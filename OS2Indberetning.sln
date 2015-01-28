@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.Web", "OS2Indberetning\Presentation.Web.csproj", "{2B953FAB-7F22-4884-9325-2A5C53519F3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.Web", "Presentation.Web\Presentation.Web.csproj", "{2B953FAB-7F22-4884-9325-2A5C53519F3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.DomainModel", "Core.DomainModel\Core.DomainModel.csproj", "{823928AD-3BB7-4FD8-831F-201D73B80AE0}"
 EndProject
