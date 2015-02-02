@@ -39,7 +39,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Address.cs" />
+    <Compile Include="DriveReport.cs" />
+    <Compile Include="Employment.cs" />
+    <Compile Include="FileGenerationSchedule.cs" />
+    <Compile Include="LicensePlate.cs" />
+    <Compile Include="MailNotificationSchedule.cs" />
+    <Compile Include="MobileToken.cs" />
+    <Compile Include="OrgUnit.cs" />
+    <Compile Include="Person.cs" />
+    <Compile Include="PersonalAddress.cs" />
+    <Compile Include="PersonalRoute.cs" />
+    <Compile Include="DriveReportPoint.cs" />
+    <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rate.cs" />
+    <Compile Include="Report.cs" />
+    <Compile Include="Substitute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
