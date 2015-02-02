@@ -144,7 +144,7 @@ namespace Infrastructure.DataAccess
         {
             modelBuilder.Entity<DriveReport>().Property(p => p.Distance).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.AmountToReimburse).IsRequired();
-            modelBuilder.Entity<DriveReport>().Property(p => p.Porpuse).IsRequired();
+            modelBuilder.Entity<DriveReport>().Property(p => p.Purpose).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.KmRate).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.DriveDate).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.FourKmRule).IsRequired();

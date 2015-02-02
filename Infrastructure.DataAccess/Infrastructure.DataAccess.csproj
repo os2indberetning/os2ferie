@@ -61,6 +61,10 @@
     <Compile Include="Migrations\201502021209415_Initial.Designer.cs">
       <DependentUpon>201502021209415_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502021251059_fixed-typo.cs" />
+    <Compile Include="Migrations\201502021251059_fixed-typo.Designer.cs">
+      <DependentUpon>201502021251059_fixed-typo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -79,6 +83,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201502021209415_Initial.resx">
       <DependentUpon>201502021209415_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502021251059_fixed-typo.resx">
+      <DependentUpon>201502021251059_fixed-typo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

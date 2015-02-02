@@ -8,7 +8,7 @@ namespace Core.DomainModel
     {
         public float Distance { get; set; }
         public float AmountToReimburse { get; set; }
-        public string Porpuse { get; set; }
+        public string Purpose { get; set; }
         public float KmRate { get; set; }
         public DateTime DriveDate { get; set; }
         public bool FourKmRule { get; set; }
