@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
+    <Compile Include="GenericRepositoryImpl.cs" />
     <Compile Include="Migrations\201502030758052_Initial.cs" />
     <Compile Include="Migrations\201502030758052_Initial.Designer.cs">
       <DependentUpon>201502030758052_Initial.cs</DependentUpon>
@@ -74,6 +75,10 @@
     <ProjectReference Include="..\Core.DomainModel\Core.DomainModel.csproj">
       <Project>{823928ad-3bb7-4fd8-831f-201d73b80ae0}</Project>
       <Name>Core.DomainModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core.DomainServices\Core.DomainServices.csproj">
+      <Project>{3a54fd98-5ecf-47c1-98c1-d827cfeba317}</Project>
+      <Name>Core.DomainServices</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
