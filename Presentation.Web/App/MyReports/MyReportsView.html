@@ -1,0 +1,44 @@
+﻿<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Mine Indberetninger <small>Se egne indberetninger</small>
+        </h1>
+    </div>
+</div>
+
+<div class="row" ng-controller="MyReportsController">
+    <div class="col-lg-12">
+        <tabset justified="true">
+            <tab heading="Afventende">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afventende</h3>
+                    </div>
+                    <div class="panel-body">
+                        <kendo-grid options="pendingReports" />
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Godkendte">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Godkendte</h3>
+                    </div>
+                    <div class="panel-body">
+                        <kendo-grid options="approvedReports" />
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Afviste">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afviste</h3>
+                    </div>
+                    <div class="panel-body">
+                        <kendo-grid options="deniedReports" />
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+</div>
