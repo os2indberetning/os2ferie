@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Web.Http;
-using Microsoft.Owin.Security.OAuth;
-using Newtonsoft.Json.Serialization;
+﻿using System.Web.Http;
+using System.Web.Http.OData.Extensions;
+using System.Web.OData.Builder;
+using System.Web.OData.Extensions;
+using System.Web.OData.Formatter;
+using System.Web.OData.Routing;
+using System.Web.OData.Routing.Conventions;
+using Core.DomainModel.Example;
+using OS2Indberetning.Controllers;
 
 namespace OS2Indberetning
 {
@@ -12,19 +14,33 @@ namespace OS2Indberetning
     {
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
-            // Configure Web API to use only bearer token authentication.
-            config.SuppressDefaultHostAuthentication();
-            config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+            //config.MapHttpAttributeRoutes();
 
-            // Web API routes
-            config.MapHttpAttributeRoutes();
+            config.EnableQuerySupport();
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+            config.Formatters.InsertRange(0, ODataMediaTypeFormatters.Create());
+
+            config.MapODataServiceRoute(
+                routeName: "odata",
+                routePrefix: "odata",
+                model: GetModel()
+                );
+        }
+
+        public static Microsoft.OData.Edm.IEdmModel GetModel()
+        {
+            ODataModelBuilder builder = new ODataConventionModelBuilder();
+
+            builder.EntitySet<TestReport>("TestReports");
+
+            //EntitySetConfiguration<Person> persons = builder.EntitySet<Person>("Person");
+
+            //FunctionConfiguration myFirstFunction = persons.EntityType.Collection.Function("MyFirstFunction");
+            //myFirstFunction.ReturnsCollectionFromEntitySet<Person>("Person");
+
+            
+
+            return builder.GetEdmModel();
         }
     }
 }
