@@ -52,10 +52,21 @@
     <Compile Include="PersonalRoute.cs" />
     <Compile Include="DriveReportPoint.cs" />
     <Compile Include="Point.cs" />
+    <Compile Include="Example\Entity.cs" />
+    <Compile Include="Example\TestReport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rate.cs" />
     <Compile Include="Report.cs" />
     <Compile Include="Substitute.cs" />
+    <Compile Include="Example\Product.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Example\Product.cs.d.ts">
+      <DependentUpon>Product.cs</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Example\Test.cs.d.ts">
+      <DependentUpon>Product.cs</DependentUpon>
+    </TypeScriptCompile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
