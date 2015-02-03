@@ -1,11 +1,59 @@
 ﻿/// <reference path="../Scripts/typings/angularjs/angular.d.ts" />
+/// <reference path="../scripts/typings/angular-ui/angular-ui-router.d.ts" />
 
 module Application {
     "use strict";
 
+    export class MyConfig {
+        constructor(private $stateProvider: ng.ui.IStateProvider)
+        {
+            this.init();            
+        }
+        private init(): void {
+            this.$stateProvider.state("app", <ng.ui.IState>
+                {
+                    abstract: true,
+                });
+            this.$stateProvider.state("Default", {
+                url: "",
+                templateUrl: "/App/Frontpage/FrontpageView.html"
+            });
+            this.$stateProvider.state("frontpage", {
+                url: "/frontpage",
+                templateUrl: "/App/Frontpage/FrontpageView.html"
+            });
+            this.$stateProvider.state("driving", {
+                url: "/driving",
+                templateUrl: "/App/Driving/DrivingView.html"
+            });
+            this.$stateProvider.state("myreports", {
+                url: "/myreports",
+                templateUrl: "/App/MyReports/MyReportsView.html"
+            });
+            this.$stateProvider.state("approvereports", {
+                url: "/approvereports",
+                templateUrl: "/App/ApproveReports/ApproveReportsView.html"
+            });
+            this.$stateProvider.state("settings", {
+                url: "/settings",
+                templateUrl: "/App/Settings/SettingsView.html"
+            });
+            this.$stateProvider.state("admin", {
+                url: "/admin",
+                templateUrl: "/App/Admin/AdminView.html"
+            });
+        }
+    }
+    
     export class AngularApp {
-        public static Module: ng.IModule = angular.module("app", []);
+        public static Module: ng.IModule = angular.module("app", ["kendo.directives", "ui.router", "ui.bootstrap", "template/tabs/tab.html", "template/tabs/tabset.html"]).config(
+            ["$stateProvider",
+                ($stateProvider) => {
+                    return new Application.MyConfig($stateProvider);
+                }
+            ]);
     }
 }
+
 
 
