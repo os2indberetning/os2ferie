@@ -186,6 +186,10 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Substitute>().Property(p => p.StartDate).IsRequired();
 
             modelBuilder.Entity<Substitute>().HasRequired(p => p.OrgUnit);
+
+            modelBuilder.Entity<Substitute>().HasRequired(p => p.Leader).WithMany(p => p.Substitutes);
+            modelBuilder.Entity<Substitute>().HasRequired(p => p.Sub).WithMany(p => p.SubstituteLeaders);
+            modelBuilder.Entity<Substitute>().HasMany<Person>(p => p.Persons).WithMany(p => p.SubstituteFor);
         }
     }
 }

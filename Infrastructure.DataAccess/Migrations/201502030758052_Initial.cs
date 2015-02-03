@@ -52,7 +52,7 @@ namespace Infrastructure.DataAccess.Migrations
                         ProcessedDate = c.DateTime(nullable: false, precision: 0),
                         Distance = c.Single(),
                         AmountToReimburse = c.Single(),
-                        Porpuse = c.String(unicode: false),
+                        Purpose = c.String(unicode: false),
                         KmRate = c.Single(),
                         DriveDate = c.DateTime(precision: 0),
                         FourKmRule = c.Boolean(),
@@ -110,11 +110,17 @@ namespace Infrastructure.DataAccess.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         StartDate = c.DateTime(nullable: false, precision: 0),
                         EndDate = c.DateTime(nullable: false, precision: 0),
+                        Leader_Id = c.Int(nullable: false),
                         OrgUnit_Id = c.Int(nullable: false),
+                        Sub_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
+                .ForeignKey("People", t => t.Leader_Id, cascadeDelete: true)
                 .ForeignKey("OrgUnits", t => t.OrgUnit_Id, cascadeDelete: true)
-                .Index(t => t.OrgUnit_Id);
+                .ForeignKey("People", t => t.Sub_Id, cascadeDelete: true)
+                .Index(t => t.Leader_Id)
+                .Index(t => t.OrgUnit_Id)
+                .Index(t => t.Sub_Id);
             
             CreateTable(
                 "People",
@@ -204,6 +210,19 @@ namespace Infrastructure.DataAccess.Migrations
                     })
                 .PrimaryKey(t => t.Id)                ;
             
+            CreateTable(
+                "SubstitutePersons",
+                c => new
+                    {
+                        Substitute_Id = c.Int(nullable: false),
+                        Person_Id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.Substitute_Id, t.Person_Id })                
+                .ForeignKey("Substitutes", t => t.Substitute_Id, cascadeDelete: true)
+                .ForeignKey("People", t => t.Person_Id, cascadeDelete: true)
+                .Index(t => t.Substitute_Id)
+                .Index(t => t.Person_Id);
+            
         }
         
         public override void Down()
@@ -211,6 +230,12 @@ namespace Infrastructure.DataAccess.Migrations
             DropForeignKey("Addresses", "NextPoint_Id1", "Addresses");
             DropForeignKey("Addresses", "DriveReport_Id", "Reports");
             DropForeignKey("Employments", "Person_Id", "People");
+            DropForeignKey("Employments", "OrgUnit_Id", "OrgUnits");
+            DropForeignKey("Substitutes", "Sub_Id", "People");
+            DropForeignKey("SubstitutePersons", "Person_Id", "People");
+            DropForeignKey("SubstitutePersons", "Substitute_Id", "Substitutes");
+            DropForeignKey("Substitutes", "OrgUnit_Id", "OrgUnits");
+            DropForeignKey("Substitutes", "Leader_Id", "People");
             DropForeignKey("Reports", "Person_Id", "People");
             DropForeignKey("Reports", "Employment_Id", "Employments");
             DropForeignKey("Addresses", "PersonalRoute_Id", "PersonalRoutes");
@@ -219,13 +244,15 @@ namespace Infrastructure.DataAccess.Migrations
             DropForeignKey("Addresses", "Person_Id", "People");
             DropForeignKey("MobileTokens", "Person_Id", "People");
             DropForeignKey("LicensePlates", "Person_Id", "People");
-            DropForeignKey("Employments", "OrgUnit_Id", "OrgUnits");
-            DropForeignKey("Substitutes", "OrgUnit_Id", "OrgUnits");
             DropForeignKey("OrgUnits", "Parent_Id", "OrgUnits");
+            DropIndex("SubstitutePersons", new[] { "Person_Id" });
+            DropIndex("SubstitutePersons", new[] { "Substitute_Id" });
             DropIndex("PersonalRoutes", new[] { "Person_Id" });
             DropIndex("MobileTokens", new[] { "Person_Id" });
             DropIndex("LicensePlates", new[] { "Person_Id" });
+            DropIndex("Substitutes", new[] { "Sub_Id" });
             DropIndex("Substitutes", new[] { "OrgUnit_Id" });
+            DropIndex("Substitutes", new[] { "Leader_Id" });
             DropIndex("OrgUnits", new[] { "Parent_Id" });
             DropIndex("Employments", new[] { "Person_Id" });
             DropIndex("Employments", new[] { "OrgUnit_Id" });
@@ -236,6 +263,7 @@ namespace Infrastructure.DataAccess.Migrations
             DropIndex("Addresses", new[] { "PersonalRoute_Id" });
             DropIndex("Addresses", new[] { "NextPoint_Id" });
             DropIndex("Addresses", new[] { "Person_Id" });
+            DropTable("SubstitutePersons");
             DropTable("Rates");
             DropTable("MailNotificationSchedules");
             DropTable("FileGenerationSchedules");
