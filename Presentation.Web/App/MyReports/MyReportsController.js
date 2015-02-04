@@ -1,3 +1,4 @@
+/// <reference path="../../scripts/typings/kendo/kendo.all.d.ts" />
 var MyReports;
 (function (MyReports) {
     'use strict';
@@ -6,10 +7,30 @@ var MyReports;
             this.$scope = $scope;
             $scope.pendingReports = {
                 dataSource: {
-                    type: "json",
+                    type: "odata",
                     transport: {
                         read: {
+                            beforeSend: function (req) {
+                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
+                            },
                             url: "/odata/TestReports",
+                            dataType: "json"
+                        },
+                        parameterMap: function (options, type) {
+                            var paramMap = kendo.data.transports.odata.parameterMap(options);
+                            console.log(paramMap);
+                            delete paramMap.$inlinecount; // <-- remove inlinecount parameter
+                            delete paramMap.$format; // <-- remove format parameter
+                            console.log(paramMap);
+                            return paramMap;
+                        }
+                    },
+                    schema: {
+                        data: function (data) {
+                            return data; // <-- The result is just the data, it doesn't need to be unpacked.
+                        },
+                        total: function (data) {
+                            return data.length; // <-- The total items count is the data length, there is no .Count to unpack.
                         }
                     },
                     pageSize: 5,

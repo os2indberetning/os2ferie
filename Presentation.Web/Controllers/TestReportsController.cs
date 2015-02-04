@@ -10,8 +10,6 @@ using System.Web.OData;
 using System.Web.OData.Query;
 using System.Web.OData.Routing;
 using Core.DomainModel.Example;
-using Microsoft.Data.OData;
-
 
 namespace OS2Indberetning.Controllers
 {
