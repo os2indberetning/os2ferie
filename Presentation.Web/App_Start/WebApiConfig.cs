@@ -1,5 +1,4 @@
 ﻿using System.Web.Http;
-using System.Web.Http.OData.Extensions;
 using System.Web.OData.Builder;
 using System.Web.OData.Extensions;
 using System.Web.OData.Formatter;
@@ -14,11 +13,9 @@ namespace OS2Indberetning
     {
         public static void Register(HttpConfiguration config)
         {
-            //config.MapHttpAttributeRoutes();
+            config.MapHttpAttributeRoutes();
 
-            config.EnableQuerySupport();
-
-            config.Formatters.InsertRange(0, ODataMediaTypeFormatters.Create());
+            
 
             config.MapODataServiceRoute(
                 routeName: "odata",
@@ -32,13 +29,6 @@ namespace OS2Indberetning
             ODataModelBuilder builder = new ODataConventionModelBuilder();
 
             builder.EntitySet<TestReport>("TestReports");
-
-            //EntitySetConfiguration<Person> persons = builder.EntitySet<Person>("Person");
-
-            //FunctionConfiguration myFirstFunction = persons.EntityType.Collection.Function("MyFirstFunction");
-            //myFirstFunction.ReturnsCollectionFromEntitySet<Person>("Person");
-
-            
 
             return builder.GetEdmModel();
         }
