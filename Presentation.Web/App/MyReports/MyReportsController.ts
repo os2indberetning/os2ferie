@@ -23,25 +23,21 @@ module MyReports {
                             dataType: "json"                                    
                         },
                         parameterMap: function (options, type) {                            
-                            var paramMap = kendo.data.transports.odata.parameterMap(options);
+                            var d = kendo.data.transports.odata.parameterMap(options);
+                           
+                            delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
 
-                            console.log(paramMap);
+                            d.$count = true;
 
-                            delete paramMap.$inlinecount; // <-- remove inlinecount parameter
-                            delete paramMap.$format; // <-- remove format parameter
-
-                            console.log(paramMap);
-
-                            return paramMap;
+                            return d;
                         }
                     },
                     schema: {
                         data: function (data) {
-                            return data; // <-- The result is just the data, it doesn't need to be unpacked.
+                            return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
                         },
                         total: function (data) {
-                            return data.length; // <-- The total items count is the data length, there is no .Count to unpack.
-
+                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                         }
                     },
                     pageSize: 5,

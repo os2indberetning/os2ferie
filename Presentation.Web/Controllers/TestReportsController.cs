@@ -96,7 +96,7 @@ namespace OS2Indberetning.Controllers
                 }
             }.AsQueryable();
 
-            return testReports;            
+            return testReports;
         }
     }
 }
