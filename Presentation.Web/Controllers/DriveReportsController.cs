@@ -6,13 +6,11 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
-using System.Web.Http.OData;
-using System.Web.Http.OData.Query;
-using System.Web.Http.OData.Routing;
+using System.Web.OData;
+using System.Web.OData.Query;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
-using Microsoft.Data.OData;
 using Ninject;
 
 namespace OS2Indberetning.Controllers
@@ -42,7 +40,7 @@ namespace OS2Indberetning.Controllers
 
         // GET: odata/DriveReports
         [EnableQuery]
-        public IQueryable<DriveReport> GetDriveReport(ODataQueryOptions<DriveReport> queryOptions)
+        public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions)
         {
             var driveReports = _repo.AsQueryable();
 
