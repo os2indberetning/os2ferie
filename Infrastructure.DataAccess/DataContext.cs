@@ -13,7 +13,6 @@ namespace Infrastructure.DataAccess
     {
         public DataContext() : base("DefaultConnection")
         {
-            DbConfiguration.SetConfiguration(new MySql.Data.Entity.MySqlEFConfiguration());
         }
 
         public IDbSet<Person> Persons { get; set; }
