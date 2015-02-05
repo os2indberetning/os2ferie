@@ -196,7 +196,7 @@ namespace Infrastructure.DataAccess
         {
             public DateTimeOffsetConvention()
             {
-                this.Properties<DateTimeOffset>().Configure(c => c.HasColumnType("DATE"));
+                this.Properties<DateTimeOffset>().Configure(c => c.HasColumnType("TIMESTAMP"));
             }
         }
     }
