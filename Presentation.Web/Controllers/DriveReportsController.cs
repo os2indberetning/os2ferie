@@ -49,10 +49,10 @@ namespace OS2Indberetning.Controllers
                 return BadRequest(ex.Message);
             }
 
-            //var driveReports = new GenericRepositoryImpl<DriveReport>(new DataContext()).AsQueryable();
+            var driveReports = new GenericRepositoryImpl<DriveReport>(new DataContext()).AsQueryable();
 
-            //return Ok<IEnumerable<DriveReport>>(driveReports);
-            return StatusCode(HttpStatusCode.NotImplemented);
+            return Ok<IEnumerable<DriveReport>>(driveReports);
+            //return StatusCode(HttpStatusCode.NotImplemented);
         }
 
         // GET: odata/DriveReports(5)
