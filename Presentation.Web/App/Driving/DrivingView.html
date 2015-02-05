@@ -3,5 +3,133 @@
         <h1 class="page-header">
             Kørselsindberetning <small>Indberet tjenestekørsler</small>
         </h1>
+
     </div>
+</div>
+
+<div class="row" ng-controller="DrivingController">
+
+    <div class="col-lg-6">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group form-inline">
+                    <label for="date">Dato for kørsel:</label>
+                    <input type="text" id="date" class="form-control">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group form-inline">
+                    <label for="purpose">Formål:</label>
+                    <textarea class="form-control" id="purpose"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="">Stilling og ansættelsested:</label>
+                    <select class="form-control" id="">
+                        <option selected="selected" disabled="disabled">Brugerens stilling(er)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="">Transportmiddel:</label>
+                    <select class="form-control" id="">
+                        <option selected="selected" disabled="disabled">Vælg her</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="">Kilometeropgørelse:</label>
+                    <select class="form-control" id="">
+                        <option selected="selected" disabled="disabled">Beregnet/aflæst</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label for="">Vælg evt. personlig rute:</label>
+                    <select class="form-control" id="">
+                        <option selected="selected" disabled="disabled">Personlige ruter</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <label for="">Til:</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="form-group">
+                    <select class="form-control" id="">
+                        <option selected="selected" disabled="disabled">Skriv / drop-down af gemte</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <label>
+                    <input type="checkbox" /> Gem
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <label for="">Til:</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="form-group">
+                    <select class="form-control" id="">
+                        <option selected="selected" disabled="disabled">Skriv / drop-down af gemte</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <label>
+                    <input type="checkbox"/> Gem
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <label>
+                    <input type="checkbox" /> Tur + retur
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <button type="button" class="btn btn-danger">Ryd alle felter</button>
+
+            </div>
+            <div class="col-lg-6 pull-right text-right">
+                <button type="button" class="btn btn-primary">Indeberet</button>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="col-lg-6">
+        Jeg er et dådyr, jeg er et dådyr! HUH! (Her skal være et kort)
+    </div>
+
 </div>

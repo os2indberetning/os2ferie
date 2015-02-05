@@ -1939,6 +1939,8 @@
     <TypeScriptCompile Include="App\Frontpage\FrontpageController.ts" />
     <TypeScriptCompile Include="App\MyReports\MyReportsController.spec.ts" />
     <TypeScriptCompile Include="App\MyReports\MyReportsController.ts" />
+    <TypeScriptCompile Include="App\Navbar\NavbarController.spec.ts" />
+    <TypeScriptCompile Include="App\Navbar\NavbarController.ts" />
     <TypeScriptCompile Include="App\Settings\SettingsController.spec.ts" />
     <TypeScriptCompile Include="App\Settings\SettingsController.ts" />
     <TypeScriptCompile Include="Scripts\typings\angular-ui\angular-ui-router.d.ts" />
