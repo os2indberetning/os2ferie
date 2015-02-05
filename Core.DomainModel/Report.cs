@@ -15,11 +15,11 @@ namespace Core.DomainModel
     {
         public int Id { get; set; }
         public ReportStatus status { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime EditedDate { get; set; }
+        public long CreatedDateTimestamp { get; set; }
+        public long EditedDateTimestamp { get; set; }
         public String Comment { get; set; }
-        public DateTime ClosedDate { get; set; }
-        public DateTime ProcessedDate { get; set; }
+        public long ClosedDateTimestamp { get; set; }
+        public long ProcessedDateTimestamp { get; set; }
 
         public virtual Person Person { get; set; }
         public virtual Employment Employment { get; set; }

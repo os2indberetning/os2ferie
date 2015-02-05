@@ -43,7 +43,7 @@ namespace OS2Indberetning.Controllers
                     Id = 1,
                     Name = "Test Testesen",
                     Purpose = "Kendo UI Grid Test",
-                    ReportedDate = DateTime.Now,
+                    Timestamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                     Type = "Rumraket"
                 },
                 new TestReport()
@@ -51,7 +51,7 @@ namespace OS2Indberetning.Controllers
                     Id = 2,
                     Name = "Gunner Testesen",
                     Purpose = "OData Web API Test",
-                    ReportedDate = DateTime.Now,
+                    Timestamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                     Type = "Sutsko"                
                 },
                 new TestReport()
@@ -59,7 +59,7 @@ namespace OS2Indberetning.Controllers
                     Id = 3,
                     Name = "Bertram Didriksen",
                     Purpose = "Server Paging Test",
-                    ReportedDate = DateTime.Now,
+                    Timestamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                     Type = "Flyver"
                 },
                 new TestReport()
@@ -67,7 +67,7 @@ namespace OS2Indberetning.Controllers
                     Id = 4,
                     Name = "Oluf Petersen",
                     Purpose = "Test",
-                    ReportedDate = DateTime.Now,
+                    Timestamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                     Type = "Båd"
                 },
                 new TestReport()
@@ -75,7 +75,7 @@ namespace OS2Indberetning.Controllers
                     Id = 5,
                     Name = "Alfred Butler",
                     Purpose = "Opvartning",
-                    ReportedDate = DateTime.Now,
+                    Timestamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                     Type = "Batmobil"
                 },
                 new TestReport()
@@ -83,7 +83,7 @@ namespace OS2Indberetning.Controllers
                     Id = 6,
                     Name = "Bruce Wayne",
                     Purpose = "Flyve",
-                    ReportedDate = DateTime.Now,
+                    Timestamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                     Type = "Vinger"
                 },
                 new TestReport()
@@ -91,7 +91,7 @@ namespace OS2Indberetning.Controllers
                     Id = 7,
                     Name = "John Snow",
                     Purpose = "To know something",
-                    ReportedDate = DateTime.Now,
+                    Timestamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                     Type = "Wolf"
                 }
             }.AsQueryable();

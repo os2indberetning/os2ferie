@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Dynamic;
 using Core.DomainModel;
 
@@ -30,14 +32,17 @@ namespace Infrastructure.DataAccess
         public IDbSet<Employment> Employments { get; set; }
         public IDbSet<OrgUnit> OrgUnits { get; set; }
         public IDbSet<Substitute> Substitutes { get; set; }
+  
 
         /**
          * Sets up 
          */
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-            
+            base.OnModelCreating(modelBuilder);           
+
+            modelBuilder.Conventions.Add(new DateTimeOffsetConvention());
+
             ConfigurePropertiesForPerson(modelBuilder);
             ConfigurePropertiesForAddress(modelBuilder);
             ConfigurePropertiesForPersonalAddress(modelBuilder);
@@ -55,7 +60,6 @@ namespace Infrastructure.DataAccess
             ConfigurePropertiesForOrgUnit(modelBuilder);
             ConfigurePropertiesForSubstitute(modelBuilder);
         }
-
 
         private void ConfigurePropertiesForPerson(DbModelBuilder modelBuilder)
         {
@@ -123,14 +127,14 @@ namespace Infrastructure.DataAccess
 
         private void ConfigurePropertiesForMailNoficationSchedule(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.Date).IsRequired();
+            modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.DateTimestamp).IsRequired();
             modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.Notified).IsRequired();
-            modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.NextGenerationDate).IsRequired();
+            modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.NextGenerationDateTimestamp).IsRequired();
         }
 
         private void ConfigurePropertiesForFileGenerationSchedule(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<FileGenerationSchedule>().Property(p => p.Date).IsRequired();
+            modelBuilder.Entity<FileGenerationSchedule>().Property(p => p.DateTimestamp).IsRequired();
             modelBuilder.Entity<FileGenerationSchedule>().Property(p => p.Generated).IsRequired();
         }
 
@@ -146,7 +150,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<DriveReport>().Property(p => p.AmountToReimburse).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.Purpose).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.KmRate).IsRequired();
-            modelBuilder.Entity<DriveReport>().Property(p => p.DriveDate).IsRequired();
+            modelBuilder.Entity<DriveReport>().Property(p => p.DriveDateTimestamp).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.FourKmRule).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.StartsAtHome).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.EndsAtHome).IsRequired();
@@ -156,9 +160,8 @@ namespace Infrastructure.DataAccess
         private void ConfigurePropertiesForReport(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Report>().Property(p => p.status).IsRequired();
-            modelBuilder.Entity<Report>().Property(p => p.CreatedDate).IsRequired();
+            modelBuilder.Entity<Report>().Property(p => p.CreatedDateTimestamp).IsRequired();
             modelBuilder.Entity<Report>().Property(p => p.Comment).IsRequired();
-
             modelBuilder.Entity<Report>().HasRequired(p => p.Person);
             modelBuilder.Entity<Report>().HasRequired(p => p.Employment);
         }
@@ -168,10 +171,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Employment>().Property(p => p.EmploymentId).IsRequired();
             modelBuilder.Entity<Employment>().Property(p => p.Position).IsRequired();
             modelBuilder.Entity<Employment>().Property(p => p.IsLeader).IsRequired();
-            modelBuilder.Entity<Employment>().Property(p => p.StartDate).IsRequired();
-
-            modelBuilder.Entity<Employment>().HasRequired(p => p.Person);
-            modelBuilder.Entity<Employment>().HasRequired(p => p.OrgUnit);
+            modelBuilder.Entity<Employment>().Property(p => p.StartDateTimestamp).IsRequired();
         }
 
         private void ConfigurePropertiesForOrgUnit(DbModelBuilder modelBuilder)
@@ -183,13 +183,21 @@ namespace Infrastructure.DataAccess
 
         private void ConfigurePropertiesForSubstitute(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Substitute>().Property(p => p.StartDate).IsRequired();
+            modelBuilder.Entity<Substitute>().Property(p => p.StartDateTimestamp).IsRequired();
 
             modelBuilder.Entity<Substitute>().HasRequired(p => p.OrgUnit);
 
             modelBuilder.Entity<Substitute>().HasRequired(p => p.Leader).WithMany(p => p.Substitutes);
             modelBuilder.Entity<Substitute>().HasRequired(p => p.Sub).WithMany(p => p.SubstituteLeaders);
             modelBuilder.Entity<Substitute>().HasMany<Person>(p => p.Persons).WithMany(p => p.SubstituteFor);
+        }
+
+        public class DateTimeOffsetConvention : Convention
+        {
+            public DateTimeOffsetConvention()
+            {
+                this.Properties<DateTimeOffset>().Configure(c => c.HasColumnType("DATE"));
+            }
         }
     }
 }

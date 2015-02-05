@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Core.DomainModel
@@ -10,8 +9,8 @@ namespace Core.DomainModel
         public int EmploymentId { get; set; }
         public string Position { get; set; }
         public bool IsLeader { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDateTime { get; set; }
+        public long StartDateTimestamp { get; set; }
+        public long EndDateTimestamp { get; set; }
 
         public virtual Person Person { get; set; }
         public virtual ICollection<Report> Reports { get; set; }

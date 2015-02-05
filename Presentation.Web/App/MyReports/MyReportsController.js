@@ -13,7 +13,7 @@ var MyReports;
                             beforeSend: function (req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
-                            url: "/odata/TestReports",
+                            url: "/odata/DriveReports",
                             dataType: "json"
                         },
                         parameterMap: function (options, type) {
@@ -46,7 +46,7 @@ var MyReports;
                         title: "Navn"
                     },
                     {
-                        field: "ReportedDate",
+                        field: "Timestamp",
                         title: "Indberetet den"
                     },
                     {
