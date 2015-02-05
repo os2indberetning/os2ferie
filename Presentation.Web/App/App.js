@@ -3,12 +3,12 @@
 var Application;
 (function (Application) {
     "use strict";
-    var MyConfig = (function () {
-        function MyConfig($stateProvider) {
+    var StateProviderConfig = (function () {
+        function StateProviderConfig($stateProvider) {
             this.$stateProvider = $stateProvider;
             this.init();
         }
-        MyConfig.prototype.init = function () {
+        StateProviderConfig.prototype.init = function () {
             this.$stateProvider.state("app", {
                 abstract: true,
             });
@@ -41,15 +41,21 @@ var Application;
                 templateUrl: "/App/Admin/AdminView.html"
             });
         };
-        return MyConfig;
+        return StateProviderConfig;
     })();
-    Application.MyConfig = MyConfig;
+    var AngularMomentConfig = (function () {
+        function AngularMomentConfig() {
+            this.preprocess = 'utc';
+            this.timezone = 'Europe/Copenhagen';
+        }
+        return AngularMomentConfig;
+    })();
     var AngularApp = (function () {
         function AngularApp() {
         }
-        AngularApp.Module = angular.module("app", ["kendo.directives", "ui.router", "ui.bootstrap", "template/tabs/tab.html", "template/tabs/tabset.html"]).config(["$stateProvider", function ($stateProvider) {
-            return new Application.MyConfig($stateProvider);
-        }]);
+        AngularApp.Module = angular.module("app", ["kendo.directives", "ui.router", "ui.bootstrap", "template/tabs/tab.html", "template/tabs/tabset.html", "angularMoment"]).config(["$stateProvider", function ($stateProvider) {
+            return new StateProviderConfig($stateProvider);
+        }]).constant('angularMomentConfig', new AngularMomentConfig());
         return AngularApp;
     })();
     Application.AngularApp = AngularApp;

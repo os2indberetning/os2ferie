@@ -4,7 +4,7 @@
 module Application {
     "use strict";
 
-    export class MyConfig {
+    class StateProviderConfig {
         constructor(private $stateProvider: ng.ui.IStateProvider)
         {
             this.init();            
@@ -44,14 +44,21 @@ module Application {
             });
         }
     }
+
+    class AngularMomentConfig {
+        preprocess = 'utc';
+        timezone = 'Europe/Copenhagen';
+    }
     
     export class AngularApp {
-        public static Module: ng.IModule = angular.module("app", ["kendo.directives", "ui.router", "ui.bootstrap", "template/tabs/tab.html", "template/tabs/tabset.html"]).config(
-            ["$stateProvider",
-                ($stateProvider) => {
-                    return new Application.MyConfig($stateProvider);
-                }
-            ]);
+        public static Module: ng.IModule = angular.module("app", ["kendo.directives", "ui.router", "ui.bootstrap", "template/tabs/tab.html", "template/tabs/tabset.html", "angularMoment"])
+            .config(
+                ["$stateProvider",
+                    ($stateProvider) => {
+                        return new StateProviderConfig($stateProvider);
+                    }
+                ])
+            .constant('angularMomentConfig', new AngularMomentConfig());
     }
 }
 
