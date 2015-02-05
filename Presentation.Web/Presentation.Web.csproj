@@ -538,6 +538,8 @@
     <Content Include="Scripts\angular-messages.js" />
     <Content Include="Scripts\angular-messages.min.js" />
     <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular-moment.js" />
+    <Content Include="Scripts\angular-moment.min.js" />
     <Content Include="Scripts\angular-resource.js" />
     <Content Include="Scripts\angular-resource.min.js" />
     <Content Include="Scripts\angular-route.js" />
@@ -619,6 +621,7 @@
     <Content Include="Content\Themes\SbAdmin\font-awesome\scss\_spinning.scss" />
     <Content Include="Content\Themes\SbAdmin\font-awesome\scss\_stacked.scss" />
     <Content Include="Content\Themes\SbAdmin\font-awesome\scss\_variables.scss" />
+    <Content Include="Scripts\angular-moment.min.js.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
@@ -1820,6 +1823,17 @@
     <Content Include="Scripts\kendo\2014.3.1119\messages\kendo.messages.zh-HK.min.js" />
     <Content Include="Scripts\kendo\2014.3.1119\messages\kendo.messages.zh-TW.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\moment-timezone-utils.js" />
+    <Content Include="Scripts\moment-timezone-with-data-2010-2020.js" />
+    <Content Include="Scripts\moment-timezone-with-data-2010-2020.min.js" />
+    <Content Include="Scripts\moment-timezone-with-data.js" />
+    <Content Include="Scripts\moment-timezone-with-data.min.js" />
+    <Content Include="Scripts\moment-timezone.js" />
+    <Content Include="Scripts\moment-timezone.min.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Web.config">
@@ -1948,6 +1962,8 @@
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\kendo\kendo.all.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\kendo\kendo.all.original.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\moment-timezone\moment-timezone.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core.ApplicationServices\Core.ApplicationServices.csproj">
