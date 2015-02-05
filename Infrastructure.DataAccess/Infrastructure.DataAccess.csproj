@@ -57,10 +57,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
+    <Compile Include="DriveReportRepository.cs" />
     <Compile Include="GenericRepositoryImpl.cs" />
     <Compile Include="Migrations\201502030758052_Initial.cs" />
     <Compile Include="Migrations\201502030758052_Initial.Designer.cs">
       <DependentUpon>201502030758052_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502041248478_drivereport_update.cs" />
+    <Compile Include="Migrations\201502041248478_drivereport_update.Designer.cs">
+      <DependentUpon>201502041248478_drivereport_update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502041316563_Update.cs" />
+    <Compile Include="Migrations\201502041316563_Update.Designer.cs">
+      <DependentUpon>201502041316563_Update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502051037455_Update1.cs" />
+    <Compile Include="Migrations\201502051037455_Update1.Designer.cs">
+      <DependentUpon>201502051037455_Update1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
@@ -85,6 +98,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201502030758052_Initial.resx">
       <DependentUpon>201502030758052_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502041248478_drivereport_update.resx">
+      <DependentUpon>201502041248478_drivereport_update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502041316563_Update.resx">
+      <DependentUpon>201502041316563_Update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502051037455_Update1.resx">
+      <DependentUpon>201502051037455_Update1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

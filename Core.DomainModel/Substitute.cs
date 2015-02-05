@@ -6,8 +6,8 @@ namespace Core.DomainModel
     public class Substitute
     {
         public int Id { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public long StartDateTimestamp { get; set; }
+        public long EndDateTimestamp { get; set; }
 
         public virtual Person Leader { get; set; }
         public virtual Person Sub { get; set; }

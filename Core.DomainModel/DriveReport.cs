@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.DomainModel
 {
@@ -10,7 +11,7 @@ namespace Core.DomainModel
         public float AmountToReimburse { get; set; }
         public string Purpose { get; set; }
         public float KmRate { get; set; }
-        public DateTime DriveDate { get; set; }
+        public long DriveDateTimestamp { get; set; }
         public bool FourKmRule { get; set; }
         public bool StartsAtHome { get; set; }
         public bool EndsAtHome { get; set; }
