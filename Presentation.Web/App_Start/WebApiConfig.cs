@@ -18,9 +18,7 @@ namespace OS2Indberetning
         public static void Register(HttpConfiguration config)
         {
             config.MapHttpAttributeRoutes();
-
             
-
             config.MapODataServiceRoute(
                 routeName: "odata",
                 routePrefix: "odata",
