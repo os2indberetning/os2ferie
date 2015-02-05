@@ -30,9 +30,13 @@ namespace OS2Indberetning.Controllers
     {
         private static ODataValidationSettings _validationSettings = new ODataValidationSettings();
 
-        public DriveReportsController()
+        private readonly IGenericRepository<DriveReport> _repo; 
+
+        public DriveReportsController(IGenericRepository<DriveReport> repo)
         {
             _validationSettings.AllowedQueryOptions = AllowedQueryOptions.All;
+
+            _repo = repo;
         }
 
         // GET: odata/DriveReports
