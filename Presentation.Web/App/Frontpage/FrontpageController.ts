@@ -1,6 +1,6 @@
 ﻿module Frontpage {
     'use strict';
-    export interface Scope extends ng.IScope {
+    interface Scope extends ng.IScope {
 
     }
 

@@ -1,5 +1,6 @@
 ﻿/// <reference path="../Scripts/typings/angularjs/angular.d.ts" />
-/// <reference path="../scripts/typings/angular-ui/angular-ui-router.d.ts" />
+/// <reference path="../Scripts/typings/angular-ui/angular-ui-router.d.ts" />
+/// <reference path="../Scripts/typings/moment/moment.d.ts" />
 
 module Application {
     "use strict";

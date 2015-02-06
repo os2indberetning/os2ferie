@@ -2,7 +2,7 @@
 
 module MyReports {
     'use strict';
-    export interface Scope extends ng.IScope {
+    interface Scope extends ng.IScope {
         pendingReports: any;
         approvedReports: any;
         deniedReports: any;
