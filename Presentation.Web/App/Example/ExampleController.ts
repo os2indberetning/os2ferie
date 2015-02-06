@@ -11,7 +11,7 @@ module Model {
 
 module Example {
     'use strict';
-    export interface Scope extends ng.IScope {
+    interface Scope extends ng.IScope {
         newProductName: string;
         newProductPrice: number;
         products: Model.Product[];

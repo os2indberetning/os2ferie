@@ -2,7 +2,7 @@
 
 module Driving {
     'use strict';
-    export interface Scope extends ng.IScope {
+    interface Scope extends ng.IScope {
         state: ng.ui.IState;
         date : any;
     }
