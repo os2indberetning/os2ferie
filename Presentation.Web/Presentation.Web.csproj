@@ -1814,6 +1814,7 @@
     <Content Include="Scripts\kendo\2014.3.1119\messages\kendo.messages.zh-HK.min.js" />
     <Content Include="Scripts\kendo\2014.3.1119\messages\kendo.messages.zh-TW.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\moment-locale-da.js" />
     <Content Include="Scripts\moment-timezone-utils.js" />
     <Content Include="Scripts\moment-timezone-with-data-2010-2020.js" />
     <Content Include="Scripts\moment-timezone-with-data-2010-2020.min.js" />
