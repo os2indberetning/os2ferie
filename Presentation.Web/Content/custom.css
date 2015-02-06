@@ -9,3 +9,13 @@
     background-color: #F5F5F5;
     border-color: #ddd;
 }
+
+.k-combobox{
+   width: 100% !important;
+    max-width: none;
+}
+
+.k-combobox .k-input {
+    max-width: none;
+    width: 100%;
+}
