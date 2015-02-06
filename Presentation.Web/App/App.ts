@@ -58,7 +58,8 @@ module Application {
                         return new StateProviderConfig($stateProvider);
                     }
                 ])
-            .constant('angularMomentConfig', new AngularMomentConfig());
+            .constant('angularMomentConfig', new AngularMomentConfig())
+            .run((amMoment) => (amMoment.changeLocale('da')));
     }
 }
 

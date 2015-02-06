@@ -18,6 +18,7 @@ namespace OS2Indberetning
                 .Include("~/Scripts/angular-ui/ui-bootstrap-tpls.js")
                 .Include("~/Scripts/angular-ui/ui-bootstrap.js")
                 .Include("~/Scripts/moment.js")
+                .Include("~/Scripts/moment-locale-da.js")
                 .Include("~/Scripts/moment-timezone-with-data.js")
                 .Include("~/Scripts/angular-moment.js"));
 
