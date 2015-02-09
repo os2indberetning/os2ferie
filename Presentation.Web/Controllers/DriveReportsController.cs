@@ -11,6 +11,7 @@ using System.Web.OData.Query;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
+using Microsoft.OData.Core;
 using Ninject;
 
 namespace OS2Indberetning.Controllers
@@ -48,85 +49,85 @@ namespace OS2Indberetning.Controllers
             //return StatusCode(HttpStatusCode.NotImplemented);
         }
 
-        // GET: odata/DriveReports(5)
-        //public IHttpActionResult GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
-        //{
-        //    // validate the query.
-        //    try
-        //    {
-        //        queryOptions.Validate(_validationSettings);
-        //    }
-        //    catch (ODataException ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
+        //GET: odata/DriveReports(5)
+        public IHttpActionResult GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
+        {
+            // validate the query.
+            try
+            {
+                queryOptions.Validate(_validationSettings);
+            }
+            catch (ODataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-        //    // return Ok<DriveReport>(driveReport);
-        //    return StatusCode(HttpStatusCode.NotImplemented);
-        //}
+            // return Ok<DriveReport>(driveReport);
+            return StatusCode(HttpStatusCode.NotImplemented);
+        }
 
-        //// PUT: odata/DriveReports(5)
-        //public IHttpActionResult Put([FromODataUri] int key, Delta<DriveReport> delta)
-        //{
-        //    Validate(delta.GetEntity());
+        // PUT: odata/DriveReports(5)
+        public IHttpActionResult Put([FromODataUri] int key, Delta<DriveReport> delta)
+        {
+            Validate(delta.GetEntity());
 
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    // TODO: Get the entity here.
+            // TODO: Get the entity here.
 
-        //    // delta.Put(driveReport);
+            // delta.Put(driveReport);
 
-        //    // TODO: Save the patched entity.
+            // TODO: Save the patched entity.
 
-        //    // return Updated(driveReport);
-        //    return StatusCode(HttpStatusCode.NotImplemented);
-        //}
+            // return Updated(driveReport);
+            return StatusCode(HttpStatusCode.NotImplemented);
+        }
 
-        //// POST: odata/DriveReports
-        //public IHttpActionResult Post(DriveReport driveReport)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        // POST: odata/DriveReports
+        public IHttpActionResult Post(DriveReport driveReport)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    // TODO: Add create logic here.
+            // TODO: Add create logic here.
 
-        //    // return Created(driveReport);
-        //    return StatusCode(HttpStatusCode.NotImplemented);
-        //}
+            // return Created(driveReport);
+            return StatusCode(HttpStatusCode.NotImplemented);
+        }
 
-        //// PATCH: odata/DriveReports(5)
-        //[AcceptVerbs("PATCH", "MERGE")]
-        //public IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
-        //{
-        //    Validate(delta.GetEntity());
+        // PATCH: odata/DriveReports(5)
+        [AcceptVerbs("PATCH", "MERGE")]
+        public IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
+        {
+            Validate(delta.GetEntity());
 
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    // TODO: Get the entity here.
+            // TODO: Get the entity here.
 
-        //    // delta.Patch(driveReport);
+            // delta.Patch(driveReport);
 
-        //    // TODO: Save the patched entity.
+            // TODO: Save the patched entity.
 
-        //    // return Updated(driveReport);
-        //    return StatusCode(HttpStatusCode.NotImplemented);
-        //}
+            // return Updated(driveReport);
+            return StatusCode(HttpStatusCode.NotImplemented);
+        }
 
-        //// DELETE: odata/DriveReports(5)
-        //public IHttpActionResult Delete([FromODataUri] int key)
-        //{
-        //    // TODO: Add delete logic here.
+        // DELETE: odata/DriveReports(5)
+        public IHttpActionResult Delete([FromODataUri] int key)
+        {
+            // TODO: Add delete logic here.
 
-        //    // return StatusCode(HttpStatusCode.NoContent);
-        //    return StatusCode(HttpStatusCode.NotImplemented);
-        //}
+            // return StatusCode(HttpStatusCode.NoContent);
+            return StatusCode(HttpStatusCode.NotImplemented);
+        }
     }
 }
