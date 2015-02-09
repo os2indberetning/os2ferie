@@ -54,7 +54,7 @@ namespace OS2Indberetning
 
             builder.EntitySet<OrgUnit>("OrgUnits");
 
-            builder.EntitySet<Person>("Persons");
+            builder.EntitySet<Person>("Person");
             var pType = builder.EntityType<Person>();
             pType.HasKey(p => p.Id);
 

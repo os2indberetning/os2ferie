@@ -5,3 +5,88 @@
         </h1>
     </div>
 </div>
+<div class="row" ng-controller="SettingController">
+    <div class="col-lg-6">
+        <div class="row setting-area">
+            <div class="col-lg-12">
+                <div class="form-group form-inline">
+                    <h3>Diverse</h3>
+                    <label for="">Registreringsnummer på bil:</label>
+                    <div></div>
+                    <input class="form-control" placeholder="AB 12 345" />
+                    <button type="submit" class="btn btn-primary">Tilføj</button>
+                    <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Vis nummerplader</button>
+                    <div collapse="isCollapsed">
+                        <div class="well well-lg">
+                            <ul class="license-plate-list">
+                                <li ng-repeat="plate in licensePlates">
+                                    <pre><strong>{{ plate }}</strong><button class="btn btn-danger pull-right">Slet</button></pre>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="seperator"></div>
+                    <label for="">Afstand mellem hjemme- og arbejdsadresse:</label>
+                    <div></div>
+                    <input class="form-control" placeholder="0" /><label>km</label>
+                    <button type="submit" class="btn btn-primary" ng-click="setHomeWorkOverride()">Gem ændringer</button>
+                </div>
+            </div>
+        </div>
+        <div class="row setting-area">
+            <div class="col-lg-12">
+                <div class="form-group form-inline">
+                    <h3>Afvigende adresser</h3>
+                    <label for="">Afvigende hjemmeadresse:</label>
+                    <div class="seperator"></div>
+                    <input class="form-control" placeholder="Skriv her" />
+                    <div class="seperator"></div>
+                    <label for="">Afvigende arbejdsadresse:</label>
+                    <div class ="seperator"></div>
+                    <input class="form-control" placeholder="Skriv her" />
+                    <button type="submit" class="btn btn-primary">Gem ændringer</button>
+                </div>
+            </div>
+        </div>
+        <div class="row setting-area">
+            <div class="col-lg-12">
+                <div class="form-group form-inline">
+                    <h3>Mailadviseringer</h3>
+                    <label for="">Send mig mailadviseringer om indberetninger til godkendelse:</label>
+                    <div class="seperator"></div>
+                    <div class="btn-group">
+                        <label class="btn btn-primary" ng-model="mailAdvice" btn-radio="'Yes'">Ja tak</label>
+                        <label class="btn btn-primary" ng-model="mailAdvice" btn-radio="'No'">Nej tak</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row setting-area">
+            <div class="col-lg-12">
+                <div class="form-group form-inline" ng-controller="TokenController">
+                    <h3>Mobil tokens</h3>
+                    <label for="">Se eller opret tokens til din mobiltelefon</label>
+                    <button class="btn btn-default" ng-click="openTokenModal()">Mine tokens</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="row setting-area">
+            <div class="col-lg-12">
+                <div class="form-group form-inline">
+                    <h3>Personlige adresser</h3>
+                    <kendo-grid options="personalAddresses" />
+                </div>
+            </div>
+        </div>
+        <div class="row setting-area">
+            <div class="col-lg-12">
+                <div class="form-group form-inline">
+                    <h3>Personlige ruter</h3>
+                    <kendo-grid options="personalAddresses" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

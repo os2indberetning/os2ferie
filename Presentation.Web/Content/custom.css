@@ -1,21 +1,58 @@
-﻿.nav-tabs.nav-justified>li>a {
+﻿.nav-tabs.nav-justified > li > a {
     border-bottom: none;
     border-radius: 4px;
     border: none;
     color: #555;
 }
 
-.nav-tabs.nav-justified>.active>a, .nav-tabs.nav-justified>.active>a:focus, .nav-tabs.nav-justified>.active>a:hover {
+.nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:focus, .nav-tabs.nav-justified > .active > a:hover {
     background-color: #F5F5F5;
     border-color: #ddd;
 }
 
-.k-combobox{
-   width: 100% !important;
+.k-combobox {
+    width: 100% !important;
     max-width: none;
 }
 
-.k-combobox .k-input {
-    max-width: none;
-    width: 100%;
+    .k-combobox .k-input {
+        max-width: none;
+        width: 100%;
+    }
+
+.setting-area {
+    background-color: #dddddd;
+    border: 5px solid #fff;
+}
+
+.modal-dialog {
+    right: auto;
+    left: auto;
+    width: 600px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.token-list {
+    right: auto;
+    left: auto;
+    margin-left: -40px;
+}
+
+.license-plate-list {
+    right: auto;
+    left: auto;
+    margin-left: -40px;
+}
+
+.new-token-btn {
+    width: 79%;
+}
+
+.close-token-modal {
+    width: 19%;
+}
+
+.seperator {
+    margin-top: 20px;
 }

@@ -1,0 +1,17 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Mine tokens</h3>
+</div>
+<div class="modal-body">
+    <div>
+        <ol class="dl-horizontal token-list">
+            <li ng-repeat="item in items">
+                <pre><strong>{{ item }}</strong><button class="btn btn-danger pull-right">Slet</button></pre>
+            </li>
+        </ol>    
+    </div>    
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-success pull-left new-token-btn" ng-click="">Opret ny token</button>
+    <button class="btn btn-primary pull-right close-token-modal" ng-click="closeTokenModal()">Luk</button>    
+</div>
