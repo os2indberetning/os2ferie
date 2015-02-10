@@ -1,4 +1,4 @@
-﻿module ServiceModels {
+﻿module Model {
     export interface IPerson extends ng.resource.IResource<IPerson> {
         id: number;
         cprNumber: string;
@@ -10,8 +10,11 @@
         workDistanceOverride: number;
     }
 
-    export interface IPersonResource extends ng.resource.IResourceClass<IPerson> {
-        update(IPerson): IPerson
-    }
+    
 }
 
+module Resource {
+    export interface IPersonResource extends ng.resource.IResourceClass<Model.IPerson> {
+
+    }
+}

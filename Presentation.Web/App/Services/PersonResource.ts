@@ -1,49 +1,8 @@
-﻿
+﻿module Service {
 
-
-    //[
-    //"$resource", ($resource: ng.resource.IResourceService): ServiceModels.IPersonResource => {
-
-    //    var updateAction: ng.resource.IActionDescriptor = {
-    //        method: 'PUT',
-    //        isArray: false
-    //    };
-
-    //    var getAction: ng.resource.IActionDescriptor = {
-    //        method: 'GET',
-    //        isArray: true,
-    //        q: '*'
-    //    };
-
-    //    return <ServiceModels.IPersonResource> $resource('/odata/Person(:id)', { id: "@id" }, {
-    //        update: updateAction,
-    //        get: getAction
-    //    });
-
-
-    //}
-    //]);
-
-module Services {
     export class PersonResource {
-
-        constructor($resource: ng.resource.IResourceService) {
-            //updateAction: ng.resource.IActionDescriptor = {
-            //    method: 'PUT',
-            //    isArray: false
-            //};
-
-            //getAction: ng.resource.IActionDescriptor = {
-            //    method: 'GET',
-            //    isArray: true,
-            //    q: '*'
-            //};
-
-            //return resource('/odata/Person(:id)', { id: "@id" }, {
-            //    update: updateAction,
-            //    get: getAction
-            //});
-
+        public static Person($resource: ng.resource.IResourceService): Resource.IPersonResource {
+            
             var updateAction: ng.resource.IActionDescriptor = {
                 method: 'PUT',
                 isArray: false
@@ -51,19 +10,18 @@ module Services {
 
             var getAction: ng.resource.IActionDescriptor = {
                 method: 'GET',
-                isArray: true,
-                q: '*'
+                isArray: true
             };
 
-            return <ServiceModels.IPersonResource> $resource('/odata/Person(:id)', { id: "@id" }, {
+            var resource =  $resource('/odata/Person(:id)', { id: "@id" }, {
                 update: updateAction,
                 get: getAction
             });
-            
 
-            
+            return <Resource.IPersonResource> resource;
+
         }
     }
 }
 
-Application.AngularApp.Module.service("PersonResource", Services.PersonResource);
+Application.AngularApp.Module.factory('Person', ["$resource", Service.PersonResource.Person]);

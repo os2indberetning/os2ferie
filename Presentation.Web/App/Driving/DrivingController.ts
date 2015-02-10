@@ -1,5 +1,4 @@
 ﻿ /// <reference path="../../scripts/typings/kendo/kendo.all.d.ts" />
-
 module Driving {
     'use strict';
     interface Scope extends ng.IScope {
@@ -8,11 +7,12 @@ module Driving {
     }
 
     export class Controller {           
-        private personResource: ServiceModels.IPersonResource;
-        constructor(private $scope: Scope, private $personResource : ServiceModels.IPersonResource) {
-            this.personResource = $personResource;
+        private Person: ServiceModels.IPersonResource;
 
-            var test = this.personResource.get({ id: 1 }, function () {
+        constructor($scope: Scope, Person: ServiceModels.IPersonResource) {
+            this.Person = Person;
+
+            var test = this.Person.get({id:1}, function () {
                 console.log(test);
             });
 

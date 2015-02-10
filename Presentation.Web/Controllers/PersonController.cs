@@ -31,8 +31,7 @@ namespace OS2Indberetning.Controllers
         private static ODataValidationSettings _validationSettings = new ODataValidationSettings();
 
         private readonly IGenericRepository<Person> _genericRepo;
-        private readonly IPersonRepository _personRepo
-;
+        private readonly IPersonRepository _personRepo;
 
         public PersonController()
         {
