@@ -43,5 +43,15 @@ namespace Infrastructure.DataAccess
         {
             throw new System.NotImplementedException();
         }
+
+        public void Update(DriveReport entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Patch(DriveReport entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
