@@ -93,7 +93,8 @@
     <Reference Include="System.Web.Http.OData">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.OData.5.3.1\lib\net45\System.Web.Http.OData.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.OData">
+    <Reference Include="System.Web.OData, Version=5.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.OData.5.3.1\lib\net45\System.Web.OData.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
@@ -253,6 +254,7 @@
     <Compile Include="Controllers\ExampleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JasmineController.cs" />
+    <Compile Include="Controllers\LicensePlatesController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\TestReportsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -273,6 +275,7 @@
     <Content Include="App\Driving\DrivingView.html" />
     <Content Include="App\Example\ExampleView.html" />
     <Content Include="App\Frontpage\FrontpageView.html" />
+    <TypeScriptCompile Include="App\Model\IPerson.ts" />
     <TypeScriptCompile Include="App\MyReports\MyReportsControllerJSTest.ts" />
     <Content Include="App\MyReports\MyReportsView.html" />
     <Content Include="App\Settings\SettingsView.html" />
@@ -1957,6 +1960,7 @@
     <TypeScriptCompile Include="App\MyReports\MyReportsController.ts" />
     <TypeScriptCompile Include="App\Navbar\NavbarController.spec.ts" />
     <TypeScriptCompile Include="App\Navbar\NavbarController.ts" />
+    <TypeScriptCompile Include="App\Services\PersonResource.ts" />
     <TypeScriptCompile Include="App\Settings\SettingsController.spec.ts" />
     <TypeScriptCompile Include="App\Settings\SettingsController.ts" />
     <TypeScriptCompile Include="Scripts\typings\angular-ui\angular-ui-router.d.ts" />

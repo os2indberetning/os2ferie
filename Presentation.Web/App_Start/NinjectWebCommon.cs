@@ -65,7 +65,7 @@ namespace OS2Indberetning.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<DataContext>().ToSelf().InRequestScope();
-            kernel.Bind(typeof (IGenericRepository<>)).To(typeof (GenericRepositoryImpl<>));
+            kernel.Bind(typeof (IGenericRepository<>)).To(typeof (GenericRepository<>));
         }        
     }
 }
