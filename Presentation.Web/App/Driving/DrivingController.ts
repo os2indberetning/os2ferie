@@ -9,7 +9,10 @@ module Driving {
 
     export class Controller {
 
-        constructor(private $scope: Scope) {
+        constructor(private $scope: Scope, private $personResource : IPersonResource) {
+
+
+            console.log($personResource.get())
 
             $scope.date = {
                 start: "month",
