@@ -7,9 +7,9 @@ module Driving {
     }
 
     export class Controller {           
-        private Person: ServiceModels.IPersonResource;
+        private Person: Resource.IPersonResource;
 
-        constructor($scope: Scope, Person: ServiceModels.IPersonResource) {
+        constructor($scope: Scope, Person: Resource.IPersonResource) {
             this.Person = Person;
 
             var test = this.Person.get({id:1}, function () {
