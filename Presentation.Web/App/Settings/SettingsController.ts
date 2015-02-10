@@ -1,4 +1,6 @@
-﻿module Setting {
+﻿///<reference path="../../../Core.DomainModel/Person.cs.d.ts"/>
+
+module Setting {
     'use strict';
     interface Scope extends ng.IScope {
         personalAddresses: any;
@@ -7,12 +9,16 @@
         licensePlates: any;
         isCollapsed: any;
         setHomeWorkOverride: any;
-        
+
+    }
+
+    class Person {
+        public workDistanceOverride: number;
     }
 
     export class Controller {
 
-        private http: any;        
+        private http: any;
 
         constructor(private $scope: Scope, private $modal, private $http) {
             this.http = $http;
@@ -92,19 +98,23 @@
 
             $scope.mailAdvice = 'No';
 
-            $scope.licensePlates = ['AB 12 345', 'HG 56 987', ' TI 53 456'];   
-            
+            $scope.licensePlates = ['AB 12 345', 'HG 56 987', ' TI 53 456'];
+
+            var person = new Person();
+            person.workDistanceOverride = 42;
+
             $scope.setHomeWorkOverride = () => {
                 console.log("1");
+
                 
 
-                $http.put('odata/Person/SetHomeWorkOverride').success(
+                $http({ method: 'PATCH', url: "odata/Person(1)", data: person }).success(
                     (data, status) => console.log(data)
                     );
-            }         
+            }
         }
 
-        
+
 
     }
 }
