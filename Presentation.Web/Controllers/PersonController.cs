@@ -36,7 +36,7 @@ namespace OS2Indberetning.Controllers
 
         public PersonController()
         {
-            _genericRepo = new GenericRepositoryImpl<Person>(new DataContext());
+            _genericRepo = new GenericRepository<Person>(new DataContext());
             _personRepo = new PersonRepository(new DataContext());
         }
 
@@ -44,14 +44,18 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<Person> GetPerson(ODataQueryOptions<Person> queryOptions)
         {
-            return _genericRepo.AsQueryable();
+            var result = _genericRepo.AsQueryable();
+
+            return result;
         }
 
         // GET: odata/Person(5)
         [EnableQuery]
         public IQueryable<Person> GetPerson([FromODataUri] int key, ODataQueryOptions<Person> queryOptions)
         {
-            return new List<Person>() { new Person() }.AsQueryable();
+            var result = new List<Person>() {  _genericRepo.AsQueryable().First(x => x.Id == key) }.AsQueryable();
+
+            return result;
         }
 
         // PUT: odata/Person(5)

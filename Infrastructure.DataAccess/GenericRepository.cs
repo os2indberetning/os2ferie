@@ -5,12 +5,12 @@ using Core.DomainServices;
 
 namespace Infrastructure.DataAccess
 {
-    public class GenericRepositoryImpl<T> : IGenericRepository<T> where T : class 
+    public class GenericRepository<T> : IGenericRepository<T> where T : class 
     {
         private readonly DbSet<T> _dbSet;
         private readonly DataContext _context;
 
-        public GenericRepositoryImpl(DataContext context)
+        public GenericRepository(DataContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();

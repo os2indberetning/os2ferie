@@ -13,15 +13,35 @@ module Setting {
     }
 
     class Person {
+        public id: number;
+        public cprNumber: string;
+        public personId: number;
+        public firstName: string;
+        public middleName: string;
+        public lastName: string;
+        public mail: string;
         public workDistanceOverride: number;
+        //public licenseplates: LicensePlate[];
+    }
+
+    class LicensePlate {
+        public id: number;
+        public plate: string;
+        public description: string;
     }
 
     export class Controller {
 
         private http: any;
+        private person: Person;
+        private licenseplates: LicensePlate[];
 
         constructor(private $scope: Scope, private $modal, private $http) {
             this.http = $http;
+
+            this.person = this.getPerson(1);
+
+            
 
             $scope.personalAddresses = {
                 dataSource: {
@@ -98,22 +118,41 @@ module Setting {
 
             $scope.mailAdvice = 'No';
 
-            $scope.licensePlates = ['AB 12 345', 'HG 56 987', ' TI 53 456'];
+            //$scope.licensePlates = ['AB 12 345', 'HG 56 987', ' TI 53 456'];
 
             var person = new Person();
             person.workDistanceOverride = 42;
 
             $scope.setHomeWorkOverride = () => {
-                console.log("1");
-
-                
-
-                $http({ method: 'PATCH', url: "odata/Person(1)", data: person }).success(
-                    (data, status) => console.log(data)
+                $http({ method: 'PATCH', url: "odata/Person(1)", data: { workDistanceOverride: 42} }).success(
+                        (data, status) => console.log(data)
                     );
             }
         }
 
+        getPerson(id: number) {
+            return this.http({
+                method: 'GET',
+                url: 'odata/Person(1)'
+            }).success(
+                (data) => {
+                        console.log(data);
+                        this.licenseplates = this.getLicensePlates(data[0].Id);
+                        console.log(this.licenseplates);
+                    return data;
+                }
+            );
+        }
+
+        getLicensePlates(personId: number) {
+            return this.http({
+                method: 'GET',
+                url: 'odata/LicensePlates(' + personId + ')'
+            }).success(
+                (data) => {
+                    console.log(data); return data; }
+            );
+        }
 
 
     }

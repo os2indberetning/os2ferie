@@ -36,7 +36,7 @@ namespace OS2Indberetning.Controllers
         {
             _validationSettings.AllowedQueryOptions = AllowedQueryOptions.All;
 
-            _repo = new GenericRepositoryImpl<DriveReport>(new DataContext());
+            _repo = new GenericRepository<DriveReport>(new DataContext());
         }
 
         // GET: odata/DriveReports
