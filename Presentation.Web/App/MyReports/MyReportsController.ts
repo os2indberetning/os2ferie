@@ -35,7 +35,7 @@ module MyReports {
                     || this.$scope.toDate == ""
                     )) {
                     // Input is valid
-                    var query = "?$filter=CreatedDateTimestamp gt " + this.dateToEpoch(this.$scope.fromDate) + " and CreatedDateTimestamp lt " + this.dateToEpoch(this.$scope.toDate);
+                    var query = "?$filter=CreatedDateTimestamp ge " + this.dateToEpoch(this.$scope.fromDate) + " and CreatedDateTimestamp le " + this.dateToEpoch(this.$scope.toDate);
                     this.updatePendingReports(query);
 
                 }
