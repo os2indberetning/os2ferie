@@ -6,25 +6,72 @@ module MyReports {
         pendingReports: any;
         approvedReports: any;
         deniedReports: any;
+        searchClicked: any;
+        toDate: string;
+        fromDate: string;
+        gridContainer : any;
     }
 
     export class Controller {
 
+
         constructor(private $scope: Scope) {
-            $scope.pendingReports = {
+
+            $scope.gridContainer = {};
+
+            $scope.searchClicked = this.searchClicked;
+
+            this.loadPendingReports();
+            this.loadApprovedReports();
+            this.loadDeniedReports();
+        }
+
+         // Eventhandler for searchbutton click
+        searchClicked = () => {
+                // Validate input
+                if (!(typeof this.$scope.fromDate == 'undefined'
+                    || typeof this.$scope.toDate == 'undefined'
+                    || this.$scope.fromDate == ""
+                    || this.$scope.toDate == ""
+                    )) {
+                    // Input is valid
+                    var query = "?$filter=CreatedDateTimestamp gt " + this.dateToEpoch(this.$scope.fromDate) + " and CreatedDateTimestamp lt " + this.dateToEpoch(this.$scope.toDate);
+                    this.updatePendingReports(query);
+
+                }
+            }
+
+        updatePendingReports = (oDataQuery : string) => {
+            this.$scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = "/odata/DriveReports" + oDataQuery;
+            this.$scope.gridContainer.pendingGrid.dataSource.read();
+        }
+
+        updateApprovedReports = (oDataQuery: string) => {
+            this.$scope.gridContainer.approvedGrid.dataSource.transport.options.read.url = "/odata/DriveReports" + oDataQuery;
+            this.$scope.gridContainer.approvedGrid.dataSource.read();
+        }
+
+        updateDeniedReports = (oDataQuery: string) => {
+            this.$scope.gridContainer.deniedGrid.dataSource.transport.options.read.url = "/odata/DriveReports" + oDataQuery;
+            this.$scope.gridContainer.deniedGrid.dataSource.read();
+        }
+
+        loadPendingReports = () => {
+            this.$scope.pendingReports = {
                 dataSource: {
                     type: "odata",
                     transport: {
                         read: {
-                            beforeSend: function (req) {
+                            beforeSend: function(req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
                             url: "/odata/DriveReports",
-                            dataType: "json"                                    
-                        },
-                        parameterMap: function (options, type) {                            
+                            dataType: "json",
+                            cache: false
+        },
+                        parameterMap: function (options, type) {
                             var d = kendo.data.transports.odata.parameterMap(options);
-                           
+
                             delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
 
                             d.$count = true;
@@ -34,6 +81,7 @@ module MyReports {
                     },
                     schema: {
                         data: function (data) {
+                            console.log(data);
                             return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
                         },
                         total: function (data) {
@@ -51,11 +99,11 @@ module MyReports {
                 },
                 columns: [
                     {
-                        field: "Name",
+                        field: "Fullname",
                         title: "Navn"
                     }, {
                         field: "Timestamp",
-                        title: "Indberetet den"
+                        title: "Indberettet den"
                     }, {
                         field: "Purpose",
                         title: "Formål"
@@ -68,81 +116,92 @@ module MyReports {
                     }
                 ]
             };
-           
-            $scope.approvedReports = {
-                dataSource: {
-                    type: "odata",
-                    transport: {
-                        read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Employees"
-                    },
-                    pageSize: 5,
-                    serverPaging: true,
-                    serverSorting: true
-                },
-                sortable: true,
-                pageable: true,
-                dataBound: function () {
-                    this.expandRow(this.tbody.find("tr.k-master-row").first());
-                },
-                columns: [
-                    {
-                        field: "FirstName",
-                        title: "First Name",
-                        width: "120px"
-                    }, {
-                        field: "LastName",
-                        title: "Last Name",
-                        width: "120px"
-                    }, {
-                        field: "Country",
-                        width: "120px"
-                    }, {
-                        field: "City",
-                        width: "120px"
-                    }, {
-                        field: "Title"
-                    }
-                ]
-            };
-
-            $scope.deniedReports = {
-                dataSource: {
-                    type: "odata",
-                    transport: {
-                        read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Employees"
-                    },
-                    pageSize: 5,
-                    serverPaging: true,
-                    serverSorting: true
-                },
-                sortable: true,
-                pageable: true,
-                dataBound: function () {
-                    this.expandRow(this.tbody.find("tr.k-master-row").first());
-                },
-                columns: [
-                    {
-                        field: "FirstName",
-                        title: "First Name",
-                        width: "120px"
-                    }, {
-                        field: "LastName",
-                        title: "Last Name",
-                        width: "120px"
-                    }, {
-                        field: "Country",
-                        width: "120px"
-                    }, {
-                        field: "City",
-                        width: "120px"
-                    }, {
-                        field: "Title"
-                    }
-                ]
-            };
-
-            console.log(this.$scope);
         }
+
+        loadApprovedReports = () => {
+            this.$scope.approvedReports = {
+                dataSource: {
+                    type: "odata",
+                    transport: {
+                        read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Employees"
+                    },
+                    pageSize: 5,
+                    serverPaging: true,
+                    serverSorting: true
+                },
+                sortable: true,
+                pageable: true,
+                dataBound: function () {
+                    this.expandRow(this.tbody.find("tr.k-master-row").first());
+                },
+                columns: [
+                    {
+                        field: "FirstName",
+                        title: "First Name",
+                        width: "120px"
+                    }, {
+                        field: "LastName",
+                        title: "Last Name",
+                        width: "120px"
+                    }, {
+                        field: "Country",
+                        width: "120px"
+                    }, {
+                        field: "City",
+                        width: "120px"
+                    }, {
+                        field: "Title"
+                    }
+                ]
+            };
+        }
+
+        loadDeniedReports = () => {
+            this.$scope.deniedReports = {
+                dataSource: {
+                    type: "odata",
+                    transport: {
+                        read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Employees"
+                    },
+                    pageSize: 5,
+                    serverPaging: true,
+                    serverSorting: true
+                },
+                sortable: true,
+                pageable: true,
+                dataBound: function () {
+                    this.expandRow(this.tbody.find("tr.k-master-row").first());
+                },
+                columns: [
+                    {
+                        field: "FirstName",
+                        title: "First Name",
+                        width: "120px"
+                    }, {
+                        field: "LastName",
+                        title: "Last Name",
+                        width: "120px"
+                    }, {
+                        field: "Country",
+                        width: "120px"
+                    }, {
+                        field: "City",
+                        width: "120px"
+                    }, {
+                        field: "Title"
+                    }
+                ]
+            };
+        }
+
+
+
+        dateToEpoch = (date: string) : number => {
+            var myDate = new Date(date);
+            myDate.setHours(myDate.getHours() + 1); // Add 1 hour to get Danish timezone.
+            return myDate.getTime() / 1000.0; // return epoch
+        }
+
     }
 }
 
