@@ -40,17 +40,5 @@ namespace Infrastructure.DataAccess
         {
             throw new System.NotImplementedException();
         }
-
-        public void UpdateWorkDistanceOverride(int id, float newValue)
-        {
-            var existing = _dbSet.First(x => x.Id == id);
-
-            if (existing != null)
-            {
-                existing.WorkDistanceOverride = newValue;
-
-                Save();
-            }
-        }
     }
 }

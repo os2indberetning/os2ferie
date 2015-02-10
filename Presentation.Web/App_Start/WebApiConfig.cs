@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
@@ -37,6 +38,8 @@ namespace OS2Indberetning
                 );
 
             config.Formatters.AddRange(ODataMediaTypeFormatters.Create());
+
+            
         }
 
         public static Microsoft.OData.Edm.IEdmModel GetModel()
@@ -58,7 +61,9 @@ namespace OS2Indberetning
             eType.HasKey(e => e.Id);
 
             builder.EntitySet<FileGenerationSchedule>("FileGenerationSchedules");
-
+            
+            var lType = builder.EntityType<LicensePlate>();
+            lType.Ignore(l => l.Person);
             builder.EntitySet<LicensePlate>("LicensePlates");
 
             builder.EntitySet<MailNotificationSchedule>("MailNotificationSchedules");
@@ -70,6 +75,7 @@ namespace OS2Indberetning
             builder.EntitySet<Person>("Person");
             var pType = builder.EntityType<Person>();
             pType.HasKey(p => p.Id);
+            pType.Ignore(p => p.LicensePlates);            
 
             builder.EntitySet<PersonalAddress>("PersonalAddresses");
 

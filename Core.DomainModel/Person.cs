@@ -15,11 +15,11 @@ namespace Core.DomainModel
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Mail { get; set; }
-        public float WorkDistanceOverride { get; set; }
+        public int WorkDistanceOverride { get; set; }
 
         public virtual ICollection<PersonalAddress> PersonalAddresses { get; set; }
         public virtual ICollection<PersonalRoute> PersonalRoutes { get; set; }
-        public virtual ICollection<LicensePlate> LicensePlates { get; set; }
+        public ICollection<LicensePlate> LicensePlates { get; set; }
         public virtual ICollection<MobileToken> MobileTokens { get; set; }
         public virtual ICollection<Report> Reports { get; set; }
         public virtual ICollection<Employment> Employments { get; set; }
