@@ -1,4 +1,6 @@
-﻿<div class="row">
+﻿<link rel="stylesheet" href="../../Content/customcss/myreports.css"/>
+
+<div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
             Mine Indberetninger <small>Se egne indberetninger</small>
@@ -8,6 +10,37 @@
 
 <div class="row" ng-controller="MyReportsController">
     <div class="col-lg-12">
+        
+        
+        
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="">Fra</label>
+                    <input ng-model="fromDate" kendo-date-picker k-options="date" id="fromDate" />
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="">Til</label>
+                    <input ng-model="toDate" kendo-date-picker k-options="date" id="toDate" />
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <button ng-click="searchClicked()" class="btn btn-primary fill-height">Søg</button>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        
+
+
+
+
         <tabset justified="true">
             <tab heading="Afventende">
                 <div class="panel panel-default">
@@ -15,7 +48,7 @@
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afventende</h3>
                     </div>
                     <div class="panel-body">
-                        <kendo-grid options="pendingReports" />
+                        <div kendo-grid="gridContainer.pendingGrid" options="pendingReports"></div>
                     </div>
                 </div>
             </tab>
@@ -25,7 +58,7 @@
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Godkendte</h3>
                     </div>
                     <div class="panel-body">
-                        <kendo-grid options="approvedReports" />
+                        <div kendo-grid="gridContainer.approvedGrid" options="approvedReports" ></div>
                     </div>
                 </div>
             </tab>
@@ -35,7 +68,7 @@
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afviste</h3>
                     </div>
                     <div class="panel-body">
-                        <kendo-grid options="deniedReports" />
+                        <div kendo-grid="gridContainer.deniedGrid" options="deniedReports"> </div>
                     </div>
                 </div>
             </tab>

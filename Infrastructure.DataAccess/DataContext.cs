@@ -154,6 +154,8 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<DriveReport>().Property(p => p.StartsAtHome).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.EndsAtHome).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.Licenseplate).IsRequired();
+            modelBuilder.Entity<DriveReport>().Ignore(p => p.Fullname);
+            modelBuilder.Entity<DriveReport>().Ignore(p => p.Timestamp);
         }
 
         private void ConfigurePropertiesForReport(DbModelBuilder modelBuilder)

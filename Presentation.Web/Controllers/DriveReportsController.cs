@@ -43,9 +43,27 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions)
         {
-            var driveReports = _repo.AsQueryable();
+            // ToList otherwise the foreach loop causes an exception
+            var driveReports = _repo.AsQueryable().ToList();
 
-            return driveReports;
+            // Add fullname and human readable timestamp to the resultset
+            foreach (var driveReport in driveReports)
+            {
+                driveReport.Fullname = driveReport.Person.FirstName;
+
+                if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
+                {
+                    driveReport.Fullname += " " + driveReport.Person.MiddleName;
+                }
+                driveReport.Fullname += " " + driveReport.Person.LastName;
+
+
+                driveReport.Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(driveReport.CreatedDateTimestamp).ToShortDateString();
+            }
+
+
+            // Back to AsQueryable for Kendo
+            return driveReports.AsQueryable();
             //return StatusCode(HttpStatusCode.NotImplemented);
         }
 
