@@ -21,5 +21,7 @@ namespace Core.DomainServices
          */
         IQueryable<T> AsQueryable();
         void Save();
+        void Update(T entity);
+        void Patch(T entity);
     }
 }

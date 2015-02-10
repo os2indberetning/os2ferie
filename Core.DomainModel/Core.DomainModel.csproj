@@ -78,6 +78,9 @@
     <TypeScriptCompile Include="Example\Test.cs.d.ts">
       <DependentUpon>Product.cs</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Person.cs.d.ts">
+      <DependentUpon>Person.cs</DependentUpon>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
