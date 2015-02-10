@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Dynamic;
 
 namespace Core.DomainModel
 {
@@ -15,7 +16,9 @@ namespace Core.DomainModel
         public bool FourKmRule { get; set; }
         public bool StartsAtHome { get; set; }
         public bool EndsAtHome { get; set; }
-        public String Licenseplate { get; set; }
+        public string Licenseplate { get; set; }
+        public string Fullname { get; set; }
+        public string Timestamp { get; set; }
 
         public virtual ICollection<DriveReportPoint> DriveReportPoints { get; set; }
     }
