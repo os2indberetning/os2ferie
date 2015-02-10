@@ -52,7 +52,7 @@ module Application {
     }
     
     export class AngularApp {
-        public static Module: ng.IModule = angular.module("app", ["kendo.directives", "ui.router", "ui.bootstrap", "template/modal/window.html", "template/modal/window.html", "template/modal/backdrop.html", "template/tabs/tab.html", "template/tabs/tabset.html", "angularMoment"])
+        public static Module: ng.IModule = angular.module("app", ["kendo.directives", "ui.router", "ui.bootstrap", "ngResource", "template/modal/window.html", "template/modal/window.html", "template/modal/backdrop.html", "template/tabs/tab.html", "template/tabs/tabset.html", "angularMoment"])
             .config(
                 ["$stateProvider",
                     ($stateProvider) => {
@@ -60,7 +60,7 @@ module Application {
                     }
                 ])
             .constant('angularMomentConfig', new AngularMomentConfig())
-            .run((amMoment) => (amMoment.changeLocale('da')));
+            .run((amMoment) => (amMoment.changeLocale('da'))); 
     }
 }
 

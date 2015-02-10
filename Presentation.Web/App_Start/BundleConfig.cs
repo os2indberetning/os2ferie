@@ -20,7 +20,8 @@ namespace OS2Indberetning
                 .Include("~/Scripts/moment.js")
                 .Include("~/Scripts/moment-locale-da.js")
                 .Include("~/Scripts/moment-timezone-with-data.js")
-                .Include("~/Scripts/angular-moment.js"));
+                .Include("~/Scripts/angular-moment.js")
+                .Include("~/Scripts/angular-resource.min.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.

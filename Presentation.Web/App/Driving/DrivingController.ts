@@ -4,15 +4,19 @@ module Driving {
     'use strict';
     interface Scope extends ng.IScope {
         state: ng.ui.IState;
-        date : any;
+        date: any;        
     }
 
-    export class Controller {
+    export class Controller {           
+        private personResource: ServiceModels.IPersonResource;
+        constructor(private $scope: Scope, private $personResource : ServiceModels.IPersonResource) {
+            this.personResource = $personResource;
 
-        constructor(private $scope: Scope, private $personResource : IPersonResource) {
+            var test = this.personResource.get({ id: 1 }, function () {
+                console.log(test);
+            });
 
-
-            console.log($personResource.get())
+            
 
             $scope.date = {
                 start: "month",
