@@ -20,6 +20,6 @@ namespace Core.DomainModel
         public string Fullname { get; set; }
         public string Timestamp { get; set; }
 
-        public virtual ICollection<DriveReportPoint> DriveReportPoints { get; set; }
+        public ICollection<DriveReportPoint> DriveReportPoints { get; set; }
     }
 }

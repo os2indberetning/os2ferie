@@ -49,6 +49,8 @@ namespace OS2Indberetning.Controllers
             // Add fullname and human readable timestamp to the resultset
             foreach (var driveReport in driveReports)
             {
+                
+
                 driveReport.Fullname = driveReport.Person.FirstName;
 
                 if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))

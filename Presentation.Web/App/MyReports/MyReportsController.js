@@ -1,5 +1,5 @@
 angular.module("application").controller("MyReportsController", [
-   "$scope", function ($scope) {
+   "$scope", "$modal", "$rootScope", function ($scope, $modal, $rootScope) {
 
        // Contains references to kendo ui grids.
        $scope.gridContainer = {};
@@ -65,6 +65,46 @@ angular.module("application").controller("MyReportsController", [
            $scope.activeTab = tab;
        }
 
+       $scope.deleteClick = function (id) {
+           var modalInstance = $modal.open({
+               templateUrl: '/App/MyReports/ConfirmDeleteTemplate.html',
+               controller: 'ConfirmDeleteReportController',
+               resolve: {
+                   itemId : function() {
+                       return id;
+                   }
+               }
+           });
+
+           modalInstance.result.then(function (itemId) {
+               // Handle confirm delete
+           });
+       }
+
+       $scope.editClick = function (id, size) {
+
+           // Create a new scope to inject into DrivingController
+           var scope = $rootScope.$new();
+
+           // Set values in the scope
+           scope.purpose = "wazzup";
+
+           var modalInstance = $modal.open({
+               scope: scope,
+               templateUrl: '/App/MyReports/EditReportTemplate.html',
+               controller: 'DrivingController',
+               windowClass: 'full',
+               resolve: {
+                   itemId: function () {
+                       return "hej";
+                   }
+               }
+           });
+
+           modalInstance.result.then(function (itemId) {
+
+           });
+       }
 
        // Load all pending reports from server.
        $scope.loadPendingReports = function () {
@@ -121,7 +161,8 @@ angular.module("application").controller("MyReportsController", [
                        field: "Type",
                        title: "Type"
                    }, {
-                       field: "options",
+                       field: "Id",
+                       template: "<a ng-click=deleteClick(${Id})>Slet</a> | <a ng-click=editClick(${Id})>Rediger</a>",
                        title: "Muligheder"
                    }
                ]
