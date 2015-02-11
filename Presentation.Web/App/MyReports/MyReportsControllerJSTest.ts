@@ -1,4 +1,4 @@
-﻿var app = Application.AngularApp.Module;
+﻿var app = angular.module("application");
 
 app.controller("MyReportsControllerJSTest", function ($scope) {
     $scope.pendingReports = {
