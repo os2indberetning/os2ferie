@@ -15,6 +15,7 @@ namespace Core.DomainModel
         public Guid Guid { get; set; }
         public MobileTokenStatus Status { get; set; }
         public String Token { get; set; }
+        public int PersonId { get; set; }
         public virtual Person Person { get; set; }
     }
 }

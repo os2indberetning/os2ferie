@@ -13,7 +13,7 @@ namespace Core.DomainModel
     public class PersonalAddress : Address
     {
         public PersonalAddressType Type { get; set; }
-
+        public int PersonId { get; set; }
         public virtual Person Person { get; set; }
     }
 }
