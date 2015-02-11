@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,6 +12,7 @@ using System.Web.OData.Query;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
+using Infrastructure.DataAccess.Migrations;
 using Microsoft.OData.Core;
 using Ninject;
 
@@ -61,6 +63,7 @@ namespace OS2Indberetning.Controllers
 
 
                 driveReport.Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(driveReport.CreatedDateTimestamp).ToShortDateString();
+
             }
 
 
@@ -72,18 +75,14 @@ namespace OS2Indberetning.Controllers
         //GET: odata/DriveReports(5)
         public IHttpActionResult GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
-            // validate the query.
-            try
-            {
-                queryOptions.Validate(_validationSettings);
-            }
-            catch (ODataException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var driveReports = _repo.AsQueryable();
+
+            var result = driveReports.FirstOrDefault(rep => rep.Id == key);
+
+      
 
             // return Ok<DriveReport>(driveReport);
-            return StatusCode(HttpStatusCode.NotImplemented);
+            return Ok(result);
         }
 
         // PUT: odata/DriveReports(5)

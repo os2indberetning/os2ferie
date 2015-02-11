@@ -1,5 +1,5 @@
 angular.module("application").controller("MyReportsController", [
-   "$scope", "$modal", "$rootScope", function ($scope, $modal, $rootScope) {
+   "$scope", "$modal", "$rootScope", "Report", function ($scope, $modal, $rootScope, Report) {
 
        // Contains references to kendo ui grids.
        $scope.gridContainer = {};
@@ -81,13 +81,21 @@ angular.module("application").controller("MyReportsController", [
            });
        }
 
-       $scope.editClick = function (id, size) {
-
+       $scope.editClick = function (id) {
            // Create a new scope to inject into DrivingController
            var scope = $rootScope.$new();
 
-           // Set values in the scope
-           scope.purpose = "wazzup";
+           console.log("id biznatch: " + id);
+
+           // Get the report from the server
+           Report.get({ id: id }, function (data) {
+               scope.purpose = data.purpose;
+               scope.driveDate = moment().unix(data.driveDateTimestamp).toString();
+               console.log("123    " + scope.driveDate);
+           });
+
+
+           
 
            var modalInstance = $modal.open({
                scope: scope,
@@ -152,7 +160,7 @@ angular.module("application").controller("MyReportsController", [
                        field: "Fullname",
                        title: "Navn"
                    }, {
-                       field: "Timestamp",
+                       field: "CreatedTimestamp",
                        title: "Indberettet den"
                    }, {
                        field: "Purpose",
@@ -253,5 +261,10 @@ angular.module("application").controller("MyReportsController", [
        $scope.loadDeniedReports();
        $scope.loadPendingReports();
 
-   }
+
+       // Get the report from the server
+       Report.get({ id: 3 }, function (data) {
+           console.log();
+       });
+    }
 ]);

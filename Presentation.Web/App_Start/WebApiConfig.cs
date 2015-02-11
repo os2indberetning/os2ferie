@@ -15,6 +15,7 @@ using Core.DomainModel.Example;
 using Microsoft.OData.Core;
 using Microsoft.OData.Edm;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using OS2Indberetning.Controllers;
 
 namespace OS2Indberetning
@@ -38,6 +39,10 @@ namespace OS2Indberetning
                 );
 
             config.Formatters.AddRange(ODataMediaTypeFormatters.Create());
+
+            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             
         }
