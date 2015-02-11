@@ -282,6 +282,7 @@
     <Content Include="App\MyReports\EditReportTemplate.html" />
     <Content Include="App\MyReports\MyReportsController.js" />
     <Content Include="App\MyReports\MyReportsView.html" />
+    <Content Include="App\Services\ReportResource.js" />
     <Content Include="App\Settings\SettingsController.js" />
     <Content Include="App\Settings\SettingsView.html" />
     <Content Include="App\Settings\tokenModal.html" />
