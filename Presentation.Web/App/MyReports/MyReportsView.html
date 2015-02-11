@@ -42,7 +42,7 @@
 
 
         <tabset justified="true">
-            <tab heading="Afventende">
+            <tab heading="Afventende" ng-click="tabClicked('pending')">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afventende</h3>
@@ -52,7 +52,7 @@
                     </div>
                 </div>
             </tab>
-            <tab heading="Godkendte">
+            <tab heading="Godkendte" ng-click="tabClicked('approved')">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Godkendte</h3>
@@ -62,7 +62,7 @@
                     </div>
                 </div>
             </tab>
-            <tab heading="Afviste">
+            <tab heading="Afviste" ng-click="tabClicked('denied')">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afviste</h3>
