@@ -17,26 +17,30 @@ namespace Infrastructure.DataAccess.Migrations
                         ZipCode = c.Int(nullable: false),
                         Town = c.String(nullable: false, unicode: false),
                         Longitude = c.String(nullable: false, unicode: false),
-                        Lattitude = c.String(nullable: false, unicode: false),
+                        Latitude = c.String(nullable: false, unicode: false),
                         Description = c.String(unicode: false),
+                        NextPointId = c.Int(),
+                        PreviousPointId = c.Int(),
+                        DriveReportId = c.Int(),
                         Type = c.Int(),
+                        PersonId = c.Int(),
+                        NextPointId1 = c.Int(),
+                        PreviousPointId1 = c.Int(),
+                        PersonalRouteId = c.Int(),
                         Discriminator = c.String(nullable: false, maxLength: 128, storeType: "nvarchar"),
-                        Person_Id = c.Int(),
                         NextPoint_Id = c.Int(),
-                        PersonalRoute_Id = c.Int(),
-                        DriveReport_Id = c.Int(),
                         NextPoint_Id1 = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("People", t => t.Person_Id, cascadeDelete: true)
+                .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
                 .ForeignKey("Addresses", t => t.NextPoint_Id)
-                .ForeignKey("PersonalRoutes", t => t.PersonalRoute_Id, cascadeDelete: true)
-                .ForeignKey("Reports", t => t.DriveReport_Id, cascadeDelete: true)
+                .ForeignKey("PersonalRoutes", t => t.PersonalRouteId, cascadeDelete: true)
+                .ForeignKey("Reports", t => t.DriveReportId, cascadeDelete: true)
                 .ForeignKey("Addresses", t => t.NextPoint_Id1)
-                .Index(t => t.Person_Id)
+                .Index(t => t.DriveReportId)
+                .Index(t => t.PersonId)
+                .Index(t => t.PersonalRouteId)
                 .Index(t => t.NextPoint_Id)
-                .Index(t => t.PersonalRoute_Id)
-                .Index(t => t.DriveReport_Id)
                 .Index(t => t.NextPoint_Id1);
             
             CreateTable(
@@ -45,29 +49,29 @@ namespace Infrastructure.DataAccess.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         status = c.Int(nullable: false),
-                        CreatedDate = c.DateTime(nullable: false, precision: 0),
-                        EditedDate = c.DateTime(nullable: false, precision: 0),
+                        CreatedDateTimestamp = c.Long(nullable: false),
+                        EditedDateTimestamp = c.Long(nullable: false),
                         Comment = c.String(nullable: false, unicode: false),
-                        ClosedDate = c.DateTime(nullable: false, precision: 0),
-                        ProcessedDate = c.DateTime(nullable: false, precision: 0),
+                        ClosedDateTimestamp = c.Long(nullable: false),
+                        ProcessedDateTimestamp = c.Long(nullable: false),
+                        PersonId = c.Int(nullable: false),
+                        EmploymentId = c.Int(nullable: false),
                         Distance = c.Single(),
                         AmountToReimburse = c.Single(),
                         Purpose = c.String(unicode: false),
                         KmRate = c.Single(),
-                        DriveDate = c.DateTime(precision: 0),
+                        DriveDateTimestamp = c.Long(),
                         FourKmRule = c.Boolean(),
                         StartsAtHome = c.Boolean(),
                         EndsAtHome = c.Boolean(),
                         Licenseplate = c.String(unicode: false),
                         Discriminator = c.String(nullable: false, maxLength: 128, storeType: "nvarchar"),
-                        Employment_Id = c.Int(nullable: false),
-                        Person_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("Employments", t => t.Employment_Id, cascadeDelete: true)
-                .ForeignKey("People", t => t.Person_Id, cascadeDelete: true)
-                .Index(t => t.Employment_Id)
-                .Index(t => t.Person_Id);
+                .ForeignKey("Employments", t => t.EmploymentId, cascadeDelete: true)
+                .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
+                .Index(t => t.PersonId)
+                .Index(t => t.EmploymentId);
             
             CreateTable(
                 "Employments",
@@ -77,16 +81,16 @@ namespace Infrastructure.DataAccess.Migrations
                         EmploymentId = c.Int(nullable: false),
                         Position = c.String(nullable: false, unicode: false),
                         IsLeader = c.Boolean(nullable: false),
-                        StartDate = c.DateTime(nullable: false, precision: 0),
-                        EndDateTime = c.DateTime(nullable: false, precision: 0),
-                        OrgUnit_Id = c.Int(nullable: false),
-                        Person_Id = c.Int(nullable: false),
+                        StartDateTimestamp = c.Long(nullable: false),
+                        EndDateTimestamp = c.Long(nullable: false),
+                        PersonId = c.Int(nullable: false),
+                        OrgUnitId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("OrgUnits", t => t.OrgUnit_Id, cascadeDelete: true)
-                .ForeignKey("People", t => t.Person_Id, cascadeDelete: true)
-                .Index(t => t.OrgUnit_Id)
-                .Index(t => t.Person_Id);
+                .ForeignKey("OrgUnits", t => t.OrgUnitId, cascadeDelete: true)
+                .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
+                .Index(t => t.PersonId)
+                .Index(t => t.OrgUnitId);
             
             CreateTable(
                 "OrgUnits",
@@ -97,30 +101,30 @@ namespace Infrastructure.DataAccess.Migrations
                         ShortDescription = c.String(nullable: false, unicode: false),
                         LongDescription = c.String(unicode: false),
                         Level = c.Int(nullable: false),
-                        Parent_Id = c.Int(),
+                        ParentId = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("OrgUnits", t => t.Parent_Id)
-                .Index(t => t.Parent_Id);
+                .ForeignKey("OrgUnits", t => t.ParentId)
+                .Index(t => t.ParentId);
             
             CreateTable(
                 "Substitutes",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        StartDate = c.DateTime(nullable: false, precision: 0),
-                        EndDate = c.DateTime(nullable: false, precision: 0),
-                        Leader_Id = c.Int(nullable: false),
-                        OrgUnit_Id = c.Int(nullable: false),
-                        Sub_Id = c.Int(nullable: false),
+                        StartDateTimestamp = c.Long(nullable: false),
+                        EndDateTimestamp = c.Long(nullable: false),
+                        LeaderId = c.Int(nullable: false),
+                        SubId = c.Int(nullable: false),
+                        OrgUnitId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("People", t => t.Leader_Id, cascadeDelete: true)
-                .ForeignKey("OrgUnits", t => t.OrgUnit_Id, cascadeDelete: true)
-                .ForeignKey("People", t => t.Sub_Id, cascadeDelete: true)
-                .Index(t => t.Leader_Id)
-                .Index(t => t.OrgUnit_Id)
-                .Index(t => t.Sub_Id);
+                .ForeignKey("People", t => t.LeaderId, cascadeDelete: true)
+                .ForeignKey("OrgUnits", t => t.OrgUnitId, cascadeDelete: true)
+                .ForeignKey("People", t => t.SubId, cascadeDelete: true)
+                .Index(t => t.LeaderId)
+                .Index(t => t.SubId)
+                .Index(t => t.OrgUnitId);
             
             CreateTable(
                 "People",
@@ -133,7 +137,7 @@ namespace Infrastructure.DataAccess.Migrations
                         MiddleName = c.String(unicode: false),
                         LastName = c.String(nullable: false, unicode: false),
                         Mail = c.String(nullable: false, unicode: false),
-                        WorkDistanceOverride = c.Single(nullable: false),
+                        WorkDistanceOverride = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                ;
             
@@ -144,11 +148,11 @@ namespace Infrastructure.DataAccess.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         Plate = c.String(nullable: false, unicode: false),
                         Description = c.String(nullable: false, unicode: false),
-                        Person_Id = c.Int(nullable: false),
+                        PersonId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("People", t => t.Person_Id, cascadeDelete: true)
-                .Index(t => t.Person_Id);
+                .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
+                .Index(t => t.PersonId);
             
             CreateTable(
                 "MobileTokens",
@@ -158,11 +162,11 @@ namespace Infrastructure.DataAccess.Migrations
                         Guid = c.Guid(nullable: false),
                         Status = c.Int(nullable: false),
                         Token = c.String(nullable: false, unicode: false),
-                        Person_Id = c.Int(nullable: false),
+                        PersonId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("People", t => t.Person_Id, cascadeDelete: true)
-                .Index(t => t.Person_Id);
+                .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
+                .Index(t => t.PersonId);
             
             CreateTable(
                 "PersonalRoutes",
@@ -170,18 +174,18 @@ namespace Infrastructure.DataAccess.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Description = c.String(nullable: false, unicode: false),
-                        Person_Id = c.Int(nullable: false),
+                        PersonId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("People", t => t.Person_Id, cascadeDelete: true)
-                .Index(t => t.Person_Id);
+                .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
+                .Index(t => t.PersonId);
             
             CreateTable(
                 "FileGenerationSchedules",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Date = c.DateTime(nullable: false, precision: 0),
+                        DateTimestamp = c.Long(nullable: false),
                         Generated = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                ;
@@ -191,9 +195,9 @@ namespace Infrastructure.DataAccess.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Date = c.DateTime(nullable: false, precision: 0),
+                        DateTimestamp = c.Long(nullable: false),
                         Notified = c.Boolean(nullable: false),
-                        NextGenerationDate = c.DateTime(nullable: false, precision: 0),
+                        NextGenerationDateTimestamp = c.Long(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                ;
             
@@ -228,41 +232,41 @@ namespace Infrastructure.DataAccess.Migrations
         public override void Down()
         {
             DropForeignKey("Addresses", "NextPoint_Id1", "Addresses");
-            DropForeignKey("Addresses", "DriveReport_Id", "Reports");
-            DropForeignKey("Employments", "Person_Id", "People");
-            DropForeignKey("Employments", "OrgUnit_Id", "OrgUnits");
-            DropForeignKey("Substitutes", "Sub_Id", "People");
+            DropForeignKey("Addresses", "DriveReportId", "Reports");
+            DropForeignKey("Substitutes", "SubId", "People");
             DropForeignKey("SubstitutePersons", "Person_Id", "People");
             DropForeignKey("SubstitutePersons", "Substitute_Id", "Substitutes");
-            DropForeignKey("Substitutes", "OrgUnit_Id", "OrgUnits");
-            DropForeignKey("Substitutes", "Leader_Id", "People");
-            DropForeignKey("Reports", "Person_Id", "People");
-            DropForeignKey("Reports", "Employment_Id", "Employments");
-            DropForeignKey("Addresses", "PersonalRoute_Id", "PersonalRoutes");
+            DropForeignKey("Substitutes", "OrgUnitId", "OrgUnits");
+            DropForeignKey("Substitutes", "LeaderId", "People");
+            DropForeignKey("Reports", "PersonId", "People");
+            DropForeignKey("Reports", "EmploymentId", "Employments");
+            DropForeignKey("Addresses", "PersonalRouteId", "PersonalRoutes");
             DropForeignKey("Addresses", "NextPoint_Id", "Addresses");
-            DropForeignKey("PersonalRoutes", "Person_Id", "People");
-            DropForeignKey("Addresses", "Person_Id", "People");
-            DropForeignKey("MobileTokens", "Person_Id", "People");
-            DropForeignKey("LicensePlates", "Person_Id", "People");
-            DropForeignKey("OrgUnits", "Parent_Id", "OrgUnits");
+            DropForeignKey("PersonalRoutes", "PersonId", "People");
+            DropForeignKey("Addresses", "PersonId", "People");
+            DropForeignKey("MobileTokens", "PersonId", "People");
+            DropForeignKey("LicensePlates", "PersonId", "People");
+            DropForeignKey("Employments", "PersonId", "People");
+            DropForeignKey("Employments", "OrgUnitId", "OrgUnits");
+            DropForeignKey("OrgUnits", "ParentId", "OrgUnits");
             DropIndex("SubstitutePersons", new[] { "Person_Id" });
             DropIndex("SubstitutePersons", new[] { "Substitute_Id" });
-            DropIndex("PersonalRoutes", new[] { "Person_Id" });
-            DropIndex("MobileTokens", new[] { "Person_Id" });
-            DropIndex("LicensePlates", new[] { "Person_Id" });
-            DropIndex("Substitutes", new[] { "Sub_Id" });
-            DropIndex("Substitutes", new[] { "OrgUnit_Id" });
-            DropIndex("Substitutes", new[] { "Leader_Id" });
-            DropIndex("OrgUnits", new[] { "Parent_Id" });
-            DropIndex("Employments", new[] { "Person_Id" });
-            DropIndex("Employments", new[] { "OrgUnit_Id" });
-            DropIndex("Reports", new[] { "Person_Id" });
-            DropIndex("Reports", new[] { "Employment_Id" });
+            DropIndex("PersonalRoutes", new[] { "PersonId" });
+            DropIndex("MobileTokens", new[] { "PersonId" });
+            DropIndex("LicensePlates", new[] { "PersonId" });
+            DropIndex("Substitutes", new[] { "OrgUnitId" });
+            DropIndex("Substitutes", new[] { "SubId" });
+            DropIndex("Substitutes", new[] { "LeaderId" });
+            DropIndex("OrgUnits", new[] { "ParentId" });
+            DropIndex("Employments", new[] { "OrgUnitId" });
+            DropIndex("Employments", new[] { "PersonId" });
+            DropIndex("Reports", new[] { "EmploymentId" });
+            DropIndex("Reports", new[] { "PersonId" });
             DropIndex("Addresses", new[] { "NextPoint_Id1" });
-            DropIndex("Addresses", new[] { "DriveReport_Id" });
-            DropIndex("Addresses", new[] { "PersonalRoute_Id" });
             DropIndex("Addresses", new[] { "NextPoint_Id" });
-            DropIndex("Addresses", new[] { "Person_Id" });
+            DropIndex("Addresses", new[] { "PersonalRouteId" });
+            DropIndex("Addresses", new[] { "PersonId" });
+            DropIndex("Addresses", new[] { "DriveReportId" });
             DropTable("SubstitutePersons");
             DropTable("Rates");
             DropTable("MailNotificationSchedules");

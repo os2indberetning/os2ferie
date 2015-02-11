@@ -79,7 +79,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Address>().Property(p => p.ZipCode).IsRequired();
             modelBuilder.Entity<Address>().Property(p => p.Town).IsRequired();
             modelBuilder.Entity<Address>().Property(p => p.Longitude).IsRequired();
-            modelBuilder.Entity<Address>().Property(p => p.Lattitude).IsRequired();      
+            modelBuilder.Entity<Address>().Property(p => p.Latitude).IsRequired();      
         }
 
         private void ConfigurePropertiesForPersonalAddress(DbModelBuilder modelBuilder)

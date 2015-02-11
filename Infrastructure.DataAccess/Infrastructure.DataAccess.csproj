@@ -67,37 +67,9 @@
     <Compile Include="DataContext.cs" />
     <Compile Include="DriveReportRepository.cs" />
     <Compile Include="GenericRepository.cs" />
-    <Compile Include="Migrations\201502030758052_Initial.cs" />
-    <Compile Include="Migrations\201502030758052_Initial.Designer.cs">
-      <DependentUpon>201502030758052_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201502041248478_drivereport_update.cs" />
-    <Compile Include="Migrations\201502041248478_drivereport_update.Designer.cs">
-      <DependentUpon>201502041248478_drivereport_update.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201502041316563_Update.cs" />
-    <Compile Include="Migrations\201502041316563_Update.Designer.cs">
-      <DependentUpon>201502041316563_Update.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201502051037455_Update1.cs" />
-    <Compile Include="Migrations\201502051037455_Update1.Designer.cs">
-      <DependentUpon>201502051037455_Update1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201502091509142_Update2.cs" />
-    <Compile Include="Migrations\201502091509142_Update2.Designer.cs">
-      <DependentUpon>201502091509142_Update2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201502101039096_Update_Person.cs" />
-    <Compile Include="Migrations\201502101039096_Update_Person.Designer.cs">
-      <DependentUpon>201502101039096_Update_Person.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201502101224563_Update_LicensePlate.cs" />
-    <Compile Include="Migrations\201502101224563_Update_LicensePlate.Designer.cs">
-      <DependentUpon>201502101224563_Update_LicensePlate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201502101244558_Update_Person1.cs" />
-    <Compile Include="Migrations\201502101244558_Update_Person1.Designer.cs">
-      <DependentUpon>201502101244558_Update_Person1.cs</DependentUpon>
+    <Compile Include="Migrations\201502111316358_Initial.cs" />
+    <Compile Include="Migrations\201502111316358_Initial.Designer.cs">
+      <DependentUpon>201502111316358_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
@@ -121,29 +93,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201502030758052_Initial.resx">
-      <DependentUpon>201502030758052_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502041248478_drivereport_update.resx">
-      <DependentUpon>201502041248478_drivereport_update.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502041316563_Update.resx">
-      <DependentUpon>201502041316563_Update.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502051037455_Update1.resx">
-      <DependentUpon>201502051037455_Update1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502091509142_Update2.resx">
-      <DependentUpon>201502091509142_Update2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502101039096_Update_Person.resx">
-      <DependentUpon>201502101039096_Update_Person.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502101224563_Update_LicensePlate.resx">
-      <DependentUpon>201502101224563_Update_LicensePlate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502101244558_Update_Person1.resx">
-      <DependentUpon>201502101244558_Update_Person1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201502111316358_Initial.resx">
+      <DependentUpon>201502111316358_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

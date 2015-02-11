@@ -9,6 +9,7 @@ namespace Core.DomainModel
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public int Level { get; set; }
+        public int? ParentId { get; set; }
         public virtual OrgUnit Parent { get; set; }
         public virtual ICollection<OrgUnit> Children { get; set; }
         public virtual ICollection<Substitute> Substitutes { get; set; }

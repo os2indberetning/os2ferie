@@ -21,7 +21,9 @@ namespace Core.DomainModel
         public long ClosedDateTimestamp { get; set; }
         public long ProcessedDateTimestamp { get; set; }
 
+        public int PersonId { get; set; }
         public virtual Person Person { get; set; }
+        public int EmploymentId { get; set; }
         public virtual Employment Employment { get; set; }
     }
 }
