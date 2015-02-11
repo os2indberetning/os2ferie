@@ -90,7 +90,7 @@ angular.module("application").controller("MyReportsController", [
            scope.purpose = "wazzup";
 
            var modalInstance = $modal.open({
-               scope: "scopezez",
+               scope: scope,
                templateUrl: '/App/MyReports/EditReportTemplate.html',
                controller: 'DrivingController',
                windowClass: 'full',
