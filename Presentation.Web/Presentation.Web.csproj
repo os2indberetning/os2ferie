@@ -276,6 +276,10 @@
     <Content Include="App\Driving\DrivingView.html" />
     <Content Include="App\Driving\DrivingController.js" />
     <Content Include="App\Frontpage\FrontpageView.html" />
+    <Content Include="App\MyReports\ConfirmDeleteReportController.js" />
+    <Content Include="App\MyReports\ConfirmDeleteTemplate.html" />
+    <Content Include="App\MyReports\EditReportController.js" />
+    <Content Include="App\MyReports\EditReportTemplate.html" />
     <Content Include="App\MyReports\MyReportsController.js" />
     <Content Include="App\MyReports\MyReportsView.html" />
     <Content Include="App\Settings\SettingsController.js" />
@@ -632,6 +636,9 @@
     <Content Include="Content\Themes\SbAdmin\font-awesome\scss\_stacked.scss" />
     <Content Include="Content\Themes\SbAdmin\font-awesome\scss\_variables.scss" />
     <Content Include="Scripts\angular-moment.min.js.map" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js.map">
+      <DependentUpon>ui-bootstrap-tpls.min.js</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
@@ -1998,7 +2005,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1983</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
