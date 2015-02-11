@@ -205,4 +205,4 @@ module MyReports {
     }
 }
 
-Application.AngularApp.Module.controller("MyReportsController", MyReports.Controller);
+angular.module("application").controller("MyReportsController", MyReports.Controller);
