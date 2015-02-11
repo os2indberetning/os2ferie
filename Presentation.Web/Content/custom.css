@@ -56,3 +56,11 @@
 .seperator {
     margin-top: 20px;
 }
+
+.no-max-width {
+    max-width: none;
+}
+
+.fill-width {
+    width: 100%;
+}
