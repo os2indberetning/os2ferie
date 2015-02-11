@@ -271,13 +271,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App\Admin\AdminView.html" />
+    <Content Include="App\application.js" />
     <Content Include="App\ApproveReports\ApproveReportsView.html" />
     <Content Include="App\Driving\DrivingView.html" />
-    <Content Include="App\Example\ExampleView.html" />
+    <Content Include="App\Driving\DrivingController.js" />
     <Content Include="App\Frontpage\FrontpageView.html" />
-    <TypeScriptCompile Include="App\Model\IPerson.ts" />
-    <TypeScriptCompile Include="App\MyReports\MyReportsControllerJSTest.ts" />
+    <Content Include="App\MyReports\MyReportsController.js" />
     <Content Include="App\MyReports\MyReportsView.html" />
+    <Content Include="App\Settings\SettingsController.js" />
     <Content Include="App\Settings\SettingsView.html" />
     <Content Include="App\Settings\tokenModal.html" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -1945,24 +1946,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="App\Admin\AdminController.spec.ts" />
-    <TypeScriptCompile Include="App\Admin\AdminController.ts" />
-    <TypeScriptCompile Include="App\App.ts" />
-    <TypeScriptCompile Include="App\ApproveReports\ApproveReportsController.spec.ts" />
+    <Content Include="App\Admin\AdminController.js" />
     <TypeScriptCompile Include="App\ApproveReports\ApproveReportsController.ts" />
-    <TypeScriptCompile Include="App\Driving\DrivingController.spec.ts" />
-    <TypeScriptCompile Include="App\Driving\DrivingController.ts" />
-    <TypeScriptCompile Include="App\Example\ExampleController.spec.ts" />
-    <TypeScriptCompile Include="App\Example\ExampleController.ts" />
-    <TypeScriptCompile Include="App\Frontpage\FrontpageController.spec.ts" />
-    <TypeScriptCompile Include="App\Frontpage\FrontpageController.ts" />
-    <TypeScriptCompile Include="App\MyReports\MyReportsController.spec.ts" />
-    <TypeScriptCompile Include="App\MyReports\MyReportsController.ts" />
-    <TypeScriptCompile Include="App\Navbar\NavbarController.spec.ts" />
-    <TypeScriptCompile Include="App\Navbar\NavbarController.ts" />
-    <TypeScriptCompile Include="App\Services\PersonResource.ts" />
-    <TypeScriptCompile Include="App\Settings\SettingsController.spec.ts" />
-    <TypeScriptCompile Include="App\Settings\SettingsController.ts" />
+    <Content Include="App\Frontpage\FrontpageController.js" />
+    <Content Include="App\Services\PersonResource.js" />
     <TypeScriptCompile Include="Scripts\typings\angular-ui\angular-ui-router.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-cookies.d.ts" />
