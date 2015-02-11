@@ -9,7 +9,8 @@ module MyReports {
         searchClicked: any;
         toDate: string;
         fromDate: string;
-        gridContainer : any;
+        gridContainer: any;
+        dateOptions : any;
     }
 
     export class Controller {
@@ -17,9 +18,21 @@ module MyReports {
 
         constructor(private $scope: Scope) {
 
+
+            $scope.fromDate = new Date().toString();
+
+
+
+            $scope.dateOptions = {
+                format: "dd-MM-yyyy"
+            };
+
             $scope.gridContainer = {};
 
             $scope.searchClicked = this.searchClicked;
+
+
+
 
             this.loadPendingReports();
             this.loadApprovedReports();
@@ -35,9 +48,8 @@ module MyReports {
                     || this.$scope.toDate == ""
                     )) {
                     // Input is valid
-                    var query = "?$filter=CreatedDateTimestamp ge " + this.dateToEpoch(this.$scope.fromDate) + " and CreatedDateTimestamp le " + this.dateToEpoch(this.$scope.toDate);
+                    var query = "?$filter=CreatedDateTimestamp ge " + moment(this.$scope.fromDate).unix() + " and CreatedDateTimestamp le " + moment(this.$scope.toDate).unix();
                     this.updatePendingReports(query);
-
                 }
             }
 
@@ -81,7 +93,6 @@ module MyReports {
                     },
                     schema: {
                         data: function (data) {
-                            console.log(data);
                             return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
                         },
                         total: function (data) {
