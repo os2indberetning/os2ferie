@@ -1947,7 +1947,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App\Admin\AdminController.js" />
-    <TypeScriptCompile Include="App\ApproveReports\ApproveReportsController.ts" />
+    <Content Include="App\ApproveReports\ApproveReportsController.js" />
     <Content Include="App\Frontpage\FrontpageController.js" />
     <Content Include="App\Services\PersonResource.js" />
     <TypeScriptCompile Include="Scripts\typings\angular-ui\angular-ui-router.d.ts" />
