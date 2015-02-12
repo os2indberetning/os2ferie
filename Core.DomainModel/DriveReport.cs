@@ -18,7 +18,7 @@ namespace Core.DomainModel
         public bool EndsAtHome { get; set; }
         public string Licenseplate { get; set; }
         public string Fullname { get; set; }
-        public string Timestamp { get; set; }
+
 
         public ICollection<DriveReportPoint> DriveReportPoints { get; set; }
     }
