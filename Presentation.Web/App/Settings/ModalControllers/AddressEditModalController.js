@@ -2,15 +2,14 @@
 
     $scope.items = ['Nr. 1: 123456', 'Nr. 1: 234567', 'Nr. 1: 345678'];
 
-    $scope.openAddressEditModal = function (size) {
+    $scope.openAddressEditModal = function (id) {
 
         var modalInstance = $modal.open({
-            templateUrl: '/App/Settings/tokenModal.html',
-            controller: 'TokenInstanceController',
-            size: size,
+            templateUrl: '/App/Settings/AddressEditModal.html',
+            controller: 'AddressEditModalInstanceController',
             resolve: {
                 items: function () {
-                    return $scope.items;
+                    return id;
                 }
             }
         });
@@ -21,12 +20,9 @@
     };
 }]);
 
-angular.module("application").controller('AddressEditModalInstanceController', ["$scope", "$modalInstance", "items", function ($scope, $modalInstance, items) {
+angular.module("application").controller('AddressEditModalInstanceController', ["$scope", "$modalInstance", "items", function ($scope, $modalInstance, id) {
 
-    $scope.items = items;
-    $scope.selected = {
-        item: $scope.items[0]
-    };
+    $scope.id = id;
 
     $scope.closeAddressEditModal = function () {
         $modalInstance.dismiss('Luk');

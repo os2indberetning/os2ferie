@@ -286,6 +286,7 @@
     <Content Include="App\MyReports\MyReportsController.js" />
     <Content Include="App\MyReports\MyReportsView.html" />
     <Content Include="App\Services\LicensePlateResource.js" />
+    <Content Include="App\Services\NotificationService.js" />
     <Content Include="App\Services\PersonalRouteResource.js" />
     <Content Include="App\Services\PointResource.js" />
     <Content Include="App\Services\RouteContainerResource.js" />
