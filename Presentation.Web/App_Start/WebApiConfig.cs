@@ -17,6 +17,7 @@ using Microsoft.OData.Edm;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OS2Indberetning.Controllers;
+using OS2Indberetning.Models;
 
 namespace OS2Indberetning
 {

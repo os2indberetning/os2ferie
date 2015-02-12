@@ -288,6 +288,12 @@
     <Content Include="App\Services\LicensePlateResource.js" />
     <Content Include="App\Services\PersonalRouteResource.js" />
     <Content Include="App\Services\PointResource.js" />
+    <Content Include="App\Services\RouteContainerResource.js" />
+    <Content Include="App\Settings\AddressEditModal.html" />
+    <Content Include="App\Settings\ModalControllers\AddressEditModalController.js" />
+    <Content Include="App\Settings\ModalControllers\RouteEditModalController.js" />
+    <Content Include="App\Settings\ModalControllers\TokenModalController.js" />
+    <Content Include="App\Settings\RouteEditModal.html" />
     <Content Include="App\Settings\SettingsController.js" />
     <Content Include="App\Settings\SettingsView.html" />
     <Content Include="App\Settings\tokenModal.html" />
