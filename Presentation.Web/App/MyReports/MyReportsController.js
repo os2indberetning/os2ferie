@@ -1,120 +1,57 @@
 angular.module("application").controller("MyReportsController", [
    "$scope", "$modal", "$rootScope", "Report", function ($scope, $modal, $rootScope, Report) {
 
-       // Contains references to kendo ui grids.
-       $scope.gridContainer = {};
-     
-
-       // Set initial values for kendo datepickers.
-       $scope.toDate = new Date();
-       $scope.fromDate = new Date();
-
-       // Format for datepickers.
-       $scope.dateOptions = {
-           format: "dd/MM/yyyy",
-       };
-
-       // Set activeTab's initial value to pending.
-       $scope.activeTab = "pending";
 
 
+// Helper Methods
 
-       // Searchbutton click event handler
-       $scope.searchClicked = function () {
+       $scope.updateActiveTab = function(query) {
+           if ($scope.activeTab == 'pending') {
+               // Update pending tabs.
+               this.updatePendingReports(query);
+           }
+           else if ($scope.activeTab == 'approved') {
+               // Update approved reports grid
+               this.updateApprovedReports(query);
+           }
+           else if ($scope.activeTab == 'denied') {
+               // Update denied reports grid.
+               this.updateDeniedReports(query);
+           }
+       }
 
-           // Validate input
-           if (!(typeof $scope.fromDate == 'undefined' || typeof $scope.toDate == 'undefined'
-               || $scope.fromDate == "" || $scope.toDate == "")) {
-               
-               // Input is valid
-               if ($scope.activeTab == 'pending') {
-                   // Update pending tabs.
-                   var query = "?$filter=CreatedDateTimestamp ge " + moment($scope.fromDate).unix() + " and CreatedDateTimestamp le " + moment($scope.toDate).unix();
-                   this.updatePendingReports(query);
-               }
-               else if ($scope.activeTab == 'approved') {
-                   // Update approved reports grid
-               }
-               else if ($scope.activeTab == 'denied') {
-                   // Update denied reports grid.
-               }
-            }
-        }
-
-       // Update pending reports grid based on input odataquery
        $scope.updatePendingReports = function (oDataQuery) {
-           $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = "/odata/DriveReports" + oDataQuery;
+
+           var and = "and ";
+           if (oDataQuery == "") {
+               and = "";
+           }
+
+           $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Pending' " + and + oDataQuery;
            $scope.gridContainer.pendingGrid.dataSource.read();
        }
 
-       // Update approved reports grid based on input odataquery
        $scope.updateApprovedReports = function (oDataQuery) {
-           $scope.gridContainer.approvedGrid.dataSource.transport.options.read.url = "/odata/DriveReports" + oDataQuery;
+
+           var and = "and ";
+           if (oDataQuery == "") {
+               and = "";
+           }
+
+           $scope.gridContainer.approvedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Accepted' " + and + oDataQuery;
            $scope.gridContainer.approvedGrid.dataSource.read();
        }
 
-       // Update denied reports grid based on input odataquery
        $scope.updateDeniedReports = function (oDataQuery) {
-           $scope.gridContainer.deniedGrid.dataSource.transport.options.read.url = "/odata/DriveReports" + oDataQuery;
+           var and = "and ";
+           if (oDataQuery == "") {
+               and = "";
+           }
+
+           $scope.gridContainer.deniedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Rejected' " + and + oDataQuery;
            $scope.gridContainer.deniedGrid.dataSource.read();
        }
 
-
-       // Event handler for tab click.
-       $scope.tabClicked = function(tab) {
-           $scope.activeTab = tab;
-       }
-
-       $scope.deleteClick = function (id) {
-           var modalInstance = $modal.open({
-               templateUrl: '/App/MyReports/ConfirmDeleteTemplate.html',
-               controller: 'ConfirmDeleteReportController',
-               resolve: {
-                   itemId : function() {
-                       return id;
-                   }
-               }
-           });
-
-           modalInstance.result.then(function (itemId) {
-               // Handle confirm delete
-           });
-       }
-
-       $scope.editClick = function (id) {
-           // Create a new scope to inject into DrivingController
-           var scope = $rootScope.$new();
-
-           console.log("id biznatch: " + id);
-
-           // Get the report from the server
-           Report.get({ id: id }, function (data) {
-               scope.purpose = data.purpose;
-               scope.driveDate = moment().unix(data.driveDateTimestamp).toString();
-               console.log("123    " + scope.driveDate);
-           });
-
-
-           
-
-           var modalInstance = $modal.open({
-               scope: scope,
-               templateUrl: '/App/MyReports/EditReportTemplate.html',
-               controller: 'DrivingController',
-               windowClass: 'full',
-               resolve: {
-                   itemId: function () {
-                       return "hej";
-                   }
-               }
-           });
-
-           modalInstance.result.then(function (itemId) {
-
-           });
-       }
-
-       // Load all pending reports from server.
        $scope.loadPendingReports = function () {
            $scope.pendingReports = {
                dataSource: {
@@ -124,7 +61,7 @@ angular.module("application").controller("MyReportsController", [
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports",
+                           url: "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Pending'",
                            dataType: "json",
                            cache: false
                        },
@@ -160,8 +97,23 @@ angular.module("application").controller("MyReportsController", [
                        field: "Fullname",
                        title: "Navn"
                    }, {
-                       field: "CreatedTimestamp",
+                       field: "CreationDate",
+                       template: function (data) {
+                           var m = moment.unix(data.CreatedDateTimestamp);
+                           return m._d.getDate() + "/" +
+                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                  m._d.getFullYear();
+                       },
                        title: "Indberettet den"
+                   }, {
+                       field: "DriveDateTimestamp",
+                       template: function(data) {
+                           var m = moment.unix(data.DriveDateTimestamp);
+                           return m._d.getDate() + "/" +
+                               (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                               m._d.getFullYear();
+                       },
+                       title: "Kørselsdato"
                    }, {
                        field: "Purpose",
                        title: "Formål"
@@ -177,13 +129,36 @@ angular.module("application").controller("MyReportsController", [
            };
        }
 
-       // Load all approved reports from server.
        $scope.loadApprovedReports = function () {
            $scope.approvedReports = {
                dataSource: {
                    type: "odata",
                    transport: {
-                       read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Employees"
+                       read: {
+                           beforeSend: function (req) {
+                               req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
+                           },
+                           url: "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Accepted'",
+                           dataType: "json",
+                           cache: false
+                       },
+                       parameterMap: function (options, type) {
+                           var d = kendo.data.transports.odata.parameterMap(options);
+
+                           delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
+
+                           d.$count = true;
+
+                           return d;
+                       }
+                   },
+                   schema: {
+                       data: function (data) {
+                           return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
+                       },
+                       total: function (data) {
+                           return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
+                       }
                    },
                    pageSize: 5,
                    serverPaging: true,
@@ -196,33 +171,67 @@ angular.module("application").controller("MyReportsController", [
                },
                columns: [
                    {
-                       field: "FirstName",
-                       title: "First Name",
-                       width: "120px"
+                       field: "Fullname",
+                       title: "Navn"
                    }, {
-                       field: "LastName",
-                       title: "Last Name",
-                       width: "120px"
+                       field: "CreationDate",
+                       template: function (data) {
+                           var m = moment.unix(data.CreatedDateTimestamp);
+                           return m._d.getDate() + "/" +
+                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                  m._d.getFullYear();
+                       },
+                       title: "Indberettet den"
                    }, {
-                       field: "Country",
-                       width: "120px"
+                       field: "DriveDateTimestamp",
+                       template: function (data) {
+                           var m = moment.unix(data.DriveDateTimestamp);
+                           return m._d.getDate() + "/" +
+                               (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                               m._d.getFullYear();
+                       },
+                       title: "Kørselsdato"
                    }, {
-                       field: "City",
-                       width: "120px"
+                       field: "Purpose",
+                       title: "Formål"
                    }, {
-                       field: "Title"
+                       field: "Type",
+                       title: "Type"
                    }
                ]
            };
        }
 
-       // Load all denied reports from server.
        $scope.loadDeniedReports = function () {
            $scope.deniedReports = {
                dataSource: {
                    type: "odata",
                    transport: {
-                       read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Employees"
+                       read: {
+                           beforeSend: function (req) {
+                               req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
+                           },
+                           url: "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Rejected'",
+                           dataType: "json",
+                           cache: false
+                       },
+                       parameterMap: function (options, type) {
+                           var d = kendo.data.transports.odata.parameterMap(options);
+
+                           delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
+
+                           d.$count = true;
+
+                           return d;
+                       }
+                   },
+                   schema: {
+                       data: function (data) {
+                           return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
+                       },
+                       total: function (data) {
+                           return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
+                       }
                    },
                    pageSize: 5,
                    serverPaging: true,
@@ -235,36 +244,141 @@ angular.module("application").controller("MyReportsController", [
                },
                columns: [
                    {
-                       field: "FirstName",
-                       title: "First Name",
-                       width: "120px"
+                       field: "Fullname",
+                       title: "Navn"
                    }, {
-                       field: "LastName",
-                       title: "Last Name",
-                       width: "120px"
+                       field: "CreationDate",
+                       template: function (data) {
+                           var m = moment.unix(data.CreatedDateTimestamp);
+                           return m._d.getDate() + "/" +
+                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                  m._d.getFullYear();
+                       },
+                       title: "Indberettet den"
                    }, {
-                       field: "Country",
-                       width: "120px"
+                       field: "DriveDateTimestamp",
+                       template: function (data) {
+                           var m = moment.unix(data.DriveDateTimestamp);
+                           return m._d.getDate() + "/" +
+                               (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                               m._d.getFullYear();
+                       },
+                       title: "Kørselsdato"
                    }, {
-                       field: "City",
-                       width: "120px"
+                       field: "Purpose",
+                       title: "Formål"
                    }, {
-                       field: "Title"
+                       field: "Type",
+                       title: "Type"
                    }
                ]
            };
        }
 
+       
+
+       $scope.getEndOfDayStamp = function(d){
+            var m = moment(d);
+            return m.endOf('day').unix();
+       }
+
+       $scope.getStartOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.startOf('day').unix();
+       }
+
+// Event handlers
+
+       $scope.clearClicked = function () {
+           $scope.toDate = "";
+           $scope.fromDate = "";
+           $scope.updateActiveTab("");
+       }
+
+       $scope.tabClicked = function (tab) {
+           $scope.activeTab = tab;
+       }
+
+       $scope.searchClicked = function () {
+           // Validate input
+           if (!(typeof $scope.fromDate == 'undefined' || typeof $scope.toDate == 'undefined'
+               || $scope.fromDate == "" || $scope.toDate == "")) {
+
+               // Input is valid
+               var query = "CreatedDateTimestamp ge " + $scope.getStartOfDayStamp($scope.fromDate) + " and CreatedDateTimestamp le " + $scope.getEndOfDayStamp($scope.toDate);
+               $scope.updateActiveTab(query);
+           }
+       }
+
+       $scope.deleteClick = function (id) {
+           var modalInstance = $modal.open({
+               templateUrl: '/App/MyReports/ConfirmDeleteTemplate.html',
+               controller: 'ConfirmDeleteReportController',
+               resolve: {
+                   itemId: function () {
+                       return id;
+                   }
+               }
+           });
+
+           modalInstance.result.then(function (itemId) {
+               // Handle confirm delete
+           });
+       }
+
+       $scope.editClick = function (id) {
+           // Create a new scope to inject into DrivingController
+           var scope = $rootScope.$new();
+
+           // Get the report from the server
+           Report.get({ id: id }, function (data) {
+               // Set values in the scope.
+               scope.purpose = data.purpose;
+               scope.driveDate = moment().unix(data.driveDateTimestamp).toString();
+           });
+
+
+
+
+           var modalInstance = $modal.open({
+               scope: scope,
+               templateUrl: '/App/MyReports/EditReportTemplate.html',
+               controller: 'DrivingController',
+               windowClass: 'full',
+               resolve: {
+                   itemId: function () {
+                       return "hej";
+                   }
+               }
+           });
+
+           modalInstance.result.then(function (itemId) {
+
+           });
+       }
+
+
+// Init
+
+       // Contains references to kendo ui grids.
+       $scope.gridContainer = {};
+
+       // Set initial values for kendo datepickers.
+       $scope.toDate = new Date();
+       $scope.fromDate = new Date();
+
+       // Format for datepickers.
+       $scope.dateOptions = {
+           format: "dd/MM/yyyy",
+       };
+
+       // Set activeTab's initial value to pending.
+       $scope.activeTab = "pending";
 
        // Load up the grids.
        $scope.loadApprovedReports();
        $scope.loadDeniedReports();
        $scope.loadPendingReports();
 
-
-       // Get the report from the server
-       Report.get({ id: 3 }, function (data) {
-           console.log();
-       });
     }
 ]);
