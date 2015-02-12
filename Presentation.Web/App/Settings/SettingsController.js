@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("SettingController", [
-    "$scope", "Person", "LicensePlate", "Personalroute", "Point", "$http", function ($scope, Person, LicensePlate, Personalroute, Point, $http) {
+    "$scope", "Person", "LicensePlate", "Personalroute", "Point", "RouteContainer", "$http", function ($scope, Person, LicensePlate, Personalroute, Point, RouteContainer, $http) {
         $scope.isCollapsed = true;
         $scope.mailAdvice = 'No';
         $scope.licenseplates = [];
@@ -13,6 +13,7 @@
         };
 
         $scope.loadGrids = function (id) {
+            
             $scope.personalRoutes = {
                 dataSource: {
                     type: "odata",
@@ -21,7 +22,7 @@
                             beforeSend: function (req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
-                            url: "odata/Points(" + id + ")",
+                            url: "odata/PersonalRoutes(" + id + ")?$expand=Points",
                             dataType: "json",
                             cache: false
                         },
@@ -54,23 +55,46 @@
                 },
                 columns: [
                     {
-                        field: "Id",
-                        title: "Navn"
-                    }, {
                         field: "Description",
-                        title: "Indberettet den"
+                        title: "Beskrivelse"
                     }, {
-                        field: "Plate",
-                        title: "Formål"
+                        field: "Points",
+                        template: function (data) {
+                            var temp = [];
+                            
+                            angular.forEach(data.Points, function (value, key) {
+                                if (value.PreviousPointId == undefined) {
+                                    this.push(value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town);
+                                }
+                                
+                            }, temp);
+
+                            return temp;
+                        },
+                        title: "Adresse 1"
                     }, {
-                        field: "Type",
-                        title: "Type"
-                    }, {
-                        field: "options",
-                        title: "Muligheder"
+                        field: "Id",
+                        template: function (data) {
+                            var temp = [];
+                            
+                            angular.forEach(data.Points, function (value, key) {
+                                if (value.NextPointId == undefined) {
+                                    this.push(value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town);
+                                }
+
+                            }, temp);
+
+                            return temp;
+                        },
+                        title: "Adresse 2"
+                    },
+                    {
+                        field: "Id",
+                        title: "Muligheder",
+                        template: "<a ng-click='editRoute(${Id})'>Rediger</a>"
                     }
                 ]
-            };
+            };            
 
             $scope.personalAddresses = {
                 dataSource: {
@@ -113,79 +137,39 @@
                 },
                 columns: [
                     {
-                        field: "Id",
-                        title: "Navn"
-                    }, {
                         field: "Description",
+                        title: "Beskrivelse"
+                    }, {
+                        field: "Id",
+                        template: function(data) {
+                            return (data.StreetName + " " + data.StreetNumber + ", " + data.ZipCode + " " + data.Town);
+                        },
                         title: "Indberettet den"
                     }, {
-                        field: "Plate",
-                        title: "Formål"
-                    }, {
-                        field: "Type",
-                        title: "Type"
-                    }, {
-                        field: "options",
-                        title: "Muligheder"
+                        field: "Id",
+                        title: "Muligheder",
+                        template: "<a ng-click=editAddress(${Id})>Rediger</a>"
                     }
                 ]
             };
-
-            
-        }
-
-
-        $scope.loadPersonalRoutes = function (id) {
-            
         }
 
         $scope.GetPerson = Person.get({ id: 1 }, function (data) {
-            $scope.currentPerson = data[0];
-
-        },
+            $scope.currentPerson = data.value[0];
+                
+            },
         function () {
 
         });
 
-        //$scope.loadPersonalRoutes(1);
-        //$scope.loadPersonalAddresses(1);
         $scope.loadGrids(1);
 
+        $scope.editRoute = function(id) {
+            
+        }
 
+        $scope.editAddress = function (id) {
+            
+        }
     }
 ]);
-
-angular.module("application").controller('TokenController', ["$scope", "$modal", function ($scope, $modal) {
-
-    $scope.items = ['Nr. 1: 123456', 'Nr. 1: 234567', 'Nr. 1: 345678'];
-
-    $scope.openTokenModal = function (size) {
-
-        var modalInstance = $modal.open({
-            templateUrl: '/App/Settings/tokenModal.html',
-            controller: 'TokenInstanceController',
-            size: size,
-            resolve: {
-                items: function () {
-                    return $scope.items;
-                }
-            }
-        });
-
-        modalInstance.result.then(function (selectedItem) {
-            $scope.selected = selectedItem;
-        });
-    };
-}]);
-
-angular.module("application").controller('TokenInstanceController', ["$scope", "$modalInstance", "items", function ($scope, $modalInstance, items) {
-
-    $scope.items = items;
-    $scope.selected = {
-        item: $scope.items[0]
-    };
-
-    $scope.closeTokenModal = function () {
-        $modalInstance.dismiss('Luk');
-    };
-}]);
