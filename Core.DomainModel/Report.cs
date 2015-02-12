@@ -5,6 +5,7 @@ namespace Core.DomainModel
 {
     public enum ReportStatus
     {
+        Pending,
         Accepted,
         Rejected,
         Invoiced,
