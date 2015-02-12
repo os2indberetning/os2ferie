@@ -12,43 +12,17 @@
     <div class="col-lg-12">
         
         
-        
-        <div class="row">
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="">Fra</label>
-                    <input k-ng-model="fromDate" data-role="datepicker" kendo-date-picker k-options="dateOptions" />
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="">Til</label>
-                    <input k-ng-model="toDate" data-role="datepicker" kendo-date-picker k-options="dateOptions" />
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <button ng-click="searchClicked()" class="btn btn-primary fill-height">Søg</button>
-                    <button ng-click="clearClicked()" class="btn btn-danger fill-height">Ryd</button>
-                </div>
-            </div>
-        </div>
-
-
-
-
-        
-
-
-
 
         <tabset justified="true">
             <tab heading="Afventende" ng-click="tabClicked('pending')">
                 <div class="panel panel-default">
+                  
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afventende</h3>
                     </div>
+                    <div ng-include src="'/App/MyReports/DateSortTemplate.html'"></div>
                     <div class="panel-body">
+                      
                         <div kendo-grid="gridContainer.pendingGrid" options="pendingReports"></div>
                     </div>
                 </div>
@@ -58,6 +32,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Godkendte</h3>
                     </div>
+                    <div ng-include src="'/App/MyReports/DateSortTemplate.html'"></div>
                     <div class="panel-body">
                         <div kendo-grid="gridContainer.approvedGrid" options="approvedReports" ></div>
                     </div>
@@ -68,6 +43,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afviste</h3>
                     </div>
+                    <div ng-include src="'/App/MyReports/DateSortTemplate.html'"></div>
                     <div class="panel-body">
                         <div kendo-grid="gridContainer.deniedGrid" options="deniedReports"> </div>
                     </div>

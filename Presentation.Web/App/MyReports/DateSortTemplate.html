@@ -1,0 +1,20 @@
+﻿<div class="row margin-top-30 margin-left-5">
+    <div class="col-lg-2">
+        <div class="form-group">
+            <label for="">Fra</label>
+            <input k-ng-model="fromDate" data-role="datepicker" kendo-date-picker k-options="dateOptions" />
+        </div>
+    </div>
+    <div class="col-lg-2">
+        <div class="form-group">
+            <label for="">Til</label>
+            <input k-ng-model="toDate" data-role="datepicker" kendo-date-picker k-options="dateOptions" />
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="form-group">
+            <button ng-click="searchClicked()" class="btn btn-primary fill-height">Søg</button>
+            <button ng-click="clearClicked()" class="btn btn-danger fill-height">Ryd</button>
+        </div>
+    </div>
+</div>
