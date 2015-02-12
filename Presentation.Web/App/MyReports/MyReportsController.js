@@ -300,6 +300,10 @@ angular.module("application").controller("MyReportsController", [
        }
 
        $scope.searchClicked = function () {
+           console.log("called");
+           console.log($scope.fromDate);
+           console.log($scope.toDate);
+           console.log("--------");
            // Validate input
            if (!(typeof $scope.fromDate == 'undefined' || typeof $scope.toDate == 'undefined'
                || $scope.fromDate == "" || $scope.toDate == "")) {
