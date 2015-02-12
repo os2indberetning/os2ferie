@@ -71,6 +71,10 @@
     <Compile Include="Migrations\201502111316358_Initial.Designer.cs">
       <DependentUpon>201502111316358_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502121319441_Update_Person_RecieveMail.cs" />
+    <Compile Include="Migrations\201502121319441_Update_Person_RecieveMail.Designer.cs">
+      <DependentUpon>201502121319441_Update_Person_RecieveMail.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="PersonRepository.cs" />
@@ -95,6 +99,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201502111316358_Initial.resx">
       <DependentUpon>201502111316358_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502121319441_Update_Person_RecieveMail.resx">
+      <DependentUpon>201502121319441_Update_Person_RecieveMail.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
