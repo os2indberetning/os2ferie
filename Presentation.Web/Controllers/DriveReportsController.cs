@@ -9,6 +9,7 @@ using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
@@ -34,10 +35,12 @@ namespace OS2Indberetning.Controllers
 
         private readonly IGenericRepository<DriveReport> _repo;
 
+        private readonly DriveReportService _driveService;
+
         public DriveReportsController()
         {
             _validationSettings.AllowedQueryOptions = AllowedQueryOptions.All;
-
+            _driveService = new DriveReportService();
             _repo = new GenericRepository<DriveReport>(new DataContext());
         }
 
@@ -45,28 +48,8 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions)
         {
-            // ToList otherwise the foreach loop causes an exception
-            var driveReports = _repo.AsQueryable().ToList();
-
-            // Add fullname and human readable timestamp to the resultset
-            foreach (var driveReport in driveReports)
-            {
-                
-
-                driveReport.Fullname = driveReport.Person.FirstName;
-
-                if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
-                {
-                    driveReport.Fullname += " " + driveReport.Person.MiddleName;
-                }
-                driveReport.Fullname += " " + driveReport.Person.LastName;
-
-            }
-
-
-            // Back to AsQueryable for Kendo
-            return driveReports.AsQueryable();
-            //return StatusCode(HttpStatusCode.NotImplemented);
+            var res = _driveService.AddFullName(_repo.AsQueryable());
+            return res;
         }
 
         //GET: odata/DriveReports(5)
