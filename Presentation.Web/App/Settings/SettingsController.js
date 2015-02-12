@@ -1,19 +1,107 @@
 ﻿angular.module("application").controller("SettingController", [
-    "$scope", "Person", "LicensePlate", "Personalroute", "Point", "RouteContainer", "$http", function ($scope, Person, LicensePlate, Personalroute, Point, RouteContainer, $http) {
+    "$scope", "$modal", "Person", "LicensePlate", "Personalroute", "Point", "RouteContainer", "$http", "NotificationService", function ($scope, $modal, Person, LicensePlate, Personalroute, Point, RouteContainer, $http, NotificationService) {
         $scope.isCollapsed = true;
-        $scope.mailAdvice = 'No';
+        $scope.mailAdvice = '';
         $scope.licenseplates = [];
+        $scope.tokens = ["1", "2"];
+        $scope.newLicensePlate = "";
+        $scope.newLicensePlateDescription = "";
+        $scope.workDistanceOverride = 0;
+        $scope.recieveMail = false;
+        $scope.alternativeHomeAddress = "";
+        $scope.alternativeWorkAddress = "";
+
+        LicensePlate.get({ id: 1 }, function (data) {
+            $scope.licenseplates = data.value;
+        });
+
+        $scope.saveNewLicensePlate = function () {
+            var newPlate = new LicensePlate({
+                Plate: $scope.newLicensePlate,
+                Description: $scope.newLicensePlateDescription,
+                PersonId: 1
+            });
+
+            newPlate.$save(function (data) {
+                $scope.licenseplates.push(data.value[0]);
+                $scope.licenseplates.sort(function (a, b) {
+                    return a.Id > b.Id;
+                });
+                $scope.newLicensePlate = "";
+                $scope.newLicensePlateDescription = "";
+
+                NotificationService.AutoFadeNotification("success", "Success", "Ny nummerplade blev gemt");
+            }, function () {
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade blev ikke gemt");
+            });
+        };
+
+        $scope.deleteLicensePlate = function (plate) {
+            var objIndex = $scope.licenseplates.indexOf(plate);
+            LicensePlate.delete({ id: plate.Id }, function (data) {
+                $scope.licenseplates.splice(objIndex, 1);
+                NotificationService.AutoFadeNotification("success", "Success", "Nummerplade blev slettet");
+            }), function () {
+                $scope.licenseplates.push(plate);
+                $scope.licenseplates.sort(function (a, b) {
+                    return a.Id > b.Id;
+                });
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade blev ikke slettet");
+            };
+        }
+
+        $scope.saveNewToken = function () {
+            NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
+        }
+
+        $scope.deleteToken = function() {
+            NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
+        }
+
+        $scope.invertRecieveMail = function () {
+            $scope.recieveMail = !$scope.recieveMail;
+
+            var newPerson = new Person({
+                RecieveMail: $scope.recieveMail
+            });
+
+            newPerson.$patch({ id: 1 }, function () {
+                NotificationService.AutoFadeNotification("success", "Success", "Valg blev gemt");
+            }), function () {
+                $scope.workDistanceOverride = !$scope.recieveMail;
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Valg blev gemt");
+            };
+        }
+
+        $scope.saveAlternativeHomeAddress = function() {
+            NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
+        }
+
+        $scope.saveAlternativeWorkAddress = function() {
+            NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
+        }
 
         // Contains references to kendo ui grids.
         $scope.gridContainer = {};
 
         $scope.setHomeWorkOverride = function () {
-            $http({ method: 'PATCH', url: "odata/Person(1)", data: { workDistanceOverride: 42 } })
-                .success();
+            var newPerson = new Person({
+                WorkDistanceOverride: $scope.workDistanceOverride
+            });
+
+            newPerson.$patch({ id: 1 }, function (data) {
+                NotificationService.AutoFadeNotification("success", "Success", "Valg blev gemt");
+            }), function () {
+                if ($scope.mailAdvice == 'No') {
+                    $scope.mailAdvice = 'Yes';
+                } else {
+                    $scope.mailAdvice = 'No';
+                }
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Valg blev gemt");
+            };
         };
 
         $scope.loadGrids = function (id) {
-            
             $scope.personalRoutes = {
                 dataSource: {
                     type: "odata",
@@ -61,12 +149,12 @@
                         field: "Points",
                         template: function (data) {
                             var temp = [];
-                            
+
                             angular.forEach(data.Points, function (value, key) {
                                 if (value.PreviousPointId == undefined) {
                                     this.push(value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town);
                                 }
-                                
+
                             }, temp);
 
                             return temp;
@@ -76,7 +164,7 @@
                         field: "Id",
                         template: function (data) {
                             var temp = [];
-                            
+
                             angular.forEach(data.Points, function (value, key) {
                                 if (value.NextPointId == undefined) {
                                     this.push(value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town);
@@ -91,10 +179,10 @@
                     {
                         field: "Id",
                         title: "Muligheder",
-                        template: "<a ng-click='editRoute(${Id})'>Rediger</a>"
+                        template: "<a ng-controller='RouteEditModalController' ng-click='openRouteEditModal(${Id})'>Rediger</a>"
                     }
                 ]
-            };            
+            };
 
             $scope.personalAddresses = {
                 dataSource: {
@@ -141,14 +229,14 @@
                         title: "Beskrivelse"
                     }, {
                         field: "Id",
-                        template: function(data) {
+                        template: function (data) {
                             return (data.StreetName + " " + data.StreetNumber + ", " + data.ZipCode + " " + data.Town);
                         },
                         title: "Indberettet den"
                     }, {
                         field: "Id",
                         title: "Muligheder",
-                        template: "<a ng-click=editAddress(${Id})>Rediger</a>"
+                        template: "<a ng-controller='AddressEditModalController' ng-click='openAddressEditModal(${Id})'>Mine tokens</a>"
                     }
                 ]
             };
@@ -156,20 +244,38 @@
 
         $scope.GetPerson = Person.get({ id: 1 }, function (data) {
             $scope.currentPerson = data.value[0];
-                
-            },
+            $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride;
+            $scope.recieveMail = data.value[0].RecieveMail;
+            if ($scope.recieveMail == true) {
+                $scope.mailAdvice = 'Yes';
+            } else {
+                $scope.mailAdvice = 'No';
+            }
+            NotificationService.AutoFadeNotification("success", "Success", "Person fundet");
+        },
         function () {
-
+            NotificationService.AutoFadeNotification("danger", "Fejl", "Person ikke fundet");
         });
 
-        $scope.loadGrids(1);
+        $scope.loadGrids(1);        
 
-        $scope.editRoute = function(id) {
-            
-        }
+        $scope.openTokenModal = function (size) {
 
-        $scope.editAddress = function (id) {
-            
-        }
+            var modalInstance = $modal.open({
+                scope: $scope,
+                templateUrl: '/App/Settings/tokenModal.html',
+                controller: 'TokenInstanceController',
+                size: size,
+                resolve: {
+                    items: function () {
+                        return $scope.tokens;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            });
+        };
     }
 ]);
