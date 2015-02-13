@@ -4,12 +4,14 @@ using System.Linq;
 using System.Net;
 using Infrastructure.AddressServices.Classes;
 using Newtonsoft.Json.Linq;
-using Address = Core.DomainModel.Address;
+using Core.DomainModel;
 
 namespace Infrastructure.AddressServices
 {
     public class AddressLaundering
     {
+        #region Public methods
+
         /// <summary>
         /// Check an address for errors in spelling and adjust case of street names and building identfiers. If laundering fails an exception is thrown.
         /// </summary>
@@ -45,6 +47,8 @@ namespace Infrastructure.AddressServices
 
             return address;
         }
+
+        #endregion
 
         #region Private methods
 

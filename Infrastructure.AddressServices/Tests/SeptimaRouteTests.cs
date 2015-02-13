@@ -2,7 +2,6 @@
 using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Routing;
 using NUnit.Framework;
-using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices.Tests
 {
@@ -186,7 +185,7 @@ namespace Infrastructure.AddressServices.Tests
         }
 
         [Test]
-        public void GetRoute_NoOriginOrDestinationEntry()
+        public void GetRoute_NoOriginOrDestinationEntryException()
         {
             //Arrange
             List<Coordinates> testCoords = new List<Coordinates>
@@ -212,7 +211,7 @@ namespace Infrastructure.AddressServices.Tests
         }
 
         [Test]
-        public void GetRoute_DoubleOrigin()
+        public void GetRoute_DoubleOriginException()
         {
             //Arrange
             List<Coordinates> testCoords = new List<Coordinates>

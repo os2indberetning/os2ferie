@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Core.DomainServices;
 using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Routing;
@@ -42,6 +39,8 @@ namespace Infrastructure.AddressServices.Tests
 
         #endregion
 
+        #region Best route tests
+
         [Test]
         public void BestRoute_CheckIfDurationIs1570()
         {
@@ -54,5 +53,6 @@ namespace Infrastructure.AddressServices.Tests
             Assert.IsTrue(_result.Length == 30886);
         }
 
+        #endregion
     }
 }
