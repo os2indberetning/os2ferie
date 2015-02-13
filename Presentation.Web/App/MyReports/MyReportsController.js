@@ -343,29 +343,26 @@ angular.module("application").controller("MyReportsController", [
        }
 
        $scope.editClick = function (id) {
-           // Create a new scope to inject into DrivingController
+           // Create a new scope to inject into EditReportController
            var scope = $rootScope.$new();
 
            // Get the report from the server
            Report.get({ id: id }, function (data) {
                // Set values in the scope.
-               scope.purpose = data.purpose;
-               scope.driveDate = moment().unix(data.driveDateTimestamp).toString();
+               scope.purpose = data[0].purpose;
+               scope.driveDate = moment.unix(data[0].driveDateTimestamp).format("DD/MM/YYYY");
            });
 
+           
 
 
+           console.log("Ive been clicked");
 
            var modalInstance = $modal.open({
                scope: scope,
-               templateUrl: '/App/MyReports/EditReportTemplate.html',
-               controller: 'DrivingController',
+               templateUrl: '/App/MyReports/EditReportModal.html',
+               controller: 'EditReportController',
                windowClass: 'full',
-               resolve: {
-                   itemId: function () {
-                       return "hej";
-                   }
-               }
            });
 
            modalInstance.result.then(function (itemId) {

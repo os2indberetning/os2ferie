@@ -1,20 +1,145 @@
-﻿<style>
-.full .modal-dialog{
-    width:auto;
-    margin-left:50px;
-    margin-right:50px;
-}
-</style>
+﻿<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Kørselsindberetning <small>Rediger indberetning</small>
+        </h1>
 
-    <div class="modal-header">
-        <h3 class="modal-title">Rediger</h3>
     </div>
-    <div class="modal-body">
-        <div>
-            <div ng-include="'/App/Driving/DrivingView.html'"></div>
+</div>
+
+<div class="row">
+
+    <div class="col-lg-6">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group form-inline">
+                    <label for="date">Dato for kørsel:</label>
+                    <input k-ng-model="driveDate" kendo-date-picker k-options="date" />
+                </div>
+
+            </div>
         </div>
 
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group form-inline">
+                    <label for="purpose">Formål:</label>
+                    <textarea ng-model="purpose" class="form-control" id="purpose"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="">Stilling og ansættelsested:</label>
+                    <select ng-model="postition" class="form-control" id="">
+                        <option selected="selected" disabled="disabled">Brugerens stilling(er)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="">Transportmiddel:</label>
+                    <select ng-model="transportation" class="form-control" id="">
+                        <option selected="selected" disabled="disabled">Vælg her</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="">Kilometeropgørelse:</label>
+                    <select ng-model="milageType" class="form-control" id="">
+                        <option selected="selected">Beregnet</option>
+                        <option>Aflæst</option>
+                        <option>Beregnet med merkørsel</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label for="">Vælg evt. personlig rute:</label>
+                    <select ng-model="personalRoute" class="form-control" id="">
+                        <option selected="selected" disabled="disabled">Personlige ruter</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <label for="">Fra:</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="form-group">
+                    <select ng-model="fromAddress" class="" kendo-combo-box id="">
+                        <option selected="selected" disabled="disabled">Skriv / drop-down af gemte</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <label>
+                    <input type="checkbox" /> Gem
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <label for="">Til:</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="form-group">
+                    <select ng-model="toAddress" class="" kendo-combo-box id="">
+                        <option selected="selected" disabled="disabled">Skriv / drop-down af gemte</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <label>
+                    <input type="checkbox" /> Gem
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <label>
+                    <input ng-model="returnTripChecked" ng-checked="returnTripChecked" type="checkbox" /> Tur + retur
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <button type="button" class="btn btn-danger">Ryd alle felter</button>
+
+            </div>
+            <div class="col-lg-6 pull-right text-right">
+                <button type="button" class="btn btn-primary">Gem ændringer</button>
+            </div>
+        </div>
+
+
     </div>
-    <div class="modal-footer">
-        <button class="btn btn-danger pull-right" style="margin: 5px" ng-click="cancel()">Annuller</button>
+    <div class="col-lg-6">
+        Jeg er et dådyr, jeg er et dådyr! HUH! (Her skal være et kort)
     </div>
+
+</div>

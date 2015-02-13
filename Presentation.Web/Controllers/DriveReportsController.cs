@@ -53,16 +53,15 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: odata/DriveReports(5)
-        public IHttpActionResult GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
+        public IQueryable<DriveReport> GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
-            var driveReports = _repo.AsQueryable();
+            var result = _repo.AsQueryable().FirstOrDefault(rep => rep.Id == key);
 
-            var result = driveReports.FirstOrDefault(rep => rep.Id == key);
 
-      
-
-            // return Ok<DriveReport>(driveReport);
-            return Ok(result);
+            return new List<DriveReport>()
+            {
+                result
+            }.AsQueryable();
         }
 
         // PUT: odata/DriveReports(5)
