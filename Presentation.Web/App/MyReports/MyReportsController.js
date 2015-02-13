@@ -10,13 +10,13 @@ angular.module("application").controller("MyReportsController", [
                // Update pending tabs.
                this.updatePendingReports(query);
            }
-           else if ($scope.activeTab == 'approved') {
-               // Update approved reports grid
-               this.updateApprovedReports(query);
+           else if ($scope.activeTab == 'accepted') {
+               // Update accepted reports grid
+               this.updateAcceptedReports(query);
            }
-           else if ($scope.activeTab == 'denied') {
-               // Update denied reports grid.
-               this.updateDeniedReports(query);
+           else if ($scope.activeTab == 'rejected') {
+               // Update rejected reports grid.
+               this.updateRejectedReports(query);
            }
        }
 
@@ -31,25 +31,25 @@ angular.module("application").controller("MyReportsController", [
            $scope.gridContainer.pendingGrid.dataSource.read();
        }
 
-       $scope.updateApprovedReports = function (oDataQuery) {
+       $scope.updateAcceptedReports = function (oDataQuery) {
 
            var and = "and ";
            if (oDataQuery == "") {
                and = "";
            }
 
-           $scope.gridContainer.approvedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Accepted' " + and + oDataQuery;
-           $scope.gridContainer.approvedGrid.dataSource.read();
+           $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Accepted' " + and + oDataQuery;
+           $scope.gridContainer.acceptedGrid.dataSource.read();
        }
 
-       $scope.updateDeniedReports = function (oDataQuery) {
+       $scope.updateRejectedReports = function (oDataQuery) {
            var and = "and ";
            if (oDataQuery == "") {
                and = "";
            }
 
-           $scope.gridContainer.deniedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Rejected' " + and + oDataQuery;
-           $scope.gridContainer.deniedGrid.dataSource.read();
+           $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Rejected' " + and + oDataQuery;
+           $scope.gridContainer.rejectedGrid.dataSource.read();
        }
 
        $scope.loadPendingReports = function () {
@@ -129,8 +129,8 @@ angular.module("application").controller("MyReportsController", [
            };
        }
 
-       $scope.loadApprovedReports = function () {
-           $scope.approvedReports = {
+       $scope.loadAcceptedReports = function () {
+           $scope.acceptedReports = {
                dataSource: {
                    type: "odata",
                    transport: {
@@ -202,8 +202,8 @@ angular.module("application").controller("MyReportsController", [
            };
        }
 
-       $scope.loadDeniedReports = function () {
-           $scope.deniedReports = {
+       $scope.loadRejectedReports = function () {
+           $scope.rejectedReports = {
                dataSource: {
                    type: "odata",
                    transport: {
@@ -275,7 +275,15 @@ angular.module("application").controller("MyReportsController", [
            };
        }
 
-       
+       $scope.loadInitialDates = function (){
+            // Set initial values for kendo datepickers.
+            $scope.dateContainer.toDatePending = new Date();
+            $scope.dateContainer.fromDatePending = new Date();
+            $scope.dateContainer.toDateAccepted = new Date();
+            $scope.dateContainer.fromDateAccepted = new Date();
+            $scope.dateContainer.toDateRejected = new Date();
+            $scope.dateContainer.fromDateRejected = new Date();
+        }
 
        $scope.getEndOfDayStamp = function(d){
             var m = moment(d);
@@ -290,8 +298,7 @@ angular.module("application").controller("MyReportsController", [
 // Event handlers
 
        $scope.clearClicked = function () {
-           $scope.toDate = "";
-           $scope.fromDate = "";
+
            $scope.updateActiveTab("");
        }
 
@@ -300,18 +307,23 @@ angular.module("application").controller("MyReportsController", [
        }
 
        $scope.searchClicked = function () {
-           console.log("called");
-           console.log($scope.fromDate);
-           console.log($scope.toDate);
-           console.log("--------");
-           // Validate input
-           if (!(typeof $scope.fromDate == 'undefined' || typeof $scope.toDate == 'undefined'
-               || $scope.fromDate == "" || $scope.toDate == "")) {
+           var from, to;
 
-               // Input is valid
-               var query = "CreatedDateTimestamp ge " + $scope.getStartOfDayStamp($scope.fromDate) + " and CreatedDateTimestamp le " + $scope.getEndOfDayStamp($scope.toDate);
-               $scope.updateActiveTab(query);
+           if ($scope.activeTab == 'pending') {
+                from = $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);
+                to = $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);
            }
+           else if ($scope.activeTab == 'accepted') {
+                from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateAccepted);
+                to = $scope.getEndOfDayStamp($scope.dateContainer.toDateAccepted);
+           }
+           else if ($scope.activeTab == 'rejected') {
+                   from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateRejected);
+                   to = $scope.getEndOfDayStamp($scope.dateContainer.toDateRejected);
+           }
+
+           var q = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+           $scope.updateActiveTab(q);
        }
 
        $scope.deleteClick = function (id) {
@@ -366,10 +378,9 @@ angular.module("application").controller("MyReportsController", [
 
        // Contains references to kendo ui grids.
        $scope.gridContainer = {};
+       $scope.dateContainer = {};
 
-       // Set initial values for kendo datepickers.
-       $scope.toDate = new Date();
-       $scope.fromDate = new Date();
+        $scope.loadInitialDates();
 
        // Format for datepickers.
        $scope.dateOptions = {
@@ -380,8 +391,8 @@ angular.module("application").controller("MyReportsController", [
        $scope.activeTab = "pending";
 
        // Load up the grids.
-       $scope.loadApprovedReports();
-       $scope.loadDeniedReports();
+       $scope.loadAcceptedReports();
+       $scope.loadRejectedReports();
        $scope.loadPendingReports();
 
     }
