@@ -9,7 +9,7 @@ using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices.Routing
 {
-	static class SeptimaRouter
+	public class SeptimaRouter
 	{
 		/// <summary>
 		/// Get routes and alternative routes for the given set of coordinates.
@@ -17,7 +17,7 @@ namespace Infrastructure.AddressServices.Routing
 		/// <param name="routeCoordinates"></param>
 		/// <exception cref="RouteInformationException">Thrown if no route was returned or no rute was found.</exception>
 		/// <returns></returns>
-		public static IEnumerable<RouteInformation> GetRoute(IEnumerable<Coordinates> routeCoordinates)
+		public IEnumerable<RouteInformation> GetRoute(IEnumerable<Coordinates> routeCoordinates)
 		{
 			List<RouteInformation> routes = new List<RouteInformation>();
 			HttpWebRequest request = CreateRequest(routeCoordinates);
@@ -62,7 +62,7 @@ namespace Infrastructure.AddressServices.Routing
 		/// </summary>
 		/// <param name="routeCoordinates"></param>
 		/// <returns></returns>
-		private static HttpWebRequest CreateRequest(IEnumerable<Coordinates> routeCoordinates)
+		private HttpWebRequest CreateRequest(IEnumerable<Coordinates> routeCoordinates)
 		{
 			string query = "";
 			var coordinateses = routeCoordinates as IList<Coordinates> ?? routeCoordinates.ToList();
@@ -102,12 +102,20 @@ namespace Infrastructure.AddressServices.Routing
 		/// </summary>
 		/// <param name="request"></param>
 		/// <returns>Formatted response from service.</returns>
-		private static RootRouteObject ExecuteAndRead(HttpWebRequest request)
+		private RootRouteObject ExecuteAndRead(HttpWebRequest request)
 		{
 			var responseString = "";
 
-			var distanceResponse = request.GetResponse();
-			var responseStream = distanceResponse.GetResponseStream();
+            Stream responseStream;
+            try
+            {
+                var distanceResponse = request.GetResponse();
+                responseStream = distanceResponse.GetResponseStream();
+            }
+            catch (WebException e)
+            {
+                throw new RouteInformationException("Server error, coordinates invalid.", e);
+            }
 
 			if (responseStream == null) return null;
 
@@ -122,7 +130,7 @@ namespace Infrastructure.AddressServices.Routing
 		/// </summary>
 		/// <param name="response"></param>
 		/// <returns>Response reprensented in custom class.</returns>
-		private static RootRouteObject ParseJson(string response)
+		private RootRouteObject ParseJson(string response)
 		{
 			JToken jRouteObject = JToken.Parse(response);
 

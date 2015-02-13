@@ -12,6 +12,7 @@ namespace Infrastructure.AddressServices.Tests
         {
             //Arrange
             Address address = new Address { StreetName = "Katrinebjergvej", StreetNumber = "90", ZipCode = 8200 };
+            AddressCoordinates uut = new AddressCoordinates();
             Coordinates correctCoord = new Coordinates
             {
                 Longitude = "10.1906",
@@ -20,7 +21,7 @@ namespace Infrastructure.AddressServices.Tests
             };
 
             //Act
-            Coordinates result = AddressCoordinates.GetCoordinates(address, Coordinates.CoordinatesType.Origin);
+            Coordinates result = uut.GetCoordinates(address, Coordinates.CoordinatesType.Origin);
 
             //Assert
             Assert.IsTrue(correctCoord.Equals(result));
@@ -31,11 +32,12 @@ namespace Infrastructure.AddressServices.Tests
         {
             //Arrange
             Address address = new Address { StreetName = "Bjergvej Alle Troll", StreetNumber = "90", ZipCode = 8200 };
+            AddressCoordinates uut = new AddressCoordinates();
             //Act
 
             //Assert
             Assert.Throws(typeof(AddressCoordinatesException),
-                () => AddressCoordinates.GetCoordinates(address, Coordinates.CoordinatesType.Origin), "Errors in address, see inner exception.");
+                () => uut.GetCoordinates(address, Coordinates.CoordinatesType.Origin), "Errors in address, see inner exception.");
         }
 
         [Test]
@@ -86,6 +88,20 @@ namespace Infrastructure.AddressServices.Tests
             Assert.AreEqual(correctAddress.StreetNumber, result.StreetNumber);
             Assert.AreEqual(correctAddress.ZipCode, result.ZipCode);
             Assert.AreEqual(correctAddress.Town, result.Town);
+        }
+
+        [Test]
+        public void GetAddressFromCoordinates_BadCoords_ThrowException()
+        {
+            //Arrange
+            Address address = new Address { Longitude = "999.00", Latitude = "999.00" };
+            AddressCoordinates uut = new AddressCoordinates();
+            
+            //Act
+
+            //Assert
+            Assert.Throws(typeof (AddressCoordinatesException), () => uut.GetAddressFromCoordinates(address),
+                "No address found at the specified coordinates");
         }
 
     }
