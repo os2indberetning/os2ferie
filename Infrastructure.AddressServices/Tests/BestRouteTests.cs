@@ -23,17 +23,15 @@ namespace Infrastructure.AddressServices.Tests
             {
                 new Address()
                 {
-                    Street = "Dalvej",
-                    StreetNr = "2",
-                    ZipCode = "8450",
-                    Type = Coordinates.CoordinatesType.Origin
+                    StreetName = "Dalvej",
+                    StreetNumber = "2",
+                    ZipCode = "8450"
                 },
                 new Address()
                 {
-                    Street = "Åskrænten",
-                    StreetNr = "5",
-                    ZipCode = "8250",
-                    Type = Coordinates.CoordinatesType.Destination
+                    StreetName = "Åskrænten",
+                    StreetNumber = "5",
+                    ZipCode = "8250"
                 }
             };
             IRoute bestRoute = new BestRoute();

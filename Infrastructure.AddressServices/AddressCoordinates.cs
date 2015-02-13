@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -17,38 +15,84 @@ namespace Infrastructure.AddressServices
         const int COORD_DECIMALS = 4;
 
         /// <summary>
-        /// Get coordinates for a given addresses.
+        /// Get coordinates for a given addresses. Use this method for single calls outside the service class.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <exception cref="AddressCoordinatesException">Thrown if address has critical spelling erros(see inner exception) or if no address coordinates correspond to the entered address.</exception>
+        /// <returns></returns>
+        public static Address GetAddressCoordinates(Address address)
+        {
+            var request = CreateRequest(address.StreetName, address.StreetNumber, address.ZipCode);
+
+            var addresses = ExecuteAndRead(request);
+
+            if (!addresses.Any())
+            {
+                request = CreateRequest(address.StreetName, null, address.ZipCode);
+
+                addresses = ExecuteAndRead(request);
+            }
+
+            if (!addresses.Any())
+            {
+                throw new AddressCoordinatesException("No coordinates returned.");
+            }
+
+            if (addresses[0].adgangsadresse.vejstykke.navn == address.StreetName
+                && addresses[0].adgangsadresse.postnummer.nr == address.ZipCode)
+            {
+                address.Longitude = addresses[0].adgangsadresse.adgangspunkt.koordinater[0].ToString().Replace(",", ".");
+                address.Latitude = addresses[0].adgangsadresse.adgangspunkt.koordinater[1].ToString().Replace(",", ".");
+
+                address.Longitude = address.Longitude.Remove(address.Longitude.IndexOf('.') + 1 + COORD_DECIMALS);
+                address.Latitude = address.Latitude.Remove(address.Latitude.IndexOf('.') + 1 + COORD_DECIMALS);
+            }
+            else
+            {
+                throw new AddressCoordinatesException("The addresses returned differ highly from the original, streetname does not exist in zipcode area.");
+            }
+
+            return address;
+        }
+
+        /// <summary>
+        /// Get coordinates for a given addresses. Only used by the service class, do not call elsewhere.
         /// </summary>
         /// <param name="address"></param>
         /// <param name="type"></param>
         /// <exception cref="AddressCoordinatesException">Thrown if address has critical spelling erros(see inner exception) or if no address coordinates correspond to the entered address.</exception>
         /// <returns></returns>
-        public static Coordinates GetAddressCoordinates(Address address, Coordinates.CoordinatesType type = Coordinates.CoordinatesType.Unkown)
+        public static Coordinates GetCoordinates(Address address, Coordinates.CoordinatesType type = Coordinates.CoordinatesType.Unkown)
         {
-            Address correctedAddress;
-            try
-            {
-                correctedAddress = AddressLaundering.LaunderAddress(address);
-            }
-            catch (AddressLaunderingException e)
-            {
-                throw new AddressCoordinatesException("Errors in address, see inner exception.", e);
-            }
+            Address correctedAddress = address;
+            //try
+            //{
+            //    correctedAddress = AddressLaundering.LaunderAddress(address);
+            //}
+            //catch (AddressLaunderingException e)
+            //{
+            //    throw new AddressCoordinatesException("Errors in address, see inner exception.", e);
+            //}
 
-            var request = CreateRequest(correctedAddress.Street, correctedAddress.StreetNr, correctedAddress.ZipCode);
+            var request = CreateRequest(correctedAddress.StreetName, correctedAddress.StreetNumber, correctedAddress.ZipCode);
 
             var addresses = ExecuteAndRead(request);
 
             if(!addresses.Any())
             {
-                request = CreateRequest(correctedAddress.Street, null, correctedAddress.ZipCode);
+                request = CreateRequest(correctedAddress.StreetName, null, correctedAddress.ZipCode);
 
                 addresses = ExecuteAndRead(request);
             }
 
+            if (!addresses.Any())
+            {
+                throw new AddressCoordinatesException("No coordinates returned.");
+            }
+
             var addressCoordinates = new Coordinates {Type = type};
 
-            if (addresses[0].adgangsadresse.vejstykke.navn == correctedAddress.Street 
+            if (addresses[0].adgangsadresse.vejstykke.navn == correctedAddress.StreetName 
                 && addresses[0].adgangsadresse.postnummer.nr == correctedAddress.ZipCode)
             {
                 addressCoordinates.Longitude = addresses[0].adgangsadresse.adgangspunkt.koordinater[0].ToString().Replace(",", ".");

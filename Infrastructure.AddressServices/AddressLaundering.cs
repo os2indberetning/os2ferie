@@ -17,7 +17,7 @@ namespace Infrastructure.AddressServices
         /// <returns>Corrected address.</returns>
         public static Address LaunderAddress(Address address)
         {
-            var request = CreateRequest(address.Street, address.StreetNr, address.ZipCode);
+            var request = CreateRequest(address.StreetName, address.StreetNumber, address.ZipCode);
 
             var laundered = ExecuteAndRead(request);
 
@@ -31,8 +31,8 @@ namespace Infrastructure.AddressServices
 
                 if (result.validateresult <= 1000 && result.validateresult >= 100)
                 {
-                    address.Street = result.laundered_address.streetname;
-                    address.StreetNr = result.laundered_address.streetbuildingidentifier;
+                    address.StreetName = result.laundered_address.streetname;
+                    address.StreetNumber = result.laundered_address.streetbuildingidentifier;
 
                     return address;
                 }
