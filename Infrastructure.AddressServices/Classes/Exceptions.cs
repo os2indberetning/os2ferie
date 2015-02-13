@@ -28,6 +28,11 @@ namespace Infrastructure.AddressServices.Classes
             _errorCode = errorCode;
         }
 
+        public AddressLaunderingException(string message, Exception inner) : base(message, inner)
+        {
+            
+        }
+
         public AddressLaunderingException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {

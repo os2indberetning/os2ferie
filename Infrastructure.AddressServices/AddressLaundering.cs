@@ -8,7 +8,7 @@ using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices
 {
-    public static class AddressLaundering
+    public class AddressLaundering
     {
         /// <summary>
         /// Check an address for errors in spelling and adjust case of street names and building identfiers. If laundering fails an exception is thrown.
@@ -16,7 +16,7 @@ namespace Infrastructure.AddressServices
         /// <param name="address"></param>
         /// <exception cref="AddressLaunderingException">Thrown if no address was returned or if the address could not be validated(see exception message and code).</exception>
         /// <returns>Corrected address.</returns>
-        public static Address LaunderAddress(Address address)
+        public Address LaunderAddress(Address address)
         {
             var request = CreateRequest(address.StreetName, address.StreetNumber, address.ZipCode.ToString());
 
@@ -46,6 +46,8 @@ namespace Infrastructure.AddressServices
             return address;
         }
 
+        #region Private methods
+
         /// <summary>
         /// Create a request following the service API url specifications. (addressevask.dk)
         /// </summary>
@@ -53,19 +55,27 @@ namespace Infrastructure.AddressServices
         /// <param name="streetNr"></param>
         /// <param name="zipCode"></param>
         /// <returns></returns>
-        private static HttpWebRequest CreateRequest(string street, string streetNr, string zipCode)
+        private HttpWebRequest CreateRequest(string street, string streetNr, string zipCode)
         {
             var query = string.Format("[\"{0} {1}, {2}\"]", street, streetNr, zipCode);
 
             return (HttpWebRequest)WebRequest.Create(UrlDefinitions.LaunderingUrl + query);
         }
 
-        private static List<RootLaunderedObject> ExecuteAndRead(HttpWebRequest request)
+        private List<RootLaunderedObject> ExecuteAndRead(HttpWebRequest request)
         {
             var responseString = "";
 
-            var distanceResponse = request.GetResponse();
-            var responseStream = distanceResponse.GetResponseStream();
+            Stream responseStream;
+            try
+            {
+                var distanceResponse = request.GetResponse();
+                responseStream = distanceResponse.GetResponseStream();
+            }
+            catch (WebException e)
+            {
+                throw new AddressLaunderingException("Server error, request invalid.", e);
+            }
 
             if (responseStream == null) return null;
 
@@ -75,7 +85,7 @@ namespace Infrastructure.AddressServices
             return ParseJson(responseString);
         }
 
-        private static List<RootLaunderedObject> ParseJson(string response)
+        private List<RootLaunderedObject> ParseJson(string response)
         {
             List<RootLaunderedObject> laundered = new List<RootLaunderedObject>();
             JObject jObject = JObject.Parse(response);
@@ -125,6 +135,7 @@ namespace Infrastructure.AddressServices
 
             return laundered;
         }
-       
+
+        #endregion
     }
 }
