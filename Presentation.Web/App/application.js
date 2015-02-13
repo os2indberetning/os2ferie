@@ -1,6 +1,8 @@
 ﻿var application = angular.module("application", ["kendo.directives", "ui.router", "ui.bootstrap", "ngResource", "template/modal/window.html", "template/modal/window.html", "template/modal/backdrop.html", "template/tabs/tab.html", "template/tabs/tabset.html", "angularMoment"]);
 
-application.config(["$stateProvider", function($stateProvider) {
+angular.module("application").config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise("/");
+
     $stateProvider
         .state("Default", {
             url: "/",
