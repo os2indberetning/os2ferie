@@ -277,6 +277,7 @@
     <Content Include="App\Admin\AdminView.html" />
     <Content Include="App\application.js" />
     <Content Include="App\ApproveReports\ApproveReportsView.html" />
+    <Content Include="App\ApproveReports\settingsTemplate.html" />
     <Content Include="App\AWS\awsSnippet.js" />
     <Content Include="App\AWS\custom-AWS.js" />
     <Content Include="App\Driving\DrivingView.html" />
