@@ -1,5 +1,6 @@
 ﻿using Infrastructure.AddressServices.Classes;
 using NUnit.Framework;
+using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices.Tests
 {
@@ -10,7 +11,7 @@ namespace Infrastructure.AddressServices.Tests
         public void GetCoordinates_GoodCoordinates()
         {
             //Arrange
-            Address address = new Address { StreetName = "Katrinebjergvej", StreetNumber = "90", ZipCode = "8200" };
+            Address address = new Address { StreetName = "Katrinebjergvej", StreetNumber = "90", ZipCode = 8200 };
             Coordinates correctCoord = new Coordinates
             {
                 Longitude = "10.1906",
@@ -29,7 +30,7 @@ namespace Infrastructure.AddressServices.Tests
         public void GetCoordinates_BadAddress_ThrowException()
         {
             //Arrange
-            Address address = new Address { StreetName = "Bjergvej Alle Troll", StreetNumber = "90", ZipCode = "8200" };
+            Address address = new Address { StreetName = "Bjergvej Alle Troll", StreetNumber = "90", ZipCode = 8200 };
             //Act
 
             //Assert
@@ -41,19 +42,20 @@ namespace Infrastructure.AddressServices.Tests
         public void GetAddressCoordinatesSecond_GoodCoordinates()
         {
             //Arrange
-            Address address = new Address { StreetName = "Katrinebjergvej", StreetNumber = "90", ZipCode = "8200" };
+            Address address = new Address { StreetName = "Katrinebjergvej", StreetNumber = "90", ZipCode = 8200 };
+            AddressCoordinates uut = new AddressCoordinates();
             Address correctCoord = new Address
             {
                 StreetName = "Katrinebjergvej",
                 StreetNumber = "90",
-                ZipCode = "8200",
+                ZipCode = 8200,
                 Longitude = "10.1906",
                 Latitude = "56.1735",
 
             };
 
             //Act
-            Address result = AddressCoordinates.GetAddressCoordinates(address);
+            Address result = uut.GetAddressCoordinates(address);
 
             //Assert
             Assert.IsTrue(correctCoord.Latitude == result.Latitude && correctCoord.Longitude == result.Longitude);
@@ -64,11 +66,12 @@ namespace Infrastructure.AddressServices.Tests
         {
             //Arrange
             Address address = new Address { Longitude = "12.58514", Latitude = "55.68323" };
+            AddressCoordinates uut = new AddressCoordinates();
             Address correctAddress = new Address
             {
                 StreetName = "Landgreven",
                 StreetNumber = "10",
-                ZipCode = "1301",
+                ZipCode = 1301,
                 Town = "København K",
                 Longitude = "12.58514",
                 Latitude = "55.68323"
@@ -76,7 +79,7 @@ namespace Infrastructure.AddressServices.Tests
             };
 
             //Act
-            Address result = AddressCoordinates.GetAddressFromCoordinates(address);
+            Address result = uut.GetAddressFromCoordinates(address);
 
             //Assert
             Assert.AreEqual(correctAddress.StreetName, result.StreetName);

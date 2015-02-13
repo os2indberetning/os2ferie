@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using Infrastructure.AddressServices.Classes;
+using Infrastructure.AddressServices.Interfaces;
 using Newtonsoft.Json.Linq;
+using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices
 {
-    public static class AddressCoordinates
+    public class AddressCoordinates : IAddressCoordinates
     {
         /// <summary>
         /// Specifies number of decimals used for coordinates.
@@ -26,9 +29,9 @@ namespace Infrastructure.AddressServices
         /// Get address information for given coordinates.
         /// </summary>
         /// <param name="addressCoord"></param>
-        /// <exception cref="AddressCoordinatesException">Thrown if the coordinates did not return an address.</exception>
+        /// <exception cref="Classes.AddressCoordinatesException">Thrown if the coordinates did not return an address.</exception>
         /// <returns></returns>
-        public static Address GetAddressFromCoordinates(Address addressCoord)
+        public Address GetAddressFromCoordinates(Address addressCoord)
         {
             var request = CreateAddressRequest(addressCoord.Longitude, addressCoord.Latitude);
 
@@ -44,7 +47,7 @@ namespace Infrastructure.AddressServices
 
             addressCoord.StreetName = singleAddress.vejstykke.navn;
             addressCoord.StreetNumber = singleAddress.husnr;
-            addressCoord.ZipCode = singleAddress.postnummer.nr;
+            addressCoord.ZipCode = Int32.Parse(singleAddress.postnummer.nr);
             addressCoord.Town = singleAddress.postnummer.navn;
 
             return addressCoord;
@@ -57,7 +60,7 @@ namespace Infrastructure.AddressServices
         /// <param name="correctAddresses">Set this to use address laundering prior to each request, the corrected values will be replaced. Default: false</param>
         /// <exception cref="AddressCoordinatesException">Thrown if address has critical spelling errors(see inner exception) or if no address coordinates correspond to the entered address.</exception>
         /// <returns></returns>
-        public static Address GetAddressCoordinates(Address address, bool correctAddresses = false)
+        public Address GetAddressCoordinates(Address address, bool correctAddresses = false)
         {
             Address correctedAddress = address;
             if (!correctAddresses)
@@ -72,14 +75,14 @@ namespace Infrastructure.AddressServices
                 }
             }
 
-            var request = CreateCoordRequest(correctedAddress.StreetName, correctedAddress.StreetNumber, correctedAddress.ZipCode);
+            var request = CreateCoordRequest(correctedAddress.StreetName, correctedAddress.StreetNumber, correctedAddress.ZipCode.ToString());
 
             string addressesString = ExecuteAndRead(request);
             var addresses = ParseJson(addressesString);
 
             if (!addresses.Any())
             {
-                request = CreateCoordRequest(address.StreetName, null, address.ZipCode);
+                request = CreateCoordRequest(address.StreetName, null, address.ZipCode.ToString());
 
                 addressesString = ExecuteAndRead(request);
                 addresses = ParseJson(addressesString);
@@ -91,7 +94,7 @@ namespace Infrastructure.AddressServices
             }
 
             if (addresses[0].adgangsadresse.vejstykke.navn == address.StreetName
-                && addresses[0].adgangsadresse.postnummer.nr == address.ZipCode)
+                && addresses[0].adgangsadresse.postnummer.nr == address.ZipCode.ToString())
             {
                 correctedAddress.Longitude = addresses[0].adgangsadresse.adgangspunkt.koordinater[0].ToString().Replace(",", ".");
                 correctedAddress.Latitude = addresses[0].adgangsadresse.adgangspunkt.koordinater[1].ToString().Replace(",", ".");
@@ -130,14 +133,14 @@ namespace Infrastructure.AddressServices
                 }
             }
 
-            var request = CreateCoordRequest(correctedAddress.StreetName, correctedAddress.StreetNumber, correctedAddress.ZipCode);
+            var request = CreateCoordRequest(correctedAddress.StreetName, correctedAddress.StreetNumber, correctedAddress.ZipCode.ToString());
 
             string addressesString = ExecuteAndRead(request);
             var addresses = ParseJson(addressesString);
 
             if (!addresses.Any())
             {
-                request = CreateCoordRequest(correctedAddress.StreetName, null, correctedAddress.ZipCode);
+                request = CreateCoordRequest(correctedAddress.StreetName, null, correctedAddress.ZipCode.ToString());
 
                 addressesString = ExecuteAndRead(request);
                 addresses = ParseJson(addressesString);
@@ -151,7 +154,7 @@ namespace Infrastructure.AddressServices
             Coordinates addressCoordinates = new Coordinates { Type = type };
 
             if (addresses[0].adgangsadresse.vejstykke.navn == correctedAddress.StreetName
-                && addresses[0].adgangsadresse.postnummer.nr == correctedAddress.ZipCode)
+                && addresses[0].adgangsadresse.postnummer.nr == correctedAddress.ZipCode.ToString())
             {
                 addressCoordinates.Longitude = addresses[0].adgangsadresse.adgangspunkt.koordinater[0].ToString().Replace(",", ".");
                 addressCoordinates.Latitude = addresses[0].adgangsadresse.adgangspunkt.koordinater[1].ToString().Replace(",", ".");

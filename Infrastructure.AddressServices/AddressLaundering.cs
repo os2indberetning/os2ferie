@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using Infrastructure.AddressServices.Classes;
 using Newtonsoft.Json.Linq;
+using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices
 {
@@ -17,7 +18,7 @@ namespace Infrastructure.AddressServices
         /// <returns>Corrected address.</returns>
         public static Address LaunderAddress(Address address)
         {
-            var request = CreateRequest(address.StreetName, address.StreetNumber, address.ZipCode);
+            var request = CreateRequest(address.StreetName, address.StreetNumber, address.ZipCode.ToString());
 
             var laundered = ExecuteAndRead(request);
 

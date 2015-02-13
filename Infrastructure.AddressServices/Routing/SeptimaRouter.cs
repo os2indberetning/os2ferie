@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using Infrastructure.AddressServices.Classes;
 using Newtonsoft.Json.Linq;
+using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices.Routing
 {
