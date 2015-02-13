@@ -5,12 +5,13 @@ using System.Linq;
 using System.Net;
 using Infrastructure.AddressServices.Classes;
 using Newtonsoft.Json.Linq;
-using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices.Routing
 {
 	public class SeptimaRouter
 	{
+		#region Public methods
+
 		/// <summary>
 		/// Get routes and alternative routes for the given set of coordinates.
 		/// </summary>
@@ -56,7 +57,10 @@ namespace Infrastructure.AddressServices.Routing
 			}
 			return routes;
 		}
-		
+		#endregion
+
+		#region Private methods
+
 		/// <summary>
 		/// Build query URL and create HTTP request following the service API url specifications.
 		/// </summary>
@@ -106,16 +110,16 @@ namespace Infrastructure.AddressServices.Routing
 		{
 			var responseString = "";
 
-            Stream responseStream;
-            try
-            {
-                var distanceResponse = request.GetResponse();
-                responseStream = distanceResponse.GetResponseStream();
-            }
-            catch (WebException e)
-            {
-                throw new RouteInformationException("Server error, coordinates invalid.", e);
-            }
+			Stream responseStream;
+			try
+			{
+				var distanceResponse = request.GetResponse();
+				responseStream = distanceResponse.GetResponseStream();
+			}
+			catch (WebException e)
+			{
+				throw new RouteInformationException("Server error, coordinates invalid.", e);
+			}
 
 			if (responseStream == null) return null;
 
@@ -154,5 +158,7 @@ namespace Infrastructure.AddressServices.Routing
 
 			return route;
 		}
+
+		#endregion
 	}
 }

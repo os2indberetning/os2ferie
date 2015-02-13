@@ -6,12 +6,14 @@ using System.Net;
 using Core.DomainServices;
 using Infrastructure.AddressServices.Classes;
 using Newtonsoft.Json.Linq;
-using Address = Core.DomainModel.Address;
+using Core.DomainModel;
 
 namespace Infrastructure.AddressServices
 {
     public class AddressCoordinates : IAddressCoordinates
     {
+        #region Properties
+
         /// <summary>
         /// Specifies number of decimals used for coordinates.
         /// </summary>
@@ -24,6 +26,8 @@ namespace Infrastructure.AddressServices
         {
             get { return COORD_DECIMALS; }
         }
+
+        #endregion
 
         #region Public methods
 
@@ -174,7 +178,7 @@ namespace Infrastructure.AddressServices
             return addressCoordinates;
         }
 
-#endregion
+        #endregion
 
         #region Private methods
 

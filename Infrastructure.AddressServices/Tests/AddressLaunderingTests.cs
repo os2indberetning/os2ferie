@@ -1,13 +1,14 @@
-﻿
-using Infrastructure.AddressServices.Classes;
+﻿using Infrastructure.AddressServices.Classes;
 using NUnit.Framework;
-using Address = Core.DomainModel.Address;
+using Core.DomainModel;
 
 namespace Infrastructure.AddressServices.Tests
 {
     [TestFixture]
     public class AddressLaunderingTests
     {
+        #region Laundering tests
+
         [Test]
         public void LaunderAddress_SplittetStreetName_Good()
         {
@@ -32,6 +33,8 @@ namespace Infrastructure.AddressServices.Tests
             //Assert
             Assert.AreEqual(address, result);
         }
+
+        #endregion
 
         #region Exception tests
 
