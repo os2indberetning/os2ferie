@@ -255,6 +255,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JasmineController.cs" />
     <Compile Include="Controllers\LicensePlatesController.cs" />
+    <Compile Include="Controllers\MobileTokenController.cs" />
     <Compile Include="Controllers\PersonalAddressesController.cs" />
     <Compile Include="Controllers\PersonalRoutesController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
@@ -290,6 +291,7 @@
     <Content Include="App\Services\PersonalRouteResource.js" />
     <Content Include="App\Services\PointResource.js" />
     <Content Include="App\Services\RouteContainerResource.js" />
+    <Content Include="App\Services\TokenResource.js" />
     <Content Include="App\Settings\AddressEditModal.html" />
     <Content Include="App\Settings\ModalControllers\AddressEditModalController.js" />
     <Content Include="App\Settings\ModalControllers\RouteEditModalController.js" />

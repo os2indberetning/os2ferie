@@ -4,8 +4,8 @@
 <div class="modal-body">
     <div>
         <ol class="dl-horizontal token-list">
-            <li ng-repeat="item in items">
-                <pre><strong>{{ item }}</strong><button class="btn btn-danger pull-right" ng-click="deleteToken()">Slet</button></pre>
+            <li ng-repeat="token in tokens">
+                <pre><strong>{{ token. }}</strong><button class="btn btn-danger pull-right" ng-click="deleteToken(token.Id)">Slet</button></pre>
             </li>
         </ol>    
     </div>    

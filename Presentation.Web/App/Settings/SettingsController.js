@@ -3,7 +3,7 @@
         $scope.isCollapsed = true;
         $scope.mailAdvice = '';
         $scope.licenseplates = [];
-        $scope.tokens = ["1", "2"];
+        $scope.tokens = [];
         $scope.newLicensePlate = "";
         $scope.newLicensePlateDescription = "";
         $scope.workDistanceOverride = 0;
@@ -38,8 +38,9 @@
 
         $scope.deleteLicensePlate = function (plate) {
             var objIndex = $scope.licenseplates.indexOf(plate);
-            LicensePlate.delete({ id: plate.Id }, function (data) {
-                $scope.licenseplates.splice(objIndex, 1);
+            $scope.licenseplates.splice(objIndex, 1);
+
+            LicensePlate.delete({ id: plate.Id }, function (data) {                
                 NotificationService.AutoFadeNotification("success", "Success", "Nummerplade blev slettet");
             }), function () {
                 $scope.licenseplates.push(plate);
@@ -54,7 +55,7 @@
             NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
         }
 
-        $scope.deleteToken = function() {
+        $scope.deleteToken = function () {
             NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
         }
 
@@ -66,18 +67,18 @@
             });
 
             newPerson.$patch({ id: 1 }, function () {
-                NotificationService.AutoFadeNotification("success", "Success", "Valg blev gemt");
+                NotificationService.AutoFadeNotification("success", "Success", "Valg om modtagelse af mails blev gemt");
             }), function () {
-                $scope.workDistanceOverride = !$scope.recieveMail;
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Valg blev gemt");
+                $scope.recieveMail = !$scope.recieveMail;
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Valg om modtagelse af mails blev ikke gemt");
             };
         }
 
-        $scope.saveAlternativeHomeAddress = function() {
+        $scope.saveAlternativeHomeAddress = function () {
             NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
         }
 
-        $scope.saveAlternativeWorkAddress = function() {
+        $scope.saveAlternativeWorkAddress = function () {
             NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
         }
 
@@ -90,14 +91,14 @@
             });
 
             newPerson.$patch({ id: 1 }, function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Valg blev gemt");
+                NotificationService.AutoFadeNotification("success", "Success", "Afstand mellem hjemme- og arbejdsadresse blev gemt");
             }), function () {
                 if ($scope.mailAdvice == 'No') {
                     $scope.mailAdvice = 'Yes';
                 } else {
                     $scope.mailAdvice = 'No';
                 }
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Valg blev gemt");
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Afstand mellem hjemme- og arbejdsadresse blev ikke gemt");
             };
         };
 
@@ -257,7 +258,7 @@
             NotificationService.AutoFadeNotification("danger", "Fejl", "Person ikke fundet");
         });
 
-        $scope.loadGrids(1);        
+        $scope.loadGrids(1);
 
         $scope.openTokenModal = function (size) {
 
@@ -265,16 +266,20 @@
                 scope: $scope,
                 templateUrl: '/App/Settings/tokenModal.html',
                 controller: 'TokenInstanceController',
+                backdrop: 'static',
                 size: size,
                 resolve: {
                     items: function () {
                         return $scope.tokens;
-                    }
+                    },
+                    personId: function() {
+                        return $scope.currentPerson.Id;
+                    } 
                 }
             });
 
-            modalInstance.result.then(function (selectedItem) {
-                $scope.selected = selectedItem;
+            modalInstance.result.then(function (tokens) {
+                $scope.tokens = tokens;
             });
         };
     }
