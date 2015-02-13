@@ -273,18 +273,29 @@
     <Content Include="App\Admin\AdminView.html" />
     <Content Include="App\application.js" />
     <Content Include="App\ApproveReports\ApproveReportsView.html" />
+    <Content Include="App\ApproveReports\settingsTemplate.html" />
+    <Content Include="App\AWS\awsSnippet.js" />
+    <Content Include="App\AWS\custom-AWS.js" />
     <Content Include="App\Driving\DrivingView.html" />
     <Content Include="App\Driving\DrivingController.js" />
     <Content Include="App\Frontpage\FrontpageView.html" />
     <Content Include="App\MyReports\ConfirmDeleteReportController.js" />
     <Content Include="App\MyReports\ConfirmDeleteTemplate.html" />
     <Content Include="App\MyReports\EditReportController.js" />
-    <Content Include="App\MyReports\EditReportModal.html" />
     <Content Include="App\MyReports\EditReportTemplate.html" />
     <Content Include="App\MyReports\MyReportsController.js" />
-    <Content Include="App\MyReports\MyReportsController.spec.js" />
     <Content Include="App\MyReports\MyReportsView.html" />
-    <Content Include="App\Services\ReportResource.js" />
+    <Content Include="App\Services\LicensePlateResource.js" />
+    <Content Include="App\Services\NotificationService.js" />
+    <Content Include="App\Services\PersonalRouteResource.js" />
+    <Content Include="App\Services\PointResource.js" />
+    <Content Include="App\Services\RouteResource.js" />
+    <Content Include="App\Services\TokenResource.js" />
+    <Content Include="App\Settings\AddressEditModal.html" />
+    <Content Include="App\Settings\ModalControllers\AddressEditModalController.js" />
+    <Content Include="App\Settings\ModalControllers\RouteEditModalController.js" />
+    <Content Include="App\Settings\ModalControllers\TokenModalController.js" />
+    <Content Include="App\Settings\RouteEditModal.html" />
     <Content Include="App\Settings\SettingsController.js" />
     <Content Include="App\Settings\SettingsView.html" />
     <Content Include="App\Settings\tokenModal.html" />
@@ -292,6 +303,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\custom.css" />
+    <Content Include="Content\customcss\approvereports.css" />
     <Content Include="Content\customcss\myreports.css" />
     <Content Include="Content\jasmine\jasmine.css" />
     <Content Include="Content\jasmine\jasmine_favicon.png" />
@@ -1981,20 +1993,17 @@
       <Name>Core.ApplicationServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\Core.DomainModel\Core.DomainModel.csproj">
-      <Project>{823928AD-3BB7-4FD8-831F-201D73B80AE0}</Project>
+      <Project>{823928ad-3bb7-4fd8-831f-201d73b80ae0}</Project>
       <Name>Core.DomainModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\Core.DomainServices\Core.DomainServices.csproj">
-      <Project>{3A54FD98-5ECF-47C1-98C1-D827CFEBA317}</Project>
+      <Project>{3a54fd98-5ecf-47c1-98c1-d827cfeba317}</Project>
       <Name>Core.DomainServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\Infrastructure.DataAccess\Infrastructure.DataAccess.csproj">
-      <Project>{9914DB94-E465-4751-939C-8121C30AC945}</Project>
+      <Project>{9914db94-e465-4751-939c-8121c30ac945}</Project>
       <Name>Infrastructure.DataAccess</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
