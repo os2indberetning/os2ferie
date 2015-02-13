@@ -255,7 +255,11 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JasmineController.cs" />
     <Compile Include="Controllers\LicensePlatesController.cs" />
+    <Compile Include="Controllers\MobileTokenController.cs" />
+    <Compile Include="Controllers\PersonalAddressesController.cs" />
+    <Compile Include="Controllers\PersonalRoutesController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\PointsController.cs" />
     <Compile Include="Controllers\TestReportsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
