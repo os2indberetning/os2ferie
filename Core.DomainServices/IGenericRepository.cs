@@ -23,5 +23,7 @@ namespace Core.DomainServices
         void Save();
         void Update(T entity);
         void Patch(T entity);
+
+        void Delete(T entity);
     }
 }

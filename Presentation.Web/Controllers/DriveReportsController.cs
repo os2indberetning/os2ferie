@@ -48,9 +48,7 @@ namespace OS2Indberetning.Controllers
 
             // Add fullname and human readable timestamp to the resultset
             foreach (var driveReport in driveReports)
-            {
-                
-
+            {               
                 driveReport.Fullname = driveReport.Person.FirstName;
 
                 if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
@@ -58,7 +56,6 @@ namespace OS2Indberetning.Controllers
                     driveReport.Fullname += " " + driveReport.Person.MiddleName;
                 }
                 driveReport.Fullname += " " + driveReport.Person.LastName;
-
 
                 driveReport.Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(driveReport.CreatedDateTimestamp).ToShortDateString();
             }
