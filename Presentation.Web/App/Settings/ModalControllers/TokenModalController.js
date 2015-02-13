@@ -1,14 +1,21 @@
-﻿angular.module("application").controller('TokenInstanceController', ["$scope", "NotificationService", "$modalInstance", "Token", "items", "personId", function ($scope, NotificationService, $modalInstance, Token, items, personId) {
+﻿angular.module("application").controller('TokenInstanceController', ["$scope", "NotificationService", "$modalInstance", "Token", "personId", function ($scope, NotificationService, $modalInstance, Token, personId) {
 
-    $scope.tokens = items;    
+    $scope.tokens = [];
+
+    Token.get({ id: personId }, function (data) {
+        NotificationService.AutoFadeNotification("success", "Success", "Tokens blev fundet");
+        $scope.tokens = data.value;
+    }, function() {
+        NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke hente tokens");
+    });
 
     $scope.deleteToken = function (token) {
         var objIndex = $scope.licenseplates.indexOf(token);
         $scope.tokens.splice(objIndex, 1);
 
-        Token.delete({ id: token.Id }, function(data) {
+        Token.delete({ id: token.Id }, function (data) {
             NotificationService.AutoFadeNotification("success", "Success", "Token blev slettet");
-        }, function() {
+        }, function () {
             $scope.tokens.push(token);
             NotificationService.AutoFadeNotification("danger", "Fejl", "Token blev ikke slettet");
         });
@@ -30,7 +37,7 @@
 
     $scope.closeTokenModal = function () {
         $modalInstance.close({
-            tokens: $scope.tokens
+            
         });
     }
 

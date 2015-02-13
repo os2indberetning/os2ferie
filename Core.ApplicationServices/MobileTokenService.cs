@@ -52,12 +52,34 @@ namespace Core.ApplicationServices
 
             _repo.Delete(token);
 
+            _repo.Save();
+
             if (_repo.AsQueryable().Any(x => x.Id == id))
             {
                 return false;
             }
 
             return true;
+        }
+
+        public IQueryable<MobileToken> GetByPersonId(int id)
+        {
+            var result = _repo.AsQueryable().Where(x => x.PersonId == id && x.Status != MobileTokenStatus.Deleted);
+
+            foreach (var token in result)
+            {
+                if (token.Status == MobileTokenStatus.Created)
+                {
+                    token.StatusToPresent = "Oprettet";
+                }
+
+                if (token.Status == MobileTokenStatus.Activated)
+                {
+                    token.StatusToPresent = "Aktiveret";
+                }
+            }
+
+            return result;
         }
 
         private string GenerateToken()

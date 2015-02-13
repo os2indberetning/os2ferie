@@ -1,4 +1,5 @@
-﻿using Core.DomainModel;
+﻿using System.Linq;
+using Core.DomainModel;
 
 namespace Core.ApplicationServices.Interfaces
 {
@@ -6,5 +7,6 @@ namespace Core.ApplicationServices.Interfaces
     {
         MobileToken Create(MobileToken token);
         bool Delete(MobileToken token);
+        IQueryable<MobileToken> GetByPersonId(int id);
     }
 }

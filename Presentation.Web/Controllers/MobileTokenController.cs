@@ -47,12 +47,14 @@ namespace OS2Indberetning.Controllers
         {
             throw new NotImplementedException();
         }
-
+                
         // GET: odata/MobileToken(5)
         [EnableQuery]
         public IQueryable<MobileToken> GetMobileToken([FromODataUri] int key, ODataQueryOptions<MobileToken> queryOptions)
         {
-            throw new NotImplementedException();
+            var result = _service.GetByPersonId(key);
+
+            return result;
         }
 
         // PUT: odata/MobileToken(5)

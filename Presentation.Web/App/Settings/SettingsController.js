@@ -1,15 +1,16 @@
 ﻿angular.module("application").controller("SettingController", [
-    "$scope", "$modal", "Person", "LicensePlate", "Personalroute", "Point", "RouteContainer", "$http", "NotificationService", function ($scope, $modal, Person, LicensePlate, Personalroute, Point, RouteContainer, $http, NotificationService) {
+    "$scope", "$modal", "Person", "LicensePlate", "Personalroute", "Point", "Route", "$http", "NotificationService", function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Route, $http, NotificationService) {
         $scope.isCollapsed = true;
         $scope.mailAdvice = '';
         $scope.licenseplates = [];
-        $scope.tokens = [];
         $scope.newLicensePlate = "";
         $scope.newLicensePlateDescription = "";
         $scope.workDistanceOverride = 0;
         $scope.recieveMail = false;
         $scope.alternativeHomeAddress = "";
         $scope.alternativeWorkAddress = "";
+        $scope.routes = [];
+        $scope.addresses = [];
 
         LicensePlate.get({ id: 1 }, function (data) {
             $scope.licenseplates = data.value;
@@ -49,14 +50,6 @@
                 });
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade blev ikke slettet");
             };
-        }
-
-        $scope.saveNewToken = function () {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
-        }
-
-        $scope.deleteToken = function () {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
         }
 
         $scope.invertRecieveMail = function () {
@@ -180,7 +173,7 @@
                     {
                         field: "Id",
                         title: "Muligheder",
-                        template: "<a ng-controller='RouteEditModalController' ng-click='openRouteEditModal(${Id})'>Rediger</a>"
+                        template: "<a ng-click='openRouteEditModal(${Id})'>Rediger</a>"
                     }
                 ]
             };
@@ -237,7 +230,7 @@
                     }, {
                         field: "Id",
                         title: "Muligheder",
-                        template: "<a ng-controller='AddressEditModalController' ng-click='openAddressEditModal(${Id})'>Mine tokens</a>"
+                        template: "<a ng-click='openAddressEditModal(${Id})'>Rediger</a>"
                     }
                 ]
             };
@@ -263,23 +256,55 @@
         $scope.openTokenModal = function (size) {
 
             var modalInstance = $modal.open({
-                scope: $scope,
                 templateUrl: '/App/Settings/tokenModal.html',
                 controller: 'TokenInstanceController',
                 backdrop: 'static',
                 size: size,
                 resolve: {
-                    items: function () {
-                        return $scope.tokens;
-                    },
                     personId: function() {
                         return $scope.currentPerson.Id;
                     } 
                 }
             });
 
-            modalInstance.result.then(function (tokens) {
-                $scope.tokens = tokens;
+            modalInstance.result.then(function () {
+                
+            });
+        };
+
+        $scope.openRouteEditModal = function (id) {
+
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/RouteEditModal.html',
+                controller: 'RouteEditModalInstanceController',
+                backdrop: 'static',
+                resolve: {
+                    routes: function () {
+                        return $scope.routes;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                
+            });
+        };
+
+        $scope.openAddressEditModal = function (id) {
+
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/AddressEditModal.html',
+                controller: 'AddressEditModalInstanceController',
+                backdrop: 'static',
+                resolve: {
+                    addresses: function () {
+                        return $scope.addresses;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                
             });
         };
     }

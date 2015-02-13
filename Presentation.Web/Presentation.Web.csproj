@@ -290,7 +290,7 @@
     <Content Include="App\Services\NotificationService.js" />
     <Content Include="App\Services\PersonalRouteResource.js" />
     <Content Include="App\Services\PointResource.js" />
-    <Content Include="App\Services\RouteContainerResource.js" />
+    <Content Include="App\Services\RouteResource.js" />
     <Content Include="App\Services\TokenResource.js" />
     <Content Include="App\Settings\AddressEditModal.html" />
     <Content Include="App\Settings\ModalControllers\AddressEditModalController.js" />
