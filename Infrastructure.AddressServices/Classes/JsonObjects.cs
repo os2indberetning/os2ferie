@@ -100,6 +100,31 @@ namespace Infrastructure.AddressServices.Classes
     }
     #endregion
 
+    #region COORDINATES TO ADDRESS
+
+    public class RootCoordinateToAddressObject
+    {
+        public RootCoordinateToAddressObject(JToken token)
+        {
+            href = (string)token["href"];
+            id = (string)token["id"];
+            kvh = (string)token["kvh"];
+            status = (int)token["status"];
+            vejstykke = new Vejstykke(token["vejstykke"]);
+            husnr = (string)token["husnr"];
+            postnummer = new Postnummer(token["postnummer"]);
+        }
+
+        public string href { get; set; }
+        public string id { get; set; }
+        public string kvh { get; set; }
+        public int status { get; set; }
+        public Vejstykke vejstykke { get; set; }
+        public string husnr { get; set; }
+        public Postnummer postnummer { get; set; }
+    }
+
+    #endregion
 
     #region ROUTE SEPTIMA
 

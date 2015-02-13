@@ -3,6 +3,7 @@ namespace Infrastructure.AddressServices.Classes
 {
     static class UrlDefinitions
     {
+        private const string _coordinateToAddressUrl = @"http://dawa.aws.dk/adgangsadresser/reverse?";
         private const string _launderingURL = @"http://service.adressevask.dk/favrskov-HIEEPKWJED/json?json=";
         private const string _coordinatesURL = @"http://dawa.aws.dk/adresser?";
         private const string _routingURL = @"http://routing.septima.dk/favrskov-HIEEPKWJED/car/viaroute?";
@@ -21,6 +22,11 @@ namespace Infrastructure.AddressServices.Classes
         public static string CoordinatesUrl
         {
             get { return _coordinatesURL; }
+        }
+
+        public static string CoordinateToAddressUrl
+        {
+            get { return _coordinateToAddressUrl; }
         }
 
         /// <summary>
