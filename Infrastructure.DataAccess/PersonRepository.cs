@@ -40,5 +40,10 @@ namespace Infrastructure.DataAccess
         {
             throw new System.NotImplementedException();
         }
+
+        public void Delete(Person entity)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

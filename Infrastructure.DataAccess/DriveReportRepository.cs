@@ -53,5 +53,10 @@ namespace Infrastructure.DataAccess
         {
             throw new NotImplementedException();
         }
+
+        public void Delete(DriveReport entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
