@@ -2,14 +2,15 @@
 {
     public class Address
     {
+        public int Id { get; set; }
         /// <summary>
-        /// Street name.
+        /// StreetName name.
         /// </summary>
-        public string Street { get; set; }
+        public string StreetName { get; set; }
         /// <summary>
         /// Building identifier
         /// </summary>
-        public string StreetNr { get; set; }
+        public string StreetNumber { get; set; }
         /// <summary>
         /// Zip code
         /// </summary>
@@ -17,6 +18,12 @@
         /// <summary>
         /// Address type.
         /// </summary>
-        public Coordinates.CoordinatesType Type { get; set; }
+
+        public string Town { get; set; }
+        public string Longitude { get; set; }
+        public string Latitude { get; set; }
+        public string Description { get; set; }
     }
 }
+
+        

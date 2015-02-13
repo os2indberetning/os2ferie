@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Interfaces;
@@ -21,8 +22,59 @@ namespace Infrastructure.AddressServices.Routing
             {
                 return null;
             }
+            var addressesList = addresses as IList<Address>;
+            List<Coordinates> routeCoordinates = new List<Coordinates>();
+            var origin = addressesList[0];
+            var destination = addressesList[addressesList.Count - 1];
 
-            List<Coordinates> routeCoordinates = addresses.Select(address => AddressCoordinates.GetAddressCoordinates(address, address.Type)).ToList();
+            addressesList.Remove(origin);
+            addressesList.Remove((destination));
+
+            if (String.IsNullOrEmpty(origin.Longitude))
+            {
+                routeCoordinates.Add(AddressCoordinates.GetCoordinates(origin, Coordinates.CoordinatesType.Origin));
+            }
+            else
+            {
+                routeCoordinates.Add(new Coordinates()
+                {
+                    Longitude = origin.Longitude,
+                    Latitude = origin.Latitude,
+                    Type = Coordinates.CoordinatesType.Origin
+                });
+            }
+
+            foreach (var address in addressesList)
+            {
+                if (String.IsNullOrEmpty(address.Longitude))
+                {
+                    routeCoordinates.Add(AddressCoordinates.GetCoordinates(address,
+                        Coordinates.CoordinatesType.Via));
+                }
+                else
+                {
+                    routeCoordinates.Add(new Coordinates()
+                    {
+                        Longitude = address.Longitude,
+                        Latitude = address.Latitude,
+                        Type = Coordinates.CoordinatesType.Via
+                    });
+                }
+            }
+
+            if (String.IsNullOrEmpty(destination.Longitude))
+            {
+                routeCoordinates.Add(AddressCoordinates.GetCoordinates(destination, Coordinates.CoordinatesType.Destination));
+            }
+            else
+            {
+                routeCoordinates.Add(new Coordinates()
+                {
+                    Longitude = destination.Longitude,
+                    Latitude = destination.Latitude,
+                    Type = Coordinates.CoordinatesType.Destination
+                });
+            }
 
             List<RouteInformation> routes = SeptimaRouter.GetRoute(routeCoordinates).OrderBy(x => x.Duration).ToList();
 

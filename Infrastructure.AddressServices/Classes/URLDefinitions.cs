@@ -1,7 +1,7 @@
 ﻿
 namespace Infrastructure.AddressServices.Classes
 {
-    class UrlDefinitions
+    static class UrlDefinitions
     {
         private const string _launderingURL = @"http://service.adressevask.dk/favrskov-HIEEPKWJED/json?json=";
         private const string _coordinatesURL = @"http://dawa.aws.dk/adresser?";

@@ -11,7 +11,7 @@ namespace Infrastructure.AddressServices.Tests
         public void LaunderAddress_SplittetStreetName_Good()
         {
             //Arrange
-            Address address = new Address { Street = "Ny Adelgade", StreetNr = "10", ZipCode = "1104" };
+            Address address = new Address { StreetName = "Ny Adelgade", StreetNumber = "10", ZipCode = "1104" };
             //Act
             Address result = AddressLaundering.LaunderAddress(address);
             //Assert
@@ -22,8 +22,8 @@ namespace Infrastructure.AddressServices.Tests
         public void LaunderAddress_SplittetStreetName_BadStreetName()
         {
             //Arrange
-            Address address = new Address { Street = "Nü Adelgaje", StreetNr = "10", ZipCode = "1104" };
-            Address correctAddress = new Address { Street = "Ny Adelgade", StreetNr = "10", ZipCode = "1104" };
+            Address address = new Address { StreetName = "Nü Adelgaje", StreetNumber = "10", ZipCode = "1104" };
+            Address correctAddress = new Address { StreetName = "Ny Adelgade", StreetNumber = "10", ZipCode = "1104" };
             //Act
             Address result = AddressLaundering.LaunderAddress(address);
             //Assert
@@ -36,7 +36,7 @@ namespace Infrastructure.AddressServices.Tests
         public void LaunderAddress_ThrowException_E700_BadStreetNr()
         {
             //Arrange
-            Address address = new Address { Street = "Ny Adelgade", StreetNr = "999999", ZipCode = "1104" };
+            Address address = new Address { StreetName = "Ny Adelgade", StreetNumber = "999999", ZipCode = "1104" };
             //Act
 
             //Assert
@@ -48,7 +48,7 @@ namespace Infrastructure.AddressServices.Tests
         public void LaunderAddress_ThrowException_E800_BadStreet()
         {
             //Arrange
-            Address address = new Address { Street = "Ny VejNavn Test Hans", StreetNr = "10", ZipCode = "1104" };
+            Address address = new Address { StreetName = "Ny VejNavn Test Hans", StreetNumber = "10", ZipCode = "1104" };
             //Act
 
             //Assert
@@ -60,7 +60,7 @@ namespace Infrastructure.AddressServices.Tests
         public void LaunderAddress_ThrowException_E900_BadZipCode()
         {
             //Arrange
-            Address address = new Address { Street = "Ny Adelgade", StreetNr = "10", ZipCode = "99999" };
+            Address address = new Address { StreetName = "Ny Adelgade", StreetNumber = "10", ZipCode = "99999" };
             //Act
 
             //Assert
