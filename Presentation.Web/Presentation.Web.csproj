@@ -279,6 +279,7 @@
     <Content Include="App\ApproveReports\ApproveReportsView.html" />
     <Content Include="App\AWS\awsSnippet.js" />
     <Content Include="App\AWS\custom-AWS.js" />
+    <Content Include="App\Directives\AwsDirective.js" />
     <Content Include="App\Driving\DrivingView.html" />
     <Content Include="App\Driving\DrivingController.js" />
     <Content Include="App\Frontpage\FrontpageView.html" />
