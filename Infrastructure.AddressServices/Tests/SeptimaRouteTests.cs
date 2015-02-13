@@ -128,13 +128,14 @@ namespace Infrastructure.AddressServices.Tests
         [Test]
         public void CheckRoute_ViaRoute_FirstResultLengthIs52910()
         {
-            Assert.IsTrue(52910 == viaRoute[0].Length);
+            Assert.IsTrue(52910 + 10 >= viaRoute[0].Length && 52910-10 <= viaRoute[0].Length); //10 meters +/-
         }
 
         [Test]
         public void CheckRoute_ViaRoute_FirstResultDurationIs2901()
         {
             Assert.IsTrue(2901 == viaRoute[0].Duration);
+            Assert.IsTrue(2901 + 5 >= viaRoute[0].Duration && 2901 - 5 <= viaRoute[0].Duration); //5 seconds +/-
         }
 
         [Test]

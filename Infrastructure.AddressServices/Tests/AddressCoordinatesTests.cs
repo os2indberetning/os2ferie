@@ -57,7 +57,32 @@ namespace Infrastructure.AddressServices.Tests
 
             //Assert
             Assert.IsTrue(correctCoord.Latitude == result.Latitude && correctCoord.Longitude == result.Longitude);
+        }
 
+        [Test]
+        public void GetAddressFromCoordinates_GoodCoords()
+        {
+            //Arrange
+            Address address = new Address { Longitude = "12.58514", Latitude = "55.68323" };
+            Address correctAddress = new Address
+            {
+                StreetName = "Landgreven",
+                StreetNumber = "10",
+                ZipCode = "1301",
+                Town = "København K",
+                Longitude = "12.58514",
+                Latitude = "55.68323"
+
+            };
+
+            //Act
+            Address result = AddressCoordinates.GetAddressFromCoordinates(address);
+
+            //Assert
+            Assert.AreEqual(correctAddress.StreetName, result.StreetName);
+            Assert.AreEqual(correctAddress.StreetNumber, result.StreetNumber);
+            Assert.AreEqual(correctAddress.ZipCode, result.ZipCode);
+            Assert.AreEqual(correctAddress.Town, result.Town);
         }
 
     }
