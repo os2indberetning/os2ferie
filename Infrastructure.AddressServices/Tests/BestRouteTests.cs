@@ -6,6 +6,7 @@ using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Interfaces;
 using Infrastructure.AddressServices.Routing;
 using NUnit.Framework;
+using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices.Tests
 {
@@ -25,13 +26,13 @@ namespace Infrastructure.AddressServices.Tests
                 {
                     StreetName = "Dalvej",
                     StreetNumber = "2",
-                    ZipCode = "8450"
+                    ZipCode = 8450
                 },
                 new Address()
                 {
                     StreetName = "Åskrænten",
                     StreetNumber = "5",
-                    ZipCode = "8250"
+                    ZipCode = 8250
                 }
             };
             IRoute bestRoute = new BestRoute();

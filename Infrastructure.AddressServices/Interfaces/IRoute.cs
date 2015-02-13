@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Infrastructure.AddressServices.Classes;
+using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices.Interfaces
 {

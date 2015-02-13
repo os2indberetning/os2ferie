@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Interfaces;
+using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices.Routing
 {

@@ -2,6 +2,7 @@
 using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Routing;
 using NUnit.Framework;
+using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices.Tests
 {
