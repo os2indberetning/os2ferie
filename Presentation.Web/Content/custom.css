@@ -64,3 +64,26 @@
 .fill-width {
     width: 100%;
 }
+
+.remove-box {
+    border-color: #4d4d4d;
+    background-color:#606060;
+    -ms-border-radius:2px;
+    border-radius:2px;
+    min-height: 2.214em;
+    width: 2.7em;
+    vertical-align: middle;
+    -moz-box-sizing: border-box;
+    text-align: center;
+    height: 2.7em;
+    border-style: solid;
+    border-width: 1px;
+    color:#fff;
+    outline: none;
+    line-height: 2.4em;
+}
+
+.remove-box:hover {
+    background-color: #363636;
+    border-color: #4d4d4d;
+}
