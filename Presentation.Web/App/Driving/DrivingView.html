@@ -79,7 +79,8 @@
                 <div class="row">
                     <div class="col-lg-7">
                         <div class="form-group">
-                            <select class="" kendo-combo-box id="" ng-model="Address.Name" k-placeholder="'Skriv / drop-down af gemte'"></select>
+                            <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
+                                   k-data-source="SmartAddress" ng-model="Adress.Name" class="fill-width" k-placeholder="'Skriv her'" />
                         </div>
                     </div>
                     <div class="col-lg-1" ng-if="$middle">
@@ -116,7 +117,7 @@
 
                 </div>
                 <div class="col-lg-6 pull-right text-right">
-                    <button type="button" class="btn btn-primary" ng-click="print()">Indeberet</button>
+                    <button type="button" class="btn btn-primary" ng-click="Save()">Indeberet</button>
                 </div>
             </div>
         </form>
