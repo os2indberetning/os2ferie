@@ -3,6 +3,14 @@
 
         $scope.DriveReport = {};
 
+        $scope.DriveReport.Addresses = [];
+
+        $scope.DriveReport.Addresses.push({ Name: "", Save: false });
+        $scope.DriveReport.Addresses.push({ Name: "", Save: false });
+
+
+        console.log($scope.DriveReport.Addresses);
+
         $scope.DriveReport.Date = new Date();
 
         $scope.DateOptions = {
@@ -17,6 +25,14 @@
 
         $scope.print = function() {
             console.log($scope.DriveReport);
+        }
+
+        $scope.AddDestination = function() {
+            $scope.DriveReport.Addresses.push({ Name: "", Save: false });
+        }
+
+        $scope.Remove = function (array, index) {
+            array.splice(index, 1);
         }
     }
 ]);

@@ -68,44 +68,41 @@
                     </div>
                 </div>
             </div>
+            <div ng-repeat="Address in DriveReport.Addresses">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label for="" ng-if="$first">Fra</label>
+                        <label for="" ng-if="$last && !$first">Til</label>
+                        <label for="" ng-if="!first && $index == 1 && !$last">Via</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="form-group">
+                            <select class="" kendo-combo-box id="" ng-model="Address.Name" k-placeholder="'Skriv / drop-down af gemte'"></select>
+                        </div>
+                    </div>
+                    <div class="col-lg-1" ng-if="$middle">
+                        <button class="remove-box" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>
+                            <input type="checkbox" ng-model="Address.Save"/> Gem
+                        </label>
+                    </div>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-lg-12">
-                    <label for="">Fra:</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="form-group">
-                        <select class="" kendo-combo-box id="" ng-model="DriveReport.Address.From" k-placeholder="'Skriv / drop-down af gemte'"></select>
-                    </div>
-                </div>
-                <div class="col-lg-4">
                     <label>
-                        <input type="checkbox" ng-model="DriveReport.Address.SaveFrom" /> Gem
+                        <button class="btn btn-default" ng-click="AddDestination()">Tilføj destination</button>
                     </label>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-lg-12">
-                    <label for="">Til:</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="form-group">
-                        <select class="" kendo-combo-box id="" ng-model="DriveReport.Address.To" k-placeholder="'Skriv / drop-down af gemte'"></select>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <label>
-                        <input type="checkbox" ng-model="DriveReport.Address.SaveTo" /> Gem
-                    </label>
-                </div>
-            </div>
 
-            <div class="row">
                 <div class="col-lg-12 text-center">
                     <label>
                         <input type="checkbox" ng-model="DriveReport.RoundTrip" /> Tur + retur
