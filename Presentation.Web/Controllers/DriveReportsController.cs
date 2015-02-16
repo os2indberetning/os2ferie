@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,9 +9,11 @@ using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
+using Infrastructure.DataAccess.Migrations;
 using Microsoft.OData.Core;
 using Ninject;
 
@@ -32,10 +35,12 @@ namespace OS2Indberetning.Controllers
 
         private readonly IGenericRepository<DriveReport> _repo;
 
+        private readonly DriveReportService _driveService;
+
         public DriveReportsController()
         {
             _validationSettings.AllowedQueryOptions = AllowedQueryOptions.All;
-
+            _driveService = new DriveReportService();
             _repo = new GenericRepository<DriveReport>(new DataContext());
         }
 
@@ -43,44 +48,20 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions)
         {
-            // ToList otherwise the foreach loop causes an exception
-            var driveReports = _repo.AsQueryable().ToList();
-
-            // Add fullname and human readable timestamp to the resultset
-            foreach (var driveReport in driveReports)
-            {               
-                driveReport.Fullname = driveReport.Person.FirstName;
-
-                if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
-                {
-                    driveReport.Fullname += " " + driveReport.Person.MiddleName;
-                }
-                driveReport.Fullname += " " + driveReport.Person.LastName;
-
-                driveReport.Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(driveReport.CreatedDateTimestamp).ToShortDateString();
-            }
-
-
-            // Back to AsQueryable for Kendo
-            return driveReports.AsQueryable();
-            //return StatusCode(HttpStatusCode.NotImplemented);
+            var res = _driveService.AddFullName(_repo.AsQueryable());
+            return res;
         }
 
         //GET: odata/DriveReports(5)
-        public IHttpActionResult GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
+        public IQueryable<DriveReport> GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
-            // validate the query.
-            try
-            {
-                queryOptions.Validate(_validationSettings);
-            }
-            catch (ODataException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _repo.AsQueryable().FirstOrDefault(rep => rep.Id == key);
 
-            // return Ok<DriveReport>(driveReport);
-            return StatusCode(HttpStatusCode.NotImplemented);
+
+            return new List<DriveReport>()
+            {
+                result
+            }.AsQueryable();
         }
 
         // PUT: odata/DriveReports(5)
