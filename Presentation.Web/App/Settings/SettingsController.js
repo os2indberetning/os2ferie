@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("SettingController", [
     "$scope", "$modal", "Person", "LicensePlate", "Personalroute", "Point", "Route", "$http", "NotificationService", function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Route, $http, NotificationService) {
-
+        $scope.gridContainer = {};
         $scope.isCollapsed = true;
         $scope.mailAdvice = '';
         $scope.licenseplates = [];
@@ -25,10 +25,10 @@
             transport: {
                 read: {
                     url: function (item) {
-                        return 'https://smartadresse.dk/service/locations/3/detect/json/' + item.filter.filters[0].value +'%200';
+                        return 'https://smartadresse.dk/service/locations/3/detect/json/' + item.filter.filters[0].value + '%200';
                     },
                     dataType: "jsonp",
-                    data:  {
+                    data: {
                         apikey: 'FCF3FC50-C9F6-4D89-9D7E-6E3706C1A0BD',
                         limit: 15,                   // REST limit
                         crs: 'EPSG:25832',           // REST projection
@@ -39,10 +39,9 @@
             },
             schema: {
                 data: function (data) {
-                    console.log(data);
-                return data.data; // <-- The result is just the data, it doesn't need to be unpacked.
-            }
-        },
+                    return data.data; // <-- The result is just the data, it doesn't need to be unpacked.
+                }
+            },
         }
 
         $scope.saveNewLicensePlate = function () {
@@ -70,7 +69,7 @@
             var objIndex = $scope.licenseplates.indexOf(plate);
             $scope.licenseplates.splice(objIndex, 1);
 
-            LicensePlate.delete({ id: plate.Id }, function (data) {                
+            LicensePlate.delete({ id: plate.Id }, function (data) {
                 NotificationService.AutoFadeNotification("success", "Success", "Nummerplade blev slettet");
             }), function () {
                 $scope.licenseplates.push(plate);
@@ -291,14 +290,14 @@
                 backdrop: 'static',
                 size: size,
                 resolve: {
-                    personId: function() {
+                    personId: function () {
                         return $scope.currentPerson.Id;
-                    } 
+                    }
                 }
             });
 
             modalInstance.result.then(function () {
-                
+
             });
         };
 
@@ -316,7 +315,7 @@
             });
 
             modalInstance.result.then(function () {
-                
+
             });
         };
 
@@ -327,14 +326,20 @@
                 controller: 'AddressEditModalInstanceController',
                 backdrop: 'static',
                 resolve: {
-                    addresses: function () {
-                        return $scope.addresses;
+                    addressId: function () {
+                        return id;
+                    },
+                    personId: function() {
+                        return $scope.currentPerson.Id;
                     }
                 }
             });
 
             modalInstance.result.then(function () {
-                
+                //$scope.updatePendingReports = function () {
+                    $scope.gridContainer.personalAddresses.dataSource.transport.options.read.url = "odata/PersonalAddresses(" + $scope.currentPerson.Id + ")";
+                    $scope.gridContainer.personalAddresses.dataSource.read();
+                //}
             });
         };
     }
