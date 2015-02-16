@@ -2,10 +2,15 @@
     <h3 class="modal-title">Rediger adresse</h3>
 </div>
 <div class="modal-body">
-    {{ id }}
+    <label>Beskrivelse</label>
+    <input class="form-control" ng-model="addressDescription" />
+    <div class="seperator"></div>
+    <label>Adresse</label>  
+    <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
+           k-data-source="SmartAddress" ng-model="oldAddress" class="fill-width" k-placeholder="'Skriv her'" />
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-success pull-left new-token-btn" ng-click="">Gem</button>
+    <button class="btn btn-success pull-left new-token-btn" ng-click="saveEditedAddress()">Gem</button>
     <button class="btn btn-primary pull-right close-token-modal" ng-click="closeAddressEditModal()">Luk</button>
 </div>
