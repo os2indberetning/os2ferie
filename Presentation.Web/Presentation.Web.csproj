@@ -278,6 +278,8 @@
     <Content Include="App\Frontpage\FrontpageView.html" />
     <TypeScriptCompile Include="App\MyReports\MyReportsControllerJSTest.ts" />
     <Content Include="App\MyReports\MyReportsView.html" />
+    <Content Include="App\Services\DriveReportResource.js" />
+    <Content Include="App\Services\SmartAdresseSource.js" />
     <Content Include="App\Settings\SettingsController.js" />
     <Content Include="App\Settings\SettingsView.html" />
     <Content Include="App\Settings\tokenModal.html" />
