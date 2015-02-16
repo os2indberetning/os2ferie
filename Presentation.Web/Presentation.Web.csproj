@@ -302,6 +302,8 @@
     <Content Include="App\Settings\ModalControllers\RouteEditModalController.js" />
     <Content Include="App\Settings\ModalControllers\TokenModalController.js" />
     <Content Include="App\Settings\RouteEditModal.html" />
+    <Content Include="App\Services\DriveReportResource.js" />
+    <Content Include="App\Services\SmartAdresseSource.js" />
     <Content Include="App\Settings\SettingsController.js" />
     <Content Include="App\Settings\SettingsView.html" />
     <Content Include="App\Settings\tokenModal.html" />
