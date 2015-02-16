@@ -13,14 +13,11 @@
     $scope.saveEditedAddress = function () {
         $scope.newAddress = $scope.oldAddress;
 
-        var result = AddressFormatter.fn();
+        var result = AddressFormatter($scope.newAddress);
 
         result.Id = $scope.oldAddressId;
 
         result.Description = $scope.addressDescription;
-
-        console.log(result);
-
 
         //var res = {
         //    Id: $scope.oldAddressId,
@@ -54,12 +51,12 @@
         //    Description: $scope.addressDescription
         //});
 
-        //result.$patch({ id: res.Id }, function() {
-        //    NotificationService.AutoFadeNotification("success", "Success", "Adresse opdateret");
-        //}, function() {
-        //    NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke opdateret");
-        //});
-    }
+        result.$patch({ id: result.Id }, function() {
+            NotificationService.AutoFadeNotification("success", "Success", "Adresse opdateret");
+        }, function() {
+            NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke opdateret");
+        });
+    };
 
     $scope.SmartAddress = {
         type: "json",
