@@ -19,16 +19,17 @@
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-lg-1">
                     <label for="purpose">Formål: </label>
                 </div>
                 <div class="col-lg-11">
-                    <textarea class="form-control no-max-width" placeholder="Skriv formålet med din kørsel" ng-model="DriveReport.Purpose" id="purpose"></textarea>
+
+                    <textarea class="no-max-width fill-width k-textbox" placeholder="Skriv formålet med din kørsel" style="height: 9.56em;" ng-model="DriveReport.Purpose" id="purpose"></textarea>
+
+                    
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-lg-4">
                     <div class="form-group">
@@ -57,12 +58,11 @@
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label for="">Vælg evt. personlig rute:</label>
-                        <select class="form-control" kendo-drop-down-list id="" ng-model="DriveReport.PersonalRoute">
+                        <select class="fill-width" kendo-drop-down-list id="" ng-model="DriveReport.PersonalRoute">
                             <option value="">Personlige ruter</option>
                         </select>
                     </div>
@@ -80,20 +80,19 @@
                     <div class="col-lg-7">
                         <div class="form-group">
                             <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
-                                   k-data-source="SmartAddress" ng-model="Adress.Name" class="fill-width" k-placeholder="'Skriv her'" />
+                                   k-data-source="SmartAddress" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="'Skriv her'" />
                         </div>
                     </div>
                     <div class="col-lg-1" ng-if="$middle">
-                        <button class="remove-box" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
+                        <button class="k-button k-button-no-shadow" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
                     </div>
                     <div class="col-lg-4">
                         <label>
-                            <input type="checkbox" ng-model="Address.Save"/> Gem
+                            <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" /><label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
                         </label>
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-lg-12">
                     <label>
@@ -101,20 +100,16 @@
                     </label>
                 </div>
             </div>
-
             <div class="row">
-
                 <div class="col-lg-12 text-center">
                     <label>
                         <input type="checkbox" ng-model="DriveReport.RoundTrip" /> Tur + retur
                     </label>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-lg-6">
                     <button type="button" class="btn btn-danger">Ryd alle felter</button>
-
                 </div>
                 <div class="col-lg-6 pull-right text-right">
                     <button type="button" class="btn btn-primary" ng-click="Save()">Indeberet</button>
@@ -125,7 +120,9 @@
     <div class="col-lg-6">
 
         <div class="row">
-            <div class="col-lg-12"><h1>Kort</h1></div>
+            <div class="col-lg-12">
+                Kort
+            </div>
         </div>
         <div class="row">
             <div class="col-lg-6">

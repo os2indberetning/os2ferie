@@ -26,7 +26,31 @@
 
         $scope.Save = function() {
             console.log($scope.DriveReport);
-            $scope.DriveReport.$save();
+
+            // Prepare all data to  be uploaded
+
+            /*
+              Distance
+              AmountToReimburse
+              Purpose
+              KmRate 
+              DriveDateTimestamp
+              FourKmRule
+              StartsAtHome
+              EndsAtHome
+              Licenseplate
+              Fullname
+              DriveReportPoints
+             */
+
+            var report = $scope.DriveReport;
+
+
+
+
+            $scope.DriveReport.$save(function(response) {
+                console.log(response);
+            });
         };
 
         $scope.AddDestination = function() {

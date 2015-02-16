@@ -87,3 +87,28 @@
     background-color: #363636;
     border-color: #4d4d4d;
 }
+
+.k-custom {
+    height: 2.214em;
+    line-height: 2.214em;
+    padding: .177em 0;
+    text-indent: .8em;
+    border: 0;
+    margin: 0;
+}
+
+.k-custom .k-input {
+    display: block;
+}
+
+.k-button-no-shadow {
+    box-shadow: none;
+    border-color: #e5e5e5;
+    -ms-border-radius: 1px;
+    border-radius: 1px;
+}
+
+.k-button-no-shadow:focus, .k-button-no-shadow:hover, .k-button-no-shadow:active {
+    -webkit-box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
+}
