@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Core.DomainModel;
-using Core.DomainServices;
-using Infrastructure.DataAccess;
+
 
 namespace Core.ApplicationServices
 {
@@ -19,16 +13,21 @@ namespace Core.ApplicationServices
             // Add fullname to the resultset
             foreach (var driveReport in set)
             {
-                driveReport.Fullname = driveReport.Person.FirstName;
-
-                if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
-                {
-                    driveReport.Fullname += " " + driveReport.Person.MiddleName;
-                }
-
-                driveReport.Fullname += " " + driveReport.Person.LastName;
+                AddFullName(driveReport);
             }
             return set.AsQueryable();
-        } 
+       }
+
+       public void AddFullName(DriveReport driveReport)
+       {
+           driveReport.Fullname = driveReport.Person.FirstName;
+
+           if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
+           {
+               driveReport.Fullname += " " + driveReport.Person.MiddleName;
+           }
+
+           driveReport.Fullname += " " + driveReport.Person.LastName;
+       }
     }
 }
