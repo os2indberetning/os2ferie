@@ -337,8 +337,8 @@ angular.module("application").controller("MyReportsController", [
                }
            });
 
-           modalInstance.result.then(function (itemId) {
-               // Handle confirm delete
+           modalInstance.result.then(function () {
+               Report.delete({id: id});
            });
        }
 
