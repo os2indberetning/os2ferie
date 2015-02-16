@@ -37,6 +37,7 @@ namespace Infrastructure.DataAccess
                 var test = e.EntityValidationErrors;
 
                 Console.WriteLine(e);
+                throw e;
             }     
         }
 

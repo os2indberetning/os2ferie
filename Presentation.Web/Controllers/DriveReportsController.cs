@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using System.Web.OData;
 using System.Web.OData.Query;
 using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
-using Infrastructure.DataAccess.Migrations;
-using Microsoft.OData.Core;
-using Ninject;
 
 namespace OS2Indberetning.Controllers
 {
@@ -33,15 +26,13 @@ namespace OS2Indberetning.Controllers
     {
         private static ODataValidationSettings _validationSettings = new ODataValidationSettings();
 
-        private readonly IGenericRepository<DriveReport> _repo;
+        private readonly IGenericRepository<DriveReport> _repo = new GenericRepository<DriveReport>(new DataContext());
 
-        private readonly DriveReportService _driveService;
+        private readonly DriveReportService _driveService = new DriveReportService();
 
         public DriveReportsController()
         {
             _validationSettings.AllowedQueryOptions = AllowedQueryOptions.All;
-            _driveService = new DriveReportService();
-            _repo = new GenericRepository<DriveReport>(new DataContext());
         }
 
         // GET: odata/DriveReports
@@ -57,8 +48,9 @@ namespace OS2Indberetning.Controllers
         {
             var result = _repo.AsQueryable().FirstOrDefault(rep => rep.Id == key);
 
+            _driveService.AddFullName(result);
 
-            return new List<DriveReport>()
+            return new List<DriveReport>
             {
                 result
             }.AsQueryable();
@@ -67,35 +59,30 @@ namespace OS2Indberetning.Controllers
         // PUT: odata/DriveReports(5)
         public IHttpActionResult Put([FromODataUri] int key, Delta<DriveReport> delta)
         {
-            Validate(delta.GetEntity());
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // TODO: Get the entity here.
-
-            // delta.Put(driveReport);
-
-            // TODO: Save the patched entity.
-
-            // return Updated(driveReport);
-            return StatusCode(HttpStatusCode.NotImplemented);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         // POST: odata/DriveReports
         public IHttpActionResult Post(DriveReport driveReport)
         {
+            Validate(driveReport);
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // TODO: Add create logic here.
+            try
+            {
+                var report = _repo.Insert(driveReport);
+                _repo.Save();
+                return Created(report);
+            }
+            catch (Exception)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError);
+            }
 
-            // return Created(driveReport);
-            return StatusCode(HttpStatusCode.NotImplemented);
         }
 
         // PATCH: odata/DriveReports(5)
@@ -109,23 +96,44 @@ namespace OS2Indberetning.Controllers
                 return BadRequest(ModelState);
             }
 
-            // TODO: Get the entity here.
+            var report = _repo.AsQueryable().FirstOrDefault(r => r.Id == key);
+            if (report == null)
+            {
+                return StatusCode(HttpStatusCode.BadRequest);
+            }
 
-            // delta.Patch(driveReport);
+            try
+            {
+                delta.Patch(report);
 
-            // TODO: Save the patched entity.
+                _repo.Save();
+            }
+            catch (Exception)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError);
+            }
 
-            // return Updated(driveReport);
-            return StatusCode(HttpStatusCode.NotImplemented);
+            return Updated(report);
         }
 
         // DELETE: odata/DriveReports(5)
         public IHttpActionResult Delete([FromODataUri] int key)
         {
-            // TODO: Add delete logic here.
-
-            // return StatusCode(HttpStatusCode.NoContent);
-            return StatusCode(HttpStatusCode.NotImplemented);
+            var report = _repo.AsQueryable().FirstOrDefault(r => r.Id == key);
+            if (report == null)
+            {
+                return StatusCode(HttpStatusCode.BadRequest);
+            }
+            try
+            {
+                _repo.Delete(report);
+                _repo.Save();
+            }
+            catch (Exception)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError);
+            }
+            return StatusCode(HttpStatusCode.OK);
         }
     }
 }
