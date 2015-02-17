@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Reflection;
 using Core.DomainServices;
 
 namespace Infrastructure.DataAccess
@@ -9,6 +13,7 @@ namespace Infrastructure.DataAccess
     {
         private readonly DbSet<T> _dbSet;
         private readonly DataContext _context;
+        private string _primaryKeyName;
 
         public GenericRepository(DataContext context)
         {
@@ -34,8 +39,6 @@ namespace Infrastructure.DataAccess
             }
             catch (System.Data.Entity.Validation.DbEntityValidationException e)
             {
-                var test = e.EntityValidationErrors;
-
                 Console.WriteLine(e);
                 throw e;
             }     
@@ -65,6 +68,31 @@ namespace Infrastructure.DataAccess
         public void Delete(T entity)
         {
             _dbSet.Remove(entity);
+        }
+
+        public PropertyInfo GetPrimaryKeyProperty()
+        {
+            var t = typeof(T);
+
+            if (_primaryKeyName == null)
+            {
+                //retrieve the base type
+                while (t.BaseType != typeof(object))
+                    t = t.BaseType;
+
+                var objectContext = ((IObjectContextAdapter)_context).ObjectContext;
+
+                //create method CreateObjectSet with the generic parameter of the base-type
+                var method = typeof(ObjectContext)
+                                          .GetMethod("CreateObjectSet", Type.EmptyTypes)
+                                          .MakeGenericMethod(t);
+                dynamic objectSet = method.Invoke(objectContext, null);
+
+                IEnumerable<dynamic> keyMembers = objectSet.EntitySet.ElementType.KeyMembers;
+
+                _primaryKeyName = keyMembers.Select(k => (string)k.Name).First();
+            }
+            return t.GetProperty(_primaryKeyName);
         }
     }
 }
