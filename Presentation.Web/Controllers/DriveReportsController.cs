@@ -78,9 +78,9 @@ namespace OS2Indberetning.Controllers
                 _repo.Save();
                 return Created(report);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return StatusCode(HttpStatusCode.InternalServerError);
+                return InternalServerError(e);
             }
 
         }
@@ -99,7 +99,7 @@ namespace OS2Indberetning.Controllers
             var report = _repo.AsQueryable().FirstOrDefault(r => r.Id == key);
             if (report == null)
             {
-                return StatusCode(HttpStatusCode.BadRequest);
+                return BadRequest("Unable to find report with id " + key);
             }
 
             try
@@ -108,9 +108,9 @@ namespace OS2Indberetning.Controllers
 
                 _repo.Save();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return StatusCode(HttpStatusCode.InternalServerError);
+                return InternalServerError(e);
             }
 
             return Updated(report);
@@ -122,18 +122,18 @@ namespace OS2Indberetning.Controllers
             var report = _repo.AsQueryable().FirstOrDefault(r => r.Id == key);
             if (report == null)
             {
-                return StatusCode(HttpStatusCode.BadRequest);
+                return BadRequest("Unable to find report with id " + key);
             }
             try
             {
                 _repo.Delete(report);
                 _repo.Save();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return StatusCode(HttpStatusCode.InternalServerError);
+                return InternalServerError(e);
             }
-            return StatusCode(HttpStatusCode.OK);
+            return Ok();
         }
     }
 }
