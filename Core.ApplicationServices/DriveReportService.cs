@@ -20,6 +20,10 @@ namespace Core.ApplicationServices
 
        public void AddFullName(DriveReport driveReport)
        {
+           if (driveReport == null)
+           {
+               return;
+           }
            driveReport.Fullname = driveReport.Person.FirstName;
 
            if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
