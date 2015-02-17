@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Linq;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
 using Core.ApplicationServices;
 using Core.DomainModel;
-using Core.DomainServices;
-using Infrastructure.DataAccess;
 
 namespace OS2Indberetning.Controllers
 {
@@ -22,118 +17,48 @@ namespace OS2Indberetning.Controllers
     builder.EntitySet<DriveReport>("DriveReports");
     config.Routes.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
     */
-    public class DriveReportsController : ODataController
+    public class DriveReportsController : BaseController<DriveReport>
     {
-        private static ODataValidationSettings _validationSettings = new ODataValidationSettings();
-
-        private readonly IGenericRepository<DriveReport> _repo = new GenericRepository<DriveReport>(new DataContext());
-
         private readonly DriveReportService _driveService = new DriveReportService();
-
-        public DriveReportsController()
-        {
-            _validationSettings.AllowedQueryOptions = AllowedQueryOptions.All;
-        }
 
         // GET: odata/DriveReports
         [EnableQuery]
         public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions)
         {
-            var res = _driveService.AddFullName(_repo.AsQueryable());
-            return res;
+            return _driveService.AddFullName(GetQueryable(queryOptions));
         }
 
         //GET: odata/DriveReports(5)
         public IQueryable<DriveReport> GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
-            var result = _repo.AsQueryable().FirstOrDefault(rep => rep.Id == key);
-
-            _driveService.AddFullName(result);
-
-            return new List<DriveReport>
-            {
-                result
-            }.AsQueryable();
+            return _driveService.AddFullName(GetQueryable(key, queryOptions));  
         }
 
         // PUT: odata/DriveReports(5)
-        public IHttpActionResult Put([FromODataUri] int key, Delta<DriveReport> delta)
+        public new IHttpActionResult Put([FromODataUri] int key, Delta<DriveReport> delta)
         {
-            return StatusCode(HttpStatusCode.MethodNotAllowed);
+            return base.Put(key, delta);
         }
 
         // POST: odata/DriveReports
-        public IHttpActionResult Post(DriveReport driveReport)
+        [EnableQuery]
+        public new IHttpActionResult Post(DriveReport driveReport)
         {
-            Validate(driveReport);
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var report = _repo.Insert(driveReport);
-                _repo.Save();
-                return Created(report);
-            }
-            catch (Exception e)
-            {
-                return InternalServerError(e);
-            }
-
+            return base.Post(driveReport);
         }
 
         // PATCH: odata/DriveReports(5)
+        [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
-        public IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
+        public new IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
         {
-            Validate(delta.GetEntity());
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var report = _repo.AsQueryable().FirstOrDefault(r => r.Id == key);
-            if (report == null)
-            {
-                return BadRequest("Unable to find report with id " + key);
-            }
-
-            try
-            {
-                delta.Patch(report);
-
-                _repo.Save();
-            }
-            catch (Exception e)
-            {
-                return InternalServerError(e);
-            }
-
-            return Updated(report);
+            return base.Patch(key, delta);
         }
 
         // DELETE: odata/DriveReports(5)
-        public IHttpActionResult Delete([FromODataUri] int key)
+        public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            var report = _repo.AsQueryable().FirstOrDefault(r => r.Id == key);
-            if (report == null)
-            {
-                return BadRequest("Unable to find report with id " + key);
-            }
-            try
-            {
-                _repo.Delete(report);
-                _repo.Save();
-            }
-            catch (Exception e)
-            {
-                return InternalServerError(e);
-            }
-            return Ok();
+            return base.Delete(key);
         }
     }
 }
