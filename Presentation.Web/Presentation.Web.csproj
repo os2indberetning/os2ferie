@@ -276,7 +276,10 @@
   <ItemGroup>
     <Content Include="App\Admin\AdminView.html" />
     <Content Include="App\application.js" />
+    <Content Include="App\ApproveReports\AcceptRejectController.js" />
     <Content Include="App\ApproveReports\ApproveReportsView.html" />
+    <Content Include="App\ApproveReports\ConfirmApproveTemplate.html" />
+    <Content Include="App\ApproveReports\ConfirmRejectTemplate.html" />
     <Content Include="App\AWS\awsSnippet.js" />
     <Content Include="App\AWS\custom-AWS.js" />
     <Content Include="App\Directives\AwsDirective.js" />
@@ -293,8 +296,10 @@
     <Content Include="App\Services\AddressResource.js" />
     <Content Include="App\Services\LicensePlateResource.js" />
     <Content Include="App\Services\NotificationService.js" />
+    <Content Include="App\Services\OrgUnitResource.js" />
     <Content Include="App\Services\PersonalRouteResource.js" />
     <Content Include="App\Services\PointResource.js" />
+    <Content Include="App\Services\ReportResource.js" />
     <Content Include="App\Services\RouteResource.js" />
     <Content Include="App\Services\TokenResource.js" />
     <Content Include="App\Settings\AddressEditModal.html" />

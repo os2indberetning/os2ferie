@@ -1,7 +1,142 @@
-﻿<div class="row">
+﻿<link rel="stylesheet" href="../../Content/customcss/approvereports.css" />
+
+<div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            Godkend indberetninger <small>Godkend tjenestekørsler for medarbejdere</small>
+            Godkend Indberetninger
         </h1>
+    </div>
+</div>
+
+<div class="row" ng-controller="ApproveReportsController">
+    <div class="col-lg-12">
+
+
+
+
+
+
+
+
+        <tabset justified="true">
+            <tab heading="Afventende" ng-click="tabClicked('pending')">
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afventende</h3>
+                    </div>
+
+                    <div class="panel-body">
+
+                        ﻿<div class="row">
+                            <div class="col-md-2">
+                                <label>Fra</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Til</label>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <input kendo-datepicker k-options="dateOptions" k-ng-model="dateContainer.fromDatePending" />
+                            </div>
+                            <div class="col-md-2">
+                                <input kendo-datepicker k-options="dateOptions" k-ng-model="dateContainer.toDatePending" />
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <button class="btn btn-primary" ng-click="searchClicked()">Søg</button>
+                                <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
+                            </div>
+                        </div>
+
+                        <div kendo-grid="gridContainer.pendingGrid" options="pendingReports" class="margin-top-10"></div>
+
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Godkendte" ng-click="tabClicked('accepted')">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Godkendte</h3>
+                    </div>
+
+                    <div class="panel-body">
+                        ﻿<div class="row">
+                            <div class="col-md-2">
+                                <label>Fra</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Til</label>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <input kendo-datepicker k-options="dateOptions" k-ng-model="dateContainer.fromDateAccepted" />
+                            </div>
+                            <div class="col-md-2">
+                                <input kendo-datepicker k-options="dateOptions" k-ng-model="dateContainer.toDateAccepted" />
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <button class="btn btn-primary" ng-click="searchClicked()">Søg</button>
+                                <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
+                            </div>
+                        </div>
+                        <div kendo-grid="gridContainer.acceptedGrid" options="acceptedReports" class="margin-top-10"></div>
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Afviste" ng-click="tabClicked('rejected')">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afviste</h3>
+                    </div>
+
+                    <div class="panel-body">
+                        ﻿<div class="row">
+                            <div class="col-md-2">
+                                <label>Fra</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Til</label>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <input kendo-datepicker k-options="dateOptions" k-ng-model="dateContainer.fromDateRejected" />
+                            </div>
+                            <div class="col-md-2">
+                                <input kendo-datepicker k-options="dateOptions" k-ng-model="dateContainer.toDateRejected" />
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <button class="btn btn-primary" ng-click="searchClicked()">Søg</button>
+                                <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
+                            </div>
+                        </div>
+                        <div kendo-grid="gridContainer.rejectedGrid" options="rejectedReports" class="margin-top-10"></div>
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Indstillinger">
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Indstillinger</h3>
+                    </div>
+
+                    <div class="panel-body">
+          
+                    </div>
+                </div>
+            </tab>
+        </tabset>
     </div>
 </div>
