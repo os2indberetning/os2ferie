@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.Web", "Presentation.Web\Presentation.Web.csproj", "{2B953FAB-7F22-4884-9325-2A5C53519F3D}"
 EndProject
@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{754E1A
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.AddressServices", "Infrastructure.AddressServices\Infrastructure.AddressServices.csproj", "{720A3483-F089-4A45-830B-CED59F8CD1E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationServices.Test", "ApplicationServices.Test\ApplicationServices.Test.csproj", "{B670D355-8423-4B20-8CBD-96404D8625B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +60,10 @@ Global
 		{720A3483-F089-4A45-830B-CED59F8CD1E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{720A3483-F089-4A45-830B-CED59F8CD1E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{720A3483-F089-4A45-830B-CED59F8CD1E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B670D355-8423-4B20-8CBD-96404D8625B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B670D355-8423-4B20-8CBD-96404D8625B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B670D355-8423-4B20-8CBD-96404D8625B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B670D355-8423-4B20-8CBD-96404D8625B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
