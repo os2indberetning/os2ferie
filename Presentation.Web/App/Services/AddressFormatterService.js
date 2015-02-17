@@ -1,4 +1,4 @@
-﻿angular.module("application").service("AddressFormatter", ["Address"], function (Address) {
+﻿angular.module("application").factory("AddressFormatter", ["Address", function (Address) {
     return {
         fn: function (addressString) {
             var res = {
@@ -23,9 +23,9 @@
             res.ZipCode = splittet[1].split(" ")[1];
             res.Town = splittet[1].split(" ")[2];
 
-            return new {
+            return {
                 Id: null,
-                PersonId: personId,
+                PersonId: 0,
                 StreetName: res.StreetName,
                 StreetNumber: res.StreetNumber,
                 ZipCode: parseInt(res.ZipCode),
@@ -34,4 +34,4 @@
             };
         }
     }
-})
+}])
