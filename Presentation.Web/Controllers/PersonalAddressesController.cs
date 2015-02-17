@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using System.Web.OData;
@@ -30,20 +31,20 @@ namespace OS2Indberetning.Controllers
     {
         private static ODataValidationSettings _validationSettings = new ODataValidationSettings();
 
-        private readonly IGenericRepository<PersonalAddress> _repo;
+        private readonly IGenericRepository<PersonalAddress> _genericRepo;
 
         public PersonalAddressesController()
         {
             _validationSettings.AllowedQueryOptions = AllowedQueryOptions.All;
 
-            _repo = new GenericRepository<PersonalAddress>(new DataContext());
+            _genericRepo = new GenericRepository<PersonalAddress>(new DataContext());
         }
 
         // GET: odata/PersonalAddresses
         [EnableQuery]
         public IQueryable<PersonalAddress> GetPersonalAddresses(ODataQueryOptions<PersonalAddress> queryOptions)
         {
-            var result = _repo.AsQueryable();
+            var result = _genericRepo.AsQueryable();
 
             return result;
         }
@@ -52,7 +53,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<PersonalAddress> GetPersonalAddress([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
         {
-            var result = _repo.AsQueryable().Where(x => x.PersonId == key);
+            var result = _genericRepo.AsQueryable().Where(x => x.PersonId == key);
 
             return result;
         }
@@ -76,7 +77,31 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public IQueryable<PersonalAddress> Patch([FromODataUri] int key, Delta<PersonalAddress> delta)
         {
-            throw new NotImplementedException();
+            var existing = _genericRepo.AsQueryable().First(x => x.Id == key);
+
+            var temp = delta.GetEntity();
+
+            foreach (var propertyInfo in typeof(PersonalAddress).GetProperties())
+            {
+                var itemType = existing.GetType();
+
+                PropertyInfo prop;
+
+                if (propertyInfo.Name == "Id")
+                    continue; // skip primary key
+
+                if (propertyInfo.GetValue(temp) != null)
+                {
+                    prop = itemType.GetProperty(propertyInfo.Name);
+
+                    prop.SetValue(existing, propertyInfo.GetValue(temp));
+                }
+            }
+
+            _genericRepo.Update(existing);
+            _genericRepo.Save();
+
+            return new List<PersonalAddress>() { existing }.AsQueryable();
         }
 
         // DELETE: odata/PersonalAddresses(5)

@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using System.Web.OData;
@@ -74,7 +75,31 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public IQueryable<Point> Patch([FromODataUri] int key, Delta<Point> delta)
         {
-            throw new NotImplementedException();
+            var existing = _repo.AsQueryable().First(x => x.Id == key);
+
+            var temp = delta.GetEntity();
+
+            foreach (var propertyInfo in typeof(Point).GetProperties())
+            {
+                var itemType = existing.GetType();
+
+                PropertyInfo prop;
+
+                if (propertyInfo.Name == "Id")
+                    continue; // skip primary key
+
+                if (propertyInfo.GetValue(temp) != null)
+                {
+                    prop = itemType.GetProperty(propertyInfo.Name);
+
+                    prop.SetValue(existing, propertyInfo.GetValue(temp));
+                }
+            }
+
+            _repo.Update(existing);
+            _repo.Save();
+
+            return new List<Point>() { existing }.AsQueryable();
         }
 
         // DELETE: odata/Points(5)

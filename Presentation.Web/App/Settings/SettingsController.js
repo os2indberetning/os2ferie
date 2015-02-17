@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("SettingController", [
     "$scope", "$modal", "Person", "LicensePlate", "Personalroute", "Point", "Route", "$http", "NotificationService", function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Route, $http, NotificationService) {
-
+        $scope.gridContainer = {};
         $scope.isCollapsed = true;
         $scope.mailAdvice = '';
         $scope.licenseplates = [];
@@ -12,6 +12,9 @@
         $scope.alternativeWorkAddress = "";
         $scope.routes = [];
         $scope.addresses = [];
+
+        // Contains references to kendo ui grids.
+        $scope.gridContainer = {};
 
         LicensePlate.get({ id: 1 }, function (data) {
             $scope.licenseplates = data.value;
@@ -25,10 +28,10 @@
             transport: {
                 read: {
                     url: function (item) {
-                        return 'https://smartadresse.dk/service/locations/3/detect/json/' + item.filter.filters[0].value +'%200';
+                        return 'https://smartadresse.dk/service/locations/3/detect/json/' + item.filter.filters[0].value + '%200';
                     },
                     dataType: "jsonp",
-                    data:  {
+                    data: {
                         apikey: 'FCF3FC50-C9F6-4D89-9D7E-6E3706C1A0BD',
                         limit: 15,                   // REST limit
                         crs: 'EPSG:25832',           // REST projection
@@ -39,10 +42,9 @@
             },
             schema: {
                 data: function (data) {
-                    console.log(data);
-                return data.data; // <-- The result is just the data, it doesn't need to be unpacked.
-            }
-        },
+                    return data.data; // <-- The result is just the data, it doesn't need to be unpacked.
+                }
+            },
         }
 
         $scope.saveNewLicensePlate = function () {
@@ -70,7 +72,7 @@
             var objIndex = $scope.licenseplates.indexOf(plate);
             $scope.licenseplates.splice(objIndex, 1);
 
-            LicensePlate.delete({ id: plate.Id }, function (data) {                
+            LicensePlate.delete({ id: plate.Id }, function (data) {
                 NotificationService.AutoFadeNotification("success", "Success", "Nummerplade blev slettet");
             }), function () {
                 $scope.licenseplates.push(plate);
@@ -104,10 +106,7 @@
         $scope.saveAlternativeWorkAddress = function () {
             NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
         }
-
-        // Contains references to kendo ui grids.
-        $scope.gridContainer = {};
-
+       
         $scope.setHomeWorkOverride = function () {
             var newPerson = new Person({
                 WorkDistanceOverride: $scope.workDistanceOverride
@@ -283,6 +282,18 @@
 
         $scope.loadGrids(1);
 
+        $scope.updatePersonalAddresses = function () {
+            $scope.gridContainer.personalAddressesGrid.dataSource.transport.options.read.url = "odata/PersonalAddresses(" + $scope.currentPerson.Id + ")";
+            $scope.gridContainer.personalAddressesGrid.dataSource.read();
+            
+        }
+
+        $scope.updatePersonalRoutes = function () {
+            $scope.gridcontainer.personalRoutesGrid.dataSource.transport.options.read.url = "odata/PersonalRoutes(" + $scope.currentPerson.Id + ")?$expand=Points";
+            $scope.gridcontainer.personalRoutesGrid.dataSource.read();
+
+        }        
+
         $scope.openTokenModal = function (size) {
 
             var modalInstance = $modal.open({
@@ -291,14 +302,14 @@
                 backdrop: 'static',
                 size: size,
                 resolve: {
-                    personId: function() {
+                    personId: function () {
                         return $scope.currentPerson.Id;
-                    } 
+                    }
                 }
             });
 
             modalInstance.result.then(function () {
-                
+
             });
         };
 
@@ -309,14 +320,17 @@
                 controller: 'RouteEditModalInstanceController',
                 backdrop: 'static',
                 resolve: {
-                    routes: function () {
-                        return $scope.routes;
+                    routeId: function () {
+                        return id;
+                    },
+                    personId: function () {
+                        return $scope.currentPerson.Id;
                     }
                 }
             });
 
             modalInstance.result.then(function () {
-                
+                $scope.updatePersonalRoutes();
             });
         };
 
@@ -327,14 +341,17 @@
                 controller: 'AddressEditModalInstanceController',
                 backdrop: 'static',
                 resolve: {
-                    addresses: function () {
-                        return $scope.addresses;
+                    addressId: function () {
+                        return id;
+                    },
+                    personId: function () {
+                        return $scope.currentPerson.Id;
                     }
                 }
             });
 
             modalInstance.result.then(function () {
-                
+                $scope.updatePersonalAddresses();
             });
         };
     }
