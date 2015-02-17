@@ -27,6 +27,8 @@ namespace OS2Indberetning
         {
             config.MapHttpAttributeRoutes();
 
+            config.AddODataQueryFilter();
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",

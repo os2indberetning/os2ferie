@@ -6,17 +6,6 @@ using Core.DomainModel;
 
 namespace OS2Indberetning.Controllers
 {
-    /*
-    The WebApiConfig class may require additional changes to add a route for this controller. Merge these statements into the Register method of the WebApiConfig class as applicable. Note that OData URLs are case sensitive.
-
-    using System.Web.Http.OData.Builder;
-    using System.Web.Http.OData.Extensions;
-    using Core.DomainModel;
-    ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-    builder.EntitySet<Person>("Person");
-    config.Routes.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
-    */
-
     public class PersonController : BaseController<Person>
     {
         // GET: odata/Person

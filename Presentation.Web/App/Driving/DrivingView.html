@@ -10,136 +10,152 @@
 <div class="row" ng-controller="DrivingController">
 
     <div class="col-lg-6">
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="form-group form-inline">
-                    <label for="date">Dato for kørsel:</label>
-                    <input k-ng-model="driveDate" kendo-date-picker k-options="date" />
-                </div>
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="form-group form-inline">
-                    <label for="purpose">Formål:</label>
-                    <textarea ng-model="purpose" class="form-control" id="purpose"></textarea>
+        <form novalidate class="driving-report-form">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group form-inline">
+                        <label for="date">Dato for kørsel: </label>
+                        <input id="date" kendo-date-picker k-format="'dd/MM/yyyy'" k-ng-model="DriveReport.Date" k-options="DateOptions" />
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="col-lg-1">
+                    <label for="purpose">Formål: </label>
+                </div>
+                <div class="col-lg-11">
 
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="">Stilling og ansættelsested:</label>
-                    <select ng-model="postition" class="form-control" id="">
-                        <option selected="selected" disabled="disabled">Brugerens stilling(er)</option>
-                    </select>
+                    <textarea class="no-max-width fill-width k-textbox" placeholder="Skriv formålet med din kørsel" style="height: 9.56em;" ng-model="DriveReport.Purpose" id="purpose"></textarea>
+
+                    
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="">Transportmiddel:</label>
-                    <select ng-model="transportation" class="form-control" id="">
-                        <option selected="selected" disabled="disabled">Vælg her</option>
-                    </select>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="">Stilling og ansættelsested:</label>
+                        <select class="fill-width" kendo-drop-down-list ng-model="DriveReport.Position" id="">
+                            <option value=''>Brugerens stilling(er)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="">Transportmiddel:</label>
+                        <select class="fill-width" kendo-drop-down-list ng-model="DriveReport.Transport">
+                            <option value="">Vælg her</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label for="">Kilometeropgørelse:</label>
+                        <select kendo-drop-down-list k-options="KilometerAllowanceOptions" class="fill-width" id="" ng-model="DriveReport.KilometerAllowance">
+                            <option value="1">Beregnet</option>
+                            <option value="2">Aflæst</option>
+                            <option value="3">Beregnet med merkørsel</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="">Kilometeropgørelse:</label>
-                    <select ng-model="milageType" class="form-control" id="">
-                        <option selected="selected">Beregnet</option>
-                        <option>Aflæst</option>
-                        <option>Beregnet med merkørsel</option>
-                    </select>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="">Vælg evt. personlig rute:</label>
+                        <select class="fill-width" kendo-drop-down-list id="" ng-model="DriveReport.PersonalRoute">
+                            <option value="">Personlige ruter</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="form-group">
-                    <label for="">Vælg evt. personlig rute:</label>
-                    <select ng-model="personalRoute" class="form-control" id="">
-                        <option selected="selected" disabled="disabled">Personlige ruter</option>
-                    </select>
+            <div ng-repeat="Address in DriveReport.Addresses">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label for="" ng-if="$first">Fra</label>
+                        <label for="" ng-if="$last && !$first">Til</label>
+                        <label for="" ng-if="!first && $index == 1 && !$last">Via</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="form-group">
+                            <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
+                                   k-data-source="SmartAddress" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="'Skriv her'" />
+                        </div>
+                    </div>
+                    <div class="col-lg-1" ng-if="$middle">
+                        <button class="k-button k-button-no-shadow" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>
+                            <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" /><label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
+                        </label>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <label for="">Fra:</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="form-group">
-                    <select ng-model="fromAddress" class="" kendo-combo-box id="">
-                        <option selected="selected" disabled="disabled">Skriv / drop-down af gemte</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label>
+                        <button class="btn btn-default" ng-click="AddDestination()">Tilføj destination</button>
+                    </label>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <label>
-                    <input type="checkbox" /> Gem
-                </label>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <label for="">Til:</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="form-group">
-                    <select ng-model="toAddress" class="" kendo-combo-box id="">
-                        <option selected="selected" disabled="disabled">Skriv / drop-down af gemte</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                    </select>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <label>
+                        <input type="checkbox" ng-model="DriveReport.RoundTrip" /> Tur + retur
+                    </label>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <label>
-                    <input type="checkbox"/> Gem
-                </label>
+            <div class="row">
+                <div class="col-lg-6">
+                    <button type="button" class="btn btn-danger">Ryd alle felter</button>
+                </div>
+                <div class="col-lg-6 pull-right text-right">
+                    <button type="button" class="btn btn-primary" ng-click="Save()">Indeberet</button>
+                </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <label>
-                    <input ng-model="returnTripChecked" ng-checked="returnTripChecked" type="checkbox" /> Tur + retur
-                </label>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-6">
-                <button type="button" class="btn btn-danger">Ryd alle felter</button>
-
-            </div>
-            <div class="col-lg-6 pull-right text-right">
-                <button type="button" class="btn btn-primary">Indeberet</button>
-            </div>
-        </div>
-
-
+        </form>
     </div>
     <div class="col-lg-6">
-        Jeg er et dådyr, jeg er et dådyr! HUH! (Her skal være et kort)
+
+        <div class="row">
+            <div class="col-lg-12">
+                Kort
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <p class="text-primary">Kørte kilometer</p>
+            </div>
+            <div class="col-lg-6 text-right">
+                {{DrivenKilometers}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <p class="text-primary">Merkørselsfradrag</p>
+            </div>
+            <div class="col-lg-6 text-right">
+                {{TransportAllowance}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <p class="text-primary">Resterende kilometer</p>
+            </div>
+            <div class="col-lg-6 text-right">
+                {{RemainingKilometers}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <p class="text-primary">Beløb til udbetaling</p>
+            </div>
+            <div class="col-lg-6 text-right">
+                {{PayoutAmount}}
+            </div>
+        </div>
     </div>
 
 </div>

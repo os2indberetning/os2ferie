@@ -57,6 +57,20 @@
     margin-top: 20px;
 }
 
+
+.no-max-width {
+    max-width: none;
+}
+
+.fill-width {
+    width: 100%;
+}
+
+.fill-fifty {
+    width: 50%;
+}
+
+
 /*CUSTOM CSS FOR NOTIFICATION SERVICE*/
 .errors-container {
   position: fixed;
@@ -71,3 +85,51 @@
     border-bottom: 0;
     margin: 0; }
 /*************************************/
+
+.remove-box {
+    border-color: #4d4d4d;
+    background-color:#606060;
+    -ms-border-radius:2px;
+    border-radius:2px;
+    min-height: 2.214em;
+    width: 2.7em;
+    vertical-align: middle;
+    -moz-box-sizing: border-box;
+    text-align: center;
+    height: 2.7em;
+    border-style: solid;
+    border-width: 1px;
+    color:#fff;
+    outline: none;
+    line-height: 2.4em;
+}
+
+.remove-box:hover {
+    background-color: #363636;
+    border-color: #4d4d4d;
+}
+
+.k-custom {
+    height: 2.214em;
+    line-height: 2.214em;
+    padding: .177em 0;
+    text-indent: .8em;
+    border: 0;
+    margin: 0;
+}
+
+.k-custom .k-input {
+    display: block;
+}
+
+.k-button-no-shadow {
+    box-shadow: none;
+    border-color: #e5e5e5;
+    -ms-border-radius: 1px;
+    border-radius: 1px;
+}
+
+.k-button-no-shadow:focus, .k-button-no-shadow:hover, .k-button-no-shadow:active {
+    -webkit-box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
+}
