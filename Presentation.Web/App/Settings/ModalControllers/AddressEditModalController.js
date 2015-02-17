@@ -13,52 +13,28 @@
     $scope.saveEditedAddress = function () {
         $scope.newAddress = $scope.oldAddress;
 
-        var result = AddressFormatter.fn();
+        var result = AddressFormatter.fn($scope.newAddress);
 
         result.Id = $scope.oldAddressId;
+        result.PersonId = personId;
 
         result.Description = $scope.addressDescription;
 
-        console.log(result);
+        var address = new Address({
+            Id: result.Id,
+            PersonId: result.PersonId,
+            StreetName: result.StreetName,
+            StreetNumber: result.StreetNumber,
+            ZipCode: result.ZipCode,
+            Town: result.Town,
+            Description: result.Description
+        });
 
-
-        //var res = {
-        //    Id: $scope.oldAddressId,
-        //    StreetName: "",
-        //    StreetNumber: "",
-        //    ZipCode: 0,
-        //    Town: "",
-        //    Description: ""
-        //}
-
-        //var splittet = ($scope.newAddress.split(","));
-        //var first = splittet[0].split(" ");
-        
-        //for (i = 0; i < first.length - 1; i++) {
-        //    res.StreetName += first[i];
-        //    if (!(i + 1 == first.length - 1)) {
-        //        res.StreetName += " ";
-        //    }
-        //}
-
-        //res.StreetNumber = first[first.length - 1];
-        //res.ZipCode = splittet[1].split(" ")[1];
-        //res.Town = splittet[1].split(" ")[2];
-        
-        //var address = new Address({
-        //    PersonId: personId,
-        //    StreetName: res.StreetName,
-        //    StreetNumber: res.StreetNumber,
-        //    ZipCode: parseInt(res.ZipCode),
-        //    Town: res.Town,
-        //    Description: $scope.addressDescription
-        //});
-
-        //result.$patch({ id: res.Id }, function() {
-        //    NotificationService.AutoFadeNotification("success", "Success", "Adresse opdateret");
-        //}, function() {
-        //    NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke opdateret");
-        //});
+        address.$patch({ id: result.Id }, function () {
+            NotificationService.AutoFadeNotification("success", "Success", "Adresse opdateret");
+        }, function() {
+            NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke opdateret");
+        });
     }
 
     $scope.SmartAddress = {

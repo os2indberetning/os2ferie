@@ -13,6 +13,9 @@
         $scope.routes = [];
         $scope.addresses = [];
 
+        // Contains references to kendo ui grids.
+        $scope.gridContainer = {};
+
         LicensePlate.get({ id: 1 }, function (data) {
             $scope.licenseplates = data.value;
         });
@@ -103,10 +106,7 @@
         $scope.saveAlternativeWorkAddress = function () {
             NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
         }
-
-        // Contains references to kendo ui grids.
-        $scope.gridContainer = {};
-
+       
         $scope.setHomeWorkOverride = function () {
             var newPerson = new Person({
                 WorkDistanceOverride: $scope.workDistanceOverride
@@ -282,6 +282,18 @@
 
         $scope.loadGrids(1);
 
+        $scope.updatePersonalAddresses = function () {
+            $scope.gridContainer.personalAddressesGrid.dataSource.transport.options.read.url = "odata/PersonalAddresses(" + $scope.currentPerson.Id + ")";
+            $scope.gridContainer.personalAddressesGrid.dataSource.read();
+            
+        }
+
+        $scope.updatePersonalRoutes = function () {
+            $scope.gridcontainer.personalRoutesGrid.dataSource.transport.options.read.url = "odata/PersonalRoutes(" + $scope.currentPerson.Id + ")?$expand=Points";
+            $scope.gridcontainer.personalRoutesGrid.dataSource.read();
+
+        }        
+
         $scope.openTokenModal = function (size) {
 
             var modalInstance = $modal.open({
@@ -308,14 +320,17 @@
                 controller: 'RouteEditModalInstanceController',
                 backdrop: 'static',
                 resolve: {
-                    routes: function () {
-                        return $scope.routes;
+                    routeId: function () {
+                        return id;
+                    },
+                    personId: function () {
+                        return $scope.currentPerson.Id;
                     }
                 }
             });
 
             modalInstance.result.then(function () {
-
+                $scope.updatePersonalRoutes();
             });
         };
 
@@ -329,17 +344,14 @@
                     addressId: function () {
                         return id;
                     },
-                    personId: function() {
+                    personId: function () {
                         return $scope.currentPerson.Id;
                     }
                 }
             });
 
             modalInstance.result.then(function () {
-                //$scope.updatePendingReports = function () {
-                    $scope.gridContainer.personalAddresses.dataSource.transport.options.read.url = "odata/PersonalAddresses(" + $scope.currentPerson.Id + ")";
-                    $scope.gridContainer.personalAddresses.dataSource.read();
-                //}
+                $scope.updatePersonalAddresses();
             });
         };
     }
