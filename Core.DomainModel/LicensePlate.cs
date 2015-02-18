@@ -7,6 +7,7 @@ namespace Core.DomainModel
         public int Id { get; set; }
         public String Plate { get; set; }
         public String Description { get; set; }
-        public Person Person { get; set; }
+        public int PersonId { get; set; }
+        public virtual Person Person { get; set; }
     }
 }

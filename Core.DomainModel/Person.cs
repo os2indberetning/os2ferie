@@ -16,6 +16,7 @@ namespace Core.DomainModel
         public string LastName { get; set; }
         public string Mail { get; set; }
         public int WorkDistanceOverride { get; set; }
+        public bool RecieveMail { get; set; }
 
         public ICollection<PersonalAddress> PersonalAddresses { get; set; }
         public ICollection<PersonalRoute> PersonalRoutes { get; set; }

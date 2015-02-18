@@ -8,6 +8,7 @@
 		lastName: string;
 		mail: string;
 		workDistanceOverride: number;
+		recieveMail: boolean;
 		personalAddresses: any[];
 		personalRoutes: any[];
 		licensePlates: any[];

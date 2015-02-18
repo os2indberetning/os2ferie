@@ -1,0 +1,19 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Rediger rute</h3>
+</div>
+<div class="modal-body">
+    <label>Beskrivelse</label>
+    <input class="form-control" ng-model="addressDescription" />
+    <div class="seperator"></div>
+    <label>Adresse 1</label>
+    <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
+           k-data-source="SmartAddress" ng-model="oldStartPoint" class="fill-width" k-placeholder="'Skriv her'" />    
+    <div class="seperator"></div>
+    <label>Adresse 2</label>
+    <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
+           k-data-source="SmartAddress" ng-model="oldEndPoint" class="fill-width" k-placeholder="'Skriv her'" />
+</div>
+<div class="modal-footer">
+    <button class="btn btn-success pull-left new-token-btn" ng-click="saveUpdatedRoute()">Gem</button>
+    <button class="btn btn-primary pull-right close-token-modal" ng-click="closeRouteEditModal()">Luk</button>
+</div>

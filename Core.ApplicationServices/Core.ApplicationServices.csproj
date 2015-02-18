@@ -49,7 +49,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="DriveReportService.cs" />
+=======
+    <Compile Include="Interfaces\IMobileTokenService.cs" />
+    <Compile Include="MobileTokenService.cs" />
+>>>>>>> ba0c7ba0f4780a1f87ac78a47fedf66621011f4c
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
