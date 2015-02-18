@@ -160,7 +160,7 @@ namespace Infrastructure.DataAccess
 
         private void ConfigurePropertiesForReport(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Report>().Property(p => p.status).IsRequired();
+            modelBuilder.Entity<Report>().Property(p => p.Status).IsRequired();
             modelBuilder.Entity<Report>().Property(p => p.CreatedDateTimestamp).IsRequired();
             modelBuilder.Entity<Report>().Property(p => p.Comment).IsRequired();
             modelBuilder.Entity<Report>().HasRequired(p => p.Person);
