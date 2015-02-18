@@ -298,6 +298,7 @@
     <Content Include="App\Services\NotificationService.js" />
     <Content Include="App\Services\PersonalRouteResource.js" />
     <Content Include="App\Services\PointResource.js" />
+    <Content Include="App\Services\ReportResource.js" />
     <Content Include="App\Services\RouteResource.js" />
     <Content Include="App\Services\TokenResource.js" />
     <Content Include="App\Settings\AddressEditModal.html" />

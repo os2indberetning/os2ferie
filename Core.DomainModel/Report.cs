@@ -15,7 +15,7 @@ namespace Core.DomainModel
     public class Report
     {
         public int Id { get; set; }
-        public ReportStatus status { get; set; }
+        public ReportStatus Status { get; set; }
         public long CreatedDateTimestamp { get; set; }
         public long EditedDateTimestamp { get; set; }
         public String Comment { get; set; }
