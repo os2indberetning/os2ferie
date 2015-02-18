@@ -9,7 +9,7 @@ namespace Core.DomainModel
         public int ZipCode { get; set; }
         public string Town { get; set; }
         public string Longitude { get; set; }
-        public string Lattitude { get; set; }
+        public string Latitude { get; set; }
         public string Description { get; set; }
     }
 }

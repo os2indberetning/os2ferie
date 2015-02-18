@@ -1,6 +1,5 @@
-﻿
-
-using System.Linq;
+﻿using System.Linq;
+using System.Reflection;
 
 namespace Core.DomainServices
 {
@@ -23,5 +22,9 @@ namespace Core.DomainServices
         void Save();
         void Update(T entity);
         void Patch(T entity);
+
+        void Delete(T entity);
+
+        PropertyInfo GetPrimaryKeyProperty();
     }
 }

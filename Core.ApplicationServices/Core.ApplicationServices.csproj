@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DriveReportService.cs" />
+    <Compile Include="Interfaces\IMobileTokenService.cs" />
+    <Compile Include="MobileTokenService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

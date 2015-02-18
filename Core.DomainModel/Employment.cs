@@ -12,8 +12,10 @@ namespace Core.DomainModel
         public long StartDateTimestamp { get; set; }
         public long EndDateTimestamp { get; set; }
 
+        public int PersonId { get; set; }
         public virtual Person Person { get; set; }
         public virtual ICollection<Report> Reports { get; set; }
+        public int OrgUnitId { get; set; }
         public virtual OrgUnit OrgUnit { get; set; }
     }
 }
