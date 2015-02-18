@@ -27,7 +27,7 @@ angular.module("application").controller("MyReportsController", [
                and = "";
            }
 
-           $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Pending' " + and + oDataQuery;
+           $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' " + and + oDataQuery;
            $scope.gridContainer.pendingGrid.dataSource.read();
        }
 
@@ -38,7 +38,7 @@ angular.module("application").controller("MyReportsController", [
                and = "";
            }
 
-           $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Accepted' " + and + oDataQuery;
+           $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted' " + and + oDataQuery;
            $scope.gridContainer.acceptedGrid.dataSource.read();
        }
 
@@ -48,7 +48,7 @@ angular.module("application").controller("MyReportsController", [
                and = "";
            }
 
-           $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Rejected' " + and + oDataQuery;
+           $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' " + and + oDataQuery;
            $scope.gridContainer.rejectedGrid.dataSource.read();
        }
 
@@ -61,7 +61,7 @@ angular.module("application").controller("MyReportsController", [
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Pending'",
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending'",
                            dataType: "json",
                            cache: false
                        },
@@ -138,7 +138,7 @@ angular.module("application").controller("MyReportsController", [
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Accepted'",
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted'",
                            dataType: "json",
                            cache: false
                        },
@@ -211,7 +211,7 @@ angular.module("application").controller("MyReportsController", [
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports?$filter=status eq Core.DomainModel.ReportStatus'Rejected'",
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected'",
                            dataType: "json",
                            cache: false
                        },
