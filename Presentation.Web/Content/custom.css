@@ -70,6 +70,13 @@
     width: 50%;
 }
 
+.fill-90 {
+    width: 90%;
+}
+
+.set-margin-top-10 {
+    margin-top: 10px;
+}
 
 /*CUSTOM CSS FOR NOTIFICATION SERVICE*/
 .errors-container {

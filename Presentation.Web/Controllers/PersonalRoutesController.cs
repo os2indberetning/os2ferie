@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using System.Web.OData;
@@ -68,7 +69,11 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<PersonalRoute> Post(PersonalRoute personalRoute)
         {
-            throw new NotImplementedException();
+            var result = _repo.Insert(personalRoute);
+
+            _repo.Save();
+
+            return new List<PersonalRoute>() { result }.AsQueryable();
         }
 
         // PATCH: odata/PersonalRoutes(5)
@@ -76,7 +81,31 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public IQueryable<PersonalRoute> Patch([FromODataUri] int key, Delta<PersonalRoute> delta)
         {
-            throw new NotImplementedException();
+            var existing = _repo.AsQueryable().First(x => x.Id == key);
+
+            var temp = delta.GetEntity();
+
+            foreach (var propertyInfo in typeof(PersonalRoute).GetProperties())
+            {
+                var itemType = existing.GetType();
+
+                PropertyInfo prop;
+
+                if (propertyInfo.Name == "Id")
+                    continue; // skip primary key
+
+                if (propertyInfo.GetValue(temp) != null)
+                {
+                    prop = itemType.GetProperty(propertyInfo.Name);
+
+                    prop.SetValue(existing, propertyInfo.GetValue(temp));
+                }
+            }
+
+            _repo.Update(existing);
+            _repo.Save();
+
+            return new List<PersonalRoute>() { existing }.AsQueryable();
         }
 
         // DELETE: odata/PersonalRoutes(5)

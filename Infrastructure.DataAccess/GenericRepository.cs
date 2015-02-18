@@ -15,7 +15,7 @@ namespace Infrastructure.DataAccess
             _context = context;
             _dbSet = context.Set<T>();
         }
-        
+
         public T Insert(T entity)
         {
             return _dbSet.Add(entity);

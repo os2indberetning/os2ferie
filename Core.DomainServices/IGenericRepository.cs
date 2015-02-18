@@ -11,7 +11,7 @@ namespace Core.DomainServices
          * The entity is first persisted when a call
          * to save occurs.
          */
-        T Insert(T entity);
+        T Insert(T entity);        
 
         /**
          * As we are using a data store with entity framework

@@ -21,6 +21,11 @@ namespace Infrastructure.DataAccess
             throw new System.NotImplementedException();
         }
 
+        public DriveReport InsertAndSave(DriveReport entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public IQueryable<DriveReport> AsQueryable()
         {
             IQueryable<DriveReport> result;

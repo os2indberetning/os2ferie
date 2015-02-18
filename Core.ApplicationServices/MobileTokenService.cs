@@ -35,6 +35,16 @@ namespace Core.ApplicationServices
                 }
             }
 
+            if (token.Status == MobileTokenStatus.Created)
+            {
+                token.StatusToPresent = "Oprettet";
+            }
+
+            if (token.Status == MobileTokenStatus.Activated)
+            {
+                token.StatusToPresent = "Aktiveret";
+            }
+
             token.Token = randomToken;
             token.Guid = Guid.NewGuid();
             token.Status = MobileTokenStatus.Created;

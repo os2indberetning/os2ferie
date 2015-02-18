@@ -21,6 +21,11 @@ namespace Infrastructure.DataAccess
             return _dbSet.Add(entity);
         }
 
+        public Person InsertAndSave(Person entity)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public IQueryable<Person> AsQueryable()
         {
             return _dbSet.AsQueryable();
