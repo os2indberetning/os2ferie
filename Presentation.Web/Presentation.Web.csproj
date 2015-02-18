@@ -255,7 +255,11 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JasmineController.cs" />
     <Compile Include="Controllers\LicensePlatesController.cs" />
+    <Compile Include="Controllers\MobileTokenController.cs" />
+    <Compile Include="Controllers\PersonalAddressesController.cs" />
+    <Compile Include="Controllers\PersonalRoutesController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\PointsController.cs" />
     <Compile Include="Controllers\TestReportsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -273,9 +277,15 @@
     <Content Include="App\Admin\AdminView.html" />
     <Content Include="App\application.js" />
     <Content Include="App\ApproveReports\ApproveReportsView.html" />
+<<<<<<< HEAD
     <Content Include="App\ApproveReports\settingsTemplate.html" />
     <Content Include="App\AWS\awsSnippet.js" />
     <Content Include="App\AWS\custom-AWS.js" />
+=======
+    <Content Include="App\AWS\awsSnippet.js" />
+    <Content Include="App\AWS\custom-AWS.js" />
+    <Content Include="App\Directives\AwsDirective.js" />
+>>>>>>> ba0c7ba0f4780a1f87ac78a47fedf66621011f4c
     <Content Include="App\Driving\DrivingView.html" />
     <Content Include="App\Driving\DrivingController.js" />
     <Content Include="App\Frontpage\FrontpageView.html" />
@@ -286,11 +296,19 @@
     <Content Include="App\MyReports\MyReportsController.js" />
     <Content Include="App\MyReports\MyReportsController.spec.js" />
     <Content Include="App\MyReports\MyReportsView.html" />
+<<<<<<< HEAD
+=======
+    <Content Include="App\Services\AddressFormatterService.js" />
+    <Content Include="App\Services\AddressResource.js" />
+>>>>>>> ba0c7ba0f4780a1f87ac78a47fedf66621011f4c
     <Content Include="App\Services\LicensePlateResource.js" />
     <Content Include="App\Services\NotificationService.js" />
     <Content Include="App\Services\PersonalRouteResource.js" />
     <Content Include="App\Services\PointResource.js" />
+<<<<<<< HEAD
     <Content Include="App\Services\ReportResource.js" />
+=======
+>>>>>>> ba0c7ba0f4780a1f87ac78a47fedf66621011f4c
     <Content Include="App\Services\RouteResource.js" />
     <Content Include="App\Services\TokenResource.js" />
     <Content Include="App\Settings\AddressEditModal.html" />
@@ -298,9 +316,15 @@
     <Content Include="App\Settings\ModalControllers\RouteEditModalController.js" />
     <Content Include="App\Settings\ModalControllers\TokenModalController.js" />
     <Content Include="App\Settings\RouteEditModal.html" />
+<<<<<<< HEAD
+=======
+    <Content Include="App\Services\DriveReportResource.js" />
+    <Content Include="App\Services\SmartAdresseSource.js" />
+>>>>>>> ba0c7ba0f4780a1f87ac78a47fedf66621011f4c
     <Content Include="App\Settings\SettingsController.js" />
     <Content Include="App\Settings\SettingsView.html" />
     <Content Include="App\Settings\tokenModal.html" />
+    <Content Include="App\Settings\viaPointEditContent.html" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />

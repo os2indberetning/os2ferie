@@ -79,7 +79,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Address>().Property(p => p.ZipCode).IsRequired();
             modelBuilder.Entity<Address>().Property(p => p.Town).IsRequired();
             modelBuilder.Entity<Address>().Property(p => p.Longitude).IsRequired();
-            modelBuilder.Entity<Address>().Property(p => p.Lattitude).IsRequired();      
+            modelBuilder.Entity<Address>().Property(p => p.Latitude).IsRequired();      
         }
 
         private void ConfigurePropertiesForPersonalAddress(DbModelBuilder modelBuilder)
@@ -113,6 +113,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<MobileToken>().Property(p => p.Status).IsRequired();
             modelBuilder.Entity<MobileToken>().Property(p => p.Token).IsRequired();
             modelBuilder.Entity<MobileToken>().HasRequired(p => p.Person);
+            modelBuilder.Entity<MobileToken>().Ignore(p => p.StatusToPresent);
         }
 
         private void ConfigurePropertiesForRate(DbModelBuilder modelBuilder)
