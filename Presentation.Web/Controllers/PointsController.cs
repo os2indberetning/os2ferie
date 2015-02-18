@@ -44,7 +44,9 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<Point> GetPoints(ODataQueryOptions<Point> queryOptions)
         {
-            throw new NotImplementedException();
+            var result = _repo.AsQueryable();
+
+            return result;
         }
 
         // GET: odata/Points(5)
@@ -67,7 +69,11 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<Point> Post(Point point)
         {
-            throw new NotImplementedException();
+            var result = _repo.Insert(point);
+
+            _repo.Save();
+
+            return new List<Point>() { result }.AsQueryable();
         }
 
         // PATCH: odata/Points(5)
@@ -106,7 +112,11 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<Point> Delete([FromODataUri] int key)
         {
-            throw new NotImplementedException();
+            _repo.Delete(_repo.AsQueryable().First(x => x.Id == key));
+
+            _repo.Save();
+
+            return new List<Point>().AsQueryable();
         }
     }
 }

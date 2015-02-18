@@ -10,7 +10,7 @@
     });
 
     $scope.deleteToken = function (token) {
-        var objIndex = $scope.licenseplates.indexOf(token);
+        var objIndex = $scope.tokens.indexOf(token);
         $scope.tokens.splice(objIndex, 1);
 
         Token.delete({ id: token.Id }, function (data) {
@@ -24,7 +24,8 @@
 
     $scope.saveNewToken = function () {
         var newToken = new Token({
-            PersonId: personId
+            PersonId: personId,
+            Status: "Created"
         });
 
         newToken.$save(function (data) {

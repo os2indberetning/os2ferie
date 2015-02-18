@@ -69,7 +69,11 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<PersonalAddress> Post(PersonalAddress personalAddress)
         {
-            throw new NotImplementedException();
+            var result = _genericRepo.Insert(personalAddress);
+
+            _genericRepo.Save();
+
+            return new List<PersonalAddress>() { result }.AsQueryable();
         }
 
         // PATCH: odata/PersonalAddresses(5)
@@ -108,7 +112,11 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<PersonalAddress> Delete([FromODataUri] int key)
         {
-            throw new NotImplementedException();
+            _genericRepo.Delete(_genericRepo.AsQueryable().First(x => x.Id == key));
+
+            _genericRepo.Save();
+
+            return new List<PersonalAddress>().AsQueryable();
         }
     }
 }
