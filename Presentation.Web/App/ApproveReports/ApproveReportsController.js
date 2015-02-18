@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("ApproveReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", function ($scope, $modal, $rootScope, Report) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", function ($scope, $modal, $rootScope, Report, OrgUnit) {
 
 
 
@@ -27,10 +27,12 @@
                and = "";
            }
 
-           $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' " + and + oDataQuery;
+
+
+           $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' " + and + oDataQuery + "&$expand=Employment"
            $scope.gridContainer.pendingGrid.dataSource.read();
 
-         
+
        }
 
        $scope.updateAcceptedReports = function (oDataQuery) {
@@ -40,7 +42,7 @@
                and = "";
            }
 
-           $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted' " + and + oDataQuery;
+           $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted' " + and + oDataQuery + "&$expand=Employment"
            $scope.gridContainer.acceptedGrid.dataSource.read();
        }
 
@@ -50,7 +52,7 @@
                and = "";
            }
 
-           $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' " + and + oDataQuery;
+           $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' " + and + oDataQuery + "&$expand=Employment"
            $scope.gridContainer.rejectedGrid.dataSource.read();
        }
 
@@ -63,7 +65,7 @@
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending'",
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending'&$expand=Employment",
                            dataType: "json",
                            cache: false
                        },
@@ -79,14 +81,49 @@
                    },
                    schema: {
                        data: function (data) {
-                           return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
+
+                           var leaderOrgId = 2;
+                           var resultSet = [];
+
+                           var orgs = OrgUnit.get();
+                           var orgUnits = {};
+
+                           orgs.$promise.then(function (res) {
+                               angular.forEach(orgs.value, function (value, key) {
+                                   orgUnits[value.Id] = value;
+                               });
+
+                               angular.forEach(data.value, function (value, key) {
+                                   var repOrg = orgUnits[value.Employment.OrgUnitId];
+
+                                   if (orgUnits[leaderOrgId].Level == repOrg.Level && orgUnits[leaderOrgId].Id == repOrg.Id) {
+                                     
+                                       resultSet.push(value);
+                                   }
+                                   else if (orgUnits[leaderOrgId].Level < repOrg.Level) {
+                                       while (orgUnits[leaderOrgId].Level < repOrg.Level) {
+                                           repOrg = orgUnits[repOrg.ParentId];
+                                       }
+                                       if (repOrg.Id == orgUnits[leaderOrgId].Id) {
+                                           resultSet.push(value);
+                                       }
+                                   }
+
+                               });
+
+                               $scope.gridContainer.pendingGrid.dataSource.data(resultSet);
+                               $scope.gridContainer.pendingGrid.refresh();
+
+                           });
+                           return resultSet;
+
                        },
                        total: function (data) {
                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                        }
                    },
                    pageSize: 5,
-                   serverPaging: true,
+                   serverPaging: false,
                    serverSorting: true
                },
                sortable: true,
@@ -140,7 +177,7 @@
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted'",
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted'&$expand=Employment",
                            dataType: "json",
                            cache: false
                        },
@@ -156,14 +193,55 @@
                    },
                    schema: {
                        data: function (data) {
-                           return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
+
+                           var leaderOrgId = 2;
+                           var resultSet = [];
+
+                           var orgs = OrgUnit.get();
+                           var orgUnits = {};
+
+                           orgs.$promise.then(function (res) {
+                               angular.forEach(orgs.value, function (value, key) {
+                                   orgUnits[value.Id] = value;
+                               });
+
+                               angular.forEach(data.value, function (value, key) {
+                                   var repOrg = orgUnits[value.Employment.OrgUnitId];
+
+                                   if (orgUnits[leaderOrgId].Level == repOrg.Level && orgUnits[leaderOrgId].Id == repOrg.Id) {
+                                       resultSet.push(value);
+                                   }
+                                   else if (orgUnits[leaderOrgId].Level < repOrg.Level) {
+                                       while (orgUnits[leaderOrgId].Level < repOrg.Level) {
+                                           repOrg = orgUnits[repOrg.ParentId];
+                                       }
+                                       if (repOrg.Id == orgUnits[leaderOrgId].Id) {
+                                           resultSet.push(value);
+                                       }
+                                   }
+
+                               });
+
+                               $scope.gridContainer.acceptedGrid.dataSource.data(resultSet);
+                               $scope.gridContainer.acceptedGrid.refresh();
+
+                           });
+
+
+
+
+
+
+
+                           return resultSet;
+
                        },
                        total: function (data) {
                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                        }
                    },
                    pageSize: 5,
-                   serverPaging: true,
+                   serverPaging: false,
                    serverSorting: true
                },
                sortable: true,
@@ -199,6 +277,10 @@
                    }, {
                        field: "Type",
                        title: "Type"
+                   }, {
+                       field: "Id",
+                       template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a>",
+                       title: "Muligheder"
                    }
                ]
            };
@@ -213,7 +295,7 @@
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected'",
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected'&$expand=Employment",
                            dataType: "json",
                            cache: false
                        },
@@ -229,14 +311,61 @@
                    },
                    schema: {
                        data: function (data) {
-                           return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
+                           // Hardcoded leaderOrgId until we can get it from AD
+                           var leaderOrgId = 2;
+
+
+                           var resultSet = [];
+
+                           var orgs = OrgUnit.get();
+
+                           var orgUnits = {};
+
+                           orgs.$promise.then(function (res) {
+
+                               angular.forEach(orgs.value, function (value, key) {
+                                   orgUnits[value.Id] = value;
+                               });
+
+                               angular.forEach(data.value, function (value, key) {
+                                   var repOrg = orgUnits[value.Employment.OrgUnitId];
+
+                                 
+
+                                   if (orgUnits[leaderOrgId].Level == repOrg.Level && orgUnits[leaderOrgId].Id == repOrg.Id) {
+                                       resultSet.push(value);
+                                   }
+                                   else if (orgUnits[leaderOrgId].Level < repOrg.Level) {
+                                       while (orgUnits[leaderOrgId].Level < repOrg.Level) {
+                                           repOrg = orgUnits[repOrg.ParentId];
+                                       }
+                                       if (repOrg.Id == orgUnits[leaderOrgId].Id) {
+                                           resultSet.push(value);
+                                       }
+                                   }
+
+                               });
+
+                               $scope.gridContainer.rejectedGrid.dataSource.data(resultSet);
+                               $scope.gridContainer.rejectedGrid.refresh();
+
+                           });
+
+
+
+
+
+
+
+                           return resultSet;
+
                        },
                        total: function (data) {
                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                        }
                    },
                    pageSize: 5,
-                   serverPaging: true,
+                   serverPaging: false,
                    serverSorting: true
                },
                sortable: true,
@@ -272,10 +401,16 @@
                    }, {
                        field: "Type",
                        title: "Type"
+                   }, {
+                       field: "Id",
+                       template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a>",
+                       title: "Muligheder"
                    }
                ]
            };
        }
+
+
 
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
@@ -340,7 +475,10 @@
            });
 
            modalInstance.result.then(function () {
-               Report.patch({ id: id, Status: "Accepted" });
+               Report.patch({ id: id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix() }, function () {
+                   $scope.updatePendingReports("");
+                   $scope.updateAcceptedReports("");
+               });
            });
        }
 
@@ -356,7 +494,10 @@
            });
 
            modalInstance.result.then(function () {
-               Report.patch({ id: id, Status: "Rejected" });
+               Report.patch({ id: id }, { "Status": "Rejected", "ClosedDateTimestamp": moment().unix() }, function () {
+                   $scope.updatePendingReports("");
+                   $scope.updateRejectedReports("");
+               });
            });
        }
 
@@ -390,6 +531,11 @@
        $scope.loadAcceptedReports();
        $scope.loadRejectedReports();
        $scope.loadPendingReports();
+
+
+
+
+
 
    }
 ]);
