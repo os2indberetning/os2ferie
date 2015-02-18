@@ -27,9 +27,9 @@ namespace OS2Indberetning.Controllers
     builder.EntitySet<PersonalAddress>("PersonalAddresses");
     config.Routes.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
     */
-    public class PersonalAddressesController : ODataController
+    public class PersonalAddressesController : BaseController<PersonalAddress>
     {
-        private static ODataValidationSettings _validationSettings = new ODataValidationSettings();
+        private new static readonly ODataValidationSettings _validationSettings = new ODataValidationSettings();
 
         private readonly IGenericRepository<PersonalAddress> _genericRepo;
 
@@ -60,22 +60,22 @@ namespace OS2Indberetning.Controllers
 
         // PUT: odata/PersonalAddresses(5)
         [EnableQuery]
-        public IQueryable<PersonalAddress> Put([FromODataUri] int key, Delta<PersonalAddress> delta)
+        public new IQueryable<PersonalAddress> Put([FromODataUri] int key, Delta<PersonalAddress> delta)
         {
             throw new NotImplementedException();
         }
 
         // POST: odata/PersonalAddresses
         [EnableQuery]
-        public IQueryable<PersonalAddress> Post(PersonalAddress personalAddress)
+        public new IHttpActionResult Post(PersonalAddress personalAddress)
         {
-            throw new NotImplementedException();
+            return base.Post(personalAddress);
         }
 
         // PATCH: odata/PersonalAddresses(5)
         [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
-        public IQueryable<PersonalAddress> Patch([FromODataUri] int key, Delta<PersonalAddress> delta)
+        public new IQueryable<PersonalAddress> Patch([FromODataUri] int key, Delta<PersonalAddress> delta)
         {
             var existing = _genericRepo.AsQueryable().First(x => x.Id == key);
 
@@ -106,7 +106,7 @@ namespace OS2Indberetning.Controllers
 
         // DELETE: odata/PersonalAddresses(5)
         [EnableQuery]
-        public IQueryable<PersonalAddress> Delete([FromODataUri] int key)
+        public new IQueryable<PersonalAddress> Delete([FromODataUri] int key)
         {
             throw new NotImplementedException();
         }

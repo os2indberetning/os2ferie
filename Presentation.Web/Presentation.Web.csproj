@@ -296,7 +296,9 @@
     <Content Include="App\Services\DriveReportResource.js" />
     <Content Include="App\Services\LicensePlateResource.js" />
     <Content Include="App\Services\NotificationService.js" />
+    <Content Include="App\Services\PersonalAddressType.js" />
     <Content Include="App\Services\PersonalRouteResource.js" />
+    <Content Include="App\Services\PersonalAddressResource.js" />
     <Content Include="App\Services\PointResource.js" />
     <Content Include="App\Services\RouteResource.js" />
     <Content Include="App\Services\SmartAdresseSource.js" />
@@ -663,6 +665,10 @@
     <Content Include="Scripts\angular-moment.min.js.map" />
     <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js.map">
       <DependentUpon>ui-bootstrap-tpls.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\Config\mapwidget.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <BrowseToURL>~/Content/Config/mapwidget.json</BrowseToURL>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
@@ -1879,6 +1885,7 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\SeptimaWidgetDriver.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
