@@ -6,6 +6,14 @@ using System.Dynamic;
 
 namespace Core.DomainModel
 {
+
+    public enum KilometerAllowance
+    {
+        Calculated,
+        Read,
+        CalculatedWithoutExtraDistance
+    }
+
     public class DriveReport : Report
     {
         public float Distance { get; set; }
@@ -19,6 +27,8 @@ namespace Core.DomainModel
         public string Licenseplate { get; set; }
         public string Fullname { get; set; }
         public string Timestamp { get; set; }
+        public KilometerAllowance KilometerAllowance { get; set; }
+
 
         public ICollection<DriveReportPoint> DriveReportPoints { get; set; }
     }

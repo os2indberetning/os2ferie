@@ -266,9 +266,9 @@
         }
 
         $scope.GetPerson = Person.get({ id: 1 }, function (data) {
-            $scope.currentPerson = data.value[0];
+            $scope.currentPerson = data;
             $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride;
-            $scope.recieveMail = data.value[0].RecieveMail;
+            $scope.recieveMail = data.RecieveMail;
             if ($scope.recieveMail == true) {
                 $scope.mailAdvice = 'Yes';
             } else {
