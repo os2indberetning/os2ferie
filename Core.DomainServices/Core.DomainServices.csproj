@@ -51,7 +51,6 @@
   <ItemGroup>
     <Compile Include="Example\IExample.cs" />
     <Compile Include="IGenericRepository.cs" />
-    <Compile Include="IPersonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

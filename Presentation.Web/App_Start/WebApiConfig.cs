@@ -17,6 +17,7 @@ using Microsoft.OData.Edm;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OS2Indberetning.Controllers;
+using OS2Indberetning.Models;
 
 namespace OS2Indberetning
 {
@@ -25,6 +26,8 @@ namespace OS2Indberetning
         public static void Register(HttpConfiguration config)
         {
             config.MapHttpAttributeRoutes();
+
+            config.AddODataQueryFilter();
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
@@ -38,7 +41,8 @@ namespace OS2Indberetning
                 model: GetModel()
                 );
 
-            config.Formatters.AddRange(ODataMediaTypeFormatters.Create());
+            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 
@@ -51,7 +55,7 @@ namespace OS2Indberetning
         {
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
 
-            //builder.EntitySet<TestReport>("TestReports");
+            builder.EntitySet<TestReport>("TestReports");
             //var test = builder.EntityType<TestReport>();
             //test.Ignore(report => report.DateTimeTest);
 
@@ -73,7 +77,7 @@ namespace OS2Indberetning
 
             builder.EntitySet<MailNotificationSchedule>("MailNotificationSchedules");
 
-            builder.EntitySet<MobileToken>("MobileTokens");
+            builder.EntitySet<MobileToken>("MobileToken");
 
             builder.EntitySet<OrgUnit>("OrgUnits");
 

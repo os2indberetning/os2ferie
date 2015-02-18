@@ -1,131 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Linq;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using System.Web.OData;
 using System.Web.OData.Query;
 using Core.ApplicationServices;
 using Core.DomainModel;
-using Core.DomainServices;
-using Infrastructure.DataAccess;
-using Infrastructure.DataAccess.Migrations;
-using Microsoft.OData.Core;
-using Ninject;
 
 namespace OS2Indberetning.Controllers
 {
-    /*
-    The WebApiConfig class may require additional changes to add a route for this controller. Merge these statements into the Register method of the WebApiConfig class as applicable. Note that OData URLs are case sensitive.
-
-    using System.Web.Http.OData.Builder;
-    using System.Web.Http.OData.Extensions;
-    using Core.DomainModel;
-    ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-    builder.EntitySet<DriveReport>("DriveReports");
-    config.Routes.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
-    */
-    public class DriveReportsController : ODataController
+    public class DriveReportsController : BaseController<DriveReport>
     {
-        private static ODataValidationSettings _validationSettings = new ODataValidationSettings();
-
-        private readonly IGenericRepository<DriveReport> _repo;
-
-        private readonly DriveReportService _driveService;
-
-        public DriveReportsController()
-        {
-            _validationSettings.AllowedQueryOptions = AllowedQueryOptions.All;
-            _driveService = new DriveReportService();
-            _repo = new GenericRepository<DriveReport>(new DataContext());
-        }
+        private readonly DriveReportService _driveService = new DriveReportService();
 
         // GET: odata/DriveReports
         [EnableQuery]
         public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions)
         {
-            var res = _driveService.AddFullName(_repo.AsQueryable());
-            return res;
+            return _driveService.AddFullName(GetQueryable(queryOptions));
         }
 
         //GET: odata/DriveReports(5)
         public IQueryable<DriveReport> GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
-            var result = _repo.AsQueryable().FirstOrDefault(rep => rep.Id == key);
-
-
-            return new List<DriveReport>()
-            {
-                result
-            }.AsQueryable();
+            return _driveService.AddFullName(GetQueryable(key, queryOptions));  
         }
 
         // PUT: odata/DriveReports(5)
-        public IHttpActionResult Put([FromODataUri] int key, Delta<DriveReport> delta)
+        public new IHttpActionResult Put([FromODataUri] int key, Delta<DriveReport> delta)
         {
-            Validate(delta.GetEntity());
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // TODO: Get the entity here.
-
-            // delta.Put(driveReport);
-
-            // TODO: Save the patched entity.
-
-            // return Updated(driveReport);
-            return StatusCode(HttpStatusCode.NotImplemented);
+            return base.Put(key, delta);
         }
 
         // POST: odata/DriveReports
-        public IHttpActionResult Post(DriveReport driveReport)
+        [EnableQuery]
+        public new IHttpActionResult Post(DriveReport driveReport)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // TODO: Add create logic here.
-
-            // return Created(driveReport);
-            return StatusCode(HttpStatusCode.NotImplemented);
+            return base.Post(driveReport);
         }
 
         // PATCH: odata/DriveReports(5)
+        [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
-        public IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
+        public new IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
         {
-            Validate(delta.GetEntity());
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // TODO: Get the entity here.
-
-            // delta.Patch(driveReport);
-
-            // TODO: Save the patched entity.
-
-            // return Updated(driveReport);
-            return StatusCode(HttpStatusCode.NotImplemented);
+            return base.Patch(key, delta);
         }
 
         // DELETE: odata/DriveReports(5)
-        public IHttpActionResult Delete([FromODataUri] int key)
+        public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            // TODO: Add delete logic here.
-
-            // return StatusCode(HttpStatusCode.NoContent);
-            return StatusCode(HttpStatusCode.NotImplemented);
+            return base.Delete(key);
         }
     }
 }

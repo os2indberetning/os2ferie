@@ -12,7 +12,7 @@ namespace OS2Indberetning
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/libraries")
-                .Include("~/Scripts/jquery-{version}.js")
+                //.Include("~/Scripts/jquery-{version}.js")
                 .Include("~/Scripts/angular.js")
                 .Include("~/Scripts/angular-ui-router.js")
                 .Include("~/Scripts/angular-ui/ui-bootstrap-tpls.js")
