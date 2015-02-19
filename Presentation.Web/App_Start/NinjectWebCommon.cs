@@ -1,5 +1,7 @@
 using System.Reflection;
 using System.Web.Http;
+using Core.ApplicationServices;
+using Core.ApplicationServices.Interfaces;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
 
@@ -48,6 +50,7 @@ namespace OS2Indberetning
         {
             kernel.Bind<DataContext>().ToSelf().InRequestScope();
             kernel.Bind(typeof (IGenericRepository<>)).To(typeof (GenericRepository<>));
+            kernel.Bind(typeof (IPersonService)).To(typeof (PersonService));
         }        
     }
 }

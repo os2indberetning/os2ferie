@@ -2,6 +2,8 @@
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.ApplicationServices;
+using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 
@@ -9,19 +11,24 @@ namespace OS2Indberetning.Controllers
 {
     public class PersonController : BaseController<Person>
     {
-        public PersonController(IGenericRepository<Person> repo) : base(repo) {}
+        private IPersonService _person;
+
+        public PersonController(IGenericRepository<Person> repo, IPersonService personService) : base(repo)
+        {
+            _person = personService;
+        }
 
         // GET: odata/Person
         [EnableQuery]
         public IQueryable<Person> GetPerson(ODataQueryOptions<Person> queryOptions)
         {
-            return GetQueryable(queryOptions);
+            return _person.ScrubCprFromPersons(GetQueryable(queryOptions));
         }
 
         //GET: odata/Person(5)
         public IQueryable<Person> GetPerson([FromODataUri] int key, ODataQueryOptions<Person> queryOptions)
         {
-            return GetQueryable(key, queryOptions);
+            return _person.ScrubCprFromPersons(GetQueryable(key, queryOptions));
         }
 
         // PUT: odata/Person(5)
