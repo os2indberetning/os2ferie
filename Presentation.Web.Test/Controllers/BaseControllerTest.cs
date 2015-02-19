@@ -117,7 +117,7 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [TestMethod]
-        public async Task GetShouldReturnThreeElements()
+        public virtual async Task GetShouldReturnThreeElements()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath()).GetAsync();
             var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
@@ -140,7 +140,7 @@ namespace Presentation.Web.Test.Controllers
         public async Task GetWithInvalidKeyShouldReturnNoEntity()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(5)").GetAsync();
-            Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode, "Unknown id should resolve in an internal server error");
+            AssertEmptyResponse(response);
         }
 
         [TestMethod]
@@ -171,8 +171,7 @@ namespace Presentation.Web.Test.Controllers
         {
             //Make sure that an entity with id 4 does not exists before the test
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(4)").GetAsync();
-            Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode, "The repo should not contain an item with id 4");
-
+            AssertEmptyResponse(response);
 
             var request = Server.CreateRequest(GetUriPath() + "")
                                 .And(r => r.Content = new StringContent(GetPostBodyContent()))
@@ -188,7 +187,7 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [TestMethod]
-        public async Task PatchShouldAlterAnEntity()
+        public virtual async Task PatchShouldAlterAnEntity()
         {
             //Make sure that an entity with id 3 looks as expected
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(3)").GetAsync();
@@ -223,7 +222,14 @@ namespace Presentation.Web.Test.Controllers
 
             //After the delete the repo should not contain an entity with id 3
             response = await Server.CreateRequest(GetUriPath() + "(3)").GetAsync();
-            Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode, "No entity with id 3 should exists, so internal server error is returned");
+            AssertEmptyResponse(response);
+        }
+
+        public async static void AssertEmptyResponse(HttpResponseMessage response)
+        {
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Return code of get should be ok");
+            var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
+            Assert.AreEqual(0, result.value.Count, "Nothing should be return from get request");
         }
     }
 }

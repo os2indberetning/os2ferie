@@ -2,7 +2,6 @@
 using System.Linq;
 using Core.DomainModel;
 using Core.DomainServices;
-using Infrastructure.DataAccess;
 using IMobileTokenService = Core.ApplicationServices.Interfaces.IMobileTokenService;
 
 namespace Core.ApplicationServices

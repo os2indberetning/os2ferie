@@ -32,8 +32,13 @@ namespace OS2Indberetning.Controllers
 
         protected IQueryable<T> GetQueryable(int key, ODataQueryOptions<T> queryOptions)
         {
-            var result = new List<T> {Repo.AsQueryable().FirstOrDefault(PrimaryKeyEquals(_primaryKeyProp, key))}.AsQueryable();
-            return result;
+            var result = new List<T> { };
+            var entity = Repo.AsQueryable().FirstOrDefault(PrimaryKeyEquals(_primaryKeyProp, key));
+            if (entity != null)
+            {
+                result.Add(entity);
+            }
+            return result.AsQueryable();
         }
 
         protected IHttpActionResult Put( int key, Delta<T> delta)

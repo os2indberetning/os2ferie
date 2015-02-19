@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.ApplicationServices;
+using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Presentation.Web.Test.Controllers.Persons
 {
+    //Notice that the controller scrubs away the cpr number
+    //before serving the person entity.
+
     [TestClass]
     public class PersonTest : BaseControllerTest<Person>
     {
@@ -13,8 +18,8 @@ namespace Presentation.Web.Test.Controllers.Persons
         {
             return new List<KeyValuePair<Type, Type>>
             {
-                new KeyValuePair<Type, Type>(typeof (IGenericRepository<Person>),
-                    typeof (PersonRepositoryMock))
+                new KeyValuePair<Type, Type>(typeof (IGenericRepository<Person>), typeof (PersonRepositoryMock)),
+                new KeyValuePair<Type, Type>(typeof(IPersonService), typeof(PersonService))
             };
         }
 
@@ -23,7 +28,7 @@ namespace Presentation.Web.Test.Controllers.Persons
             return new Person
             {
                 Id = 1,
-                CprNumber = "1234567894",
+                CprNumber = "",
                 FirstName = "Morten",
                 LastName = "Rasmussen"
             };
@@ -34,7 +39,7 @@ namespace Presentation.Web.Test.Controllers.Persons
             return new Person
             {
                 Id = 2,
-                CprNumber = "5761587423",
+                CprNumber = "",
                 FirstName = "Morten",
                 LastName = "Jørgensen"
             };
@@ -45,7 +50,7 @@ namespace Presentation.Web.Test.Controllers.Persons
             return new Person
             {
                 Id = 3,
-                CprNumber = "8754875412",
+                CprNumber = "",
                 FirstName = "Morten",
                 LastName = "Foo"
             };
@@ -56,7 +61,7 @@ namespace Presentation.Web.Test.Controllers.Persons
             return new Person
             {
                 Id = 4,
-                CprNumber = "8754875412",
+                CprNumber = "",
                 FirstName = "Morten",
                 LastName = "Bar"
             };
@@ -67,7 +72,7 @@ namespace Presentation.Web.Test.Controllers.Persons
             return new Person
             {
                 Id = 3,
-                CprNumber = "8754875412",
+                CprNumber = "",
                 FirstName = "Niels",
                 LastName = "Patcher"
             };
