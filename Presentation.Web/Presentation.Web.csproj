@@ -278,7 +278,8 @@
   <ItemGroup>
     <Content Include="App\Admin\AdminView.html" />
     <Content Include="App\application.js" />
-    <Content Include="App\ApproveReports\AcceptRejectController.js" />
+    <Content Include="App\ApproveReports\RejectController.js" />
+    <Content Include="App\ApproveReports\AcceptController.js" />
     <Content Include="App\ApproveReports\ApproveReportsView.html" />
     <Content Include="App\ApproveReports\ConfirmApproveTemplate.html" />
     <Content Include="App\ApproveReports\ConfirmRejectTemplate.html" />

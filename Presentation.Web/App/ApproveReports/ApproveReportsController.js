@@ -1,58 +1,99 @@
 ﻿angular.module("application").controller("ApproveReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", function ($scope, $modal, $rootScope, Report, OrgUnit) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout) {
 
 
+       var pendingQueryOptions = { dateQuery: "", personQuery: "" };
+       var acceptedQueryOptions = { dateQuery: "", personQuery: "" };
+       var rejectedQueryOptions = { dateQuery: "", personQuery: "" };
 
        // Helper Methods
 
-       $scope.updateActiveTab = function (query) {
+       $scope.updateActiveTab = function () {
            if ($scope.activeTab == 'pending') {
                // Update pending tabs.
-               this.updatePendingReports(query);
+               this.updatePendingReports();
            }
            else if ($scope.activeTab == 'accepted') {
                // Update accepted reports grid
-               this.updateAcceptedReports(query);
+               this.updateAcceptedReports();
            }
            else if ($scope.activeTab == 'rejected') {
                // Update rejected reports grid.
-               this.updateRejectedReports(query);
+               this.updateRejectedReports();
            }
        }
 
-       $scope.updatePendingReports = function (oDataQuery) {
+       $scope.updatePendingReports = function () {
 
-           var and = "and ";
-           if (oDataQuery == "") {
-               and = "";
+           var dateAnd = "and ";
+           var dateQuery = dateAnd + pendingQueryOptions.dateQuery;
+           if (pendingQueryOptions.dateQuery == "") {
+               dateAnd = "";
+               dateQuery = "";
            }
 
+           var personAnd = "and ";
+           var personQuery = personAnd + pendingQueryOptions.personQuery;
+           if (pendingQueryOptions.personQuery == "") {
+               personAnd = "";
+               personQuery = "";
+           }
 
+           var query = dateQuery + personQuery;
 
-           $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' " + and + oDataQuery + "&$expand=Employment"
+           var url = "/odata/DriveReports?$expand=Employment &$filter=Status eq Core.DomainModel.ReportStatus'Pending' " + query;
+
+           console.log(url);
+
+           $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = url;
            $scope.gridContainer.pendingGrid.dataSource.read();
-
-
        }
 
-       $scope.updateAcceptedReports = function (oDataQuery) {
-
-           var and = "and ";
-           if (oDataQuery == "") {
-               and = "";
+       $scope.updateAcceptedReports = function () {
+           var dateAnd = "and ";
+           var dateQuery = dateAnd + acceptedQueryOptions.dateQuery;
+           if (acceptedQueryOptions.dateQuery == "") {
+               dateAnd = "";
+               dateQuery = "";
            }
 
-           $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted' " + and + oDataQuery + "&$expand=Employment"
+           var personAnd = "and ";
+           var personQuery = personAnd + acceptedQueryOptions.personQuery;
+           if (acceptedQueryOptions.personQuery == "") {
+               personAnd = "";
+               personQuery = "";
+           }
+
+           var query = dateQuery + personQuery;
+
+           var url = "/odata/DriveReports?$expand=Employment &$filter=Status eq Core.DomainModel.ReportStatus'Accepted' " + query;
+
+           console.log(url);
+
+           $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = url;
            $scope.gridContainer.acceptedGrid.dataSource.read();
        }
 
-       $scope.updateRejectedReports = function (oDataQuery) {
-           var and = "and ";
-           if (oDataQuery == "") {
-               and = "";
+       $scope.updateRejectedReports = function () {
+           var dateAnd = "and ";
+           if (rejectedQueryOptions.dateQuery == "") {
+               dateAnd = "";
            }
+           var dateQuery = dateAnd + rejectedQueryOptions.dateQuery;
 
-           $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' " + and + oDataQuery + "&$expand=Employment"
+           var personAnd = "and ";
+           if (rejectedQueryOptions.personQuery == "") {
+               personAnd = "";
+           }
+           var personQuery = personAnd + rejectedQueryOptions.personQuery;
+
+           var query = dateQuery + personQuery;
+
+           var url = "/odata/DriveReports?$expand=Employment &$filter=Status eq Core.DomainModel.ReportStatus'Rejected' " + query;
+
+           console.log(url);
+
+           $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = url;
            $scope.gridContainer.rejectedGrid.dataSource.read();
        }
 
@@ -97,7 +138,7 @@
                                    var repOrg = orgUnits[value.Employment.OrgUnitId];
 
                                    if (orgUnits[leaderOrgId].Level == repOrg.Level && orgUnits[leaderOrgId].Id == repOrg.Id) {
-                                     
+
                                        resultSet.push(value);
                                    }
                                    else if (orgUnits[leaderOrgId].Level < repOrg.Level) {
@@ -154,14 +195,22 @@
                        },
                        title: "Kørselsdato"
                    }, {
-                       field: "Purpose",
+                       field: "Id",
+                       template: function (data) {
+                           if (data.Comment != "") {
+                               return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                           }
+                           return data.Purpose;
+
+                       },
                        title: "Formål"
+
                    }, {
                        field: "Type",
                        title: "Type"
                    }, {
                        field: "Id",
-                       template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a>",
+                       template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=approveWithAccount(${Id})>Godkend med anden kontering</a>",
                        title: "Muligheder"
                    }
                ]
@@ -283,7 +332,6 @@
        }
 
 
-       $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
 
 
        $scope.loadRejectedReports = function () {
@@ -330,7 +378,7 @@
                                angular.forEach(data.value, function (value, key) {
                                    var repOrg = orgUnits[value.Employment.OrgUnitId];
 
-                                 
+
 
                                    if (orgUnits[leaderOrgId].Level == repOrg.Level && orgUnits[leaderOrgId].Id == repOrg.Id) {
                                        resultSet.push(value);
@@ -435,38 +483,33 @@
        }
 
        $scope.clearClicked = function () {
+           if ($scope.activeTab == 'pending') {
+               pendingQueryOptions.dateQuery = "";
+               pendingQueryOptions.personQuery = "";
+               $scope.person.pendingChosenPerson = "";
+           }
+           else if ($scope.activeTab == 'accepted') {
+               acceptedQueryOptions.dateQuery = "";
+               acceptedQueryOptions.personQuery = "";
+               $scope.person.acceptedChosenPerson = "";
 
-           $scope.updateActiveTab("");
+           }
+           else if ($scope.activeTab == 'rejected') {
+               rejectedQueryOptions.dateQuery = "";
+               rejectedQueryOptions.personQuery = "";
+               $scope.person.rejectedChosenPerson = "";
+           }
+           $scope.updateActiveTab();
        }
 
        $scope.tabClicked = function (tab) {
            $scope.activeTab = tab;
        }
 
-       $scope.searchClicked = function () {
-           var from, to;
-
-           if ($scope.activeTab == 'pending') {
-               from = $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);
-               to = $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);
-           }
-           else if ($scope.activeTab == 'accepted') {
-               from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateAccepted);
-               to = $scope.getEndOfDayStamp($scope.dateContainer.toDateAccepted);
-           }
-           else if ($scope.activeTab == 'rejected') {
-               from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateRejected);
-               to = $scope.getEndOfDayStamp($scope.dateContainer.toDateRejected);
-           }
-
-           var q = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
-           $scope.updateActiveTab(q);
-       }
-
        $scope.approveClick = function (id) {
            var modalInstance = $modal.open({
                templateUrl: '/App/ApproveReports/ConfirmApproveTemplate.html',
-               controller: 'AcceptRejectController',
+               controller: 'AcceptController',
                resolve: {
                    itemId: function () {
                        return id;
@@ -476,8 +519,8 @@
 
            modalInstance.result.then(function () {
                Report.patch({ id: id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix() }, function () {
-                   $scope.updatePendingReports("");
-                   $scope.updateAcceptedReports("");
+                   $scope.updatePendingReports();
+                   $scope.updateAcceptedReports();
                });
            });
        }
@@ -485,7 +528,7 @@
        $scope.rejectClick = function (id) {
            var modalInstance = $modal.open({
                templateUrl: '/App/ApproveReports/ConfirmRejectTemplate.html',
-               controller: 'AcceptRejectController',
+               controller: 'RejectController',
                resolve: {
                    itemId: function () {
                        return id;
@@ -493,18 +536,47 @@
                }
            });
 
-           modalInstance.result.then(function () {
-               Report.patch({ id: id }, { "Status": "Rejected", "ClosedDateTimestamp": moment().unix() }, function () {
-                   $scope.updatePendingReports("");
-                   $scope.updateRejectedReports("");
+           modalInstance.result.then(function (res) {
+               Report.patch({ id: id }, { "Status": "Rejected", "ClosedDateTimestamp": moment().unix(), "Comment" : res.Comment }, function () {
+                   $scope.updatePendingReports();
+                   $scope.updateRejectedReports();
                });
            });
        }
 
 
+       $scope.$watch('dateContainer.fromDatePending', $scope.dateChanged);
+
+       $scope.dateChanged = function () {
+
+           //TODO: Shit doesnt work if the input field is left empty. It yields NaN and gives no results.
+
+           // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
+           $timeout(function () {
+               var from, to;
+
+               if ($scope.activeTab == 'pending') {
+                   from = $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);
+                   to = $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);
+                   pendingQueryOptions.dateQuery = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+               }
+               else if ($scope.activeTab == 'accepted') {
+                   from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateAccepted);
+                   to = $scope.getEndOfDayStamp($scope.dateContainer.toDateAccepted);
+                   acceptedQueryOptions.dateQuery = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+               }
+               else if ($scope.activeTab == 'rejected') {
+                   from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateRejected);
+                   to = $scope.getEndOfDayStamp($scope.dateContainer.toDateRejected);
+                   rejectedQueryOptions.dateQuery = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+               }
 
 
-
+               $scope.updateActiveTab();
+           }, 0);
+           
+         
+       }
 
 
 
@@ -533,9 +605,29 @@
        $scope.loadRejectedReports();
        $scope.loadPendingReports();
 
+       $scope.personChanged = function (item) {
+           if ($scope.activeTab == 'pending') {
+               pendingQueryOptions.personQuery = "PersonId eq " + item.Id;
+           }
+           else if ($scope.activeTab == 'accepted') {
+               acceptedQueryOptions.personQuery = "PersonId eq " + item.Id;
+           }
+           else if ($scope.activeTab == 'rejected') {
+               rejectedQueryOptions.personQuery = "PersonId eq " + item.Id;
+           }
 
+           $scope.updateActiveTab();
+       }
 
+    // Load people for auto-complete textbox
+       $scope.people = [];
+       $scope.person = {};
 
+       Person.get().$promise.then(function (res) {
+           angular.forEach(res.value, function (value, key) {
+               $scope.people.push({ Id: value.Id, FullName: value.FirstName + " " + value.MiddleName + " " + value.LastName });
+           });
+       });
 
 
    }
