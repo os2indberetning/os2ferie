@@ -16,6 +16,7 @@ using Microsoft.OData.Core;
 using Microsoft.OData.Edm;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using OS2Indberetning.App_Start;
 using OS2Indberetning.Controllers;
 using OS2Indberetning.Models;
 
@@ -25,6 +26,8 @@ namespace OS2Indberetning
     {
         public static void Register(HttpConfiguration config)
         {
+            config.DependencyResolver = new NinjectDependencyResolver(NinjectWebCommon.CreateKernel());
+
             config.MapHttpAttributeRoutes();
 
             config.AddODataQueryFilter();
