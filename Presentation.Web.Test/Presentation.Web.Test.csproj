@@ -122,6 +122,8 @@
     <Compile Include="Controllers\BaseControllerTest.cs" />
     <Compile Include="Controllers\DriveReports\DriveReportsRepositoryMock.cs" />
     <Compile Include="Controllers\DriveReports\DriveReportsTest.cs" />
+    <Compile Include="Controllers\MobileTokens\MobileTokenRepositoryMock.cs" />
+    <Compile Include="Controllers\MobileTokens\MobileTokenTest.cs" />
     <Compile Include="Controllers\Models\ODataMetaData.cs" />
     <Compile Include="Controllers\Models\ODataResponse.cs" />
     <Compile Include="Controllers\OrgUnits\OrgUnitRepositoryMock.cs" />
