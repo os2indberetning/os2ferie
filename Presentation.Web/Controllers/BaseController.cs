@@ -8,34 +8,31 @@ using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
 using Core.DomainServices;
-using Infrastructure.DataAccess;
 using Expression = System.Linq.Expressions.Expression;
 
 namespace OS2Indberetning.Controllers
 {
     public class BaseController<T> : ODataController where T : class
     {
-        protected static ODataValidationSettings _validationSettings = new ODataValidationSettings();
-        protected IGenericRepository<T> _repo = new GenericRepository<T>(new DataContext());
-
+        protected ODataValidationSettings ValidationSettings = new ODataValidationSettings();
+        protected IGenericRepository<T> Repo;
         private readonly PropertyInfo _primaryKeyProp;
 
-
-
-        protected BaseController()
+        public BaseController(IGenericRepository<T> repository)
         {
-            _validationSettings.AllowedQueryOptions = AllowedQueryOptions.All;
-            _primaryKeyProp = _repo.GetPrimaryKeyProperty();
-        }
+            ValidationSettings.AllowedQueryOptions = AllowedQueryOptions.All;
+            Repo = repository;
+            _primaryKeyProp = Repo.GetPrimaryKeyProperty();
+        } 
 
         protected IQueryable<T> GetQueryable(ODataQueryOptions<T> queryOptions)
         {
-            return _repo.AsQueryable();
+            return Repo.AsQueryable();
         }
 
         protected IQueryable<T> GetQueryable(int key, ODataQueryOptions<T> queryOptions)
         {
-            var result = new List<T>() {_repo.AsQueryable().FirstOrDefault(BaseController<T>.PrimaryKeyEquals(_primaryKeyProp, key))}.AsQueryable();
+            var result = new List<T> {Repo.AsQueryable().FirstOrDefault(PrimaryKeyEquals(_primaryKeyProp, key))}.AsQueryable();
             return result;
         }
 
@@ -55,8 +52,8 @@ namespace OS2Indberetning.Controllers
 
             try
             {
-                entity = _repo.Insert(entity);
-                _repo.Save();
+                entity = Repo.Insert(entity);
+                Repo.Save();
                 return Created(entity);
             }
             catch (Exception e)
@@ -74,7 +71,7 @@ namespace OS2Indberetning.Controllers
                 return BadRequest(ModelState);
             }
 
-            var entity = _repo.AsQueryable().FirstOrDefault(BaseController<T>.PrimaryKeyEquals(_primaryKeyProp, key));
+            var entity = Repo.AsQueryable().FirstOrDefault(PrimaryKeyEquals(_primaryKeyProp, key));
             if (entity == null)
             {
                 return BadRequest("Unable to find entity with id " + key);
@@ -83,7 +80,7 @@ namespace OS2Indberetning.Controllers
             try
             {
                 delta.Patch(entity);
-                _repo.Save();
+                Repo.Save();
             }
             catch (Exception e)
             {
@@ -95,15 +92,15 @@ namespace OS2Indberetning.Controllers
 
         protected IHttpActionResult Delete(int key)
         {
-            var entity = _repo.AsQueryable().FirstOrDefault(BaseController<T>.PrimaryKeyEquals(_primaryKeyProp, key));
+            var entity = Repo.AsQueryable().FirstOrDefault(PrimaryKeyEquals(_primaryKeyProp, key));
             if (entity == null)
             {
                 return BadRequest("Unable to find entity with id " + key);
             }
             try
             {
-                _repo.Delete(entity);
-                _repo.Save();
+                Repo.Delete(entity);
+                Repo.Save();
             }
             catch (Exception e)
             {

@@ -3,11 +3,14 @@ using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
 using Core.DomainModel;
+using Core.DomainServices;
 
 namespace OS2Indberetning.Controllers
 {
     public class PersonController : BaseController<Person>
     {
+        public PersonController(IGenericRepository<Person> repo) : base(repo) {}
+
         // GET: odata/Person
         [EnableQuery]
         public IQueryable<Person> GetPerson(ODataQueryOptions<Person> queryOptions)
