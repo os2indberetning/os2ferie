@@ -131,12 +131,16 @@
     <Compile Include="Controllers\GenericRepositoryMock.cs" />
     <Compile Include="Controllers\PersonalAddresses\PersonalAddressRepositoryMock.cs" />
     <Compile Include="Controllers\PersonalAddresses\PersonalAddressTest.cs" />
+    <Compile Include="Controllers\Addresses\AddressRepositoryMock.cs" />
+    <Compile Include="Controllers\Addresses\AddressTest.cs" />
     <Compile Include="Controllers\Rates\RateRepositoryMock.cs" />
     <Compile Include="Controllers\Rates\RateTest.cs" />
     <Compile Include="Controllers\PersonalRoutes\PersonalRouteTest.cs" />
     <Compile Include="Controllers\PersonalRoutes\PersonalRouteRepositoryMock.cs" />
     <Compile Include="Controllers\Persons\PersonRepositoryMock.cs" />
     <Compile Include="Controllers\Persons\PersonTest.cs" />
+    <Compile Include="Controllers\Substitutes\SubstituteRepositoryMock.cs" />
+    <Compile Include="Controllers\Substitutes\SubstituteTest.cs" />
     <Compile Include="NinjectTestInjecter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
