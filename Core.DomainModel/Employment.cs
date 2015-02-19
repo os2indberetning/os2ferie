@@ -11,6 +11,8 @@ namespace Core.DomainModel
         public bool IsLeader { get; set; }
         public long StartDateTimestamp { get; set; }
         public long EndDateTimestamp { get; set; }
+        public int EmploymentType { get; set; }
+        public int ExtraNumber { get; set; }
 
         public int PersonId { get; set; }
         public virtual Person Person { get; set; }
