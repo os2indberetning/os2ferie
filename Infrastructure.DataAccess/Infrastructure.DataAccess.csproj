@@ -83,6 +83,10 @@
     <Compile Include="Migrations\201502190925147_AddedPropertiesToPerson.Designer.cs">
       <DependentUpon>201502190925147_AddedPropertiesToPerson.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.cs" />
+    <Compile Include="Migrations\201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.Designer.cs">
+      <DependentUpon>201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="PersonRepository.cs" />
@@ -116,6 +120,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502190925147_AddedPropertiesToPerson.resx">
       <DependentUpon>201502190925147_AddedPropertiesToPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.resx">
+      <DependentUpon>201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
