@@ -88,11 +88,20 @@ namespace OS2Indberetning
 
             builder.EntitySet<Point>("Points");
 
-            builder.EntitySet<Rate>("Rates");
-
             builder.EntitySet<Report>("Reports");
 
             builder.EntitySet<Substitute>("Substitutes");
+
+            builder.EntitySet<Person>("Person");
+            builder.Namespace = "PersonService";
+            builder.EntityType<Person>()
+                .Action("HasLicensePlate");
+
+            builder.EntitySet<Rate>("Rates");
+            builder.Namespace = "RateService";
+            builder.EntityType<Rate>().Collection
+                .Function("ThisYearsRates")
+                .ReturnsFromEntitySet<Rate>("Rates");
 
             return builder.GetEdmModel();
         }
