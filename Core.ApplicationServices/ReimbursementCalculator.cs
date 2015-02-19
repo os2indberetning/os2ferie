@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.AddressServices.Interfaces;
 using Infrastructure.AddressServices.Routing;
+using Infrastructure.DataAccess;
 
 namespace Core.ApplicationServices
 {
+    
     public class ReimbursementCalculator : IReimbursementCalculator
     {
         private readonly IRoute _route;
@@ -17,43 +18,122 @@ namespace Core.ApplicationServices
         public ReimbursementCalculator()
         {
             _route = new BestRoute();
+            _addressRepo = new GenericRepository<PersonalAddress>(new DataContext());
         }
 
-        public DriveReport Calculate(DriveReport report, string reportMethod)
+        public ReimbursementCalculator(IRoute route, IGenericRepository<PersonalAddress> addressRepo)
         {
-            var result = report;
+            _route = route;
+            _addressRepo = addressRepo;
+        }
 
-            var startAddress = report.DriveReportPoints.First(x => x.PreviousPointId == null);
-            var endAddress = report.DriveReportPoints.First(x => x.NextPointId == null);
+        /// <summary>
+        /// Takes a DriveReport as input and returns it with data.
+        /// 
+        /// FourKmRule: If a user has set the FourKmRule to be used, the distance between 
+        /// the users home and municipality is used in the correction of the driven distance.
+        /// If the rule is not used, the distance between the users home and work address are 
+        /// calculated and used, provided that the user has not set a override for this value.
+        /// 
+        /// Calculated: The driven route is calculated, and based on whether the user starts 
+        /// and/or ends at home, the driven distance is corrected by subtracting the distance 
+        /// between the users home address and work address. 
+        /// Again, this is dependend on wheter the user has overridden this value.
+        /// 
+        /// Calculated without extra distance: If this method is used, the driven distance is 
+        /// still calculated, but the distance is not corrected with the distance between the 
+        /// users home address and work address. The distance calculated from the service is 
+        /// therefore used directly in the calculation of the amount to reimburse
+        /// 
+        /// </summary>
+        public DriveReport Calculate(DriveReport report, string reportMethod)
+        {            
+            //Check if user has manually provided a distance between home address and work address
+            var homeWorkDistance = 0;
 
-            var homeAddress = GetHomeAddress(report);
-            var workAddress = GetWorkAddress(report);
-
-            if (reportMethod.ToLower() == "aflæst")
+            if (report.Person.WorkDistanceOverride > 0)
             {
-
+                homeWorkDistance = report.Person.WorkDistanceOverride;
             }
             else
             {
-                if (report.FourKmRule)
+                var homeAddress = GetHomeAddress(report);
+                var workAddress = GetWorkAddress(report); 
+                homeWorkDistance = _route.GetRoute(new List<Address>() { homeAddress, workAddress }).Length;    
+            }
+            
+            //Calculate distance to subtract
+            double toSubtract = 0;
+
+            //If user indicated to use the Four Km Rule
+            if (report.FourKmRule)
+            {
+                //Take users provided distance from home to border of municipality
+                var borderDistance = report.Person.DistanceFromHomeToBorder;
+
+                //Adjust distance based on if user starts or ends at home
+                if (report.StartsAtHome)
                 {
-                    
+                    toSubtract += borderDistance;
                 }
-                else
+
+                if (report.EndsAtHome)
                 {
-                    
+                    toSubtract += borderDistance;
+                }
+
+                //Subtract 4 km because reasons.
+                toSubtract += 4;
+            }
+            else
+            {
+                //Same logic as above, but uses calculated distance between home and work
+                if (report.StartsAtHome)
+                {
+                    toSubtract += homeWorkDistance;
+                }
+
+                if (report.EndsAtHome)
+                {
+                    toSubtract += homeWorkDistance;
                 }
             }
 
+            // If user manually provided a driven distance
+            if (reportMethod.ToLower() == "aflæst")
+            {
+                //Take distance from report
+                var manuallyProvidedDrivenDistance = report.Distance;                               
 
+                report.Distance = manuallyProvidedDrivenDistance - toSubtract;
+            }
+            // Use route service to calculate the driven route
+            else if (reportMethod.ToLower() == "beregnet")
+            {
+                //Calculate the driven route
+                var drivenRoute = _route.GetRoute(report.DriveReportPoints);
 
-            var route = _route.GetRoute(report.DriveReportPoints);
+                double drivenDistance = drivenRoute.Length;
 
+                //Adjust distance based on FourKmRule and if user start and/or ends at home
+                var correctDistance = drivenDistance - toSubtract;
 
+                //Set distance to corrected
+                report.Distance = correctDistance;
+            }
+            // Use route service to calculate the driven route, but with no correction of the length of the route
+            else if (reportMethod.ToLower() == "beregnet uden merkørsel")
+            {
+                //Calculate the driven route
+                var drivenRoute = _route.GetRoute(report.DriveReportPoints);
 
+                report.Distance = drivenRoute.Length;
+            }
 
-
-            return result;
+            //Calculate the actual amount to reimburse
+            report.AmountToReimburse = report.Distance * report.KmRate;            
+            
+            return report;
         }
 
         private PersonalAddress GetHomeAddress(DriveReport report)
