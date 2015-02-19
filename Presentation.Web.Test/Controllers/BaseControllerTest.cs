@@ -225,6 +225,5 @@ namespace Presentation.Web.Test.Controllers
             response = await Server.CreateRequest(GetUriPath() + "(3)").GetAsync();
             Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode, "No entity with id 3 should exists, so internal server error is returned");
         }
-
     }
 }
