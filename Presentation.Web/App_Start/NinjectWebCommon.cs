@@ -2,8 +2,6 @@ using System.Reflection;
 using System.Web.Http;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
-using OS2Indberetning.App_Start;
-
 
 namespace OS2Indberetning
 {

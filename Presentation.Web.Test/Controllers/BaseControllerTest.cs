@@ -119,7 +119,7 @@ namespace Presentation.Web.Test.Controllers
         [TestMethod]
         public async Task GetShouldReturnThreeElements()
         {
-            HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "").GetAsync();
+            HttpResponseMessage response = await Server.CreateRequest(GetUriPath()).GetAsync();
             var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Response to get request should be OK");
             Assert.AreEqual(3, result.value.Count, "Expects the return of a get request to have three entitys");
