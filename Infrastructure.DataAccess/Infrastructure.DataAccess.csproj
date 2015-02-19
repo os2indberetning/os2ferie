@@ -75,6 +75,18 @@
     <Compile Include="Migrations\201502121319441_Update_Person_RecieveMail.Designer.cs">
       <DependentUpon>201502121319441_Update_Person_RecieveMail.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502190921381_AddedPropertiesToEmployment.cs" />
+    <Compile Include="Migrations\201502190921381_AddedPropertiesToEmployment.Designer.cs">
+      <DependentUpon>201502190921381_AddedPropertiesToEmployment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502190925147_AddedPropertiesToPerson.cs" />
+    <Compile Include="Migrations\201502190925147_AddedPropertiesToPerson.Designer.cs">
+      <DependentUpon>201502190925147_AddedPropertiesToPerson.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.cs" />
+    <Compile Include="Migrations\201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.Designer.cs">
+      <DependentUpon>201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -101,6 +113,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502121319441_Update_Person_RecieveMail.resx">
       <DependentUpon>201502121319441_Update_Person_RecieveMail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502190921381_AddedPropertiesToEmployment.resx">
+      <DependentUpon>201502190921381_AddedPropertiesToEmployment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502190925147_AddedPropertiesToPerson.resx">
+      <DependentUpon>201502190925147_AddedPropertiesToPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.resx">
+      <DependentUpon>201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
