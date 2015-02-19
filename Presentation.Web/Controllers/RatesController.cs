@@ -51,5 +51,14 @@ namespace OS2Indberetning.Controllers
         {
             return base.Delete(key);
         }
+        
+        // GET: odata/Rates/RateService.ThisYearsRates
+        [EnableQuery]
+        [HttpGet]
+        public IQueryable<Rate> ThisYearsRates()
+        {
+            var result = _repo.AsQueryable().Where(x => x.Year == (DateTime.Now).Year);
+            return result;
+        }
     }
 }
