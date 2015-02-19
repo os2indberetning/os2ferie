@@ -258,6 +258,7 @@
     <Compile Include="Controllers\PersonalAddressesController.cs" />
     <Compile Include="Controllers\PersonalRoutesController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\PointsController.cs" />
     <Compile Include="Controllers\TestReportsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
