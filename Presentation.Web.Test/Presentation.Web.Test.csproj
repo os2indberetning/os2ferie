@@ -129,6 +129,8 @@
     <Compile Include="Controllers\OrgUnits\OrgUnitRepositoryMock.cs" />
     <Compile Include="Controllers\OrgUnits\OrgUnitTest.cs" />
     <Compile Include="Controllers\GenericRepositoryMock.cs" />
+    <Compile Include="Controllers\PersonalAddresses\PersonalAddressRepositoryMock.cs" />
+    <Compile Include="Controllers\PersonalAddresses\PersonalAddressTest.cs" />
     <Compile Include="Controllers\Persons\PersonRepositoryMock.cs" />
     <Compile Include="Controllers\Persons\PersonTest.cs" />
     <Compile Include="NinjectTestInjecter.cs" />
