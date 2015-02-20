@@ -5,7 +5,10 @@
     <div>
         Er du sikker på at du vil godkende indberetning {{itemId}} ?
         <br/>
-        <select class="form-control"></select>
+        <select class="form-control" ng-model="selectedAccount" ng-options="account.Description for account in accounts">
+            <option value="" disabled selected style="display:none">Vælg konto</option>
+        </select>
+        <label class="text-danger" ng-bind="errorMessage"></label>
     </div>
 </div>
 <div class="modal-footer">

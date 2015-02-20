@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("ApproveReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "BankAccount", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, BankAccount) {
 
 
        var pendingQueryOptions = { dateQuery: "", personQuery: "" };
@@ -239,7 +239,7 @@
                        footerTemplate: "Total: #= sum # "
                    }, {
                        field: "Id",
-                       template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=approveWithAccount(${Id})>Godkend med anden kontering</a>",
+                       template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=ApproveWithAccountClick(${Id})>Godkend med anden kontering</a>",
                        title: "Muligheder"
                    }
                ],
@@ -323,7 +323,7 @@
                    serverSorting: true,
 
                    aggregate: [{ field: "Distance", aggregate: "sum" },
-                               { field: "AmountToReimburse", aggregate: "sum"}
+                               { field: "AmountToReimburse", aggregate: "sum" }
                    ]
 
                },
@@ -373,6 +373,9 @@
                                       field: "Distance",
                                       title: "Afstand",
                                       footerTemplate: "Total: #= sum #"
+                                  }, {
+                                      field: "AccountNumber",
+                                      title: "Kontonummer"
                                   }
                ]
            };
@@ -577,6 +580,25 @@
 
            modalInstance.result.then(function () {
                Report.patch({ id: id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix() }, function () {
+                   $scope.updatePendingReports();
+                   $scope.updateAcceptedReports();
+               });
+           });
+       }
+
+       $scope.ApproveWithAccountClick = function (id) {
+           var modalInstance = $modal.open({
+               templateUrl: '/App/ApproveReports/ConfirmApproveWithAccountTemplate.html',
+               controller: "AcceptWithAccountController",
+               resolve: {
+                   itemId: function () {
+                       return id;
+                   }
+               }
+           });
+
+           modalInstance.result.then(function (res) {
+               Report.patch({ id: id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix(), "AccountNumber": res.AccountNumber }, function () {
                    $scope.updatePendingReports();
                    $scope.updateAcceptedReports();
                });
