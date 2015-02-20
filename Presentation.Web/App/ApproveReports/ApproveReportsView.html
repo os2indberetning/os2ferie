@@ -33,6 +33,18 @@
                             <div class="col-md-2">
                                 <label>Til</label>
                             </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+                                <label>Visninger pr. side</label>
+                            </div>
 
                         </div>
                         <div class="row">
@@ -45,7 +57,7 @@
 
 
                             <div class="col-md-2">
-                              
+
                             </div>
                             <div class="col-md-2">
                                 <input type="text" typeahead-on-select="personChanged($item)" typeahead-editable="false" ng-model="person.pendingChosenPerson" placeholder="Indtast navn" typeahead="person as person.FullName for person in people | filter:$viewValue" class="form-control" />
@@ -53,11 +65,19 @@
                             <div class="col-md-2">
                                 <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
                             </div>
+                            <div class="col-md-2">
+                                <select ng-model="gridContainer.pendingGridPageSize" class="form-control" ng-change="pageSizeChanged()">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
 
 
                         </div>
                         <div>
-                            <div kendo-grid="gridContainer.pendingGrid" options="pendingReports"></div>
+                            <div kendo-grid="gridContainer.pendingGrid" class="margin-top-10" options="pendingReports"></div>
                         </div>
 
                     </div>
@@ -77,6 +97,18 @@
                             <div class="col-md-2">
                                 <label>Til</label>
                             </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+                                <label>Visninger pr. side</label>
+                            </div>
 
                         </div>
                         <div class="row">
@@ -89,7 +121,7 @@
 
 
                             <div class="col-md-2">
-                            
+
                             </div>
                             <div class="col-md-2">
                                 <input type="text" typeahead-on-select="personChanged($item)" typeahead-editable="false" ng-model="person.acceptedChosenPerson" placeholder="Indtast navn" typeahead="person as person.FullName for person in people | filter:$viewValue" class="form-control" />
@@ -97,10 +129,18 @@
                             <div class="col-md-2">
                                 <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
                             </div>
+                            <div class="col-md-2">
+                                <select ng-model="gridContainer.acceptedGridPageSize" class="form-control" ng-change="pageSizeChanged()">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
 
 
                         </div>
-                        <div kendo-grid="gridContainer.acceptedGrid" options="acceptedReports" class="margin-top-10"></div>
+                        <div kendo-grid="gridContainer.acceptedGrid" class="margin-top-10" options="acceptedReports"></div>
                     </div>
                 </div>
             </tab>
@@ -117,6 +157,18 @@
                             </div>
                             <div class="col-md-2">
                                 <label>Til</label>
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+                                <label>Visninger pr. side</label>
                             </div>
 
                         </div>
@@ -138,10 +190,19 @@
                             <div class="col-md-2">
                                 <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
                             </div>
+                            <div class="col-md-2">
+                                <select ng-model="gridContainer.rejectedGridPageSize" class="form-control" ng-change="pageSizeChanged()">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
 
 
                         </div>
-                        <div kendo-grid="gridContainer.rejectedGrid" options="rejectedReports" class="margin-top-10"></div>
+
+                        <div kendo-grid="gridContainer.rejectedGrid" class="margin-top-10" options="rejectedReports"></div>
                     </div>
                 </div>
             </tab>
