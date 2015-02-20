@@ -120,7 +120,17 @@
                            return d;
                        }
                    },
+
+
+
                    schema: {
+                       model: {
+                           fields: {
+                               Distance: { type: "number" },
+                               AmountToReimburse: { type: "number" }
+                           }
+                       },
+
                        data: function (data) {
 
                            var leaderOrgId = 2;
@@ -164,14 +174,28 @@
                        }
                    },
                    pageSize: 5,
+                   sortAble: true,
+                   pageable: true,
+
+
+
+
                    serverPaging: false,
-                   serverSorting: true
+                   serverAggregates: false,
+                   serverSorting: true,
+
+
+                   aggregate: [{ field: "Distance", aggregate: "sum" },
+                                 { field: "AmountToReimburse", aggregate: "sum" }]
                },
                sortable: true,
                pageable: true,
                dataBound: function () {
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
+
+
+
                columns: [
                    {
                        field: "Fullname",
@@ -206,14 +230,19 @@
                        title: "Formål"
 
                    }, {
-                       field: "Type",
-                       title: "Type"
+                       field: "AmountToReimburse",
+                       title: "Beløb",
+                       footerTemplate: "Total: #= sum # "
+                   }, {
+                       field: "Distance",
+                       title: "Afstand",
+                       footerTemplate: "Total: #= sum # "
                    }, {
                        field: "Id",
                        template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=approveWithAccount(${Id})>Godkend med anden kontering</a>",
                        title: "Muligheder"
                    }
-               ]
+               ],
            };
        }
 
@@ -291,7 +320,12 @@
                    },
                    pageSize: 5,
                    serverPaging: false,
-                   serverSorting: true
+                   serverSorting: true,
+
+                   aggregate: [{ field: "Distance", aggregate: "sum" },
+                               { field: "AmountToReimburse", aggregate: "sum"}
+                   ]
+
                },
                sortable: true,
                pageable: true,
@@ -299,34 +333,47 @@
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
                columns: [
-                   {
-                       field: "Fullname",
-                       title: "Navn"
-                   }, {
-                       field: "CreationDate",
-                       template: function (data) {
-                           var m = moment.unix(data.CreatedDateTimestamp);
-                           return m._d.getDate() + "/" +
-                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                                  m._d.getFullYear();
-                       },
-                       title: "Indberettet den"
-                   }, {
-                       field: "DriveDateTimestamp",
-                       template: function (data) {
-                           var m = moment.unix(data.DriveDateTimestamp);
-                           return m._d.getDate() + "/" +
-                               (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                               m._d.getFullYear();
-                       },
-                       title: "Kørselsdato"
-                   }, {
-                       field: "Purpose",
-                       title: "Formål"
-                   }, {
-                       field: "Type",
-                       title: "Type"
-                   }
+                                  {
+                                      field: "Fullname",
+                                      title: "Navn"
+                                  }, {
+                                      field: "CreationDate",
+                                      template: function (data) {
+                                          var m = moment.unix(data.CreatedDateTimestamp);
+                                          return m._d.getDate() + "/" +
+                                                (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                                 m._d.getFullYear();
+                                      },
+                                      title: "Indberettet den"
+                                  }, {
+                                      field: "DriveDateTimestamp",
+                                      template: function (data) {
+                                          var m = moment.unix(data.DriveDateTimestamp);
+                                          return m._d.getDate() + "/" +
+                                              (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                              m._d.getFullYear();
+                                      },
+                                      title: "Kørselsdato"
+                                  }, {
+                                      field: "Id",
+                                      template: function (data) {
+                                          if (data.Comment != "") {
+                                              return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                                          }
+                                          return data.Purpose;
+
+                                      },
+                                      title: "Formål"
+
+                                  }, {
+                                      field: "AmountToReimburse",
+                                      title: "Beløb",
+                                      footerTemplate: "Total: #= sum #"
+                                  }, {
+                                      field: "Distance",
+                                      title: "Afstand",
+                                      footerTemplate: "Total: #= sum #"
+                                  }
                ]
            };
        }
@@ -422,34 +469,45 @@
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
                columns: [
-                   {
-                       field: "Fullname",
-                       title: "Navn"
-                   }, {
-                       field: "CreationDate",
-                       template: function (data) {
-                           var m = moment.unix(data.CreatedDateTimestamp);
-                           return m._d.getDate() + "/" +
-                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                                  m._d.getFullYear();
-                       },
-                       title: "Indberettet den"
-                   }, {
-                       field: "DriveDateTimestamp",
-                       template: function (data) {
-                           var m = moment.unix(data.DriveDateTimestamp);
-                           return m._d.getDate() + "/" +
-                               (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                               m._d.getFullYear();
-                       },
-                       title: "Kørselsdato"
-                   }, {
-                       field: "Purpose",
-                       title: "Formål"
-                   }, {
-                       field: "Type",
-                       title: "Type"
-                   }
+                                  {
+                                      field: "Fullname",
+                                      title: "Navn"
+                                  }, {
+                                      field: "CreationDate",
+                                      template: function (data) {
+                                          var m = moment.unix(data.CreatedDateTimestamp);
+                                          return m._d.getDate() + "/" +
+                                                (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                                 m._d.getFullYear();
+                                      },
+                                      title: "Indberettet den"
+                                  }, {
+                                      field: "DriveDateTimestamp",
+                                      template: function (data) {
+                                          var m = moment.unix(data.DriveDateTimestamp);
+                                          return m._d.getDate() + "/" +
+                                              (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                              m._d.getFullYear();
+                                      },
+                                      title: "Kørselsdato"
+                                  }, {
+                                      field: "Id",
+                                      template: function (data) {
+                                          if (data.Comment != "") {
+                                              return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                                          }
+                                          return data.Purpose;
+
+                                      },
+                                      title: "Formål"
+
+                                  }, {
+                                      field: "AmountToReimburse",
+                                      title: "Beløb"
+                                  }, {
+                                      field: "Distance",
+                                      title: "Afstand"
+                                  }
                ]
            };
        }
@@ -537,7 +595,7 @@
            });
 
            modalInstance.result.then(function (res) {
-               Report.patch({ id: id }, { "Status": "Rejected", "ClosedDateTimestamp": moment().unix(), "Comment" : res.Comment }, function () {
+               Report.patch({ id: id }, { "Status": "Rejected", "ClosedDateTimestamp": moment().unix(), "Comment": res.Comment }, function () {
                    $scope.updatePendingReports();
                    $scope.updateRejectedReports();
                });
@@ -553,29 +611,32 @@
 
            // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
            $timeout(function () {
-               var from, to;
+               var from, to, and;
 
                if ($scope.activeTab == 'pending') {
-                   from = $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);
-                   to = $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);
-                   pendingQueryOptions.dateQuery = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+                   and = " and ";
+                   from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);
+                   to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);
+                   pendingQueryOptions.dateQuery = from + and + to;
                }
                else if ($scope.activeTab == 'accepted') {
-                   from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateAccepted);
-                   to = $scope.getEndOfDayStamp($scope.dateContainer.toDateAccepted);
-                   acceptedQueryOptions.dateQuery = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+                   and = " and ";
+                   from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDateAccepted);
+                   to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDateAccepted);
+                   acceptedQueryOptions.dateQuery = from + and + to;
                }
                else if ($scope.activeTab == 'rejected') {
-                   from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateRejected);
-                   to = $scope.getEndOfDayStamp($scope.dateContainer.toDateRejected);
-                   rejectedQueryOptions.dateQuery = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+                   and = " and ";
+                   from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDateRejected);
+                   to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDateRejected);
+                   rejectedQueryOptions.dateQuery = from + and + to;
                }
 
 
                $scope.updateActiveTab();
            }, 0);
-           
-         
+
+
        }
 
 
@@ -619,7 +680,7 @@
            $scope.updateActiveTab();
        }
 
-    // Load people for auto-complete textbox
+       // Load people for auto-complete textbox
        $scope.people = [];
        $scope.person = {};
 
