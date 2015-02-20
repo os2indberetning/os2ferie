@@ -10,7 +10,7 @@ namespace Infrastructure.AddressServices.Classes
         /// <summary>
         /// Route length.
         /// </summary>
-        public int Length { get; set; }
+        public double Length { get; set; }
         /// <summary>
         /// Route duration.
         /// </summary>

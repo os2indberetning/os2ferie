@@ -7,7 +7,7 @@
         $scope.FourKmRule = {}
         $scope.FourKmRule.Using = false;
 
-        $scope.KmRate = Rate.ThisYearsRates(function() {
+        $scope.KmRate = Rate.ThisYearsRates(function () {
             $scope.KmRateDropDown.dataSource.read();
         });
 
@@ -30,14 +30,14 @@
             start: "month"
         };
 
-  
+
         $scope.DrivenKilometers = 33;
         $scope.TransportAllowance = 33;
         $scope.RemainingKilometers = 0;
         $scope.PayoutAmount = 123;
 
         $scope.Save = function () {
- 
+
             var driveReport = new DriveReport();
 
             // Prepare all data to  be uploaded
@@ -75,12 +75,23 @@
 
                     var currentAddress = new PersonalAddress(AddressFormatter.fn(address.Name));
 
-                    delete currentAddress.Id;
-                    currentAddress.Description = "";
-                    currentAddress.Longitude = "";
-                    currentAddress.Latitude = "";
+                    //delete currentAddress.Id;
+                    //currentAddress.Description = "";
+                    //currentAddress.Longitude = "";
+                    //currentAddress.Latitude = "";
+                    //currentAddress.DriveReportId = 0;
+                    //currentAddress.NextPointId = 0;
+                    //currentAddress.PreviousPointId = 0;
 
-                    driveReport.DriveReportPoints.push(currentAddress);
+                    driveReport.DriveReportPoints.push({
+                        StreetName: currentAddress.StreetName,
+                        StreetNumber: currentAddress.StreetNumber,
+                        ZipCode: currentAddress.ZipCode,
+                        Town: currentAddress.Town,
+                        Description: "",
+                        Latitude: "",
+                        Longitude: ""
+                    });
 
                 });
 
@@ -138,9 +149,9 @@
             driveReport.AmountToReimburse = 0;
             driveReport.Fullname = "";
             driveReport.Timestamp = "";
-            
 
-            
+
+
 
             driveReport.PersonId = $scope.Person.Id;
             driveReport.status = "Reported";
@@ -154,7 +165,8 @@
 
 
             // Not working when points are set.
-            delete driveReport.DriveReportPoints;
+            //delete driveReport.DriveReportPoints;
+            
 
 
             console.log(driveReport);
@@ -165,8 +177,10 @@
             });
         };
 
-        $scope.AddDestination = function() {
+        $scope.AddViapoint = function () {
+            var temp = $scope.DriveReport.Addresses.pop();
             $scope.DriveReport.Addresses.push({ Name: "", Save: false });
+            $scope.DriveReport.Addresses.push(temp);
         };
 
         $scope.Remove = function (array, index) {

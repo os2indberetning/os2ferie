@@ -43,7 +43,7 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="">Kilometeropgørelse:</label>
-                        <select kendo-drop-down-list k-options="KilometerAllowanceOptions" class="fill-width" id="" ng-model="DriveReport.KilometerAllowance">
+                        <select kendo-drop-down-list k-options="KilometerAllowanceOptions" class="fill-width" id="KilometerAllowance" ng-model="DriveReport.KilometerAllowance">
                             <option value="Calculated">Beregnet</option>
                             <option value="Read">Aflæst</option>
                             <option value="CalculatedWithoutExtraDistance">Beregnet med merkørsel</option>
@@ -54,12 +54,12 @@
             <div class="row" ng-if="DriveReport.KilometerAllowance == 'Read'">
                 <div class=" col-lg-12">
                     <div class="form-group">
-                        <label for="">Startede eller sluttede din route hjemmefra:</label>
+                        <label for="">Startede eller sluttede din rute hjemmefra:</label>
                         <select class="fill-width" kendo-drop-down-list id="" ng-model="DriveReport.StartOrEndedAtHome">
-                            <option value="Started">Den startede hjemmefra</option>
-                            <option value="Ended">Den sluttede hjemmefra</option>
-                            <option value="Both">Startede og sluttede hjemme</option>
                             <option value="Neither">Ingen af delene</option>
+                            <option value="Started">Startede hjemmefra</option>
+                            <option value="Ended">Sluttede hjemmefra</option>
+                            <option value="Both">Startede og sluttede hjemme</option>
                         </select>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                     <input type="text" ng-model="DriveReport.FourKmRule.Value" id="FourKmRuleValue" name="FourKmRuleValue" class="k-textbox" placeholder="4 Km regel værdi" />
                 </div>
             </div>
-            <div class="row">
+            <div class="row" ng-if="DriveReport.KilometerAllowance != 'Read'">
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label for="">Vælg evt. personlig rute:</label>
@@ -130,10 +130,10 @@
                 </div>
             </div>
             
-            <div class="row">
+            <div class="row" ng-if="DriveReport.KilometerAllowance != 'Read'">
                 <div class="col-lg-12">
                     <label>
-                        <button class="btn btn-default" ng-click="AddDestination()">Tilføj destination</button>
+                        <button class="btn btn-default" ng-click="AddViapoint()">Tilføj viapunkt</button>
                     </label>
                 </div>
             </div>
