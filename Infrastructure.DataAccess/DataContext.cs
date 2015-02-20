@@ -31,6 +31,7 @@ namespace Infrastructure.DataAccess
         public IDbSet<Employment> Employments { get; set; }
         public IDbSet<OrgUnit> OrgUnits { get; set; }
         public IDbSet<Substitute> Substitutes { get; set; }
+        public IDbSet<Account> Accounts { get; set; } 
   
 
         /**
@@ -86,6 +87,12 @@ namespace Infrastructure.DataAccess
         {
             modelBuilder.Entity<PersonalAddress>().Property(p => p.Type).IsRequired();
             modelBuilder.Entity<PersonalAddress>().HasRequired(p => p.Person);
+        }
+
+        private void ConfigurePropertiesForAccount(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Account>().Property(p => p.Description).IsRequired();
+            modelBuilder.Entity<Account>().Property(p => p.Number).IsRequired();
         }
 
         private void ConfigurePropertiesForPersonalRoute(DbModelBuilder modelBuilder)
@@ -161,7 +168,7 @@ namespace Infrastructure.DataAccess
 
         private void ConfigurePropertiesForReport(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Report>().Property(p => p.status).IsRequired();
+            modelBuilder.Entity<Report>().Property(p => p.Status).IsRequired();
             modelBuilder.Entity<Report>().Property(p => p.CreatedDateTimestamp).IsRequired();
             modelBuilder.Entity<Report>().Property(p => p.Comment).IsRequired();
             modelBuilder.Entity<Report>().HasRequired(p => p.Person);
