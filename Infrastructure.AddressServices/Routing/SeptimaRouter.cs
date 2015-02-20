@@ -136,13 +136,28 @@ namespace Infrastructure.AddressServices.Routing
 				route_summary = new RouteSummary(jRouteObject["route_summary"])
 			};
 
-			var altGeos = jRouteObject["alternative_geometries"].ToList();
-			var altSums = jRouteObject["alternative_summaries"].ToList();
-			for (int i = 0; i < altGeos.Count; i++)
-			{
-				route.alternative_geometries.Add((string)altGeos[i]);
-				route.alternative_summaries.Add(new AlternativeSummary(altSums[i]));
-			}
+		    if (jRouteObject["alternative_geometries"] != null)
+		    {
+                if (jRouteObject["alternative_summaries"] != null)
+		        {
+                    var altSums = jRouteObject["alternative_summaries"].ToList();
+
+                    var altGeos = jRouteObject["alternative_geometries"].ToList();
+                    
+                    for (int i = 0; i < altGeos.Count; i++)
+                    {
+                        route.alternative_geometries.Add((string)altGeos[i]);
+                        route.alternative_summaries.Add(new AlternativeSummary(altSums[i]));
+                    }
+		        }
+
+                
+		    }
+			
+			
+            
+
+			
 
 			return route;
 		}

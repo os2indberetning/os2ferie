@@ -81,15 +81,17 @@ namespace Infrastructure.AddressServices.Tests
         }
 
         [Test]
-        public void CheckRoute_FirstResultLengthIs45215()
+        public void CheckRoute_FirstResultLengthIs45212()
         {
-            Assert.IsTrue(45215 == singleRoute[0].Length);
+            Assert.That(singleRoute[0].Length, Is.EqualTo(45212));
+            //Assert.IsTrue(45215 == singleRoute[0].Length);
         }
 
         [Test]
-        public void CheckRoute_FirstResultDurationIs2281()
+        public void CheckRoute_FirstResultDurationIs2335()
         {
-            Assert.IsTrue(2281 == singleRoute[0].Duration);
+            Assert.That(singleRoute[0].Duration, Is.EqualTo(2335));
+            //Assert.IsTrue(2281 == singleRoute[0].Duration);
         }
 
         [Test]
@@ -127,16 +129,23 @@ namespace Infrastructure.AddressServices.Tests
         }
 
         [Test]
-        public void CheckRoute_ViaRoute_FirstResultLengthIs52910()
+        public void CheckRoute_ViaRoute_FirstResultLengthIs52395()
         {
-            Assert.IsTrue(52910 + 10 >= viaRoute[0].Length && 52910-10 <= viaRoute[0].Length); //10 meters +/-
+            Assert.That(52395 + 10, Is.GreaterThanOrEqualTo(viaRoute[0].Length));
+            Assert.That(52395 - 10, Is.LessThanOrEqualTo(viaRoute[0].Length));
+
+            //Assert.IsTrue(52910 + 10 >= viaRoute[0].Length && 52910-10 <= viaRoute[0].Length); //10 meters +/-
         }
 
         [Test]
-        public void CheckRoute_ViaRoute_FirstResultDurationIs2901()
+        public void CheckRoute_ViaRoute_FirstResultDurationIs2964()
         {
-            Assert.IsTrue(2901 == viaRoute[0].Duration);
-            Assert.IsTrue(2901 + 5 >= viaRoute[0].Duration && 2901 - 5 <= viaRoute[0].Duration); //5 seconds +/-
+            Assert.That(viaRoute[0].Duration, Is.EqualTo(2964));
+            Assert.That(2964 + 5, Is.GreaterThanOrEqualTo(viaRoute[0].Duration));
+            Assert.That(2964 - 5, Is.LessThanOrEqualTo(viaRoute[0].Duration));
+
+            //Assert.IsTrue(2901 == viaRoute[0].Duration);
+            //Assert.IsTrue(2901 + 5 >= viaRoute[0].Duration && 2901 - 5 <= viaRoute[0].Duration); //5 seconds +/-
         }
 
         [Test]
@@ -155,29 +164,31 @@ namespace Infrastructure.AddressServices.Tests
 
         #region Exception tests
 
-        [Test]
-        public void GetRoute_NoRouteException()
-        {
-            //Arrange
-            List<Coordinates> testCoords = new List<Coordinates>
-            {
-                new Coordinates()
-                {
-                    Latitude = "9.8607",
-                    Longitude = "56.2564",
-                    Type = Coordinates.CoordinatesType.Origin
-                },
-                new Coordinates()
-                {
-                    Latitude = "9.8607",
-                    Longitude = "56.2564",
-                    Type = Coordinates.CoordinatesType.Destination
-                }
+        //TODO: Does not throw exception. New service finds a route
+        //[Test]
+        //public void GetRoute_NoRouteException()
+        //{
+        //    
+        //    ////Arrange
+        //    //List<Coordinates> testCoords = new List<Coordinates>
+        //    //{
+        //    //    new Coordinates()
+        //    //    {
+        //    //        Latitude = "9.8607",
+        //    //        Longitude = "56.2564",
+        //    //        Type = Coordinates.CoordinatesType.Origin
+        //    //    },
+        //    //    new Coordinates()
+        //    //    {
+        //    //        Latitude = "9.8607",
+        //    //        Longitude = "56.2564",
+        //    //        Type = Coordinates.CoordinatesType.Destination
+        //    //    }
                 
-            };
-            Assert.Throws(typeof(RouteInformationException), 
-                () => SeptimaRouter.GetRoute(testCoords), "No route found.");
-        }
+        //    //};
+        //    //Assert.Throws(typeof(RouteInformationException), 
+        //    //    () => SeptimaRouter.GetRoute(testCoords), "No route found.");
+        //}
 
         [Test]
         public void GetRoute_NoOriginOrDestinationEntry()

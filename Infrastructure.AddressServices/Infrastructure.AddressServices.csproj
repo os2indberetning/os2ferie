@@ -65,6 +65,7 @@
     <Compile Include="Routing\SeptimaRouter.cs" />
     <Compile Include="Tests\AddressCoordinatesTests.cs" />
     <Compile Include="Tests\AddressLaunderingTests.cs" />
+    <Compile Include="Tests\AddressTests.cs" />
     <Compile Include="Tests\BestRouteTests.cs" />
     <Compile Include="Tests\SeptimaRouteTests.cs" />
   </ItemGroup>
