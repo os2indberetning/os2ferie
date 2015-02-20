@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using Core.DomainServices;
 using Infrastructure.AddressServices.Classes;
-using Infrastructure.AddressServices.Interfaces;
 using Infrastructure.AddressServices.Routing;
 using NUnit.Framework;
 using Address = Core.DomainModel.Address;
@@ -14,7 +11,7 @@ namespace Infrastructure.AddressServices.Tests
     public class BestRouteTests
     {
         #region Setup
-        private RouteInformation result = new RouteInformation();
+        private RouteInformation _result = new RouteInformation();
 
         [TestFixtureSetUp]
         public void BestRoute_CheckIfBoundariesObeyed_Setup()
@@ -35,12 +32,14 @@ namespace Infrastructure.AddressServices.Tests
                     ZipCode = 8250
                 }
             };
-            IRoute bestRoute = new BestRoute();
+            IRoute<RouteInformation> bestRoute = new BestRoute();
             //Act
-            result = bestRoute.GetRoute(addresses);
+            _result = bestRoute.GetRoute(addresses);
         }
 
         #endregion
+
+        #region Best route tests
 
         [Test]
         public void BestRoute_CheckIfDurationIs1595()
@@ -56,5 +55,6 @@ namespace Infrastructure.AddressServices.Tests
             //Assert.IsTrue(result.Length == 30886);
         }
 
+        #endregion
     }
 }

@@ -1,17 +1,20 @@
 ﻿using Infrastructure.AddressServices.Classes;
 using NUnit.Framework;
-using Address = Core.DomainModel.Address;
+using Core.DomainModel;
 
 namespace Infrastructure.AddressServices.Tests
 {
     [TestFixture]
     public class AddressCoordinatesTests
     {
+        #region Coordinate tests
+
         [Test]
         public void GetCoordinates_GoodCoordinates()
         {
             //Arrange
             Address address = new Address { StreetName = "Katrinebjergvej", StreetNumber = "90", ZipCode = 8200 };
+            AddressCoordinates uut = new AddressCoordinates();
             Coordinates correctCoord = new Coordinates
             {
                 Longitude = "10.1906",
@@ -20,22 +23,10 @@ namespace Infrastructure.AddressServices.Tests
             };
 
             //Act
-            Coordinates result = AddressCoordinates.GetCoordinates(address, Coordinates.CoordinatesType.Origin);
+            Coordinates result = uut.GetCoordinates(address, Coordinates.CoordinatesType.Origin);
 
             //Assert
             Assert.IsTrue(correctCoord.Equals(result));
-        }
-
-        [Test]
-        public void GetCoordinates_BadAddress_ThrowException()
-        {
-            //Arrange
-            Address address = new Address { StreetName = "Bjergvej Alle Troll", StreetNumber = "90", ZipCode = 8200 };
-            //Act
-
-            //Assert
-            Assert.Throws(typeof(AddressCoordinatesException),
-                () => AddressCoordinates.GetCoordinates(address, Coordinates.CoordinatesType.Origin), "Errors in address, see inner exception.");
         }
 
         [Test]
@@ -88,5 +79,37 @@ namespace Infrastructure.AddressServices.Tests
             Assert.AreEqual(correctAddress.Town, result.Town);
         }
 
+        #endregion
+
+        #region Exception tests
+
+        [Test]
+        public void GetCoordinates_BadAddress_ThrowException()
+        {
+            //Arrange
+            Address address = new Address { StreetName = "Bjergvej Alle Troll", StreetNumber = "90", ZipCode = 8200 };
+            AddressCoordinates uut = new AddressCoordinates();
+            //Act
+
+            //Assert
+            Assert.Throws(typeof(AddressCoordinatesException),
+                () => uut.GetCoordinates(address, Coordinates.CoordinatesType.Origin), "Errors in address, see inner exception.");
+        }
+
+        [Test]
+        public void GetAddressFromCoordinates_BadCoords_ThrowException()
+        {
+            //Arrange
+            Address address = new Address { Longitude = "999.00", Latitude = "999.00" };
+            AddressCoordinates uut = new AddressCoordinates();
+            
+            //Act
+
+            //Assert
+            Assert.Throws(typeof (AddressCoordinatesException), () => uut.GetAddressFromCoordinates(address),
+                "Server error, coordinates invalid");
+        }
+
+        #endregion
     }
 }

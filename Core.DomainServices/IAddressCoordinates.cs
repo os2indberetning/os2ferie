@@ -1,7 +1,10 @@
-﻿namespace Core.DomainServices
+﻿using Core.DomainModel;
+
+namespace Core.DomainServices
 {
-    public interface IAddressCoordinates<T>
+    public interface IAddressCoordinates
     {
-        T GetAddressCoordinates(T address);
+        Address GetAddressFromCoordinates(Address addressCoord);
+        Address GetAddressCoordinates(Address address, bool correctAddresses = false);
     }
 }
