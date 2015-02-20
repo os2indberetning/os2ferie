@@ -4,12 +4,15 @@ using System.Web.OData;
 using System.Web.OData.Query;
 using Core.ApplicationServices;
 using Core.DomainModel;
+using Core.DomainServices;
 
 namespace OS2Indberetning.Controllers
 {
     public class DriveReportsController : BaseController<DriveReport>
     {
         private readonly DriveReportService _driveService = new DriveReportService();
+
+        public DriveReportsController(IGenericRepository<DriveReport> repo) : base(repo) {}
 
         // GET: odata/DriveReports
         [EnableQuery]

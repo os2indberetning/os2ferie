@@ -1,23 +1,11 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Net.Http;
-using System.Security.Cryptography.X509Certificates;
+﻿
 using System.Web.Http;
 using System.Web.OData.Builder;
 using System.Web.OData.Extensions;
-using System.Web.OData.Formatter;
-using System.Web.OData.Formatter.Deserialization;
-using System.Web.OData.Routing;
-using System.Web.OData.Routing.Conventions;
 using Core.DomainModel;
 using Core.DomainModel.Example;
-using Microsoft.OData.Core;
-using Microsoft.OData.Edm;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using OS2Indberetning.Controllers;
-using OS2Indberetning.Models;
 
 namespace OS2Indberetning
 {
@@ -25,6 +13,8 @@ namespace OS2Indberetning
     {
         public static void Register(HttpConfiguration config)
         {
+            config.DependencyResolver = new NinjectDependencyResolver(NinjectWebCommon.CreateKernel());
+
             config.MapHttpAttributeRoutes();
 
             config.AddODataQueryFilter();
@@ -93,6 +83,8 @@ namespace OS2Indberetning
             builder.EntitySet<Report>("Reports");
 
             builder.EntitySet<Substitute>("Substitutes");
+
+            builder.EntitySet<BankAccount>("BankAccounts");
 
             return builder.GetEdmModel();
         }

@@ -1,11 +1,10 @@
-using System.Reflection;
+﻿using System.Collections.Generic;
 using System.Web.Http;
-using Core.ApplicationServices;
-using Core.ApplicationServices.Interfaces;
+using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
 
-namespace OS2Indberetning
+namespace OS2Indberetning.App_Start
 {
     using System;
     using System.Web;
@@ -13,16 +12,18 @@ namespace OS2Indberetning
     using Ninject;
     using Ninject.Web.Common;
 
-    public static class NinjectWebCommon 
+    public static class NinjectTestInjector
     {
+        private static List<KeyValuePair<Type, Type>> _injectedServices;  
+
         /// <summary>
         /// Creates the kernel that will manage your application.
         /// </summary>
         /// <returns>The created kernel.</returns>
-        public static IKernel CreateKernel()
+        public static IKernel CreateKernel(List<KeyValuePair<Type, Type>> injectedServices)
         {
+            _injectedServices = injectedServices;
             var kernel = new StandardKernel();
-            kernel.Load(Assembly.GetExecutingAssembly());
             try
             {
                 kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
@@ -48,9 +49,11 @@ namespace OS2Indberetning
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<DataContext>().ToSelf().InRequestScope();
-            kernel.Bind(typeof (IGenericRepository<>)).To(typeof (GenericRepository<>));
-            kernel.Bind(typeof (IPersonService)).To(typeof (PersonService));
-        }        
+            kernel.Bind<DataContext>().ToSelf();
+            foreach (var injectedServicePair in _injectedServices)
+            {
+                kernel.Bind(injectedServicePair.Key).To(injectedServicePair.Value);
+            }
+        }
     }
 }
