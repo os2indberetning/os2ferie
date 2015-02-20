@@ -23,17 +23,16 @@ namespace Infrastructure.DataAccess
         
         public T Insert(T entity)
         {
-            var entry = _context.Entry(entity);
+            //There is a problem that an unattached navigation property will
+            //be created as a new entity, so we attach all non value types to the
+            //contexts db sets.
             foreach (var propertyInfo in typeof(T).GetProperties())
             {
-                if (propertyInfo.Name == "Id")
-                    continue; // skip primary key
-
-                if (propertyInfo.GetValue(entity) != null && !propertyInfo.PropertyType.IsValueType)
+                if (propertyInfo.GetValue(entity) != null && ! propertyInfo.PropertyType.IsValueType)
                 {
-                    //TODO: Attach navigation properties to context.
+                    var navProperty = propertyInfo.GetValue(entity);
+                    _context.Set(propertyInfo.GetType()).Attach(navProperty);
                 }
-                    
             }
 
             return _dbSet.Add(entity);
