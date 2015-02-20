@@ -9,7 +9,9 @@
     border: none;
 }
 
-
+.margin-top-10 {
+    margin-top: 10px;
+}
 
 .k-tooltip {
     text-align: left;
