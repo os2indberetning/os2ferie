@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core.DomainModel;
 using Infrastructure.AddressServices.Classes;
 using Address = Core.DomainModel.Address;
 

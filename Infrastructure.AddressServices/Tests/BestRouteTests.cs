@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Core.DomainModel;
 using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Interfaces;
 using Infrastructure.AddressServices.Routing;
@@ -20,7 +21,7 @@ namespace Infrastructure.AddressServices.Tests
         public void BestRoute_CheckIfBoundariesObeyed_Setup()
         {
             //Arrange
-            List<Address> addresses = new List<Address>()
+            var addresses = new List<Address>()
             {
                 new Address()
                 {

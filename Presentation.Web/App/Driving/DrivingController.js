@@ -1,9 +1,21 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person) {
+    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate) {
 
         $scope.DriveReport = new DriveReport();
 
         $scope.Person = Person.get({ id: 1 });
+        $scope.FourKmRule = {}
+        $scope.FourKmRule.Using = false;
+
+        $scope.KmRate = Rate.ThisYearsRates(function () {
+            $scope.KmRateDropDown.dataSource.read();
+        });
+
+
+        $scope.Employments = PersonEmployments.get({ id: 1 }, function () {
+            $scope.PositionDropDown.dataSource.read();
+        });
+
 
         $scope.DriveReport.Addresses = [];
 
@@ -18,98 +30,157 @@
             start: "month"
         };
 
-  
+
         $scope.DrivenKilometers = 33;
         $scope.TransportAllowance = 33;
         $scope.RemainingKilometers = 0;
         $scope.PayoutAmount = 123;
 
-        $scope.Save = function() {
-            console.log($scope.DriveReport);
+        $scope.Save = function () {
+
+            var driveReport = new DriveReport();
 
             // Prepare all data to  be uploaded
+            driveReport.Purpose = $scope.DriveReport.Purpose;
+            driveReport.DriveDateTimestamp = Math.floor($scope.DriveReport.Date.getTime() / 1000);
+            driveReport.KmRate = parseFloat($scope.DriveReport.KmRate);
+            driveReport.KilometerAllowance = $scope.DriveReport.KilometerAllowance;
 
-            /*
-              DriveReport
-                  Distance
-                  AmountToReimburse
-                  Purpose
-                  KmRate  // Transportmiddel skal sættes til Rate
-                  DriveDateTimestamp
-                  FourKmRule
-                  StartsAtHome
-                  EndsAtHome
-                  Licenseplate
-                  Fullname
-                  DriveReportPoints
-                    
-                  KilometerAllowance
-                
-             */
+            if ($scope.DriveReport.KilometerAllowance === "Read") {
 
 
-            /*
-                PersonalAddress 
-                
-                    PersonId = required
-                    Type = 0
-                        Standard = 0,
-                        Home = 1,
-                        Work = 2,
-                        AlternativeHome = 3,
-                        AlternativeWork = 4
-                    Id = null
-                    StreetName = required
-                    StreetNumber = required
-                    ZipCode = required 
-                    Town = required
-                    Longitude = null
-                    Latitude = null
-                    Description = null
-                    
-             */
+                driveReport.Distance = $scope.DriveReport.ReadDistance;
 
-            // go through addresses and see which is going to be saved
+                if ($scope.DriveReport.StartOrEndedAtHome === 'Started') {
+                    driveReport.StartsAtHome = true;
+                    driveReport.EndsAtHome = false;
+                } else if ($scope.DriveReport.StartOrEndedAtHome === 'Ended') {
+                    driveReport.StartsAtHome = false;
+                    driveReport.EndsAtHome = true;
+                } else if ($scope.DriveReport.StartOrEndedAtHome === 'Both') {
+                    driveReport.StartsAtHome = true;
+                    driveReport.EndsAtHome = true;
+                } else {
+                    driveReport.StartsAtHome = false;
+                    driveReport.EndsAtHome = false;
+                }
+            } else {
 
-            angular.forEach($scope.DriveReport.Addresses, function (address, key) {
+                driveReport.StartsAtHome = false;
+                driveReport.EndsAtHome = false;
 
-                if (address.Save) {
-                    console.log(address);
+                driveReport.DriveReportPoints = [];
 
-                    var personalAddress = new PersonalAddress(AddressFormatter.fn(address.Name));
+                angular.forEach($scope.DriveReport.Addresses, function (address, key) {
 
-                    console.log($scope.Person);
+                    var currentAddress = new PersonalAddress(AddressFormatter.fn(address.Name));
 
-                    personalAddress.PersonId = $scope.Person.Id;
-                    personalAddress.Type = PersonalAddressType.Standard;
-                    personalAddress.Longitude = "";
-                    personalAddress.Latitude = "";
-                    personalAddress.Description = "";
+                    //delete currentAddress.Id;
+                    //currentAddress.Description = "";
+                    //currentAddress.Longitude = "";
+                    //currentAddress.Latitude = "";
+                    //currentAddress.DriveReportId = 0;
+                    //currentAddress.NextPointId = 0;
+                    //currentAddress.PreviousPointId = 0;
 
-
-                    delete personalAddress.Id;
-
-                    personalAddress.$save(function(response) {
-                        console.log(response);
+                    driveReport.DriveReportPoints.push({
+                        StreetName: currentAddress.StreetName,
+                        StreetNumber: currentAddress.StreetNumber,
+                        ZipCode: currentAddress.ZipCode,
+                        Town: currentAddress.Town,
+                        Description: "",
+                        Latitude: "",
+                        Longitude: ""
                     });
+
+                });
+
+                if (typeof $scope.DriveReport.RoundTrip !== "undefined" && $scope.DriveReport.RoundTrip === true) {
+
+
+                    for (var i = driveReport.DriveReportPoints.length - 1; i > 0; --i) {
+                        driveReport.DriveReportPoints.push(driveReport.DriveReportPoints[i]);
+                    }
+
 
                 }
 
-            });
+                // go through addresses and see which is going to be saved
+
+                angular.forEach($scope.DriveReport.Addresses, function (address, key) {
+
+                    if (address.Save) {
+                        console.log(address);
+
+                        var personalAddress = new PersonalAddress(AddressFormatter.fn(address.Name));
+
+                        console.log($scope.Person);
+
+                        personalAddress.PersonId = $scope.Person.Id;
+                        personalAddress.Type = PersonalAddressType.Standard;
+                        personalAddress.Longitude = "";
+                        personalAddress.Latitude = "";
+                        personalAddress.Description = "";
 
 
-            var report = $scope.DriveReport;
+
+                        delete personalAddress.Id;
+
+                        personalAddress.$save(function (response) {
+                            console.log(response);
+                        });
+
+                    }
+
+                });
+
+            }
 
 
+
+            if (typeof $scope.DriveReport.FourKmRule !== "undefined" && $scope.DriveReport.FourKmRule.Using === true) {
+                driveReport.FourKmRule = true;
+            } else {
+                driveReport.FourKmRule = false;
+            }
+
+            driveReport.Licenseplate = "";
+            driveReport.Distance = 0;
+            driveReport.AmountToReimburse = 0;
+            driveReport.Fullname = "";
+            driveReport.Timestamp = "";
+
+
+
+
+            driveReport.PersonId = $scope.Person.Id;
+            driveReport.status = "Reported";
+            driveReport.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
+            driveReport.EditedDateTimestamp = driveReport.CreatedDateTimestamp;
+
+            driveReport.Comment = "";
+            driveReport.ClosedDateTimestamp = 0;
+            driveReport.ProcessedDateTimestamp = 0;
+            driveReport.EmploymentId = $scope.DriveReport.Position;
+
+
+            // Not working when points are set.
+            //delete driveReport.DriveReportPoints;
             
 
-            //$scope.DriveReport.$save(function(response) {
-            //    console.log(response);
-            //});
+
+            console.log(driveReport);
+
+            // Jobs done! Send to backend
+            driveReport.$save(function (response) {
+                console.log(response);
+            });
         };
 
-        $scope.AddDestination = function() {
+        $scope.AddViapoint = function () {
+            var temp = $scope.DriveReport.Addresses.pop();
             $scope.DriveReport.Addresses.push({ Name: "", Save: false });
+            $scope.DriveReport.Addresses.push(temp);
         };
 
         $scope.Remove = function (array, index) {

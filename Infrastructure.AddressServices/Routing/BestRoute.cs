@@ -23,7 +23,7 @@ namespace Infrastructure.AddressServices.Routing
             {
                 return null;
             }
-            var addressesList = addresses as IList<Address>;
+            var addressesList = addresses.ToList();
             List<Coordinates> routeCoordinates = new List<Coordinates>();
             var origin = addressesList[0];
             var destination = addressesList[addressesList.Count - 1];
