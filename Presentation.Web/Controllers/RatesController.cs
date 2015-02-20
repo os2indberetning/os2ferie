@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -57,7 +58,7 @@ namespace OS2Indberetning.Controllers
         [HttpGet]
         public IQueryable<Rate> ThisYearsRates()
         {
-            var result = _repo.AsQueryable().Where(x => x.Year == (DateTime.Now).Year);
+            var result = Repo.AsQueryable().Where(x => x.Year == (DateTime.Now).Year);
             return result;
         }
     }

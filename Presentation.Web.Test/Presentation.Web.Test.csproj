@@ -129,6 +129,8 @@
     <Compile Include="Controllers\MobileTokens\MobileTokenTest.cs" />
     <Compile Include="Controllers\Models\ODataMetaData.cs" />
     <Compile Include="Controllers\Models\ODataResponse.cs" />
+    <Compile Include="Controllers\BankAccounts\BankAccountRepositoryMock.cs" />
+    <Compile Include="Controllers\BankAccounts\BankAccountTest.cs" />
     <Compile Include="Controllers\OrgUnits\OrgUnitRepositoryMock.cs" />
     <Compile Include="Controllers\OrgUnits\OrgUnitTest.cs" />
     <Compile Include="Controllers\GenericRepositoryMock.cs" />

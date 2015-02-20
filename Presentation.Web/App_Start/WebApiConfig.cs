@@ -84,6 +84,8 @@ namespace OS2Indberetning
 
             builder.EntitySet<Substitute>("Substitutes");
 
+            builder.EntitySet<BankAccount>("BankAccounts");
+
             return builder.GetEdmModel();
         }
     }

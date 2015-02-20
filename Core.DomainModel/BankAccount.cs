@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.DomainModel
 {
-    public class Account
+    public class BankAccount
     {
         public int Id { get; set; }
         public string Number { get; set; }
