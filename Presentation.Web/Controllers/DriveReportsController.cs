@@ -34,7 +34,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(DriveReport driveReport)
         {
-            return base.Post(driveReport);
+            return Ok(driveReport);
         }
 
         // PATCH: odata/DriveReports(5)
