@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
@@ -14,17 +15,20 @@ namespace Core.ApplicationServices
     {
         private readonly IRoute _route;
         private readonly IGenericRepository<PersonalAddress> _addressRepo;
+        private readonly IGenericRepository<Person> _personRepo; 
 
         public ReimbursementCalculator()
         {
             _route = new BestRoute();
             _addressRepo = new GenericRepository<PersonalAddress>(new DataContext());
+            _personRepo = new GenericRepository<Person>(new DataContext());
         }
 
-        public ReimbursementCalculator(IRoute route, IGenericRepository<PersonalAddress> addressRepo)
+        public ReimbursementCalculator(IRoute route, IGenericRepository<PersonalAddress> addressRepo, IGenericRepository<Person> personRepo)
         {
             _route = route;
             _addressRepo = addressRepo;
+            _personRepo = personRepo;
         }
 
         /// <summary>
@@ -49,7 +53,7 @@ namespace Core.ApplicationServices
         public DriveReport Calculate(DriveReport report, string reportMethod)
         {            
             //Check if user has manually provided a distance between home address and work address
-            var homeWorkDistance = 0;
+            var homeWorkDistance = 0.0;            
 
             if (report.Person.WorkDistanceOverride > 0)
             {
@@ -58,7 +62,7 @@ namespace Core.ApplicationServices
             else
             {
                 var homeAddress = GetHomeAddress(report);
-                var workAddress = GetWorkAddress(report); 
+                var workAddress = GetWorkAddress(report);
                 homeWorkDistance = _route.GetRoute(new List<Address>() { homeAddress, workAddress }).Length;    
             }
             
@@ -69,7 +73,7 @@ namespace Core.ApplicationServices
             if (report.FourKmRule)
             {
                 //Take users provided distance from home to border of municipality
-                var borderDistance = report.Person.DistanceFromHomeToBorder;
+                var borderDistance = report.Person.DistanceFromHomeToBorder * 1000;
 
                 //Adjust distance based on if user starts or ends at home
                 if (report.StartsAtHome)
@@ -83,7 +87,7 @@ namespace Core.ApplicationServices
                 }
 
                 //Subtract 4 km because reasons.
-                toSubtract += 4;
+                toSubtract += 4000;
             }
             else
             {
@@ -100,7 +104,7 @@ namespace Core.ApplicationServices
             }
 
             // If user manually provided a driven distance
-            if (reportMethod.ToLower() == "aflæst")
+            if (reportMethod.ToLower() == "read")
             {
                 //Take distance from report
                 var manuallyProvidedDrivenDistance = report.Distance;                               
@@ -108,7 +112,7 @@ namespace Core.ApplicationServices
                 report.Distance = manuallyProvidedDrivenDistance - toSubtract;
             }
             // Use route service to calculate the driven route
-            else if (reportMethod.ToLower() == "beregnet")
+            else if (reportMethod.ToLower() == "calculated")
             {
                 //Calculate the driven route
                 var drivenRoute = _route.GetRoute(report.DriveReportPoints);
@@ -122,17 +126,23 @@ namespace Core.ApplicationServices
                 report.Distance = correctDistance;
             }
             // Use route service to calculate the driven route, but with no correction of the length of the route
-            else if (reportMethod.ToLower() == "beregnet uden merkørsel")
+            else if (reportMethod.ToLower() == "calculatedwithoutextradistance")
             {
                 //Calculate the driven route
                 var drivenRoute = _route.GetRoute(report.DriveReportPoints);
 
                 report.Distance = drivenRoute.Length;
             }
+            else
+            {
+                throw new Exception("No calculation method provided");
+            }
 
             //Calculate the actual amount to reimburse
-            report.AmountToReimburse = report.Distance * report.KmRate;            
-            
+            report.AmountToReimburse = (report.Distance / 1000) * (report.KmRate / 100);
+
+            report.Distance = report.Distance/1000;
+
             return report;
         }
 

@@ -23,6 +23,19 @@ namespace Infrastructure.DataAccess
         
         public T Insert(T entity)
         {
+            var entry = _context.Entry(entity);
+            foreach (var propertyInfo in typeof(T).GetProperties())
+            {
+                if (propertyInfo.Name == "Id")
+                    continue; // skip primary key
+
+                if (propertyInfo.GetValue(entity) != null && !propertyInfo.PropertyType.IsValueType)
+                {
+                    //TODO: Attach navigation properties to context.
+                }
+                    
+            }
+
             return _dbSet.Add(entity);
         }
 
@@ -60,7 +73,7 @@ namespace Infrastructure.DataAccess
                 if (propertyInfo.Name == "Id")
                     continue; // skip primary key
 
-                if (propertyInfo.GetValue(entity) != null)
+                if (propertyInfo.GetValue(entity) != null && propertyInfo.PropertyType.IsValueType)
                     entry.Property(propertyInfo.Name).IsModified = true;
             }
         }
