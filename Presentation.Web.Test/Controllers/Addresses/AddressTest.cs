@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using Core.DomainModel;
 using Core.DomainServices;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Presentation.Web.Test.Controllers.Addresses;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Presentation.Web.Test.Controllers.Addresss
 {
-    [TestClass]
+    [TestFixture]
     public class AddressTest : BaseControllerTest<Address>
     {
         protected override List<KeyValuePair<Type, Type>> GetInjections()
