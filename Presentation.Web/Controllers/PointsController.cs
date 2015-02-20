@@ -83,26 +83,10 @@ namespace OS2Indberetning.Controllers
         {
             var existing = _repo.AsQueryable().First(x => x.Id == key);
 
-            var temp = delta.GetEntity();
-
-            foreach (var propertyInfo in typeof(Point).GetProperties())
-            {
-                var itemType = existing.GetType();
-
-                PropertyInfo prop;
-
-                if (propertyInfo.Name == "Id")
-                    continue; // skip primary key
-
-                if (propertyInfo.GetValue(temp) != null)
-                {
-                    prop = itemType.GetProperty(propertyInfo.Name);
-
-                    prop.SetValue(existing, propertyInfo.GetValue(temp));
-                }
-            }
+            delta.Patch(existing);            
 
             _repo.Update(existing);
+
             _repo.Save();
 
             return new List<Point>() { existing }.AsQueryable();
