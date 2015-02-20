@@ -4,14 +4,15 @@ using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Presentation.Web.Test.Controllers.Persons
 {
     //Notice that the controller scrubs away the cpr number
     //before serving the person entity.
 
-    [TestClass]
+    [TestFixture]
     public class PersonTest : BaseControllerTest<Person>
     {
         protected override List<KeyValuePair<Type, Type>> GetInjections()
