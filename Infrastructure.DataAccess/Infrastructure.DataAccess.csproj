@@ -75,6 +75,14 @@
     <Compile Include="Migrations\201502121319441_Update_Person_RecieveMail.Designer.cs">
       <DependentUpon>201502121319441_Update_Person_RecieveMail.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502191034374_addedAccountTable.cs" />
+    <Compile Include="Migrations\201502191034374_addedAccountTable.Designer.cs">
+      <DependentUpon>201502191034374_addedAccountTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502191036262_addedAccountNumberToDriveReport.cs" />
+    <Compile Include="Migrations\201502191036262_addedAccountNumberToDriveReport.Designer.cs">
+      <DependentUpon>201502191036262_addedAccountNumberToDriveReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -101,6 +109,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502121319441_Update_Person_RecieveMail.resx">
       <DependentUpon>201502121319441_Update_Person_RecieveMail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502191034374_addedAccountTable.resx">
+      <DependentUpon>201502191034374_addedAccountTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502191036262_addedAccountNumberToDriveReport.resx">
+      <DependentUpon>201502191036262_addedAccountNumberToDriveReport.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

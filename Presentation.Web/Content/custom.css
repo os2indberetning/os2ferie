@@ -5,6 +5,32 @@
     color: #555;
 }
 
+.no-border {
+    border: none;
+}
+
+
+
+.k-tooltip {
+    text-align: left;
+    padding: 1em;
+}
+
+.k-group {
+    display: inline-block;
+    text-align: left;
+    /*width: 200px;*/
+    white-space: nowrap;
+    /*padding: 2em;*/
+    margin: 6px;
+    
+
+}
+
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
+
 .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:focus, .nav-tabs.nav-justified > .active > a:hover {
     background-color: #F5F5F5;
     border-color: #ddd;
@@ -62,6 +88,14 @@
     max-width: none;
 }
 
+.min-height-100 {
+    min-height: 100px;
+}
+
+.max-width-100 {
+    max-width: 100%;
+}
+
 .fill-width {
     width: 100%;
 }
@@ -73,24 +107,26 @@
 
 /*CUSTOM CSS FOR NOTIFICATION SERVICE*/
 .errors-container {
-  position: fixed;
-  z-index: 2000;
-  bottom: 0;
-  left: 0;
-  right: 0; }
-  /* line 554, C:/Users/larsvonqualen/development/cheetah-webapp/src/cheetah-webapp/cheetah.webapp.WebAPI/Content/app/style/sass/app.scss */
-  .errors-container .alert {
-    -webkit-border-radius: 0 !important;
-    border-radius: 0 !important;
-    border-bottom: 0;
-    margin: 0; }
+    position: fixed;
+    z-index: 2000;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+    /* line 554, C:/Users/larsvonqualen/development/cheetah-webapp/src/cheetah-webapp/cheetah.webapp.WebAPI/Content/app/style/sass/app.scss */
+    .errors-container .alert {
+        -webkit-border-radius: 0 !important;
+        border-radius: 0 !important;
+        border-bottom: 0;
+        margin: 0;
+    }
 /*************************************/
 
 .remove-box {
     border-color: #4d4d4d;
-    background-color:#606060;
-    -ms-border-radius:2px;
-    border-radius:2px;
+    background-color: #606060;
+    -ms-border-radius: 2px;
+    border-radius: 2px;
     min-height: 2.214em;
     width: 2.7em;
     vertical-align: middle;
@@ -99,15 +135,15 @@
     height: 2.7em;
     border-style: solid;
     border-width: 1px;
-    color:#fff;
+    color: #fff;
     outline: none;
     line-height: 2.4em;
 }
 
-.remove-box:hover {
-    background-color: #363636;
-    border-color: #4d4d4d;
-}
+    .remove-box:hover {
+        background-color: #363636;
+        border-color: #4d4d4d;
+    }
 
 .k-custom {
     height: 2.214em;
@@ -118,9 +154,9 @@
     margin: 0;
 }
 
-.k-custom .k-input {
-    display: block;
-}
+    .k-custom .k-input {
+        display: block;
+    }
 
 .k-button-no-shadow {
     box-shadow: none;
@@ -129,7 +165,7 @@
     border-radius: 1px;
 }
 
-.k-button-no-shadow:focus, .k-button-no-shadow:hover, .k-button-no-shadow:active {
-    -webkit-box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
-}
+    .k-button-no-shadow:focus, .k-button-no-shadow:hover, .k-button-no-shadow:active {
+        -webkit-box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
+    }
