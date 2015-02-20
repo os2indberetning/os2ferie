@@ -1,4 +1,4 @@
-﻿var application = angular.module("application", ["kendo.directives", "ui.router", "ui.bootstrap", "ngResource", "template/modal/window.html", "template/modal/window.html", "template/modal/backdrop.html", "template/tabs/tab.html", "template/tabs/tabset.html", "angularMoment"]);
+﻿var application = angular.module("application", ["kendo.directives", "ui.router", "ui.bootstrap", "ngResource", "template/popover/popover.html", "template/modal/window.html", "template/modal/window.html", "template/modal/backdrop.html", "template/tabs/tab.html", "template/tabs/tabset.html", "angularMoment"]);
 
 angular.module("application").config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");

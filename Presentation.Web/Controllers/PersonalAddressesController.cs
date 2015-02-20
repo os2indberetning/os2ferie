@@ -73,7 +73,9 @@ namespace OS2Indberetning.Controllers
 
             _genericRepo.Save();
 
-            return new List<PersonalAddress>() { result }.AsQueryable();
+            var toReturn = _genericRepo.AsQueryable().First(x => x.Id == result.Id);
+
+            return new List<PersonalAddress>() { toReturn }.AsQueryable();
         }
 
         // PATCH: odata/PersonalAddresses(5)
