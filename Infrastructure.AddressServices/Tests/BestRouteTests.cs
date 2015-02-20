@@ -43,15 +43,17 @@ namespace Infrastructure.AddressServices.Tests
         #endregion
 
         [Test]
-        public void BestRoute_CheckIfDurationIs1570()
+        public void BestRoute_CheckIfDurationIs1595()
         {
-            Assert.IsTrue(result.Duration == 1569);
+            Assert.That(result.Duration, Is.EqualTo(1595));
+            //Assert.IsTrue(result.Duration == 1595);
         }
 
         [Test]
-        public void BestRoute_CheckIfDistanceIs30889()
+        public void BestRoute_CheckIfDistanceIs30882()
         {
-            Assert.IsTrue(result.Length == 30886);
+            Assert.That(result.Length, Is.EqualTo(30882));
+            //Assert.IsTrue(result.Length == 30886);
         }
 
     }
