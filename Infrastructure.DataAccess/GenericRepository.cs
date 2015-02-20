@@ -60,5 +60,10 @@ namespace Infrastructure.DataAccess
                     entry.Property(propertyInfo.Name).IsModified = true;
             }
         }
+
+        public void Delete(T entity)
+        {
+            _dbSet.Remove(entity);
+        }
     }
 }

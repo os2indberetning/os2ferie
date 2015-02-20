@@ -50,7 +50,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<Point> GetPoint([FromODataUri] int key, ODataQueryOptions<Point> queryOptions)
         {
-            var result = _repo.AsQueryable().Where(x => x.PersonalRouteId == key);
+            var result = _repo.AsQueryable().Where(x => x.PersonalRoute.PersonId == key);
 
             return result;
         }

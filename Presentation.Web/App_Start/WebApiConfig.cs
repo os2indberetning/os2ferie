@@ -17,6 +17,7 @@ using Microsoft.OData.Edm;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OS2Indberetning.Controllers;
+using OS2Indberetning.Models;
 
 namespace OS2Indberetning
 {
@@ -70,7 +71,7 @@ namespace OS2Indberetning
 
             builder.EntitySet<MailNotificationSchedule>("MailNotificationSchedules");
 
-            builder.EntitySet<MobileToken>("MobileTokens");
+            builder.EntitySet<MobileToken>("MobileToken");
 
             builder.EntitySet<OrgUnit>("OrgUnits");
 

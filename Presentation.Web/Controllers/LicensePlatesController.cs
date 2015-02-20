@@ -29,7 +29,7 @@ namespace OS2Indberetning.Controllers
     public class LicensePlatesController : ODataController
     {
         private static ODataValidationSettings _validationSettings = new ODataValidationSettings();
-        private readonly IGenericRepository<LicensePlate> _genericRepo; 
+        private readonly IGenericRepository<LicensePlate> _genericRepo;
 
         public LicensePlatesController()
         {
@@ -63,7 +63,11 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<LicensePlate> Post(LicensePlate licensePlate)
         {
-            throw new NotImplementedException();
+            _genericRepo.Insert(licensePlate);
+
+            _genericRepo.Save();
+
+            return new List<LicensePlate>() { licensePlate }.AsQueryable();
         }
 
         // PATCH: odata/LicensePlates(5)
@@ -78,7 +82,20 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<LicensePlate> Delete([FromODataUri] int key)
         {
-            throw new NotImplementedException();
+            var plate = _genericRepo.AsQueryable().First(x => x.Id == key);
+
+            if (plate != null)
+            {
+                _genericRepo.Delete(plate);
+
+                _genericRepo.Save();
+
+                return new List<LicensePlate>() { new LicensePlate() }.AsQueryable();
+            }
+            else
+            {
+                return new List<LicensePlate>() { plate }.AsQueryable();
+            }
         }
     }
 }

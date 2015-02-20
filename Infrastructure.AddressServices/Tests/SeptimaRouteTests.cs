@@ -2,7 +2,6 @@
 using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Routing;
 using NUnit.Framework;
-using Address = Core.DomainModel.Address;
 
 namespace Infrastructure.AddressServices.Tests
 {
@@ -11,8 +10,8 @@ namespace Infrastructure.AddressServices.Tests
     {
         #region Test setups
 
-        private List<RouteInformation> singleRoute = new List<RouteInformation>();
-        private List<RouteInformation> viaRoute = new List<RouteInformation>();
+        private List<RouteInformation> _singleRoute = new List<RouteInformation>();
+        private List<RouteInformation> _viaRoute = new List<RouteInformation>();
 
         [TestFixtureSetUp]
         public void GetRoute_FoundRoute()
@@ -33,7 +32,9 @@ namespace Infrastructure.AddressServices.Tests
                     Type = Coordinates.CoordinatesType.Destination
                 }
             };
-            singleRoute = SeptimaRouter.GetRoute(testCoords) as List<RouteInformation>;
+            SeptimaRouter uut = new SeptimaRouter();
+
+            _singleRoute = uut.GetRoute(testCoords) as List<RouteInformation>;
         }
 
         [TestFixtureSetUp]
@@ -61,7 +62,9 @@ namespace Infrastructure.AddressServices.Tests
                     Type = Coordinates.CoordinatesType.Via
                 }
             };
-            viaRoute = SeptimaRouter.GetRoute(testCoords) as List<RouteInformation>;
+            SeptimaRouter uut = new SeptimaRouter();
+
+            _viaRoute = uut.GetRoute(testCoords) as List<RouteInformation>;
         }
 
 #endregion
@@ -71,13 +74,13 @@ namespace Infrastructure.AddressServices.Tests
         [Test]
         public void CheckRoute_ResultNotEmpty()
         {
-            Assert.IsNotEmpty(singleRoute);
+            Assert.IsNotEmpty(_singleRoute);
         }
 
         [Test]
         public void CheckRoute_FirsResultHasGeoPoints()
         {
-            Assert.IsTrue(singleRoute[0].GeoPoints.Length > 0);
+            Assert.IsTrue(_singleRoute[0].GeoPoints.Length > 0);
         }
 
         [Test]
@@ -97,19 +100,19 @@ namespace Infrastructure.AddressServices.Tests
         [Test]
         public void CheckRoute_FirstResultStartStreetIsDalvej()
         {
-            Assert.AreEqual(singleRoute[0].StartStreet, "Dalvej");
+            Assert.AreEqual(_singleRoute[0].StartStreet, "Dalvej");
         }
 
         [Test]
         public void CheckRoute_FirstResultEndStreetIsKlydevej()
         {
-            Assert.AreEqual(singleRoute[0].EndStreet, "Klydevej");
+            Assert.AreEqual(_singleRoute[0].EndStreet, "Klydevej");
         }
 
         [Test]
         public void CheckRoute_ResultHasAlternativeRoutes()
         {
-            Assert.IsTrue(singleRoute.Count > 1);
+            Assert.IsTrue(_singleRoute.Count > 1);
         }
 
         #endregion
@@ -119,13 +122,13 @@ namespace Infrastructure.AddressServices.Tests
         [Test]
         public void CheckRoute_ViaRoute_ResultNotEmpty()
         {
-            Assert.IsNotEmpty(viaRoute);
+            Assert.IsNotEmpty(_viaRoute);
         }
 
         [Test]
         public void CheckRoute_ViaRoute_FirsResultHasGeoPoints()
         {
-            Assert.IsTrue(viaRoute[0].GeoPoints.Length > 0);
+            Assert.IsTrue(_viaRoute[0].GeoPoints.Length > 0);
         }
 
         [Test]
@@ -151,13 +154,13 @@ namespace Infrastructure.AddressServices.Tests
         [Test]
         public void CheckRoute_ViaRoute_FirstResultStartStreetIsDalvej()
         {
-            Assert.AreEqual(viaRoute[0].StartStreet, "Dalvej");
+            Assert.AreEqual(_viaRoute[0].StartStreet, "Dalvej");
         }
 
         [Test]
         public void CheckRoute_ViaRoute_FirstResultEndStreetIsKlydevej()
         {
-            Assert.AreEqual(viaRoute[0].EndStreet, "Klydevej");
+            Assert.AreEqual(_viaRoute[0].EndStreet, "Klydevej");
         }
 
         #endregion
@@ -191,7 +194,7 @@ namespace Infrastructure.AddressServices.Tests
         //}
 
         [Test]
-        public void GetRoute_NoOriginOrDestinationEntry()
+        public void GetRoute_NoOriginOrDestinationEntryException()
         {
             //Arrange
             List<Coordinates> testCoords = new List<Coordinates>
@@ -210,12 +213,14 @@ namespace Infrastructure.AddressServices.Tests
                 }
                 
             };
+            SeptimaRouter uut = new SeptimaRouter();
+
             Assert.Throws(typeof(RouteInformationException), 
-                () => SeptimaRouter.GetRoute(testCoords), "Coordinate of type Origin and/or Destination missing.");
+                () => uut.GetRoute(testCoords), "Coordinate of type Origin and/or Destination missing.");
         }
 
         [Test]
-        public void GetRoute_DoubleOrigin()
+        public void GetRoute_DoubleOriginException()
         {
             //Arrange
             List<Coordinates> testCoords = new List<Coordinates>
@@ -234,8 +239,10 @@ namespace Infrastructure.AddressServices.Tests
                 }
                 
             };
+            SeptimaRouter uut = new SeptimaRouter();
+
             Assert.Throws(typeof(RouteInformationException), 
-                () => SeptimaRouter.GetRoute(testCoords), "Mutltiple coordinates with type Origin and/or Destination.");
+                () => uut.GetRoute(testCoords), "Mutltiple coordinates with type Origin and/or Destination.");
         }
 
         #endregion
