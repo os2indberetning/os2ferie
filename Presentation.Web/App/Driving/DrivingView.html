@@ -31,7 +31,7 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="">Stilling og ansættelsested:</label>
-                        <select class="fill-width" kendo-drop-down-list="PositionDropDown" ng-model="DriveReport.Position" id="" k-data-source="Employments" k-data-text-field="'Position'" k-data-value-field="'Position'" k-placeholder="'Brugerens stilling(er)'"></select>
+                        <select class="fill-width" kendo-drop-down-list="PositionDropDown" ng-model="DriveReport.Position" id="" k-data-source="Employments" k-data-text-field="'Position'" k-data-value-field="'EmploymentId'" k-placeholder="'Brugerens stilling(er)'"></select>
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -90,29 +90,46 @@
                     </div>
                 </div>
             </div>
-            <div ng-repeat="Address in DriveReport.Addresses">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <label for="" ng-if="$first">Fra</label>
-                        <label for="" ng-if="$last && !$first">Til</label>
-                        <label for="" ng-if="!first && $index == 1 && !$last">Via</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-7">
-                        <div class="form-group">
-                            <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
-                                   k-data-source="SmartAddress" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="'Skriv her'" />
+            <div ng-switch="DriveReport.KilometerAllowance">
+                <div ng-switch-when="Read">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="ReadDistance">Antal kørte kilometer:</label>
                         </div>
                     </div>
-                    <div class="col-lg-1" ng-if="$middle">
-                        <button class="k-button k-button-no-shadow" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input type="text" ng-model="DriveReport.ReadDistance" id="ReadDistance" name="FourKmRuleValue" class="k-textbox" />
+                        </div>
                     </div>
-                    <div class="col-lg-4">
-                        <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" /><label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
+                </div>
+                <div ng-switch-default>
+                    <div ng ng-repeat="Address in DriveReport.Addresses">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label for="" ng-if="$first">Fra</label>
+                                <label for="" ng-if="$last && !$first">Til</label>
+                                <label for="" ng-if="!first && $index == 1 && !$last">Via</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <div class="form-group">
+                                    <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
+                                           k-data-source="SmartAddress" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="'Skriv her'" />
+                                </div>
+                            </div>
+                            <div class="col-lg-1" ng-if="$middle">
+                                <button class="k-button k-button-no-shadow" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
+                            </div>
+                            <div class="col-lg-4">
+                                <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" /><label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            
             <div class="row">
                 <div class="col-lg-12">
                     <label>
