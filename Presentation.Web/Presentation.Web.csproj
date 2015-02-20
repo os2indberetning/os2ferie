@@ -254,6 +254,7 @@
     <Compile Include="Controllers\JasmineController.cs" />
     <Compile Include="Controllers\LicensePlatesController.cs" />
     <Compile Include="Controllers\MobileTokenController.cs" />
+    <Compile Include="Controllers\BankAccountsController.cs" />
     <Compile Include="Controllers\OrgUnitsController.cs" />
     <Compile Include="Controllers\PersonalAddressesController.cs" />
     <Compile Include="Controllers\PersonalRoutesController.cs" />

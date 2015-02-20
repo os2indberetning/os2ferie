@@ -83,6 +83,10 @@
     <Compile Include="Migrations\201502191036262_addedAccountNumberToDriveReport.Designer.cs">
       <DependentUpon>201502191036262_addedAccountNumberToDriveReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502201040378_Changed account to bank account.cs" />
+    <Compile Include="Migrations\201502201040378_Changed account to bank account.Designer.cs">
+      <DependentUpon>201502201040378_Changed account to bank account.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -115,6 +119,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502191036262_addedAccountNumberToDriveReport.resx">
       <DependentUpon>201502191036262_addedAccountNumberToDriveReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502201040378_Changed account to bank account.resx">
+      <DependentUpon>201502201040378_Changed account to bank account.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
