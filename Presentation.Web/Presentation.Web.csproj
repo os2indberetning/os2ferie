@@ -278,11 +278,13 @@
   <ItemGroup>
     <Content Include="App\Admin\AdminView.html" />
     <Content Include="App\application.js" />
+    <Content Include="App\ApproveReports\ConfirmApproveWithAccountTemplate.html" />
     <Content Include="App\ApproveReports\RejectController.js" />
     <Content Include="App\ApproveReports\AcceptController.js" />
     <Content Include="App\ApproveReports\ApproveReportsView.html" />
     <Content Include="App\ApproveReports\ConfirmApproveTemplate.html" />
     <Content Include="App\ApproveReports\ConfirmRejectTemplate.html" />
+    <Content Include="App\Services\AccountService.js" />
     <Content Include="template\typeahead\typeahead-match.html" />
     <Content Include="template\typeahead\typeahead-popup.html" />
     <Content Include="App\AWS\awsSnippet.js" />
