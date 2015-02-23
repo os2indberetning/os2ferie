@@ -29,7 +29,6 @@ namespace Core.DomainModel
         public string Timestamp { get; set; }
         public KilometerAllowance KilometerAllowance { get; set; }
 
-
         public ICollection<DriveReportPoint> DriveReportPoints { get; set; }
     }
 }

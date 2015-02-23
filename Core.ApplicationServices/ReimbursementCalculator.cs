@@ -50,7 +50,7 @@ namespace Core.ApplicationServices
         /// therefore used directly in the calculation of the amount to reimburse
         /// 
         /// </summary>
-        public DriveReport Calculate(DriveReport report, string reportMethod)
+        public DriveReport Calculate(DriveReport report)
         {            
             //Check if user has manually provided a distance between home address and work address
             var homeWorkDistance = 0.0;
@@ -75,7 +75,7 @@ namespace Core.ApplicationServices
             if (report.FourKmRule)
             {
                 //Take users provided distance from home to border of municipality
-                var borderDistance = report.Person.DistanceFromHomeToBorder * 1000;
+                var borderDistance = person.DistanceFromHomeToBorder * 1000;
 
                 //Adjust distance based on if user starts or ends at home
                 if (report.StartsAtHome)
@@ -105,39 +105,49 @@ namespace Core.ApplicationServices
                 }
             }
 
-            // If user manually provided a driven distance
-            if (reportMethod.ToLower() == "read")
+            switch (report.KilometerAllowance)
             {
-                //Take distance from report
-                var manuallyProvidedDrivenDistance = report.Distance;                               
+                case KilometerAllowance.Calculated:
+                {
+                    
+                
+                    //Calculate the driven route
+                    var drivenRoute = _route.GetRoute(report.DriveReportPoints);
 
-                report.Distance = manuallyProvidedDrivenDistance - toSubtract;
-            }
-            // Use route service to calculate the driven route
-            else if (reportMethod.ToLower() == "calculated")
-            {
-                //Calculate the driven route
-                var drivenRoute = _route.GetRoute(report.DriveReportPoints);
+                    double drivenDistance = drivenRoute.Length;
 
-                double drivenDistance = drivenRoute.Length;
+                    //Adjust distance based on FourKmRule and if user start and/or ends at home
+                    var correctDistance = drivenDistance - toSubtract;
 
-                //Adjust distance based on FourKmRule and if user start and/or ends at home
-                var correctDistance = drivenDistance - toSubtract;
+                    //Set distance to corrected
+                    report.Distance = correctDistance;
 
-                //Set distance to corrected
-                report.Distance = correctDistance;
-            }
-            // Use route service to calculate the driven route, but with no correction of the length of the route
-            else if (reportMethod.ToLower() == "calculatedwithoutextradistance")
-            {
-                //Calculate the driven route
-                var drivenRoute = _route.GetRoute(report.DriveReportPoints);
+                    break;
+                }
+                case KilometerAllowance.CalculatedWithoutExtraDistance:
+                {
+                    
+                
+                    //Calculate the driven route
+                    var drivenRoute = _route.GetRoute(report.DriveReportPoints);
 
-                report.Distance = drivenRoute.Length;
-            }
-            else
-            {
-                throw new Exception("No calculation method provided");
+                    report.Distance = drivenRoute.Length;
+                    break;
+                }
+
+                case KilometerAllowance.Read:
+                { 
+                    //Take distance from report
+                    var manuallyProvidedDrivenDistance = report.Distance;
+
+                    report.Distance = manuallyProvidedDrivenDistance - toSubtract;
+
+                    break;
+                }
+                default:
+                {
+                    throw new Exception("No calculation method provided");
+                }
             }
 
             //Calculate the actual amount to reimburse

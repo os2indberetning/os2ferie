@@ -4,6 +4,6 @@ namespace Core.ApplicationServices.Interfaces
 {
     public interface IReimbursementCalculator
     {
-        DriveReport Calculate(DriveReport report, string reportMethod);
+        DriveReport Calculate(DriveReport report);
     }
 }

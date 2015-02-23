@@ -2,8 +2,9 @@
     return $resource("/odata/LicensePlates(:id)", { id: "@id" }, {
         "get": {
             method: "GET", transformResponse: function (data) {
-                return angular.fromJson(data).value[0];
-            }
+                return angular.fromJson(data).value;
+            },
+            isArray: true
         },
         "delete": { method: "DELETE" }
         

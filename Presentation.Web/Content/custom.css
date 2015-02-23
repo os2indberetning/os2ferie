@@ -134,10 +134,10 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
 }
 
-.margin-top-10 {
-    margin-top: 10px;
+.m-t-l {
+    margin-top: 15px;
 }
 
-.margin-bottom-10 {
-    margin-bottom: 10px;
+.m-b-l {
+    margin-bottom: 15px;
 }

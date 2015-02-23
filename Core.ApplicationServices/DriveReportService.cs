@@ -70,14 +70,7 @@ namespace Core.ApplicationServices
 
         public DriveReport Create(DriveReport report)
         {
-            var pointsWithCoordinates = new List<DriveReportPoint>();
-
-            foreach (var point in report.DriveReportPoints)
-            {
-                var result = (DriveReportPoint)_coordinates.GetAddressCoordinates(point);
-
-                pointsWithCoordinates.Add(result);
-            }
+            var pointsWithCoordinates = report.DriveReportPoints.Select((t, i) => report.DriveReportPoints.ElementAt(i)).Select(currentPoint => (DriveReportPoint) _coordinates.GetAddressCoordinates(currentPoint)).ToList();
 
             report.DriveReportPoints = pointsWithCoordinates;
 
@@ -92,40 +85,37 @@ namespace Core.ApplicationServices
             }
 
 
-            report = _calculator.Calculate(report, report.KilometerAllowance.ToString());
+            report = _calculator.Calculate(report);
 
             var createdReport = _driveReportRepository.Insert(report);
             _driveReportRepository.Save();
 
 
-            //Save DriveReportPoints in database            
-
-            var first = report.DriveReportPoints.First();
-            first.DriveReportId = createdReport.Id;
-            var last = report.DriveReportPoints.Last();
-            last.DriveReportId = createdReport.Id;
-
-            if (report.DriveReportPoints.Count > 2)
+            for (var i = 0; i < createdReport.DriveReportPoints.Count; i++)
             {
-                foreach (var point in report.DriveReportPoints)
+                var currentPoint = createdReport.DriveReportPoints.ElementAt(i);
+
+                if (i == report.DriveReportPoints.Count - 1)
                 {
+                    // last element   
+                    currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
+                }
+                else if (i == 0)
+                {
+                    // first element
+                    currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
+                }
+                else
+                {
+                    // between first and last
+                    currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
+                    currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
 
                 }
-            }
-            else
-            {
-                var firstCreated = _driveReportPointRepository.Insert(first);
-                _driveReportPointRepository.Save();
-                last.PreviousPointId = firstCreated.Id;
-                var lastCreated = _driveReportPointRepository.Insert(last);
-                _driveReportPointRepository.Save();
-                firstCreated.NextPointId = lastCreated.Id;
-                _driveReportPointRepository.Patch(firstCreated);
-                _driveReportPointRepository.Save();
+
             }
 
-
-
+            _driveReportRepository.Save();
 
             return report;
         }
