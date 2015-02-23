@@ -116,7 +116,14 @@ angular.module("application").controller("MyReportsController", [
                        },
                        title: "Kørselsdato"
                    }, {
-                       field: "Purpose",
+                       field: "Id",
+                       template: function (data) {
+                           if (data.Comment != "") {
+                               return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                           }
+                           return data.Purpose;
+
+                       },
                        title: "Formål"
                    }, {
                        field: "Type",
@@ -193,7 +200,14 @@ angular.module("application").controller("MyReportsController", [
                        },
                        title: "Kørselsdato"
                    }, {
-                       field: "Purpose",
+                       field: "Id",
+                       template: function (data) {
+                           if (data.Comment != "") {
+                               return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                           }
+                           return data.Purpose;
+
+                       },
                        title: "Formål"
                    }, {
                        field: "Type",
@@ -269,7 +283,14 @@ angular.module("application").controller("MyReportsController", [
                        },
                        title: "Kørselsdato"
                    }, {
-                       field: "Purpose",
+                       field: "Id",
+                       template: function (data) {
+                           if (data.Comment != "") {
+                               return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                           }
+                           return data.Purpose;
+
+                       },
                        title: "Formål"
                    }, {
                        field: "Type",
