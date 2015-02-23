@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate) {
+    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate) {
 
         $scope.DriveReport = new DriveReport();
 
@@ -10,12 +10,16 @@
         $scope.KmRate = Rate.ThisYearsRates(function () {
             $scope.KmRateDropDown.dataSource.read();
         });
-
-
+        
         $scope.Employments = PersonEmployments.get({ id: 1 }, function () {
             $scope.PositionDropDown.dataSource.read();
         });
 
+        $scope.LicensePlates = LicensePlate.get({ id: 1 }, function () {
+            $scope.LicensePlateDropDown.dataSource.read();
+            console.log($scope.LicensePlates);
+            console.log($scope.LicensePlateDropDown);
+        });
 
         $scope.DriveReport.Addresses = [];
 

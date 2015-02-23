@@ -36,6 +36,12 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="form-group">
+                        <label for="">Nummerplade:</label>
+                        <select class="fill-width" kendo-drop-down-list="LicensePlateDropDown" ng-model="LicensePlates" id="" k-data-source="LicensePlates" k-data-text-field="'Plate'" k-data-value-field="'Id'" k-placeholder="'Brugerens nummerplade(r)'"></select>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
                         <label for="">Transportmiddel:</label>
                         <select class="fill-width" kendo-drop-down-list="KmRateDropDown" ng-model="DriveReport.KmRate" k-data-source="KmRate" k-data-text-field="'Type'" k-data-value-field="'KmRate'" k-placeholder="'Vælg transportmiddel'"></select>
                     </div>

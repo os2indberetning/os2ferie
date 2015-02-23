@@ -53,11 +53,13 @@ namespace Core.ApplicationServices
         public DriveReport Calculate(DriveReport report, string reportMethod)
         {            
             //Check if user has manually provided a distance between home address and work address
-            var homeWorkDistance = 0.0;            
+            var homeWorkDistance = 0.0;
 
-            if (report.Person.WorkDistanceOverride > 0)
+            var person = _personRepo.AsQueryable().First(x => x.Id == report.PersonId);
+
+            if (person.WorkDistanceOverride > 0)
             {
-                homeWorkDistance = report.Person.WorkDistanceOverride;
+                homeWorkDistance = person.WorkDistanceOverride;
             }
             else
             {
