@@ -161,16 +161,9 @@ namespace Infrastructure.AddressServices.Routing
                         route.alternative_geometries.Add((string)altGeos[i]);
                         route.alternative_summaries.Add(new AlternativeSummary(altSums[i]));
                     }
-		        }
-
-                
+		        }                
 		    }
-			
-			
-            
-
-			
-
+						       
 			return route;
 		}
 
