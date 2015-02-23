@@ -50,7 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Example\IExample.cs" />
+    <Compile Include="IAddressCoordinates.cs" />
     <Compile Include="IGenericRepository.cs" />
+    <Compile Include="IRoute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

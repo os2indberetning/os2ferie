@@ -163,7 +163,7 @@ namespace Infrastructure.AddressServices.Classes
     {
         public RootRouteObject(JToken token)
         {
-            version = (double)token["version"];
+            //version = (double)token["version"];
             status = (int)token["status"];
             status_message = (string)token["status_message"];
             route_geometry = (string)token["route_geometry"];
