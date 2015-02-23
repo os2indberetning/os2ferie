@@ -28,7 +28,7 @@ namespace Infrastructure.DataAccess
             //contexts db sets.
             foreach (var propertyInfo in typeof(T).GetProperties())
             {
-                if (propertyInfo.GetValue(entity) != null && ! propertyInfo.PropertyType.IsValueType)
+                if (propertyInfo.GetValue(entity) != null && propertyInfo.PropertyType == typeof(object))
                 {
                     var navProperty = propertyInfo.GetValue(entity);
                     _context.Set(propertyInfo.GetType()).Attach(navProperty);
