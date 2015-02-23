@@ -31,6 +31,7 @@ namespace Infrastructure.DataAccess
         public IDbSet<Employment> Employments { get; set; }
         public IDbSet<OrgUnit> OrgUnits { get; set; }
         public IDbSet<Substitute> Substitutes { get; set; }
+        public IDbSet<BankAccount> BankAccounts { get; set; } 
   
 
         /**
@@ -58,6 +59,7 @@ namespace Infrastructure.DataAccess
             ConfigurePropertiesForEmployment(modelBuilder);
             ConfigurePropertiesForOrgUnit(modelBuilder);
             ConfigurePropertiesForSubstitute(modelBuilder);
+            ConfigurePropertiesForBankAccount(modelBuilder);
         }
 
         private void ConfigurePropertiesForPerson(DbModelBuilder modelBuilder)
@@ -86,6 +88,12 @@ namespace Infrastructure.DataAccess
         {
             modelBuilder.Entity<PersonalAddress>().Property(p => p.Type).IsRequired();
             modelBuilder.Entity<PersonalAddress>().HasRequired(p => p.Person);
+        }
+
+        private void ConfigurePropertiesForBankAccount(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<BankAccount>().Property(p => p.Description).IsRequired();
+            modelBuilder.Entity<BankAccount>().Property(p => p.Number).IsRequired();
         }
 
         private void ConfigurePropertiesForPersonalRoute(DbModelBuilder modelBuilder)

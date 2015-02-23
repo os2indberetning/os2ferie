@@ -1,7 +1,8 @@
 angular.module("application").controller("MyReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", function ($scope, $modal, $rootScope, Report) {
+   "$scope", "$modal", "$rootScope", "Report", "$timeout", function ($scope, $modal, $rootScope, Report, $timeout) {
 
-
+       // Hardcoded personid == 4 until we can get current user from their system.
+        var personId = 4;
 
 // Helper Methods
 
@@ -27,7 +28,7 @@ angular.module("application").controller("MyReportsController", [
                and = "";
            }
 
-           $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' " + and + oDataQuery;
+           $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' and PersonId eq " + personId + " " + and + oDataQuery;
            $scope.gridContainer.pendingGrid.dataSource.read();
        }
 
@@ -38,7 +39,7 @@ angular.module("application").controller("MyReportsController", [
                and = "";
            }
 
-           $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted' " + and + oDataQuery;
+           $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted' and PersonId eq " + personId + " " + and + oDataQuery;
            $scope.gridContainer.acceptedGrid.dataSource.read();
        }
 
@@ -48,7 +49,7 @@ angular.module("application").controller("MyReportsController", [
                and = "";
            }
 
-           $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' " + and + oDataQuery;
+           $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' and PersonId eq " + personId + " " + and + oDataQuery;
            $scope.gridContainer.rejectedGrid.dataSource.read();
        }
 
@@ -61,7 +62,7 @@ angular.module("application").controller("MyReportsController", [
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending'",
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' and PersonId eq " + personId,
                            dataType: "json",
                            cache: false
                        },
@@ -138,7 +139,7 @@ angular.module("application").controller("MyReportsController", [
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted'",
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted' and PersonId eq " + personId,
                            dataType: "json",
                            cache: false
                        },
@@ -211,7 +212,10 @@ angular.module("application").controller("MyReportsController", [
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected'",
+
+
+
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' and PersonId eq " + personId,
                            dataType: "json",
                            cache: false
                        },
@@ -295,7 +299,19 @@ angular.module("application").controller("MyReportsController", [
            return m.startOf('day').unix();
        }
 
-// Event handlers
+       // Event handlers
+
+       $scope.pageSizeChanged = function () {
+           if ($scope.activeTab == 'pending') {
+               $scope.gridContainer.pendingGrid.dataSource.pageSize($scope.gridContainer.pendingGridPageSize);
+           }
+           else if ($scope.activeTab == 'accepted') {
+               $scope.gridContainer.acceptedGrid.dataSource.pageSize($scope.gridContainer.acceptedGridPageSize);
+           }
+           else if ($scope.activeTab == 'rejected') {
+               $scope.gridContainer.rejectedGrid.dataSource.pageSize($scope.gridContainer.rejectedGridPageSize);
+           }
+       }
 
        $scope.clearClicked = function () {
 
@@ -370,8 +386,42 @@ angular.module("application").controller("MyReportsController", [
            });
        }
 
+       $scope.dateChanged = function () {
+
+           //TODO: Shit doesnt work if the input field is left empty. It yields NaN and gives no results.
+
+           // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
+           $timeout(function () {
+               var from, to, and;
+
+               if ($scope.activeTab == 'pending') {
+                   and = " and ";
+                   from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);
+                   to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);
+               }
+               else if ($scope.activeTab == 'accepted') {
+                   and = " and ";
+                   from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDateAccepted);
+                   to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDateAccepted);
+               }
+               else if ($scope.activeTab == 'rejected') {
+                   and = " and ";
+                   from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDateRejected);
+                   to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDateRejected);
+               }
+
+
+               $scope.updateActiveTab(to + and + from);
+           }, 0);
+
+
+       }
+
 
 // Init
+
+
+
 
        // Contains references to kendo ui grids.
        $scope.gridContainer = {};
@@ -383,6 +433,10 @@ angular.module("application").controller("MyReportsController", [
        $scope.dateOptions = {
            format: "dd/MM/yyyy",
        };
+
+        $scope.gridContainer.pendingGridPageSize = 5;
+        $scope.gridContainer.acceptedGridPageSize = 5;
+        $scope.gridContainer.rejectedGridPageSize = 5;
 
        // Set activeTab's initial value to pending.
        $scope.activeTab = "pending";
