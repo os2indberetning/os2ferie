@@ -24,6 +24,7 @@
     <TypeScriptToolsVersion>1.4</TypeScriptToolsVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <NuGetPackageImportStamp>bb2330ea</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -301,6 +302,7 @@
     <Content Include="App\MyReports\EditReportController.js" />
     <Content Include="App\MyReports\EditReportTemplate.html" />
     <Content Include="App\MyReports\MyReportsController.js" />
+    <Content Include="App\MyReports\MyReportsController.spec.js" />
     <Content Include="App\MyReports\MyReportsView.html" />
     <Content Include="App\Services\AddressFormatterService.js" />
     <Content Include="App\Services\AddressResource.js" />
@@ -326,6 +328,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\custom.css" />
+    <Content Include="Content\customcss\approvereports.css" />
     <Content Include="Content\customcss\myreports.css" />
     <Content Include="Content\jasmine\jasmine.css" />
     <Content Include="Content\jasmine\jasmine_favicon.png" />
