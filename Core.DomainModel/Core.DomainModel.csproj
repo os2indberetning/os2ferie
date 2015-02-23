@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BankAccount.cs" />
     <Compile Include="Address.cs" />
     <Compile Include="DriveReport.cs" />
     <Compile Include="Employment.cs" />
