@@ -121,7 +121,7 @@
                     $scope.mailAdvice = 'No';
                 }
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Afstand mellem hjemme- og arbejdsadresse blev ikke gemt");
-            };
+        };
         };
 
         $scope.loadGrids = function (id) {
@@ -294,24 +294,25 @@
 
         }        
 
-        $scope.openTokenModal = function (size) {
+    $scope.openTokenModal = function (size) {
 
-            var modalInstance = $modal.open({
-                templateUrl: '/App/Settings/tokenModal.html',
-                controller: 'TokenInstanceController',
+        var modalInstance = $modal.open({
+                scope: $scope,
+            templateUrl: '/App/Settings/tokenModal.html',
+            controller: 'TokenInstanceController',
                 backdrop: 'static',
-                size: size,
-                resolve: {
+            size: size,
+            resolve: {
                     personId: function () {
                         return $scope.currentPerson.Id;
-                    }
                 }
-            });
+            }
+        });
 
             modalInstance.result.then(function () {
 
-            });
-        };
+        });
+    };
 
         $scope.openRouteEditModal = function (id) {
 

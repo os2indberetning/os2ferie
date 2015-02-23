@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Core.DomainServices;
 using Infrastructure.AddressServices.Classes;
-using Infrastructure.AddressServices.Interfaces;
 using Newtonsoft.Json.Linq;
-using Address = Core.DomainModel.Address;
+using Core.DomainModel;
 
 namespace Infrastructure.AddressServices
 {
     public class AddressCoordinates : IAddressCoordinates
     {
+        #region Properties
+
         /// <summary>
         /// Specifies number of decimals used for coordinates.
         /// </summary>
@@ -24,6 +26,10 @@ namespace Infrastructure.AddressServices
         {
             get { return COORD_DECIMALS; }
         }
+
+        #endregion
+
+        #region Public methods
 
         /// <summary>
         /// Get address information for given coordinates.
@@ -67,7 +73,8 @@ namespace Infrastructure.AddressServices
             {
                 try
                 {
-                    correctedAddress = AddressLaundering.LaunderAddress(address);
+                    AddressLaundering launderer = new AddressLaundering();
+                    correctedAddress = launderer.LaunderAddress(address);
                 }
                 catch (AddressLaunderingException e)
                 {
@@ -118,14 +125,15 @@ namespace Infrastructure.AddressServices
         /// <param name="correctAddresses">Set this to use address laundering prior to each request. Default: false</param>
         /// <exception cref="AddressCoordinatesException">Thrown if address has critical spelling erros(see inner exception) or if no address coordinates correspond to the entered address.</exception>
         /// <returns></returns>
-        public static Coordinates GetCoordinates(Address address, Coordinates.CoordinatesType type, bool correctAddresses = false)
+        public Coordinates GetCoordinates(Address address, Coordinates.CoordinatesType type, bool correctAddresses = false)
         {
             Address correctedAddress = address;
             if (!correctAddresses)
             {
                 try
                 {
-                    correctedAddress = AddressLaundering.LaunderAddress(address);
+                    AddressLaundering launderer = new AddressLaundering();
+                    correctedAddress = launderer.LaunderAddress(address);
                 }
                 catch (AddressLaunderingException e)
                 {
@@ -170,6 +178,10 @@ namespace Infrastructure.AddressServices
             return addressCoordinates;
         }
 
+        #endregion
+
+        #region Private methods
+
         /// <summary>
         /// Create a request for getting address coordinates following the service API url specifications. (dawa.aws.dk)
         /// </summary>
@@ -177,7 +189,7 @@ namespace Infrastructure.AddressServices
         /// <param name="streetNr">Uppercase street number</param>
         /// <param name="zipCode"></param>
         /// <returns></returns>
-        private static HttpWebRequest CreateCoordRequest(string street, string streetNr, string zipCode)
+        private HttpWebRequest CreateCoordRequest(string street, string streetNr, string zipCode)
         {
             var query = streetNr == null ? string.Format("vejnavn={0}&postnr={1}", street, zipCode) : string.Format("vejnavn={0}&husnr={1}&postnr={2}", street, streetNr, zipCode);
 
@@ -190,7 +202,7 @@ namespace Infrastructure.AddressServices
         /// <param name="longitude"></param>
         /// <param name="latitude"></param>
         /// <returns></returns>
-        private static HttpWebRequest CreateAddressRequest(string longitude, string latitude)
+        private HttpWebRequest CreateAddressRequest(string longitude, string latitude)
         {
             var query = string.Format("x={0}&y={1}", longitude, latitude);
 
@@ -202,12 +214,19 @@ namespace Infrastructure.AddressServices
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Formatted response from service.</returns>
-        private static string ExecuteAndRead(HttpWebRequest request, bool returnSingle = false)
+        private string ExecuteAndRead(HttpWebRequest request, bool returnSingle = false)
         {
             var responseString = "";
-
-            var distanceResponse = request.GetResponse();
-            var responseStream = distanceResponse.GetResponseStream();
+            Stream responseStream;
+            try
+            {
+                var distanceResponse = request.GetResponse();
+                responseStream = distanceResponse.GetResponseStream();
+            }
+            catch (WebException e)
+            {
+                throw new AddressCoordinatesException("Server error, coordinates invalid", e);
+            }
 
             if (responseStream == null) return null;
 
@@ -222,7 +241,7 @@ namespace Infrastructure.AddressServices
         /// </summary>
         /// <param name="response"></param>
         /// <returns>Response reprensented in custom class.</returns>
-        private static List<RootAddressObject> ParseJson(string response)
+        private List<RootAddressObject> ParseJson(string response)
         {
             List<RootAddressObject> addressObject = new List<RootAddressObject>();
             JArray jAddressList = JArray.Parse(response);
@@ -254,7 +273,7 @@ namespace Infrastructure.AddressServices
             return addressObject;
         }
 
-        private static List<RootCoordinateToAddressObject> ParseSingleJson(string response)
+        private List<RootCoordinateToAddressObject> ParseSingleJson(string response)
         {
             List<RootCoordinateToAddressObject> addressObject = new List<RootCoordinateToAddressObject>();
 
@@ -269,5 +288,7 @@ namespace Infrastructure.AddressServices
 
             return addressObject;
         }
+
+        #endregion
     }
 }
