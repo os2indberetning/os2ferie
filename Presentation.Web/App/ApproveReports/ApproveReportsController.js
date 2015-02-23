@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("ApproveReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "BankAccount", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, BankAccount) {
 
 
        var pendingQueryOptions = { dateQuery: "", personQuery: "" };
@@ -103,14 +103,14 @@
                    type: "odata",
                    transport: {
                        read: {
-                           beforeSend: function (req) {
+                           beforeSend: function(req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
                            url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending'&$expand=Employment",
                            dataType: "json",
                            cache: false
                        },
-                       parameterMap: function (options, type) {
+                       parameterMap: function(options, type) {
                            var d = kendo.data.transports.odata.parameterMap(options);
 
                            delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
@@ -121,7 +121,14 @@
                        }
                    },
                    schema: {
-                       data: function (data) {
+                       model: {
+                           fields: {
+                               Distance: { type: "number" },
+                               AmountToReimburse: { type: "number" }
+                           }
+                       },
+
+                       data: function(data) {
 
                            var leaderOrgId = 2;
                            var resultSet = [];
@@ -129,19 +136,18 @@
                            var orgs = OrgUnit.get();
                            var orgUnits = {};
 
-                           orgs.$promise.then(function (res) {
-                               angular.forEach(orgs.value, function (value, key) {
+                           orgs.$promise.then(function(res) {
+                               angular.forEach(orgs.value, function(value, key) {
                                    orgUnits[value.Id] = value;
                                });
 
-                               angular.forEach(data.value, function (value, key) {
+                               angular.forEach(data.value, function(value, key) {
                                    var repOrg = orgUnits[value.Employment.OrgUnitId];
 
                                    if (orgUnits[leaderOrgId].Level == repOrg.Level && orgUnits[leaderOrgId].Id == repOrg.Id) {
 
                                        resultSet.push(value);
-                                   }
-                                   else if (orgUnits[leaderOrgId].Level < repOrg.Level) {
+                                   } else if (orgUnits[leaderOrgId].Level < repOrg.Level) {
                                        while (orgUnits[leaderOrgId].Level < repOrg.Level) {
                                            repOrg = orgUnits[repOrg.ParentId];
                                        }
@@ -159,19 +165,30 @@
                            return resultSet;
 
                        },
-                       total: function (data) {
+                       total: function(data) {
                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                        }
                    },
                    pageSize: 5,
                    serverPaging: false,
-                   serverSorting: true
+                   serverAggregates: false,
+                   serverSorting: true,
+
+
+                   aggregate: [
+                       { field: "Distance", aggregate: "sum" },
+                       { field: "AmountToReimburse", aggregate: "sum" }
+                   ]
                },
                sortable: true,
                pageable: true,
+               scrollable: false,
                dataBound: function () {
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
+
+
+
                columns: [
                    {
                        field: "Fullname",
@@ -206,14 +223,19 @@
                        title: "Formål"
 
                    }, {
-                       field: "Type",
-                       title: "Type"
+                       field: "AmountToReimburse",
+                       title: "Beløb",
+                       footerTemplate: "Total: #= sum # "
+                   }, {
+                       field: "Distance",
+                       title: "Afstand",
+                       footerTemplate: "Total: #= sum # "
                    }, {
                        field: "Id",
-                       template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=approveWithAccount(${Id})>Godkend med anden kontering</a>",
+                       template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=ApproveWithAccountClick(${Id})>Godkend med anden kontering</a>",
                        title: "Muligheder"
                    }
-               ]
+               ],
            };
        }
 
@@ -241,6 +263,13 @@
                        }
                    },
                    schema: {
+                       model: {
+                           fields: {
+                               Distance: { type: "number" },
+                               AmountToReimburse: { type: "number" }
+                           }
+                       },
+
                        data: function (data) {
 
                            var leaderOrgId = 2;
@@ -258,6 +287,7 @@
                                    var repOrg = orgUnits[value.Employment.OrgUnitId];
 
                                    if (orgUnits[leaderOrgId].Level == repOrg.Level && orgUnits[leaderOrgId].Id == repOrg.Id) {
+
                                        resultSet.push(value);
                                    }
                                    else if (orgUnits[leaderOrgId].Level < repOrg.Level) {
@@ -275,13 +305,6 @@
                                $scope.gridContainer.acceptedGrid.refresh();
 
                            });
-
-
-
-
-
-
-
                            return resultSet;
 
                        },
@@ -291,13 +314,21 @@
                    },
                    pageSize: 5,
                    serverPaging: false,
-                   serverSorting: true
+                   serverAggregates: false,
+                   serverSorting: true,
+
+
+                   aggregate: [{ field: "Distance", aggregate: "sum" },
+                                 { field: "AmountToReimburse", aggregate: "sum" }]
                },
                sortable: true,
                pageable: true,
                dataBound: function () {
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
+
+
+
                columns: [
                    {
                        field: "Fullname",
@@ -321,13 +352,29 @@
                        },
                        title: "Kørselsdato"
                    }, {
-                       field: "Purpose",
+                       field: "Id",
+                       template: function (data) {
+                           if (data.Comment != "") {
+                               return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                           }
+                           return data.Purpose;
+
+                       },
                        title: "Formål"
+
                    }, {
-                       field: "Type",
-                       title: "Type"
+                       field: "AmountToReimburse",
+                       title: "Beløb",
+                       footerTemplate: "Total: #= sum # "
+                   }, {
+                       field: "Distance",
+                       title: "Afstand",
+                       footerTemplate: "Total: #= sum # "
+                   }, {
+                       field: "AccountNumber",
+                       title: "Kontonummer"
                    }
-               ]
+               ],
            };
        }
 
@@ -422,34 +469,45 @@
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
                columns: [
-                   {
-                       field: "Fullname",
-                       title: "Navn"
-                   }, {
-                       field: "CreationDate",
-                       template: function (data) {
-                           var m = moment.unix(data.CreatedDateTimestamp);
-                           return m._d.getDate() + "/" +
-                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                                  m._d.getFullYear();
-                       },
-                       title: "Indberettet den"
-                   }, {
-                       field: "DriveDateTimestamp",
-                       template: function (data) {
-                           var m = moment.unix(data.DriveDateTimestamp);
-                           return m._d.getDate() + "/" +
-                               (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                               m._d.getFullYear();
-                       },
-                       title: "Kørselsdato"
-                   }, {
-                       field: "Purpose",
-                       title: "Formål"
-                   }, {
-                       field: "Type",
-                       title: "Type"
-                   }
+                                  {
+                                      field: "Fullname",
+                                      title: "Navn"
+                                  }, {
+                                      field: "CreationDate",
+                                      template: function (data) {
+                                          var m = moment.unix(data.CreatedDateTimestamp);
+                                          return m._d.getDate() + "/" +
+                                                (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                                 m._d.getFullYear();
+                                      },
+                                      title: "Indberettet den"
+                                  }, {
+                                      field: "DriveDateTimestamp",
+                                      template: function (data) {
+                                          var m = moment.unix(data.DriveDateTimestamp);
+                                          return m._d.getDate() + "/" +
+                                              (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                              m._d.getFullYear();
+                                      },
+                                      title: "Kørselsdato"
+                                  }, {
+                                      field: "Id",
+                                      template: function (data) {
+                                          if (data.Comment != "") {
+                                              return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                                          }
+                                          return data.Purpose;
+
+                                      },
+                                      title: "Formål"
+
+                                  }, {
+                                      field: "AmountToReimburse",
+                                      title: "Beløb"
+                                  }, {
+                                      field: "Distance",
+                                      title: "Afstand"
+                                  }
                ]
            };
        }
@@ -477,6 +535,19 @@
        }
 
        // Event handlers
+
+       $scope.pageSizeChanged = function () {
+           if ($scope.activeTab == 'pending') {
+               $scope.gridContainer.pendingGrid.dataSource.pageSize($scope.gridContainer.pendingGridPageSize);
+           }
+           else if ($scope.activeTab == 'accepted') {
+               $scope.gridContainer.acceptedGrid.dataSource.pageSize($scope.gridContainer.acceptedGridPageSize);
+           }
+           else if ($scope.activeTab == 'rejected') {
+               $scope.gridContainer.rejectedGrid.dataSource.pageSize($scope.gridContainer.rejectedGridPageSize);
+           }
+       }
+
 
        $scope.clearName = function () {
            $scope.chosenPerson = "";
@@ -510,6 +581,7 @@
            var modalInstance = $modal.open({
                templateUrl: '/App/ApproveReports/ConfirmApproveTemplate.html',
                controller: 'AcceptController',
+               backdrop: "static",
                resolve: {
                    itemId: function () {
                        return id;
@@ -525,10 +597,11 @@
            });
        }
 
-       $scope.rejectClick = function (id) {
+       $scope.ApproveWithAccountClick = function (id) {
            var modalInstance = $modal.open({
-               templateUrl: '/App/ApproveReports/ConfirmRejectTemplate.html',
-               controller: 'RejectController',
+               templateUrl: '/App/ApproveReports/ConfirmApproveWithAccountTemplate.html',
+               controller: "AcceptWithAccountController",
+               backdrop: "static",
                resolve: {
                    itemId: function () {
                        return id;
@@ -537,7 +610,27 @@
            });
 
            modalInstance.result.then(function (res) {
-               Report.patch({ id: id }, { "Status": "Rejected", "ClosedDateTimestamp": moment().unix(), "Comment" : res.Comment }, function () {
+               Report.patch({ id: id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix(), "AccountNumber": res.AccountNumber }, function () {
+                   $scope.updatePendingReports();
+                   $scope.updateAcceptedReports();
+               });
+           });
+       }
+
+       $scope.rejectClick = function (id) {
+           var modalInstance = $modal.open({
+               templateUrl: '/App/ApproveReports/ConfirmRejectTemplate.html',
+               controller: 'RejectController',
+               backdrop: "static",
+               resolve: {
+                   itemId: function () {
+                       return id;
+                   }
+               }
+           });
+
+           modalInstance.result.then(function (res) {
+               Report.patch({ id: id }, { "Status": "Rejected", "ClosedDateTimestamp": moment().unix(), "Comment": res.Comment }, function () {
                    $scope.updatePendingReports();
                    $scope.updateRejectedReports();
                });
@@ -553,29 +646,32 @@
 
            // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
            $timeout(function () {
-               var from, to;
+               var from, to, and;
 
                if ($scope.activeTab == 'pending') {
-                   from = $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);
-                   to = $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);
-                   pendingQueryOptions.dateQuery = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+                   and = " and ";
+                   from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);
+                   to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);
+                   pendingQueryOptions.dateQuery = from + and + to;
                }
                else if ($scope.activeTab == 'accepted') {
-                   from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateAccepted);
-                   to = $scope.getEndOfDayStamp($scope.dateContainer.toDateAccepted);
-                   acceptedQueryOptions.dateQuery = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+                   and = " and ";
+                   from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDateAccepted);
+                   to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDateAccepted);
+                   acceptedQueryOptions.dateQuery = from + and + to;
                }
                else if ($scope.activeTab == 'rejected') {
-                   from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateRejected);
-                   to = $scope.getEndOfDayStamp($scope.dateContainer.toDateRejected);
-                   rejectedQueryOptions.dateQuery = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+                   and = " and ";
+                   from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDateRejected);
+                   to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDateRejected);
+                   rejectedQueryOptions.dateQuery = from + and + to;
                }
 
 
                $scope.updateActiveTab();
            }, 0);
-           
-         
+
+
        }
 
 
@@ -619,15 +715,22 @@
            $scope.updateActiveTab();
        }
 
-    // Load people for auto-complete textbox
+       // Load people for auto-complete textbox
        $scope.people = [];
        $scope.person = {};
+
+       // Set initial value for grid pagesizes
+       $scope.gridContainer.pendingGridPageSize = 5;
+       $scope.gridContainer.acceptedGridPageSize = 5;
+       $scope.gridContainer.rejectedGridPageSize = 5;
 
        Person.get().$promise.then(function (res) {
            angular.forEach(res.value, function (value, key) {
                $scope.people.push({ Id: value.Id, FullName: value.FirstName + " " + value.MiddleName + " " + value.LastName });
            });
        });
+
+
 
 
    }
