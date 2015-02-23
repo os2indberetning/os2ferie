@@ -35,6 +35,10 @@ namespace Core.ApplicationServices
                 }
             }
 
+            token.Token = randomToken;
+            token.Guid = Guid.NewGuid();
+            token.Status = MobileTokenStatus.Created;
+
             if (token.Status == MobileTokenStatus.Created)
             {
                 token.StatusToPresent = "Oprettet";
@@ -43,11 +47,7 @@ namespace Core.ApplicationServices
             if (token.Status == MobileTokenStatus.Activated)
             {
                 token.StatusToPresent = "Aktiveret";
-            }
-
-            token.Token = randomToken;
-            token.Guid = Guid.NewGuid();
-            token.Status = MobileTokenStatus.Created;
+            }            
 
             var createdToken = _repo.Insert(token);
 
