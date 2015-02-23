@@ -11,20 +11,21 @@ using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using Microsoft.Owin.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using OS2Indberetning;
 using OS2Indberetning.App_Start;
 using Owin;
 using Presentation.Web.Test.Controllers.Models;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Presentation.Web.Test.Controllers.MobileTokens
 {
-    [TestClass]
+    [TestFixture]
     public class MobileTokenTest
     {
         protected TestServer Server;
 
-        [TestInitialize]
+        [SetUp]
         public void Setup()
         {
             Server = TestServer.Create(app =>
@@ -41,21 +42,21 @@ namespace Presentation.Web.Test.Controllers.MobileTokens
             ReSeed();
         }
 
-        [TestCleanup]
+        [TearDown]
         public void TearDown()
         {
             if (Server != null)
                 Server.Dispose();
         }
 
-        [TestMethod]
+        [Test]
         public async Task GetShouldReturnNoElements()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath()).GetAsync();
             BaseControllerTest<MobileToken>.AssertEmptyResponse(response); //MobileToken controller does not allow this call so it returns an empty list
         }
 
-        [TestMethod]
+        [Test]
         public async Task GetWithKeyShouldReturnAllTokensForPersonWithId()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(1)").GetAsync();
@@ -66,14 +67,14 @@ namespace Presentation.Web.Test.Controllers.MobileTokens
             AsssertEqualEntities(GetReferenceEntity2(), result.value[1]);
         }
 
-        [TestMethod]
+        [Test]
         public async Task GetWithInvalidKeyShouldReturnNoEntity()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(5)").GetAsync();
             BaseControllerTest<MobileToken>.AssertEmptyResponse(response);
         }
 
-        [TestMethod]
+        [Test]
         public async Task PutShouldReturnMethodNotAllowed()
         {
             var httpContent = new StreamContent(Stream.Null);
@@ -81,7 +82,7 @@ namespace Presentation.Web.Test.Controllers.MobileTokens
             Assert.AreEqual(HttpStatusCode.MethodNotAllowed, response.StatusCode, "Put method should not be allowed");
         }
 
-        [TestMethod]
+        [Test]
         public async Task PatchShouldNotBeAllowed()
         {
             var request = Server.CreateRequest(GetUriPath() + "(3)")
@@ -92,7 +93,7 @@ namespace Presentation.Web.Test.Controllers.MobileTokens
         }
 
 
-        [TestMethod]
+        [Test]
         public async Task DeleteShouldRemoveAMobileToken()
         {
             //Make sure that an entity with person Id 2

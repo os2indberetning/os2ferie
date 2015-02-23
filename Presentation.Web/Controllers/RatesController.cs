@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -50,6 +51,15 @@ namespace OS2Indberetning.Controllers
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
             return base.Delete(key);
+        }
+        
+        // GET: odata/Rates/RateService.ThisYearsRates
+        [EnableQuery]
+        [HttpGet]
+        public IQueryable<Rate> ThisYearsRates()
+        {
+            var result = Repo.AsQueryable().Where(x => x.Year == (DateTime.Now).Year);
+            return result;
         }
     }
 }

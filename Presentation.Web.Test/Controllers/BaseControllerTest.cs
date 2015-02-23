@@ -4,7 +4,6 @@ using System.IO;
 using System.Net;
 using System.Net.Http.Headers;
 using Microsoft.Owin.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OS2Indberetning;
 using OS2Indberetning.App_Start;
 using Owin;
@@ -12,6 +11,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Presentation.Web.Test.Controllers.Models;
+using NUnit.Framework;
+using Assert = NUnit.Framework.Assert;
+
 
 namespace Presentation.Web.Test.Controllers
 {
@@ -25,9 +27,9 @@ namespace Presentation.Web.Test.Controllers
      * The mocked repository should contain three entities.
      */
 
-    
 
-    [TestClass]
+
+    [TestFixture]
     public abstract class BaseControllerTest<T> where T : class, new()
     {
         protected TestServer Server;
@@ -92,7 +94,7 @@ namespace Presentation.Web.Test.Controllers
          */
         protected abstract void ReSeed();
 
-        [TestInitialize]
+        [SetUp]
         public void Setup()
         {
             Server = TestServer.Create(app =>
@@ -109,14 +111,14 @@ namespace Presentation.Web.Test.Controllers
             ReSeed();
         }
 
-        [TestCleanup]
+        [TearDown]
         public void TearDown()
         {
             if (Server != null)
                 Server.Dispose();
         }
 
-        [TestMethod]
+        [Test]
         public virtual async Task GetShouldReturnThreeElements()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath()).GetAsync();
@@ -125,7 +127,7 @@ namespace Presentation.Web.Test.Controllers
             Assert.AreEqual(3, result.value.Count, "Expects the return of a get request to have three entitys");
         }
 
-        [TestMethod]
+        [Test]
         public async Task GetWithKeyShouldReturnCorrectElement()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(2)").GetAsync();
@@ -136,14 +138,14 @@ namespace Presentation.Web.Test.Controllers
             AsssertEqualEntities(GetReferenceEntity2(), entity);
         }
 
-        [TestMethod]
+        [Test]
         public async Task GetWithInvalidKeyShouldReturnNoEntity()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(5)").GetAsync();
             AssertEmptyResponse(response);
         }
 
-        [TestMethod]
+        [Test]
         public async Task GetWithOdataQuery()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "?$orderby=Id desc").GetAsync();
@@ -158,7 +160,7 @@ namespace Presentation.Web.Test.Controllers
             AsssertEqualEntities(GetReferenceEntity1(), entity);
         }
 
-        [TestMethod]
+        [Test]
         public async Task PutShouldReturnMethodNotAllowed()
         {
             var httpContent = new StreamContent(Stream.Null);
@@ -166,7 +168,7 @@ namespace Presentation.Web.Test.Controllers
             Assert.AreEqual(HttpStatusCode.MethodNotAllowed, response.StatusCode, "Put method should not be allowed");
         }
 
-        [TestMethod]
+        [Test]
         public async Task PostShouldInsertAnEntity()
         {
             //Make sure that an entity with id 4 does not exists before the test
@@ -186,7 +188,7 @@ namespace Presentation.Web.Test.Controllers
             AsssertEqualEntities(GetPostReferenceEntity(), result.value[0]);
         }
 
-        [TestMethod]
+        [Test]
         public virtual async Task PatchShouldAlterAnEntity()
         {
             //Make sure that an entity with id 3 looks as expected
@@ -208,7 +210,7 @@ namespace Presentation.Web.Test.Controllers
             AsssertEqualEntities(GetPatchReferenceEntity(), result.value[0]);
         }
 
-        [TestMethod]
+        [Test]
         public async Task DeleteShouldRemoveAnEntity()
         {
             //Make sure that an entity with id 3 exists
