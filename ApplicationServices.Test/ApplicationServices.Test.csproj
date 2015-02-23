@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="DriveReportServiceTest\DriveReportMock.cs" />
     <Compile Include="DriveReportServiceTest\DriveReportServiceTest.cs" />
+    <Compile Include="PersonService\PersonServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
