@@ -83,6 +83,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
@@ -126,6 +129,8 @@
     <Compile Include="Controllers\MobileTokens\MobileTokenTest.cs" />
     <Compile Include="Controllers\Models\ODataMetaData.cs" />
     <Compile Include="Controllers\Models\ODataResponse.cs" />
+    <Compile Include="Controllers\BankAccounts\BankAccountRepositoryMock.cs" />
+    <Compile Include="Controllers\BankAccounts\BankAccountTest.cs" />
     <Compile Include="Controllers\OrgUnits\OrgUnitRepositoryMock.cs" />
     <Compile Include="Controllers\OrgUnits\OrgUnitTest.cs" />
     <Compile Include="Controllers\GenericRepositoryMock.cs" />

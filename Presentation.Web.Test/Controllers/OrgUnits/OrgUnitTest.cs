@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using Core.DomainModel;
 using Core.DomainServices;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Presentation.Web.Test.Controllers.OrgUnits
 {
-    [TestClass]
+    [TestFixture]
     public class OrgUnitTest : BaseControllerTest<OrgUnit>
     {
 
