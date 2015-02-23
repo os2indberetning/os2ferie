@@ -24,7 +24,7 @@
     <TypeScriptToolsVersion>1.4</TypeScriptToolsVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>803d1e9e</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>bb2330ea</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -285,8 +285,6 @@
     <Content Include="App\ApproveReports\ApproveReportsView.html" />
     <Content Include="App\ApproveReports\ConfirmApproveTemplate.html" />
     <Content Include="App\ApproveReports\ConfirmRejectTemplate.html" />
-    <Content Include="Gruntfile.js" />
-    <Content Include="karma.conf.js" />
     <Content Include="template\typeahead\typeahead-match.html" />
     <Content Include="template\typeahead\typeahead-popup.html" />
     <Content Include="App\AWS\awsSnippet.js" />
@@ -678,7 +676,6 @@
     <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js.map">
       <DependentUpon>ui-bootstrap-tpls.min.js</DependentUpon>
     </Content>
-    <Content Include="package.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
@@ -1894,7 +1891,6 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="TestScripts\DefaultTest.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -2066,9 +2062,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\packages\KarmaGruntJSUnit.MSBuild.1.0.6\build\KarmaGruntJSUnit.MSBuild.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\KarmaGruntJSUnit.MSBuild.1.0.6\build\KarmaGruntJSUnit.MSBuild.Targets'))" />
   </Target>
-  <Import Project="..\packages\KarmaGruntJSUnit.MSBuild.1.0.6\build\KarmaGruntJSUnit.MSBuild.Targets" Condition="Exists('..\packages\KarmaGruntJSUnit.MSBuild.1.0.6\build\KarmaGruntJSUnit.MSBuild.Targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
