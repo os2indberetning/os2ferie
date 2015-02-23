@@ -3,3 +3,4 @@
         "get": { method: "GET", isArray: false }
     });
 }]);
+

@@ -1,15 +1,15 @@
 namespace Infrastructure.DataAccess.Migrations
 {
+    using System;
+    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using MySql.Data.Entity;
+    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<Infrastructure.DataAccess.DataContext>
     {
         public Configuration()
         {
-            CodeGenerator = new MySqlMigrationCodeGenerator();
-            AutomaticMigrationsEnabled = false;
-            SetSqlGenerator("MySql.Data.MySqlClient", new MySqlMigrationSqlGenerator());
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(Infrastructure.DataAccess.DataContext context)
