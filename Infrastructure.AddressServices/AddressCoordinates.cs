@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using Infrastructure.AddressServices.Classes;
+using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices.Interfaces;
 using Newtonsoft.Json.Linq;
 using Address = Core.DomainModel.Address;
@@ -29,7 +29,7 @@ namespace Infrastructure.AddressServices
         /// Get address information for given coordinates.
         /// </summary>
         /// <param name="addressCoord"></param>
-        /// <exception cref="Classes.AddressCoordinatesException">Thrown if the coordinates did not return an address.</exception>
+        /// <exception cref="AddressCoordinatesException">Thrown if the coordinates did not return an address.</exception>
         /// <returns></returns>
         public Address GetAddressFromCoordinates(Address addressCoord)
         {

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Infrastructure.AddressServices.Classes;
+using Core.DomainServices.RoutingClasses;
+using Core.DomainServices.Ínterfaces;
 using Infrastructure.AddressServices.Interfaces;
 using Infrastructure.AddressServices.Routing;
 using NUnit.Framework;

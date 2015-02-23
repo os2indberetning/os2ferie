@@ -1,7 +1,7 @@
 ﻿
-namespace Infrastructure.AddressServices.Classes
+namespace Core.DomainServices.RoutingClasses
 {
-    static class UrlDefinitions
+    public class UrlDefinitions
     {
         private const string _coordinateToAddressUrl = @"http://dawa.aws.dk/adgangsadresser/reverse?";
         private const string _launderingURL = @"http://service.adressevask.dk/favrskov-HIEEPKWJED/json?json=";

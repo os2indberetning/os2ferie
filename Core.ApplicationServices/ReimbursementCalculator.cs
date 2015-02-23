@@ -3,7 +3,7 @@ using System.Linq;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
-using Infrastructure.AddressServices.Interfaces;
+using Core.DomainServices.Ínterfaces;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 
@@ -100,7 +100,7 @@ namespace Core.ApplicationServices
             }
 
             // If user manually provided a driven distance
-            if (reportMethod.ToLower() == "aflæst")
+            if (reportMethod.ToLower() == "read")
             {
                 //Take distance from report
                 var manuallyProvidedDrivenDistance = report.Distance;                               
@@ -108,7 +108,7 @@ namespace Core.ApplicationServices
                 report.Distance = manuallyProvidedDrivenDistance - toSubtract;
             }
             // Use route service to calculate the driven route
-            else if (reportMethod.ToLower() == "beregnet")
+            else if (reportMethod.ToLower() == "calculated")
             {
                 //Calculate the driven route
                 var drivenRoute = _route.GetRoute(report.DriveReportPoints);
@@ -121,18 +121,29 @@ namespace Core.ApplicationServices
                 //Set distance to corrected
                 report.Distance = correctDistance;
             }
-            // Use route service to calculate the driven route, but with no correction of the length of the route
-            else if (reportMethod.ToLower() == "beregnet uden merkørsel")
+            // Use route service to calculate the driven route, but with no correction of the length of the route besides when using FourKmRule
+            else if (reportMethod.ToLower() == "calculatedwithoutallowance")
             {
                 //Calculate the driven route
                 var drivenRoute = _route.GetRoute(report.DriveReportPoints);
-
-                report.Distance = drivenRoute.Length;
+                if (report.FourKmRule)
+                {
+                    report.Distance = drivenRoute.Length - 4;
+                }
+                else
+                {
+                    report.Distance = drivenRoute.Length;    
+                }
             }
 
             //Calculate the actual amount to reimburse
-            report.AmountToReimburse = report.Distance * report.KmRate;            
-            
+            report.AmountToReimburse = report.Distance * report.KmRate;
+
+            if (report.AmountToReimburse < 0)
+            {
+                report.AmountToReimburse = 0;
+            }
+
             return report;
         }
 

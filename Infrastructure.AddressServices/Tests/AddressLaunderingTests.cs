@@ -1,5 +1,4 @@
-﻿
-using Infrastructure.AddressServices.Classes;
+﻿using Core.DomainServices.RoutingClasses;
 using NUnit.Framework;
 using Address = Core.DomainModel.Address;
 

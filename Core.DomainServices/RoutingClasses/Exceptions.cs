@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Infrastructure.AddressServices.Classes
+namespace Core.DomainServices.RoutingClasses
 {
     [Serializable]
     public class AddressLaunderingException : ApplicationException

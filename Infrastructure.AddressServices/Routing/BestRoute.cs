@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Infrastructure.AddressServices.Classes;
+using Core.DomainServices.RoutingClasses;
+using Core.DomainServices.Ínterfaces;
 using Infrastructure.AddressServices.Interfaces;
 using Address = Core.DomainModel.Address;
 

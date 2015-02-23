@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.AddressServices.Classes
+﻿namespace Core.DomainServices.RoutingClasses
 {
     public class Coordinates
     {

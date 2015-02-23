@@ -51,6 +51,8 @@
     <Compile Include="DriveReportServiceTest\DriveReportServiceTest.cs" />
     <Compile Include="PersonService\PersonServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReimbursementCalculatorTest\ReimbursementCalculatorBaseTest.cs" />
+    <Compile Include="ReimbursementCalculatorTest\ReimbursementCalculatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -63,6 +65,10 @@
     <ProjectReference Include="..\Core.DomainModel\Core.DomainModel.csproj">
       <Project>{823928AD-3BB7-4FD8-831F-201D73B80AE0}</Project>
       <Name>Core.DomainModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core.DomainServices\Core.DomainServices.csproj">
+      <Project>{3A54FD98-5ECF-47C1-98C1-D827CFEBA317}</Project>
+      <Name>Core.DomainServices</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

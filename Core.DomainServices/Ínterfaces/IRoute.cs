@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Infrastructure.AddressServices.Classes;
-using Address = Core.DomainModel.Address;
+using Core.DomainModel;
+using Core.DomainServices.RoutingClasses;
 
-namespace Infrastructure.AddressServices.Interfaces
+namespace Core.DomainServices.Ínterfaces
 {
     public interface IRoute
     {

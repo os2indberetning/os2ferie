@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Net;
-using Infrastructure.AddressServices.Classes;
+using Core.DomainServices.RoutingClasses;
 using Newtonsoft.Json.Linq;
 using Address = Core.DomainModel.Address;
 
