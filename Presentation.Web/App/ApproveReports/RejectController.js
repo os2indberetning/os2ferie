@@ -12,12 +12,13 @@
 
        $scope.yesClicked = function () {
            if ($scope.comment == undefined) {
-               $scope.result.Comment = "";
+               $scope.errorMessage = "* Du skal angive en kommentar."
            } else {
                $scope.result.Comment = $scope.comment;
+               $scope.result.Id = itemId;
+               $modalInstance.close($scope.result);
            }
-           $scope.result.Id = itemId;
-           $modalInstance.close($scope.result);
+           
        }
 
    }
