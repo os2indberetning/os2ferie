@@ -5,13 +5,17 @@
     <div>
         <ol class="dl-horizontal token-list">
             <li ng-repeat="token in tokens">
-                <pre><strong>{{ token.Token }} | {{ token.StatusToPresent }}</strong><button class="btn btn-danger pull-right" ng-click="deleteToken(token)">Slet</button></pre>
+                <pre><strong>{{ token.Token }} | {{ token.StatusToPresent }} | {{ token.Description }}</strong><button class="btn btn-danger pull-right" ng-click="openConfirmDeleteModal(token)">Slet</button></pre>
             </li>
-        </ol>    
-    </div>    
-    
+        </ol>
+    </div>
+    <div collapse="isCollapsed">
+        <input ng-model="newTokenDescription" class="form-control  fill-fifty pull-left" placeholder="Beskrivelse" />
+        <div class="seperator"></div>
+        <button class="btn btn-success pull-right" ng-click="saveToken()">Gem</button>
+    </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-success pull-left new-token-btn" ng-click="saveNewToken()">Opret ny token</button>
+    <button class="btn btn-success pull-left new-token-btn" ng-click="newToken()">Opret ny token</button>
     <button class="btn btn-primary pull-right close-token-modal" ng-click="closeTokenModal()">OK</button>    
 </div>

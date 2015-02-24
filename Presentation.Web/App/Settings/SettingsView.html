@@ -42,13 +42,13 @@
                     <label for="">Afvigende hjemmeadresse:</label>
                     <div></div>
                     <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
-                           k-data-source="SmartAddress" ng-model="alternativeHomeAddress" class="fill-fifty" k-placeholder="'Skriv her'" />
+                           k-data-source="SmartAddress" ng-model="newAlternativeHomeAddress" class="fill-fifty" k-placeholder="'Skriv her'" />
                     <button type="submit" class="btn btn-primary" ng-click="saveAlternativeHomeAddress()">Gem afvigende hjemmeadresse</button>
                     <div class="seperator"></div>
                     <label for="">Afvigende arbejdsadresse:</label>
                     <div></div>
                     <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
-                           k-data-source="SmartAddress" ng-model="alternativeWorkAddress" class="fill-fifty" k-placeholder="'Skriv her'" />
+                           k-data-source="SmartAddress" ng-model="newAlternativeWorkAddress" class="fill-fifty" k-placeholder="'Skriv her'" />
                     <button type="submit" class="btn btn-primary" ng-click="saveAlternativeWorkAddress()">Gem afvigende arbejdsadresse</button>
                 </div>
             </div>
@@ -82,6 +82,7 @@
                 <div class="form-group form-inline">
                     <h3>Personlige adresser</h3>
                     <div kendo-grid="gridContainer.personalAddressesGrid" options="personalAddresses"></div>
+                    <button class="btn btn-default set-margin-top-10" ng-click="openAddressEditModal()">Opret ny personlig adresse</button>
                 </div>
             </div>
         </div>
@@ -90,8 +91,9 @@
                 <div class="form-group form-inline">
                     <h3>Personlige ruter</h3>
                     <div kendo-grid="gridcontainer.personalRoutesGrid" options="personalRoutes"></div>
-                </div>
-            </div>
+                    <button class="btn btn-default set-margin-top-10" ng-click="openRouteEditModal()">Opret ny rute</button>
+                </div>                
+            </div>            
         </div>
     </div>
 </div>

@@ -20,7 +20,7 @@ namespace Infrastructure.DataAccess
             _context = context;
             _dbSet = context.Set<T>();
         }
-        
+
         public T Insert(T entity)
         {
             //There is a problem that an unattached navigation property will
