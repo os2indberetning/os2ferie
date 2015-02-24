@@ -175,7 +175,12 @@
       <Name>Presentation.Web</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="FrontendCasperTests\google-test.js" />
+    <Content Include="FrontendCasperTests\MyReports\test.js" />
+    <Content Include="casperjs-setup.js" />
+    <None Include="run-casper-tests.bat" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
