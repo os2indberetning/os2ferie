@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("SettingController", [
-    "$scope", "$modal", "Person", "LicensePlate", "Personalroute", "Point", "Route", "$http", "NotificationService", function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Route, $http, NotificationService) {
+    "$scope", "$modal", "Person", "LicensePlate", "Personalroute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService) {
         $scope.gridContainer = {};
         $scope.isCollapsed = true;
         $scope.mailAdvice = '';
@@ -8,18 +8,76 @@
         $scope.newLicensePlateDescription = "";
         $scope.workDistanceOverride = 0;
         $scope.recieveMail = false;
-        $scope.alternativeHomeAddress = "";
-        $scope.alternativeWorkAddress = "";
+        $scope.oldAlternativeHomeAddress = "";
+        $scope.oldAlternativeHomeAddressId = 0;
+        $scope.newAlternativeHomeAddress = "";
+        $scope.oldAlternativeWorkAddress = "";
+        $scope.oldAlternativeWorkAddressId = 0;
+        $scope.newAlternativeWorkAddress = "";
         $scope.routes = [];
         $scope.addresses = [];
 
         // Contains references to kendo ui grids.
         $scope.gridContainer = {};
 
-        LicensePlate.get({ id: 1 }, function (data) {
-            $scope.licenseplates = data.value;
+        $scope.GetPerson = Person.get({ id: 1 }, function (data) {
+            $scope.currentPerson = data.value[0];
+            $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride;
+            $scope.recieveMail = data.value[0].RecieveMail;
+
+            //Sæt valg af mailnotifikationer
+            if ($scope.recieveMail == true) {
+                $scope.mailAdvice = 'Yes';
+            } else {
+                $scope.mailAdvice = 'No';
+            }
+
+            //Hent nummerplader
+            LicensePlate.get({ id: 1 }, function (data) {
+                $scope.licenseplates = data.value;
+            });
+
+            $scope.loadAlternativeHomeAddress();
+            $scope.loadAlternativeWorkAddress();
+
+            NotificationService.AutoFadeNotification("success", "Success", "Person fundet");
+        }, function () {
+            NotificationService.AutoFadeNotification("danger", "Fejl", "Person ikke fundet");
         });
 
+        //Hent alternativ hjemmeadresse
+        $scope.loadAlternativeHomeAddress = function () {
+            Address.get({ id: $scope.currentPerson.Id, query: "$filter=Type eq Core.DomainModel.PersonalAddressType'AlternativeHome'" }, function (data) {
+                if (data.value[0] != undefined) {
+                    $scope.oldAlternativeHomeAddressId = data.value[0].Id;
+                    $scope.oldAlternativeHomeAddress = data.value[0].StreetName + " " + data.value[0].StreetNumber + ", " + data.value[0].ZipCode + " " + data.value[0].Town;
+                    $scope.newAlternativeHomeAddress = $scope.oldAlternativeHomeAddress;
+                } else {
+                    $scope.newAlternativeHomeAddress = "";
+                    $scope.oldAlternativeHomeAddress = "";
+                }
+            }, function () {
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke finde alternativ hjemmeadresse");
+            });
+        }
+
+        //Hent alternativ arbejdsadresse
+        $scope.loadAlternativeWorkAddress = function () {
+            Address.get({ id: $scope.currentPerson.Id, query: "$filter=Type eq Core.DomainModel.PersonalAddressType'AlternativeWork'" }, function (data) {
+                if (data.value[0] != undefined) {
+                    $scope.oldAlternativeWorkAddressId = data.value[0].Id;
+                    $scope.oldAlternativeWorkAddress = data.value[0].StreetName + " " + data.value[0].StreetNumber + ", " + data.value[0].ZipCode + " " + data.value[0].Town;
+                    $scope.newAlternativeWorkAddress = $scope.oldAlternativeWorkAddress;
+                } else {
+                    $scope.newAlternativeWorkAddress = "";
+                    $scope.oldAlternativeWorkAddress = "";
+                }
+            }, function () {
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke finde alternativ arbejdsadresse");
+            });
+        }
+
+        //Funtionalitet til opslag af adresser
         $scope.SmartAddress = {
             type: "json",
             minLength: 3,
@@ -47,9 +105,44 @@
             },
         }
 
+        //Gem ny nummerplade
         $scope.saveNewLicensePlate = function () {
+            var plate = "";
+
+            var array = $scope.newLicensePlate.split('');
+
+            if ($scope.newLicensePlateDescription == "") {
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade skal have en beskrivelse");
+                return;
+            }
+
+            if (array.length < 7 || array.length > 9) {
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade er ikke i korrekt format. Eksempel: AB 12 345");
+                return;
+            }
+
+            var first = array[0];
+            var second = array[1];
+
+            array[0] = first.toUpperCase();
+            array[1] = second.toUpperCase();
+
+            var cleanArray = [];
+            if (array.length >= 7 || array.length <= 9) {
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i] != ' ') {
+                        cleanArray[i] = array[i];
+                    }
+                }                
+            }
+
+            cleanArray.splice(2, 0, ' ');
+            cleanArray.splice(5, 0, ' ');
+
+            plate = cleanArray.join("");
+
             var newPlate = new LicensePlate({
-                Plate: $scope.newLicensePlate,
+                Plate: plate,
                 Description: $scope.newLicensePlateDescription,
                 PersonId: 1
             });
@@ -68,6 +161,7 @@
             });
         };
 
+        //Slet eksisterende nummerplade
         $scope.deleteLicensePlate = function (plate) {
             var objIndex = $scope.licenseplates.indexOf(plate);
             $scope.licenseplates.splice(objIndex, 1);
@@ -83,6 +177,7 @@
             };
         }
 
+        //Skift valg om mailnotifikationer
         $scope.invertRecieveMail = function () {
             $scope.recieveMail = !$scope.recieveMail;
 
@@ -98,15 +193,128 @@
             };
         }
 
+        //Funktionalitet til alternativ hjemmeadresse
         $scope.saveAlternativeHomeAddress = function () {
-            console.log($scope.alternativeHomeAddress);
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
+            if ($scope.oldAlternativeHomeAddress == "") { // CREATE IT
+                var result = AddressFormatter.fn($scope.newAlternativeHomeAddress);
+
+                result.Id = $scope.oldAlternativeHomeAddressId;
+                result.PersonId = $scope.currentPerson.Id;
+
+                var newAlternativeHomeAddress = new Address({
+                    Id: result.Id,
+                    PersonId: result.PersonId,
+                    StreetName: result.StreetName,
+                    StreetNumber: result.StreetNumber,
+                    ZipCode: result.ZipCode,
+                    Town: result.Town,
+                    Type: "AlternativeHome",
+                    Latitude: "",
+                    Longitude: ""
+                });
+
+                newAlternativeHomeAddress.$post({}, function (data) {
+                    $scope.loadAlternativeHomeAddress();
+                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse gemt");
+                }, function () {
+                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse kunne ikke gemmes");
+                });
+
+            } else if ($scope.newAlternativeHomeAddress == "") { // DELETE IT
+                Address.delete({ id: $scope.oldAlternativeHomeAddressId }, function () {
+                    $scope.loadAlternativeHomeAddress();
+                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse slettet");
+                }, function () {
+                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse kunne ikke slettes");
+                });
+
+            } else if ($scope.newAlternativeHomeAddress != $scope.oldAlternativeHomeAddress) { // UPDATE IT                
+                var result = AddressFormatter.fn($scope.newAlternativeHomeAddress);
+
+                result.Id = $scope.oldAlternativeHomeAddressId;
+                result.PersonId = $scope.currentPerson.Id;
+
+                var editedAlternativeHomeAddress = new Address({
+                    Id: result.Id,
+                    PersonId: result.PersonId,
+                    StreetName: result.StreetName,
+                    StreetNumber: result.StreetNumber,
+                    ZipCode: result.ZipCode,
+                    Town: result.Town,
+                    Description: result.Description,
+                    Type: "AlternativeHome"
+                });
+
+                editedAlternativeHomeAddress.$patch({ id: result.Id }, function (data) {
+                    $scope.loadAlternativeHomeAddress();
+                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse opdateret");
+                }, function () {
+                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse blev ikke opdateret");
+                });
+            }
         }
 
+        //Funktionalitet til alternativ arbejdsadresse
         $scope.saveAlternativeWorkAddress = function () {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Jeg er ikke implementeret :(");
+            if ($scope.oldAlternativeWorkAddress == "") { // CREATE IT
+                var result = AddressFormatter.fn($scope.newAlternativeWorkAddress);
+
+                result.Id = $scope.oldAlternativeWorkAddressId;
+                result.PersonId = $scope.currentPerson.Id;
+
+                var newAlternativeWorkAddress = new Address({
+                    Id: result.Id,
+                    PersonId: result.PersonId,
+                    StreetName: result.StreetName,
+                    StreetNumber: result.StreetNumber,
+                    ZipCode: result.ZipCode,
+                    Town: result.Town,
+                    Type: "AlternativeWork",
+                    Latitude: "",
+                    Longitude: ""
+                });
+
+                newAlternativeWorkAddress.$post({}, function (data) {
+                    $scope.loadAlternativeWorkAddress();
+                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse gemt");
+                }, function () {
+                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse kunne ikke gemmes");
+                });
+
+            } else if ($scope.newAlternativeWorkAddress == "") { // DELETE IT
+                Address.delete({ id: $scope.oldAlternativeWorkAddressId }, function () {
+                    $scope.loadAlternativeWorkAddress();
+                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse slettet");
+                }, function () {
+                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse kunne ikke ¨Slettes");
+                });
+
+            } else if ($scope.newAlternativeWorkAddress != $scope.oldAlternativeWorkAddress) { // UPDATE IT
+                var result = AddressFormatter.fn($scope.newAlternativeWorkAddress);
+
+                result.Id = $scope.oldAlternativeWorkAddressId;
+                result.PersonId = $scope.currentPerson.Id;
+
+                var editedAlternativeWorkAddress = new Address({
+                    Id: result.Id,
+                    PersonId: result.PersonId,
+                    StreetName: result.StreetName,
+                    StreetNumber: result.StreetNumber,
+                    ZipCode: result.ZipCode,
+                    Town: result.Town,
+                    Description: result.Description,
+                    Type: "AlternativeWork"
+                });
+
+                editedAlternativeWorkAddress.$patch({ id: result.Id }, function (data) {
+                    $scope.loadAlternativeWorkAddress();
+                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse opdateret");
+                }, function () {
+                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse blev ikke opdateret");
+                });
+            }
         }
-       
+
         $scope.setHomeWorkOverride = function () {
             var newPerson = new Person({
                 WorkDistanceOverride: $scope.workDistanceOverride
@@ -121,7 +329,7 @@
                     $scope.mailAdvice = 'No';
                 }
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Afstand mellem hjemme- og arbejdsadresse blev ikke gemt");
-        };
+            };
         };
 
         $scope.loadGrids = function (id) {
@@ -202,7 +410,7 @@
                     {
                         field: "Id",
                         title: "Muligheder",
-                        template: "<a ng-click='openRouteEditModal(${Id})'>Rediger</a>"
+                        template: "<a ng-click='openRouteEditModal(${Id})'>Rediger</a> | <a ng-click=''>Slet</a>"
                     }
                 ]
             };
@@ -265,60 +473,44 @@
             };
         }
 
-        $scope.GetPerson = Person.get({ id: 1 }, function (data) {
-            $scope.currentPerson = data;
-            $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride;
-            $scope.recieveMail = data.RecieveMail;
-            if ($scope.recieveMail == true) {
-                $scope.mailAdvice = 'Yes';
-            } else {
-                $scope.mailAdvice = 'No';
-            }
-            NotificationService.AutoFadeNotification("success", "Success", "Person fundet");
-        },
-        function () {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Person ikke fundet");
-        });
-
         $scope.loadGrids(1);
 
         $scope.updatePersonalAddresses = function () {
             $scope.gridContainer.personalAddressesGrid.dataSource.transport.options.read.url = "odata/PersonalAddresses(" + $scope.currentPerson.Id + ")";
             $scope.gridContainer.personalAddressesGrid.dataSource.read();
-            
+
         }
 
         $scope.updatePersonalRoutes = function () {
             $scope.gridcontainer.personalRoutesGrid.dataSource.transport.options.read.url = "odata/PersonalRoutes(" + $scope.currentPerson.Id + ")?$expand=Points";
             $scope.gridcontainer.personalRoutesGrid.dataSource.read();
 
-        }        
+        }
 
-    $scope.openTokenModal = function (size) {
+        $scope.openTokenModal = function (size) {
 
-        var modalInstance = $modal.open({
-                scope: $scope,
-            templateUrl: '/App/Settings/tokenModal.html',
-            controller: 'TokenInstanceController',
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/tokenModal.html',
+                controller: 'TokenInstanceController',
                 backdrop: 'static',
-            size: size,
-            resolve: {
+                size: size,
+                resolve: {
                     personId: function () {
                         return $scope.currentPerson.Id;
+                    }
                 }
-            }
-        });
+            });
 
             modalInstance.result.then(function () {
 
-        });
-    };
+            });
+        };
 
         $scope.openRouteEditModal = function (id) {
 
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/RouteEditModal.html',
-                controller: 'RouteEditModalController',
+                controller: 'RouteEditModalInstanceController',
                 backdrop: 'static',
                 resolve: {
                     routeId: function () {
@@ -339,7 +531,7 @@
 
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/AddressEditModal.html',
-                controller: 'AddressEditModalController',
+                controller: 'AddressEditModalInstanceController',
                 backdrop: 'static',
                 resolve: {
                     addressId: function () {

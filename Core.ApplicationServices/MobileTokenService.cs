@@ -38,6 +38,16 @@ namespace Core.ApplicationServices
             token.Guid = Guid.NewGuid();
             token.Status = MobileTokenStatus.Created;
 
+            if (token.Status == MobileTokenStatus.Created)
+            {
+                token.StatusToPresent = "Oprettet";
+            }
+
+            if (token.Status == MobileTokenStatus.Activated)
+            {
+                token.StatusToPresent = "Aktiveret";
+            }            
+
             var createdToken = _repo.Insert(token);
 
             _repo.Save();

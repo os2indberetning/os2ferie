@@ -99,6 +99,10 @@
     <Compile Include="Migrations\201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.Designer.cs">
       <DependentUpon>201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502231457318_AddedDescriptionToMobileToken.cs" />
+    <Compile Include="Migrations\201502231457318_AddedDescriptionToMobileToken.Designer.cs">
+      <DependentUpon>201502231457318_AddedDescriptionToMobileToken.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201502240716334_update.cs" />
     <Compile Include="Migrations\201502240716334_update.Designer.cs">
       <DependentUpon>201502240716334_update.cs</DependentUpon>
@@ -157,6 +161,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502240947494_update1.resx">
       <DependentUpon>201502240947494_update1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502231457318_AddedDescriptionToMobileToken.resx">
+      <DependentUpon>201502231457318_AddedDescriptionToMobileToken.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

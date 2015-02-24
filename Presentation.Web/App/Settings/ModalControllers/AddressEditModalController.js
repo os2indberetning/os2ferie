@@ -4,37 +4,61 @@
     $scope.oldAddress = "";
     $scope.addressDescription = "";
 
-    Address.get({ id: personId, query: "$filter=Id eq " + addressId }, function (data) {
-        $scope.oldAddressId = data.value[0].Id;
-        $scope.addressDescription = data.value[0].Description;
-        $scope.oldAddress = data.value[0].StreetName + " " + data.value[0].StreetNumber + ", " + data.value[0].ZipCode + " " + data.value[0].Town;
-    });
+    $scope.loadAddressData= function() {
+        if (addressId != undefined) {
+            Address.get({ id: personId, query: "$filter=Id eq " + addressId }, function (data) {
+                $scope.oldAddressId = data.value[0].Id;
+                $scope.addressDescription = data.value[0].Description;
+                $scope.oldAddress = data.value[0].StreetName + " " + data.value[0].StreetNumber + ", " + data.value[0].ZipCode + " " + data.value[0].Town;
+            });
+        }
+    }
+
+    $scope.loadAddressData();
 
     $scope.saveEditedAddress = function () {
         $scope.newAddress = $scope.oldAddress;
 
         var result = AddressFormatter.fn($scope.newAddress);
 
-        result.Id = $scope.oldAddressId;
-        result.PersonId = personId;
+        if (addressId != undefined) {
+            result.Id = $scope.oldAddressId;
+            result.PersonId = personId;
 
-        result.Description = $scope.addressDescription;
+            result.Description = $scope.addressDescription;
 
-        var address = new Address({
-            Id: result.Id,
-            PersonId: result.PersonId,
-            StreetName: result.StreetName,
-            StreetNumber: result.StreetNumber,
-            ZipCode: result.ZipCode,
-            Town: result.Town,
-            Description: result.Description
-        });
+            var updatedAddress = new Address({
+                PersonId: personId,
+                StreetName: result.StreetName,
+                StreetNumber: result.StreetNumber,
+                ZipCode: parseInt(result.ZipCode),
+                Town: result.Town,
+                Description: $scope.addressDescription
+            });
 
-        address.$patch({ id: result.Id }, function () {
-            NotificationService.AutoFadeNotification("success", "Success", "Adresse opdateret");
-        }, function() {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke opdateret");
-        });
+            updatedAddress.$patch({ id: result.Id }, function () {
+                NotificationService.AutoFadeNotification("success", "Success", "Adresse opdateret");
+            }, function () {
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke opdateret");
+            });
+        } else {
+            var newAddress = new Address({
+                PersonId: personId,
+                StreetName: result.StreetName,
+                StreetNumber: result.StreetNumber,
+                ZipCode: parseInt(result.ZipCode),
+                Town: result.Town,
+                Description: $scope.addressDescription,
+                Latitude: "",
+                Longitude: ""
+            });
+
+            newAddress.$post(function() {
+                NotificationService.AutoFadeNotification("success", "Success", "Adresse oprettet");
+            }, function() {
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke oprettet");
+            });
+        }
     }
 
     $scope.SmartAddress = {
