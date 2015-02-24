@@ -5,7 +5,7 @@ using System.Linq;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.AddressServices;
-using Infrastructure.AddressServices.Interfaces;
+using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 
@@ -14,7 +14,7 @@ namespace Core.ApplicationServices
 {
     public class DriveReportService
     {
-        private readonly IRoute _route;
+        private readonly IRoute<RouteInformation> _route;
         private readonly IAddressCoordinates _coordinates;
         private readonly IGenericRepository<DriveReportPoint> _driveReportPointRepository;
         private readonly IGenericRepository<DriveReport> _driveReportRepository;
@@ -31,7 +31,7 @@ namespace Core.ApplicationServices
             _calculator = new ReimbursementCalculator();
         }
 
-        public DriveReportService(IRoute route, IAddressCoordinates coordinates, IGenericRepository<DriveReportPoint> driveReportPointRepository, IGenericRepository<DriveReport> driveReportRepository, IGenericRepository<LicensePlate> licensePlateRepository, ReimbursementCalculator calculator)
+        public DriveReportService(IRoute<RouteInformation> route, IAddressCoordinates coordinates, IGenericRepository<DriveReportPoint> driveReportPointRepository, IGenericRepository<DriveReport> driveReportRepository, IGenericRepository<LicensePlate> licensePlateRepository, ReimbursementCalculator calculator)
         {
             _route = route;
             _coordinates = coordinates;
