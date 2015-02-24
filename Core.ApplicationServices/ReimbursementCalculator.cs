@@ -56,15 +56,35 @@ namespace Core.ApplicationServices
             var homeWorkDistance = 0.0;
 
             var person = _personRepo.AsQueryable().First(x => x.Id == report.PersonId);
+            
+            var homeAddress = GetHomeAddress(report);
+            var workAddress = GetWorkAddress(report);
 
+            //Check if drivereport starts at users home address.
+            if (homeAddress.StreetName == report.DriveReportPoints.First().StreetName
+                && homeAddress.StreetNumber == report.DriveReportPoints.First().StreetNumber
+                && homeAddress.ZipCode == report.DriveReportPoints.First().ZipCode
+                && homeAddress.Town == report.DriveReportPoints.First().Town)
+            {
+                report.StartsAtHome = true;
+            }
+
+            //Check if drivereport ends at users home address.
+            if (homeAddress.StreetName == report.DriveReportPoints.Last().StreetName
+                && homeAddress.StreetNumber == report.DriveReportPoints.Last().StreetNumber
+                && homeAddress.ZipCode == report.DriveReportPoints.Last().ZipCode
+                && homeAddress.Town == report.DriveReportPoints.Last().Town)
+            {
+                report.EndsAtHome = true;
+            }
+
+            //Check if user has overriden the distance between the users home and work address
             if (person.WorkDistanceOverride > 0)
             {
                 homeWorkDistance = person.WorkDistanceOverride;
             }
             else
-            {
-                var homeAddress = GetHomeAddress(report);
-                var workAddress = GetWorkAddress(report);
+            {                
                 homeWorkDistance = _route.GetRoute(new List<Address>() { homeAddress, workAddress }).Length;    
             }
             
