@@ -285,6 +285,8 @@
     <Content Include="App\Directives\AwsDirective.js" />
     <Content Include="App\Driving\DrivingView.html" />
     <Content Include="App\Driving\DrivingController.js" />
+    <Content Include="App\Driving\noLicensePlateModal.html" />
+    <Content Include="App\Driving\noLicensePlateModalController.js" />
     <Content Include="App\Frontpage\FrontpageView.html" />
     <Content Include="App\MyReports\ConfirmDeleteReportController.js" />
     <Content Include="App\MyReports\ConfirmDeleteTemplate.html" />
