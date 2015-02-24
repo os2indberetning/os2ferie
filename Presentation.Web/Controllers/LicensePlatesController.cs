@@ -13,6 +13,7 @@ using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
 using Microsoft.Data.OData;
+using Microsoft.SqlServer.Server;
 
 namespace OS2Indberetning.Controllers
 {

@@ -10,11 +10,14 @@
     <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.material.mobile.min.css" rel="stylesheet">
     <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.dataviz.min.css" rel="stylesheet">
     <link href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.dataviz.material.min.css" rel="stylesheet">
+    
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
+    
+
 </head>
-<body>
+<body class="scrollme" ng-scrollbar rebuild-on-resize>
     <div id="wrapper">
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -31,7 +34,7 @@
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             Fornavn Mellemnavn Efternavn
@@ -76,17 +79,19 @@
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
-        </nav>
-        <div>
+        </nav>        
+      
+
             @RenderBody()
-        </div>
+
+       
 
     </div>
-
+    
     <div class="errors-container">
 
     </div>
-   
+
     <!-- REQUIERED LIBRARIES FOR AWS SNIPPET -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/jquery-ui.min.js"></script>
@@ -100,11 +105,7 @@
     <script src="http://cdn.kendostatic.com/2014.3.1119/js/kendo.all.min.js"></script>
     <script src="http://kendo-labs.github.io/angular-kendo/angular-kendo.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
-<<<<<<< HEAD
-    @Scripts.Render("~/bundles/angular")
-=======
-    @Scripts.Render("~/bundles/angular")
->>>>>>> ba0c7ba0f4780a1f87ac78a47fedf66621011f4c
+    @Scripts.Render("~/bundles/angular")   
     @RenderSection("scripts", required: false)
     <script>
         $(document).ready($('#mastertab a').click(function (e) {

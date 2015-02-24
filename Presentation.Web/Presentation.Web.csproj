@@ -249,6 +249,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\DriveReportsController.cs" />
     <Compile Include="Controllers\ExampleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -262,7 +263,6 @@
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\AddressController.cs" />
     <Compile Include="Controllers\SubstitutesController.cs" />
-    <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\PointsController.cs" />
     <Compile Include="Controllers\TestReportsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -289,6 +289,7 @@
     <Content Include="App\ApproveReports\ConfirmRejectTemplate.html" />
     <Content Include="App\Services\BankAccountService.js" />
     <Content Include="App\Services\OrgUnitResource.js" />
+    <Content Include="App\Services\RouteContainerResource.js" />
     <Content Include="template\typeahead\typeahead-match.html" />
     <Content Include="template\typeahead\typeahead-popup.html" />
     <Content Include="App\AWS\awsSnippet.js" />
@@ -296,6 +297,8 @@
     <Content Include="App\Directives\AwsDirective.js" />
     <Content Include="App\Driving\DrivingView.html" />
     <Content Include="App\Driving\DrivingController.js" />
+    <Content Include="App\Driving\noLicensePlateModal.html" />
+    <Content Include="App\Driving\noLicensePlateModalController.js" />
     <Content Include="App\Frontpage\FrontpageView.html" />
     <Content Include="App\MyReports\ConfirmDeleteReportController.js" />
     <Content Include="App\MyReports\ConfirmDeleteTemplate.html" />
@@ -305,20 +308,25 @@
     <Content Include="App\MyReports\MyReportsView.html" />
     <Content Include="App\Services\AddressFormatterService.js" />
     <Content Include="App\Services\AddressResource.js" />
+    <Content Include="App\Services\DriveReportResource.js" />
     <Content Include="App\Services\LicensePlateResource.js" />
     <Content Include="App\Services\NotificationService.js" />
+    <Content Include="App\Services\RateResource.js" />
+    <Content Include="App\Services\PersonEmploymentsResource.js" />
+    <Content Include="App\Services\PersonalAddressType.js" />
     <Content Include="App\Services\PersonalRouteResource.js" />
+    <Content Include="App\Services\PersonalAddressResource.js" />
     <Content Include="App\Services\PointResource.js" />
     <Content Include="App\Services\ReportResource.js" />
     <Content Include="App\Services\RouteResource.js" />
+    <Content Include="App\Services\SmartAdresseSource.js" />
     <Content Include="App\Services\TokenResource.js" />
     <Content Include="App\Settings\AddressEditModal.html" />
+    <Content Include="App\Settings\confirmDeleteTokenModal.html" />
     <Content Include="App\Settings\ModalControllers\AddressEditModalController.js" />
     <Content Include="App\Settings\ModalControllers\RouteEditModalController.js" />
     <Content Include="App\Settings\ModalControllers\TokenModalController.js" />
     <Content Include="App\Settings\RouteEditModal.html" />
-    <Content Include="App\Services\DriveReportResource.js" />
-    <Content Include="App\Services\SmartAdresseSource.js" />
     <Content Include="App\Settings\SettingsController.js" />
     <Content Include="App\Settings\SettingsView.html" />
     <Content Include="App\Settings\tokenModal.html" />
@@ -576,6 +584,7 @@
     <Content Include="Content\Themes\SbAdmin\font-awesome\css\font-awesome.css" />
     <Content Include="Content\Themes\SbAdmin\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\Themes\SbAdmin\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\timeline.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -677,6 +686,10 @@
     <Content Include="Scripts\angular-moment.min.js.map" />
     <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js.map">
       <DependentUpon>ui-bootstrap-tpls.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\Config\mapwidget.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <BrowseToURL>~/Content/Config/mapwidget.json</BrowseToURL>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
@@ -1893,6 +1906,7 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\SeptimaWidgetDriver.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

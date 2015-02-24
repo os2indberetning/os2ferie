@@ -39,6 +39,7 @@ namespace OS2Indberetning
                       "~/Content/Themes/SbAdmin/css/plugins/morris.css",
                       "~/Content/Themes/SbAdmin/font-awesome/css/font-awesome.min.css",
                       "~/Content/site.css",
+                      "~/Content/timeline.css",
                       "~/Content/custom.css"));
 
             //bundles.Add(new ScriptBundle("~/bundles/angular").IncludeDirectory("~/App", "*.js", true));

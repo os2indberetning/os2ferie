@@ -52,5 +52,17 @@ namespace OS2Indberetning.Controllers
         {
             return base.Delete(key);
         }
+
+        //GET odata/PersonalAddresses(5)/GetAlternativeHome
+        public IQueryable<PersonalAddress> GetAlternativeHome([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
+        {
+            return GetQueryable(queryOptions).Where(x => x.PersonId == key && x.Type == PersonalAddressType.AlternativeHome);
+        }
+
+        //GET odata/PersonalAddresses(5)/GetAlternativeWork
+        public IQueryable<PersonalAddress> GetAlternativeWork([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
+        {
+            return GetQueryable(queryOptions).Where(x => x.PersonId == key && x.Type == PersonalAddressType.AlternativeWork);
+        }
     }
 }
