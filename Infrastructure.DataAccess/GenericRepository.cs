@@ -20,9 +20,21 @@ namespace Infrastructure.DataAccess
             _context = context;
             _dbSet = context.Set<T>();
         }
-        
+
         public T Insert(T entity)
         {
+            //There is a problem that an unattached navigation property will
+            //be created as a new entity, so we attach all non value types to the
+            //contexts db sets.
+            foreach (var propertyInfo in typeof(T).GetProperties())
+            {
+                if (propertyInfo.GetValue(entity) != null && propertyInfo.PropertyType == typeof(object))
+                {
+                    var navProperty = propertyInfo.GetValue(entity);
+                    _context.Set(propertyInfo.GetType()).Attach(navProperty);
+                }
+            }
+
             return _dbSet.Add(entity);
         }
 
@@ -60,7 +72,7 @@ namespace Infrastructure.DataAccess
                 if (propertyInfo.Name == "Id")
                     continue; // skip primary key
 
-                if (propertyInfo.GetValue(entity) != null)
+                if (propertyInfo.GetValue(entity) != null && propertyInfo.PropertyType.IsValueType)
                     entry.Property(propertyInfo.Name).IsModified = true;
             }
         }

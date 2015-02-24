@@ -87,6 +87,30 @@
     <Compile Include="Migrations\201502201040378_Changed account to bank account.Designer.cs">
       <DependentUpon>201502201040378_Changed account to bank account.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502190921381_AddedPropertiesToEmployment.cs" />
+    <Compile Include="Migrations\201502190921381_AddedPropertiesToEmployment.Designer.cs">
+      <DependentUpon>201502190921381_AddedPropertiesToEmployment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502190925147_AddedPropertiesToPerson.cs" />
+    <Compile Include="Migrations\201502190925147_AddedPropertiesToPerson.Designer.cs">
+      <DependentUpon>201502190925147_AddedPropertiesToPerson.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.cs" />
+    <Compile Include="Migrations\201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.Designer.cs">
+      <DependentUpon>201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502231457318_AddedDescriptionToMobileToken.cs" />
+    <Compile Include="Migrations\201502231457318_AddedDescriptionToMobileToken.Designer.cs">
+      <DependentUpon>201502231457318_AddedDescriptionToMobileToken.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502240716334_update.cs" />
+    <Compile Include="Migrations\201502240716334_update.Designer.cs">
+      <DependentUpon>201502240716334_update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502240947494_update1.cs" />
+    <Compile Include="Migrations\201502240947494_update1.Designer.cs">
+      <DependentUpon>201502240947494_update1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -122,6 +146,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502201040378_Changed account to bank account.resx">
       <DependentUpon>201502201040378_Changed account to bank account.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502190921381_AddedPropertiesToEmployment.resx">
+      <DependentUpon>201502190921381_AddedPropertiesToEmployment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502190925147_AddedPropertiesToPerson.resx">
+      <DependentUpon>201502190925147_AddedPropertiesToPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.resx">
+      <DependentUpon>201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502240716334_update.resx">
+      <DependentUpon>201502240716334_update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502240947494_update1.resx">
+      <DependentUpon>201502240947494_update1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502231457318_AddedDescriptionToMobileToken.resx">
+      <DependentUpon>201502231457318_AddedDescriptionToMobileToken.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

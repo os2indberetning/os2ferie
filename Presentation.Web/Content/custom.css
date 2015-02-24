@@ -106,6 +106,13 @@
     width: 50%;
 }
 
+.fill-90 {
+    width: 90%;
+}
+
+.set-margin-top-10 {
+    margin-top: 10px;
+}
 
 /*CUSTOM CSS FOR NOTIFICATION SERVICE*/
 .errors-container {
@@ -186,3 +193,11 @@
     border-bottom: 0;
     margin: 0; }
 /*************************************/
+
+.m-t-l {
+    margin-top: 15px;
+}
+
+.m-b-l {
+    margin-bottom: 15px;
+}

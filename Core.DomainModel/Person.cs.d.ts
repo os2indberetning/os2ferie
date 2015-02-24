@@ -9,6 +9,7 @@
 		mail: string;
 		workDistanceOverride: number;
 		recieveMail: boolean;
+		distanceFromHomeToBorder: number;
 		personalAddresses: any[];
 		personalRoutes: any[];
 		licensePlates: any[];

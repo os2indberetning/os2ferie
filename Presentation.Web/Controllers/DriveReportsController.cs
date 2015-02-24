@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -24,7 +25,7 @@ namespace OS2Indberetning.Controllers
         //GET: odata/DriveReports(5)
         public IQueryable<DriveReport> GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
-            return _driveService.AddFullName(GetQueryable(key, queryOptions));  
+            return _driveService.AddFullName(GetQueryable(key, queryOptions));
         }
 
         // PUT: odata/DriveReports(5)
@@ -37,7 +38,16 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(DriveReport driveReport)
         {
-            return base.Post(driveReport);
+            //try
+            //{
+                var result = _driveService.Create(driveReport);
+
+                return Ok(result);
+            //}
+            //catch (Exception e)
+            //{
+            //    return BadRequest("DriveReport has some invalid parameters");
+            //}
         }
 
         // PATCH: odata/DriveReports(5)
