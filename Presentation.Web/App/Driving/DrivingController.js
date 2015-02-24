@@ -1,7 +1,8 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService) {
+    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state) {
 
         $scope.DriveReport = new DriveReport();
+        $scope.canSubmitDriveReport = true;
 
         $scope.Person = Person.get({ id: 1 });
         $scope.FourKmRule = {}
@@ -10,16 +11,19 @@
         $scope.KmRate = Rate.ThisYearsRates(function () {
             $scope.KmRateDropDown.dataSource.read();
         });
-        
+
         $scope.Employments = PersonEmployments.get({ id: 1 }, function () {
             $scope.PositionDropDown.dataSource.read();
         });
-
+        
         $scope.Licenseplates = LicensePlate.get({ id: 1 }, function (data) {
-            $scope.LicenseplateDropDown.dataSource.read();
-
-            $scope.canSubmitDriveReport = data.length > 0;
-        });
+            if (data.length > 0) {
+                $scope.LicenseplateDropDown.dataSource.read();
+                $scope.canSubmitDriveReport = data.length > 0;
+            } else {
+                $scope.openNoLicensePlateModal();
+            }
+        });        
 
         $scope.DriveReport.Addresses = [];
 
@@ -143,9 +147,9 @@
                 $scope.PayoutAmount = response.AmountToReimburse;
 
                 NotificationService.AutoFadeNotification("success", "Success", "Din kørselsindberetning blev gemt");
-                
 
-            }, function(response) {
+
+            }, function (response) {
                 // failure
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Din kørselsindberetning blev ikke gemt");
             });
@@ -159,6 +163,25 @@
 
         $scope.Remove = function (array, index) {
             array.splice(index, 1);
+        };
+
+        $scope.openNoLicensePlateModal = function () {
+
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Driving/noLicensePlateModal.html',
+                controller: 'noLicensePlateModalController',
+                //size: size,
+                backdrop: 'static',
+                resolve: {
+
+                }
+            });
+
+            modalInstance.result.then(function () {
+                $state.go("settings");
+            }, function () {
+
+            });
         };
     }
 ]);
