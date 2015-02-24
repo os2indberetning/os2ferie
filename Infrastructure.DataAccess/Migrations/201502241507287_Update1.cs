@@ -3,7 +3,7 @@ namespace Infrastructure.DataAccess.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class update1 : DbMigration
+    public partial class Update1 : DbMigration
     {
         public override void Up()
         {
@@ -20,10 +20,12 @@ namespace Infrastructure.DataAccess.Migrations
             //AddColumn("dbo.Reports", "Timestamp", c => c.String(unicode: false));
             //AddColumn("dbo.Reports", "AccountNumber", c => c.String(unicode: false));
             //AddColumn("dbo.Reports", "KilometerAllowance", c => c.Int());
+            AddColumn("dbo.MobileTokens", "Description", c => c.String(unicode: false));
         }
         
         public override void Down()
         {
+            DropColumn("dbo.MobileTokens", "Description");
             //DropColumn("dbo.Reports", "KilometerAllowance");
             //DropColumn("dbo.Reports", "AccountNumber");
             //DropColumn("dbo.Reports", "Timestamp");
