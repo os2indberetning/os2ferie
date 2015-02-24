@@ -7,11 +7,11 @@
             <li ng-repeat="token in tokens">
                 <pre><strong>{{ token.Token }} | {{ token.StatusToPresent }}</strong><button class="btn btn-danger pull-right" ng-click="deleteToken(token)">Slet</button></pre>
             </li>
-        </ol>
-    </div>
-
+        </ol>    
+    </div>    
+    
 </div>
 <div class="modal-footer">
     <button class="btn btn-success pull-left new-token-btn" ng-click="saveNewToken()">Opret ny token</button>
-    <button class="btn btn-primary pull-right close-token-modal" ng-click="closeTokenModal()">OK</button>
+    <button class="btn btn-primary pull-right close-token-modal" ng-click="closeTokenModal()">OK</button>    
 </div>

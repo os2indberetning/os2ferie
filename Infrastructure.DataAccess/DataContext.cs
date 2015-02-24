@@ -31,6 +31,7 @@ namespace Infrastructure.DataAccess
         public IDbSet<Employment> Employments { get; set; }
         public IDbSet<OrgUnit> OrgUnits { get; set; }
         public IDbSet<Substitute> Substitutes { get; set; }
+        public IDbSet<BankAccount> BankAccounts { get; set; } 
   
 
         /**
@@ -58,6 +59,7 @@ namespace Infrastructure.DataAccess
             ConfigurePropertiesForEmployment(modelBuilder);
             ConfigurePropertiesForOrgUnit(modelBuilder);
             ConfigurePropertiesForSubstitute(modelBuilder);
+            ConfigurePropertiesForBankAccount(modelBuilder);
         }
 
         private void ConfigurePropertiesForPerson(DbModelBuilder modelBuilder)
@@ -86,6 +88,12 @@ namespace Infrastructure.DataAccess
         {
             modelBuilder.Entity<PersonalAddress>().Property(p => p.Type).IsRequired();
             modelBuilder.Entity<PersonalAddress>().HasRequired(p => p.Person);
+        }
+
+        private void ConfigurePropertiesForBankAccount(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<BankAccount>().Property(p => p.Description).IsRequired();
+            modelBuilder.Entity<BankAccount>().Property(p => p.Number).IsRequired();
         }
 
         private void ConfigurePropertiesForPersonalRoute(DbModelBuilder modelBuilder)
@@ -156,13 +164,11 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<DriveReport>().Property(p => p.EndsAtHome).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.Licenseplate).IsRequired();
             modelBuilder.Entity<DriveReport>().Ignore(p => p.Fullname);
-            modelBuilder.Entity<DriveReport>().Ignore(p => p.KilometerAllowance);
-            modelBuilder.Entity<DriveReport>().Ignore(p => p.Timestamp);
         }
 
         private void ConfigurePropertiesForReport(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Report>().Property(p => p.status).IsRequired();
+            modelBuilder.Entity<Report>().Property(p => p.Status).IsRequired();
             modelBuilder.Entity<Report>().Property(p => p.CreatedDateTimestamp).IsRequired();
             modelBuilder.Entity<Report>().Property(p => p.Comment).IsRequired();
             modelBuilder.Entity<Report>().HasRequired(p => p.Person);

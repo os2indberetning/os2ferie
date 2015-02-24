@@ -24,6 +24,7 @@
     <TypeScriptToolsVersion>1.4</TypeScriptToolsVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <NuGetPackageImportStamp>bb2330ea</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,11 +74,7 @@
     </Reference>
     <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+      <HintPath>..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -217,6 +214,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\NinjectDependencyScope.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
@@ -258,10 +256,14 @@
     <Compile Include="Controllers\JasmineController.cs" />
     <Compile Include="Controllers\LicensePlatesController.cs" />
     <Compile Include="Controllers\MobileTokenController.cs" />
+    <Compile Include="Controllers\BankAccountsController.cs" />
     <Compile Include="Controllers\OrgUnitsController.cs" />
     <Compile Include="Controllers\PersonalAddressesController.cs" />
     <Compile Include="Controllers\PersonalRoutesController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\AddressController.cs" />
+    <Compile Include="Controllers\SubstitutesController.cs" />
+    <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\PointsController.cs" />
     <Compile Include="Controllers\TestReportsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -279,7 +281,17 @@
   <ItemGroup>
     <Content Include="App\Admin\AdminView.html" />
     <Content Include="App\application.js" />
+    <Content Include="App\ApproveReports\AcceptWithAccountController.js" />
+    <Content Include="App\ApproveReports\ConfirmApproveWithAccountTemplate.html" />
+    <Content Include="App\ApproveReports\RejectController.js" />
+    <Content Include="App\ApproveReports\AcceptController.js" />
     <Content Include="App\ApproveReports\ApproveReportsView.html" />
+    <Content Include="App\ApproveReports\ConfirmApproveTemplate.html" />
+    <Content Include="App\ApproveReports\ConfirmRejectTemplate.html" />
+    <Content Include="App\Services\BankAccountService.js" />
+    <Content Include="App\Services\OrgUnitResource.js" />
+    <Content Include="template\typeahead\typeahead-match.html" />
+    <Content Include="template\typeahead\typeahead-popup.html" />
     <Content Include="App\AWS\awsSnippet.js" />
     <Content Include="App\AWS\custom-AWS.js" />
     <Content Include="App\Directives\AwsDirective.js" />
@@ -293,6 +305,7 @@
     <Content Include="App\MyReports\EditReportController.js" />
     <Content Include="App\MyReports\EditReportTemplate.html" />
     <Content Include="App\MyReports\MyReportsController.js" />
+    <Content Include="App\MyReports\MyReportsController.spec.js" />
     <Content Include="App\MyReports\MyReportsView.html" />
     <Content Include="App\Services\AddressFormatterService.js" />
     <Content Include="App\Services\AddressResource.js" />
@@ -305,6 +318,7 @@
     <Content Include="App\Services\PersonalRouteResource.js" />
     <Content Include="App\Services\PersonalAddressResource.js" />
     <Content Include="App\Services\PointResource.js" />
+    <Content Include="App\Services\ReportResource.js" />
     <Content Include="App\Services\RouteResource.js" />
     <Content Include="App\Services\SmartAdresseSource.js" />
     <Content Include="App\Services\TokenResource.js" />
@@ -321,6 +335,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\custom.css" />
+    <Content Include="Content\customcss\approvereports.css" />
     <Content Include="Content\customcss\myreports.css" />
     <Content Include="Content\jasmine\jasmine.css" />
     <Content Include="Content\jasmine\jasmine_favicon.png" />
@@ -2042,7 +2057,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1983</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

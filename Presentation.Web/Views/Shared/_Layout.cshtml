@@ -75,19 +75,19 @@
                     <li ui-sref-active="active">
                         <a ui-sref="admin"><i class="fa fa-fw fa-wrench"></i> Admin</a>
                     </li>
-
+                    
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
-        </nav>
+        </nav>        
       
 
-        @RenderBody()
+            @RenderBody()
 
        
 
     </div>
-
+    
     <div class="errors-container">
 
     </div>
@@ -105,7 +105,7 @@
     <script src="http://cdn.kendostatic.com/2014.3.1119/js/kendo.all.min.js"></script>
     <script src="http://kendo-labs.github.io/angular-kendo/angular-kendo.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/angular")   
     @RenderSection("scripts", required: false)
     <script>
         $(document).ready($('#mastertab a').click(function (e) {
@@ -113,7 +113,7 @@
             $(this).tab('show');
         }));
     </script>
-    
+
 </body>
 
 </html>

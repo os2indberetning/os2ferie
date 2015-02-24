@@ -1,4 +1,4 @@
-﻿<link rel="stylesheet" href="../../Content/customcss/myreports.css"/>
+﻿<link rel="stylesheet" href="../../Content/customcss/myreports.css" />
 
 <div class="row">
     <div class="col-lg-12">
@@ -10,65 +10,196 @@
 
 <div class="row" ng-controller="MyReportsController">
     <div class="col-lg-12">
-        
-        
-        
-        <div class="row">
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="">Fra</label>
-                    <input k-ng-model="fromDate" data-role="datepicker" kendo-date-picker k-options="dateOptions" />
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="">Til</label>
-                    <input k-ng-model="toDate" data-role="datepicker" kendo-date-picker k-options="dateOptions" />
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <button ng-click="searchClicked()" class="btn btn-primary fill-height">Søg</button>
-                </div>
-            </div>
-        </div>
-
-
-
-
-        
-
 
 
 
         <tabset justified="true">
             <tab heading="Afventende" ng-click="tabClicked('pending')">
                 <div class="panel panel-default">
+
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afventende</h3>
                     </div>
+
+
+
                     <div class="panel-body">
-                        <div kendo-grid="gridContainer.pendingGrid" options="pendingReports"></div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Fra</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Til</label>
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+                                <label>Visninger pr. side</label>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.toDatePendingString" k-ng-model="dateContainer.fromDatePending" ng-change="dateChanged()" />
+                            </div>
+                            <div class="col-md-2">
+                                <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.fromDatePendingString" k-ng-model="dateContainer.toDatePending" ng-change="dateChanged()" />
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
+                            </div>
+
+                            <div class="col-md-2">
+
+                            </div>
+
+                           
+                            <div class="col-md-2"></div>
+                            <div class="col-md-2">
+                                <select ng-model="gridContainer.pendingGridPageSize" class="form-control" ng-change="pageSizeChanged()">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+
+
+                        </div>
+                        <div>
+                            <div kendo-grid="gridContainer.pendingGrid" class="margin-top-10" options="pendingReports"></div>
+                        </div>
                     </div>
                 </div>
             </tab>
-            <tab heading="Godkendte" ng-click="tabClicked('approved')">
+            <tab heading="Godkendte" ng-click="tabClicked('accepted')">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Godkendte</h3>
                     </div>
-                    <div class="panel-body">
-                        <div kendo-grid="gridContainer.approvedGrid" options="approvedReports" ></div>
+
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>Fra</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Til</label>
+                                </div>
+                                <div class="col-md-2">
+
+                                </div>
+                                <div class="col-md-2">
+
+                                </div>
+                                <div class="col-md-2">
+                                <div class="col-md-2"></div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Visninger pr. side</label>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.toDateAcceptedString" k-ng-model="dateContainer.fromDateAccepted" ng-change="dateChanged()" />
+                                </div>
+                                <div class="col-md-2">
+                                    <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.fromDateAcceptedString" k-ng-model="dateContainer.toDateAccepted" ng-change="dateChanged()" />
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
+                                </div>
+
+                                <div class="col-md-2">
+
+                                </div>
+                                
+                                <div class="col-md-2"></div>
+                                <div class="col-md-2">
+                                    <select ng-model="gridContainer.acceptedGridPageSize" class="form-control" ng-change="pageSizeChanged()">
+                                        <option value="5" selected>5</option>
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </div>
+
+
+                            </div>
+                            <div>
+                                <div kendo-grid="gridContainer.acceptedGrid" class="margin-top-10" options="acceptedReports"></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
             </tab>
-            <tab heading="Afviste" ng-click="tabClicked('denied')">
+            <tab heading="Afviste" ng-click="tabClicked('rejected')">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afviste</h3>
                     </div>
+
                     <div class="panel-body">
-                        <div kendo-grid="gridContainer.deniedGrid" options="deniedReports"> </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Fra</label>
+                            </div>
+                            <div class="col-md-2">
+                                <label>Til</label>
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+
+                            </div>
+                            <div class="col-md-2">
+                                <label>Visninger pr. side</label>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.toDateRejectedString" k-ng-model="dateContainer.fromDateRejected" ng-change="dateChanged()" />
+                            </div>
+                            <div class="col-md-2">
+                                <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.fromDateRejectedString" k-ng-model="dateContainer.toDateRejected" ng-change="dateChanged()" />
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
+                            </div>
+
+                            <div class="col-md-2">
+
+                            </div>
+                           
+                            <div class="col-md-2"></div>
+                            <div class="col-md-2">
+                                <select ng-model="gridContainer.rejectedGridPageSize" class="form-control" ng-change="pageSizeChanged()">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+
+
+                        </div>
+                        <div>
+                            <div kendo-grid="gridContainer.rejectedGrid" class="margin-top-10" options="rejectedReports"></div>
+                        </div>
                     </div>
                 </div>
             </tab>
