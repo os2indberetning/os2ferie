@@ -1,4 +1,4 @@
-﻿angular.module("application").controller('AddressEditModalInstanceController', ["$scope", "$modalInstance", "Address", "personId", "addressId", "NotificationService", "AddressFormatter", function ($scope, $modalInstance, Address, personId, addressId, NotificationService, AddressFormatter) {
+﻿angular.module("application").controller('AddressEditModalController', ["$scope", "$modalInstance", "Address", "personId", "addressId", "NotificationService", "AddressFormatter", function ($scope, $modalInstance, Address, personId, addressId, NotificationService, AddressFormatter) {
     $scope.newAddress = "";
     $scope.oldAddressId = 0;
     $scope.oldAddress = "";

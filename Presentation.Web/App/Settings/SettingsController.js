@@ -318,7 +318,7 @@
 
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/RouteEditModal.html',
-                controller: 'RouteEditModalInstanceController',
+                controller: 'RouteEditModalController',
                 backdrop: 'static',
                 resolve: {
                     routeId: function () {
@@ -339,7 +339,7 @@
 
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/AddressEditModal.html',
-                controller: 'AddressEditModalInstanceController',
+                controller: 'AddressEditModalController',
                 backdrop: 'static',
                 resolve: {
                     addressId: function () {

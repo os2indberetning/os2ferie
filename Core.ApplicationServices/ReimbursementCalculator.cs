@@ -4,7 +4,7 @@ using System.Linq;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
-using Infrastructure.AddressServices.Interfaces;
+using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 
@@ -13,7 +13,7 @@ namespace Core.ApplicationServices
     
     public class ReimbursementCalculator : IReimbursementCalculator
     {
-        private readonly IRoute _route;
+        private readonly IRoute<RouteInformation> _route;
         private readonly IGenericRepository<PersonalAddress> _addressRepo;
         private readonly IGenericRepository<Person> _personRepo; 
 
@@ -24,7 +24,7 @@ namespace Core.ApplicationServices
             _personRepo = new GenericRepository<Person>(new DataContext());
         }
 
-        public ReimbursementCalculator(IRoute route, IGenericRepository<PersonalAddress> addressRepo, IGenericRepository<Person> personRepo)
+        public ReimbursementCalculator(IRoute<RouteInformation> route, IGenericRepository<PersonalAddress> addressRepo, IGenericRepository<Person> personRepo)
         {
             _route = route;
             _addressRepo = addressRepo;

@@ -1,4 +1,5 @@
-﻿angular.module("application").controller('RouteEditModalInstanceController', ["$scope", "Route", "Point", "NotificationService", "$modalInstance", "routeId", "personId", "AddressFormatter", function ($scope, Route, Point, NotificationService, $modalInstance, routeId, personId, AddressFormatter) {
+﻿angular.module("application").controller('RouteEditModalController', [
+    "$scope", "Route", "Point", "NotificationService", "$modalInstance", "routeId", "personId", "AddressFormatter", function ($scope, Route, Point, NotificationService, $modalInstance, routeId, personId, AddressFormatter) {
     $scope.newStartPoint = "";
     $scope.newEndPoint = "";
     $scope.oldStartPointId = 0;

@@ -60,6 +60,7 @@
     <Compile Include="DriveReportService.cs" />
     <Compile Include="Interfaces\IMobileTokenService.cs" />
     <Compile Include="Interfaces\IPersonService.cs" />
+    <Compile Include="Interfaces\IReimbursementCalculator.cs" />
     <Compile Include="PersonService.cs" />
     <Compile Include="MobileTokenService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
