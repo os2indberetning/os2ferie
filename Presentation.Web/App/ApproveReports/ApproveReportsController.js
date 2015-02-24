@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("ApproveReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "BankAccount", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, BankAccount) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout) {
 
 
        var pendingQueryOptions = { dateQuery: "", personQuery: "" };
@@ -43,7 +43,7 @@
 
            var url = "/odata/DriveReports?$expand=Employment &$filter=Status eq Core.DomainModel.ReportStatus'Pending' " + query;
 
-           console.log(url);
+
 
            $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = url;
            $scope.gridContainer.pendingGrid.dataSource.read();
@@ -67,9 +67,7 @@
            var query = dateQuery + personQuery;
 
            var url = "/odata/DriveReports?$expand=Employment &$filter=Status eq Core.DomainModel.ReportStatus'Accepted' " + query;
-
-           console.log(url);
-
+        
            $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = url;
            $scope.gridContainer.acceptedGrid.dataSource.read();
        }
@@ -91,7 +89,7 @@
 
            var url = "/odata/DriveReports?$expand=Employment &$filter=Status eq Core.DomainModel.ReportStatus'Rejected' " + query;
 
-           console.log(url);
+      
 
            $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = url;
            $scope.gridContainer.rejectedGrid.dataSource.read();
@@ -127,36 +125,18 @@
                                AmountToReimburse: { type: "number" }
                            }
                        },
-
                        data: function(data) {
 
                            var leaderOrgId = 2;
                            var resultSet = [];
 
                            var orgs = OrgUnit.get();
-                           var orgUnits = {};
+
+                           console.log(data);
 
                            orgs.$promise.then(function(res) {
-                               angular.forEach(orgs.value, function(value, key) {
-                                   orgUnits[value.Id] = value;
-                               });
 
-                               angular.forEach(data.value, function(value, key) {
-                                   var repOrg = orgUnits[value.Employment.OrgUnitId];
-
-                                   if (orgUnits[leaderOrgId].Level == repOrg.Level && orgUnits[leaderOrgId].Id == repOrg.Id) {
-
-                                       resultSet.push(value);
-                                   } else if (orgUnits[leaderOrgId].Level < repOrg.Level) {
-                                       while (orgUnits[leaderOrgId].Level < repOrg.Level) {
-                                           repOrg = orgUnits[repOrg.ParentId];
-                                       }
-                                       if (repOrg.Id == orgUnits[leaderOrgId].Id) {
-                                           resultSet.push(value);
-                                       }
-                                   }
-
-                               });
+                               resultSet = $scope.filterReportsByLeaderOrg(orgs, data, leaderOrgId);
 
                                $scope.gridContainer.pendingGrid.dataSource.data(resultSet);
                                $scope.gridContainer.pendingGrid.refresh();
@@ -239,6 +219,34 @@
            };
        }
 
+       $scope.filterReportsByLeaderOrg = function (orgs, data, leaderOrgId) {
+           var orgUnits = {};
+
+           var resultSet = [];
+
+           angular.forEach(orgs.value, function (value, key) {
+               orgUnits[value.Id] = value;
+           });
+
+           angular.forEach(data.value, function (value, key) {
+               var repOrg = orgUnits[value.Employment.OrgUnitId];
+
+               if (orgUnits[leaderOrgId].Level == repOrg.Level && orgUnits[leaderOrgId].Id == repOrg.Id) {
+
+                   resultSet.push(value);
+               } else if (orgUnits[leaderOrgId].Level < repOrg.Level) {
+                   while (orgUnits[leaderOrgId].Level < repOrg.Level) {
+                       repOrg = orgUnits[repOrg.ParentId];
+                   }
+                   if (repOrg.Id == orgUnits[leaderOrgId].Id) {
+                       resultSet.push(value);
+                   }
+               }
+
+           });
+           return resultSet;
+       }
+
        $scope.loadAcceptedReports = function () {
            $scope.acceptedReports = {
                dataSource: {
@@ -276,30 +284,10 @@
                            var resultSet = [];
 
                            var orgs = OrgUnit.get();
-                           var orgUnits = {};
 
                            orgs.$promise.then(function (res) {
-                               angular.forEach(orgs.value, function (value, key) {
-                                   orgUnits[value.Id] = value;
-                               });
 
-                               angular.forEach(data.value, function (value, key) {
-                                   var repOrg = orgUnits[value.Employment.OrgUnitId];
-
-                                   if (orgUnits[leaderOrgId].Level == repOrg.Level && orgUnits[leaderOrgId].Id == repOrg.Id) {
-
-                                       resultSet.push(value);
-                                   }
-                                   else if (orgUnits[leaderOrgId].Level < repOrg.Level) {
-                                       while (orgUnits[leaderOrgId].Level < repOrg.Level) {
-                                           repOrg = orgUnits[repOrg.ParentId];
-                                       }
-                                       if (repOrg.Id == orgUnits[leaderOrgId].Id) {
-                                           resultSet.push(value);
-                                       }
-                                   }
-
-                               });
+                               resultSet = $scope.filterReportsByLeaderOrg(orgs, data, leaderOrgId);
 
                                $scope.gridContainer.acceptedGrid.dataSource.data(resultSet);
                                $scope.gridContainer.acceptedGrid.refresh();
@@ -378,9 +366,6 @@
            };
        }
 
-
-
-
        $scope.loadRejectedReports = function () {
            $scope.rejectedReports = {
                dataSource: {
@@ -406,52 +391,21 @@
                    },
                    schema: {
                        data: function (data) {
-                           // Hardcoded leaderOrgId until we can get it from AD
+
                            var leaderOrgId = 2;
-
-
                            var resultSet = [];
 
                            var orgs = OrgUnit.get();
 
-                           var orgUnits = {};
-
                            orgs.$promise.then(function (res) {
+                            
 
-                               angular.forEach(orgs.value, function (value, key) {
-                                   orgUnits[value.Id] = value;
-                               });
-
-                               angular.forEach(data.value, function (value, key) {
-                                   var repOrg = orgUnits[value.Employment.OrgUnitId];
-
-
-
-                                   if (orgUnits[leaderOrgId].Level == repOrg.Level && orgUnits[leaderOrgId].Id == repOrg.Id) {
-                                       resultSet.push(value);
-                                   }
-                                   else if (orgUnits[leaderOrgId].Level < repOrg.Level) {
-                                       while (orgUnits[leaderOrgId].Level < repOrg.Level) {
-                                           repOrg = orgUnits[repOrg.ParentId];
-                                       }
-                                       if (repOrg.Id == orgUnits[leaderOrgId].Id) {
-                                           resultSet.push(value);
-                                       }
-                                   }
-
-                               });
+                               resultSet = $scope.filterReportsByLeaderOrg(orgs, data, leaderOrgId);
 
                                $scope.gridContainer.rejectedGrid.dataSource.data(resultSet);
                                $scope.gridContainer.rejectedGrid.refresh();
 
                            });
-
-
-
-
-
-
-
                            return resultSet;
 
                        },
@@ -511,8 +465,6 @@
                ]
            };
        }
-
-
 
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
@@ -638,7 +590,6 @@
        }
 
 
-       $scope.$watch('dateContainer.fromDatePending', $scope.dateChanged);
 
        $scope.dateChanged = function () {
 
