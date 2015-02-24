@@ -74,7 +74,7 @@ namespace OS2Indberetning
             builder.EntitySet<Person>("Person");
             var pType = builder.EntityType<Person>();
             pType.HasKey(p => p.Id);
-            pType.Ignore(p => p.LicensePlates);            
+            pType.Ignore(p => p.LicensePlates);
 
             builder.EntitySet<PersonalAddress>("PersonalAddresses");
 

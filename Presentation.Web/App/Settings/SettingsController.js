@@ -148,7 +148,7 @@
             });
 
             newPlate.$save(function (data) {
-                $scope.licenseplates.push(data[0]);
+                $scope.licenseplates.push(data.value[0]);
                 $scope.licenseplates.sort(function (a, b) {
                     return a.Id > b.Id;
                 });
@@ -423,7 +423,7 @@
                             beforeSend: function (req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
-                            url: "odata/PersonalAddresses(" + id + ")",
+                            url: "odata/PersonalAddresses()?$filter=PersonId eq " + id,
                             dataType: "json",
                             cache: false
                         },
@@ -476,13 +476,13 @@
         $scope.loadGrids(1);
 
         $scope.updatePersonalAddresses = function () {
-            $scope.gridContainer.personalAddressesGrid.dataSource.transport.options.read.url = "odata/PersonalAddresses(" + $scope.currentPerson.Id + ")";
+            $scope.gridContainer.personalAddressesGrid.dataSource.transport.options.read.url = "odata/PersonalAddresses()?$filter=PersonId eq " + $scope.currentPerson.Id;
             $scope.gridContainer.personalAddressesGrid.dataSource.read();
 
         }
 
         $scope.updatePersonalRoutes = function () {
-            $scope.gridcontainer.personalRoutesGrid.dataSource.transport.options.read.url = "odata/PersonalRoutes(" + $scope.currentPerson.Id + ")?$expand=Points";
+            $scope.gridcontainer.personalRoutesGrid.dataSource.transport.options.read.url = "odata/PersonalRoutes()?$filter=PersonId eq " + $scope.currentPerson.Id + "&$expand=Points";
             $scope.gridcontainer.personalRoutesGrid.dataSource.read();
 
         }

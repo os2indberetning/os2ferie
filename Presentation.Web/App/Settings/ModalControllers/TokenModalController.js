@@ -31,7 +31,7 @@
         });
 
         newToken.$save(function (data) {
-            $scope.tokens.push(data.value[0]);
+            $scope.tokens.push(data[0]);
             NotificationService.AutoFadeNotification("success", "Success", "Ny token oprettet");
             $scope.newTokenDescription = "";
             $scope.isCollapsed = !$scope.isCollapsed;
