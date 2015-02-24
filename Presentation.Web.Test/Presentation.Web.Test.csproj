@@ -178,6 +178,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="FrontendCasperTests\google-test.js" />
+    <Content Include="FrontendCasperTests\MyReports\test.js" />
+    <Content Include="casperjs-setup.js" />
+    <None Include="run-casper-tests.bat" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="AppTests\controllers\ApproveReports\AcceptControllerTest.js" />
     <Content Include="AppTests\controllers\ApproveReports\AcceptWithAccountControllerTest.js" />
     <Content Include="AppTests\controllers\ApproveReports\ApproveReportsControllerTest.js" />
