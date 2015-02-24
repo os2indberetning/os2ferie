@@ -7,12 +7,12 @@ namespace Infrastructure.DataAccess.Migrations
     {
         public override void Up()
         {
-            AddColumn("dbo.Reports", "KilometerAllowance", c => c.Int());
+            //AddColumn("dbo.Reports", "KilometerAllowance", c => c.Int());
         }
 
         public override void Down()
         {
-            DropColumn("dbo.Reports", "KilometerAllowance");
+            //DropColumn("dbo.Reports", "KilometerAllowance");
         }
     }
 }
