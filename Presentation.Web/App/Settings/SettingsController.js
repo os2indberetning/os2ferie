@@ -21,9 +21,9 @@
         $scope.gridContainer = {};
 
         $scope.GetPerson = Person.get({ id: 1 }, function (data) {
-            $scope.currentPerson = data.value[0];
+            $scope.currentPerson = data;
             $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride;
-            $scope.recieveMail = data.value[0].RecieveMail;
+            $scope.recieveMail = data.RecieveMail;
 
             //Sæt valg af mailnotifikationer
             if ($scope.recieveMail == true) {
@@ -34,7 +34,7 @@
 
             //Hent nummerplader
             LicensePlate.get({ id: 1 }, function (data) {
-                $scope.licenseplates = data.value;
+                $scope.licenseplates = data;
             });
 
             $scope.loadAlternativeHomeAddress();
@@ -47,7 +47,7 @@
 
         //Hent alternativ hjemmeadresse
         $scope.loadAlternativeHomeAddress = function () {
-            Address.get({ id: $scope.currentPerson.Id, query: "$filter=Type eq Core.DomainModel.PersonalAddressType'AlternativeHome'" }, function (data) {
+            Address.get({ query: "$filter=Type eq Core.DomainModel.PersonalAddressType'AlternativeHome' and PersonId eq " + $scope.currentPerson.Id }, function (data) {
                 if (data.value[0] != undefined) {
                     $scope.oldAlternativeHomeAddressId = data.value[0].Id;
                     $scope.oldAlternativeHomeAddress = data.value[0].StreetName + " " + data.value[0].StreetNumber + ", " + data.value[0].ZipCode + " " + data.value[0].Town;
@@ -63,7 +63,7 @@
 
         //Hent alternativ arbejdsadresse
         $scope.loadAlternativeWorkAddress = function () {
-            Address.get({ id: $scope.currentPerson.Id, query: "$filter=Type eq Core.DomainModel.PersonalAddressType'AlternativeWork'" }, function (data) {
+            Address.get({ query: "$filter=Type eq Core.DomainModel.PersonalAddressType'AlternativeWork' and PersonId eq " + $scope.currentPerson.Id }, function (data) {
                 if (data.value[0] != undefined) {
                     $scope.oldAlternativeWorkAddressId = data.value[0].Id;
                     $scope.oldAlternativeWorkAddress = data.value[0].StreetName + " " + data.value[0].StreetNumber + ", " + data.value[0].ZipCode + " " + data.value[0].Town;
@@ -148,7 +148,7 @@
             });
 
             newPlate.$save(function (data) {
-                $scope.licenseplates.push(data.value[0]);
+                $scope.licenseplates.push(data[0]);
                 $scope.licenseplates.sort(function (a, b) {
                     return a.Id > b.Id;
                 });
@@ -341,7 +341,7 @@
                             beforeSend: function (req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
-                            url: "odata/PersonalRoutes(" + id + ")?$expand=Points",
+                            url: "odata/PersonalRoutes()?$filter=PersonId eq " + id + "&$expand=Points",
                             dataType: "json",
                             cache: false
                         },
@@ -463,7 +463,7 @@
                         template: function (data) {
                             return (data.StreetName + " " + data.StreetNumber + ", " + data.ZipCode + " " + data.Town);
                         },
-                        title: "Indberettet den"
+                        title: "Adresse"
                     }, {
                         field: "Id",
                         title: "Muligheder",

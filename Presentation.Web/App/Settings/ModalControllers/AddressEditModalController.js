@@ -1,4 +1,4 @@
-﻿angular.module("application").controller('AddressEditModalController', ["$scope", "$modalInstance", "Address", "personId", "addressId", "NotificationService", "AddressFormatter", function ($scope, $modalInstance, Address, personId, addressId, NotificationService, AddressFormatter) {
+﻿angular.module("application").controller('AddressEditModalInstanceController', ["$scope", "$modalInstance", "Address", "personId", "addressId", "NotificationService", "AddressFormatter", function ($scope, $modalInstance, Address, personId, addressId, NotificationService, AddressFormatter) {
     $scope.newAddress = "";
     $scope.oldAddressId = 0;
     $scope.oldAddress = "";
@@ -7,9 +7,9 @@
     $scope.loadAddressData= function() {
         if (addressId != undefined) {
             Address.get({ id: personId, query: "$filter=Id eq " + addressId }, function (data) {
-                $scope.oldAddressId = data.value[0].Id;
-                $scope.addressDescription = data.value[0].Description;
-                $scope.oldAddress = data.value[0].StreetName + " " + data.value[0].StreetNumber + ", " + data.value[0].ZipCode + " " + data.value[0].Town;
+                $scope.oldAddressId = data[0].Id;
+                $scope.addressDescription = data[0].Description;
+                $scope.oldAddress = data[0].StreetName + " " + data[0].StreetNumber + ", " + data[0].ZipCode + " " + data[0].Town;
             });
         }
     }
