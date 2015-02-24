@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using Core.DomainModel;
 
-namespace Infrastructure.AddressServices.Interfaces
+namespace Core.DomainServices
 {
-    public interface IRoute
+    public interface IRoute<T>
     {
         /// <summary>
         /// Returns a route for a set of addresses.
         /// </summary>
         /// <param name="addresses"></param>
         /// <returns></returns>
-        //RouteInformation GetRoute(IEnumerable<Address> addresses);
+        T GetRoute(IEnumerable<Address> addresses);
     }
 }
