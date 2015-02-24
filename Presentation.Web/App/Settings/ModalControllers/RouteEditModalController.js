@@ -23,14 +23,14 @@
         }
 
         Route.get({ id: personId, query: "$filter=Id eq " + routeId }, function (data) {
-            $scope.oldRouteDescription = data[0].Description;
+            $scope.oldRouteDescription = data.value[0].Description;
             $scope.newRouteDescription = $scope.oldRouteDescription;
         }, function () {
             NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke hente ruteinformation");
         });
 
         $scope.routePoints = Point.get({ id: personId, query: "$filter=PersonalRouteId eq " + routeId }, function (data) {
-            angular.forEach(data, function (value, key) {
+            angular.forEach(data.value, function (value, key) {
                 if (value.NextPointId == null) {
                     $scope.oldEndPointId = value.Id;
                     $scope.oldEndPoint = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
@@ -72,7 +72,7 @@
 
         if (obj.Id > 0) {
             Point.get({ query: "$filter=Id eq " + obj.NextPointId }, function (data) {
-                next = data[0];
+                next = data.value[0];
                 console.log(next);
 
                 next.PreviousPointId = obj.NextPointId;
@@ -84,7 +84,7 @@
 
                 editedNext.$patch({ id: next.Id }, function () {
                     Point.get({ query: "$filter=Id eq " + obj.PreviousPointId }, function (data) {
-                        previous = data[0];
+                        previous = data.value[0];
 
                         previous.NextPointId = obj.PreviousPointId;
 
@@ -250,7 +250,7 @@
             });
 
             newRoute.$post(function (data) {
-                $scope.newRouteId = data[0].Id;
+                $scope.newRouteId = data.Id;
                 $scope.handleStartPointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Ny rute oprettet");
             }, function () {
@@ -301,7 +301,7 @@
             });
 
             newStartPoint.$post(function (data) {
-                $scope.newRouteStartPointId = data[0].Id;
+                $scope.newRouteStartPointId = data.Id;
                 $scope.handleEndpointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Startadresse til ny rute oprettet");
             }, function () {
@@ -352,16 +352,16 @@
             });
 
             newEndPoint.$post(function (data1) {
-                $scope.newRouteEndPointId = data1.value[0].Id;
+                $scope.newRouteEndPointId = data1.Id;
 
                 //PATCH START ADDRESS FOR NEW ROUTE
                 Point.get({ id: personId, query: "$filter=Id eq " + $scope.newRouteStartPointId }, function (data2) {
                     var patchedStartPoint = new Point({
-                        NextPointId: data1.value[0].Id,
-                        PersonalRouteId: data1.value[0].PersonalRouteId
+                        NextPointId: data1.Id,
+                        PersonalRouteId: data1.PersonalRouteId
                     });
 
-                    patchedStartPoint.$patch({ id: data2.value[0].Id }, function() {
+                    patchedStartPoint.$patch({ id: data2.Id }, function() {
                         //Handle via points
                         $scope.saveViaPoints();
                     });

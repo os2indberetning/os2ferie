@@ -43,7 +43,7 @@ namespace Core.ApplicationServices
 
        public IQueryable<DriveReport> AddFullName(IQueryable<DriveReport> repo)
        {
-           var set = repo.ToList(); 
+            var set = repo.ToList(); 
 
             // Add fullname to the resultset
             foreach (var driveReport in set)

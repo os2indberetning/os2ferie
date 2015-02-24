@@ -56,7 +56,7 @@
             driveReport.AmountToReimburse = 0;
             driveReport.Licenseplate = $scope.DriveReport.Licenseplate;
             driveReport.PersonId = $scope.Person.Id;
-            driveReport.Status = "Reported";
+            driveReport.Status = "Pending";
             driveReport.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
             driveReport.EditedDateTimestamp = driveReport.CreatedDateTimestamp;
             driveReport.Comment = "";
