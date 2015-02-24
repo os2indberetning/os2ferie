@@ -24,7 +24,7 @@ module.exports = function(config) {
         '../Presentation.Web/Scripts/moment.js',
         'AppTests/controllers/**/*.js',
         '../Presentation.Web/App/application.js',
-        '../Presentation.Web/App/ApproveReports/*.js'
+        '../Presentation.Web/App/**/*.js'
         
     ],
 

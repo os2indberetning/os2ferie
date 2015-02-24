@@ -302,7 +302,6 @@
     <Content Include="App\MyReports\EditReportController.js" />
     <Content Include="App\MyReports\EditReportTemplate.html" />
     <Content Include="App\MyReports\MyReportsController.js" />
-    <Content Include="App\MyReports\MyReportsController.spec.js" />
     <Content Include="App\MyReports\MyReportsView.html" />
     <Content Include="App\Services\AddressFormatterService.js" />
     <Content Include="App\Services\AddressResource.js" />
