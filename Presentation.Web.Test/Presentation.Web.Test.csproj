@@ -185,9 +185,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FrontendCasperTests\google-test.js" />
-    <Content Include="FrontendCasperTests\MyReports\test.js" />
-    <Content Include="casperjs-setup.js" />
+    <Content Include="Gruntfile.js" />
+    <Content Include="ProtractorTests\MyReports\httpBackEndMocks.js" />
+    <Content Include="ProtractorTests\MyReports\myReports_page.js" />
+    <Content Include="ProtractorTests\MyReports\myReports_specs.js" />
+    <Content Include="ProtractorTests\protractor.conf.js" />
+    <Content Include="Sandbox\conf.js" />
+    <Content Include="Sandbox\test.js" />
+    <None Include="packages.json" />
     <None Include="run-casper-tests.bat" />
   </ItemGroup>
   <ItemGroup>
