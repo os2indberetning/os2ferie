@@ -7,13 +7,13 @@ namespace Infrastructure.DataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.1-30610")]
-    public sealed partial class Update3 : IMigrationMetadata
+    public sealed partial class Fixmigration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Update3));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Fixmigration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201502241544092_Update3"; }
+            get { return "201502251425474_Fix migration"; }
         }
         
         string IMigrationMetadata.Source

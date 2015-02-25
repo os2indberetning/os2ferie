@@ -103,25 +103,13 @@
     <Compile Include="Migrations\201502231457318_AddedDescriptionToMobileToken.Designer.cs">
       <DependentUpon>201502231457318_AddedDescriptionToMobileToken.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201502240716334_update.cs" />
-    <Compile Include="Migrations\201502240716334_update.Designer.cs">
-      <DependentUpon>201502240716334_update.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201502241507287_Update1.cs" />
     <Compile Include="Migrations\201502241507287_Update1.Designer.cs">
       <DependentUpon>201502241507287_Update1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201502241541384_Update2.cs" />
-    <Compile Include="Migrations\201502241541384_Update2.Designer.cs">
-      <DependentUpon>201502241541384_Update2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201502241544092_Update3.cs" />
-    <Compile Include="Migrations\201502241544092_Update3.Designer.cs">
-      <DependentUpon>201502241544092_Update3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201502250755217_removedTimeStampFromDriveReport.cs" />
-    <Compile Include="Migrations\201502250755217_removedTimeStampFromDriveReport.Designer.cs">
-      <DependentUpon>201502250755217_removedTimeStampFromDriveReport.cs</DependentUpon>
+    <Compile Include="Migrations\201502251425474_Fix migration.cs" />
+    <Compile Include="Migrations\201502251425474_Fix migration.Designer.cs">
+      <DependentUpon>201502251425474_Fix migration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
@@ -168,23 +156,14 @@
     <EmbeddedResource Include="Migrations\201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.resx">
       <DependentUpon>201502190954117_ChangedDataTypeInDriveReportFromFloatToDouble.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502240716334_update.resx">
-      <DependentUpon>201502240716334_update.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502231457318_AddedDescriptionToMobileToken.resx">
       <DependentUpon>201502231457318_AddedDescriptionToMobileToken.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502241507287_Update1.resx">
       <DependentUpon>201502241507287_Update1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502241541384_Update2.resx">
-      <DependentUpon>201502241541384_Update2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502241544092_Update3.resx">
-      <DependentUpon>201502241544092_Update3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502250755217_removedTimeStampFromDriveReport.resx">
-      <DependentUpon>201502250755217_removedTimeStampFromDriveReport.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201502251425474_Fix migration.resx">
+      <DependentUpon>201502251425474_Fix migration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
