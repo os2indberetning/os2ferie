@@ -151,8 +151,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="AppTests\controllers\Driving\DrivingControllerTest.js" />
     <Content Include="AppTests\controllers\MyReports\MyReportsControllerTest.js" />
     <Content Include="AppTests\controllers\MyReports\ConfirmDeleteReportControllerTest.js" />
+    <Content Include="AppTests\controllers\Driving\noLicensePlateModalControllerTest.js" />
+    <Content Include="AppTests\controllers\Settings\ModalControllers\confirmDeleteTokenTest.js" />
+    <Content Include="AppTests\controllers\Settings\ModalControllers\RouteEditModalInstanceControllerTest.js" />
+    <Content Include="AppTests\controllers\Settings\ModalControllers\TokenModalControllerTest.js" />
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>

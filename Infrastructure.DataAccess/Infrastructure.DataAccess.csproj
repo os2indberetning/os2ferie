@@ -119,6 +119,10 @@
     <Compile Include="Migrations\201502241544092_Update3.Designer.cs">
       <DependentUpon>201502241544092_Update3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502250755217_removedTimeStampFromDriveReport.cs" />
+    <Compile Include="Migrations\201502250755217_removedTimeStampFromDriveReport.Designer.cs">
+      <DependentUpon>201502250755217_removedTimeStampFromDriveReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -178,6 +182,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502241544092_Update3.resx">
       <DependentUpon>201502241544092_Update3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502250755217_removedTimeStampFromDriveReport.resx">
+      <DependentUpon>201502250755217_removedTimeStampFromDriveReport.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

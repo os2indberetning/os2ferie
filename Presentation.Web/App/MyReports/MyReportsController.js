@@ -2,11 +2,11 @@ angular.module("application").controller("MyReportsController", [
    "$scope", "$modal", "$rootScope", "Report", "$timeout", function ($scope, $modal, $rootScope, Report, $timeout) {
 
        // Hardcoded personid == 4 until we can get current user from their system.
-        var personId = 1;
+       var personId = 1;
 
-// Helper Methods
+       // Helper Methods
 
-       $scope.updateActiveTab = function(query) {
+       $scope.updateActiveTab = function (query) {
            if ($scope.activeTab == 'pending') {
                // Update pending tabs.
                this.updatePendingReports(query);
@@ -85,7 +85,7 @@ angular.module("application").controller("MyReportsController", [
                        }
                    },
                    pageSize: 5,
-                   serverPaging: true,
+                   serverPaging: false,
                    serverSorting: true
                },
                sortable: true,
@@ -108,7 +108,7 @@ angular.module("application").controller("MyReportsController", [
                        title: "Indberettet den"
                    }, {
                        field: "DriveDateTimestamp",
-                       template: function(data) {
+                       template: function (data) {
                            var m = moment.unix(data.DriveDateTimestamp);
                            return m._d.getDate() + "/" +
                                (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
@@ -169,7 +169,7 @@ angular.module("application").controller("MyReportsController", [
                        }
                    },
                    pageSize: 5,
-                   serverPaging: true,
+                   serverPaging: false,
                    serverSorting: true
                },
                sortable: true,
@@ -252,7 +252,7 @@ angular.module("application").controller("MyReportsController", [
                        }
                    },
                    pageSize: 5,
-                   serverPaging: true,
+                   serverPaging: false,
                    serverSorting: true
                },
                sortable: true,
@@ -300,19 +300,19 @@ angular.module("application").controller("MyReportsController", [
            };
        }
 
-       $scope.loadInitialDates = function (){
-            // Set initial values for kendo datepickers.
-            $scope.dateContainer.toDatePending = new Date();
-            $scope.dateContainer.fromDatePending = new Date();
-            $scope.dateContainer.toDateAccepted = new Date();
-            $scope.dateContainer.fromDateAccepted = new Date();
-            $scope.dateContainer.toDateRejected = new Date();
-            $scope.dateContainer.fromDateRejected = new Date();
-        }
+       $scope.loadInitialDates = function () {
+           // Set initial values for kendo datepickers.
+           $scope.dateContainer.toDatePending = new Date();
+           $scope.dateContainer.fromDatePending = new Date();
+           $scope.dateContainer.toDateAccepted = new Date();
+           $scope.dateContainer.fromDateAccepted = new Date();
+           $scope.dateContainer.toDateRejected = new Date();
+           $scope.dateContainer.fromDateRejected = new Date();
+       }
 
-       $scope.getEndOfDayStamp = function(d){
-            var m = moment(d);
-            return m.endOf('day').unix();
+       $scope.getEndOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.endOf('day').unix();
        }
 
        $scope.getStartOfDayStamp = function (d) {
@@ -347,16 +347,16 @@ angular.module("application").controller("MyReportsController", [
            var from, to;
 
            if ($scope.activeTab == 'pending') {
-                from = $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);
-                to = $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);
+               from = $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);
+               to = $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);
            }
            else if ($scope.activeTab == 'accepted') {
-                from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateAccepted);
-                to = $scope.getEndOfDayStamp($scope.dateContainer.toDateAccepted);
+               from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateAccepted);
+               to = $scope.getEndOfDayStamp($scope.dateContainer.toDateAccepted);
            }
            else if ($scope.activeTab == 'rejected') {
-                   from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateRejected);
-                   to = $scope.getEndOfDayStamp($scope.dateContainer.toDateRejected);
+               from = $scope.getStartOfDayStamp($scope.dateContainer.fromDateRejected);
+               to = $scope.getEndOfDayStamp($scope.dateContainer.toDateRejected);
            }
 
            var q = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
@@ -374,8 +374,13 @@ angular.module("application").controller("MyReportsController", [
                }
            });
 
-           modalInstance.result.then(function () {
-               Report.delete({id: id});
+           modalInstance.result.then(function (res) {
+               Report.delete({ id: id }, function () {
+                   var from = $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);
+                   var to = $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);
+                   var q = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+                   $scope.updatePendingReports(q);
+               });
            });
        }
 
@@ -390,7 +395,7 @@ angular.module("application").controller("MyReportsController", [
                scope.driveDate = moment.unix(data[0].driveDateTimestamp).format("DD/MM/YYYY");
            });
 
-           
+
 
 
            console.log("Ive been clicked");
@@ -439,33 +444,33 @@ angular.module("application").controller("MyReportsController", [
        }
 
 
-// Init
+       // Init
 
-
-
-
-       // Contains references to kendo ui grids.
-       $scope.gridContainer = {};
-       $scope.dateContainer = {};
-
-        $scope.loadInitialDates();
-
-       // Format for datepickers.
-       $scope.dateOptions = {
-           format: "dd/MM/yyyy",
-       };
-
-        $scope.gridContainer.pendingGridPageSize = 5;
-        $scope.gridContainer.acceptedGridPageSize = 5;
-        $scope.gridContainer.rejectedGridPageSize = 5;
-
-       // Set activeTab's initial value to pending.
-       $scope.activeTab = "pending";
 
        // Load up the grids.
        $scope.loadAcceptedReports();
        $scope.loadRejectedReports();
        $scope.loadPendingReports();
 
-    }
+
+       // Contains references to kendo ui grids.
+       $scope.gridContainer = {};
+       $scope.dateContainer = {};
+
+       $scope.loadInitialDates();
+
+       // Format for datepickers.
+       $scope.dateOptions = {
+           format: "dd/MM/yyyy",
+       };
+
+       $scope.gridContainer.pendingGridPageSize = 5;
+       $scope.gridContainer.acceptedGridPageSize = 5;
+       $scope.gridContainer.rejectedGridPageSize = 5;
+
+       // Set activeTab's initial value to pending.
+       $scope.activeTab = "pending";
+
+
+   }
 ]);

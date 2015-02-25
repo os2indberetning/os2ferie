@@ -34,6 +34,10 @@
                 get: function () {
                     queryDeferred = $q.defer();
                     return { $promise: queryDeferred.promise };
+                },
+                getAll: function () {
+                    queryDeferred = $q.defer();
+                    return { $promise: queryDeferred.promise };
                 }
             }
 

@@ -72,22 +72,22 @@
             expect(result).toBe(1398376800);
         });
 
-        it('PendingGrid url should filter status pending and personId 4 initially', function () {
+        it('PendingGrid url should filter status pending and personId 1 initially', function () {
             $scope.loadPendingReports();
             $scope.gridContainer.pendingGrid = $scope.pendingReports;
-            expect($scope.gridContainer.pendingGrid.dataSource.transport.read.url).toBe("/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' and PersonId eq 4");
+            expect($scope.gridContainer.pendingGrid.dataSource.transport.read.url).toBe("/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' and PersonId eq 1");
         });
 
-        it('acceptedGrid url should filter status accepted and personId 4 initially', function () {
+        it('acceptedGrid url should filter status accepted and personId 1 initially', function () {
             $scope.loadAcceptedReports();
             $scope.gridContainer.acceptedGrid = $scope.acceptedReports;
-            expect($scope.gridContainer.acceptedGrid.dataSource.transport.read.url).toBe("/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted' and PersonId eq 4");
+            expect($scope.gridContainer.acceptedGrid.dataSource.transport.read.url).toBe("/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted' and PersonId eq 1");
         });
 
-        it('rejectedGrid url should filter status rejected and personId 4 initially', function () {
+        it('rejectedGrid url should filter status rejected and personId 1 initially', function () {
             $scope.loadRejectedReports();
             $scope.gridContainer.rejectedGrid = $scope.rejectedReports;
-            expect($scope.gridContainer.rejectedGrid.dataSource.transport.read.url).toBe("/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' and PersonId eq 4");
+            expect($scope.gridContainer.rejectedGrid.dataSource.transport.read.url).toBe("/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' and PersonId eq 1");
         });
 
         it('PendingGrid url should be updated with oDataQuery when calling updatePendingReports', function() {
@@ -99,7 +99,7 @@
             $scope.gridContainer.pendingGrid.dataSource.transport.options.read = {};
             $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = "";
             $scope.updatePendingReports("query");
-            expect($scope.gridContainer.pendingGrid.dataSource.transport.options.read.url).toBe("/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' and PersonId eq 4 and query");
+            expect($scope.gridContainer.pendingGrid.dataSource.transport.options.read.url).toBe("/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' and PersonId eq 1 and query");
         });
 
         it('AcceptedGrid url should be updated with oDataQuery when calling updateAcceptedReports', function () {
@@ -111,7 +111,7 @@
             $scope.gridContainer.acceptedGrid.dataSource.transport.options.read = {};
             $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = "";
             $scope.updateAcceptedReports("query");
-            expect($scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url).toBe("/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted' and PersonId eq 4 and query");
+            expect($scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url).toBe("/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted' and PersonId eq 1 and query");
         });
 
         it('RejectedGrid url should be updated with oDataQuery when calling updateRejectedGrid', function () {
@@ -123,9 +123,10 @@
             $scope.gridContainer.rejectedGrid.dataSource.transport.options.read = {};
             $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = "";
             $scope.updateRejectedReports("query");
-            expect($scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url).toBe("/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' and PersonId eq 4 and query");
+            expect($scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url).toBe("/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' and PersonId eq 1 and query");
         });
 
+       
 
     });
 });
