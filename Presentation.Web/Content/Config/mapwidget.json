@@ -1,0 +1,47 @@
+﻿{
+    "objects": [
+        {
+            "id": "map_route_ol3",
+            "map": {
+                "crs": "EPSG:25832",
+                "maxZoomLevel": 0,
+                "minZoomLevel": 11,
+                "view": {
+                    "id": 1,
+                    "name": "Soroe Kommune",
+                    "zoomLevel": 5,
+                    "x": 659519,
+                    "y": 6151191
+                },
+                "layer": [
+                    {
+                        "namedlayer": "#gst"
+                    },
+                    {
+                        "crs": "EPSG:25832",
+                        "features": true,
+                        "features_host": "",
+                        "features_dataType": "json",
+                        "features_type": "Point",
+                        "features_style": {
+                            "namedstyle": "#004"
+                        },
+                        "template_route": "{{navn}} -",
+                        "name": "Børnehaver",
+                        "type": "geojson"
+                    }
+                ],
+                "type": "OL3",
+                "controls": [
+                    {
+                        "route": {
+                            "apikey": "septimawidget-3GTHZ61OKP",
+                            "profile": "car",
+                            "template": "<div class=\"widget-hoverbox-title widget-hoverbox-img\">{{title}}</div><div class=\"widget-hoverbox-subheader\">De nærmeste børnehaver<br/>- Før musen over en børnehave for at se ruten</div><div class=\"widget-hoverbox-sub\">{{content}}</div>"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

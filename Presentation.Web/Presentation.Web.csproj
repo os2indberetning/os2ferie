@@ -57,6 +57,14 @@
     <Reference Include="Microsoft.OData.Edm">
       <HintPath>..\packages\Microsoft.OData.Edm.6.5.0\lib\portable-net40+sl5+wp8+win8+wpa\Microsoft.OData.Edm.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Spatial">
       <HintPath>..\packages\Microsoft.Spatial.6.5.0\lib\portable-net40+sl5+wp8+win8+wpa\Microsoft.Spatial.dll</HintPath>
     </Reference>
@@ -75,6 +83,10 @@
     <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -176,17 +188,8 @@
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Owin">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin">
-      <HintPath>..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Owin.Host.SystemWeb">
       <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security">
-      <HintPath>..\packages\Microsoft.Owin.Security.3.0.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Security.Facebook">
       <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.0\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
@@ -249,6 +252,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\DriveReportsController.cs" />
     <Compile Include="Controllers\ExampleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -262,7 +266,6 @@
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\AddressController.cs" />
     <Compile Include="Controllers\SubstitutesController.cs" />
-    <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\PointsController.cs" />
     <Compile Include="Controllers\TestReportsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -289,6 +292,7 @@
     <Content Include="App\ApproveReports\ConfirmRejectTemplate.html" />
     <Content Include="App\Services\BankAccountService.js" />
     <Content Include="App\Services\OrgUnitResource.js" />
+    <Content Include="App\Services\RouteContainerResource.js" />
     <Content Include="template\typeahead\typeahead-match.html" />
     <Content Include="template\typeahead\typeahead-popup.html" />
     <Content Include="App\AWS\awsSnippet.js" />
@@ -296,30 +300,36 @@
     <Content Include="App\Directives\AwsDirective.js" />
     <Content Include="App\Driving\DrivingView.html" />
     <Content Include="App\Driving\DrivingController.js" />
+    <Content Include="App\Driving\noLicensePlateModal.html" />
+    <Content Include="App\Driving\noLicensePlateModalController.js" />
     <Content Include="App\Frontpage\FrontpageView.html" />
     <Content Include="App\MyReports\ConfirmDeleteReportController.js" />
     <Content Include="App\MyReports\ConfirmDeleteTemplate.html" />
     <Content Include="App\MyReports\EditReportController.js" />
     <Content Include="App\MyReports\EditReportTemplate.html" />
     <Content Include="App\MyReports\MyReportsController.js" />
-    <Content Include="App\MyReports\MyReportsController.spec.js" />
     <Content Include="App\MyReports\MyReportsView.html" />
     <Content Include="App\Services\AddressFormatterService.js" />
     <Content Include="App\Services\AddressResource.js" />
+    <Content Include="App\Services\DriveReportResource.js" />
     <Content Include="App\Services\LicensePlateResource.js" />
     <Content Include="App\Services\NotificationService.js" />
+    <Content Include="App\Services\RateResource.js" />
+    <Content Include="App\Services\PersonEmploymentsResource.js" />
+    <Content Include="App\Services\PersonalAddressType.js" />
     <Content Include="App\Services\PersonalRouteResource.js" />
+    <Content Include="App\Services\PersonalAddressResource.js" />
     <Content Include="App\Services\PointResource.js" />
     <Content Include="App\Services\ReportResource.js" />
     <Content Include="App\Services\RouteResource.js" />
+    <Content Include="App\Services\SmartAdresseSource.js" />
     <Content Include="App\Services\TokenResource.js" />
     <Content Include="App\Settings\AddressEditModal.html" />
+    <Content Include="App\Settings\confirmDeleteTokenModal.html" />
     <Content Include="App\Settings\ModalControllers\AddressEditModalController.js" />
     <Content Include="App\Settings\ModalControllers\RouteEditModalController.js" />
     <Content Include="App\Settings\ModalControllers\TokenModalController.js" />
     <Content Include="App\Settings\RouteEditModal.html" />
-    <Content Include="App\Services\DriveReportResource.js" />
-    <Content Include="App\Services\SmartAdresseSource.js" />
     <Content Include="App\Settings\SettingsController.js" />
     <Content Include="App\Settings\SettingsView.html" />
     <Content Include="App\Settings\tokenModal.html" />
@@ -577,6 +587,7 @@
     <Content Include="Content\Themes\SbAdmin\font-awesome\css\font-awesome.css" />
     <Content Include="Content\Themes\SbAdmin\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\Themes\SbAdmin\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\timeline.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -679,6 +690,11 @@
     <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js.map">
       <DependentUpon>ui-bootstrap-tpls.min.js</DependentUpon>
     </Content>
+    <Content Include="Content\Config\mapwidget.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <BrowseToURL>~/Content/Config/mapwidget.json</BrowseToURL>
+    </Content>
+    <Content Include="packages.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
@@ -1894,6 +1910,7 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\SeptimaWidgetDriver.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1987,9 +2004,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="packages.config">
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
