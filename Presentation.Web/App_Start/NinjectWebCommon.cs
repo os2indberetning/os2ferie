@@ -51,6 +51,7 @@ namespace OS2Indberetning
             kernel.Bind<DataContext>().ToSelf().InRequestScope();
             kernel.Bind(typeof (IGenericRepository<>)).To(typeof (GenericRepository<>));
             kernel.Bind(typeof (IPersonService)).To(typeof (PersonService));
+            kernel.Bind(typeof (IMobileTokenService)).To(typeof (MobileTokenService));
         }        
     }
 }

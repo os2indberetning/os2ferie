@@ -74,7 +74,7 @@ namespace OS2Indberetning
             builder.EntitySet<Person>("Person");
             var pType = builder.EntityType<Person>();
             pType.HasKey(p => p.Id);
-            pType.Ignore(p => p.LicensePlates);            
+            pType.Ignore(p => p.LicensePlates);
 
             builder.EntitySet<PersonalAddress>("PersonalAddresses");
 
@@ -82,13 +82,22 @@ namespace OS2Indberetning
 
             builder.EntitySet<Point>("Points");
 
-            builder.EntitySet<Rate>("Rates");
-
             builder.EntitySet<Report>("Reports");
 
             builder.EntitySet<Substitute>("Substitutes");
 
             builder.EntitySet<BankAccount>("BankAccounts");
+
+            builder.EntitySet<Person>("Person");
+            builder.Namespace = "PersonService";
+            builder.EntityType<Person>()
+                .Action("HasLicensePlate");
+
+            builder.EntitySet<Rate>("Rates");
+            builder.Namespace = "RateService";
+            builder.EntityType<Rate>().Collection
+                .Function("ThisYearsRates")
+                .ReturnsFromEntitySet<Rate>("Rates");
 
             return builder.GetEdmModel();
         }

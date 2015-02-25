@@ -2,7 +2,7 @@ angular.module("application").controller("MyReportsController", [
    "$scope", "$modal", "$rootScope", "Report", "$timeout", function ($scope, $modal, $rootScope, Report, $timeout) {
 
        // Hardcoded personid == 4 until we can get current user from their system.
-        var personId = 4;
+        var personId = 1;
 
 // Helper Methods
 

@@ -12,6 +12,7 @@ namespace Core.DomainModel
     public class MobileToken
     {
         public int Id { get; set; }
+        public string Description { get; set; }
         public Guid Guid { get; set; }
         public MobileTokenStatus Status { get; set; }
         public String Token { get; set; }

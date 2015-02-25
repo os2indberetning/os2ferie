@@ -4,8 +4,7 @@ using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
-using Core.DomainServices.RoutingClasses;
-using Core.DomainServices.Ínterfaces;
+using Infrastructure.AddressServices.Classes;
 using NSubstitute;
 using Substitute = NSubstitute.Substitute;
 
@@ -26,14 +25,23 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
             return repo;
         }
 
+        protected IGenericRepository<Person> GetPersonRepository()
+        {
+            var repo = Substitute.For<IGenericRepository<Person>>();
+
+            repo.AsQueryable().Returns(info => new List<Person>().AsQueryable());
+
+            return repo;
+        } 
+
         protected IReimbursementCalculator GetCalculator()
         {
-            return new ReimbursementCalculator(GetRouter(), GetPersonalAddressRepository());
+            return new ReimbursementCalculator(GetRouter(), GetPersonalAddressRepository(), GetPersonRepository());
         }
 
-        protected IRoute GetRouter()
+        protected IRoute<RouteInformation> GetRouter()
         {
-            var router = Substitute.For<IRoute>();
+            var router = Substitute.For<IRoute<RouteInformation>>();
 
             router.GetRoute(Arg.Any<List<Address>>()).Returns(GetRouteInformation());
 
