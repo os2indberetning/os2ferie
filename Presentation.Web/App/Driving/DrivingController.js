@@ -1,10 +1,64 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state) {
+    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", "Address", "Route", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state, Address, Route) {
 
         $scope.DriveReport = new DriveReport();
         $scope.canSubmitDriveReport = true;
+        $scope.Routes = [];
+        $scope.IsNotRoute = true;
 
-        $scope.Person = Person.get({ id: 1 });
+        $scope.test = function(e) {
+            var index = e.sender.selectedIndex;
+
+            if (index == 0) {
+                IsNotRoute = true;
+                return;
+            }
+
+            IsNotRoute = false;
+
+            var route = $scope.Routes[index - 1];
+
+            var lastIndex = route.Points.length - 1;
+
+            $scope.DriveReport.Addresses = [];
+
+            angular.forEach($scope.Routes[index - 1].Points, function(value, key) {
+                $scope.DriveReport.Addresses.push({ Name: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town, Save: false });
+            });
+
+            //$scope.DriveReport.Addresses[0] = { Name: route.Points[0].StreetName + " " + route.Points[0].StreetNumber + ", " + route.Points[0].ZipCode + " " + route.Points[0].Town, Save: false };
+            //$scope.DriveReport.Addresses[1] = { Name: route.Points[lastIndex].StreetName + " " + route.Points[lastIndex].StreetNumber + ", " + route.Points[lastIndex].ZipCode + " " + route.Points[lastIndex].Town, Save: false };
+            
+            console.log(route);
+        }
+
+        $scope.Person = Person.get({ id: 1 }, function() {
+            Address.get({ query: "$filter=PersonId eq " + $scope.Person.Id + " and Type eq Core.DomainModel.PersonalAddressType'Standard'" }, function (data) {
+                var temp = [{value: ""}];
+
+                angular.forEach(data.value, function (value, key) {
+                    temp.push({ value: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town });
+                });
+
+                $scope.PersonalAddresses = temp;
+            });
+
+            Route.get({ query: "&filter=PersonId eq " + 1 }, function (data) {
+
+                var temp = [{ addressOne: "", addressTwo: "", viaPointCounr: "", presentation: "" }];
+
+                angular.forEach(data.value, function (value, key) {
+                    var one = value.Points[0].StreetName + " " + value.Points[0].StreetNumber + ", " + value.Points[0].ZipCode + " " + value.Points[0].Town;
+                    var two = value.Points[value.Points.length - 1].StreetName + " " + value.Points[value.Points.length - 1].StreetNumber + ", " + value.Points[value.Points.length - 1].ZipCode + " " + value.Points[value.Points.length - 1].Town;
+                    var count = value.Points.length;
+                    temp.push({ addressOne: one, addressTwo: two, viaPointCount: count, presentation: one + " -> " + two + " | Antal viapunkter: " + count - 2, routeId: value.Id });
+                    $scope.Routes.push(value);
+                });
+
+                $scope.PersonalRoutes = temp;                
+            });
+        });
+
         $scope.FourKmRule = {}
         $scope.FourKmRule.Using = false;
 
@@ -23,7 +77,9 @@
             } else {
                 $scope.openNoLicensePlateModal();
             }
-        });        
+        });
+
+        
 
         $scope.DriveReport.Addresses = [];
 

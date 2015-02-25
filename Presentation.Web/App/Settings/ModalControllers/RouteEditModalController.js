@@ -357,7 +357,7 @@
                 //PATCH START ADDRESS FOR NEW ROUTE
                 Point.get({ id: personId, query: "$filter=Id eq " + $scope.newRouteStartPointId }, function (data2) {
                     var patchedStartPoint = new Point({
-                        NextPointId: data1.Id,
+                        NextPointId: data1.value[0].Id,
                         PersonalRouteId: data1.PersonalRouteId
                     });
 

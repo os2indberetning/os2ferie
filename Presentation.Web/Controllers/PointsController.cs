@@ -27,80 +27,49 @@ namespace OS2Indberetning.Controllers
     builder.EntitySet<Point>("Points");
     config.Routes.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
     */
-    public class PointsController : ODataController
+    public class PointsController : BaseController<Point>
     {
-        private static ODataValidationSettings _validationSettings = new ODataValidationSettings();
+        public PointsController(IGenericRepository<Point> repo) : base(repo){}
 
-        private readonly IGenericRepository<Point> _repo;
-
-        public PointsController()
-        {
-            _validationSettings.AllowedQueryOptions = AllowedQueryOptions.All;
-
-            _repo = new GenericRepository<Point>(new DataContext());
-        }
-
-        // GET: odata/Points
+        //GET: odata/Points
         [EnableQuery]
-        public IQueryable<Point> GetPoints(ODataQueryOptions<Point> queryOptions)
+        public IQueryable<Point> Get(ODataQueryOptions<Point> queryOptions)
         {
-            var result = _repo.AsQueryable();
-
-            return result;
+            var res = GetQueryable(queryOptions);
+            return res;
         }
 
-        // GET: odata/Points(5)
+        //GET: odata/Points(5)
+        public IQueryable<Point> Get([FromODataUri] int key, ODataQueryOptions<Point> queryOptions)
+        {
+            return GetQueryable(key, queryOptions);
+        }
+
+        //PUT: odata/Points(5)
+        public new IHttpActionResult Put([FromODataUri] int key, Delta<Point> delta)
+        {
+            return base.Put(key, delta);
+        }
+
+        //POST: odata/Points
         [EnableQuery]
-        public IQueryable<Point> GetPoint([FromODataUri] int key, ODataQueryOptions<Point> queryOptions)
+        public new IHttpActionResult Post(Point Point)
         {
-            var result = _repo.AsQueryable().Where(x => x.PersonalRoute.PersonId == key);
-
-            return result;
+            return base.Post(Point);
         }
 
-        // PUT: odata/Points(5)
-        [EnableQuery]
-        public IQueryable<Point> Put([FromODataUri] int key, Delta<Point> delta)
-        {
-            throw new NotImplementedException();
-        }
-
-        // POST: odata/Points
-        [EnableQuery]
-        public IQueryable<Point> Post(Point point)
-        {
-            var result = _repo.Insert(point);
-
-            _repo.Save();
-
-            return new List<Point>() { result }.AsQueryable();
-        }
-
-        // PATCH: odata/Points(5)
+        //PATCH: odata/Points(5)
         [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
-        public IQueryable<Point> Patch([FromODataUri] int key, Delta<Point> delta)
+        public new IHttpActionResult Patch([FromODataUri] int key, Delta<Point> delta)
         {
-            var existing = _repo.AsQueryable().First(x => x.Id == key);
-
-            delta.Patch(existing);            
-
-            _repo.Update(existing);
-
-            _repo.Save();
-
-            return new List<Point>() { existing }.AsQueryable();
+            return base.Patch(key, delta);
         }
 
-        // DELETE: odata/Points(5)
-        [EnableQuery]
-        public IQueryable<Point> Delete([FromODataUri] int key)
+        //DELETE: odata/Points(5)
+        public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            _repo.Delete(_repo.AsQueryable().First(x => x.Id == key));
-
-            _repo.Save();
-
-            return new List<Point>().AsQueryable();
+            return base.Delete(key);
         }
     }
 }

@@ -50,7 +50,8 @@
                 Town: result.Town,
                 Description: $scope.addressDescription,
                 Latitude: "",
-                Longitude: ""
+                Longitude: "",
+                Type: "Standard"
             });
 
             newAddress.$post(function() {
