@@ -48,24 +48,24 @@
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin">
-      <HintPath>..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Host.HttpListener">
       <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.2.0.2\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Hosting">
-      <HintPath>..\packages\Microsoft.Owin.Hosting.3.0.0\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Owin.Hosting.3.0.1\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Owin.Security.3.0.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Testing">
-      <HintPath>..\packages\Microsoft.Owin.Testing.3.0.0\lib\net45\Microsoft.Owin.Testing.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Owin.Testing.3.0.1\lib\net45\Microsoft.Owin.Testing.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -151,6 +151,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="AppTests\controllers\Driving\DrivingControllerTest.js" />
+    <Content Include="AppTests\controllers\MyReports\MyReportsControllerTest.js" />
+    <Content Include="AppTests\controllers\MyReports\ConfirmDeleteReportControllerTest.js" />
+    <Content Include="AppTests\controllers\Driving\noLicensePlateModalControllerTest.js" />
+    <Content Include="AppTests\controllers\Settings\ModalControllers\confirmDeleteTokenTest.js" />
+    <Content Include="AppTests\controllers\Settings\ModalControllers\RouteEditModalInstanceControllerTest.js" />
+    <Content Include="AppTests\controllers\Settings\ModalControllers\TokenModalControllerTest.js" />
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
@@ -178,9 +185,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FrontendCasperTests\google-test.js" />
-    <Content Include="FrontendCasperTests\MyReports\test.js" />
-    <Content Include="casperjs-setup.js" />
+    <Content Include="Gruntfile.js" />
+    <Content Include="ProtractorTests\MyReports\httpBackEndMocks.js" />
+    <Content Include="ProtractorTests\MyReports\myReports_page.js" />
+    <Content Include="ProtractorTests\MyReports\myReports_specs.js" />
+    <Content Include="ProtractorTests\protractor.conf.js" />
+    <Content Include="Sandbox\conf.js" />
+    <Content Include="Sandbox\test.js" />
+    <None Include="packages.json" />
     <None Include="run-casper-tests.bat" />
   </ItemGroup>
   <ItemGroup>
