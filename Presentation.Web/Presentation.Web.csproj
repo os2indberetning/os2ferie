@@ -282,6 +282,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App\Admin\AdminView.html" />
+    <Content Include="App\Admin\EditAddressController.js" />
+    <Content Include="App\Admin\EditAddressTemplate.html" />
+    <Content Include="App\Admin\ConfirmDeleteAddressTemplate.html" />
+    <Content Include="App\Admin\DeleteAddressController.js" />
+    <Content Include="App\Admin\EmailNotificationController.js" />
+    <Content Include="App\Admin\StandardAddressController.js" />
     <Content Include="App\application.js" />
     <Content Include="App\ApproveReports\AcceptWithAccountController.js" />
     <Content Include="App\ApproveReports\ConfirmApproveWithAccountTemplate.html" />
@@ -291,6 +297,7 @@
     <Content Include="App\ApproveReports\ConfirmApproveTemplate.html" />
     <Content Include="App\ApproveReports\ConfirmRejectTemplate.html" />
     <Content Include="App\Services\BankAccountService.js" />
+    <Content Include="App\Services\StandardAddressResource.js" />
     <Content Include="App\Services\OrgUnitResource.js" />
     <Content Include="App\Services\RouteContainerResource.js" />
     <Content Include="template\typeahead\typeahead-match.html" />

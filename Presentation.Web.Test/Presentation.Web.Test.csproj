@@ -151,6 +151,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="AppTests\controllers\Admin\DeleteAddressControllerTest.js" />
+    <Content Include="AppTests\controllers\Admin\EditAddressControllerTest.js" />
     <Content Include="AppTests\controllers\Driving\DrivingControllerTest.js" />
     <Content Include="AppTests\controllers\MyReports\MyReportsControllerTest.js" />
     <Content Include="AppTests\controllers\MyReports\ConfirmDeleteReportControllerTest.js" />
@@ -202,6 +204,7 @@
     <Content Include="AppTests\controllers\ApproveReports\RejectControllerTest.js" />
     <Content Include="karma.conf.js" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
