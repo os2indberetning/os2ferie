@@ -3,16 +3,16 @@ namespace Infrastructure.DataAccess.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class update : DbMigration
+    public partial class Fixmigration : DbMigration
     {
         public override void Up()
         {
-            DropColumn("MobileTokens", "Description");
+        //    DropColumn("Reports", "Timestamp");
         }
         
         public override void Down()
         {
-            AddColumn("MobileTokens", "Description", c => c.String(unicode: false));
+          //  AddColumn("Reports", "Timestamp", c => c.String(unicode: false));
         }
     }
 }

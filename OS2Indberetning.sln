@@ -35,6 +35,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EFB1501E-877D-4D4D-B810-9B75B376A065}"
 	ProjectSection(SolutionItems) = preProject
 		GenerateTestCoverage.bat = GenerateTestCoverage.bat
+		Performance1.psess = Performance1.psess
 		RunAllTests.bat = RunAllTests.bat
 		RunApplicationServicesTests.bat = RunApplicationServicesTests.bat
 		RunPresentationWebTests.bat = RunPresentationWebTests.bat

@@ -675,7 +675,7 @@
        $scope.gridContainer.acceptedGridPageSize = 5;
        $scope.gridContainer.rejectedGridPageSize = 5;
 
-       Person.get().$promise.then(function (res) {
+       Person.getAll().$promise.then(function (res) {
            angular.forEach(res.value, function (value, key) {
                $scope.people.push({ Id: value.Id, FullName: value.FirstName + " " + value.MiddleName + " " + value.LastName });
            });

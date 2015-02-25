@@ -173,6 +173,11 @@ namespace Core.ApplicationServices
             //Calculate the actual amount to reimburse
             report.AmountToReimburse = (report.Distance / 1000) * (report.KmRate / 100);
 
+            if (report.AmountToReimburse < 0)
+            {
+                report.AmountToReimburse = 0;
+            }
+
             report.Distance = report.Distance/1000;
 
             return report;
