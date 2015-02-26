@@ -474,6 +474,8 @@
            $scope.dateContainer.fromDateAccepted = new Date();
            $scope.dateContainer.toDateRejected = new Date();
            $scope.dateContainer.fromDateRejected = new Date();
+           $scope.dateContainer.toDateSubstitute = new Date();
+           $scope.dateContainer.fromDateSubstitute = new Date();
        }
 
        $scope.getEndOfDayStamp = function (d) {
@@ -618,13 +620,22 @@
                    rejectedQueryOptions.dateQuery = from + and + to;
                }
 
-
                $scope.updateActiveTab();
            }, 0);
 
 
        }
 
+        $scope.substituteInitials = "foo";
+
+       $scope.createNewSubstitute = function () {
+           var from = $scope.dateContainer.fromDateSubstitute;
+           var to = $scope.dateContainer.toDateSubstitute;
+           if (from - to < 0) {
+               //TODO alert user
+           }
+           console.log($scope.substituteInitials);
+       };
 
 
 

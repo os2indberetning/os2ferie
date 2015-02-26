@@ -9,13 +9,6 @@
 <div class="row" ng-controller="ApproveReportsController">
     <div class="col-lg-12">
 
-
-
-
-
-
-
-
         <tabset justified="true">
             <tab heading="Afventende" ng-click="tabClicked('pending')">
                 <div class="panel panel-default">
@@ -206,7 +199,7 @@
                     </div>
                 </div>
             </tab>
-            <tab heading="Indstillinger">
+            <tab heading="Indstillinger" ng-click="tabClicked('settings')">
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
@@ -214,8 +207,54 @@
                     </div>
 
                     <div class="panel-body">
+                        <div class="row new-substitute-area setting-area">
 
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h3>Opret ny stedfortræder i en periode</h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3"> Fra </div>
+                                <div class="col-md-3"> Til </div>
+                                <div class="col-md-2">  </div>
+                                <div class="col-md-3"> Organisation </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group form-inline">
+                                    <div class="col-md-3">
+                                        <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.fromDateSubstituteString" k-ng-model="dateContainer.fromDateSubstitute" ng-change="dateChanged()" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.toDateSubstituteString" k-ng-model="dateContainer.toDateSubstitute" ng-change="dateChanged()" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" typeahead-on-select="personChanged($item)" typeahead-editable="false" ng-model="person.substituteChosenPerson" placeholder="Indtast navn" typeahead="person as person.FullName for person in people | filter:$viewValue" class="form-control" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select class="fill-width" kendo-drop-down-list="PositionDropDown" ng-model="DriveReport.Position" id="" k-data-source="Employments" k-data-text-field="'Position'" k-data-value-field="'Id'" k-placeholder="'Brugerens stilling(er)'"><option>' '</option></select><!-- todo-->
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="submit" class="btn btn-primary" ng-click="createNewSubstitute()">Opret</button>
+                                    </div>
+                                    <div />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div kendo-grid="gridContainer.substituteGrid" class="margin-top-10" options="substitutes"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row new-approver-area setting-area">
+                            <div class="col-lg-12">
+                                <h3>Opret personlige godkendere for medarbejdere</h3>
+
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </tab>
         </tabset>
