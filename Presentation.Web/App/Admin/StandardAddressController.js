@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("StandardAddressController", [
-   "$scope", "$modal", "StandardAddress", function ($scope, $modal, StandardAddress) {
+   "$scope", "$modal", "StandardAddress", "AddressFormatter", function ($scope, $modal, StandardAddress, AddressFormatter) {
 
        $scope.loadAddresses = function () {
            $scope.addresses = {
@@ -75,8 +75,16 @@
                }
            });
 
-           modalInstance.result.then(function () {
-               // onSuccess
+           modalInstance.result.then(function (editedAddress) {
+               var result = AddressFormatter.fn(editedAddress);
+               StandardAddress.patch({ id: id }, {
+                   "StreetName": result.StreetName,
+                   "StreetNumber": result.StreetNumber,
+                   "ZipCode": result.ZipCode,
+                   "Town": result.Town
+               }, function () {
+                   $scope.updateAddressGrid();
+               });
            });
        }
 
@@ -97,7 +105,29 @@
                    $scope.updateAddressGrid();
                });
            });
-       } 
+       }
+
+       $scope.addNewClick = function() {
+           var modalInstance = $modal.open({
+               templateUrl: '/App/Admin/AddNewAddressTemplate.html',
+               controller: 'AddNewAddressController',
+               backdrop: "static",
+           });
+
+           modalInstance.result.then(function (newAddress) {
+               var result = AddressFormatter.fn(newAddress);
+               StandardAddress.post({
+                   "StreetName": result.StreetName,
+                   "StreetNumber": result.StreetNumber,
+                   "ZipCode": result.ZipCode,
+                   "Town": result.Town,
+                   "Latitude": "1",
+                   "Longitude": "1"
+               }, function () {
+                   $scope.updateAddressGrid();
+               });
+           });
+       }
 
        $scope.loadAddresses();
    }

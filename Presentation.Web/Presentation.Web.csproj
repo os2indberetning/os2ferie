@@ -282,7 +282,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App\Admin\AdminView.html" />
+    <Content Include="App\Admin\AddNewAddressController.js" />
     <Content Include="App\Admin\EditAddressController.js" />
+    <Content Include="App\Admin\AddNewAddressTemplate.html" />
     <Content Include="App\Admin\EditAddressTemplate.html" />
     <Content Include="App\Admin\ConfirmDeleteAddressTemplate.html" />
     <Content Include="App\Admin\DeleteAddressController.js" />
@@ -290,7 +292,11 @@
     <Content Include="App\Admin\StandardAddressController.js" />
     <Content Include="App\application.js" />
     <Content Include="App\ApproveReports\AcceptWithAccountController.js" />
-    <Content Include="App\ApproveReports\ConfirmApproveWithAccountTemplate.html" />
+    <Content Include="App\ApproveReports\ConfirmApproveAllTemplate.html" />
+    <Content Include="App\ApproveReports\ConfirmApproveSelectedTemplate.html" />
+    <Content Include="App\ApproveReports\ConfirmApproveAllWithAccountTemplate.html" />
+    <Content Include="App\ApproveReports\ConfirmApproveWithAccountTemplate - Copy.html" />
+    <Content Include="App\ApproveReports\ConfirmApproveSelectedWithAccountTemplate.html" />
     <Content Include="App\ApproveReports\RejectController.js" />
     <Content Include="App\ApproveReports\AcceptController.js" />
     <Content Include="App\ApproveReports\ApproveReportsView.html" />

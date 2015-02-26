@@ -1,9 +1,11 @@
 ﻿angular.module("application").controller("AcceptWithAccountController", [
-   "$scope", "$modalInstance", "itemId", "BankAccount", "NotificationService", function ($scope, $modalInstance, itemId, BankAccount, NotificationService) {
+   "$scope", "$modalInstance", "itemId", "BankAccount", "NotificationService", "pageNumber", function ($scope, $modalInstance, itemId, BankAccount, NotificationService, pageNumber) {
 
        $scope.itemId = itemId;
 
        $scope.result = {};
+
+       $scope.pageNumber = pageNumber;
 
        BankAccount.get().$promise.then(function (res) {
            $scope.accounts = res.value;
@@ -22,6 +24,24 @@
                $scope.result.Id = itemId;
                $modalInstance.close($scope.result);
                NotificationService.AutoFadeNotification("success", "Godkendt", "Indberetningen blev godkendt med kontering " + $scope.selectedAccount.Description + " - " + $scope.selectedAccount.Number);
+           }
+       }
+
+       $scope.approveAllWithAccountClick = function () {
+           if ($scope.selectedAccount == undefined) {
+               $scope.errorMessage = "* Du skal vælge en konto";
+           } else {
+               $modalInstance.close($scope.selectedAccount.Number);
+               NotificationService.AutoFadeNotification("success", "Godkendt", "Indberetningerne blev godkendt med kontering " + $scope.selectedAccount.Description + " - " + $scope.selectedAccount.Number);
+           }
+       }
+
+       $scope.approveSelectedWithAccountClick = function () {
+           if ($scope.selectedAccount == undefined) {
+               $scope.errorMessage = "* Du skal vælge en konto";
+           } else {
+               $modalInstance.close($scope.selectedAccount.Number);
+               NotificationService.AutoFadeNotification("success", "Godkendt", "Indberetningerne blev godkendt med kontering " + $scope.selectedAccount.Description + " - " + $scope.selectedAccount.Number);
            }
        }
 

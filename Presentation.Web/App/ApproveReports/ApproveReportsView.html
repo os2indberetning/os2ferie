@@ -13,6 +13,7 @@
 
 
 
+       
 
 
 
@@ -63,7 +64,7 @@
                                 <input type="text" typeahead-on-select="personChanged($item)" typeahead-editable="false" ng-model="person.pendingChosenPerson" placeholder="Indtast navn" typeahead="person as person.FullName for person in people | filter:$viewValue" class="form-control" />
                             </div>
                             <div class="col-md-2">
-                                <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
+                                <button class="btn btn-danger" ng-click="clearClicked()"><i class="fa fa-times"></i> Ryd</button>
                             </div>
                             <div class="col-md-2">
                                 <select ng-model="gridContainer.pendingGridPageSize" class="form-control" ng-change="pageSizeChanged()">
@@ -127,7 +128,7 @@
                                 <input type="text" typeahead-on-select="personChanged($item)" typeahead-editable="false" ng-model="person.acceptedChosenPerson" placeholder="Indtast navn" typeahead="person as person.FullName for person in people | filter:$viewValue" class="form-control" />
                             </div>
                             <div class="col-md-2">
-                                <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
+                                <button class="btn btn-danger" ng-click="clearClicked()"><i class="fa fa-times"></i> Ryd</button>
                             </div>
                             <div class="col-md-2">
                                 <select ng-model="gridContainer.acceptedGridPageSize" class="form-control" ng-change="pageSizeChanged()">
@@ -188,7 +189,7 @@
                                 <input type="text" typeahead-on-select="personChanged($item)" typeahead-editable="false" ng-model="person.rejectedChosenPerson" placeholder="Indtast navn" typeahead="person as person.FullName for person in people | filter:$viewValue" class="form-control" />
                             </div>
                             <div class="col-md-2">
-                                <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
+                                <button class="btn btn-danger" ng-click="clearClicked()"><i class="fa fa-times"></i> Ryd</button>
                             </div>
                             <div class="col-md-2">
                                 <select ng-model="gridContainer.rejectedGridPageSize" class="form-control" ng-change="pageSizeChanged()">

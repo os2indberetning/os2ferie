@@ -1,7 +1,13 @@
 ﻿angular.module("application").controller("DeleteAddressController", [
-    "$scope", "$modalInstance", "itemId", "NotificationService", function ($scope, $modalInstance, itemId, NotificationService) {
+    "$scope", "$modalInstance", "itemId", "NotificationService", "StandardAddress", function($scope, $modalInstance, itemId, NotificationService, StandardAddress) {
 
-        $scope.itemId = itemId;
+        StandardAddress.get({ id: itemId }).$promise.then(function (res) {
+            var address = res.value[0];
+            $scope.addressString = address.StreetName + " " + address.StreetNumber + ", " + address.ZipCode + " " + address.Town + ".";
+        });
+
+      
+
 
         $scope.confirmDelete = function () {
             $modalInstance.close($scope.itemId);
