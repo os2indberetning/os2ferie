@@ -29,11 +29,6 @@
             angular.forEach($scope.Routes[index - 1].Points, function(value, key) {
                 $scope.DriveReport.Addresses.push({ Name: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town, Save: false });
             });
-
-            //$scope.DriveReport.Addresses[0] = { Name: route.Points[0].StreetName + " " + route.Points[0].StreetNumber + ", " + route.Points[0].ZipCode + " " + route.Points[0].Town, Save: false };
-            //$scope.DriveReport.Addresses[1] = { Name: route.Points[lastIndex].StreetName + " " + route.Points[lastIndex].StreetNumber + ", " + route.Points[lastIndex].ZipCode + " " + route.Points[lastIndex].Town, Save: false };
-            
-            console.log(route);
         }
 
         $scope.Person = Person.get({ id: 1 }, function() {
