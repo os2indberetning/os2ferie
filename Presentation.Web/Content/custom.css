@@ -13,6 +13,10 @@
     margin-top: 10px;
 }
 
+.margin-top-40 {
+    margin-top: 40px;
+}
+
 .k-tooltip {
     text-align: left;
     padding: 1em;
@@ -31,6 +35,10 @@
 
 .margin-bottom-10 {
     margin-bottom: 10px;
+}
+
+.margin-bottom-40 {
+    margin-bottom: 40px;
 }
 
 .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:focus, .nav-tabs.nav-justified > .active > a:hover {

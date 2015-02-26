@@ -285,6 +285,11 @@
     <Content Include="App\application.js" />
     <Content Include="App\ApproveReports\AcceptWithAccountController.js" />
     <Content Include="App\ApproveReports\ConfirmApproveWithAccountTemplate.html" />
+    <Content Include="App\ApproveReports\LeaderSettingsController.js" />
+    <Content Include="App\ApproveReports\Modals\newApproverModal.html" />
+    <Content Include="App\ApproveReports\Modals\NewApproverModalInstanceController.js" />
+    <Content Include="App\ApproveReports\Modals\newSubstituteModal.html" />
+    <Content Include="App\ApproveReports\Modals\NewSubstituteModalInstanceController.js" />
     <Content Include="App\ApproveReports\RejectController.js" />
     <Content Include="App\ApproveReports\AcceptController.js" />
     <Content Include="App\ApproveReports\ApproveReportsView.html" />
