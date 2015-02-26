@@ -392,7 +392,7 @@
                         },
                         title: "Adresse 1"
                     }, {
-                        field: "Id",
+                        field: "Points",
                         template: function (data) {
                             var temp = [];
 
