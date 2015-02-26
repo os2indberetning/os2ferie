@@ -108,7 +108,7 @@
                     </div>
                 </div>
                 <div ng-switch-default>
-                    <div ng ng-repeat="Address in DriveReport.Addresses">
+                    <div ng-if="!IsRoute" ng-repeat="Address in DriveReport.Addresses">
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="" ng-if="$first">Fra</label>

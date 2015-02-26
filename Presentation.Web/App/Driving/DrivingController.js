@@ -4,17 +4,21 @@
         $scope.DriveReport = new DriveReport();
         $scope.canSubmitDriveReport = true;
         $scope.Routes = [];
-        $scope.IsNotRoute = true;
+        $scope.IsRoute = false;
 
         $scope.test = function(e) {
             var index = e.sender.selectedIndex;
 
             if (index == 0) {
-                IsNotRoute = true;
+                $scope.IsRoute = false;
+                $scope.DriveReport.Addresses = [];
+
+                $scope.DriveReport.Addresses.push({ Name: "", Save: false });
+                $scope.DriveReport.Addresses.push({ Name: "", Save: false });
                 return;
             }
 
-            IsNotRoute = false;
+            $scope.IsRoute = true;
 
             var route = $scope.Routes[index - 1];
 
@@ -50,8 +54,8 @@
                 angular.forEach(data.value, function (value, key) {
                     var one = value.Points[0].StreetName + " " + value.Points[0].StreetNumber + ", " + value.Points[0].ZipCode + " " + value.Points[0].Town;
                     var two = value.Points[value.Points.length - 1].StreetName + " " + value.Points[value.Points.length - 1].StreetNumber + ", " + value.Points[value.Points.length - 1].ZipCode + " " + value.Points[value.Points.length - 1].Town;
-                    var count = value.Points.length;
-                    temp.push({ addressOne: one, addressTwo: two, viaPointCount: count, presentation: one + " -> " + two + " | Antal viapunkter: " + count - 2, routeId: value.Id });
+                    var count = value.Points.length - 2;
+                    temp.push({ addressOne: one, addressTwo: two, viaPointCount: count, presentation: value.Description + ": " + one + " -> " + two + " | Antal viapunkter: " + count, routeId: value.Id });
                     $scope.Routes.push(value);
                 });
 
@@ -121,8 +125,8 @@
             driveReport.EmploymentId = $scope.DriveReport.Position;
 
             // These two should be removed, they are in a future branch
-            driveReport.Fullname = "";
-            driveReport.Timestamp = "";
+            //driveReport.Fullname = "";
+            //driveReport.Timestamp = "";
 
             if ($scope.DriveReport.KilometerAllowance === "Read") {
 
