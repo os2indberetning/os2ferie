@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.ApplicationServices;
 using Core.DmzModel;
 using Core.DomainModel;
 using Infrastructure.DmzDataAccess;
@@ -85,63 +86,32 @@ namespace Infrastructure.DmzSync
                         //Reference the correct employment
                         dr.EmploymentId = report.EmploymentId;
 
-                        var model = new ReportViewModel
-                        {
-                            SelectedReportMethod = 0,
-                            StartingFromHome = report.StartsAtHome,
-                            EndingAtHome = report.EndsAtHome,
-                            SelectedEmployment = dr.EmploymentId,
+                        var licensePlate = dr.Person.LicensePlates.FirstOrDefault();
 
-                            TotalRouteDistance = report.Route.TotalDistance.ToString(),
-                            Date = dr.Date
-                        };
-
-                        var adminRateReference = MasterContext.AdminRates.FirstOrDefault(x => x.TFCode == masterRate.TFCode && x.Year == masterRate.Year);
-
-                        if (adminRateReference != null)
-                            model.SelectedRateType = adminRateReference.Id;
+                        if (licensePlate != null)
+                            dr.Licenseplate = licensePlate.ToString();
                         else
-                            model.SelectedRateType = -1;
+                            dr.Licenseplate = "No Licenseplate";
 
-                        try
-                        {
-                            //Calculate reimburstment info
-                            IQueryHelper qHelper = new QueryHelper();
-                            INetHelper nHelper = new NetHelper();
-                            IReimbursementCalculator calc = new ReimbursementCalculator(qHelper, new DistanceCalculator(qHelper, nHelper));
-                            model.SubjectToFourKmRule = qHelper.IsSubjectToFourKmRule(dr.Profile.CprNr);
-
-                            calc.CalculateDriveReportReimbursement(model);
-                            dr.AmountToReimburse = model.TotalCostToReimburse;
-                            dr.IsExtraDistance = model.IsExtraDistance;
-                            dr.ReimburseableDistance = model.ReimburseableDistance;
-                        }
-                        catch (Exception ex)
-                        {
-                            dr.AmountToReimburse = "0";
-                            dr.IsExtraDistance = false;
-                            dr.ReimburseableDistance = "0";
-                        }
-
-                        //Create route object
-                        MasterModel.Route r = new MasterModel.Route { RouteDescription = "Aflæst" };
-                        r.TotalDistance = report.Route.TotalDistance.ToString();
-                        dr.Routes.Add(r);
+                        //Create ReimburstmentCalculator
+                        ReimbursementCalculator calc = new ReimbursementCalculator();
+                        dr = calc.Calculate(dr);
 
                         //Add GPS coordinates to the route
-                        foreach (DMZModel.GPSCoordinate gps in report.Route.GPSCoordinates)
+                        foreach (Core.DmzModel.GPSCoordinate gps in report.Route.GPSCoordinates)
                         {
-                            DMZModel.GPSCoordinate g = Encryptor.DecryptGPSCoordinate(gps);
+                            Core.DmzModel.GPSCoordinate g = Encryptor.DecryptGPSCoordinate(gps);
 
-                            MasterModel.RouteCoordinate c = new RouteCoordinate
+                           var drp = new Core.DomainModel.DriveReportPoint
                             {
-                                Latitude = decimal.Parse(g.Latitude, CultureInfo.InvariantCulture),
-                                Longitude = decimal.Parse(g.Longitude, CultureInfo.InvariantCulture),
+                                Latitude =  g.Latitude,
+                                Longitude = g.Longitude
                             };
 
-                            c.Time = DateTime.ParseExact(g.TimeStamp, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                            // What to do with time? - or now just throw aray.. assume gpscoordinatea re in the correct order
+                            //c.Time = DateTime.ParseExact(g.TimeStamp, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
-                            r.RouteCoordinates.Add(c);
+                            dr.DriveReportPoints.Add(drp);
                         }
 
                         i++;
@@ -237,45 +207,19 @@ namespace Infrastructure.DmzSync
                                 Id = profile.Id
                             };
 
-                            //If coordinate exists, pick it from the lookup table
-                            if (profile.HomeCoordinate != null && person.Gade == profile.HomeCoordinate.Gade)
+                            //Find profiles home coordinate
+                            var personalAddress =
+                                profile.PersonalAddresses.FirstOrDefault(x => x.Type == PersonalAddressType.Home);
+
+                            if (personalAddress != null)
                             {
-                                p.HomeLatitude = profile.HomeCoordinate.Latitude.ToString();
-                                p.HomeLongitude = profile.HomeCoordinate.Longitude.ToString();
+                                p.HomeLatitude = personalAddress.Latitude;
+                                p.HomeLongitude = personalAddress.Longitude;
                             }
-                            else // Else look it up
+                            else
                             {
-                                Console.WriteLine("Looking up {0}", person.Gade);
-
-                                try
-                                {
-                                    NetHelper nh = new NetHelper();
-                                    SingleAddressCoordinates c = nh.ConvertSingleUnstructuredAddress(person.Gade, person.PostNr);
-
-                                    p.HomeLatitude = c.Latitude;
-                                    p.HomeLongitude = c.Longitude;
-
-                                    if (profile.HomeCoordinate == null)
-                                        profile.HomeCoordinate = new HomeCoordinate();
-
-                                    profile.HomeCoordinate.Latitude = decimal.Parse(c.Latitude, CultureInfo.InvariantCulture);
-                                    profile.HomeCoordinate.Longitude = decimal.Parse(c.Longitude, CultureInfo.InvariantCulture);
-                                    profile.HomeCoordinate.Gade = person.Gade;
-
-                                    try
-                                    {
-                                        MasterContext.SaveChanges();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        //Could not save coordinate to mastermodel.. not a big deal..
-                                    }
-                                }
-                                catch (Exception)
-                                {
-                                    p.HomeLatitude = "0";
-                                    p.HomeLongitude = "0";
-                                }
+                                p.HomeLatitude = "0";
+                                p.HomeLongitude = "0";
                             }
 
                             foreach (var emp in profile.Employments)
@@ -303,12 +247,13 @@ namespace Infrastructure.DmzSync
                                 t = Encryptor.EncryptToken(t);
                                 p.Tokens.Add(t);
                             }
+                        
+
+                            p = Encryptor.EncryptProfile(p);
+                            DMZContext.Profiles.Add(p);
+
+                            i++;
                         }
-
-                        p = Encryptor.EncryptProfile(p);
-                        DMZContext.Profiles.Add(p);
-
-                        i++;
                     }
 
                     try
