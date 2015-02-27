@@ -10,21 +10,28 @@
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-map-marker fa-fw"></i> Standard-adresser</h3>
                     </div>
-                    
-                 
+
+
 
 
                     <div class="panel-body">
-                        
-                       
+                        <div class="row">
+                            <div class="col-md-10"></div>
+                            <div class="col-md-2">
+                                <label class="pull-left">Visninger pr. side</label>
+                                <select ng-model="gridPageSize" class="form-control" ng-change="pageSizeChanged()">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
 
-                        <div kendo-grid="gridContainer.addressGrid" class="margin-top-10" options="addresses"></div>
-                        
-                        
-                        <button class="btn btn-primary col-md-2 margin-top-20 pull-right" ng-click="addNewClick()">Opret</button>
-                       
-
+                        </div>
+                        <div kendo-grid="addressGrid" class="margin-top-10" options="addresses"></div>
+                        <button class="btn btn-primary col-md-2 margin-top-20 pull-right" ng-click="addNewClick()"><i class="fa fa-plus"></i> Opret</button>
                     </div>
+
                 </div>
             </tab>
             <tab heading="Email adviseringer" ng-controller="EmailNotificationController">
@@ -35,8 +42,22 @@
                     </div>
 
 
-
                     <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-10"></div>
+                            <div class="col-md-2">
+                                <label class="pull-left">Visninger pr. side</label>
+                                <select ng-model="gridPageSize" class="form-control" ng-change="pageSizeChanged()">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div kendo-grid="notificationGrid" class="margin-top-10" options="notifications"></div>
+                        <button class="btn btn-primary col-md-2 margin-top-20 pull-right" ng-click="addNewClick()"><i class="fa fa-plus"></i> Opret</button>
                     </div>
                 </div>
             </tab>

@@ -111,6 +111,10 @@
     <Compile Include="Migrations\201502251425474_Fix migration.Designer.cs">
       <DependentUpon>201502251425474_Fix migration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502270937254_AddedRateType.cs" />
+    <Compile Include="Migrations\201502270937254_AddedRateType.Designer.cs">
+      <DependentUpon>201502270937254_AddedRateType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -164,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502251425474_Fix migration.resx">
       <DependentUpon>201502251425474_Fix migration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502270937254_AddedRateType.resx">
+      <DependentUpon>201502270937254_AddedRateType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

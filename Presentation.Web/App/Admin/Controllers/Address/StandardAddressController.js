@@ -60,12 +60,14 @@
        }
 
        $scope.updateAddressGrid = function () {
-           $scope.gridContainer.addressGrid.dataSource.read();
+           $scope.addressGrid.dataSource.read();
        }
+
+       $scope.gridPageSize = 5;
 
        $scope.editClick = function (id) {
            var modalInstance = $modal.open({
-               templateUrl: '/App/Admin/EditAddressTemplate.html',
+               templateUrl: '/App/Admin/HTML/Address/EditAddressTemplate.html',
                controller: 'EditAddressController',
                backdrop: "static",
                resolve: {
@@ -88,9 +90,13 @@
            });
        }
 
-       $scope.deleteClick = function(id) {
+       $scope.pageSizeChanged = function () {
+           $scope.addressGrid.dataSource.pageSize(Number($scope.gridPageSize));
+       }
+
+       $scope.deleteClick = function (id) {
            var modalInstance = $modal.open({
-               templateUrl: '/App/Admin/ConfirmDeleteAddressTemplate.html',
+               templateUrl: '/App/Admin/HTML/Address/ConfirmDeleteAddressTemplate.html',
                controller: 'DeleteAddressController',
                backdrop: "static",
                resolve: {
@@ -107,9 +113,9 @@
            });
        }
 
-       $scope.addNewClick = function() {
+       $scope.addNewClick = function () {
            var modalInstance = $modal.open({
-               templateUrl: '/App/Admin/AddNewAddressTemplate.html',
+               templateUrl: '/App/Admin/HTML/Address/AddNewAddressTemplate.html',
                controller: 'AddNewAddressController',
                backdrop: "static",
            });

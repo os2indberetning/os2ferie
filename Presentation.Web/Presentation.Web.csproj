@@ -252,6 +252,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\MailNotificationsController.cs" />
     <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\DriveReportsController.cs" />
     <Compile Include="Controllers\ExampleController.cs" />
@@ -281,15 +282,21 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App\Admin\HTML\Email\AddNewMailNotificationTemplate.html" />
+    <Content Include="App\Admin\Controllers\Email\AddNewMailNotificationController.js" />
     <Content Include="App\Admin\AdminView.html" />
-    <Content Include="App\Admin\AddNewAddressController.js" />
-    <Content Include="App\Admin\EditAddressController.js" />
-    <Content Include="App\Admin\AddNewAddressTemplate.html" />
-    <Content Include="App\Admin\EditAddressTemplate.html" />
-    <Content Include="App\Admin\ConfirmDeleteAddressTemplate.html" />
-    <Content Include="App\Admin\DeleteAddressController.js" />
-    <Content Include="App\Admin\EmailNotificationController.js" />
-    <Content Include="App\Admin\StandardAddressController.js" />
+    <Content Include="App\Admin\Controllers\Address\AddNewAddressController.js" />
+    <Content Include="App\Admin\HTML\Email\ConfirmDeleteMailNotificationTemplate.html" />
+    <Content Include="App\Admin\Controllers\Email\DeleteMailNotificationController.js" />
+    <Content Include="App\Admin\HTML\Email\EditMailNotificationTemplate.html" />
+    <Content Include="App\Admin\Controllers\Email\EditMailNotificationController.js" />
+    <Content Include="App\Admin\Controllers\Address\EditAddressController.js" />
+    <Content Include="App\Admin\HTML\Address\AddNewAddressTemplate.html" />
+    <Content Include="App\Admin\HTML\Address\EditAddressTemplate.html" />
+    <Content Include="App\Admin\HTML\Address\ConfirmDeleteAddressTemplate.html" />
+    <Content Include="App\Admin\Controllers\Address\DeleteAddressController.js" />
+    <Content Include="App\Admin\Controllers\Email\EmailNotificationController.js" />
+    <Content Include="App\Admin\Controllers\Address\StandardAddressController.js" />
     <Content Include="App\application.js" />
     <Content Include="App\ApproveReports\AcceptWithAccountController.js" />
     <Content Include="App\ApproveReports\ConfirmApproveAllTemplate.html" />
@@ -303,6 +310,7 @@
     <Content Include="App\ApproveReports\ConfirmApproveTemplate.html" />
     <Content Include="App\ApproveReports\ConfirmRejectTemplate.html" />
     <Content Include="App\Services\BankAccountService.js" />
+    <Content Include="App\Services\EmailNotificationResouce.js" />
     <Content Include="App\Services\StandardAddressResource.js" />
     <Content Include="App\Services\OrgUnitResource.js" />
     <Content Include="App\Services\RouteContainerResource.js" />

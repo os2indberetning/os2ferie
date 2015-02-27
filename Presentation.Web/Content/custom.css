@@ -13,6 +13,14 @@
     margin-top: 30px;
 }
 
+.margin-right-10 {
+    margin-right: 10px;
+}
+
+.margin-5 {
+    margin: 5px;
+}
+
 .no-border {
     border: none;
 }
@@ -112,7 +120,7 @@
 }
 
 .max-width-100 {
-    max-width: 100%;
+    max-width: 100px;
 }
 
 .fill-width {

@@ -65,7 +65,7 @@ namespace OS2Indberetning
             lType.Ignore(l => l.Person);
             builder.EntitySet<LicensePlate>("LicensePlates");
 
-            builder.EntitySet<MailNotificationSchedule>("MailNotificationSchedules");
+            builder.EntitySet<MailNotificationSchedule>("MailNotifications");
 
             builder.EntitySet<MobileToken>("MobileToken");
 
