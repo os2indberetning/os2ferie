@@ -62,7 +62,7 @@
                 </div>
             </tab>
 
-            <tab heading="Rate-styring">
+            <tab heading="Rate-styring" ng-controller="RateController">
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
@@ -72,7 +72,123 @@
 
 
                     <div class="panel-body">
+
+
+
+                        <div class="col-md-5 rounded-border margin-5">
+
+                            <h2>Ny Rate</h2>
+
+
+                            <div class="col-md-12 margin-5">
+                                <div class="col-md-4">
+                                    <label class="pull-left">År</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="number" class="form-control pull-left" ng-model="newRateYear" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12 margin-5">
+
+                                <div class="col-md-4">
+                                    <label class="pull-left">Takst</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control" ng-model="newRateRate" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="margin-top-5">Ører pr. kilometer</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 margin-5">
+                                <div class="col-md-4">
+                                    <label class="pull-left">TF kode</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" ng-model="newRateTFCode" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12 margin-5">
+                                <div class="col-md-4">
+                                    <label>Taksttype</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" ng-model="newRateRateType">
+                                        <option>Default</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-primary fill-width" ng-click="addNewRateClick()">Opret</button>
+                                </div>
+                            </div>
+                            
+                   
+
+                            <label class="text-danger" ng-bind="newRateYearError"></label><br />
+                            <label class="text-danger" ng-bind="newRateRateError"></label><br/>
+                            <label class="text-danger" ng-bind="newRateTFCodeError"></label><br />
+                            <label class="text-danger" ng-bind="newRateRateTypeError"></label>
+
+                        </div>
+                        <div class="col-md-6 rounded-border margin-5">
+                            <h2>Nyt kontonummer</h2>
+                            <div class="col-md-12 margin-5">
+                                <div class="col-md-4">
+                                    <label>Registreringsnummer</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="number" class="form-control" ng-model="newAccountRegNumber" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 margin-5">
+                                <div class="col-md-4">
+                                    <label>Kontonummer</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="number" class="form-control" ng-model="newAccountAccountNumber" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 margin-5">
+                                <div class="col-md-4">
+                                    <label>Beskrivelse</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" ng-model="newAccountDescription" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 margin-5">
+                                <div class="col-md-3 pull-right">
+                                    <button class="btn btn-primary fill-width" ng-click="addNewAccountClick()">Opret</button>
+                                </div>
+
+                            </div>
+                            <label class="text-danger" ng-bind="accountNumberRegNumberErrorMessage"></label><br/>
+                            <label class="text-danger" ng-bind="accountNumberErrorMessage"></label><br/>
+                            <label class="text-danger" ng-bind="accountDescriptionErrorMessage"></label>
+                            
+
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <div class="col-md-5 rounded-border margin-5">
+                                <div kendo-grid="rateGrid" class="margin-5" options="rates"></div>
+                            </div>
+
+                            <div class="col-md-6 rounded-border margin-5">
+                                <div kendo-grid="accountGrid" class="margin-5" options="accounts"></div>
+                            </div>
+                        </div>
+                        
                     </div>
+
+
                 </div>
             </tab>
             <tab heading="Stedfortrædere/Godkendere">

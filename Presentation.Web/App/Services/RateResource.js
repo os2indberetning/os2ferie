@@ -14,6 +14,7 @@
                 return angular.fromJson(data).value;
             },
             url: "/odata/Rates/RateService.ThisYearsRates"
-        }
+        },
+        "post": {method: "POST"}
     });
 }]);

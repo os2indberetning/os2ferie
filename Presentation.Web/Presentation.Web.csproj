@@ -282,6 +282,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App\Admin\Controllers\Account\DeleteAccountController.js" />
+    <Content Include="App\Admin\Controllers\Rate\RateController.js" />
+    <Content Include="App\Admin\HTML\Account\ConfirmDeleteAccountTemplate.html" />
     <Content Include="App\Admin\HTML\Email\AddNewMailNotificationTemplate.html" />
     <Content Include="App\Admin\Controllers\Email\AddNewMailNotificationController.js" />
     <Content Include="App\Admin\AdminView.html" />

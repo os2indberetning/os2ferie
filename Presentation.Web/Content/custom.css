@@ -21,6 +21,16 @@
     margin: 5px;
 }
 
+.rounded-border {
+    border: 1px solid;
+    border-radius: 20px;
+    border-color: #8a2be2;
+}
+
+.margin-top-5 {
+    margin-top: 5px;
+}
+
 .no-border {
     border: none;
 }
