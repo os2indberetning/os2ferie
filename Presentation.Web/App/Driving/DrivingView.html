@@ -90,9 +90,7 @@
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label for="">Vælg evt. personlig rute:</label>
-                        <select class="fill-width" kendo-drop-down-list id="" ng-model="DriveReport.PersonalRoute">
-                            <option value="">Personlige ruter</option>
-                        </select>
+                        <select class="fill-width" kendo-drop-down-list="PersonalRouteDropDown" id="" k-on-change="test(kendoEvent)" ng-model="DriveReport.PersonalRoute" k-data-source="PersonalRoutes" k-data-text-field="'presentation'"></select>
                     </div>
                 </div>
             </div>
@@ -110,7 +108,7 @@
                     </div>
                 </div>
                 <div ng-switch-default>
-                    <div ng ng-repeat="Address in DriveReport.Addresses">
+                    <div ng-if="!IsRoute" ng-repeat="Address in DriveReport.Addresses">
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="" ng-if="$first">Fra</label>
@@ -121,7 +119,9 @@
                         <div class="row">
                             <div class="col-lg-7">
                                 <div class="form-group">
-                                    <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
+                                    <label for="">Vælg personlig adresse:</label>
+                                    <select class="fill-width" kendo-drop-down-list="PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Name" id="" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"></select>
+                                    <input ng-if="DriveReport.Addresses[$index].Name.length == 0" type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
                                            k-data-source="SmartAddress" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="'Skriv her'" />
                                 </div>
                             </div>
