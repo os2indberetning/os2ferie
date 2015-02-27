@@ -121,8 +121,8 @@
                    "StreetNumber": result.StreetNumber,
                    "ZipCode": result.ZipCode,
                    "Town": result.Town,
-                   "Latitude": "1",
-                   "Longitude": "1"
+                   "Latitude": "0",
+                   "Longitude": "0"
                }, function () {
                    $scope.updateAddressGrid();
                });
