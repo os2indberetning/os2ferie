@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using System.Linq;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
@@ -16,7 +17,29 @@ namespace Core.ApplicationServices
             {
                 person.CprNumber = "";
             }
+
+            AddFullName(set);
+
             return set.AsQueryable();
+        }
+
+        public void AddFullName(List<Person> persons)
+        {
+            if (persons == null)
+            {
+                return;
+            }
+            foreach (var person in persons)
+            {
+                person.FullName = person.FirstName;
+
+                if (!string.IsNullOrEmpty(person.MiddleName))
+                {
+                    person.FullName += " " + person.MiddleName;
+                }
+
+                person.FullName += " " + person.LastName;
+            }            
         }
     }
 }

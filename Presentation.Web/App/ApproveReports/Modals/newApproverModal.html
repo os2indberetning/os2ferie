@@ -2,44 +2,18 @@
     <h3 class="modal-title">Opret ny personlig godkender</h3>
 </div>
 <div class="modal-body">
-    <div class="row">
-        <div class="form-group form-inline">
-            <div class="col-md-12">
-                <label>Vælg godkender:</label>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group form-inline">
-            <div class="col-md-3">
-                Vælg godkender:
-                <input type="text" typeahead-on-select="personChanged($item)" typeahead-editable="false" ng-model="person.approverChosenApprover" placeholder="Indtast navn" typeahead="person as person.FullName for person in people | filter:$viewValue" class="form-control" />
-            </div>
-            <div class="col-md-3">
-                Fra
-                <input kendo-datepicker k-options="dateOptions" ng-model="approverFromDate" k-ng-model="dateContainer.fromDateSubstitute" ng-change="dateChanged()" />
-            </div>
-            <div class="col-md-3">
-                Til
-                <input kendo-datepicker k-options="dateOptions" ng-model="approverToDate" k-ng-model="dateContainer.toDateSubstitute" ng-change="dateChanged()" />
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group form-inline">
-            <div class="col-md-12">
-                <label>Vælg ansatte som godkenderen skal godkende for:</label>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group form-inline">
-            <div class="col-md-3">
-                Vælg afsender:
-                <input type="text" typeahead-on-select="personChanged($item)" typeahead-editable="false" ng-model="person.approverChosenTarget" placeholder="Indtast navn" typeahead="person as person.FullName for person in people | filter:$viewValue" class="form-control" />
-            </div>
-            
-        </div>
+    <div class="form-group form-inline">
+        <label>Vælg godkender:</label>
+        <input class="form-control pull-right" kendo-auto-complete k-data-source="persons" k-ng-model="approver" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+        <div class="seperator"></div>
+        <label>Fra</label>
+        <input class="pull-right" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverFromDate" />
+        <div class="seperator"></div>
+        <label>Til</label>
+        <input class="pull-right" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverToDate" />
+        <div class="seperator"></div>
+        <label>Vælg ansat:</label>
+        <input class="form-control pull-right" kendo-auto-complete k-data-source="persons" k-ng-model="target" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
     </div>
 </div>
 <div class="modal-footer">

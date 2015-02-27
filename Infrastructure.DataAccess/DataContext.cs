@@ -72,6 +72,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Person>().Property(p => p.WorkDistanceOverride).IsRequired();
 
             modelBuilder.Entity<Person>().Property(t => t.CprNumber).IsFixedLength().HasMaxLength(10);
+            modelBuilder.Entity<Person>().Ignore(t => t.FullName);
         }
 
         private void ConfigurePropertiesForAddress(DbModelBuilder modelBuilder)

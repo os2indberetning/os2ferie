@@ -146,14 +146,20 @@
                resolve: {
                    persons: function () {
                        return $scope.persons;
+                   },
+                   orgUnits: function () {
+                       return $scope.orgUnits;
+                   },
+                   leader: function () {
+                       return $scope.currentPerson;
                    }
                }
            });
 
-           modalInstance.result.then(function (selectedItem) {
-               $scope.selected = selectedItem;
+           modalInstance.result.then(function () {
+               $scope.loadGrids();
            }, function () {
-               
+
            });
        };
 
@@ -166,14 +172,20 @@
                resolve: {
                    persons: function () {
                        return $scope.persons;
+                   },
+                   orgUnits: function () {
+                       return $scope.orgUnits;
+                   },
+                   leader: function () {
+                       return $scope.currentPerson;
                    }
                }
            });
 
-           modalInstance.result.then(function (selectedItem) {
-               $scope.selected = selectedItem;
+           modalInstance.result.then(function () {
+               $scope.loadGrids();
            }, function () {
-               
+
            });
        };
    }
