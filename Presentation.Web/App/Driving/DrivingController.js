@@ -82,8 +82,8 @@
 
         $scope.DriveReport.Addresses = [];
 
-        $scope.DriveReport.Addresses.push({ Name: "", Save: false });
-        $scope.DriveReport.Addresses.push({ Name: "", Save: false });
+        $scope.DriveReport.Addresses.push({ Name: "", Personal: "", Save: false });
+        $scope.DriveReport.Addresses.push({ Name: "", Personal: "", Save: false });
 
         $scope.SmartAddress = SmartAdresseSource;
 
@@ -149,7 +149,10 @@
 
                 angular.forEach($scope.DriveReport.Addresses, function (address, key) {
 
-                    var currentAddress = new PersonalAddress(AddressFormatter.fn(address.Name));
+
+                    var tempAddress = (address.Personal.length != 0) ? address.Personal : address.Name;
+
+                    var currentAddress = new PersonalAddress(AddressFormatter.fn(tempAddress));
 
                     driveReport.DriveReportPoints.push({
                         StreetName: currentAddress.StreetName,
@@ -212,7 +215,7 @@
 
         $scope.AddViapoint = function () {
             var temp = $scope.DriveReport.Addresses.pop();
-            $scope.DriveReport.Addresses.push({ Name: "", Save: false });
+            $scope.DriveReport.Addresses.push({ Name: "", Personal:"", Save: false });
             $scope.DriveReport.Addresses.push(temp);
         };
 

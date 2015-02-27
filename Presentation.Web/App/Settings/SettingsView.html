@@ -14,15 +14,15 @@
                     
                     <label for="">Registreringsnummer på bil:</label>
                     <div></div>
-                    <input ng-model="newLicensePlate" class="form-control" placeholder="AB 12 345" />
-                    <input ng-model="newLicensePlateDescription" class="form-control" placeholder="VW Polo" />
+                    <input ng-model="newLicensePlate" class="" kendo-masked-text-box k-mask="'&& && &&&'" placeholder="AB 12 345" />
+                    <input ng-model="newLicensePlateDescription" class="k-textbox" placeholder="VW Polo" />
                     <button type="submit" class="btn btn-primary" ng-click="saveNewLicensePlate()">Tilføj</button>
                     <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Vis nummerplader</button>
                     <div collapse="isCollapsed">
                         <div class="well well-lg">
                             <ul class="license-plate-list">
                                 <li ng-repeat="plate in licenseplates">
-                                    <pre><strong>{{plate.Description}}: {{ plate.Plate }}</strong><button class="btn btn-danger pull-right" ng-click="deleteLicensePlate(plate)">Slet</button></pre>
+                                    <pre><strong>{{plate.Description}}:{{ plate.Plate}}</strong><button class="btn btn-danger pull-right" ng-click="deleteLicensePlate(plate)">Slet</button></pre>
                                 </li>
                             </ul>
                         </div>
@@ -30,7 +30,7 @@
                     <div class="seperator"></div>
                     <label for="">Afstand mellem hjemme- og arbejdsadresse:</label>
                     <div></div>
-                    <input ng-model="workDistanceOverride" class="form-control" placeholder="0" /><label>km</label>
+                    <input ng-model="workDistanceOverride" class="k-textbox" placeholder="0" /><label>km</label>
                     <button type="submit" class="btn btn-primary" ng-click="setHomeWorkOverride()">Gem ændringer</button>
                 </div>
             </div>
