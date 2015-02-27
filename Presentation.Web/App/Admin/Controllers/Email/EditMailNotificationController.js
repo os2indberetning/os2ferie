@@ -5,7 +5,7 @@
 
         $scope.dateOptions = {
             format: "dd/MM/yyyy"
-        }
+        };
 
         $scope.repeatItems = [{ value: "Ja", bool : true }, { value: "Nej", bool : false }];
 
@@ -31,7 +31,7 @@
             $scope.dateErrorMessage = "";
             if ($scope.notificationDate == undefined) {
                 error = true;
-                $scope.dateErrorMessage = "* Du skal vælge en adviseringsdato.";
+                $scope.dateErrorMessage = "* Du skal vælge en gyldig adviseringsdato.";
             }
 
             var result = {};

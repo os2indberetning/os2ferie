@@ -5,7 +5,9 @@
 
         $scope.dateOptions = {
             format: "dd/MM/yyyy"
-        }
+        };
+
+        $scope.notificationDate = new Date();
 
         $scope.confirmSave = function () {
             var error = false;
@@ -19,7 +21,7 @@
             $scope.dateErrorMessage = "";
             if ($scope.notificationDate == undefined) {
                 error = true;
-                $scope.dateErrorMessage = "* Du skal vælge en adviseringsdato.";
+                $scope.dateErrorMessage = "* Du skal vælge en gyldig adviseringsdato.";
             }
 
             var result = {};

@@ -1,7 +1,8 @@
 ﻿angular.module("application").controller("EmailNotificationController", [
     "$scope", "$modal", "EmailNotification", function ($scope, $modal, EmailNotification) {
 
-       
+
+
 
         $scope.loadNotifications = function () {
             $scope.notifications = {
