@@ -1,7 +1,7 @@
 ﻿<div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            Administration <small>Administrer rater, standard adresser, email notifikationer, godkend fratrådte medarbejdere</small>
+            Administration <small>Administrer takster, standardadresser, email-notifikationer, godkend fratrådte medarbejdere</small>
         </h1>
         <tabset justified="true">
             <tab heading="Standardadresser" ng-controller="StandardAddressController">
@@ -66,7 +66,7 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Rate-styring</h3>
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Takst-styring</h3>
                     </div>
 
 
@@ -75,9 +75,9 @@
 
 
 
-                        <div class="col-md-5 rounded-border margin-5">
+                        <div class="col-md-5 margin-5">
 
-                            <h2>Ny Rate</h2>
+                            <h2>Ny Takst</h2>
 
 
                             <div class="col-md-12 margin-5">
@@ -118,8 +118,7 @@
                                     <label>Taksttype</label>
                                 </div>
                                 <div class="col-md-4">
-                                    <select class="form-control" ng-model="newRateRateType">
-                                        <option>Default</option>
+                                    <select class="form-control" ng-options="rate.Id as rate.Description for rate in rateTypes" ng-model="newRateRateType">
                                     </select>
                                 </div>
                                 <div class="col-md-4">
@@ -135,7 +134,7 @@
                             <label class="text-danger" ng-bind="newRateRateTypeError"></label>
 
                         </div>
-                        <div class="col-md-6 rounded-border margin-5">
+                        <div class="col-md-6 margin-5">
                             <h2>Nyt kontonummer</h2>
                             <div class="col-md-12 margin-5">
                                 <div class="col-md-4">
@@ -177,11 +176,11 @@
                         </div>
                         
                         <div class="col-md-12">
-                            <div class="col-md-5 rounded-border margin-5">
+                            <div class="col-md-5 margin-5">
                                 <div kendo-grid="rateGrid" class="margin-5" options="rates"></div>
                             </div>
 
-                            <div class="col-md-6 rounded-border margin-5">
+                            <div class="col-md-6 margin-5">
                                 <div kendo-grid="accountGrid" class="margin-5" options="accounts"></div>
                             </div>
                         </div>

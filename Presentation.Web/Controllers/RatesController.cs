@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
 
@@ -10,6 +12,8 @@ namespace OS2Indberetning.Controllers
 {
     public class RatesController : BaseController<Rate>
     {
+        RatePostService ratePostService = new RatePostService();
+
           //GET: odata/Rates
         public RatesController(IGenericRepository<Rate> repository) : base(repository){}
 
@@ -26,6 +30,7 @@ namespace OS2Indberetning.Controllers
             return GetQueryable(key, queryOptions);
         }
 
+
         //PUT: odata/Rates(5)
         public new IHttpActionResult Put([FromODataUri] int key, Delta<Rate> delta)
         {
@@ -36,6 +41,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(Rate Rate)
         {
+            ratePostService.DeactivateExistingRate(Repo.AsQueryable(), Rate);
             return base.Post(Rate);
         }
 

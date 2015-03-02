@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("RateController", [
-    "$scope", "$modal", "BankAccount", "Rate", "NotificationService", function ($scope, $modal, BankAccount, Rate, NotificationService) {
+    "$scope", "$modal", "BankAccount", "Rate", "NotificationService", "RateType", function ($scope, $modal, BankAccount, Rate, NotificationService, RateType) {
 
 
 
@@ -78,7 +78,7 @@
                             beforeSend: function (req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
-                            url: "/odata/Rates",
+                            url: "/odata/Rates?$expand=Type&$filter=Active eq true",
                             dataType: "json",
                             cache: false
                         },
@@ -115,6 +115,13 @@
                     }, {
                         field: "TFCode",
                         title: "TF kode",
+                    },
+                    {
+                        field: "Type",
+                        title: "Type",
+                        template: function(data) {
+                            return data.Type.Description;
+                        }
                     }
                 ],
             };
@@ -123,6 +130,8 @@
         $scope.updateAccountGrid = function () {
             $scope.accountGrid.dataSource.read();
         }
+
+        $scope.rateTypes = RateType.get();
 
         $scope.updateRatesGrid = function () {
             $scope.rateGrid.dataSource.read();
@@ -189,11 +198,12 @@
             }
 
             if (!error) {
-                Rate.post({ "Description": $scope.newAccountDescription, "Number": $scope.newAccountRegNumber + "-" + $scope.newAccountAccountNumber }, function () {
-                    $scope.updateAccountGrid();
-                    $scope.newAccountDescription = "";
-                    $scope.newAccountRegNumber = "";
-                    $scope.newAccountAccountNumber = "";
+                Rate.post({ "Year": $scope.newRateYear, "TFCode": $scope.newRateTFCode, "KmRate": $scope.newRateRate, "TypeId" : $scope.newRateRateType, "Active" : true}, function () {
+                    $scope.updateRatesGrid();
+                    $scope.newRateYear = "";
+                    $scope.newRateTFCode = "";
+                    $scope.newRateRate = "";
+                    $scope.newRateRateType = "";
                 });
             }
 

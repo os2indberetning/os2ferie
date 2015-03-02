@@ -67,6 +67,8 @@ namespace OS2Indberetning
 
             builder.EntitySet<MailNotificationSchedule>("MailNotifications");
 
+            builder.EntitySet<RateType>("RateTypes");
+
             builder.EntitySet<MobileToken>("MobileToken");
 
             builder.EntitySet<OrgUnit>("OrgUnits");

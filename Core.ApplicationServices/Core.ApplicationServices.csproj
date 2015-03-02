@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RatePostService.cs" />
     <Compile Include="DriveReportService.cs" />
     <Compile Include="Interfaces\IMobileTokenService.cs" />
     <Compile Include="Interfaces\IPersonService.cs" />
