@@ -1,7 +1,7 @@
 ﻿angular.module("application").controller("AccountController", [
     "$scope", "$modal", "BankAccount", "NotificationService", function ($scope, $modal, BankAccount, NotificationService) {
 
-
+        $scope.container = {};
 
 
         $scope.loadAccounts = function () {
@@ -83,10 +83,8 @@
         }
 
         $scope.updateAccountGrid = function () {
-            $scope.accountGrid.dataSource.read();
+            $scope.container.accountGrid.dataSource.read();
         }
-
-        $scope.gridPageSize = 5;
 
         $scope.loadAccounts();
  
@@ -95,26 +93,27 @@
             $scope.accountDescriptionErrorMessage = "";
             $scope.accountNumberRegNumberErrorMessage = "";
             var error = false;
-            if ($scope.newAccountAccountNumber == "" || $scope.newAccountAccountNumber == undefined) {
+            if ($scope.container.newAccountAccountNumber == "" || $scope.container.newAccountAccountNumber == undefined) {
                 $scope.accountNumberErrorMessage = "* Du skal skrive et gyldigt kontonummer."
                 error = true;
             }
-            if ($scope.newAccountRegNumber == "" || $scope.newAccountRegNumber == undefined) {
+            if ($scope.container.newAccountRegNumber == "" || $scope.container.newAccountRegNumber == undefined) {
                 $scope.accountNumberRegNumberErrorMessage = "* Du skal skrive et gyldigt registreringsnummer.";
                 error = true;
             }
-            if ($scope.newAccountDescription == "" || $scope.newAccountDescription == undefined) {
+            if ($scope.container.newAccountDescription == "" || $scope.container.newAccountDescription == undefined) {
                 $scope.accountDescriptionErrorMessage = "* Du skal skrive en beskrivelse.";
                 error = true;
             }
 
 
             if (!error) {
-                BankAccount.post({ "Description": $scope.newAccountDescription, "Number": $scope.newAccountRegNumber + "-" + $scope.newAccountAccountNumber }, function () {
+                BankAccount.post({ "Description": $scope.container.newAccountDescription, "Number": $scope.container.newAccountRegNumber + "-" + $scope.container.newAccountAccountNumber }, function () {
                     $scope.updateAccountGrid();
-                    $scope.newAccountDescription = "";
-                    $scope.newAccountRegNumber = "";
-                    $scope.newAccountAccountNumber = "";
+                    $scope.container.newAccountDescription = "";
+                    $scope.container.newAccountRegNumber = "";
+                    $scope.container.newAccountAccountNumber = "";
+                    NotificationService.AutoFadeNotification("success", "Opret", "Ny konto oprettet!");
                 });
             }
 

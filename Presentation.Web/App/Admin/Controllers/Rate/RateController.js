@@ -124,6 +124,7 @@
                     $scope.container.newRateTFCode = "";
                     $scope.container.newRateRate = "";
                     $scope.container.newRateRateType = "";
+                    NotificationService.AutoFadeNotification("success", "Opret", "Ny takst oprettet!");
                 });
             }
 
