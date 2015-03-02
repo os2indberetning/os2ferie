@@ -31,10 +31,10 @@
         });
 
         newToken.$save(function (data) {
-            $scope.tokens.push(data[0]);
-            NotificationService.AutoFadeNotification("success", "Success", "Ny token oprettet");
-            $scope.newTokenDescription = "";
-            $scope.isCollapsed = !$scope.isCollapsed;
+                $scope.tokens.push(data);
+                NotificationService.AutoFadeNotification("success", "Success", "Ny token oprettet");
+                $scope.newTokenDescription = "";
+                $scope.isCollapsed = !$scope.isCollapsed;
         }, function () {
             NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette ny token");
         });
