@@ -35,6 +35,8 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(Substitute Substitute)
         {
+            var targets = Substitute.Persons;
+
             return base.Post(Substitute);
         }
 

@@ -1,0 +1,22 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Opret ny personlig godkender</h3>
+</div>
+<div class="modal-body">
+    <div class="form-group form-inline">
+        <label>Vælg godkender:</label>
+        <input class="form-control pull-right" kendo-auto-complete k-data-source="persons" k-ng-model="approver" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+        <div class="seperator"></div>
+        <label>Fra</label>
+        <input class="pull-right" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverFromDate" />
+        <div class="seperator"></div>
+        <label>Til</label>
+        <input class="pull-right" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverToDate" />
+        <div class="seperator"></div>
+        <label>Vælg ansat:</label>
+        <input class="form-control pull-right" kendo-auto-complete k-data-source="persons" k-ng-model="target" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="saveNewApprover()">Gem</button>
+    <button class="btn btn-warning" ng-click="cancelNewApprover()">Annuller</button>
+</div>
