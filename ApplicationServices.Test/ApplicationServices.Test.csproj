@@ -52,6 +52,7 @@
     <Compile Include="MobileTokenServiceTest\MobileTokenServiceTest.cs" />
     <Compile Include="PersonService\PersonServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RatePostServiceTest\RatePostServiceTest.cs" />
     <Compile Include="ReimbursementCalculatorTest\ReimbursementCalculatorBaseTest.cs" />
   </ItemGroup>
   <ItemGroup>
