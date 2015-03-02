@@ -286,7 +286,11 @@
     <Content Include="App\Admin\Controllers\Account\DeleteAccountController.js" />
     <Content Include="App\Admin\Controllers\Account\AccountController.js" />
     <Content Include="App\Admin\Controllers\Rate\RateController.js" />
+    <Content Include="App\Admin\Controllers\Substitutes\SubstituteController.js" />
+    <Content Include="App\Admin\HTML\Substitutes\View.html" />
     <Content Include="App\Admin\HTML\Account\ConfirmDeleteAccountTemplate.html" />
+    <Content Include="App\Admin\HTML\Account\View.html" />
+    <Content Include="App\Admin\HTML\Address\View.html" />
     <Content Include="App\Admin\HTML\Email\AddNewMailNotificationTemplate.html" />
     <Content Include="App\Admin\Controllers\Email\AddNewMailNotificationController.js" />
     <Content Include="App\Admin\AdminView.html" />
@@ -302,6 +306,8 @@
     <Content Include="App\Admin\Controllers\Address\DeleteAddressController.js" />
     <Content Include="App\Admin\Controllers\Email\EmailNotificationController.js" />
     <Content Include="App\Admin\Controllers\Address\StandardAddressController.js" />
+    <Content Include="App\Admin\HTML\Email\View.html" />
+    <Content Include="App\Admin\HTML\Rate\View.html" />
     <Content Include="App\application.js" />
     <Content Include="App\ApproveReports\AcceptWithAccountController.js" />
     <Content Include="App\ApproveReports\ConfirmApproveAllTemplate.html" />

@@ -2,6 +2,7 @@
     "$scope", "$modal", "Rate", "NotificationService", "RateType", function ($scope, $modal, Rate, NotificationService, RateType) {
 
 
+        $scope.container = {};
 
 
 
@@ -38,7 +39,20 @@
                     serverSorting: true,
                 },
                 sortable: true,
-                pageable: true,
+                pageable: {
+                    messages: {
+                        display: "{0} - {1} af {2} takster", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                        empty: "Ingen takster at vise",
+                        page: "Side",
+                        of: "af {0}", //{0} is total amount of pages
+                        itemsPerPage: "takster pr. side",
+                        first: "Gå til første side",
+                        previous: "Gå til forrige side",
+                        next: "Gå til næste side",
+                        last: "Gå til sidste side",
+                        refresh: "Genopfrisk"
+                    }
+                },
                 scrollable: false,
                 columns: [
                     {
@@ -68,10 +82,10 @@
         $scope.rateTypes = RateType.get();
 
         $scope.updateRatesGrid = function () {
-            $scope.rateGrid.dataSource.read();
+            $scope.container.rateGrid.dataSource.read();
         }
 
-        $scope.gridPageSize = 5;
+
 
 
       
@@ -86,30 +100,30 @@
             $scope.newRateTFCodeError = "";
             $scope.newRateRateTypeError = "";
             var error = false;
-            if ($scope.newRateYear == "" || $scope.newRateYear == undefined) {
+            if ($scope.container.newRateYear == "" || $scope.container.newRateYear == undefined || $scope.container.newRateYear.toString().length != 4) {
                 $scope.newRateYearError = "* Du skal skrive et gyldigt år."
                 error = true;
             }
-            if ($scope.newRateRate == "" || $scope.newRateRate == undefined) {
+            if ($scope.container.newRateRate == "" || $scope.container.newRateRate == undefined) {
                 $scope.newRateRateError = "* Du skal skrive en gyldig takst."
                 error = true;
             }
-            if ($scope.newRateTFCode == "" || $scope.newRateTFCode == undefined) {
+            if ($scope.container.newRateTFCode == "" || $scope.container.newRateTFCode == undefined) {
                 $scope.newRateTFCodeError = "* Du skal skrive en gyldig TF kode."
                 error = true;
             }
-            if ($scope.newRateRateType == "" || $scope.newRateRateType == undefined) {
+            if ($scope.container.newRateRateType == "" || $scope.container.newRateRateType == undefined) {
                 $scope.newRateRateTypeError = "* Du skal vælge en gyldig taksttype."
                 error = true;
             }
 
             if (!error) {
-                Rate.post({ "Year": $scope.newRateYear, "TFCode": $scope.newRateTFCode, "KmRate": $scope.newRateRate, "TypeId" : $scope.newRateRateType, "Active" : true}, function () {
+                Rate.post({ "Year": $scope.container.newRateYear, "TFCode": $scope.container.newRateTFCode, "KmRate": $scope.container.newRateRate, "TypeId": $scope.container.newRateRateType, "Active": true }, function () {
                     $scope.updateRatesGrid();
-                    $scope.newRateYear = "";
-                    $scope.newRateTFCode = "";
-                    $scope.newRateRate = "";
-                    $scope.newRateRateType = "";
+                    $scope.container.newRateYear = "";
+                    $scope.container.newRateTFCode = "";
+                    $scope.container.newRateRate = "";
+                    $scope.container.newRateRateType = "";
                 });
             }
 

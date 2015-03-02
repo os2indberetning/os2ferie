@@ -1,6 +1,8 @@
 ﻿angular.module("application").controller("StandardAddressController", [
    "$scope", "$modal", "StandardAddress", "AddressFormatter", function ($scope, $modal, StandardAddress, AddressFormatter) {
 
+        $scope.gridContainer = {};
+
        $scope.loadAddresses = function () {
            $scope.addresses = {
                dataSource: {
@@ -34,7 +36,20 @@
                    serverSorting: true,
                },
                sortable: true,
-               pageable: true,
+               pageable: {
+                   messages: {
+                       display: "{0} - {1} af {2} adresser", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                       empty: "Ingen adresser at vise",
+                       page: "Side",
+                       of: "af {0}", //{0} is total amount of pages
+                       itemsPerPage: "adresser pr. side",
+                       first: "Gå til første side",
+                       previous: "Gå til forrige side",
+                       next: "Gå til næste side",
+                       last: "Gå til sidste side",
+                       refresh: "Genopfrisk"
+                   }
+               },
                scrollable: false,
                columns: [
                    {
@@ -64,10 +79,10 @@
        }
 
        $scope.updateAddressGrid = function () {
-           $scope.addressGrid.dataSource.read();
+           $scope.gridContainer.addressGrid.dataSource.read();
        }
 
-       $scope.gridPageSize = 5;
+       $scope.gridContainer.gridPageSize = 5;
 
        $scope.editClick = function (id) {
            var modalInstance = $modal.open({
@@ -96,7 +111,7 @@
        }
 
        $scope.pageSizeChanged = function () {
-           $scope.addressGrid.dataSource.pageSize(Number($scope.gridPageSize));
+           $scope.gridContainer.addressGrid.dataSource.pageSize(Number($scope.gridContainer.gridPageSize));
        }
 
        $scope.deleteClick = function (id) {

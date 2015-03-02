@@ -2,7 +2,7 @@
     "$scope", "$modal", "EmailNotification", function ($scope, $modal, EmailNotification) {
 
 
-
+        $scope.gridContainer = {};
 
         $scope.loadNotifications = function () {
             $scope.notifications = {
@@ -37,7 +37,20 @@
                     serverSorting: true,
                 },
                 sortable: true,
-                pageable: true,
+                pageable: {
+                    messages: {
+                        display: "{0} - {1} af {2} adviseringer", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                        empty: "Ingen adviseringer at vise",
+                        page: "Side",
+                        of: "af {0}", //{0} is total amount of pages
+                        itemsPerPage: "adviseringer pr. side",
+                        first: "Gå til første side",
+                        previous: "Gå til forrige side",
+                        next: "Gå til næste side",
+                        last: "Gå til sidste side",
+                        refresh: "Genopfrisk"
+                    }
+                },
                 scrollable: false,
                 columns: [
                     {
@@ -49,9 +62,6 @@
                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                 m._d.getFullYear();
                         }
-                    }, {
-                        field: "Id",
-                        title: "Lønkørselsdato"
                     }, {
                         field: "Repeat",
                         title: "Gentag Månedligt",
@@ -71,10 +81,10 @@
         }
 
         $scope.updateNotificationGrid = function () {
-            $scope.notificationGrid.dataSource.read();
+            $scope.gridContainer.notificationGrid.dataSource.read();
         }
 
-        $scope.gridPageSize = 5;
+        $scope.gridContainer.gridPageSize = 5;
 
 
         $scope.loadNotifications();
@@ -104,7 +114,7 @@
         }
 
         $scope.pageSizeChanged = function () {
-            $scope.notificationGrid.dataSource.pageSize(Number($scope.gridPageSize));
+            $scope.gridContainer.notificationGrid.dataSource.pageSize(Number($scope.gridContainer.gridPageSize));
         }
 
         $scope.deleteClick = function (id) {

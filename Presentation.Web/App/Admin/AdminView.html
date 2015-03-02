@@ -4,223 +4,27 @@
             Administration <small>Administrer takster, standardadresser, email-notifikationer, godkend fratrådte medarbejdere</small>
         </h1>
         <tabset justified="true">
+
             <tab heading="Standardadresser" ng-controller="StandardAddressController">
-                <div class="panel panel-default">
-
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-map-marker fa-fw"></i> Standard-adresser</h3>
-                    </div>
-
-
-
-
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-10"></div>
-                            <div class="col-md-2">
-                                <label class="pull-left">Visninger pr. side</label>
-                                <select ng-model="gridPageSize" class="form-control" ng-change="pageSizeChanged()">
-                                    <option value="5" selected>5</option>
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="50">50</option>
-                                </select>
-                            </div>
-
-                        </div>
-                        <div kendo-grid="addressGrid" class="margin-top-10" options="addresses"></div>
-                        <button class="btn btn-primary col-md-2 margin-top-20 pull-right" ng-click="addNewClick()"><i class="fa fa-plus"></i> Opret</button>
-                    </div>
-
-                </div>
+                <div ng-include='"App/Admin/HTML/Address/View.html"'></div>
             </tab>
-            <tab heading="Email adviseringer" ng-controller="EmailNotificationController">
-                <div class="panel panel-default">
 
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-envelope-o fa-fw"></i> Email adviseringer</h3>
-                    </div>
-
-
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-10"></div>
-                            <div class="col-md-2">
-                                <label class="pull-left">Visninger pr. side</label>
-                                <select ng-model="gridPageSize" class="form-control" ng-change="pageSizeChanged()">
-                                    <option value="5" selected>5</option>
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="50">50</option>
-                                </select>
-                            </div>
-
-                        </div>
-                        <div kendo-grid="notificationGrid" class="margin-top-10" options="notifications"></div>
-                        <button class="btn btn-primary col-md-2 margin-top-20 pull-right" ng-click="addNewClick()"><i class="fa fa-plus"></i> Opret</button>
-                    </div>
-                </div>
+            <tab heading="Emailadviseringer" ng-controller="EmailNotificationController">
+                <div ng-include='"App/Admin/HTML/Email/View.html"'></div>
             </tab>
 
             <tab heading="Takststyring" ng-controller="RateController">
-                <div class="panel panel-default">
-
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Takst-styring</h3>
-                    </div>
-
-
-
-                    <div class="panel-body">
-
-
-
-                        <div class="col-md-5 margin-5">
-
-                            <h2>Ny Takst</h2>
-
-
-                            <div class="col-md-12 margin-5">
-                                <div class="col-md-4">
-                                    <label class="pull-left">År</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="number" class="form-control pull-left" ng-model="newRateYear" />
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-12 margin-5">
-
-                                <div class="col-md-4">
-                                    <label class="pull-left">Takst</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="number" class="form-control" ng-model="newRateRate" />
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="margin-top-5">Ører pr. kilometer</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 margin-5">
-                                <div class="col-md-4">
-                                    <label class="pull-left">TF kode</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" ng-model="newRateTFCode" />
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-12 margin-5">
-                                <div class="col-md-4">
-                                    <label>Taksttype</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <select class="form-control" ng-options="rate.Id as rate.Description for rate in rateTypes" ng-model="newRateRateType"></select>
-                                </div>
-                                <div class="col-md-4">
-                                    <button class="btn btn-primary fill-width" ng-click="addNewRateClick()">Opret</button>
-                                </div>
-                            </div>
-
-
-
-                            <label class="text-danger" ng-bind="newRateYearError"></label><br />
-                            <label class="text-danger" ng-bind="newRateRateError"></label><br />
-                            <label class="text-danger" ng-bind="newRateTFCodeError"></label><br />
-                            <label class="text-danger" ng-bind="newRateRateTypeError"></label>
-
-                        </div>
-
-                        <div class="col-md-6 margin-5">
-                            <h2>Eksisterende takster</h2>
-                            <div kendo-grid="rateGrid" class="margin-5" options="rates"></div>
-                        </div>
-
-
-                    </div>
-
-
-                </div>
+                <div ng-include='"App/Admin/HTML/Rate/View.html"'></div>
             </tab>
 
             <tab heading="Kontostyring" ng-controller="AccountController">
-                <div class="panel panel-default">
-
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-money"></i> Kontostyring</h3>
-                    </div>
-
-
-
-                    <div class="panel-body">
-                        <div class="col-md-5 margin-5">
-                            <h2>Nyt kontonummer</h2>
-                            <div class="col-md-12 margin-5">
-                                <div class="col-md-4">
-                                    <label>Registreringsnummer</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="number" class="form-control" ng-model="newAccountRegNumber" />
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 margin-5">
-                                <div class="col-md-4">
-                                    <label>Kontonummer</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="number" class="form-control" ng-model="newAccountAccountNumber" />
-                                </div>
-                            </div>
-
-                            <div class="col-md-12 margin-5">
-                                <div class="col-md-4">
-                                    <label>Beskrivelse</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" ng-model="newAccountDescription" />
-                                </div>
-                            </div>
-                            <div class="col-md-12 margin-5">
-                                <div class="col-md-3 pull-right">
-                                    <button class="btn btn-primary fill-width" ng-click="addNewAccountClick()">Opret</button>
-                                </div>
-
-                            </div>
-                            <label class="text-danger" ng-bind="accountNumberRegNumberErrorMessage"></label><br />
-                            <label class="text-danger" ng-bind="accountNumberErrorMessage"></label><br />
-                            <label class="text-danger" ng-bind="accountDescriptionErrorMessage"></label>
-
-
-                        </div>
-
-
-                        <div class=" col-md-6 margin-5">
-                            <h2>Eksisterende konti</h2>
-                            <div kendo-grid="accountGrid" class="margin-5" options="accounts"></div>
-                        </div>
-
-
-
-                    </div>
-                </div>
+                <div ng-include='"App/Admin/HTML/Account/View.html"'></div>
             </tab>
-            <tab heading="Stedfortrædere/Godkendere">
-                <div class="panel panel-default">
 
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-user fa-fw"></i> Stedfortrædere/Godkendere</h3>
-                    </div>
-
-
-
-                    <div class="panel-body">
-                    </div>
-                </div>
+            <tab heading="Stedfortrædere/Godkendere" ng-controller="SubstituteController">
+                <div ng-include='"App/Admin/HTML/Substitutes/View.html"'></div>
             </tab>
+
         </tabset>
     </div>
 </div>

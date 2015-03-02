@@ -89,7 +89,20 @@ angular.module("application").controller("MyReportsController", [
                    serverSorting: true
                },
                sortable: true,
-               pageable: true,
+               pageable: {
+                   messages: {
+                       display: "{0} - {1} af {2} indberetninger", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                       empty: "Ingen indberetninger at vise",
+                       page: "Side",
+                       of: "af {0}", //{0} is total amount of pages
+                       itemsPerPage: "indberetninger pr. side",
+                       first: "Gå til første side",
+                       previous: "Gå til forrige side",
+                       next: "Gå til næste side",
+                       last: "Gå til sidste side",
+                       refresh: "Genopfrisk"
+                   }
+               },
                dataBound: function () {
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
@@ -173,7 +186,20 @@ angular.module("application").controller("MyReportsController", [
                    serverSorting: true
                },
                sortable: true,
-               pageable: true,
+               pageable: {
+                   messages: {
+                       display: "{0} - {1} af {2} indberetninger", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                       empty: "Ingen indberetninger at vise",
+                       page: "Side",
+                       of: "af {0}", //{0} is total amount of pages
+                       itemsPerPage: "indberetninger pr. side",
+                       first: "Gå til første side",
+                       previous: "Gå til forrige side",
+                       next: "Gå til næste side",
+                       last: "Gå til sidste side",
+                       refresh: "Genopfrisk"
+                   }
+               },
                dataBound: function () {
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
@@ -256,7 +282,20 @@ angular.module("application").controller("MyReportsController", [
                    serverSorting: true
                },
                sortable: true,
-               pageable: true,
+               pageable: {
+                   messages: {
+                       display: "{0} - {1} af {2} indberetninger", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                       empty: "Ingen indberetninger at vise",
+                       page: "Side",
+                       of: "af {0}", //{0} is total amount of pages
+                       itemsPerPage: "indberetninger pr. side",
+                       first: "Gå til første side",
+                       previous: "Gå til forrige side",
+                       next: "Gå til næste side",
+                       last: "Gå til sidste side",
+                       refresh: "Genopfrisk"
+                   }
+               },
                dataBound: function () {
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
