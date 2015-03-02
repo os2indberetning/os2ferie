@@ -369,7 +369,14 @@
                        footerTemplate: "Total: #= sum # "
                    }, {
                        field: "AccountNumber",
-                       title: "Kontonummer"
+                       title: "Anden Kontering",
+                       template: function(data) {
+                           if (data.AccountNumber == "" || data.AccountNumber == null) {
+                               return "Nej";
+                           } else {
+                               return "Ja" +  "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.AccountNumber + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                           }
+                       }
                    }
                ],
            };

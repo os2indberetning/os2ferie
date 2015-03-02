@@ -21,6 +21,8 @@
     margin: 5px;
 }
 
+
+
 .rounded-border {
     border: 1px solid;
     border-radius: 20px;
@@ -131,6 +133,10 @@
 
 .max-width-100 {
     max-width: 100px;
+}
+
+.max-width-100p {
+    max-width: 100%;
 }
 
 .fill-width {
