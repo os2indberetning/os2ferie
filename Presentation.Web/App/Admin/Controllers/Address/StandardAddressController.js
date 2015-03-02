@@ -51,6 +51,10 @@
                        title: "By"
 
                    }, {
+                       field: "Description",
+                       title: "Beskrivelse"
+                   },
+                   {
                        field: "Id",
                        template: "<a ng-click=editClick(${Id})>Redigér</a> | <a ng-click=deleteClick(${Id})>Slet</a>",
                        title: "Muligheder",
@@ -77,13 +81,14 @@
                }
            });
 
-           modalInstance.result.then(function (editedAddress) {
-               var result = AddressFormatter.fn(editedAddress);
+           modalInstance.result.then(function (res) {
+               var result = AddressFormatter.fn(res.address);
                StandardAddress.patch({ id: id }, {
                    "StreetName": result.StreetName,
                    "StreetNumber": result.StreetNumber,
                    "ZipCode": result.ZipCode,
-                   "Town": result.Town
+                   "Town": result.Town,
+                   "Description": res.description
                }, function () {
                    $scope.updateAddressGrid();
                });
@@ -120,13 +125,14 @@
                backdrop: "static",
            });
 
-           modalInstance.result.then(function (newAddress) {
-               var result = AddressFormatter.fn(newAddress);
+           modalInstance.result.then(function (res) {
+               var result = AddressFormatter.fn(res.address);
                StandardAddress.post({
                    "StreetName": result.StreetName,
                    "StreetNumber": result.StreetNumber,
                    "ZipCode": result.ZipCode,
                    "Town": result.Town,
+                   "Description": res.description,
                    "Latitude": "0",
                    "Longitude": "0"
                }, function () {

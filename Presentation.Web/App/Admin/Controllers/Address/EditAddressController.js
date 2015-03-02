@@ -34,12 +34,16 @@
         StandardAddress.get({ id: itemId }).$promise.then(function(res) {
             var address = res.value[0];
             $scope.address = address.StreetName + " " + address.StreetNumber + ", " + address.ZipCode + " " + address.Town;
+            $scope.description = address.Description;
         });
 
 
 
         $scope.confirmEdit = function () {
-            $modalInstance.close($scope.address);
+            var result = {};
+            result.address = $scope.address;
+            result.description = $scope.description;
+            $modalInstance.close(result);
             NotificationService.AutoFadeNotification("success", "Rediger", "Adressen blev redigeret.");
         }
 

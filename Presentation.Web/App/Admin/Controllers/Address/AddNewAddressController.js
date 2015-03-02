@@ -31,7 +31,10 @@
       
 
         $scope.confirmSave = function () {
-            $modalInstance.close($scope.address);
+            var result = {};
+            result.address = $scope.address;
+            result.description = $scope.description;
+            $modalInstance.close(result);
             NotificationService.AutoFadeNotification("success", "Opret", "Adressen blev oprettet.");
         }
 
