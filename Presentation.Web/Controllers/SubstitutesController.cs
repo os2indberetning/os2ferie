@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
 
@@ -9,6 +11,8 @@ namespace OS2Indberetning.Controllers
 {
     public class SubstitutesController : BaseController<Substitute>
     {
+        SubstituteService _sub = new SubstituteService();
+
           //GET: odata/Substitutes
         public SubstitutesController(IGenericRepository<Substitute> repository) : base(repository){}
 
@@ -16,13 +20,18 @@ namespace OS2Indberetning.Controllers
         public IQueryable<Substitute> Get(ODataQueryOptions<Substitute> queryOptions)
         {
             var res = GetQueryable(queryOptions);
+            _sub.AddFullName(res);
+            _sub.ScrubCprFromPersons(res);
             return res;
         }
 
         //GET: odata/Substitutes(5)
         public IQueryable<Substitute> Get([FromODataUri] int key, ODataQueryOptions<Substitute> queryOptions)
         {
-            return GetQueryable(key, queryOptions);
+            var res = GetQueryable(key, queryOptions);
+            _sub.AddFullName(res);
+            _sub.ScrubCprFromPersons(res);
+            return res;
         }
 
         //PUT: odata/Substitutes(5)

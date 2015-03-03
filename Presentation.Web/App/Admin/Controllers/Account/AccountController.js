@@ -3,6 +3,11 @@
 
         $scope.container = {};
 
+        $scope.container.gridPageSize = 5;
+
+        $scope.pageSizeChanged = function () {
+            $scope.container.accountGrid.dataSource.pageSize(Number($scope.container.gridPageSize));
+        }
 
         $scope.loadAccounts = function () {
             $scope.accounts = {

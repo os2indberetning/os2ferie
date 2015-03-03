@@ -4,7 +4,11 @@
 
         $scope.container = {};
 
+        $scope.container.gridPageSize = 5;
 
+        $scope.pageSizeChanged = function () {
+            $scope.container.rateGrid.dataSource.pageSize(Number($scope.container.gridPageSize));
+        }
 
         $scope.loadRates = function () {
             $scope.rates = {

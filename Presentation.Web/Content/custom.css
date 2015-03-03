@@ -33,8 +33,21 @@
     margin-top: 5px;
 }
 
+.margin-10 {
+    margin: 10px;
+}
+
 .no-border {
     border: none;
+}
+
+.inline {
+    display: inline;
+    
+}
+
+.vertical-text-bottom {
+    vertical-align: bottom;
 }
 
 .margin-top-10 {
