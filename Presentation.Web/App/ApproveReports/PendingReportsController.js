@@ -12,6 +12,8 @@
 
        // Helper Methods
 
+       $scope.test = 2;
+
 
        $scope.approveAllToolbar = {
            items: [
@@ -40,9 +42,9 @@
                }
            ]
        };
-    
-    
-      
+
+
+
 
 
        $scope.updateReports = function () {
@@ -70,6 +72,10 @@
            $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = url;
            $scope.gridContainer.pendingGrid.dataSource.read();
        }
+
+
+
+
 
        $scope.loadReports = function () {
            $scope.pendingReports = {
@@ -149,7 +155,7 @@
                        previous: "Gå til forrige side",
                        next: "Gå til næste side",
                        last: "Gå til sidste side",
-                       refresh: "Genopfrisk"
+                       refresh: "Genopfrisk",
                    }
                },
                scrollable: false,
@@ -195,7 +201,7 @@
                    }, {
                        field: "AmountToReimburse",
                        title: "Beløb",
-                       footerTemplate: "Total: #= sum # "
+                       footerTemplate: "Side: " + $scope.currentPageAmountSum + " Total: #= sum # "
                    }, {
                        field: "Distance",
                        title: "Afstand",
@@ -209,6 +215,8 @@
                ],
            };
        }
+
+
 
        $scope.filterReportsByLeaderOrg = function (orgs, data, leaderOrgId) {
            var orgUnits = {};
@@ -288,7 +296,6 @@
        }
 
        function approveAllClick() {
-           console.log("123");
            var modalInstance = $modal.open({
                templateUrl: '/App/ApproveReports/ConfirmApproveAllTemplate.html',
                controller: 'AcceptController',
@@ -327,6 +334,25 @@
                }
            });
 
+
+       }
+
+       $scope.getCurrentPageSums = function () {
+           var pageNumber = $scope.gridContainer.pendingGrid.dataSource.page();
+           var pageSize = $scope.gridContainer.pendingGrid.dataSource.pageSize();
+           var first = pageSize * (pageNumber - 1);
+           var last = first + pageSize - 1;
+           var resAmount = 0;
+           var resDistance = 0;
+           for (var i = first; i <= last; i++) {
+               if (allReports[i] != undefined) {
+                   resAmount += allReports[i].AmountToReimburse;
+                   resDistance += allReports[i].Distance;
+               }
+
+           }
+           $scope.currentPageAmountSum = resAmount;
+           $scope.currentPageDistanceSum = resDistance;
 
        }
 
@@ -504,7 +530,7 @@
 
        }
 
-     
+
 
 
 
@@ -528,6 +554,8 @@
 
        $scope.loadReports();
 
+
+
        $scope.personChanged = function (item) {
            queryOptions.personQuery = "PersonId eq " + item.Id;
            $scope.updateReports();
@@ -546,7 +574,11 @@
            });
        });
 
-
+       $scope.$on("kendoWidgetCreated", function (event, widget) {
+           if (widget === $scope.gridContainer.pendingGrid) {
+               $scope.getCurrentPageSums();
+           }
+       });
 
 
    }
