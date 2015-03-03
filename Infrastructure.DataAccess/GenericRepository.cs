@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
@@ -9,7 +11,7 @@ using Core.DomainServices;
 
 namespace Infrastructure.DataAccess
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class 
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly DbSet<T> _dbSet;
         private readonly DataContext _context;
@@ -32,6 +34,13 @@ namespace Infrastructure.DataAccess
                 {
                     var navProperty = propertyInfo.GetValue(entity);
                     _context.Set(propertyInfo.GetType()).Attach(navProperty);
+                }                
+                else if (propertyInfo.PropertyType.IsGenericType)
+                {
+                    foreach (var obj in (ICollection)propertyInfo.GetValue(entity))
+                    {
+                        _context.Set(obj.GetType()).Attach(obj);
+                    }
                 }
             }
 
@@ -53,7 +62,7 @@ namespace Infrastructure.DataAccess
             {
                 Console.WriteLine(e);
                 throw e;
-            }     
+            }
         }
 
         public void Update(T entity)

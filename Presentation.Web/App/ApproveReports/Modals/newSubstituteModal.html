@@ -1,0 +1,22 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Opret ny stedfortræder</h3>
+</div>
+<div class="modal-body">
+    <div class="form-group form-inline">
+        <label>Vælg stedfortræder:</label>
+        <input class="form-control pull-right" kendo-auto-complete k-data-source="persons" k-ng-model="person" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" /> <!--typeahead="person as person.FullName for person in persons | filter:$viewValue"-->
+        <div class="seperator"></div>
+        <label>Fra:</label>
+        <input class="fill-fifty pull-right" k-format="'dd/MM/yyyy'" kendo-datepicker k-options="dateOptions" k-ng-model="substituteFromDate" />
+        <div class="seperator"></div>
+        <label>Til:</label>
+        <input class="fill-fifty pull-right" k-format="'dd/MM/yyyy'" kendo-datepicker k-options="dateOptions" k-ng-model="substituteToDate" />
+        <div class="seperator"></div>
+        <label>Organisation:</label>
+        <select class="fill-fifty pull-right" kendo-drop-down-list="PositionDropDown" k-ng-model="orgUnit" k-data-text-field="'ShortDescription'" id=" " k-data-source="orgUnits" k-data-value-field="'Id'"></select>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="saveNewSubstitute()">Gem</button>
+    <button class="btn btn-warning" ng-click="cancelNewSubstitute()">Annuller</button>
+</div>

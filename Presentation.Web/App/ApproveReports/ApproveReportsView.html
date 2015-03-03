@@ -9,14 +9,6 @@
 <div class="row" ng-controller="ApproveReportsController">
     <div class="col-lg-12">
 
-
-
-
-
-       
-
-
-
         <tabset justified="true">
             <tab heading="Afventende" ng-click="tabClicked('pending')">
                 <div class="panel panel-default">
@@ -207,14 +199,47 @@
                     </div>
                 </div>
             </tab>
-            <tab heading="Indstillinger">
+            <tab heading="Indstillinger" ng-controller="LeaderSettingsController" ng-click="tabClicked('settings')">
                 <div class="panel panel-default">
-
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Indstillinger</h3>
                     </div>
-
                     <div class="panel-body">
+                        <div class=" row col-lg-12 setting-area">
+                            <h3 ng-click="collapseSubtitute = !collapseSubtitute">Opret ny stedfortræder i en periode</h3>
+                            <div collapse="collapseSubtitute">
+                                <div class="col-md-2 pull-right">
+                                    <button type="submit" class="btn btn-primary pull-right" ng-click="createNewSubstitute()">Opret</button>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group form-inline">
+                                        <div class="col-md-12">
+                                            <div kendo-grid="gridContainer.substituteGrid" class="margin-bottom-10" options="substitutes"></div>
+                                        </div>
+                                    </div>
+                                </div>                               
+                            </div>
+                        </div>
+                        <div class="row col-lg-12 setting-area">
+                            <h3 ng-click="collapsePersonalApprover = !collapsePersonalApprover">Opret personlige godkendere for medarbejdere</h3>
+                            <div collapse="collapsePersonalApprover">
+                                <div class="col-md-2 pull-right">
+                                    <button type="submit" class="btn btn-primary pull-right" ng-click="createNewApprover()">Opret</button>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group form-inline">
+                                        <div class="col-md-12">
+                                            <div kendo-grid="gridContainer.personalApproverGrid" class="margin-bottom-10" options="personalApprovers"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+
 
                     </div>
                 </div>
