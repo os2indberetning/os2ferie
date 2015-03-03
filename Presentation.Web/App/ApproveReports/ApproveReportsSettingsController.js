@@ -1,4 +1,4 @@
-﻿angular.module("application").controller("LeaderSettingsController", [
+﻿angular.module("application").controller("ApproveReportsSettingsController", [
    "$scope", "OrgUnit", "Person", "$modal", function ($scope, OrgUnit, Person, $modal) {
        $scope.grindContainer = [];
        $scope.collapseSubtitute = false;
@@ -13,7 +13,6 @@
 
        Person.getAll(function (data) {
            $scope.persons = data.value;
-           console.log($scope.persons);
        });
 
        $scope.substituteOrgUnit = "";

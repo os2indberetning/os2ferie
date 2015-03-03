@@ -37,6 +37,8 @@
     margin: 10px;
 }
 
+
+
 .no-border {
     border: none;
 }
@@ -261,4 +263,13 @@
 
 .m-b-l {
     margin-bottom: 15px;
+}
+
+.k-grid-content .btn-group { position: absolute; } 
+.k-grid-content .btn-group .btn { top: -12px; } 
+.k-grid-content { overflow: visible !important; } 
+.k-grid-content table { padding-right: 17px }
+
+.overflow-visible {
+    overflow: visible !important;
 }
