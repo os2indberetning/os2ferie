@@ -37,12 +37,29 @@
 
            var url = "/odata/DriveReports?$expand=Employment &$filter=Status eq Core.DomainModel.ReportStatus'Accepted' " + query;
 
-           $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = url;
-           $scope.gridContainer.acceptedGrid.dataSource.read();
+           $scope.gridContainer.grid.dataSource.transport.options.read.url = url;
+           $scope.gridContainer.grid.dataSource.read();
        }
 
 
+       $scope.getCurrentPageSums = function () {
+           var pageNumber = $scope.gridContainer.grid.dataSource.page();
+           var pageSize = $scope.gridContainer.grid.dataSource.pageSize();
+           var first = pageSize * (pageNumber - 1);
+           var last = first + pageSize - 1;
+           var resAmount = 0;
+           var resDistance = 0;
+           for (var i = first; i <= last; i++) {
+               if (allReports[i] != undefined) {
+                   resAmount += allReports[i].AmountToReimburse;
+                   resDistance += allReports[i].Distance;
+               }
 
+           }
+           $scope.currentPageAmountSum = resAmount;
+           $scope.currentPageDistanceSum = resDistance;
+
+       }
 
 
        $scope.filterReportsByLeaderOrg = function (orgs, data, leaderOrgId) {
@@ -74,7 +91,7 @@
        }
 
        $scope.loadReports = function () {
-           $scope.acceptedReports = {
+           $scope.reports = {
                dataSource: {
                    type: "odata",
                    transport: {
@@ -114,9 +131,9 @@
                            orgs.$promise.then(function (res) {
 
                                resultSet = $scope.filterReportsByLeaderOrg(orgs, data, leaderOrgId);
-
-                               $scope.gridContainer.acceptedGrid.dataSource.data(resultSet);
-                               $scope.gridContainer.acceptedGrid.refresh();
+                               allReports = resultSet;
+                               $scope.gridContainer.grid.dataSource.data(resultSet);
+                               $scope.gridContainer.grid.refresh();
 
                            });
                            return resultSet;
@@ -151,6 +168,7 @@
                    }
                },
                dataBound: function () {
+                   $scope.getCurrentPageSums();
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
 
@@ -182,7 +200,7 @@
                        field: "Id",
                        template: function (data) {
                            if (data.Comment != "") {
-                               return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                               return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"transparent-background pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
                            }
                            return data.Purpose;
 
@@ -192,11 +210,11 @@
                    }, {
                        field: "AmountToReimburse",
                        title: "Beløb",
-                       footerTemplate: "Total: #= sum # "
+                       footerTemplate: "Side: {{currentPageAmountSum}}, total: #= sum # "
                    }, {
                        field: "Distance",
                        title: "Afstand",
-                       footerTemplate: "Total: #= sum # "
+                       footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= sum # "
                    }, {
                        field: "AccountNumber",
                        title: "Anden Kontering",
@@ -204,7 +222,7 @@
                            if (data.AccountNumber == "" || data.AccountNumber == null) {
                                return "Nej";
                            } else {
-                               return "Ja" + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.AccountNumber + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                               return "Ja" + "<button kendo-tooltip k-position=\"'left'\" k-content=\"'" + data.AccountNumber + "'\" class=\"transparent-background pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
                            }
                        }
                    }
@@ -216,8 +234,8 @@
 
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
-           $scope.dateContainer.toDateAccepted = new Date();
-           $scope.dateContainer.fromDateAccepted = new Date();
+           $scope.dateContainer.toDate = new Date();
+           $scope.dateContainer.fromDate = new Date();
 
        }
 
@@ -234,7 +252,7 @@
        // Event handlers
 
        $scope.pageSizeChanged = function () {
-           $scope.gridContainer.acceptedGrid.dataSource.pageSize(Number($scope.gridContainer.acceptedGridPageSize));
+           $scope.gridContainer.grid.dataSource.pageSize(Number($scope.gridContainer.gridPageSize));
        }
 
 
@@ -247,7 +265,7 @@
 
            queryOptions.dateQuery = "";
            queryOptions.personQuery = "";
-           $scope.person.acceptedChosenPerson = "";
+           $scope.person.chosenPerson = "";
            $scope.updateReports();
        }
 
@@ -276,8 +294,8 @@
            $timeout(function () {
                var from, to, and;
                and = " and ";
-               from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDateAccepted);
-               to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDateAccepted);
+               from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
+               to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDate);
                queryOptions.dateQuery = from + and + to;
                $scope.updateReports();
            }, 0);
@@ -318,7 +336,7 @@
        $scope.person = {};
 
        // Set initial value for grid pagesize
-       $scope.gridContainer.acceptedGridPageSize = 5;
+       $scope.gridContainer.gridPageSize = 5;
 
        Person.getAll().$promise.then(function (res) {
            angular.forEach(res.value, function (value, key) {

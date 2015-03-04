@@ -39,8 +39,8 @@
 
 
 
-           $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = url;
-           $scope.gridContainer.rejectedGrid.dataSource.read();
+           $scope.gridContainer.grid.dataSource.transport.options.read.url = url;
+           $scope.gridContainer.grid.dataSource.read();
        }
 
 
@@ -76,7 +76,7 @@
 
 
        $scope.loadReports = function () {
-           $scope.rejectedReports = {
+           $scope.reports = {
                dataSource: {
                    type: "odata",
                    transport: {
@@ -111,8 +111,8 @@
 
                                resultSet = $scope.filterReportsByLeaderOrg(orgs, data, leaderOrgId);
 
-                               $scope.gridContainer.rejectedGrid.dataSource.data(resultSet);
-                               $scope.gridContainer.rejectedGrid.refresh();
+                               $scope.gridContainer.grid.dataSource.data(resultSet);
+                               $scope.gridContainer.grid.refresh();
 
                            });
                            return resultSet;
@@ -170,7 +170,7 @@
                                       field: "Id",
                                       template: function (data) {
                                           if (data.Comment != "") {
-                                              return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                                              return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"transparent-background pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
                                           }
                                           return data.Purpose;
 
@@ -190,8 +190,8 @@
 
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
-           $scope.dateContainer.toDateRejected = new Date();
-           $scope.dateContainer.fromDateRejected = new Date();
+           $scope.dateContainer.toDate = new Date();
+           $scope.dateContainer.fromDate = new Date();
        }
 
        $scope.getEndOfDayStamp = function (d) {
@@ -207,7 +207,7 @@
        // Event handlers
 
        $scope.pageSizeChanged = function () {
-           $scope.gridContainer.rejectedGrid.dataSource.pageSize(Number($scope.gridContainer.rejectedGridPageSize));
+           $scope.gridContainer.grid.dataSource.pageSize(Number($scope.gridContainer.gridPageSize));
        }
 
        $scope.clearName = function () {
@@ -217,7 +217,7 @@
        $scope.clearClicked = function () {
            queryOptions.dateQuery = "";
            queryOptions.personQuery = "";
-           $scope.person.rejectedChosenPerson = "";
+           $scope.person.chosenPerson = "";
            $scope.updateReports();
        }
 
@@ -229,8 +229,8 @@
            $timeout(function () {
                var from, to, and;
                and = " and ";
-               from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDateRejected);
-               to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDateRejected);
+               from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
+               to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDate);
                queryOptions.dateQuery = from + and + to;
                $scope.updateReports();
            }, 0);
@@ -271,7 +271,7 @@
        $scope.person = {};
 
        // Set initial value for grid pagesize
-       $scope.gridContainer.rejectedGridPageSize = 5;
+       $scope.gridContainer.gridPageSize = 5;
 
        Person.getAll().$promise.then(function (res) {
            angular.forEach(res.value, function (value, key) {

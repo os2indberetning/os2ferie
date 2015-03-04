@@ -69,8 +69,8 @@
 
 
 
-           $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = url;
-           $scope.gridContainer.pendingGrid.dataSource.read();
+           $scope.gridContainer.grid.dataSource.transport.options.read.url = url;
+           $scope.gridContainer.grid.dataSource.read();
        }
 
 
@@ -78,7 +78,7 @@
 
 
        $scope.loadReports = function () {
-           $scope.pendingReports = {
+           $scope.reports = {
                dataSource: {
                    type: "odata",
                    transport: {
@@ -120,8 +120,8 @@
 
                                resultSet = $scope.filterReportsByLeaderOrg(orgs, data, leaderOrgId);
                                allReports = resultSet;
-                               $scope.gridContainer.pendingGrid.dataSource.data(resultSet);
-                               $scope.gridContainer.pendingGrid.refresh();
+                               $scope.gridContainer.grid.dataSource.data(resultSet);
+                               $scope.gridContainer.grid.refresh();
 
                            });
                            return resultSet;
@@ -160,6 +160,7 @@
                },
                scrollable: false,
                dataBound: function () {
+                   $scope.getCurrentPageSums();
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
 
@@ -189,23 +190,22 @@
                        title: "Kørselsdato"
                    }, {
                        field: "Id",
+                       title: "Formål",
                        template: function (data) {
                            if (data.Comment != "") {
-                               return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                               return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"transparent-background pull-right no-border inline\"><i class=\"fa fa-comment-o\"></i></button>";
                            }
                            return data.Purpose;
 
-                       },
-                       title: "Formål"
-
+                       }
                    }, {
                        field: "AmountToReimburse",
                        title: "Beløb",
-                       footerTemplate: "Side: " + $scope.currentPageAmountSum + " Total: #= sum # "
+                       footerTemplate: "Side: {{currentPageAmountSum}}, total: #= sum # "
                    }, {
                        field: "Distance",
                        title: "Afstand",
-                       footerTemplate: "Total: #= sum # "
+                       footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= sum # "
                    }, {
                        field: "Id",
                        template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=ApproveWithAccountClick(${Id})>Godkend med anden kontering</a><div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'/></div>",
@@ -252,8 +252,8 @@
 
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
-           $scope.dateContainer.toDatePending = new Date();
-           $scope.dateContainer.fromDatePending = new Date();
+           $scope.dateContainer.toDate = new Date();
+           $scope.dateContainer.fromDate = new Date();
        }
 
        $scope.getEndOfDayStamp = function (d) {
@@ -269,7 +269,7 @@
        // Event handlers
 
        $scope.pageSizeChanged = function () {
-           $scope.gridContainer.pendingGrid.dataSource.pageSize(Number($scope.gridContainer.pendingGridPageSize));
+           $scope.gridContainer.grid.dataSource.pageSize(Number($scope.gridContainer.gridPageSize));
        }
 
        $scope.rowChecked = function (id) {
@@ -290,14 +290,14 @@
        $scope.clearClicked = function () {
            queryOptions.dateQuery = "";
            queryOptions.personQuery = "";
-           $scope.person.pendingChosenPerson = "";
+           $scope.person.chosenPerson = "";
            $scope.updateReports();
 
        }
 
        function approveAllClick() {
            var modalInstance = $modal.open({
-               templateUrl: '/App/ApproveReports/ConfirmApproveAllTemplate.html',
+               templateUrl: '/App/ApproveReports/Modals/ConfirmApproveAllTemplate.html',
                controller: 'AcceptController',
                backdrop: "static",
                resolve: {
@@ -305,14 +305,14 @@
                        return -1;
                    },
                    pageNumber: function () {
-                       return $scope.gridContainer.pendingGrid.dataSource.page();
+                       return $scope.gridContainer.grid.dataSource.page();
                    }
                }
            });
 
            modalInstance.result.then(function () {
-               var pageNumber = $scope.gridContainer.pendingGrid.dataSource.page();
-               var pageSize = $scope.gridContainer.pendingGrid.dataSource.pageSize();
+               var pageNumber = $scope.gridContainer.grid.dataSource.page();
+               var pageSize = $scope.gridContainer.grid.dataSource.pageSize();
                var first = pageSize * (pageNumber - 1);
                var last = first + pageSize - 1;
                var noOfApprovedReports = 0;
@@ -338,8 +338,8 @@
        }
 
        $scope.getCurrentPageSums = function () {
-           var pageNumber = $scope.gridContainer.pendingGrid.dataSource.page();
-           var pageSize = $scope.gridContainer.pendingGrid.dataSource.pageSize();
+           var pageNumber = $scope.gridContainer.grid.dataSource.page();
+           var pageSize = $scope.gridContainer.grid.dataSource.pageSize();
            var first = pageSize * (pageNumber - 1);
            var last = first + pageSize - 1;
            var resAmount = 0;
@@ -358,7 +358,7 @@
 
        function approveAllWithAccountClick() {
            var modalInstance = $modal.open({
-               templateUrl: '/App/ApproveReports/ConfirmApproveAllWithAccountTemplate.html',
+               templateUrl: '/App/ApproveReports/Modals/ConfirmApproveAllWithAccountTemplate.html',
                controller: 'AcceptWithAccountController',
                backdrop: "static",
                resolve: {
@@ -366,14 +366,14 @@
                        return -1;
                    },
                    pageNumber: function () {
-                       return $scope.gridContainer.pendingGrid.dataSource.page();
+                       return $scope.gridContainer.grid.dataSource.page();
                    }
                }
            });
 
            modalInstance.result.then(function (accountNumber) {
-               var pageNumber = $scope.gridContainer.pendingGrid.dataSource.page();
-               var pageSize = $scope.gridContainer.pendingGrid.dataSource.pageSize();
+               var pageNumber = $scope.gridContainer.grid.dataSource.page();
+               var pageSize = $scope.gridContainer.grid.dataSource.pageSize();
                var first = pageSize * (pageNumber - 1);
                var last = first + pageSize - 1;
                var noOfApprovedReports = 0;
@@ -396,7 +396,7 @@
 
        $scope.approveClick = function (id) {
            var modalInstance = $modal.open({
-               templateUrl: '/App/ApproveReports/ConfirmApproveTemplate.html',
+               templateUrl: '/App/ApproveReports/Modals/ConfirmApproveTemplate.html',
                controller: 'AcceptController',
                backdrop: "static",
                resolve: {
@@ -419,7 +419,7 @@
                NotificationService.AutoFadeNotification("danger", "Fejl", "Ingen indberetninger er markerede!");
            } else {
                var modalInstance = $modal.open({
-                   templateUrl: '/App/ApproveReports/ConfirmApproveSelectedWithAccountTemplate.html',
+                   templateUrl: '/App/ApproveReports/Modals/ConfirmApproveSelectedWithAccountTemplate.html',
                    controller: 'AcceptWithAccountController',
                    backdrop: "static",
                    resolve: {
@@ -446,7 +446,7 @@
                NotificationService.AutoFadeNotification("danger", "Fejl", "Ingen indberetninger er markerede!");
            } else {
                var modalInstance = $modal.open({
-                   templateUrl: '/App/ApproveReports/ConfirmApproveSelectedTemplate.html',
+                   templateUrl: '/App/ApproveReports/Modals/ConfirmApproveSelectedTemplate.html',
                    controller: 'AcceptController',
                    backdrop: "static",
                    resolve: {
@@ -472,7 +472,7 @@
 
        $scope.ApproveWithAccountClick = function (id) {
            var modalInstance = $modal.open({
-               templateUrl: '/App/ApproveReports/ConfirmApproveWithAccountTemplate.html',
+               templateUrl: '/App/ApproveReports/Modals/ConfirmApproveWithAccountTemplate.html',
                controller: "AcceptWithAccountController",
                backdrop: "static",
                resolve: {
@@ -493,7 +493,7 @@
 
        $scope.rejectClick = function (id) {
            var modalInstance = $modal.open({
-               templateUrl: '/App/ApproveReports/ConfirmRejectTemplate.html',
+               templateUrl: '/App/ApproveReports/Modals/ConfirmRejectTemplate.html',
                controller: 'RejectController',
                backdrop: "static",
                resolve: {
@@ -521,8 +521,8 @@
            $timeout(function () {
                var from, to, and;
                and = " and ";
-               from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);
-               to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);
+               from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
+               to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDate);
                queryOptions.dateQuery = from + and + to;
                $scope.updateReports();
            }, 0);
@@ -566,7 +566,7 @@
        $scope.person = {};
 
        // Set initial value for grid pagesize
-       $scope.gridContainer.pendingGridPageSize = 5;
+       $scope.gridContainer.gridPageSize = 5;
 
        Person.getAll().$promise.then(function (res) {
            angular.forEach(res.value, function (value, key) {
@@ -574,11 +574,7 @@
            });
        });
 
-       $scope.$on("kendoWidgetCreated", function (event, widget) {
-           if (widget === $scope.gridContainer.pendingGrid) {
-               $scope.getCurrentPageSums();
-           }
-       });
+   
 
 
    }
