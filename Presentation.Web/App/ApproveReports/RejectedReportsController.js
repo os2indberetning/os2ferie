@@ -78,25 +78,11 @@
        $scope.loadReports = function () {
            $scope.reports = {
                dataSource: {
-                   type: "odata",
+                   type: "odata-v4",
                    transport: {
                        read: {
-                           beforeSend: function (req) {
-                               req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
-                           },
                            url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected'&$expand=Employment",
-                           dataType: "json",
-                           cache: false
                        },
-                       parameterMap: function (options, type) {
-                           var d = kendo.data.transports.odata.parameterMap(options);
-
-                           delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
-
-                           d.$count = true;
-
-                           return d;
-                       }
                    },
                    schema: {
                        data: function (data) {
@@ -118,9 +104,6 @@
                            return resultSet;
 
                        },
-                       total: function (data) {
-                           return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
-                       }
                    },
                    pageSize: 5,
                    serverPaging: false,
@@ -221,21 +204,26 @@
            $scope.updateReports();
        }
 
+       var initialLoad = 2;
        $scope.dateChanged = function () {
-
-           //TODO: Shit doesnt work if the input field is left empty. It yields NaN and gives no results.
-
            // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
            $timeout(function () {
                var from, to, and;
                and = " and ";
                from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
                to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDate);
-               queryOptions.dateQuery = from + and + to;
-               $scope.updateReports();
+
+
+               // Initial load is also a bit of a hack.
+               // dateChanged is called twice when the default values for the datepickers are set.
+               // This leads to sorting the grid content on load, which is not what we want.
+               // Therefore the sorting is not done the first 2 times the dates change - Which are the 2 times we set the default values.
+               if (initialLoad <= 0) {
+                   queryOptions.dateQuery = from + and + to;
+                   $scope.updateReports();
+               }
+               initialLoad--;
            }, 0);
-
-
        }
 
 

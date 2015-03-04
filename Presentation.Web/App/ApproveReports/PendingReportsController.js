@@ -1,8 +1,11 @@
 ﻿angular.module("application").controller("PendingReportsController", [
    "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService) {
 
+       // Load people for auto-complete textbox
+       $scope.people = [];
+       $scope.person = {};
 
-       var queryOptions = { dateQuery: "", personQuery: "" };
+
 
        $scope.checkboxes = {};
 
@@ -11,9 +14,6 @@
        var allReports = [];
 
        // Helper Methods
-
-       $scope.test = 2;
-
 
        $scope.approveAllToolbar = {
            items: [
@@ -77,144 +77,107 @@
 
 
 
-       $scope.loadReports = function () {
-           $scope.reports = {
-               dataSource: {
-                   type: "odata",
-                   transport: {
-                       read: {
-                           beforeSend: function (req) {
-                               req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
-                           },
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending'&$expand=Employment",
-                           dataType: "json",
-                           cache: false
-                       },
-                       parameterMap: function (options, type) {
-                           var d = kendo.data.transports.odata.parameterMap(options);
-
-                           delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
-
-                           d.$count = true;
-
-                           return d;
-                       }
+       $scope.reports = {
+           dataSource: {
+               type: "odata-v4",
+               transport: {
+                   read: {
+                       url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending'&$expand=Employment",
                    },
-                   schema: {
-                       model: {
-                           fields: {
-                               Distance: { type: "number" },
-                               AmountToReimburse: { type: "number" }
-                           }
-                       },
-                       data: function (data) {
 
-                           var leaderOrgId = 1;
-                           var resultSet = [];
+               },
+               schema: {
+                   data: function (data) {
+                       var leaderOrgId = 1;
+                       var resultSet = [];
+                       var orgs = OrgUnit.get();
+                       orgs.$promise.then(function (res) {
+                           resultSet = $scope.filterReportsByLeaderOrg(orgs, data, leaderOrgId);
+                           allReports = resultSet;
+                           $scope.gridContainer.grid.dataSource.data(resultSet);
+                           $scope.gridContainer.grid.refresh();
+                       });
+                       return resultSet;
 
-                           var orgs = OrgUnit.get();
-
-
-
-                           orgs.$promise.then(function (res) {
-
-                               resultSet = $scope.filterReportsByLeaderOrg(orgs, data, leaderOrgId);
-                               allReports = resultSet;
-                               $scope.gridContainer.grid.dataSource.data(resultSet);
-                               $scope.gridContainer.grid.refresh();
-
-                           });
-                           return resultSet;
-
-                       },
-                       total: function (data) {
-                           return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
-                       }
                    },
-                   pageSize: 5,
-                   serverPaging: false,
-                   serverAggregates: false,
-                   serverSorting: true,
-
-
-                   aggregate: [
-                       { field: "Distance", aggregate: "sum" },
-                       { field: "AmountToReimburse", aggregate: "sum" },
-
-                   ]
                },
-               sortable: true,
-               pageable: {
-                   messages: {
-                       display: "{0} - {1} af {2} indberetninger", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
-                       empty: "Ingen indberetninger at vise",
-                       page: "Side",
-                       of: "af {0}", //{0} is total amount of pages
-                       itemsPerPage: "indberetninger pr. side",
-                       first: "Gå til første side",
-                       previous: "Gå til forrige side",
-                       next: "Gå til næste side",
-                       last: "Gå til sidste side",
-                       refresh: "Genopfrisk",
-                   }
-               },
-               scrollable: false,
-               dataBound: function () {
-                   $scope.getCurrentPageSums();
-                   this.expandRow(this.tbody.find("tr.k-master-row").first());
-               },
-
-
-
-               columns: [
-                   {
-                       field: "Fullname",
-                       title: "Navn"
-                   }, {
-                       field: "CreationDate",
-                       template: function (data) {
-                           var m = moment.unix(data.CreatedDateTimestamp);
-                           return m._d.getDate() + "/" +
-                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                                  m._d.getFullYear();
-                       },
-                       title: "Indberettet den"
-                   }, {
-                       field: "DriveDateTimestamp",
-                       template: function (data) {
-                           var m = moment.unix(data.DriveDateTimestamp);
-                           return m._d.getDate() + "/" +
-                               (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                               m._d.getFullYear();
-                       },
-                       title: "Kørselsdato"
-                   }, {
-                       field: "Id",
-                       title: "Formål",
-                       template: function (data) {
-                           if (data.Comment != "") {
-                               return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"transparent-background pull-right no-border inline\"><i class=\"fa fa-comment-o\"></i></button>";
-                           }
-                           return data.Purpose;
-
+               pageSize: 5,
+               serverPaging: false,
+               serverAggregates: false,
+               serverSorting: true,
+               aggregate: [
+                   { field: "Distance", aggregate: "sum" },
+                   { field: "AmountToReimburse", aggregate: "sum" },
+               ]
+           },
+           sortable: true,
+           pageable: {
+               messages: {
+                   display: "{0} - {1} af {2} indberetninger", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                   empty: "Ingen indberetninger at vise",
+                   page: "Side",
+                   of: "af {0}", //{0} is total amount of pages
+                   itemsPerPage: "indberetninger pr. side",
+                   first: "Gå til første side",
+                   previous: "Gå til forrige side",
+                   next: "Gå til næste side",
+                   last: "Gå til sidste side",
+                   refresh: "Genopfrisk",
+               }
+           },
+           scrollable: false,
+           dataBound: function () {
+               $scope.getCurrentPageSums();
+               this.expandRow(this.tbody.find("tr.k-master-row").first());
+           },
+           columns: [
+               {
+                   field: "Fullname",
+                   title: "Navn"
+               }, {
+                   field: "CreationDate",
+                   template: function (data) {
+                       var m = moment.unix(data.CreatedDateTimestamp);
+                       return m._d.getDate() + "/" +
+                             (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                              m._d.getFullYear();
+                   },
+                   title: "Indberettet den"
+               }, {
+                   field: "DriveDateTimestamp",
+                   template: function (data) {
+                       var m = moment.unix(data.DriveDateTimestamp);
+                       return m._d.getDate() + "/" +
+                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                           m._d.getFullYear();
+                   },
+                   title: "Kørselsdato"
+               }, {
+                   field: "Id",
+                   title: "Formål",
+                   template: function (data) {
+                       if (data.Comment != "") {
+                           return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"transparent-background pull-right no-border inline\"><i class=\"fa fa-comment-o\"></i></button>";
                        }
-                   }, {
-                       field: "AmountToReimburse",
-                       title: "Beløb",
-                       footerTemplate: "Side: {{currentPageAmountSum}}, total: #= sum # "
-                   }, {
-                       field: "Distance",
-                       title: "Afstand",
-                       footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= sum # "
-                   }, {
-                       field: "Id",
-                       template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=ApproveWithAccountClick(${Id})>Godkend med anden kontering</a><div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'/></div>",
-                       title: "Muligheder",
-                       footerTemplate: "<div class='pull-left' kendo-toolbar k-options='approveAllToolbar'></div><div class='pull-right' kendo-toolbar k-options='approveSelectedToolbar'></div>"
+                       return data.Purpose;
+
                    }
-               ],
-           };
-       }
+               }, {
+                   field: "AmountToReimburse",
+                   title: "Beløb",
+                   footerTemplate: "Side: {{currentPageAmountSum}}, total: #= sum # "
+               }, {
+                   field: "Distance",
+                   title: "Afstand",
+                   footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= sum # "
+               }, {
+                   field: "Id",
+                   template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=ApproveWithAccountClick(${Id})>Godkend med anden kontering</a><div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'/></div>",
+                   title: "Muligheder",
+                   footerTemplate: "<div class='pull-left' kendo-toolbar k-options='approveAllToolbar'></div><div class='pull-right' kendo-toolbar k-options='approveSelectedToolbar'></div>"
+               }
+           ],
+       };
 
 
 
@@ -246,15 +209,13 @@
            return resultSet;
        }
 
-
-
-
-
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
            $scope.dateContainer.toDate = new Date();
            $scope.dateContainer.fromDate = new Date();
        }
+
+
 
        $scope.getEndOfDayStamp = function (d) {
            var m = moment(d);
@@ -296,6 +257,10 @@
        }
 
        function approveAllClick() {
+           if (!allReports.length > 0) {
+               NotificationService.AutoFadeNotification("danger", "Ingen indberetninger", "Der findes ingen indberetninger på siden!");
+               return;
+           }
            var modalInstance = $modal.open({
                templateUrl: '/App/ApproveReports/Modals/ConfirmApproveAllTemplate.html',
                controller: 'AcceptController',
@@ -357,6 +322,10 @@
        }
 
        function approveAllWithAccountClick() {
+           if (!allReports.length > 0) {
+               NotificationService.AutoFadeNotification("danger", "Ingen indberetninger", "Der findes ingen indberetninger på siden!");
+               return;
+           }
            var modalInstance = $modal.open({
                templateUrl: '/App/ApproveReports/Modals/ConfirmApproveAllWithAccountTemplate.html',
                controller: 'AcceptWithAccountController',
@@ -512,22 +481,26 @@
        }
 
 
-
+       var initialLoad = 2;
        $scope.dateChanged = function () {
-
-           //TODO: Shit doesnt work if the input field is left empty. It yields NaN and gives no results.
-
            // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
            $timeout(function () {
                var from, to, and;
                and = " and ";
                from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
                to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDate);
-               queryOptions.dateQuery = from + and + to;
-               $scope.updateReports();
+
+
+               // Initial load is also a bit of a hack.
+               // dateChanged is called twice when the default values for the datepickers are set.
+               // This leads to sorting the grid content on load, which is not what we want.
+               // Therefore the sorting is not done the first 2 times the dates change - Which are the 2 times we set the default values.
+               if (initialLoad <= 0) {
+                   queryOptions.dateQuery = from + and + to;
+                   $scope.updateReports();
+               }
+               initialLoad--;
            }, 0);
-
-
        }
 
 
@@ -538,32 +511,29 @@
        // Init
 
 
+
        // Contains references to kendo ui grids.
        $scope.gridContainer = {};
        $scope.dateContainer = {};
 
        $scope.loadInitialDates();
 
+
+
        // Format for datepickers.
        $scope.dateOptions = {
            format: "dd/MM/yyyy",
+
        };
-
-
-
-
-       $scope.loadReports();
-
-
 
        $scope.personChanged = function (item) {
            queryOptions.personQuery = "PersonId eq " + item.Id;
            $scope.updateReports();
        }
 
-       // Load people for auto-complete textbox
-       $scope.people = [];
-       $scope.person = {};
+       var queryOptions = { dateQuery: "", personQuery: "" };
+       $scope.person.chosenPerson = "";
+
 
        // Set initial value for grid pagesize
        $scope.gridContainer.gridPageSize = 5;
@@ -574,7 +544,8 @@
            });
        });
 
-   
+
+
 
 
    }

@@ -286,21 +286,26 @@
 
 
 
+       var initialLoad = 2;
        $scope.dateChanged = function () {
-
-           //TODO: Shit doesnt work if the input field is left empty. It yields NaN and gives no results.
-
            // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
            $timeout(function () {
                var from, to, and;
                and = " and ";
                from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
                to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDate);
-               queryOptions.dateQuery = from + and + to;
-               $scope.updateReports();
+
+
+               // Initial load is also a bit of a hack.
+               // dateChanged is called twice when the default values for the datepickers are set.
+               // This leads to sorting the grid content on load, which is not what we want.
+               // Therefore the sorting is not done the first 2 times the dates change - Which are the 2 times we set the default values.
+               if (initialLoad <= 0) {
+                   queryOptions.dateQuery = from + and + to;
+                   $scope.updateReports();
+               }
+               initialLoad--;
            }, 0);
-
-
        }
 
 

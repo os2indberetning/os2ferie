@@ -57,6 +57,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MailerService\IMailerService.cs" />
+    <Compile Include="MailerService\ISmtpClient.cs" />
+    <Compile Include="MailerService\MailerService.cs" />
     <Compile Include="SubstituteService.cs" />
     <Compile Include="RatePostService.cs" />
     <Compile Include="DriveReportService.cs" />
