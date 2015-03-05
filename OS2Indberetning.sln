@@ -43,8 +43,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleApplications", "ConsoleApplications", "{38A093DE-ECBD-4C54-9376-E71805D2C06B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailNotifier", "MailNotifier\MailNotifier.csproj", "{342708CE-70DF-453F-8895-27CDB3836822}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,10 +81,6 @@ Global
 		{8A5EC991-4B8B-4D71-9051-8AE020695A62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A5EC991-4B8B-4D71-9051-8AE020695A62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A5EC991-4B8B-4D71-9051-8AE020695A62}.Release|Any CPU.Build.0 = Release|Any CPU
-		{342708CE-70DF-453F-8895-27CDB3836822}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{342708CE-70DF-453F-8895-27CDB3836822}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{342708CE-70DF-453F-8895-27CDB3836822}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{342708CE-70DF-453F-8895-27CDB3836822}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +92,5 @@ Global
 		{7FE59360-F8D1-441D-8A51-E521F22A3733} = {66BEC24C-076D-4933-9AE4-CBFD4E9519B0}
 		{9914DB94-E465-4751-939C-8121C30AC945} = {A9413206-37FE-4261-9223-8E136288075E}
 		{720A3483-F089-4A45-830B-CED59F8CD1E7} = {A9413206-37FE-4261-9223-8E136288075E}
-		{342708CE-70DF-453F-8895-27CDB3836822} = {38A093DE-ECBD-4C54-9376-E71805D2C06B}
 	EndGlobalSection
 EndGlobal

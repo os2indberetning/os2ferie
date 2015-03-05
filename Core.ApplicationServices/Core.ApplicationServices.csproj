@@ -57,9 +57,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MailerService\IMailerService.cs" />
-    <Compile Include="MailerService\ISmtpClient.cs" />
-    <Compile Include="MailerService\MailerService.cs" />
+    <Compile Include="MailerService\Impl\MailSenderFactory.cs" />
+    <Compile Include="MailerService\Impl\MailService.cs" />
+    <Compile Include="MailerService\Impl\RepositoryFactory.cs" />
+    <Compile Include="MailerService\Interface\IMailSender.cs" />
+    <Compile Include="MailerService\Interface\IMailerServiceFactory.cs" />
+    <Compile Include="MailerService\Impl\MailSender.cs" />
+    <Compile Include="MailerService\Interface\IMailService.cs" />
+    <Compile Include="MailerService\Interface\IRepositoryFactory.cs" />
     <Compile Include="SubstituteService.cs" />
     <Compile Include="RatePostService.cs" />
     <Compile Include="DriveReportService.cs" />

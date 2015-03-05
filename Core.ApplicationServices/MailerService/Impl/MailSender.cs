@@ -2,9 +2,9 @@
 
 namespace Core.ApplicationServices.MailerService
 {
-    public class MailerService : IMailerService
+    public class MailSender : IMailSender
     {
-        public void SendMail(string to, string from, string subject, string body, ISmtpClient smtpClient)
+        public void SendMail(string to, string from, string subject, string body, SmtpClient smtpClient)
         {
             var msg = new MailMessage();
             msg.To.Add(to);

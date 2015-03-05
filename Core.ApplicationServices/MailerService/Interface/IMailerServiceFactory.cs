@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Core.ApplicationServices.MailerService
 {
-    public interface ISmtpClient
+    public interface IMailSenderFactory
     {
-        void Send(MailMessage message);
+        IMailSender CreateMailerService();
     }
 }
