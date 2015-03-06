@@ -2,6 +2,8 @@ using System.Reflection;
 using System.Web.Http;
 using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
+using Core.ApplicationServices.MailerService.Impl;
+using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
 
@@ -52,6 +54,7 @@ namespace OS2Indberetning
             kernel.Bind(typeof (IGenericRepository<>)).To(typeof (GenericRepository<>));
             kernel.Bind<IPersonService>().To<PersonService>();
             kernel.Bind<IMobileTokenService>().To<MobileTokenService>();
+            kernel.Bind<IMailSender>().To<MailSender>();
         }        
     }
 }

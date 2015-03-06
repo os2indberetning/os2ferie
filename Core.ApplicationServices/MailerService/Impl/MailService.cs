@@ -30,7 +30,6 @@ namespace Core.ApplicationServices.MailerService.Impl
             foreach (var mailAddress in mailAddresses)
             {
                 _mailSender.SendMail(mailAddress,
-                    ConfigurationManager.AppSettings["MAIL_FROM_ADDRESS"],
                     ConfigurationManager.AppSettings["MAIL_SUBJECT"],
                      ConfigurationManager.AppSettings["MAIL_BODY"]);
             }

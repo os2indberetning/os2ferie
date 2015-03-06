@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
+using System.Web.OData;
+using Core.ApplicationServices.MailerService.Impl;
+using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.AddressServices;
 using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
+using Ninject;
 
 
 namespace Core.ApplicationServices
@@ -41,9 +46,9 @@ namespace Core.ApplicationServices
             _calculator = calculator;
         }
 
-       public IQueryable<DriveReport> AddFullName(IQueryable<DriveReport> repo)
-       {
-            var set = repo.ToList(); 
+        public IQueryable<DriveReport> AddFullName(IQueryable<DriveReport> repo)
+        {
+            var set = repo.ToList();
 
             // Add fullname to the resultset
             foreach (var driveReport in set)
@@ -51,23 +56,23 @@ namespace Core.ApplicationServices
                 AddFullName(driveReport);
             }
             return set.AsQueryable();
-       }
+        }
 
-       public void AddFullName(DriveReport driveReport)
-       {
-           if (driveReport == null)
-           {
-               return;
-           }
-           driveReport.Fullname = driveReport.Person.FirstName;
+        public void AddFullName(DriveReport driveReport)
+        {
+            if (driveReport == null)
+            {
+                return;
+            }
+            driveReport.Fullname = driveReport.Person.FirstName;
 
-           if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
-           {
-               driveReport.Fullname += " " + driveReport.Person.MiddleName;
-           }
+            if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
+            {
+                driveReport.Fullname += " " + driveReport.Person.MiddleName;
+            }
 
-           driveReport.Fullname += " " + driveReport.Person.LastName;
-       }
+            driveReport.Fullname += " " + driveReport.Person.LastName;
+        }
 
         public DriveReport Create(DriveReport report)
         {
@@ -75,20 +80,20 @@ namespace Core.ApplicationServices
             {
                 throw new Exception("No person provided");
             }
-           
+
             if (!Validate(report))
             {
                 throw new Exception("DriveReport has some invalid parameters");
             }
 
-            var pointsWithCoordinates = report.DriveReportPoints.Select((t, i) => report.DriveReportPoints.ElementAt(i)).Select(currentPoint => (DriveReportPoint) _coordinates.GetAddressCoordinates(currentPoint)).ToList();
+            var pointsWithCoordinates = report.DriveReportPoints.Select((t, i) => report.DriveReportPoints.ElementAt(i)).Select(currentPoint => (DriveReportPoint)_coordinates.GetAddressCoordinates(currentPoint)).ToList();
 
             report.DriveReportPoints = pointsWithCoordinates;
 
             var drivenRoute = _route.GetRoute(report.DriveReportPoints);
 
             report.Distance = (double)drivenRoute.Length / 1000;
-           
+
             report = _calculator.Calculate(report);
 
             var createdReport = _driveReportRepository.Insert(report);
@@ -126,6 +131,25 @@ namespace Core.ApplicationServices
             bool hasError = report.Distance <= 0 || report.DriveReportPoints.Count < 2 || string.IsNullOrEmpty(report.Purpose) || _licensePlateRepository.AsQueryable().First(x => x.PersonId == report.PersonId && x.Plate == report.Licenseplate) == null;
 
             return hasError;
+        }
+
+        public void SendMailIfRejectedReport(int key, Delta<DriveReport> delta)
+        {
+            var status = new object();
+            var getStatusSuccess = delta.TryGetPropertyValue("Status", out status);
+            if (getStatusSuccess && status.ToString().Equals("Rejected"))
+            {
+                var repo = new StandardKernel().Get<GenericRepository<DriveReport>>();
+                var recipient = repo.AsQueryable().First(r => r.Id == key).Person.Mail;
+                var comment = new object();
+                var getCommentSuccess = delta.TryGetPropertyValue("Comment", out comment);
+                if (getCommentSuccess)
+                {
+                    var mailSender = new StandardKernel().Get<IMailSender>();
+                    mailSender.SendMail(recipient,"Afvist indberetning", 
+                        "Din indberetning er blevet afvist med kommentaren: \n \n" + comment);
+                }
+            }
         }
     }
 }

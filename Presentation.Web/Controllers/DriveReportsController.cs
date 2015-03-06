@@ -55,6 +55,8 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
         {
+
+            _driveService.SendMailIfRejectedReport(key,delta);
             return base.Patch(key, delta);
         }
 
