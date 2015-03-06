@@ -192,3 +192,9 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 /Presentation.Web/App/Admin/StandardAddressController - Copy.js.html
+
+/Presentation.Web/Content/Kendo/
+/Presentation.Web/Scripts/Kendo/
+
+/Presentation.Web/PrivateSettings.config
+
