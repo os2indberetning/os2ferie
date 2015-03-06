@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Mail;
 
-namespace Core.ApplicationServices.MailerService
+namespace Core.ApplicationServices.MailerService.Interface
 {
     public interface IMailSender
     {
-        void SendMail(string to, string from, string subject, string body, SmtpClient smtpClient);
+        void SendMail(string to, string from, string subject, string body);
     }
 }

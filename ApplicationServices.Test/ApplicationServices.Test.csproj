@@ -68,7 +68,9 @@
   <ItemGroup>
     <Compile Include="DriveReportServiceTest\DriveReportMock.cs" />
     <Compile Include="DriveReportServiceTest\DriveReportServiceTest.cs" />
-    <Compile Include="MailerServiceTest\MailerServiceTest.cs" />
+    <Compile Include="MailerServiceTest\RepoMock.cs" />
+    <Compile Include="MailerServiceTest\GetLeadersWithPendingReportsEmails.cs" />
+    <Compile Include="MailerServiceTest\SendMails.cs" />
     <Compile Include="MobileTokenServiceTest\MobileTokenServiceTest.cs" />
     <Compile Include="PersonService\PersonServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="DataContext.cs" />
     <Compile Include="GenericRepository.cs" />
+    <Compile Include="GenericRepositoryMock.cs" />
     <Compile Include="Migrations\201502111316358_Initial.cs" />
     <Compile Include="Migrations\201502111316358_Initial.Designer.cs">
       <DependentUpon>201502111316358_Initial.cs</DependentUpon>

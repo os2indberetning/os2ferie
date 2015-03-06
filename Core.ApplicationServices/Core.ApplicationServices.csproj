@@ -45,6 +45,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -57,14 +58,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MailerService\Impl\MailSenderFactory.cs" />
     <Compile Include="MailerService\Impl\MailService.cs" />
-    <Compile Include="MailerService\Impl\RepositoryFactory.cs" />
     <Compile Include="MailerService\Interface\IMailSender.cs" />
-    <Compile Include="MailerService\Interface\IMailerServiceFactory.cs" />
     <Compile Include="MailerService\Impl\MailSender.cs" />
     <Compile Include="MailerService\Interface\IMailService.cs" />
-    <Compile Include="MailerService\Interface\IRepositoryFactory.cs" />
     <Compile Include="SubstituteService.cs" />
     <Compile Include="RatePostService.cs" />
     <Compile Include="DriveReportService.cs" />

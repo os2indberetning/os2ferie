@@ -133,7 +133,6 @@
     <Compile Include="Controllers\BankAccounts\BankAccountTest.cs" />
     <Compile Include="Controllers\OrgUnits\OrgUnitRepositoryMock.cs" />
     <Compile Include="Controllers\OrgUnits\OrgUnitTest.cs" />
-    <Compile Include="Controllers\GenericRepositoryMock.cs" />
     <Compile Include="Controllers\PersonalAddresses\PersonalAddressRepositoryMock.cs" />
     <Compile Include="Controllers\PersonalAddresses\PersonalAddressTest.cs" />
     <Compile Include="Controllers\Addresses\AddressRepositoryMock.cs" />
@@ -150,7 +149,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="App.config" />
     <Content Include="AppTests\controllers\Admin\DeleteAddressControllerTest.js" />
     <Content Include="AppTests\controllers\Admin\EditAddressControllerTest.js" />
     <Content Include="AppTests\controllers\Driving\DrivingControllerTest.js" />
