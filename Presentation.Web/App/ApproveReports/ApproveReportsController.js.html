@@ -1,0 +1,2598 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for C:/Users/JOJ/Documents/o2indberetning/Presentation.Web/App/ApproveReports/ApproveReportsController.js</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../prettify.css">
+
+    <link rel="stylesheet" href="../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">C:/Users/JOJ/Documents/o2indberetning/Presentation.Web/App/ApproveReports/ApproveReportsController.js</span></h1>
+    <h2>
+        
+        Statements: <span class="metric">24.19% <small>(75 / 310)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Branches: <span class="metric">11.43% <small>(8 / 70)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Functions: <span class="metric">14.46% <small>(12 / 83)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Lines: <span class="metric">24.19% <small>(75 / 310)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">C:/Users/JOJ/Documents/o2indberetning/Presentation.Web/App/ApproveReports\</a> &#187; ApproveReportsController.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605
+606
+607
+608
+609
+610
+611
+612
+613
+614
+615
+616
+617
+618
+619
+620
+621
+622
+623
+624
+625
+626
+627
+628
+629
+630
+631
+632
+633
+634
+635
+636
+637
+638
+639
+640
+641
+642
+643
+644
+645
+646
+647
+648
+649
+650
+651
+652
+653
+654
+655
+656
+657
+658
+659
+660
+661
+662
+663
+664
+665
+666
+667
+668
+669
+670
+671
+672
+673
+674
+675
+676
+677
+678
+679
+680
+681
+682
+683
+684
+685
+686
+687
+688
+689
+690
+691
+692
+693
+694
+695
+696
+697
+698
+699
+700
+701
+702
+703
+704
+705
+706
+707
+708
+709
+710
+711
+712
+713
+714
+715
+716
+717
+718
+719
+720
+721
+722
+723
+724
+725
+726
+727
+728
+729
+730
+731
+732
+733
+734
+735
+736
+737
+738
+739
+740
+741
+742
+743
+744
+745
+746
+747
+748
+749
+750
+751
+752
+753
+754
+755
+756
+757
+758
+759
+760
+761
+762
+763
+764
+765
+766
+767
+768
+769
+770
+771
+772
+773
+774
+775
+776
+777
+778
+779
+780
+781
+782
+783
+784
+785
+786
+787
+788
+789
+790
+791
+792
+793
+794
+795
+796
+797
+798
+799
+800
+801
+802
+803
+804
+805
+806
+807
+808
+809
+810
+811
+812
+813
+814
+815
+816
+817
+818
+819
+820
+821
+822
+823
+824
+825
+826
+827
+828
+829
+830
+831
+832
+833
+834
+835
+836
+837
+838
+839
+840
+841
+842
+843
+844
+845
+846
+847
+848</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">19</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">21</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">30</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">30</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-yes">24</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-yes">13</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">19</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">19</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular.module("application").controller("ApproveReportsController", [
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService) {
+&nbsp;
+&nbsp;
+       var pendingQueryOptions = { dateQuery: "", personQuery: "" };
+       var acceptedQueryOptions = { dateQuery: "", personQuery: "" };
+       var rejectedQueryOptions = { dateQuery: "", personQuery: "" };
+&nbsp;
+&nbsp;
+       $scope.checkboxes = {};
+&nbsp;
+       var checkedReports = [];
+&nbsp;
+       var allReports = [];
+&nbsp;
+       // Helper Methods
+&nbsp;
+       $scope.updateActiveTab = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >           if ($scope.activeTab == 'pending') {</span>
+               // Update pending tabs.
+<span class="cstat-no" title="statement not covered" >               this.updatePendingReports();</span>
+           }
+           else <span class="cstat-no" title="statement not covered" >if ($scope.activeTab == 'accepted') {</span>
+               // Update accepted reports grid
+<span class="cstat-no" title="statement not covered" >               this.updateAcceptedReports();</span>
+           }
+           else <span class="cstat-no" title="statement not covered" >if ($scope.activeTab == 'rejected') {</span>
+               // Update rejected reports grid.
+<span class="cstat-no" title="statement not covered" >               this.updateRejectedReports();</span>
+           }
+       }
+&nbsp;
+       $scope.updatePendingReports = <span class="fstat-no" title="function not covered" >function () {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           var dateAnd = "and ";</span>
+<span class="cstat-no" title="statement not covered" >           var dateQuery = dateAnd + pendingQueryOptions.dateQuery;</span>
+<span class="cstat-no" title="statement not covered" >           if (pendingQueryOptions.dateQuery == "") {</span>
+<span class="cstat-no" title="statement not covered" >               dateAnd = "";</span>
+<span class="cstat-no" title="statement not covered" >               dateQuery = "";</span>
+           }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           var personAnd = "and ";</span>
+<span class="cstat-no" title="statement not covered" >           var personQuery = personAnd + pendingQueryOptions.personQuery;</span>
+<span class="cstat-no" title="statement not covered" >           if (pendingQueryOptions.personQuery == "") {</span>
+<span class="cstat-no" title="statement not covered" >               personAnd = "";</span>
+<span class="cstat-no" title="statement not covered" >               personQuery = "";</span>
+           }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           var query = dateQuery + personQuery;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           var url = "/odata/DriveReports?$expand=Employment &amp;$filter=Status eq Core.DomainModel.ReportStatus'Pending' " + query;</span>
+&nbsp;
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           $scope.gridContainer.pendingGrid.dataSource.transport.options.read.url = url;</span>
+<span class="cstat-no" title="statement not covered" >           $scope.gridContainer.pendingGrid.dataSource.read();</span>
+       }
+&nbsp;
+       $scope.updateAcceptedReports = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >           var dateAnd = "and ";</span>
+<span class="cstat-no" title="statement not covered" >           var dateQuery = dateAnd + acceptedQueryOptions.dateQuery;</span>
+<span class="cstat-no" title="statement not covered" >           if (acceptedQueryOptions.dateQuery == "") {</span>
+<span class="cstat-no" title="statement not covered" >               dateAnd = "";</span>
+<span class="cstat-no" title="statement not covered" >               dateQuery = "";</span>
+           }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           var personAnd = "and ";</span>
+<span class="cstat-no" title="statement not covered" >           var personQuery = personAnd + acceptedQueryOptions.personQuery;</span>
+<span class="cstat-no" title="statement not covered" >           if (acceptedQueryOptions.personQuery == "") {</span>
+<span class="cstat-no" title="statement not covered" >               personAnd = "";</span>
+<span class="cstat-no" title="statement not covered" >               personQuery = "";</span>
+           }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           var query = dateQuery + personQuery;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           var url = "/odata/DriveReports?$expand=Employment &amp;$filter=Status eq Core.DomainModel.ReportStatus'Accepted' " + query;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           $scope.gridContainer.acceptedGrid.dataSource.transport.options.read.url = url;</span>
+<span class="cstat-no" title="statement not covered" >           $scope.gridContainer.acceptedGrid.dataSource.read();</span>
+       }
+&nbsp;
+       $scope.updateRejectedReports = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >           var dateAnd = "and ";</span>
+<span class="cstat-no" title="statement not covered" >           if (rejectedQueryOptions.dateQuery == "") {</span>
+<span class="cstat-no" title="statement not covered" >               dateAnd = "";</span>
+           }
+<span class="cstat-no" title="statement not covered" >           var dateQuery = dateAnd + rejectedQueryOptions.dateQuery;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           var personAnd = "and ";</span>
+<span class="cstat-no" title="statement not covered" >           if (rejectedQueryOptions.personQuery == "") {</span>
+<span class="cstat-no" title="statement not covered" >               personAnd = "";</span>
+           }
+<span class="cstat-no" title="statement not covered" >           var personQuery = personAnd + rejectedQueryOptions.personQuery;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           var query = dateQuery + personQuery;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           var url = "/odata/DriveReports?$expand=Employment &amp;$filter=Status eq Core.DomainModel.ReportStatus'Rejected' " + query;</span>
+&nbsp;
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           $scope.gridContainer.rejectedGrid.dataSource.transport.options.read.url = url;</span>
+<span class="cstat-no" title="statement not covered" >           $scope.gridContainer.rejectedGrid.dataSource.read();</span>
+       }
+&nbsp;
+       $scope.loadPendingReports = function () {
+           $scope.pendingReports = {
+               dataSource: {
+                   type: "odata",
+                   transport: {
+                       read: {
+                           beforeSend: <span class="fstat-no" title="function not covered" >function (req) {</span>
+<span class="cstat-no" title="statement not covered" >                               req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');</span>
+                           },
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending'&amp;$expand=Employment",
+                           dataType: "json",
+                           cache: false
+                       },
+                       parameterMap: <span class="fstat-no" title="function not covered" >function (options, type) {</span>
+<span class="cstat-no" title="statement not covered" >                           var d = kendo.data.transports.odata.parameterMap(options);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           delete d.$inlinecount; </span>// &lt;-- remove inlinecount parameter                                                        
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           d.$count = true;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           return d;</span>
+                       }
+                   },
+                   schema: {
+                       model: {
+                           fields: {
+                               Distance: { type: "number" },
+                               AmountToReimburse: { type: "number" }
+                           }
+                       },
+                       data: <span class="fstat-no" title="function not covered" >function (data) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           var leaderOrgId = 2;</span>
+<span class="cstat-no" title="statement not covered" >                           var resultSet = [];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           var orgs = OrgUnit.get();</span>
+&nbsp;
+                         
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           orgs.$promise.then(<span class="fstat-no" title="function not covered" >function (res) {</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                               resultSet = $scope.filterReportsByLeaderOrg(orgs, data, leaderOrgId);</span>
+<span class="cstat-no" title="statement not covered" >                               allReports = resultSet;</span>
+<span class="cstat-no" title="statement not covered" >                               $scope.gridContainer.pendingGrid.dataSource.data(resultSet);</span>
+<span class="cstat-no" title="statement not covered" >                               $scope.gridContainer.pendingGrid.refresh();</span>
+&nbsp;
+                           });
+<span class="cstat-no" title="statement not covered" >                           return resultSet;</span>
+&nbsp;
+                       },
+                       total: <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                           return data['@odata.count']; </span>// &lt;-- The total items count is the data length, there is no .Count to unpack.
+                       }
+                   },
+                   pageSize: 5,
+                   serverPaging: false,
+                   serverAggregates: false,
+                   serverSorting: true,
+&nbsp;
+&nbsp;
+                   aggregate: [
+                       { field: "Distance", aggregate: "sum" },
+                       { field: "AmountToReimburse", aggregate: "sum" },
+&nbsp;
+                   ]
+               },
+               sortable: true,
+               pageable: true,
+               scrollable: false,
+               dataBound: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                   this.expandRow(this.tbody.find("tr.k-master-row").first());</span>
+               },
+&nbsp;
+&nbsp;
+&nbsp;
+               columns: [
+                   {
+                       field: "Fullname",
+                       title: "Navn"
+                   }, {
+                       field: "CreationDate",
+                       template: <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                           var m = moment.unix(data.CreatedDateTimestamp);</span>
+<span class="cstat-no" title="statement not covered" >                           return m._d.getDate() + "/" +</span>
+                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                  m._d.getFullYear();
+                       },
+                       title: "Indberettet den"
+                   }, {
+                       field: "DriveDateTimestamp",
+                       template: <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                           var m = moment.unix(data.DriveDateTimestamp);</span>
+<span class="cstat-no" title="statement not covered" >                           return m._d.getDate() + "/" +</span>
+                               (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                               m._d.getFullYear();
+                       },
+                       title: "Kørselsdato"
+                   }, {
+                       field: "Id",
+                       template: <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                           if (data.Comment != "") {</span>
+<span class="cstat-no" title="statement not covered" >                               return data.Purpose + "&lt;button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"&gt;&lt;i class=\"fa fa-comment-o\"&gt;&lt;/i&gt;&lt;/button&gt;";</span>
+                           }
+<span class="cstat-no" title="statement not covered" >                           return data.Purpose;</span>
+&nbsp;
+                       },
+                       title: "Formål"
+&nbsp;
+                   }, {
+                       field: "AmountToReimburse",
+                       title: "Beløb",
+                       footerTemplate: "Total: #= sum # "
+                   }, {
+                       field: "Distance",
+                       title: "Afstand",
+                       footerTemplate: "Total: #= sum # "
+                   }, {
+                       field: "Id",
+                       template: "&lt;a ng-click=approveClick(${Id})&gt;Godkend&lt;/a&gt; | &lt;a ng-click=rejectClick(${Id})&gt;Afvis&lt;/a&gt; | &lt;a ng-click=ApproveWithAccountClick(${Id})&gt;Godkend med anden kontering&lt;/a&gt;&lt;div class='col-md-1 pull-right'&gt;&lt;input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'/&gt;&lt;/div&gt;",
+                       title: "Muligheder",
+                       footerTemplate: "&lt;div class='btn-group dropup margin-top-30'&gt;&lt;button type='button' ng-click='approveAllClick()' class='btn btn-success'&gt;Godkend Alle&lt;/button&gt;&lt;button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'&gt;&lt;span class='caret'&gt;&lt;/span&gt;&lt;/button&gt;&lt;ul class='dropdown-menu' role='menu'&gt;&lt;li&gt;&lt;a ng-click='approveAllWithAccountClick()'&gt;Anden kontering&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;    &lt;div class='btn-group dropup margin-top-30 pull-right'&gt;&lt;button type='button' ng-click='approveSelectedClick()' class='btn btn-success'&gt;&lt;i class='fa fa-check-square'&gt;&lt;/i&gt; Godkend Markerede&lt;/button&gt;&lt;button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'&gt;&lt;span class='caret'&gt;&lt;/span&gt;&lt;/button&gt;&lt;ul class='dropdown-menu' role='menu'&gt;&lt;li&gt;&lt;a ng-click='approveSelectedWithAccountClick()'&gt; Anden kontering&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;"
+                   }
+               ],
+           };
+       }
+&nbsp;
+       $scope.filterReportsByLeaderOrg = function (orgs, data, leaderOrgId) {
+           var orgUnits = {};
+&nbsp;
+           var resultSet = [];
+&nbsp;
+           angular.forEach(orgs.value, function (value, key) {
+               orgUnits[value.Id] = value;
+           });
+&nbsp;
+           angular.forEach(data.value, function (value, key) {
+               var repOrg = orgUnits[value.Employment.OrgUnitId];
+&nbsp;
+               if (orgUnits[leaderOrgId].Level == repOrg.Level &amp;&amp; orgUnits[leaderOrgId].Id == repOrg.Id) {
+&nbsp;
+                   resultSet.push(value);
+               } else if (orgUnits[leaderOrgId].Level &lt; repOrg.Level) {
+                   while (orgUnits[leaderOrgId].Level &lt; repOrg.Level) {
+                       repOrg = orgUnits[repOrg.ParentId];
+                   }
+                   if (repOrg.Id == orgUnits[leaderOrgId].Id) {
+                       resultSet.push(value);
+                   }
+               }
+&nbsp;
+           });
+           return resultSet;
+       }
+&nbsp;
+       $scope.loadAcceptedReports = function () {
+           $scope.acceptedReports = {
+               dataSource: {
+                   type: "odata",
+                   transport: {
+                       read: {
+                           beforeSend: <span class="fstat-no" title="function not covered" >function (req) {</span>
+<span class="cstat-no" title="statement not covered" >                               req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');</span>
+                           },
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Accepted'&amp;$expand=Employment",
+                           dataType: "json",
+                           cache: false
+                       },
+                       parameterMap: <span class="fstat-no" title="function not covered" >function (options, type) {</span>
+<span class="cstat-no" title="statement not covered" >                           var d = kendo.data.transports.odata.parameterMap(options);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           delete d.$inlinecount; </span>// &lt;-- remove inlinecount parameter                                                        
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           d.$count = true;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           return d;</span>
+                       }
+                   },
+                   schema: {
+                       model: {
+                           fields: {
+                               Distance: { type: "number" },
+                               AmountToReimburse: { type: "number" }
+                           }
+                       },
+&nbsp;
+                       data: <span class="fstat-no" title="function not covered" >function (data) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           var leaderOrgId = 2;</span>
+<span class="cstat-no" title="statement not covered" >                           var resultSet = [];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           var orgs = OrgUnit.get();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           orgs.$promise.then(<span class="fstat-no" title="function not covered" >function (res) {</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                               resultSet = $scope.filterReportsByLeaderOrg(orgs, data, leaderOrgId);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                               $scope.gridContainer.acceptedGrid.dataSource.data(resultSet);</span>
+<span class="cstat-no" title="statement not covered" >                               $scope.gridContainer.acceptedGrid.refresh();</span>
+&nbsp;
+                           });
+<span class="cstat-no" title="statement not covered" >                           return resultSet;</span>
+&nbsp;
+                       },
+                       total: <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                           return data['@odata.count']; </span>// &lt;-- The total items count is the data length, there is no .Count to unpack.
+                       }
+                   },
+                   pageSize: 5,
+                   serverPaging: false,
+                   serverAggregates: false,
+                   serverSorting: true,
+&nbsp;
+&nbsp;
+                   aggregate: [{ field: "Distance", aggregate: "sum" },
+                                 { field: "AmountToReimburse", aggregate: "sum" }]
+               },
+               sortable: true,
+               pageable: true,
+               dataBound: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                   this.expandRow(this.tbody.find("tr.k-master-row").first());</span>
+               },
+&nbsp;
+&nbsp;
+&nbsp;
+               columns: [
+                   {
+                       field: "Fullname",
+                       title: "Navn"
+                   }, {
+                       field: "CreationDate",
+                       template: <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                           var m = moment.unix(data.CreatedDateTimestamp);</span>
+<span class="cstat-no" title="statement not covered" >                           return m._d.getDate() + "/" +</span>
+                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                  m._d.getFullYear();
+                       },
+                       title: "Indberettet den"
+                   }, {
+                       field: "DriveDateTimestamp",
+                       template: <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                           var m = moment.unix(data.DriveDateTimestamp);</span>
+<span class="cstat-no" title="statement not covered" >                           return m._d.getDate() + "/" +</span>
+                               (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                               m._d.getFullYear();
+                       },
+                       title: "Kørselsdato"
+                   }, {
+                       field: "Id",
+                       template: <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                           if (data.Comment != "") {</span>
+<span class="cstat-no" title="statement not covered" >                               return data.Purpose + "&lt;button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"&gt;&lt;i class=\"fa fa-comment-o\"&gt;&lt;/i&gt;&lt;/button&gt;";</span>
+                           }
+<span class="cstat-no" title="statement not covered" >                           return data.Purpose;</span>
+&nbsp;
+                       },
+                       title: "Formål"
+&nbsp;
+                   }, {
+                       field: "AmountToReimburse",
+                       title: "Beløb",
+                       footerTemplate: "Total: #= sum # "
+                   }, {
+                       field: "Distance",
+                       title: "Afstand",
+                       footerTemplate: "Total: #= sum # "
+                   }, {
+                       field: "AccountNumber",
+                       title: "Kontonummer"
+                   }
+               ],
+           };
+       }
+&nbsp;
+       $scope.loadRejectedReports = function () {
+           $scope.rejectedReports = {
+               dataSource: {
+                   type: "odata",
+                   transport: {
+                       read: {
+                           beforeSend: <span class="fstat-no" title="function not covered" >function (req) {</span>
+<span class="cstat-no" title="statement not covered" >                               req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');</span>
+                           },
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected'&amp;$expand=Employment",
+                           dataType: "json",
+                           cache: false
+                       },
+                       parameterMap: <span class="fstat-no" title="function not covered" >function (options, type) {</span>
+<span class="cstat-no" title="statement not covered" >                           var d = kendo.data.transports.odata.parameterMap(options);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           delete d.$inlinecount; </span>// &lt;-- remove inlinecount parameter                                                        
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           d.$count = true;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           return d;</span>
+                       }
+                   },
+                   schema: {
+                       data: <span class="fstat-no" title="function not covered" >function (data) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           var leaderOrgId = 2;</span>
+<span class="cstat-no" title="statement not covered" >                           var resultSet = [];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           var orgs = OrgUnit.get();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                           orgs.$promise.then(<span class="fstat-no" title="function not covered" >function (res) {</span></span>
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                               resultSet = $scope.filterReportsByLeaderOrg(orgs, data, leaderOrgId);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                               $scope.gridContainer.rejectedGrid.dataSource.data(resultSet);</span>
+<span class="cstat-no" title="statement not covered" >                               $scope.gridContainer.rejectedGrid.refresh();</span>
+&nbsp;
+                           });
+<span class="cstat-no" title="statement not covered" >                           return resultSet;</span>
+&nbsp;
+                       },
+                       total: <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                           return data['@odata.count']; </span>// &lt;-- The total items count is the data length, there is no .Count to unpack.
+                       }
+                   },
+                   pageSize: 5,
+                   serverPaging: false,
+                   serverSorting: true
+               },
+               sortable: true,
+               pageable: true,
+               dataBound: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                   this.expandRow(this.tbody.find("tr.k-master-row").first());</span>
+               },
+               columns: [
+                                  {
+                                      field: "Fullname",
+                                      title: "Navn"
+                                  }, {
+                                      field: "CreationDate",
+                                      template: <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                                          var m = moment.unix(data.CreatedDateTimestamp);</span>
+<span class="cstat-no" title="statement not covered" >                                          return m._d.getDate() + "/" +</span>
+                                                (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                                 m._d.getFullYear();
+                                      },
+                                      title: "Indberettet den"
+                                  }, {
+                                      field: "DriveDateTimestamp",
+                                      template: <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                                          var m = moment.unix(data.DriveDateTimestamp);</span>
+<span class="cstat-no" title="statement not covered" >                                          return m._d.getDate() + "/" +</span>
+                                              (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                              m._d.getFullYear();
+                                      },
+                                      title: "Kørselsdato"
+                                  }, {
+                                      field: "Id",
+                                      template: <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                                          if (data.Comment != "") {</span>
+<span class="cstat-no" title="statement not covered" >                                              return data.Purpose + "&lt;button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"k-group btn btn-default pull-right no-border\"&gt;&lt;i class=\"fa fa-comment-o\"&gt;&lt;/i&gt;&lt;/button&gt;";</span>
+                                          }
+<span class="cstat-no" title="statement not covered" >                                          return data.Purpose;</span>
+&nbsp;
+                                      },
+                                      title: "Formål"
+&nbsp;
+                                  }, {
+                                      field: "AmountToReimburse",
+                                      title: "Beløb"
+                                  }, {
+                                      field: "Distance",
+                                      title: "Afstand"
+                                  }
+               ]
+           };
+       }
+&nbsp;
+       $scope.loadInitialDates = function () {
+           // Set initial values for kendo datepickers.
+           $scope.dateContainer.toDatePending = new Date();
+           $scope.dateContainer.fromDatePending = new Date();
+           $scope.dateContainer.toDateAccepted = new Date();
+           $scope.dateContainer.fromDateAccepted = new Date();
+           $scope.dateContainer.toDateRejected = new Date();
+           $scope.dateContainer.fromDateRejected = new Date();
+       }
+&nbsp;
+       $scope.getEndOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.endOf('day').unix();
+       }
+&nbsp;
+       $scope.getStartOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.startOf('day').unix();
+       }
+&nbsp;
+       // Event handlers
+&nbsp;
+       $scope.pageSizeChanged = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >           if ($scope.activeTab == 'pending') {</span>
+<span class="cstat-no" title="statement not covered" >               $scope.gridContainer.pendingGrid.dataSource.pageSize(Number($scope.gridContainer.pendingGridPageSize));</span>
+           }
+           else <span class="cstat-no" title="statement not covered" >if ($scope.activeTab == 'accepted') {</span>
+<span class="cstat-no" title="statement not covered" >               $scope.gridContainer.acceptedGrid.dataSource.pageSize(Number($scope.gridContainer.acceptedGridPageSize));</span>
+           }
+           else <span class="cstat-no" title="statement not covered" >if ($scope.activeTab == 'rejected') {</span>
+<span class="cstat-no" title="statement not covered" >               $scope.gridContainer.rejectedGrid.dataSource.pageSize(Number($scope.gridContainer.rejectedGridPageSize));</span>
+           }
+       }
+&nbsp;
+       $scope.rowChecked = <span class="fstat-no" title="function not covered" >function (id) {</span>
+<span class="cstat-no" title="statement not covered" >           if ($scope.checkboxes[id]) {</span>
+               // Is run if the checkbox has been checked.
+<span class="cstat-no" title="statement not covered" >               checkedReports.push(id);</span>
+           } else {
+               // Is run of the checkbox has been unchecked
+<span class="cstat-no" title="statement not covered" >               var index = checkedReports.indexOf(id);</span>
+<span class="cstat-no" title="statement not covered" >               checkedReports.splice(index, 1);</span>
+           }
+       }
+&nbsp;
+       $scope.clearName = function () {
+           $scope.chosenPerson = "";
+       }
+&nbsp;
+       $scope.clearClicked = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >           if ($scope.activeTab == 'pending') {</span>
+<span class="cstat-no" title="statement not covered" >               pendingQueryOptions.dateQuery = "";</span>
+<span class="cstat-no" title="statement not covered" >               pendingQueryOptions.personQuery = "";</span>
+<span class="cstat-no" title="statement not covered" >               $scope.person.pendingChosenPerson = "";</span>
+           }
+           else <span class="cstat-no" title="statement not covered" >if ($scope.activeTab == 'accepted') {</span>
+<span class="cstat-no" title="statement not covered" >               acceptedQueryOptions.dateQuery = "";</span>
+<span class="cstat-no" title="statement not covered" >               acceptedQueryOptions.personQuery = "";</span>
+<span class="cstat-no" title="statement not covered" >               $scope.person.acceptedChosenPerson = "";</span>
+&nbsp;
+           }
+           else <span class="cstat-no" title="statement not covered" >if ($scope.activeTab == 'rejected') {</span>
+<span class="cstat-no" title="statement not covered" >               rejectedQueryOptions.dateQuery = "";</span>
+<span class="cstat-no" title="statement not covered" >               rejectedQueryOptions.personQuery = "";</span>
+<span class="cstat-no" title="statement not covered" >               $scope.person.rejectedChosenPerson = "";</span>
+           }
+<span class="cstat-no" title="statement not covered" >           $scope.updateActiveTab();</span>
+       }
+&nbsp;
+       $scope.tabClicked = function (tab) {
+           $scope.activeTab = tab;
+       }
+&nbsp;
+       $scope.approveAllClick = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >           var modalInstance = $modal.open({</span>
+               templateUrl: '/App/ApproveReports/ConfirmApproveAllTemplate.html',
+               controller: 'AcceptController',
+               backdrop: "static",
+               resolve: {
+                   itemId: <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >                       return -1;</span>
+                   },
+                   pageNumber: <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >                       return $scope.gridContainer.pendingGrid.dataSource.page();</span>
+                   }
+               }
+           });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           modalInstance.result.then(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >               var pageNumber = $scope.gridContainer.pendingGrid.dataSource.page();</span>
+<span class="cstat-no" title="statement not covered" >               var pageSize = $scope.gridContainer.pendingGrid.dataSource.pageSize();</span>
+<span class="cstat-no" title="statement not covered" >               var first = pageSize * (pageNumber - 1);</span>
+<span class="cstat-no" title="statement not covered" >               var last = first + pageSize - 1;</span>
+<span class="cstat-no" title="statement not covered" >               var noOfApprovedReports = 0;</span>
+<span class="cstat-no" title="statement not covered" >               for (var i = first; i &lt;= last; i++) {</span>
+<span class="cstat-no" title="statement not covered" >                   if (allReports[i] != undefined) {</span>
+<span class="cstat-no" title="statement not covered" >                       noOfApprovedReports++;</span>
+<span class="cstat-no" title="statement not covered" >                       Report.patch({ id: allReports[i].Id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix() }, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                           $scope.updatePendingReports();</span>
+<span class="cstat-no" title="statement not covered" >                           $scope.updateAcceptedReports();</span>
+                       });
+                   
+                   }
+&nbsp;
+               }
+              
+           
+&nbsp;
+<span class="cstat-no" title="statement not covered" >               if (allReports.length &gt; noOfApprovedReports) {</span>
+<span class="cstat-no" title="statement not covered" >                   NotificationService.AutoFadeNotification("warning", "Yderligere indberetninger", "Der findes flere sider til godkendelse!");</span>
+               }
+           });
+           
+&nbsp;
+       }
+&nbsp;
+       $scope.approveAllWithAccountClick = <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >           var modalInstance = $modal.open({</span>
+               templateUrl: '/App/ApproveReports/ConfirmApproveAllWithAccountTemplate.html',
+               controller: 'AcceptWithAccountController',
+               backdrop: "static",
+               resolve: {
+                   itemId: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                       return -1;</span>
+                   },
+                   pageNumber: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                       return $scope.gridContainer.pendingGrid.dataSource.page();</span>
+                   }
+               }
+           });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           modalInstance.result.then(<span class="fstat-no" title="function not covered" >function (accountNumber) {</span></span>
+<span class="cstat-no" title="statement not covered" >               var pageNumber = $scope.gridContainer.pendingGrid.dataSource.page();</span>
+<span class="cstat-no" title="statement not covered" >               var pageSize = $scope.gridContainer.pendingGrid.dataSource.pageSize();</span>
+<span class="cstat-no" title="statement not covered" >               var first = pageSize * (pageNumber - 1);</span>
+<span class="cstat-no" title="statement not covered" >               var last = first + pageSize - 1;</span>
+<span class="cstat-no" title="statement not covered" >               var noOfApprovedReports = 0;</span>
+<span class="cstat-no" title="statement not covered" >               for (var i = first; i &lt;= last; i++) {</span>
+<span class="cstat-no" title="statement not covered" >                   if (allReports[i] != undefined) {</span>
+<span class="cstat-no" title="statement not covered" >                       noOfApprovedReports++;</span>
+<span class="cstat-no" title="statement not covered" >                       Report.patch({ id: allReports[i].Id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix(), "AccountNumber" : accountNumber}, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                           $scope.updatePendingReports();</span>
+<span class="cstat-no" title="statement not covered" >                           $scope.updateAcceptedReports();</span>
+                       });
+&nbsp;
+                   }
+&nbsp;
+               }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >               if (allReports.length &gt; noOfApprovedReports) {</span>
+<span class="cstat-no" title="statement not covered" >                   NotificationService.AutoFadeNotification("warning", "Yderligere indberetninger", "Der findes flere sider til godkendelse!");</span>
+               }
+           });
+       }
+&nbsp;
+       $scope.approveClick = <span class="fstat-no" title="function not covered" >function (id) {</span>
+<span class="cstat-no" title="statement not covered" >           var modalInstance = $modal.open({</span>
+               templateUrl: '/App/ApproveReports/ConfirmApproveTemplate.html',
+               controller: 'AcceptController',
+               backdrop: "static",
+               resolve: {
+                   itemId: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                       return id;</span>
+                   },
+                   pageNumber: -1
+               }
+           });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           modalInstance.result.then(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >               Report.patch({ id: id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix() }, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                   $scope.updatePendingReports();</span>
+<span class="cstat-no" title="statement not covered" >                   $scope.updateAcceptedReports();</span>
+               });
+           });
+       }
+&nbsp;
+       $scope.approveSelectedWithAccountClick = <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >           if (checkedReports.length == 0) {</span>
+<span class="cstat-no" title="statement not covered" >               NotificationService.AutoFadeNotification("danger", "Fejl", "Ingen indberetninger er markerede!");</span>
+           } else {
+<span class="cstat-no" title="statement not covered" >               var modalInstance = $modal.open({</span>
+                   templateUrl: '/App/ApproveReports/ConfirmApproveSelectedWithAccountTemplate.html',
+                   controller: 'AcceptWithAccountController',
+                   backdrop: "static",
+                   resolve: {
+                       itemId: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                           return -1;</span>
+                       },
+                       pageNumber: -1
+                   }
+               });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >               modalInstance.result.then(<span class="fstat-no" title="function not covered" >function (accountNumber) {</span></span>
+<span class="cstat-no" title="statement not covered" >                   angular.forEach(checkedReports, <span class="fstat-no" title="function not covered" >function (value, key) {</span></span>
+<span class="cstat-no" title="statement not covered" >                       Report.patch({ id: value }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix(), "AccountNumber" : accountNumber}, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                           $scope.updatePendingReports();</span>
+<span class="cstat-no" title="statement not covered" >                           $scope.updateAcceptedReports();</span>
+                       });
+                   });
+<span class="cstat-no" title="statement not covered" >                   checkedReports = [];</span>
+               });
+           }
+       }
+&nbsp;
+       $scope.approveSelectedClick = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >           if (checkedReports.length == 0) {</span>
+<span class="cstat-no" title="statement not covered" >               NotificationService.AutoFadeNotification("danger", "Fejl", "Ingen indberetninger er markerede!");</span>
+           } else {
+<span class="cstat-no" title="statement not covered" >               var modalInstance = $modal.open({</span>
+                   templateUrl: '/App/ApproveReports/ConfirmApproveSelectedTemplate.html',
+                   controller: 'AcceptController',
+                   backdrop: "static",
+                   resolve: {
+                       itemId: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                           return -1;</span>
+                       },
+                       pageNumber: -1
+                   }
+               });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >               modalInstance.result.then(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                   angular.forEach(checkedReports, <span class="fstat-no" title="function not covered" >function (value, key) {</span></span>
+<span class="cstat-no" title="statement not covered" >                       Report.patch({ id: value }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix() }, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                           $scope.updatePendingReports();</span>
+<span class="cstat-no" title="statement not covered" >                           $scope.updateAcceptedReports();</span>
+                       });
+                   });
+<span class="cstat-no" title="statement not covered" >                   checkedReports = [];</span>
+               });
+           }
+       }
+&nbsp;
+&nbsp;
+       $scope.ApproveWithAccountClick = <span class="fstat-no" title="function not covered" >function (id) {</span>
+<span class="cstat-no" title="statement not covered" >           var modalInstance = $modal.open({</span>
+               templateUrl: '/App/ApproveReports/ConfirmApproveWithAccountTemplate.html',
+               controller: "AcceptWithAccountController",
+               backdrop: "static",
+               resolve: {
+                   itemId: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                       return id;</span>
+                   },
+                   pageNumber: -1
+               }
+           });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           modalInstance.result.then(<span class="fstat-no" title="function not covered" >function (res) {</span></span>
+<span class="cstat-no" title="statement not covered" >               Report.patch({ id: id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix(), "AccountNumber": res.AccountNumber }, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                   $scope.updatePendingReports();</span>
+<span class="cstat-no" title="statement not covered" >                   $scope.updateAcceptedReports();</span>
+               });
+           });
+       }
+&nbsp;
+       $scope.rejectClick = <span class="fstat-no" title="function not covered" >function (id) {</span>
+<span class="cstat-no" title="statement not covered" >           var modalInstance = $modal.open({</span>
+               templateUrl: '/App/ApproveReports/ConfirmRejectTemplate.html',
+               controller: 'RejectController',
+               backdrop: "static",
+               resolve: {
+                   itemId: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                       return id;</span>
+                   }
+               }
+           });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           modalInstance.result.then(<span class="fstat-no" title="function not covered" >function (res) {</span></span>
+<span class="cstat-no" title="statement not covered" >               Report.patch({ id: id }, { "Status": "Rejected", "ClosedDateTimestamp": moment().unix(), "Comment": res.Comment }, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                   $scope.updatePendingReports();</span>
+<span class="cstat-no" title="statement not covered" >                   $scope.updateRejectedReports();</span>
+               });
+           });
+       }
+&nbsp;
+&nbsp;
+&nbsp;
+       $scope.dateChanged = <span class="fstat-no" title="function not covered" >function () {</span>
+&nbsp;
+           //TODO: Shit doesnt work if the input field is left empty. It yields NaN and gives no results.
+&nbsp;
+           // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
+<span class="cstat-no" title="statement not covered" >           $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >               var from, to, and;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >               if ($scope.activeTab == 'pending') {</span>
+<span class="cstat-no" title="statement not covered" >                   and = " and ";</span>
+<span class="cstat-no" title="statement not covered" >                   from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDatePending);</span>
+<span class="cstat-no" title="statement not covered" >                   to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDatePending);</span>
+<span class="cstat-no" title="statement not covered" >                   pendingQueryOptions.dateQuery = from + and + to;</span>
+               }
+               else <span class="cstat-no" title="statement not covered" >if ($scope.activeTab == 'accepted') {</span>
+<span class="cstat-no" title="statement not covered" >                   and = " and ";</span>
+<span class="cstat-no" title="statement not covered" >                   from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDateAccepted);</span>
+<span class="cstat-no" title="statement not covered" >                   to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDateAccepted);</span>
+<span class="cstat-no" title="statement not covered" >                   acceptedQueryOptions.dateQuery = from + and + to;</span>
+               }
+               else <span class="cstat-no" title="statement not covered" >if ($scope.activeTab == 'rejected') {</span>
+<span class="cstat-no" title="statement not covered" >                   and = " and ";</span>
+<span class="cstat-no" title="statement not covered" >                   from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDateRejected);</span>
+<span class="cstat-no" title="statement not covered" >                   to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDateRejected);</span>
+<span class="cstat-no" title="statement not covered" >                   rejectedQueryOptions.dateQuery = from + and + to;</span>
+               }
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >               $scope.updateActiveTab();</span>
+           }, 0);
+&nbsp;
+&nbsp;
+       }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+       // Init
+&nbsp;
+&nbsp;
+       // Contains references to kendo ui grids.
+       $scope.gridContainer = {};
+       $scope.dateContainer = {};
+&nbsp;
+       $scope.loadInitialDates();
+&nbsp;
+       // Format for datepickers.
+       $scope.dateOptions = {
+           format: "dd/MM/yyyy",
+       };
+&nbsp;
+       // Set activeTab's initial value to pending.
+       $scope.activeTab = "pending";
+&nbsp;
+       // Load up the grids.
+       $scope.loadAcceptedReports();
+       $scope.loadRejectedReports();
+       $scope.loadPendingReports();
+&nbsp;
+       $scope.personChanged = <span class="fstat-no" title="function not covered" >function (item) {</span>
+<span class="cstat-no" title="statement not covered" >           if ($scope.activeTab == 'pending') {</span>
+<span class="cstat-no" title="statement not covered" >               pendingQueryOptions.personQuery = "PersonId eq " + item.Id;</span>
+           }
+           else <span class="cstat-no" title="statement not covered" >if ($scope.activeTab == 'accepted') {</span>
+<span class="cstat-no" title="statement not covered" >               acceptedQueryOptions.personQuery = "PersonId eq " + item.Id;</span>
+           }
+           else <span class="cstat-no" title="statement not covered" >if ($scope.activeTab == 'rejected') {</span>
+<span class="cstat-no" title="statement not covered" >               rejectedQueryOptions.personQuery = "PersonId eq " + item.Id;</span>
+           }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >           $scope.updateActiveTab();</span>
+       }
+&nbsp;
+       // Load people for auto-complete textbox
+       $scope.people = [];
+       $scope.person = {};
+&nbsp;
+       // Set initial value for grid pagesizes
+       $scope.gridContainer.pendingGridPageSize = 5;
+       $scope.gridContainer.acceptedGridPageSize = 5;
+       $scope.gridContainer.rejectedGridPageSize = 5;
+&nbsp;
+       Person.getAll().$promise.then(<span class="fstat-no" title="function not covered" >function (res) {</span>
+<span class="cstat-no" title="statement not covered" >           angular.forEach(res.value, <span class="fstat-no" title="function not covered" >function (value, key) {</span></span>
+<span class="cstat-no" title="statement not covered" >               $scope.people.push({ Id: value.Id, FullName: value.FirstName + " " + value.MiddleName + " " + value.LastName });</span>
+           });
+       });
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+   }
+]);</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Feb 27 2015 11:17:13 GMT+0100 (Romance Standard Time)</div>
+</div>
+
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+
+<script src="../sorter.js"></script>
+</body>
+</html>

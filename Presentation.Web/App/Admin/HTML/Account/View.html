@@ -1,0 +1,68 @@
+﻿<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-money"></i> Kontostyring</h3>
+    </div>
+
+
+
+    <div class="panel-body">
+        <div class="col-md-6">
+            <h2>Nyt kontonummer</h2>
+            <div class="col-md-12 margin-5">
+                <div class="col-md-4">
+                    <label>Registreringsnummer</label>
+                </div>
+                <div class="col-md-8">
+                    <input type="number" min="0" class="form-control" ng-model="container.newAccountRegNumber" />
+                </div>
+            </div>
+
+            <div class="col-md-12 margin-5">
+                <div class="col-md-4">
+                    <label>Kontonummer</label>
+                </div>
+                <div class="col-md-8">
+                    <input type="number" min="0" class="form-control" ng-model="container.newAccountAccountNumber" />
+                </div>
+            </div>
+
+            <div class="col-md-12 margin-5">
+                <div class="col-md-4">
+                    <label>Beskrivelse</label>
+                </div>
+                <div class="col-md-8">
+                    <textarea type="text" class="form-control min-height-100" ng-model="container.newAccountDescription"></textarea>
+                </div>
+            </div>
+            <div class="col-md-12 margin-5">
+                <div class="col-md-3 pull-right">
+                    <button class="btn btn-primary fill-width" ng-click="addNewAccountClick()">Opret</button>
+                </div>
+
+            </div>
+            <label class="text-danger" ng-bind="accountNumberRegNumberErrorMessage"></label><br />
+            <label class="text-danger" ng-bind="accountNumberErrorMessage"></label><br />
+            <label class="text-danger" ng-bind="accountDescriptionErrorMessage"></label>
+
+
+        </div>
+
+
+        <div class=" col-md-6">
+            <label class="pull-right margin-5">Visninger pr. side</label>
+            <h2 class="inline">
+                Eksisterende konti<select ng-model="container.gridPageSize" class="form-control pull-right max-width-100" ng-change="pageSizeChanged()">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+            </h2>
+            <div kendo-grid="container.accountGrid" class="margin-5" options="accounts"></div>
+        </div>
+
+
+
+    </div>
+</div>
