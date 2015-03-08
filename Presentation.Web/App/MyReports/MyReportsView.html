@@ -18,7 +18,7 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afventende</h3>
+                        <h3 class="panel-title"><i class="fa fa-file-text-o fa-fw"></i> Afventende</h3>
                     </div>
 
 
@@ -48,10 +48,10 @@
                         </div>
                         <div class="row">
                             <div class="col-md-2">
-                                <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.toDatePendingString" k-ng-model="dateContainer.fromDatePending" ng-change="dateChanged()" />
+                                <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.toDatePendingString" k-ng-model="dateContainer.fromDatePending" ng-change="dateChanged()" />
                             </div>
                             <div class="col-md-2">
-                                <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.fromDatePendingString" k-ng-model="dateContainer.toDatePending" ng-change="dateChanged()" />
+                                <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.fromDatePendingString" k-ng-model="dateContainer.toDatePending" ng-change="dateChanged()" />
                             </div>
                             <div class="col-md-2">
                                 <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
@@ -83,7 +83,7 @@
             <tab heading="Godkendte" ng-click="tabClicked('accepted')">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Godkendte</h3>
+                        <h3 class="panel-title"><i class="fa fa-file-text-o fa-fw"></i> Godkendte</h3>
                     </div>
 
                         <div class="panel-body">
@@ -111,10 +111,10 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
-                                    <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.toDateAcceptedString" k-ng-model="dateContainer.fromDateAccepted" ng-change="dateChanged()" />
+                                    <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.toDateAcceptedString" k-ng-model="dateContainer.fromDateAccepted" ng-change="dateChanged()" />
                                 </div>
                                 <div class="col-md-2">
-                                    <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.fromDateAcceptedString" k-ng-model="dateContainer.toDateAccepted" ng-change="dateChanged()" />
+                                    <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.fromDateAcceptedString" k-ng-model="dateContainer.toDateAccepted" ng-change="dateChanged()" />
                                 </div>
                                 <div class="col-md-2">
                                     <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
@@ -145,7 +145,7 @@
             <tab heading="Afviste" ng-click="tabClicked('rejected')">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Afviste</h3>
+                        <h3 class="panel-title"><i class="fa fa-file-text-o fa-fw"></i> Afviste</h3>
                     </div>
 
                     <div class="panel-body">
@@ -172,10 +172,10 @@
                         </div>
                         <div class="row">
                             <div class="col-md-2">
-                                <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.toDateRejectedString" k-ng-model="dateContainer.fromDateRejected" ng-change="dateChanged()" />
+                                <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.toDateRejectedString" k-ng-model="dateContainer.fromDateRejected" ng-change="dateChanged()" />
                             </div>
                             <div class="col-md-2">
-                                <input kendo-datepicker k-options="dateOptions" ng-model="dateContainer.fromDateRejectedString" k-ng-model="dateContainer.toDateRejected" ng-change="dateChanged()" />
+                                <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.fromDateRejectedString" k-ng-model="dateContainer.toDateRejected" ng-change="dateChanged()" />
                             </div>
                             <div class="col-md-2">
                                 <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>

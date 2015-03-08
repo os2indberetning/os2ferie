@@ -1,0 +1,95 @@
+﻿<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Takststyring</h3>
+    </div>
+
+
+
+    <div class="panel-body">
+
+
+
+        <div class="col-md-6">
+
+            <h2>Ny Takst</h2>
+
+
+            <div class="col-md-12 margin-5">
+                <div class="col-md-4">
+                    <label class="pull-left">År</label>
+                </div>
+                <div class="col-md-8">
+                    <input kendo-datepicker data-role="datepicker" culture="'da-DK'" ng-model="container.newRateYear" data-start="'decade'" data-format="'yyyy'" data-depth="'decade'" />
+
+                </div>
+
+            </div>
+
+            <div class="col-md-12 margin-5">
+
+                <div class="col-md-4">
+                    <label class="pull-left">Takst</label>
+                </div>
+                <div class="col-md-4">
+                    <input type="number" min="0" class="form-control" ng-model="container.newRateRate" />
+                </div>
+                <div class="col-md-4">
+                    <label class="margin-top-5">Ører pr. kilometer</label>
+                </div>
+            </div>
+
+            <div class="col-md-12 margin-5">
+                <div class="col-md-4">
+                    <label class="pull-left">TF kode</label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" ng-model="container.newRateTFCode" />
+                </div>
+
+            </div>
+
+            <div class="col-md-12 margin-5">
+                <div class="col-md-4">
+                    <label>Taksttype</label>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-control" ng-options="rate.Id as rate.Description for rate in rateTypes" ng-model="container.newRateRateType"></select>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-primary fill-width" ng-click="addNewRateClick()">Opret</button>
+                </div>
+            </div>
+
+
+
+            <label class="text-danger" ng-bind="newRateYearError"></label><br />
+            <label class="text-danger" ng-bind="newRateRateError"></label><br />
+            <label class="text-danger" ng-bind="newRateTFCodeError"></label><br />
+            <label class="text-danger" ng-bind="newRateRateTypeError"></label>
+
+        </div>
+
+        <div class="col-md-6">
+                
+                
+           
+            <h2 class="inline">
+                Eksisterende takster
+            </h2>
+            <label class="pull-right margin-5">Visninger pr. side</label>
+            <select ng-model="container.gridPageSize" class="form-control pull-right max-width-100" ng-change="pageSizeChanged()">
+                <option value="5" selected>5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </select>
+            <br/>
+            <div kendo-grid="container.rateGrid" class="margin-5" culture="da-DK" options="rates"></div>
+        </div>
+
+
+    </div>
+
+
+</div>

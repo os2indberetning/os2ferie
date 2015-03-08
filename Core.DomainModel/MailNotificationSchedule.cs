@@ -8,6 +8,6 @@ namespace Core.DomainModel
         public int Id { get; set; }
         public long DateTimestamp { get; set; }
         public bool Notified { get; set; }
-        public long NextGenerationDateTimestamp { get; set; }
+        public bool Repeat { get; set; }
     }
 }

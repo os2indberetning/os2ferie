@@ -1,7 +1,30 @@
 ﻿<div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            Administration <small>Administrer rater, standard adresser, email notifikationer, godkend fratrådte medarbejdere</small>
+            Administration <small>Administrer takster, standardadresser, email-notifikationer, godkend fratrådte medarbejdere</small>
         </h1>
+        <tabset justified="true">
+
+            <tab heading="Standardadresser" ng-controller="StandardAddressController">
+                <div ng-include='"App/Admin/HTML/Address/View.html"'></div>
+            </tab>
+
+            <tab heading="Emailadviseringer" ng-controller="EmailNotificationController">
+                <div ng-include='"App/Admin/HTML/Email/View.html"'></div>
+            </tab>
+
+            <tab heading="Takststyring" ng-controller="RateController">
+                <div ng-include='"App/Admin/HTML/Rate/View.html"'></div>
+            </tab>
+
+            <tab heading="Kontostyring" ng-controller="AccountController">
+                <div ng-include='"App/Admin/HTML/Account/View.html"'></div>
+            </tab>
+
+            <tab heading="Stedfortrædere/Godkendere" ng-controller="SubstituteController">
+                <div ng-include='"App/Admin/HTML/Substitutes/View.html"'></div>
+            </tab>
+
+        </tabset>
     </div>
 </div>

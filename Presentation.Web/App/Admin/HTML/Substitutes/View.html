@@ -1,0 +1,48 @@
+﻿<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-user fa-fw"></i> Stedfortrædere/Godkendere</h3>
+    </div>
+
+
+
+    <div class="panel-body">
+
+        <div class="col-md-12">
+            <div class="setting-area">
+                <h2 ng-click="collapseSubstitute = !collapseSubstitute" class="inline">Opsatte Stedfortrædere</h2>
+                
+                <div collapse="collapseSubstitute">
+                    <label class="pull-right margin-5">Visninger pr. side</label>
+                    <select ng-model="container.subGridPageSize" class="form-control pull-right max-width-100" ng-change="pageSizeChanged()">
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                    <br/><br/>
+                    <div kendo-grid="container.substituteGrid" class="margin-10" options="substitutes"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="setting-area">
+                <h2 ng-click="collapseApprove = !collapseApprove" class="inline">Opsatte Personlige Godkendere</h2>
+                <div collapse="collapseApprove">
+                    <label class="pull-right margin-5">Visninger pr. side</label>
+                    <select ng-model="container.appGridPageSize" class="form-control pull-right max-width-100" ng-change="pageSizeChanged()">
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                    <br /><br />
+                    <div kendo-grid="container.approverGrid" class="margin-10" options="personalApprovers"></div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>

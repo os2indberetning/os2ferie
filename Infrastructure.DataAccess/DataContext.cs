@@ -32,6 +32,8 @@ namespace Infrastructure.DataAccess
         public IDbSet<OrgUnit> OrgUnits { get; set; }
         public IDbSet<Substitute> Substitutes { get; set; }
         public IDbSet<BankAccount> BankAccounts { get; set; } 
+        public IDbSet<RateType> RateTypes { get; set; } 
+        
   
 
         /**
@@ -60,6 +62,7 @@ namespace Infrastructure.DataAccess
             ConfigurePropertiesForOrgUnit(modelBuilder);
             ConfigurePropertiesForSubstitute(modelBuilder);
             ConfigurePropertiesForBankAccount(modelBuilder);
+            ConfigurePropertiesForRateType(modelBuilder);
         }
 
         private void ConfigurePropertiesForPerson(DbModelBuilder modelBuilder)
@@ -72,6 +75,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Person>().Property(p => p.WorkDistanceOverride).IsRequired();
 
             modelBuilder.Entity<Person>().Property(t => t.CprNumber).IsFixedLength().HasMaxLength(10);
+            modelBuilder.Entity<Person>().Ignore(t => t.FullName);
         }
 
         private void ConfigurePropertiesForAddress(DbModelBuilder modelBuilder)
@@ -82,6 +86,11 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Address>().Property(p => p.Town).IsRequired();
             modelBuilder.Entity<Address>().Property(p => p.Longitude).IsRequired();
             modelBuilder.Entity<Address>().Property(p => p.Latitude).IsRequired();      
+        }
+
+        private void ConfigurePropertiesForRateType(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<RateType>().Property(p => p.Description).IsRequired();
         }
 
         private void ConfigurePropertiesForPersonalAddress(DbModelBuilder modelBuilder)
@@ -129,7 +138,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Rate>().Property(p => p.Year).IsRequired();
             modelBuilder.Entity<Rate>().Property(p => p.TFCode).IsRequired();
             modelBuilder.Entity<Rate>().Property(p => p.KmRate).IsRequired();
-            modelBuilder.Entity<Rate>().Property(p => p.Type).IsRequired();
+            modelBuilder.Entity<Rate>().Property(p => p.TypeId).IsRequired();
             modelBuilder.Entity<Rate>().Property(p => p.Active).IsRequired();
         }
 
@@ -137,7 +146,8 @@ namespace Infrastructure.DataAccess
         {
             modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.DateTimestamp).IsRequired();
             modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.Notified).IsRequired();
-            modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.NextGenerationDateTimestamp).IsRequired();
+            modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.Repeat).IsRequired();
+            
         }
 
         private void ConfigurePropertiesForFileGenerationSchedule(DbModelBuilder modelBuilder)

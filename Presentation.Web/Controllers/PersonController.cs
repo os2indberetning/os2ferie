@@ -28,7 +28,10 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<Person> GetPerson(ODataQueryOptions<Person> queryOptions)
         {
-            return _person.ScrubCprFromPersons(GetQueryable(queryOptions));
+            var res = GetQueryable(queryOptions);
+            _person.ScrubCprFromPersons(res);
+            _person.AddFullName(res);
+            return res;
         }
 
         //GET: odata/Person(5)

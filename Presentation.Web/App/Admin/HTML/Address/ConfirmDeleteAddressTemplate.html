@@ -1,0 +1,18 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Bekræft Slet</h3>
+</div>
+<div class="modal-body">
+    <div>
+        Er du sikker på at du vil slette adressen?
+        <div>
+            <br/>
+            <label class="label label-info" ng-bind="addressString"></label>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger pull-right" style="margin: 5px" ng-click="cancel()">Nej</button>
+    <button class="btn btn-success pull-right" style="margin: 5px" ng-click="confirmDelete()">Ja</button>
+
+</div>
