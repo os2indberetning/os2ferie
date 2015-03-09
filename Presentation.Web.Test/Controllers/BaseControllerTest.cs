@@ -169,7 +169,7 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [Test]
-        public async Task PostShouldInsertAnEntity()
+        public virtual async Task PostShouldInsertAnEntity()
         {
             //Make sure that an entity with id 4 does not exists before the test
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(4)").GetAsync();

@@ -13,6 +13,7 @@ using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 using Ninject;
+using OS2Indberetning;
 
 
 namespace Core.ApplicationServices
@@ -21,29 +22,19 @@ namespace Core.ApplicationServices
     {
         private readonly IRoute<RouteInformation> _route;
         private readonly IAddressCoordinates _coordinates;
-        private readonly IGenericRepository<DriveReportPoint> _driveReportPointRepository;
         private readonly IGenericRepository<DriveReport> _driveReportRepository;
         private readonly IGenericRepository<LicensePlate> _licensePlateRepository;
         private readonly ReimbursementCalculator _calculator;
+        private readonly IMailSender _mailSender;
 
-        public DriveReportService()
+        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IGenericRepository<LicensePlate> licensePlateRepository)
         {
             _route = new BestRoute();
             _coordinates = new AddressCoordinates();
-            _driveReportPointRepository = new GenericRepository<DriveReportPoint>(new DataContext());
-            _driveReportRepository = new GenericRepository<DriveReport>(new DataContext());
-            _licensePlateRepository = new GenericRepository<LicensePlate>(new DataContext());
             _calculator = new ReimbursementCalculator();
-        }
-
-        public DriveReportService(IRoute<RouteInformation> route, IAddressCoordinates coordinates, IGenericRepository<DriveReportPoint> driveReportPointRepository, IGenericRepository<DriveReport> driveReportRepository, IGenericRepository<LicensePlate> licensePlateRepository, ReimbursementCalculator calculator)
-        {
-            _route = route;
-            _coordinates = coordinates;
-            _driveReportPointRepository = driveReportPointRepository;
+            _mailSender = mailSender;
             _driveReportRepository = driveReportRepository;
             _licensePlateRepository = licensePlateRepository;
-            _calculator = calculator;
         }
 
         public IQueryable<DriveReport> AddFullName(IQueryable<DriveReport> repo)
@@ -136,17 +127,13 @@ namespace Core.ApplicationServices
         public void SendMailIfRejectedReport(int key, Delta<DriveReport> delta)
         {
             var status = new object();
-            var getStatusSuccess = delta.TryGetPropertyValue("Status", out status);
-            if (getStatusSuccess && status.ToString().Equals("Rejected"))
+            if (delta.TryGetPropertyValue("Status", out status) && status.ToString().Equals("Rejected"))
             {
-                var repo = new StandardKernel().Get<GenericRepository<DriveReport>>();
-                var recipient = repo.AsQueryable().First(r => r.Id == key).Person.Mail;
+                var recipient = _driveReportRepository.AsQueryable().First(r => r.Id == key).Person.Mail;
                 var comment = new object();
-                var getCommentSuccess = delta.TryGetPropertyValue("Comment", out comment);
-                if (getCommentSuccess)
+                if (delta.TryGetPropertyValue("Comment", out comment))
                 {
-                    var mailSender = new StandardKernel().Get<IMailSender>();
-                    mailSender.SendMail(recipient,"Afvist indberetning", 
+                    _mailSender.SendMail(recipient, "Afvist indberetning",
                         "Din indberetning er blevet afvist med kommentaren: \n \n" + comment);
                 }
             }

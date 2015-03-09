@@ -27,7 +27,7 @@ namespace ApplicationServices.Test.MailerServiceTest
             var senderMock = Substitute.For<IMailSender>();
             uut = new MailService(driveRepoMock, subRepoMock, senderMock);
             uut.SendMails();
-            senderMock.ReceivedWithAnyArgs().SendMail("", "", "", "");
+            senderMock.ReceivedWithAnyArgs().SendMail("", "", "");
         }
     }
 }

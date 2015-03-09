@@ -12,7 +12,7 @@ namespace OS2Indberetning
     {
         public static void Register(HttpConfiguration config)
         {
-            config.DependencyResolver = new NinjectDependencyResolver(NinjectWebCommon.CreateKernel());
+            config.DependencyResolver = new NinjectDependencyResolver(NinjectWebKernel.CreateKernel());
 
             config.MapHttpAttributeRoutes();
 
