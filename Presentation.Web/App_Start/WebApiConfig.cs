@@ -86,20 +86,29 @@ namespace OS2Indberetning
 
             builder.EntitySet<Report>("Reports");
 
-            builder.EntitySet<Substitute>("Substitutes");
+            
 
             builder.EntitySet<BankAccount>("BankAccounts");
 
             builder.EntitySet<Person>("Person");
-            builder.Namespace = "PersonService";
             builder.EntityType<Person>()
                 .Action("HasLicensePlate");
 
+
+            builder.EntitySet<Substitute>("Substitutes");
+            builder.EntityType<Substitute>().Collection
+                .Function("Personal")
+                .ReturnsFromEntitySet<Substitute>("Substitutes");
+            builder.EntityType<Substitute>().Collection
+                .Function("Substitute")
+                .ReturnsFromEntitySet<Substitute>("Substitutes");
+
             builder.EntitySet<Rate>("Rates");
-            builder.Namespace = "RateService";
             builder.EntityType<Rate>().Collection
                 .Function("ThisYearsRates")
                 .ReturnsFromEntitySet<Rate>("Rates");
+
+            builder.Namespace = "Service";
 
             return builder.GetEdmModel();
         }

@@ -62,5 +62,27 @@ namespace OS2Indberetning.Controllers
         {
             return base.Delete(key);
         }
+
+        // GET: odata/Substitutes/SubstituteService.Personal
+        [EnableQuery]
+        [HttpGet]
+        public IQueryable<Substitute> Personal()
+        {
+            var res = Repo.AsQueryable().Where(x => x.LeaderId != x.Sub.PersonId);
+            _sub.AddFullName(res);
+            _sub.ScrubCprFromPersons(res);
+            return res;
+        }
+
+        // GET: odata/Substitutes/SubstituteService.Substitute
+        [EnableQuery]
+        [HttpGet]
+        public IQueryable<Substitute> Substitute()
+        {
+            var res = Repo.AsQueryable().Where(x => x.LeaderId == x.Sub.PersonId);
+            _sub.AddFullName(res);
+            _sub.ScrubCprFromPersons(res);
+            return res;
+        }
     }
 }

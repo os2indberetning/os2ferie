@@ -19,7 +19,7 @@
             var sub = new Substitute({
                 StartDateTimestamp: Math.floor($scope.substituteFromDate.getTime() / 1000),
                 EndDateTimestamp: Math.floor($scope.substituteToDate.getTime() / 1000),
-                LeaderId: 1,
+                LeaderId: $scope.person[0].Id,
                 SubId: $scope.person[0].Id,
                 OrgUnitId: $scope.orgUnit.Id,
                 Persons: [leader]

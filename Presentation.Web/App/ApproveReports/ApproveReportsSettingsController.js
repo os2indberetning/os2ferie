@@ -30,7 +30,7 @@
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "odata/Substitutes()",//"?$expand=OrgUnit and Sub",
+                           url: "odata/Substitutes/Service.Substitute?$expand=OrgUnit,Sub",
                            dataType: "json",
                            cache: false
                        },
@@ -59,7 +59,7 @@
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
                columns: [{
-                   field: "Id",
+                   field: "Sub.FullName",
                    title: "Stedfortræder"
                }, {
                    field: "StartDateTimestamp",
@@ -70,7 +70,7 @@
                    title: "Til",
                    template: "#= kendo.toString(new Date(EndDateTimestamp*1000), 'MM/dd/yyyy') #"
                }, {
-                   field: "Id",
+                   field: "OrgUnit.ShortDescription",
                    title: "Organisation"
                }, {
                    field: "Id",
@@ -86,7 +86,7 @@
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "odata/Substitutes()",
+                           url: "odata/Substitutes/Service.Personal?$expand=OrgUnit,Sub,Leader",
                            dataType: "json",
                            cache: false
                        },
@@ -115,13 +115,13 @@
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
                columns: [{
-                   field: "Id",
+                   field: "Leader.FullName",
                    title: "Godkender"
                }, {
                    field: "Id",
                    title: "Afviger"
                }, {
-                   field: "Id",
+                   field: "Sub.FullName",
                    title: "Ansatte"
                }, {
                    field: "StartDateTimestamp",
