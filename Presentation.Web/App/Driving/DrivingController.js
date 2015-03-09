@@ -36,7 +36,7 @@
                 var temp = [{value: "Vælg fast adresse"}];
 
                 angular.forEach(data.value, function (value, key) {
-                    temp.push({ value: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town });
+                    temp.push({ value: value.Description });
                 });
 
                 $scope.PersonalAddresses = temp;
