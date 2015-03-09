@@ -162,10 +162,12 @@
 
                                   }, {
                                       field: "AmountToReimburse",
-                                      title: "Beløb"
+                                      title: "Beløb",
+                                      format: "{0:n2}",
                                   }, {
                                       field: "Distance",
-                                      title: "Afstand"
+                                      title: "Afstand",
+                                      format: "{0:n2}",
                                   }
                ]
            };

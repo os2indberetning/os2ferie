@@ -56,8 +56,8 @@
                }
 
            }
-           $scope.currentPageAmountSum = resAmount;
-           $scope.currentPageDistanceSum = resDistance;
+           $scope.currentPageAmountSum = resAmount.toFixed(2);
+           $scope.currentPageDistanceSum = resDistance.toFixed(2);
 
        }
 
@@ -210,10 +210,12 @@
                    }, {
                        field: "AmountToReimburse",
                        title: "Beløb",
+                       format:"{0:n2}",
                        footerTemplate: "Side: {{currentPageAmountSum}}, total: #= kendo.toString(sum, '0.00') # "
                    }, {
                        field: "Distance",
                        title: "Afstand",
+                       format: "{0:n2}",
                        footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= kendo.toString(sum, '0.00') # "
                    }, {
                        field: "AccountNumber",

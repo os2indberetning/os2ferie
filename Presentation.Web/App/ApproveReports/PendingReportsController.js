@@ -165,11 +165,13 @@
                }, {
                    field: "AmountToReimburse",
                    title: "Beløb",
-                   footerTemplate: "Side: {{currentPageAmountSum}}, total: #= sum # "
+                   format:"{0:n2}",
+                   footerTemplate: "Side: {{currentPageAmountSum}}, total: #= kendo.toString(sum, '0.00') # "
                }, {
                    field: "Distance",
                    title: "Afstand",
-                   footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= sum # "
+                   format: "{0:n2}",
+                   footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= kendo.toString(sum, '0.00') # "
                }, {
                    field: "Id",
                    template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=ApproveWithAccountClick(${Id})>Godkend med anden kontering</a><div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'/></div>",
@@ -316,8 +318,8 @@
                }
 
            }
-           $scope.currentPageAmountSum = resAmount;
-           $scope.currentPageDistanceSum = resDistance;
+           $scope.currentPageAmountSum = resAmount.toFixed(2);
+           $scope.currentPageDistanceSum = resDistance.toFixed(2);
 
        }
 
