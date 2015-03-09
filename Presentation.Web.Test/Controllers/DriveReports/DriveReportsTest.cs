@@ -207,9 +207,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                                 .And(r => r.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json"));
             var patchResponse = await request.SendAsync("PATCH");
 
-            Assert.AreEqual(@"Din indberetning er blevet afvist med kommentaren: 
- 
-TestComment", MailSenderMock.Body);
+            Assert.AreEqual("Din indberetning er blevet afvist med kommentaren: \n \n" + "TestComment", MailSenderMock.Body);
         }
 
         [Test]
