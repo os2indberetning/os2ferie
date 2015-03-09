@@ -58,6 +58,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileGenerator\FileRecord.cs" />
+    <Compile Include="FileGenerator\ReportFileWriter.cs" />
+    <Compile Include="FileGenerator\ReportGenerator.cs" />
     <Compile Include="MailerService\Impl\MailService.cs" />
     <Compile Include="MailerService\Interface\IMailSender.cs" />
     <Compile Include="MailerService\Impl\MailSender.cs" />
