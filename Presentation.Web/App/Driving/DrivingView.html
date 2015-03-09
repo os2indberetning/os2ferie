@@ -107,7 +107,7 @@
                                 <label for="">Vælg personlig adresse:</label>
                                 <select ng-hide="DriveReport.Addresses[$index].Name.length != 0" class="fill-width" kendo-drop-down-list="PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" id="" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"></select>
                             </div>
-                            <div ng-show="DriveReport.Addresses[$index].Personal.length == 0">
+                            <div ng-show="DriveReport.Addresses[$index].Personal == 'Vælg fast adresse'">
                                 <div class="col-lg-7">
                                     <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
                                            k-data-source="SmartAddress" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="'Skriv her'" />

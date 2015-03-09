@@ -217,8 +217,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
-    <Compile Include="App_Start\NinjectDependencyScope.cs" />
-    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -329,6 +327,10 @@
     <Content Include="App\ApproveReports\Modals\ConfirmRejectTemplate.html" />
     <Content Include="App\ApproveReports\SettingsView.html" />
     <Content Include="App\ApproveReports\View.html" />
+    <Content Include="App\MyReports\MyAcceptedReportsController.js" />
+    <Content Include="App\MyReports\MyRejectedReportsController.js" />
+    <Content Include="App\MyReports\MyPendingReportsController.js" />
+    <Content Include="App\MyReports\View.html" />
     <Content Include="App\Services\BankAccountService.js" />
     <Content Include="App\Services\EmailNotificationResouce.js" />
     <Content Include="App\Services\RateTypeResource.js" />

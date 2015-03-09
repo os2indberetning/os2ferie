@@ -1,23 +1,27 @@
+
+using System.Collections.Generic;
 using System.Reflection;
+using System.Web;
 using System.Web.Http;
 using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
+using Core.ApplicationServices.MailerService.Impl;
+using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
+using Ninject;
+using Ninject.Web.Common;
 
 namespace OS2Indberetning
 {
     using System;
-    using System.Web;
 
-    using Ninject;
-    using Ninject.Web.Common;
-
-    public static class NinjectWebCommon 
+    public static class NinjectWebKernel 
     {
         /// <summary>
         /// Creates the kernel that will manage your application.
         /// </summary>
+        /// <param name="getInjections"></param>
         /// <returns>The created kernel.</returns>
         public static IKernel CreateKernel()
         {
@@ -52,6 +56,8 @@ namespace OS2Indberetning
             kernel.Bind(typeof (IGenericRepository<>)).To(typeof (GenericRepository<>));
             kernel.Bind<IPersonService>().To<PersonService>();
             kernel.Bind<IMobileTokenService>().To<MobileTokenService>();
+            kernel.Bind<IMailSender>().To<MailSender>();
+            kernel.Bind(typeof(IMailService)).To(typeof(MailService));
         }        
     }
 }

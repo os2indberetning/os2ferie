@@ -210,11 +210,11 @@
                    }, {
                        field: "AmountToReimburse",
                        title: "Beløb",
-                       footerTemplate: "Side: {{currentPageAmountSum}}, total: #= sum # "
+                       footerTemplate: "Side: {{currentPageAmountSum}}, total: #= kendo.toString(sum, '0.00') # "
                    }, {
                        field: "Distance",
                        title: "Afstand",
-                       footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= sum # "
+                       footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= kendo.toString(sum, '0.00') # "
                    }, {
                        field: "AccountNumber",
                        title: "Anden Kontering",
