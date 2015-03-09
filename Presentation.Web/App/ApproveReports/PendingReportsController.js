@@ -496,8 +496,8 @@
                // This leads to sorting the grid content on load, which is not what we want.
                // Therefore the sorting is not done the first 2 times the dates change - Which are the 2 times we set the default values.
                if (initialLoad <= 0) {
-                   queryOptions.dateQuery = from + and + to;
-                   $scope.updateReports();
+
+                   $scope.updateReports(to + and + from);
                }
                initialLoad--;
            }, 0);
