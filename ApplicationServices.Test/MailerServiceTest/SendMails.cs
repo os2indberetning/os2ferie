@@ -2,6 +2,7 @@
 using Core.ApplicationServices.MailerService.Interface;
 using NSubstitute;
 using NUnit.Framework;
+using Quartz;
 
 namespace ApplicationServices.Test.MailerServiceTest
 {
@@ -25,6 +26,7 @@ namespace ApplicationServices.Test.MailerServiceTest
         public void SendMails_ShouldCall_GetLeadersWithPendingReportsMail()
         {
             var senderMock = Substitute.For<IMailSender>();
+
             uut = new MailService(driveRepoMock, subRepoMock, senderMock);
             uut.SendMails();
             senderMock.ReceivedWithAnyArgs().SendMail("", "", "");

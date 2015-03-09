@@ -1,21 +1,21 @@
-
-using System.Collections.Generic;
+using System;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
-using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Impl;
 using Core.ApplicationServices.MailerService.Interface;
+using Core.ApplicationServices.Quartz;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
 using Ninject;
 using Ninject.Web.Common;
+using OS2Indberetning;
+using Quartz;
+using Quartz.Spi;
 
-namespace OS2Indberetning
+namespace Core.ApplicationServices
 {
-    using System;
-
     public static class NinjectWebKernel 
     {
         /// <summary>
