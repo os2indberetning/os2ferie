@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="form-group form-inline">
-                        <label for="date">Dato for kørsel: </label>
+                        <label for="date">Dato for tjenestekørsel: </label>
                         <input id="date" kendo-date-picker k-format="'dd/MM/yyyy'" k-ng-model="DriveReport.Date" k-options="DateOptions" />
                     </div>
                 </div>
@@ -22,7 +22,7 @@
             <div class="row m-b-l">
                 <div class="col-lg-12">
                     <div class="form-group form-inline">
-                        <label for="purpose">Formål: </label>
+                        <label for="purpose">Formål med tjenestekørsel: </label>
                         <input type="text" class="no-max-width fill-width k-textbox" placeholder="Skriv formålet med din kørsel" ng-model="DriveReport.Purpose" id="purpose" />
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="">Transportmiddel:</label>
-                        <select class="fill-width" kendo-drop-down-list="KmRateDropDown" ng-model="DriveReport.KmRate" k-data-source="KmRate" k-data-text-field="'Type'" k-data-value-field="'Id'" k-placeholder="'Vælg transportmiddel'"></select>
+                        <select class="fill-width" kendo-drop-down-list="KmRateDropDown" ng-model="DriveReport.KmRate" k-data-source="KmRate" k-data-text-field="'Type.Description'" k-data-value-field="'Id'" k-placeholder="'Vælg transportmiddel'"></select>
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -75,7 +75,7 @@
             <div class="row" ng-if="DriveReport.KilometerAllowance != 'Read'">
                 <div class="col-lg-12">
                     <div class="form-group">
-                        <label for="">Vælg evt. personlig rute:</label>
+                        <label for="">Vælg standardrute:</label>
                         <select class="fill-width" kendo-drop-down-list="PersonalRouteDropDown" id="" k-on-change="test(kendoEvent)" ng-model="DriveReport.PersonalRoute" k-data-source="PersonalRoutes" k-data-text-field="'presentation'"></select>
                     </div>
                 </div>
@@ -104,13 +104,13 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-lg-7">
-                                <label for="">Vælg personlig adresse:</label>
+                                <label for="">Vælg adresse:</label>
                                 <select ng-hide="DriveReport.Addresses[$index].Name.length != 0" class="fill-width" kendo-drop-down-list="PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" id="" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"></select>
                             </div>
                             <div ng-show="DriveReport.Addresses[$index].Personal == 'Vælg fast adresse'">
                                 <div class="col-lg-7">
                                     <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
-                                           k-data-source="SmartAddress" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="'Skriv her'" />
+                                           k-data-source="SmartAddress" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="'Eller skriv her'" />
                                 </div>
                                 <div class="col-lg-1" ng-if="$middle">
                                     <button class="k-button k-button-no-shadow" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
@@ -127,28 +127,31 @@
             <div class="row" ng-if="DriveReport.KilometerAllowance != 'Read'">
                 <div class="col-lg-12" ng-if="!IsRoute">
                     <label>
-                        <button class="btn btn-default" ng-click="AddViapoint()">Tilføj viapunkt</button>
+                        <button class="btn btn-default" ng-click="AddViapoint()">Tilføj delmål</button>
                     </label>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <label>
-                        <input type="checkbox" ng-model="DriveReport.RoundTrip"/> Tur + retur
-                    </label>
+                    
                 </div>
             </div>
             <div class="row m-b-l">
                 <div class="col-lg-4">
                     <input type="checkbox" class="k-checkbox" id="FourKmRule" ng-model="DriveReport.FourKmRule.Using" /><label for="FourKmRule" class="k-checkbox-label">Jeg bruger 4 Km reglen</label>
                 </div>
-
-            </div>
-            <div class="row m-b-l" ng-if="DriveReport.FourKmRule.Using">
+                <div class="col-lg-4 m-b-l" ng-if="DriveReport.FourKmRule.Using">
                 <div class="col-lg-12">
                     <input type="text" ng-model="DriveReport.FourKmRule.Value" id="FourKmRuleValue" name="FourKmRuleValue" class="k-textbox" placeholder="4 Km regel værdi" />
                 </div>
+                </div>
+                <div class="col-lg-4">
+                    <input type="checkbox" class="k-checkbox" id="returnTrip" ng-model="DriveReport.RoundTrip" /><label for="returnTrip" class="k-checkbox-label">Tur + retur</label>
+                </div>
+                
+
             </div>
+            
             <div class="row">
                 <div class="col-lg-6">
                     <button type="button" class="btn btn-danger">Ryd alle felter</button>

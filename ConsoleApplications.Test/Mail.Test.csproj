@@ -50,8 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mailer\MailerTests.cs" />
-    <Compile Include="Mailer\MailNotificationsRepoMock.cs" />
+    <Compile Include="MailerTests.cs" />
+    <Compile Include="MailNotificationsRepoMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
