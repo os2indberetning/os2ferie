@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Web.Configuration;
 
-namespace Core.ApplicationServices.FileGenerator
+namespace FileGenerator
 {
-    class ReportFileWriter
+    class ReportFileWriter : IReportFileWriter
     {
         private readonly string _filePathName = GetSetting("KMDFilePath") + @"\" + GetSetting("KMDFileName");
 
@@ -87,7 +87,7 @@ namespace Core.ApplicationServices.FileGenerator
             
         private static string GetSetting(string key)
         {
-            return WebConfigurationManager.AppSettings[key];
+            return ConfigurationManager.AppSettings[key];
         }
     }
 }
