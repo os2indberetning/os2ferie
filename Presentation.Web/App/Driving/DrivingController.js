@@ -33,10 +33,10 @@
 
         $scope.Person = Person.get({ id: 1 }, function() {
             Address.get({ query: "$filter=PersonId eq " + $scope.Person.Id + " and Type eq Core.DomainModel.PersonalAddressType'Standard'" }, function (data) {
-                var temp = [{value: ""}];
+                var temp = [{value: "Vælg fast adresse"}];
 
                 angular.forEach(data.value, function (value, key) {
-                    temp.push({ value: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town });
+                    temp.push({ value: value.Description });
                 });
 
                 $scope.PersonalAddresses = temp;
@@ -106,6 +106,7 @@
             driveReport.Purpose = $scope.DriveReport.Purpose;
             driveReport.DriveDateTimestamp = Math.floor($scope.DriveReport.Date.getTime() / 1000);
             driveReport.KmRate = parseFloat($scope.DriveReport.KmRate);
+            driveReport.TFCode = $scope.DriveReport.TFCode;
             driveReport.KilometerAllowance = $scope.DriveReport.KilometerAllowance;
             driveReport.Distance = 0;
             driveReport.AmountToReimburse = 0;

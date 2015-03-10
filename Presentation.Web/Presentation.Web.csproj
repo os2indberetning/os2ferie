@@ -343,6 +343,10 @@
     <Content Include="App\ApproveReports\Modals\ConfirmRejectTemplate.html" />
     <Content Include="App\ApproveReports\SettingsView.html" />
     <Content Include="App\ApproveReports\View.html" />
+    <Content Include="App\MyReports\MyAcceptedReportsController.js" />
+    <Content Include="App\MyReports\MyRejectedReportsController.js" />
+    <Content Include="App\MyReports\MyPendingReportsController.js" />
+    <Content Include="App\MyReports\View.html" />
     <Content Include="App\Services\BankAccountService.js" />
     <Content Include="App\Services\EmailNotificationResouce.js" />
     <Content Include="App\Services\RateTypeResource.js" />
@@ -621,6 +625,7 @@
     <Content Include="Content\kendo\Uniform\sprite_2x.png" />
     <Content Include="Content\kendo\Uniform\sprite_kpi.png" />
     <Content Include="Content\kendo\Uniform\sprite_kpi_2x.png" />
+    <Content Include="Content\private.css" />
     <Content Include="Scripts\kendo\angular.min.js" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.af-ZA.min.js" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.af.min.js" />

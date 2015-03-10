@@ -1,0 +1,13 @@
+﻿/**
+  * Sets the color of the frame of the page
+  */
+body, 
+.navbar-inverse,
+.side-nav,
+.side-nav li a:hover, 
+.side-nav li a:focus, 
+.navbar-inverse .navbar-nav>.active>a, 
+.navbar-inverse .navbar-nav>.active>a:focus,
+.navbar-inverse .navbar-nav>.active>a:hover {
+    background-color: #6B2D52 !important;
+}
