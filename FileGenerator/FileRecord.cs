@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Configuration;
 using System.Text;
-using System.Web.Configuration;
 using Core.DomainModel;
 
-namespace Core.ApplicationServices.FileGenerator
+namespace FileGenerator
 {
     public class FileRecord
     {
@@ -56,12 +56,18 @@ namespace Core.ApplicationServices.FileGenerator
             var beforeComma = distance;
             var afterComma = "";
 
+            distance = distance.Replace('.', ',');
+
             if (distance.Contains(","))
             {
                 var index = distance.IndexOf(",");
 
                 beforeComma = distance.Substring(0, index);
                 afterComma = distance.Substring(index + 1, distance.Length - (index + 1));
+                if (afterComma.Length > 2)
+                {
+                    afterComma = afterComma.Substring(0, 2);
+                }
             }
 
             while (beforeComma.Length < 4)
@@ -79,7 +85,7 @@ namespace Core.ApplicationServices.FileGenerator
 
         private string getSetting(string key)
         {
-            return WebConfigurationManager.AppSettings[key];
+            return ConfigurationManager.AppSettings[key];
         }
     }
 }

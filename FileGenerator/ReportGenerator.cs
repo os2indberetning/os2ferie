@@ -3,15 +3,17 @@ using System.Linq;
 using Core.DomainModel;
 using Core.DomainServices;
 
-namespace Core.ApplicationServices.FileGenerator
+namespace FileGenerator
 {
     public class ReportGenerator
     {
         private readonly IGenericRepository<DriveReport> _reportRepo;
+        private readonly IReportFileWriter _fileWriter;
         
-        public ReportGenerator(IGenericRepository<DriveReport> reportRepo)
+        public ReportGenerator(IGenericRepository<DriveReport> reportRepo, IReportFileWriter fileWriter)
         {
             _reportRepo = reportRepo;
+            _fileWriter = fileWriter;
         }
 
         public void WriteRecordsToFileAndAlterReportStatus()
@@ -19,7 +21,7 @@ namespace Core.ApplicationServices.FileGenerator
             var usersToReimburse = GetUsersAndReportsToReimburse();
             var records = RecordListBuilder(usersToReimburse);
 
-            new ReportFileWriter().WriteRecordsToFile(records);
+            _fileWriter.WriteRecordsToFile(records);
 
             foreach (var reports in usersToReimburse.Values)
             {
