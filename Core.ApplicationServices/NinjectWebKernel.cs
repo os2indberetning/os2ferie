@@ -5,7 +5,6 @@ using System.Web.Http;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Impl;
 using Core.ApplicationServices.MailerService.Interface;
-using Core.ApplicationServices.Quartz;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
 using Ninject;

@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Net;
 using System.Net.Mail;
 using Core.ApplicationServices.MailerService.Interface;
@@ -16,21 +17,22 @@ namespace Core.ApplicationServices.MailerService.Impl
             {
                 Host = ConfigurationManager.AppSettings["SMTP_HOST"],
                 Port = int.Parse(ConfigurationManager.AppSettings["SMTP_HOST_PORT"]),
+                EnableSsl = true,
                 Credentials = new NetworkCredential()
                 {
                     UserName = ConfigurationManager.AppSettings["SMTP_USER"],
                     Password = ConfigurationManager.AppSettings["SMTP_PASSWORD"]
                 }
-               
+
             };
-            
+
         }
 
         public void SendMail(string to, string subject, string body)
         {
             var msg = new MailMessage();
             msg.To.Add(to);
-            msg.From = new MailAddress(ConfigurationManager.AppSettings["MAIL_FROM"]);
+            msg.From = new MailAddress(ConfigurationManager.AppSettings["MAIL_FROM_ADDRESS"]);
             msg.Body = body;
             msg.Subject = subject;
             _smtpClient.Send(msg);

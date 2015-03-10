@@ -115,7 +115,6 @@
     <Compile Include="MailerService\Interface\IMailService.cs" />
     <Compile Include="NinjectDependencyScope.cs" />
     <Compile Include="NinjectWebKernel.cs" />
-    <Compile Include="Quartz\QuartzMailJob.cs" />
     <Compile Include="SubstituteService.cs" />
     <Compile Include="RatePostService.cs" />
     <Compile Include="DriveReportService.cs" />
