@@ -1,4 +1,5 @@
-﻿using Core.DomainModel;
+﻿using Core.ApplicationServices;
+using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
 using Ninject;
