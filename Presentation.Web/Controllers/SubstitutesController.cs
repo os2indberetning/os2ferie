@@ -26,6 +26,7 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: odata/Substitutes(5)
+        [EnableQuery]
         public IQueryable<Substitute> Get([FromODataUri] int key, ODataQueryOptions<Substitute> queryOptions)
         {
             var res = GetQueryable(key, queryOptions);
@@ -68,7 +69,7 @@ namespace OS2Indberetning.Controllers
         [HttpGet]
         public IQueryable<Substitute> Personal()
         {
-            var res = Repo.AsQueryable().Where(x => x.LeaderId != x.Sub.PersonId);
+            var res = Repo.AsQueryable().Where(x => x.Persons.Any(y => y.Id != x.LeaderId));
             _sub.AddFullName(res);
             _sub.ScrubCprFromPersons(res);
             return res;
@@ -79,7 +80,7 @@ namespace OS2Indberetning.Controllers
         [HttpGet]
         public IQueryable<Substitute> Substitute()
         {
-            var res = Repo.AsQueryable().Where(x => x.LeaderId == x.Sub.PersonId);
+            var res = Repo.AsQueryable().Where(x => x.Persons.Any(y => y.Id == x.LeaderId));
             _sub.AddFullName(res);
             _sub.ScrubCprFromPersons(res);
             return res;

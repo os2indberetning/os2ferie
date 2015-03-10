@@ -73,8 +73,8 @@
                    field: "OrgUnit.ShortDescription",
                    title: "Organisation"
                }, {
-                   field: "Id",
-                   title: "Muligheder"
+                   title: "Muligheder",
+                   template: "<a class='k-button' ng-click='openEditSubstitute(${Id})'>Rediger</a><a class='k-button' ng-click='deleteSubstitute(Id)'>Slet</a>"
                }]
            };
 
@@ -115,13 +115,13 @@
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
                columns: [{
-                   field: "Leader.FullName",
+                   field: "Sub.FullName",
                    title: "Godkender"
                }, {
-                   field: "Id",
+                   field: "Leader.FullName",
                    title: "Afviger"
                }, {
-                   field: "Sub.FullName",
+                   field: "Title", // Kendo grid doesn't support arrays
                    title: "Ansatte"
                }, {
                    field: "StartDateTimestamp",
@@ -132,13 +132,59 @@
                    title: "Til",
                    template: "#= kendo.toString(new Date(EndDateTimestamp*1000), 'MM/dd/yyyy') #"
                }, {
-                   field: "Title",
-                   title: "Muligheder"
+                   title: "Muligheder",
+                   template: "<a class='k-button' ng-click='openEditApprover(${Id})'>Rediger</a><a class='k-button' ng-click='deleteApprover(Id)'>Slet</a>"
                }]
            };
        }
 
        $scope.loadGrids();
+
+       $scope.openEditSubstitute = function (id) {
+           var modalInstance = $modal.open({
+               templateUrl: 'App/ApproveReports/Modals/editSubstituteModal.html',
+               controller: 'EditSubstituteModalInstanceController',
+               backdrop: 'static',
+               size: 'lg',
+               resolve: {
+                   persons: function () {
+                       return $scope.persons;
+                   },
+                   orgUnits: function () {
+                       return $scope.orgUnits;
+                   },
+                   leader: function () {
+                       return $scope.currentPerson;
+                   },
+                   id: function () {
+                       return id;
+                   }
+               }
+           });
+       }
+
+       $scope.openEditApprover = function(id) {
+           var modalInstance = $modal.open({
+               templateUrl: 'App/ApproveReports/Modals/editApproverModal.html',
+               controller: 'EditApproverModalInstanceController',
+               backdrop: 'static',
+               size: 'lg',
+               resolve: {
+                   persons: function () {
+                       return $scope.persons;
+                   },
+                   orgUnits: function () {
+                       return $scope.orgUnits;
+                   },
+                   leader: function () {
+                       return $scope.currentPerson;
+                   },
+                   id: function() {
+                       return id;
+                   }
+               }
+           });
+       }
 
        $scope.createNewApprover = function () {
            var modalInstance = $modal.open({
