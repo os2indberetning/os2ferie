@@ -6,7 +6,7 @@ using Core.DomainModel;
 
 namespace Core.ApplicationServices
 {
-    public class SubstituteService
+    public class SubstituteService : ISubstituteService
     {
         public void ScrubCprFromPersons(IQueryable<Substitute> subs)
         {

@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
-using System.Net.Mail;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
-using Infrastructure.DataAccess;
-using Quartz;
-
 namespace Core.ApplicationServices.MailerService.Impl
 {
     public class MailService : IMailService

@@ -32,12 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging">
-      <HintPath>..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Logging.Core">
-      <HintPath>..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Core.ApplicationServices, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Presentation.Web\Bin\Core.ApplicationServices.dll</HintPath>
@@ -71,9 +65,6 @@
     </Reference>
     <Reference Include="Ninject.Web.Common">
       <HintPath>..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Quartz">
-      <HintPath>..\packages\Quartz.2.3.1\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -109,6 +100,8 @@
     <Compile Include="FileGenerator\FileRecord.cs" />
     <Compile Include="FileGenerator\ReportFileWriter.cs" />
     <Compile Include="FileGenerator\ReportGenerator.cs" />
+    <Compile Include="Interfaces\IDriveReportService.cs" />
+    <Compile Include="Interfaces\ISubstituteService.cs" />
     <Compile Include="MailerService\Impl\MailService.cs" />
     <Compile Include="MailerService\Interface\IMailSender.cs" />
     <Compile Include="MailerService\Impl\MailSender.cs" />
@@ -131,9 +124,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="job_scheduling_data_2_0.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

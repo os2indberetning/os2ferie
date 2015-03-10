@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using Core.ApplicationServices;
+using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
@@ -90,6 +91,23 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             var service = NinjectWebKernel.CreateKernel().Get<DriveReportService>();
             service.AddFullName(report);
             Assert.AreEqual("Morten Rasmussen", report.Fullname, "Service should add full name to the drive report");
+        }
+
+        [Test]
+        public void AddFullName_CalledWithDriveReportNull_ShouldNotThrowException()
+        {
+            Assert.DoesNotThrow(() => NinjectWebKernel.CreateKernel().Get<DriveReportService>().AddFullName((DriveReport)null));
+        }
+
+        [Test]
+        public void Create_WithPersonID0_ShouldThrowException()
+        {
+            var testReport = new DriveReport()
+            {
+                PersonId = 0
+            };
+
+            Assert.Throws<Exception>(() => NinjectWebKernel.CreateKernel().Get<DriveReportService>().Create(testReport));
         }
 
     }

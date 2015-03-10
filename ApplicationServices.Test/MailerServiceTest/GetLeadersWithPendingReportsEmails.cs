@@ -6,7 +6,6 @@ using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 
 using NUnit.Framework;
-using Quartz;
 using Substitute = NSubstitute.Substitute;
 
 
@@ -29,7 +28,6 @@ namespace ApplicationServices.Test.MailerServiceTest
             driveRepoMock.ReSeed();
 
             var senderMock = Substitute.For<IMailSender>();
-            var schedulerMock = Substitute.For<IScheduler>();
 
             uut = new MailService(driveRepoMock, subRepoMock, senderMock);
         }

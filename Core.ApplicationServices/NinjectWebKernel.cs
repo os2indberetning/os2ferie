@@ -10,9 +10,6 @@ using Infrastructure.DataAccess;
 using Ninject;
 using Ninject.Web.Common;
 using OS2Indberetning;
-using Quartz;
-using Quartz.Spi;
-
 namespace Core.ApplicationServices
 {
     public static class NinjectWebKernel 
@@ -56,7 +53,11 @@ namespace Core.ApplicationServices
             kernel.Bind<IPersonService>().To<PersonService>();
             kernel.Bind<IMobileTokenService>().To<MobileTokenService>();
             kernel.Bind<IMailSender>().To<MailSender>();
-            kernel.Bind(typeof(IMailService)).To(typeof(MailService));
+            kernel.Bind<IMailService>().To<MailService>();
+            kernel.Bind<ISubstituteService>().To<SubstituteService>();
+            kernel.Bind<IDriveReportService>().To<DriveReportService>();
+
+
         }        
     }
 }

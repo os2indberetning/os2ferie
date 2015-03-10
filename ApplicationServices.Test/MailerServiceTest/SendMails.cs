@@ -2,7 +2,6 @@
 using Core.ApplicationServices.MailerService.Interface;
 using NSubstitute;
 using NUnit.Framework;
-using Quartz;
 
 namespace ApplicationServices.Test.MailerServiceTest
 {

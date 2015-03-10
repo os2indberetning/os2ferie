@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Web.OData;
+using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Impl;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
@@ -18,7 +19,7 @@ using OS2Indberetning;
 
 namespace Core.ApplicationServices
 {
-    public class DriveReportService
+    public class DriveReportService : IDriveReportService
     {
         private readonly IRoute<RouteInformation> _route;
         private readonly IAddressCoordinates _coordinates;
@@ -138,5 +139,6 @@ namespace Core.ApplicationServices
                 }
             }
         }
+
     }
 }

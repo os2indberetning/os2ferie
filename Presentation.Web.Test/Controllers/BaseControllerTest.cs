@@ -216,7 +216,7 @@ namespace Presentation.Web.Test.Controllers
             //Make sure that an entity with id 3 exists
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(3)").GetAsync();
             var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
-            Assert.AreEqual(1, result.value.Count, "There should be excatly one entity with id 3 before the patch");
+            Assert.AreEqual(1, result.value.Count, "There should be exactly one entity with id 3 before the patch");
 
             var request = Server.CreateRequest(GetUriPath() + "(3)");
             var patchResponse = await request.SendAsync("DELETE");
