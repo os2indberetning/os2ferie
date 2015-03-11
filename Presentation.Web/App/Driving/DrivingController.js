@@ -1,12 +1,15 @@
 ﻿angular.module("application").controller("DrivingController", [
     "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", "Address", "Route", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state, Address, Route) {
 
+
+        $scope.dropdownContainer = {};
+
         $scope.DriveReport = new DriveReport();
         $scope.canSubmitDriveReport = true;
         $scope.Routes = [];
         $scope.IsRoute = false;
 
-        $scope.test = function(e) {
+        $scope.personalRouteDropdownChange = function(e) {
             var index = e.sender.selectedIndex;
 
             if (index == 0) {
@@ -29,6 +32,8 @@
             angular.forEach($scope.Routes[index - 1].Points, function(value, key) {
                 $scope.DriveReport.Addresses.push({ Name: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town, Save: false });
             });
+
+            $scope.validateInput();
         }
 
         $scope.Person = Person.get({ id: 1 }, function() {
@@ -36,7 +41,14 @@
                 var temp = [{ value: "Vælg fast adresse" }];
 
                 angular.forEach(data.value, function (value, key) {
-                    temp.push({ value: value.Description, StreetName: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town });
+                    var street = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
+                    var presentation = (function() {
+                        if (value.Description != "" && value.Description != undefined) {
+                            return value.Description + " : " + street;
+                        }
+                        return street;
+                    })();
+                    temp.push({ value: presentation, StreetName: street });
                 });
 
                 $scope.PersonalAddresses = temp;
@@ -107,10 +119,37 @@
             }
         }
 
+        $scope.validateInput = function () {
+            $scope.canSubmitDriveReport = true;
+            
+            if ($scope.DriveReport.KilometerAllowance === "Read") {
+                if ($scope.DriveReport.Purpose == "" || $scope.DriveReport.Purpose == undefined) {
+                    $scope.canSubmitDriveReport = false;
+                }
+                if ($scope.DriveReport.ReadDistance === "" || $scope.DriveReport.ReadDistance == undefined) {
+                    $scope.canSubmitDriveReport = false;
+                }
+            } else {
+                angular.forEach($scope.DriveReport.Addresses, function (address, key) {
+                    if (address.Name == "" && address.Personal == "Vælg fast adresse") {
+                        $scope.canSubmitDriveReport = false;
+                    }
+                });
+                if ($scope.DriveReport.Purpose == "" || $scope.DriveReport.Purpose == undefined) {
+                    $scope.canSubmitDriveReport = false;
+                }
+            }
+        }
+
         $scope.Save = function () {
+            $scope.validateInput();
+
+            if (!$scope.canSubmitDriveReport) {
+                return;
+            }            
 
             var driveReport = new DriveReport();
-
+            
             // Prepare all data to  be uploaded
             driveReport.Purpose = $scope.DriveReport.Purpose;
             driveReport.DriveDateTimestamp = Math.floor($scope.DriveReport.Date.getTime() / 1000);
@@ -135,7 +174,7 @@
 
             if ($scope.DriveReport.KilometerAllowance === "Read") {
 
-                driveReport.Distance = $scope.DriveReport.ReadDistance;
+                driveReport.Distance = Number($scope.DriveReport.ReadDistance) * 1000;
 
                 if ($scope.DriveReport.StartOrEndedAtHome === 'Started') {
                     driveReport.StartsAtHome = true;
@@ -251,5 +290,35 @@
 
             });
         };
+
+
+
+        $scope.clearClicked = function () {
+            var event = {};
+            event.sender = {};
+            event.sender.selectedIndex = 0;
+
+            // Make the datepicker pop open when clear is clicked.
+            openDatePicker = true;
+
+            $scope.DriveReport.Purpose = "";
+            $scope.dropdownContainer.PersonalRouteDropDown.select(0);
+            $scope.personalRouteDropdownChange(event);
+            $scope.dropdownContainer.PersonalAddressDropDown.select(0);
+
+        }
+
+
+        var openDatePicker = true;
+        // Open the datepicker when the page finishes loading
+        $scope.$on("kendoRendered", function (event) {
+            if (openDatePicker) {
+                $scope.driveDatePicker.open();
+                openDatePicker = false;
+            }
+        });
+       
+
+
     }
 ]);
