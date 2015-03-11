@@ -33,10 +33,10 @@
 
         $scope.Person = Person.get({ id: 1 }, function() {
             Address.get({ query: "$filter=PersonId eq " + $scope.Person.Id + " and Type eq Core.DomainModel.PersonalAddressType'Standard'" }, function (data) {
-                var temp = [{value: "Vælg fast adresse"}];
+                var temp = [{ value: "Vælg fast adresse" }];
 
                 angular.forEach(data.value, function (value, key) {
-                    temp.push({ value: value.Description });
+                    temp.push({ value: value.Description, StreetName: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town });
                 });
 
                 $scope.PersonalAddresses = temp;
@@ -44,13 +44,13 @@
 
             Route.get({ query: "&filter=PersonId eq " + 1 }, function (data) {
 
-                var temp = [{id: 0, addressOne: "", addressTwo: "", viaPointCounr: "", presentation: "" }];
+                var temp = [{ addressOne: "", addressTwo: "", viaPointCounr: "", presentation: "" }];
 
                 angular.forEach(data.value, function (value, key) {
                     var one = value.Points[0].StreetName + " " + value.Points[0].StreetNumber + ", " + value.Points[0].ZipCode + " " + value.Points[0].Town;
                     var two = value.Points[value.Points.length - 1].StreetName + " " + value.Points[value.Points.length - 1].StreetNumber + ", " + value.Points[value.Points.length - 1].ZipCode + " " + value.Points[value.Points.length - 1].Town;
                     var count = value.Points.length - 2;
-                    temp.push({id: value.Id, addressOne: one, addressTwo: two, viaPointCount: count, presentation: value.Description + ": " + one + " -> " + two + " | Antal viapunkter: " + count, routeId: value.Id });
+                    temp.push({ addressOne: one, addressTwo: two, viaPointCount: count, presentation: value.Description + ": " + one + " -> " + two + " | Antal viapunkter: " + count, routeId: value.Id });
                     $scope.Routes.push(value);
                 });
 
@@ -98,6 +98,15 @@
         $scope.RemainingKilometers = 0;
         $scope.PayoutAmount = 0;
 
+        var getKmRate = function()
+        {
+            for (var i = 0; i < $scope.KmRate.length; i++) {
+                if ($scope.KmRate[i].Id == $scope.DriveReport.KmRate) {
+                    return $scope.KmRate[i];
+                }
+            }
+        }
+
         $scope.Save = function () {
 
             var driveReport = new DriveReport();
@@ -105,8 +114,8 @@
             // Prepare all data to  be uploaded
             driveReport.Purpose = $scope.DriveReport.Purpose;
             driveReport.DriveDateTimestamp = Math.floor($scope.DriveReport.Date.getTime() / 1000);
-            driveReport.KmRate = parseFloat($scope.DriveReport.KmRate);
-            driveReport.TFCode = $scope.DriveReport.TFCode;
+            driveReport.KmRate = parseFloat(getKmRate().KmRate);
+            driveReport.TFCode = getKmRate().TFCode;
             driveReport.KilometerAllowance = $scope.DriveReport.KilometerAllowance;
             driveReport.Distance = 0;
             driveReport.AmountToReimburse = 0;
@@ -150,7 +159,8 @@
 
                 angular.forEach($scope.DriveReport.Addresses, function (address, key) {
 
-                    var tempAddress = (address.Personal.length != 0) ? address.Personal : address.Name;
+
+                    var tempAddress = (address.Name.length != 0) ? address.Name : address.Personal;
 
                     var currentAddress = new PersonalAddress(AddressFormatter.fn(tempAddress));
 
