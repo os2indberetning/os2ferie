@@ -184,7 +184,7 @@
                             previous.$patch({ id: data3.PreviousPointId }, function () {
                                 next.$patch({ id: data3.NextPointId }, function () {
                                     NotificationService.AutoFadeNotification("success", "Success", "Viapunkt oprettet");
-                                    $modalInstance.close();
+                                    $modalInstance.close('');
                                 });
                             });
 
@@ -204,6 +204,7 @@
 
                 existingViaPoint.$patch({ id: $scope.viaPoints[key].Id }, function () {
                     NotificationService.AutoFadeNotification("success", "Success", "Viapunkt opdateret");
+                    $modalInstance.close('');
                 });
             }
         });
