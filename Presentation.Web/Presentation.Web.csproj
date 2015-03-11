@@ -311,7 +311,11 @@
     <Content Include="App\application.js" />
     <Content Include="App\ApproveReports\AcceptedReportsController.js" />
     <Content Include="App\ApproveReports\Modals\AcceptWithAccountController.js" />
+    <Content Include="App\ApproveReports\Modals\ConfirmDeleteApproverModal.html" />
+    <Content Include="App\ApproveReports\Modals\DeleteApproverModalInstanceController.js" />
     <Content Include="App\ApproveReports\Modals\EditApproverModalInstanceController.js" />
+    <Content Include="App\ApproveReports\Modals\ConfirmDeleteSubstituteModal.html" />
+    <Content Include="App\ApproveReports\Modals\DeleteSubstituteModalInstanceController.js" />
     <Content Include="App\ApproveReports\Modals\EditSubstituteModalInstanceController.js" />
     <Content Include="App\ApproveReports\Modals\editSubstituteModal.html" />
     <Content Include="App\ApproveReports\Modals\editApproverModal.html" />

@@ -1,6 +1,5 @@
 ﻿angular.module("application").controller("ApproveReportsSettingsController", [
    "$scope", "OrgUnit", "Person", "$modal", function ($scope, OrgUnit, Person, $modal) {
-       $scope.grindContainer = [];
        $scope.collapseSubtitute = false;
        $scope.collapsePersonalApprover = false;
        $scope.orgUnits = [];
@@ -74,7 +73,7 @@
                    title: "Organisation"
                }, {
                    title: "Muligheder",
-                   template: "<a class='k-button' ng-click='openEditSubstitute(${Id})'>Rediger</a><a class='k-button' ng-click='deleteSubstitute(Id)'>Slet</a>"
+                   template: "<a class='k-button' ng-click='openEditSubstitute(${Id})'>Rediger</a><a class='k-button' ng-click='openDeleteSubstitute(${Id})'>Slet</a>"
                }]
            };
 
@@ -133,12 +132,71 @@
                    template: "#= kendo.toString(new Date(EndDateTimestamp*1000), 'MM/dd/yyyy') #"
                }, {
                    title: "Muligheder",
-                   template: "<a class='k-button' ng-click='openEditApprover(${Id})'>Rediger</a><a class='k-button' ng-click='deleteApprover(Id)'>Slet</a>"
+                   template: "<a class='k-button' ng-click='openEditApprover(${Id})'>Rediger</a><a class='k-button' ng-click='openDeleteApprover(${Id})'>Slet</a>"
                }]
            };
        }
 
        $scope.loadGrids();
+
+       $scope.openDeleteApprover = function (id) {
+           var modalInstance = $modal.open({
+               templateUrl: 'App/ApproveReports/Modals/ConfirmDeleteApproverModal.html',
+               controller: 'ConfirmDeleteApproverModalInstanceController',
+               backdrop: 'static',
+               size: 'lg',
+               resolve: {
+                   persons: function () {
+                       return $scope.persons;
+                   },
+                   orgUnits: function () {
+                       return $scope.orgUnits;
+                   },
+                   leader: function () {
+                       return $scope.currentPerson;
+                   },
+                   substituteId: function () {
+                       return id;
+                   }
+               }
+           });
+
+           modalInstance.result.then(function () {
+               $scope.refreshGrids();
+           }, function () {
+
+           });
+       }
+
+       $scope.openDeleteSubstitute = function (id) {
+           var modalInstance = $modal.open({
+               templateUrl: 'App/ApproveReports/Modals/ConfirmDeleteSubstituteModal.html',
+               controller: 'ConfirmDeleteSubstituteModalInstanceController',
+               backdrop: 'static',
+               size: 'lg',
+               resolve: {
+                   persons: function() {
+                       return $scope.persons;
+                   },
+                   orgUnits: function() {
+                       return $scope.orgUnits;
+                   },
+                   leader: function() {
+                       return $scope.currentPerson;
+                   },
+                   substituteId: function () {
+                       return id;
+                   }
+               }
+           });
+
+           modalInstance.result.then(function () {
+               $scope.refreshGrids();
+           }, function () {
+
+           });
+       }
+
 
        $scope.openEditSubstitute = function (id) {
            var modalInstance = $modal.open({
@@ -156,10 +214,16 @@
                    leader: function () {
                        return $scope.currentPerson;
                    },
-                   id: function () {
+                   substituteId: function () {
                        return id;
                    }
                }
+           });
+
+           modalInstance.result.then(function () {
+               $scope.refreshGrids();
+           }, function () {
+
            });
        }
 
@@ -179,10 +243,16 @@
                    leader: function () {
                        return $scope.currentPerson;
                    },
-                   id: function() {
+                   substituteId: function () {
                        return id;
                    }
                }
+           });
+
+           modalInstance.result.then(function () {
+               $scope.refreshGrids();
+           }, function () {
+
            });
        }
 
@@ -206,7 +276,7 @@
            });
 
            modalInstance.result.then(function () {
-               $scope.loadGrids();
+               $scope.refreshGrids();
            }, function () {
 
            });
@@ -232,10 +302,15 @@
            });
 
            modalInstance.result.then(function () {
-               $scope.loadGrids();
+               $scope.refreshGrids();
            }, function () {
 
            });
        };
+
+       $scope.refreshGrids = function() {
+           $scope.substituteGrid.dataSource.read();
+           $scope.personalApproverGrid.dataSource.read();
+       }
    }
 ]);

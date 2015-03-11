@@ -8,6 +8,8 @@
             data: ''
         },
         "patch": { method: "PATCH", isArray: false },
-        "post": { method: "POST", isArray: false }
+        "post": { method: "POST", isArray: false },
+        'remove': {method:'DELETE'},
+        'delete': {method:'DELETE'}
     });
 }]);

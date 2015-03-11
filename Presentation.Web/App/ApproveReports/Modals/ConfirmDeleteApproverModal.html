@@ -1,0 +1,10 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Slet personlig godkender</h3>
+</div>
+<div class="modal-body">
+    Er du sikker på du vil slette <b>{{sub.FullName}}</b> som personlig godkender for <b>{{person.FullName}}</b> fra <b> {{substituteFromDate}} </b> til <b>{{substituteToDate}}</b>?
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="deleteSubstitute()">Ja</button>
+    <button class="btn btn-warning" ng-click="cancelSubstitute()">Annuller</button>
+</div>

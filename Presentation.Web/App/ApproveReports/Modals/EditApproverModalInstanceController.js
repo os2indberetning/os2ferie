@@ -1,12 +1,25 @@
-﻿angular.module('application').controller('NewApproverModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService) {
+﻿angular.module('application').controller('EditApproverModalInstanceController',
+    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId) {
         $scope.persons = persons;
         $scope.approverFromDate = new Date();
         $scope.approverToDate = new Date();
         $scope.orgUnits = orgUnits;
         $scope.orgUnit = $scope.orgUnits[0];
 
+        $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
 
+            $scope.substitute = data.value[0];
+
+            $scope.person = $scope.substitute.Persons[0];
+            $scope.approver = $scope.Sub;
+
+            $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000);
+            $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000);
+
+            $scope.orgUnit = $.grep($scope.orgUnits, function (e) { return e.Id == $scope.substitute.OrgUnitId; })[0];
+
+            console.log($scope.substitute);
+        });
 
         $scope.saveNewApprover = function () {
             if ($scope.approver == undefined) {
@@ -19,10 +32,6 @@
                 return;
             }
             
-
-            console.log($scope.target);
-            console.log(leader);
-
             var sub = new Substitute({
                 StartDateTimestamp: Math.floor($scope.approverFromDate.getTime() / 1000),
                 EndDateTimestamp: Math.floor($scope.approverToDate.getTime() / 1000),
@@ -34,10 +43,10 @@
 
             console.log(sub);
 
-            sub.$post(function (data) {
+            sub.$patch({id: function (data) {
                 NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev oprettet");
                 $modalInstance.close();
-            }, function () {
+            }}, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette stedfortræder");
             });
         };

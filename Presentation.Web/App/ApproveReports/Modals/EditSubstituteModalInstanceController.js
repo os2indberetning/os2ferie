@@ -1,22 +1,21 @@
 ﻿angular.module('application').controller('EditSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "id", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, id) {
+    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId) {
 
         $scope.persons = persons;
         $scope.orgUnits = orgUnits;
 
-        console.log(id);
+        console.log(substituteId);
 
-        $scope.substitute = Substitute.get({ id: id }, function (data) {
+        $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
 
             $scope.substitute = data.value[0]; // This is bad, but can't change the service
 
-            console.log($scope.substitute.Persons[0]);
-
-            $scope.person = $scope.substitute.Persons[0];
+            $scope.person = $scope.substitute.Sub;
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000);
             $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000);
 
             $scope.orgUnit = $.grep($scope.orgUnits, function (e) { return e.Id == $scope.substitute.OrgUnitId; })[0];
+
         });
 
         
@@ -35,15 +34,14 @@
                 EndDateTimestamp: Math.floor($scope.substituteToDate.getTime() / 1000),
                 LeaderId: leader.Id,
                 SubId: $scope.person[0].Id,
-                OrgUnitId: $scope.orgUnit.Id,
-                Persons: [leader]
+                OrgUnitId: $scope.orgUnit.Id
         });
 
             sub.$patch({ id: $scope.substitute.Id }, function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev oprettet");
+                NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev gemt");
                 $modalInstance.close();
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette stedfortræder");
+                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke gemme stedfortræder");
             });
         };
 
