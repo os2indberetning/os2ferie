@@ -13,7 +13,7 @@
             transformResponse: function(data) {
                 return angular.fromJson(data).value;
             },
-            url: "/odata/Rates/RateService.ThisYearsRates"
+            url: "/odata/Rates/RateService.ThisYearsRates?$expand=Type"
         },
         "post": {method: "POST"}
     });

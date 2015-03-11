@@ -174,7 +174,7 @@
                    footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= kendo.toString(sum, '0.00') # "
                }, {
                    field: "Id",
-                   template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=ApproveWithAccountClick(${Id})>Godkend med anden kontering</a><div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'/></div>",
+                   template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=ApproveWithAccountClick(${Id})>Godkend med anden kontering</a><div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'></input></div>",
                    title: "Muligheder",
                    footerTemplate: "<div class='pull-left' kendo-toolbar k-options='approveAllToolbar'></div><div class='pull-right' kendo-toolbar k-options='approveSelectedToolbar'></div>"
                }
