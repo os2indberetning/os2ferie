@@ -38,6 +38,7 @@
 
             updatedAddress.$patch({ id: result.Id }, function () {
                 NotificationService.AutoFadeNotification("success", "Success", "Adresse opdateret");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke opdateret");
             });
@@ -56,10 +57,12 @@
 
             newAddress.$post(function() {
                 NotificationService.AutoFadeNotification("success", "Success", "Adresse oprettet");
+                $modalInstance.close('');
             }, function() {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke oprettet");
             });
         }
+
     }
 
     $scope.SmartAddress = {

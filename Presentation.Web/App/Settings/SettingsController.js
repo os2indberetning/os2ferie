@@ -410,7 +410,7 @@
                     {
                         field: "Id",
                         title: "Muligheder",
-                        template: "<a ng-click='openRouteEditModal(${Id})'>Rediger</a> | <a ng-click=''>Slet</a>"
+                        template: "<a ng-click='openRouteEditModal(${Id})'>Rediger</a> | <a ng-click='openRouteDeleteModal(${Id})'>Slet</a>"
                     }
                 ]
             };
@@ -439,13 +439,7 @@
                     },
                     schema: {
                         data: function (data) {
-                            var resultSet = [];
-                            angular.forEach(data.value, function (value, key) {
-                                if (value.Description != undefined && value.Description != "" && value.Description != "null") {
-                                    resultSet.push(value);
-                                }
-                            });
-                            return resultSet;
+                            return data.value;
                         },
                         total: function (data) {
                             var resultSet = [];
@@ -458,7 +452,7 @@
                         }
                     },
                     pageSize: 5,
-                    serverPaging: true,
+                    serverPaging: false,
                     serverSorting: true
                 },
                 sortable: true,
@@ -479,7 +473,7 @@
                     }, {
                         field: "Id",
                         title: "Muligheder",
-                        template: "<a ng-click='openAddressEditModal(${Id})'>Rediger</a>"
+                        template: "<a ng-click='openAddressEditModal(${Id})'>Rediger</a> | <a ng-click='openAddressDeleteModal(${Id})'>Slet</a>"
                     }
                 ]
             };
@@ -539,11 +533,53 @@
             });
         };
 
+        $scope.openRouteDeleteModal = function (id) {
+
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/RouteDeleteModal.html',
+                controller: 'RouteDeleteModalInstanceController',
+                backdrop: 'static',
+                resolve: {
+                    routeId: function () {
+                        return id;
+                    },
+                    personId: function () {
+                        return $scope.currentPerson.Id;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                $scope.updatePersonalRoutes();
+            });
+        };
+
         $scope.openAddressEditModal = function (id) {
 
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/AddressEditModal.html',
                 controller: 'AddressEditModalInstanceController',
+                backdrop: 'static',
+                resolve: {
+                    addressId: function () {
+                        return id;
+                    },
+                    personId: function () {
+                        return $scope.currentPerson.Id;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                $scope.updatePersonalAddresses();
+            });
+        };
+
+        $scope.openAddressDeleteModal = function (id) {
+
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/AddressDeleteModal.html',
+                controller: 'AddressDeleteModalInstanceController',
                 backdrop: 'static',
                 resolve: {
                     addressId: function () {

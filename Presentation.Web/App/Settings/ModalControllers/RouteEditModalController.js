@@ -184,6 +184,7 @@
                             previous.$patch({ id: data3.PreviousPointId }, function () {
                                 next.$patch({ id: data3.NextPointId }, function () {
                                     NotificationService.AutoFadeNotification("success", "Success", "Viapunkt oprettet");
+                                    $modalInstance.close();
                                 });
                             });
 
@@ -240,6 +241,7 @@
             route.$patch({ id: routeId }, function () {
                 $scope.handleStartPointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Rutebeskrivelse opdateret");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Rutebeskrivelse blev ikke opdateret");
             });
@@ -253,6 +255,7 @@
                 $scope.newRouteId = data.Id;
                 $scope.handleStartPointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Ny rute oprettet");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette ny rute");
                 return;
@@ -283,6 +286,7 @@
             startPoint.$patch({ id: result1.Id }, function (data) {
                 $scope.handleEndpointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Startadresse opdateret");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Startadresse blev ikke opdateret");
             });
@@ -304,6 +308,7 @@
                 $scope.newRouteStartPointId = data.Id;
                 $scope.handleEndpointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Startadresse til ny rute oprettet");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Startadresse blev ikke opdateret");
                 return;
@@ -334,6 +339,7 @@
 
             endPoint.$patch({ id: result2.Id }, function () {
                 NotificationService.AutoFadeNotification("success", "Success", "Slutadresse opdateret");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Slutadresse blev ikke opdateret");
             });
@@ -368,6 +374,7 @@
                 });
 
                 NotificationService.AutoFadeNotification("success", "Success", "Slutadresse til ny rute oprettet");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Slutadresse blev ikke opdateret");
                 return;
