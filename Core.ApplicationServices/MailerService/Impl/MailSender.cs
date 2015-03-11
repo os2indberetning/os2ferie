@@ -35,7 +35,14 @@ namespace Core.ApplicationServices.MailerService.Impl
             msg.From = new MailAddress(ConfigurationManager.AppSettings["MAIL_FROM_ADDRESS"]);
             msg.Body = body;
             msg.Subject = subject;
-            _smtpClient.Send(msg);
+            try
+            {
+                _smtpClient.Send(msg);
+            }
+            catch (Exception)
+            {
+                //TODO
+            }
         }
     }
 }

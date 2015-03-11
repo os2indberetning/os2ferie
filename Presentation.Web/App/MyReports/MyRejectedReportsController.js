@@ -115,8 +115,8 @@ angular.module("application").controller("MyRejectedReportsController", [
                        },
                        title: "Formål"
                    }, {
-                       field: "Type",
-                       title: "Type"
+                       field: "TFCode",
+                       title: "TF Kode"
                    }
                ]
            };

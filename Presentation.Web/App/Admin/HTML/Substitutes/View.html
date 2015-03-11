@@ -14,7 +14,7 @@
                 
                 <div collapse="collapseSubstitute">
                     <label class="pull-right margin-5">Visninger pr. side</label>
-                    <select ng-model="container.subGridPageSize" class="form-control pull-right max-width-100" ng-change="pageSizeChanged()">
+                    <select ng-model="container.subGridPageSize" kendo-drop-down-list class="form-control pull-right max-width-100" ng-change="pageSizeChanged()">
                         <option value="5" selected>5</option>
                         <option value="10">10</option>
                         <option value="20">20</option>
@@ -30,7 +30,7 @@
                 <h2 ng-click="collapseApprove = !collapseApprove" class="inline">Opsatte Personlige Godkendere</h2>
                 <div collapse="collapseApprove">
                     <label class="pull-right margin-5">Visninger pr. side</label>
-                    <select ng-model="container.appGridPageSize" class="form-control pull-right max-width-100" ng-change="pageSizeChanged()">
+                    <select kendo-drop-down-list ng-model="container.appGridPageSize" class="form-control pull-right max-width-100" ng-change="pageSizeChanged()">
                         <option value="5" selected>5</option>
                         <option value="10">10</option>
                         <option value="20">20</option>

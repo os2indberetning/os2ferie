@@ -199,7 +199,7 @@ namespace Core.ApplicationServices
         private PersonalAddress GetHomeAddress(DriveReport report)
         {
             var hasAlternative = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.AlternativeHome);
+                    .FirstOrDefault(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.AlternativeHome);
 
             if (hasAlternative != null)
             {

@@ -404,6 +404,7 @@
                modalInstance.result.then(function (accountNumber) {
                    angular.forEach(checkedReports, function (value, key) {
                        Report.patch({ id: value }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix(), "AccountNumber": accountNumber }, function () {
+                           debugger;
                            $scope.updateReports();
                        });
                    });

@@ -107,8 +107,8 @@
                        },
                        title: "Formål"
                    }, {
-                       field: "Type",
-                       title: "Type"
+                       field: "TFCode",
+                       title: "TF Kode"
                    }, {
                        field: "Id",
                        template: "<a ng-click=deleteClick(${Id})>Slet</a> | <a ng-click=editClick(${Id})>Rediger</a>",

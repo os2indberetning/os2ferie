@@ -110,8 +110,8 @@ angular.module("application").controller("MyAcceptedReportsController", [
                        },
                        title: "Formål"
                    }, {
-                       field: "Type",
-                       title: "Type"
+                       field: "TFCode",
+                       title: "TF Kode"
                    }
                ]
            };
