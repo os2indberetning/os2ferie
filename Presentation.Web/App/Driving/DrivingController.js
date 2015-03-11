@@ -44,13 +44,13 @@
 
             Route.get({ query: "&filter=PersonId eq " + 1 }, function (data) {
 
-                var temp = [{ addressOne: "", addressTwo: "", viaPointCounr: "", presentation: "" }];
+                var temp = [{id: 0, addressOne: "", addressTwo: "", viaPointCounr: "", presentation: "" }];
 
                 angular.forEach(data.value, function (value, key) {
                     var one = value.Points[0].StreetName + " " + value.Points[0].StreetNumber + ", " + value.Points[0].ZipCode + " " + value.Points[0].Town;
                     var two = value.Points[value.Points.length - 1].StreetName + " " + value.Points[value.Points.length - 1].StreetNumber + ", " + value.Points[value.Points.length - 1].ZipCode + " " + value.Points[value.Points.length - 1].Town;
                     var count = value.Points.length - 2;
-                    temp.push({ addressOne: one, addressTwo: two, viaPointCount: count, presentation: value.Description + ": " + one + " -> " + two + " | Antal viapunkter: " + count, routeId: value.Id });
+                    temp.push({id: value.Id, addressOne: one, addressTwo: two, viaPointCount: count, presentation: value.Description + ": " + one + " -> " + two + " | Antal viapunkter: " + count, routeId: value.Id });
                     $scope.Routes.push(value);
                 });
 
@@ -149,7 +149,6 @@
                 driveReport.DriveReportPoints = [];
 
                 angular.forEach($scope.DriveReport.Addresses, function (address, key) {
-
 
                     var tempAddress = (address.Personal.length != 0) ? address.Personal : address.Name;
 
