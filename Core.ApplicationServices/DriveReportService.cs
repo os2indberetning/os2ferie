@@ -78,51 +78,81 @@ namespace Core.ApplicationServices
                 throw new Exception("DriveReport has some invalid parameters");
             }
 
-            var pointsWithCoordinates = report.DriveReportPoints.Select((t, i) => report.DriveReportPoints.ElementAt(i)).Select(currentPoint => (DriveReportPoint)_coordinates.GetAddressCoordinates(currentPoint)).ToList();
+            if (report.KilometerAllowance != KilometerAllowance.Read)
+            {
+                var pointsWithCoordinates =
+                    report.DriveReportPoints.Select((t, i) => report.DriveReportPoints.ElementAt(i))
+                        .Select(currentPoint => (DriveReportPoint) _coordinates.GetAddressCoordinates(currentPoint))
+                        .ToList();
 
-            report.DriveReportPoints = pointsWithCoordinates;
+                report.DriveReportPoints = pointsWithCoordinates;
 
-            var drivenRoute = _route.GetRoute(report.DriveReportPoints);
+                var drivenRoute = _route.GetRoute(report.DriveReportPoints);
 
-            report.Distance = (double)drivenRoute.Length / 1000;
+                report.Distance = (double) drivenRoute.Length/1000;
 
+
+            }
             report = _calculator.Calculate(report);
+
+
+            
 
             var createdReport = _driveReportRepository.Insert(report);
             _driveReportRepository.Save();
 
-            for (var i = 0; i < createdReport.DriveReportPoints.Count; i++)
+            if (report.KilometerAllowance != KilometerAllowance.Read)
             {
-                var currentPoint = createdReport.DriveReportPoints.ElementAt(i);
+                for (var i = 0; i < createdReport.DriveReportPoints.Count; i++)
+                {
+                    var currentPoint = createdReport.DriveReportPoints.ElementAt(i);
 
-                if (i == report.DriveReportPoints.Count - 1)
-                {
-                    // last element   
-                    currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
+                    if (i == report.DriveReportPoints.Count - 1)
+                    {
+                        // last element   
+                        currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
+                    }
+                    else if (i == 0)
+                    {
+                        // first element
+                        currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
+                    }
+                    else
+                    {
+                        // between first and last
+                        currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
+                        currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
+                    }
                 }
-                else if (i == 0)
-                {
-                    // first element
-                    currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
-                }
-                else
-                {
-                    // between first and last
-                    currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
-                    currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
-                }
+                _driveReportRepository.Save();
             }
 
-            _driveReportRepository.Save();
+            
+
+
 
             return report;
         }
 
         private bool Validate(DriveReport report)
         {
-            bool hasError = report.Distance <= 0 || report.DriveReportPoints.Count < 2 || string.IsNullOrEmpty(report.Purpose) || _licensePlateRepository.AsQueryable().First(x => x.PersonId == report.PersonId && x.Plate == report.Licenseplate) == null;
-
-            return hasError;
+            if (report.KilometerAllowance == KilometerAllowance.Read && report.Distance <= 0)
+            {
+                return false;
+            }
+            if (report.KilometerAllowance != KilometerAllowance.Read && report.DriveReportPoints.Count < 2)
+            {
+                return false;
+            }
+            if (string.IsNullOrEmpty(report.Purpose))
+            {
+                return false;
+            }
+            if (_licensePlateRepository.AsQueryable().FirstOrDefault(x => x.PersonId == report.PersonId && x.Plate == report.Licenseplate) == null)
+            {
+                return false;
+            }
+            return true;
         }
 
         public void SendMailIfRejectedReport(int key, Delta<DriveReport> delta)
