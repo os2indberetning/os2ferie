@@ -40,7 +40,7 @@
             $scope.loadAlternativeHomeAddress();
             $scope.loadAlternativeWorkAddress();
 
-            NotificationService.AutoFadeNotification("success", "Success", "Person fundet");
+            //NotificationService.AutoFadeNotification("success", "Success", "Person fundet");
         }, function () {
             NotificationService.AutoFadeNotification("danger", "Fejl", "Person ikke fundet");
         });
