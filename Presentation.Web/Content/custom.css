@@ -21,7 +21,10 @@
     margin: 5px;
 }
 
-
+a {
+    cursor: hand;
+    cursor: pointer;
+}
 
 .rounded-border {
     border: 1px solid;
