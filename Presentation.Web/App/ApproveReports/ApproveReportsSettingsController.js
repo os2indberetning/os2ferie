@@ -309,8 +309,13 @@
        };
 
        $scope.refreshGrids = function() {
-           $scope.substituteGrid.dataSource.read();
-           $scope.personalApproverGrid.dataSource.read();
+           // Below ain't working with angular bindings, or I can't get it to work
+
+           $('#substituteGrid').data('kendoGrid').dataSource.read();
+           $("#substituteGrid").data('kendoGrid').refresh();
+
+           $('#personalApproverGrid').data('kendoGrid').dataSource.read();
+           $("#personalApproverGrid").data('kendoGrid').refresh();
        }
    }
 ]);

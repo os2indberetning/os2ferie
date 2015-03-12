@@ -4,7 +4,7 @@
 <div class="modal-body">
     <div class="form-group form-inline">
         <label>Vælg godkender:</label>
-        <input class="form-control pull-right" kendo-auto-complete k-data-source="persons" k-ng-model="approver" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+        <input class="form-control pull-right" kendo-auto-complete="acApprover" k-data-source="persons" k-ng-model="approver" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
         <div class="seperator"></div>
         <label>Fra</label>
         <input class="pull-right" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverFromDate" />
@@ -13,7 +13,7 @@
         <input class="pull-right" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverToDate" />
         <div class="seperator"></div>
         <label>Vælg ansat:</label>
-        <input class="form-control pull-right" kendo-auto-complete k-data-source="persons" k-ng-model="target" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+        <input class="form-control pull-right" kendo-auto-complete="acTarget" k-data-source="persons" k-ng-model="target" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
     </div>
 </div>
 <div class="modal-footer">

@@ -4,13 +4,17 @@
         $scope.persons = persons;
         $scope.orgUnits = orgUnits;
 
+        $scope.person = [];
+
         console.log(substituteId);
 
         $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
 
             $scope.substitute = data.value[0]; // This is bad, but can't change the service
 
-            $scope.person = $scope.substitute.Sub;
+            console.log($scope.substitute);
+
+            $scope.person[0] = $scope.substitute.Sub;
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000);
             $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000);
 
@@ -35,7 +39,7 @@
                 LeaderId: leader.Id,
                 SubId: $scope.person[0].Id,
                 OrgUnitId: $scope.orgUnit.Id
-        });
+            });
 
             sub.$patch({ id: $scope.substitute.Id }, function (data) {
                 NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev gemt");

@@ -5,20 +5,20 @@
         $scope.approverToDate = new Date();
         $scope.orgUnits = orgUnits;
         $scope.orgUnit = $scope.orgUnits[0];
+        $scope.approver = [];
+        $scope.target = [];
 
         $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
 
-            $scope.substitute = data.value[0];
+            $scope.substitute = data.value[0]; // Should change the service
 
-            $scope.person = $scope.substitute.Persons[0];
-            $scope.approver = $scope.Sub;
+            $scope.target[0] = $scope.substitute.Persons[0];
+            $scope.approver[0] = $scope.substitute.Sub;
 
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000);
             $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000);
-
             $scope.orgUnit = $.grep($scope.orgUnits, function (e) { return e.Id == $scope.substitute.OrgUnitId; })[0];
 
-            console.log($scope.substitute);
         });
 
         $scope.saveNewApprover = function () {
@@ -38,15 +38,13 @@
                 LeaderId: leader.Id,
                 SubId: $scope.approver[0].Id,
                 OrgUnitId: $scope.orgUnit.Id,
-                Persons: [$scope.target[0]]
+                Persons: [$scope.target[0].Id]
             });
 
-            console.log(sub);
-
-            sub.$patch({id: function (data) {
+            sub.$patch({ id: substituteId }, function (data) {
                 NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev oprettet");
                 $modalInstance.close();
-            }}, function () {
+            }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette stedfortræder");
             });
         };
