@@ -97,6 +97,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileGenerator\FileRecord.cs" />
+    <Compile Include="FileGenerator\IReportFileWriter.cs" />
+    <Compile Include="FileGenerator\ReportFileWriter.cs" />
+    <Compile Include="FileGenerator\ReportGenerator.cs" />
     <Compile Include="Interfaces\IDriveReportService.cs" />
     <Compile Include="Interfaces\ISubstituteService.cs" />
     <Compile Include="MailerService\Impl\MailService.cs" />

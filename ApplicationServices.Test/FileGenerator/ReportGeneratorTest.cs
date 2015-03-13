@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Core.ApplicationServices.FileGenerator;
 using Core.DomainModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
-namespace FileGenerator.Test
+namespace ApplicationServices.Test.FileGenerator
 {
-    [TestClass]
+    [TestFixture]
     public class ReportGeneratorTest
     {
-        [TestMethod]
+        [Test]
         public void WriteRecordsShouldAlterReportStatusToInvoiced()
         {
             var repoMock = new ReportRepositoryMock();
@@ -29,7 +30,7 @@ namespace FileGenerator.Test
             Assert.AreEqual(ReportStatus.Invoiced, repoMock.Report5.Status, "Status should be changed to invoiced after by being passed to file generator");
         }
 
-        [TestMethod]
+        [Test]
         public void WriteRecordsShouldPass3RecordsToTheWriter()
         {
             var repoMock = new ReportRepositoryMock();
@@ -43,7 +44,7 @@ namespace FileGenerator.Test
                 "The writer should receive three elements when it is called by the generator.");
         }
 
-        [TestMethod]
+        [Test]
         public void WriteRecordsShouldGroupRecordsPassedToTheWriterByCPR()
         {
             var repoMock = new ReportRepositoryMock();

@@ -251,6 +251,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\MailNotificationsController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\RateTypeController.cs" />
     <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\DriveReportsController.cs" />

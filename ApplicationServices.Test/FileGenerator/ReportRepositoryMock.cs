@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Core.DomainModel;
 using Presentation.Web.Test.Controllers;
 
-namespace FileGenerator.Test
+namespace ApplicationServices.Test.FileGenerator
 {
     public class ReportRepositoryMock : GenericRepositoryMock<DriveReport>
     {
