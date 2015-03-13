@@ -56,27 +56,34 @@ namespace Core.ApplicationServices
             var homeWorkDistance = 0.0;
 
             var person = _personRepo.AsQueryable().First(x => x.Id == report.PersonId);
-            
+
             var homeAddress = GetHomeAddress(report);
             var workAddress = GetWorkAddress(report);
 
-            //Check if drivereport starts at users home address.
-            if (homeAddress.StreetName == report.DriveReportPoints.First().StreetName
-                && homeAddress.StreetNumber == report.DriveReportPoints.First().StreetNumber
-                && homeAddress.ZipCode == report.DriveReportPoints.First().ZipCode
-                && homeAddress.Town == report.DriveReportPoints.First().Town)
+            if (report.KilometerAllowance != KilometerAllowance.Read)
             {
-                report.StartsAtHome = true;
+
+
+                //Check if drivereport starts at users home address.
+                if (homeAddress.StreetName == report.DriveReportPoints.First().StreetName
+                    && homeAddress.StreetNumber == report.DriveReportPoints.First().StreetNumber
+                    && homeAddress.ZipCode == report.DriveReportPoints.First().ZipCode
+                    && homeAddress.Town == report.DriveReportPoints.First().Town)
+                {
+                    report.StartsAtHome = true;
+                }
+
+                //Check if drivereport ends at users home address.
+                if (homeAddress.StreetName == report.DriveReportPoints.Last().StreetName
+                    && homeAddress.StreetNumber == report.DriveReportPoints.Last().StreetNumber
+                    && homeAddress.ZipCode == report.DriveReportPoints.Last().ZipCode
+                    && homeAddress.Town == report.DriveReportPoints.Last().Town)
+                {
+                    report.EndsAtHome = true;
+                }
             }
 
-            //Check if drivereport ends at users home address.
-            if (homeAddress.StreetName == report.DriveReportPoints.Last().StreetName
-                && homeAddress.StreetNumber == report.DriveReportPoints.Last().StreetNumber
-                && homeAddress.ZipCode == report.DriveReportPoints.Last().ZipCode
-                && homeAddress.Town == report.DriveReportPoints.Last().Town)
-            {
-                report.EndsAtHome = true;
-            }
+           
 
             //Check if user has overriden the distance between the users home and work address
             if (person.WorkDistanceOverride > 0)
@@ -171,22 +178,28 @@ namespace Core.ApplicationServices
             }
 
             //Calculate the actual amount to reimburse
-            report.AmountToReimburse = (report.Distance / 1000) * (report.KmRate / 100);
-
-            if (report.AmountToReimburse < 0)
-            {
-                report.AmountToReimburse = 0;
-            }
+            
+            SetAmountToReimburse(report);
 
             report.Distance = report.Distance/1000;
 
             return report;
         }
 
+        private void SetAmountToReimburse(DriveReport report)
+        {
+            report.AmountToReimburse = (report.Distance / 1000) * (report.KmRate / 100);
+
+            if (report.AmountToReimburse < 0)
+            {
+                report.AmountToReimburse = 0;
+            }
+        }
+
         private PersonalAddress GetHomeAddress(DriveReport report)
         {
             var hasAlternative = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.AlternativeHome);
+                    .FirstOrDefault(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.AlternativeHome);
 
             if (hasAlternative != null)
             {
@@ -202,7 +215,7 @@ namespace Core.ApplicationServices
         private PersonalAddress GetWorkAddress(DriveReport report)
         {
             var hasAlternative = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.AlternativeWork);
+                    .FirstOrDefault(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.AlternativeWork);
 
             if (hasAlternative != null)
             {

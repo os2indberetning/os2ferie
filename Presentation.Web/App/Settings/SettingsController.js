@@ -40,7 +40,7 @@
             $scope.loadAlternativeHomeAddress();
             $scope.loadAlternativeWorkAddress();
 
-            NotificationService.AutoFadeNotification("success", "Success", "Person fundet");
+            //NotificationService.AutoFadeNotification("success", "Success", "Person fundet");
         }, function () {
             NotificationService.AutoFadeNotification("danger", "Fejl", "Person ikke fundet");
         });
@@ -133,7 +133,7 @@
                     if (array[i] != ' ') {
                         cleanArray[i] = array[i];
                     }
-                }                
+                }
             }
 
             cleanArray.splice(2, 0, ' ');
@@ -410,7 +410,7 @@
                     {
                         field: "Id",
                         title: "Muligheder",
-                        template: "<a ng-click='openRouteEditModal(${Id})'>Rediger</a> | <a ng-click=''>Slet</a>"
+                        template: "<a ng-click='openRouteEditModal(${Id})'>Rediger</a> | <a ng-click='openRouteDeleteModal(${Id})'>Slet</a>"
                     }
                 ]
             };
@@ -420,14 +420,14 @@
                     type: "odata",
                     transport: {
                         read: {
-                            beforeSend: function (req) {
+                            beforeSend: function(req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
                             url: "odata/PersonalAddresses()?$filter=PersonId eq " + id,
                             dataType: "json",
                             cache: false
                         },
-                        parameterMap: function (options, type) {
+                        parameterMap: function(options, type) {
                             var d = kendo.data.transports.odata.parameterMap(options);
 
                             delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
@@ -439,14 +439,20 @@
                     },
                     schema: {
                         data: function (data) {
-                            return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
+                            return data.value;
                         },
                         total: function (data) {
-                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
+                            var resultSet = [];
+                            angular.forEach(data.value, function (value, key) {
+                                if (value.Description != undefined && value.Description != "" && value.Description != "null") {
+                                    resultSet.push(value);
+                                }
+                            });
+                            return resultSet.length;
                         }
                     },
                     pageSize: 5,
-                    serverPaging: true,
+                    serverPaging: false,
                     serverSorting: true
                 },
                 sortable: true,
@@ -467,7 +473,7 @@
                     }, {
                         field: "Id",
                         title: "Muligheder",
-                        template: "<a ng-click='openAddressEditModal(${Id})'>Rediger</a>"
+                        template: "<a ng-click='openAddressEditModal(${Id})'>Rediger</a> | <a ng-click='openAddressDeleteModal(${Id})'>Slet</a>"
                     }
                 ]
             };
@@ -527,11 +533,53 @@
             });
         };
 
+        $scope.openRouteDeleteModal = function (id) {
+
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/RouteDeleteModal.html',
+                controller: 'RouteDeleteModalInstanceController',
+                backdrop: 'static',
+                resolve: {
+                    routeId: function () {
+                        return id;
+                    },
+                    personId: function () {
+                        return $scope.currentPerson.Id;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                $scope.updatePersonalRoutes();
+            });
+        };
+
         $scope.openAddressEditModal = function (id) {
 
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/AddressEditModal.html',
                 controller: 'AddressEditModalInstanceController',
+                backdrop: 'static',
+                resolve: {
+                    addressId: function () {
+                        return id;
+                    },
+                    personId: function () {
+                        return $scope.currentPerson.Id;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                $scope.updatePersonalAddresses();
+            });
+        };
+
+        $scope.openAddressDeleteModal = function (id) {
+
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/AddressDeleteModal.html',
+                controller: 'AddressDeleteModalInstanceController',
                 backdrop: 'static',
                 resolve: {
                     addressId: function () {

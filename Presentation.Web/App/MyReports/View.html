@@ -1,0 +1,53 @@
+﻿
+<div class="row">
+    <div class="col-md-2">
+        <label>Fra</label>
+    </div>
+    <div class="col-md-2">
+        <label>Til</label>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-2">
+        <label>Visninger pr. side</label>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.toDateString" k-ng-model="dateContainer.fromDate" ng-change="dateChanged()" />
+    </div>
+    <div class="col-md-2">
+        <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.fromDateString" k-ng-model="dateContainer.toDate" ng-change="dateChanged()" />
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-danger" ng-click="clearClicked()">Ryd</button>
+    </div>
+
+    <div class="col-md-2">
+
+    </div>
+
+
+    <div class="col-md-2"></div>
+    <div class="col-md-2">
+        <select ng-model="gridContainer.gridPageSize" class="form-control" ng-change="pageSizeChanged()">
+            <option value="5" selected>5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+        </select>
+    </div>
+
+
+</div>
+<div>
+    <div kendo-grid="gridContainer.grid" class="margin-top-10" options="Reports"></div>
+</div>

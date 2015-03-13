@@ -116,6 +116,10 @@
     <Compile Include="Migrations\201502270937254_AddedRateType.Designer.cs">
       <DependentUpon>201502270937254_AddedRateType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503091207217_Added tfcode to drivereport.cs" />
+    <Compile Include="Migrations\201503091207217_Added tfcode to drivereport.Designer.cs">
+      <DependentUpon>201503091207217_Added tfcode to drivereport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -172,6 +176,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502270937254_AddedRateType.resx">
       <DependentUpon>201502270937254_AddedRateType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503091207217_Added tfcode to drivereport.resx">
+      <DependentUpon>201503091207217_Added tfcode to drivereport.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

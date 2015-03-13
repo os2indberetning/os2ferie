@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
-using System.Net.Mail;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
-using Infrastructure.DataAccess;
-
 namespace Core.ApplicationServices.MailerService.Impl
 {
     public class MailService : IMailService
@@ -30,7 +27,6 @@ namespace Core.ApplicationServices.MailerService.Impl
             foreach (var mailAddress in mailAddresses)
             {
                 _mailSender.SendMail(mailAddress,
-                    ConfigurationManager.AppSettings["MAIL_FROM_ADDRESS"],
                     ConfigurationManager.AppSettings["MAIL_SUBJECT"],
                      ConfigurationManager.AppSettings["MAIL_BODY"]);
             }

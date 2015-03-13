@@ -56,8 +56,8 @@
                }
 
            }
-           $scope.currentPageAmountSum = resAmount;
-           $scope.currentPageDistanceSum = resDistance;
+           $scope.currentPageAmountSum = resAmount.toFixed(2);
+           $scope.currentPageDistanceSum = resDistance.toFixed(2);
 
        }
 
@@ -153,6 +153,7 @@
                                  { field: "AmountToReimburse", aggregate: "sum" }]
                },
                sortable: true,
+               scrollable: false,
                pageable: {
                    messages: {
                        display: "{0} - {1} af {2} indberetninger", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
@@ -210,11 +211,13 @@
                    }, {
                        field: "AmountToReimburse",
                        title: "Beløb",
-                       footerTemplate: "Side: {{currentPageAmountSum}}, total: #= sum # "
+                       format:"{0:n2}",
+                       footerTemplate: "Side: {{currentPageAmountSum}}, total: #= kendo.toString(sum, '0.00') # "
                    }, {
                        field: "Distance",
                        title: "Afstand",
-                       footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= sum # "
+                       format: "{0:n2}",
+                       footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= kendo.toString(sum, '0.00') # "
                    }, {
                        field: "AccountNumber",
                        title: "Anden Kontering",

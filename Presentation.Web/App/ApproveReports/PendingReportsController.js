@@ -165,14 +165,16 @@
                }, {
                    field: "AmountToReimburse",
                    title: "Beløb",
-                   footerTemplate: "Side: {{currentPageAmountSum}}, total: #= sum # "
+                   format:"{0:n2}",
+                   footerTemplate: "Side: {{currentPageAmountSum}}, total: #= kendo.toString(sum, '0.00') # "
                }, {
                    field: "Distance",
                    title: "Afstand",
-                   footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= sum # "
+                   format: "{0:n2}",
+                   footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= kendo.toString(sum, '0.00') # "
                }, {
                    field: "Id",
-                   template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=ApproveWithAccountClick(${Id})>Godkend med anden kontering</a><div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'/></div>",
+                   template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> | <a ng-click=ApproveWithAccountClick(${Id})>Godkend med anden kontering</a><div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'></input></div>",
                    title: "Muligheder",
                    footerTemplate: "<div class='pull-left' kendo-toolbar k-options='approveAllToolbar'></div><div class='pull-right' kendo-toolbar k-options='approveSelectedToolbar'></div>"
                }
@@ -316,8 +318,8 @@
                }
 
            }
-           $scope.currentPageAmountSum = resAmount;
-           $scope.currentPageDistanceSum = resDistance;
+           $scope.currentPageAmountSum = resAmount.toFixed(2);
+           $scope.currentPageDistanceSum = resDistance.toFixed(2);
 
        }
 
@@ -402,6 +404,7 @@
                modalInstance.result.then(function (accountNumber) {
                    angular.forEach(checkedReports, function (value, key) {
                        Report.patch({ id: value }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix(), "AccountNumber": accountNumber }, function () {
+                           debugger;
                            $scope.updateReports();
                        });
                    });
@@ -496,8 +499,8 @@
                // This leads to sorting the grid content on load, which is not what we want.
                // Therefore the sorting is not done the first 2 times the dates change - Which are the 2 times we set the default values.
                if (initialLoad <= 0) {
-                   queryOptions.dateQuery = from + and + to;
-                   $scope.updateReports();
+
+                   $scope.updateReports(to + and + from);
                }
                initialLoad--;
            }, 0);

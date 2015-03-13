@@ -1,7 +1,7 @@
-﻿
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.OData.Builder;
 using System.Web.OData.Extensions;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainModel.Example;
 using Newtonsoft.Json;
@@ -13,7 +13,7 @@ namespace OS2Indberetning
     {
         public static void Register(HttpConfiguration config)
         {
-            config.DependencyResolver = new NinjectDependencyResolver(NinjectWebCommon.CreateKernel());
+            config.DependencyResolver = new NinjectDependencyResolver(NinjectWebKernel.CreateKernel());
 
             config.MapHttpAttributeRoutes();
 

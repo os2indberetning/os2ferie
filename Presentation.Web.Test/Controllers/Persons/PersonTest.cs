@@ -4,6 +4,7 @@ using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
+using Infrastructure.DataAccess;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
@@ -20,7 +21,10 @@ namespace Presentation.Web.Test.Controllers.Persons
             return new List<KeyValuePair<Type, Type>>
             {
                 new KeyValuePair<Type, Type>(typeof (IGenericRepository<Person>), typeof (PersonRepositoryMock)),
-                new KeyValuePair<Type, Type>(typeof(IPersonService), typeof(PersonService))
+                new KeyValuePair<Type, Type>(typeof(IPersonService), typeof(PersonService)),
+                new KeyValuePair<Type, Type>(typeof(IGenericRepository<Employment>), typeof(GenericRepository<Employment>)),
+                new KeyValuePair<Type, Type>(typeof(IGenericRepository<LicensePlate>), typeof(GenericRepository<LicensePlate>)),
+                
             };
         }
 

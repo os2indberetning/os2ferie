@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
 using Core.ApplicationServices;
+using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 
@@ -11,10 +12,14 @@ namespace OS2Indberetning.Controllers
 {
     public class SubstitutesController : BaseController<Substitute>
     {
-        SubstituteService _sub = new SubstituteService();
+        private ISubstituteService _sub;
 
           //GET: odata/Substitutes
-        public SubstitutesController(IGenericRepository<Substitute> repository) : base(repository){}
+        public SubstitutesController(IGenericRepository<Substitute> repository, ISubstituteService sub)
+            : base(repository)
+        {
+            _sub = sub;
+        }
 
         [EnableQuery]
         public IQueryable<Substitute> Get(ODataQueryOptions<Substitute> queryOptions)

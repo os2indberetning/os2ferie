@@ -217,8 +217,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
-    <Compile Include="App_Start\NinjectDependencyScope.cs" />
-    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -253,6 +251,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\MailNotificationsController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\RateTypeController.cs" />
     <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\DriveReportsController.cs" />
@@ -311,6 +310,7 @@
     <Content Include="App\application.js" />
     <Content Include="App\ApproveReports\AcceptedReportsController.js" />
     <Content Include="App\ApproveReports\Modals\AcceptWithAccountController.js" />
+    <Content Include="App\ApproveReports\Modals\ConfirmApproveSelectedWithAccountTemplate.html" />
     <Content Include="App\ApproveReports\Modals\ConfirmDeleteApproverModal.html" />
     <Content Include="App\ApproveReports\Modals\DeleteApproverModalInstanceController.js" />
     <Content Include="App\ApproveReports\Modals\EditApproverModalInstanceController.js" />
@@ -337,6 +337,10 @@
     <Content Include="App\ApproveReports\Modals\ConfirmRejectTemplate.html" />
     <Content Include="App\ApproveReports\SettingsView.html" />
     <Content Include="App\ApproveReports\View.html" />
+    <Content Include="App\MyReports\MyAcceptedReportsController.js" />
+    <Content Include="App\MyReports\MyRejectedReportsController.js" />
+    <Content Include="App\MyReports\MyPendingReportsController.js" />
+    <Content Include="App\MyReports\View.html" />
     <Content Include="App\Services\BankAccountService.js" />
     <Content Include="App\Services\EmailNotificationResouce.js" />
     <Content Include="App\Services\RateTypeResource.js" />
@@ -344,6 +348,10 @@
     <Content Include="App\Services\OrgUnitResource.js" />
     <Content Include="App\Services\RouteContainerResource.js" />
     <Content Include="App\Services\SubstituteResource.js" />
+    <Content Include="App\Settings\ModalControllers\AddressDeleteModalController.js" />
+    <Content Include="App\Settings\ModalControllers\RouteDeleteModalController.js" />
+    <Content Include="App\Settings\AddressDeleteModal.html" />
+    <Content Include="App\Settings\RouteDeleteModal.html" />
     <Content Include="Content\kendo\Black\editor.png" />
     <Content Include="Content\kendo\Black\imagebrowser.png" />
     <Content Include="Content\kendo\Black\indeterminate.gif" />
@@ -615,6 +623,7 @@
     <Content Include="Content\kendo\Uniform\sprite_2x.png" />
     <Content Include="Content\kendo\Uniform\sprite_kpi.png" />
     <Content Include="Content\kendo\Uniform\sprite_kpi_2x.png" />
+    <Content Include="Content\private.css" />
     <Content Include="Scripts\kendo\angular.min.js" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.af-ZA.min.js" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.af.min.js" />
@@ -2247,6 +2256,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

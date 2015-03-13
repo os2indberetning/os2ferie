@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.DataAccess;

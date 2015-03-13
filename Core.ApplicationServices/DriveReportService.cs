@@ -1,49 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
+using System.Web.OData;
+using Core.ApplicationServices.Interfaces;
+using Core.ApplicationServices.MailerService.Impl;
+using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.AddressServices;
 using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
+using Ninject;
+using OS2Indberetning;
 
 
 namespace Core.ApplicationServices
 {
-    public class DriveReportService
+    public class DriveReportService : IDriveReportService
     {
         private readonly IRoute<RouteInformation> _route;
         private readonly IAddressCoordinates _coordinates;
-        private readonly IGenericRepository<DriveReportPoint> _driveReportPointRepository;
         private readonly IGenericRepository<DriveReport> _driveReportRepository;
         private readonly IGenericRepository<LicensePlate> _licensePlateRepository;
         private readonly ReimbursementCalculator _calculator;
+        private readonly IMailSender _mailSender;
 
-        public DriveReportService()
+        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IGenericRepository<LicensePlate> licensePlateRepository)
         {
             _route = new BestRoute();
             _coordinates = new AddressCoordinates();
-            _driveReportPointRepository = new GenericRepository<DriveReportPoint>(new DataContext());
-            _driveReportRepository = new GenericRepository<DriveReport>(new DataContext());
-            _licensePlateRepository = new GenericRepository<LicensePlate>(new DataContext());
             _calculator = new ReimbursementCalculator();
-        }
-
-        public DriveReportService(IRoute<RouteInformation> route, IAddressCoordinates coordinates, IGenericRepository<DriveReportPoint> driveReportPointRepository, IGenericRepository<DriveReport> driveReportRepository, IGenericRepository<LicensePlate> licensePlateRepository, ReimbursementCalculator calculator)
-        {
-            _route = route;
-            _coordinates = coordinates;
-            _driveReportPointRepository = driveReportPointRepository;
+            _mailSender = mailSender;
             _driveReportRepository = driveReportRepository;
             _licensePlateRepository = licensePlateRepository;
-            _calculator = calculator;
         }
 
-       public IQueryable<DriveReport> AddFullName(IQueryable<DriveReport> repo)
-       {
-            var set = repo.ToList(); 
+        public IQueryable<DriveReport> AddFullName(IQueryable<DriveReport> repo)
+        {
+            var set = repo.ToList();
 
             // Add fullname to the resultset
             foreach (var driveReport in set)
@@ -51,23 +48,23 @@ namespace Core.ApplicationServices
                 AddFullName(driveReport);
             }
             return set.AsQueryable();
-       }
+        }
 
-       public void AddFullName(DriveReport driveReport)
-       {
-           if (driveReport == null)
-           {
-               return;
-           }
-           driveReport.Fullname = driveReport.Person.FirstName;
+        public void AddFullName(DriveReport driveReport)
+        {
+            if (driveReport == null)
+            {
+                return;
+            }
+            driveReport.Fullname = driveReport.Person.FirstName;
 
-           if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
-           {
-               driveReport.Fullname += " " + driveReport.Person.MiddleName;
-           }
+            if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
+            {
+                driveReport.Fullname += " " + driveReport.Person.MiddleName;
+            }
 
-           driveReport.Fullname += " " + driveReport.Person.LastName;
-       }
+            driveReport.Fullname += " " + driveReport.Person.LastName;
+        }
 
         public DriveReport Create(DriveReport report)
         {
@@ -75,57 +72,103 @@ namespace Core.ApplicationServices
             {
                 throw new Exception("No person provided");
             }
-           
+
             if (!Validate(report))
             {
                 throw new Exception("DriveReport has some invalid parameters");
             }
 
-            var pointsWithCoordinates = report.DriveReportPoints.Select((t, i) => report.DriveReportPoints.ElementAt(i)).Select(currentPoint => (DriveReportPoint) _coordinates.GetAddressCoordinates(currentPoint)).ToList();
+            if (report.KilometerAllowance != KilometerAllowance.Read)
+            {
+                var pointsWithCoordinates =
+                    report.DriveReportPoints.Select((t, i) => report.DriveReportPoints.ElementAt(i))
+                        .Select(currentPoint => (DriveReportPoint) _coordinates.GetAddressCoordinates(currentPoint))
+                        .ToList();
 
-            report.DriveReportPoints = pointsWithCoordinates;
+                report.DriveReportPoints = pointsWithCoordinates;
 
-            var drivenRoute = _route.GetRoute(report.DriveReportPoints);
+                var drivenRoute = _route.GetRoute(report.DriveReportPoints);
 
-            report.Distance = (double)drivenRoute.Length / 1000;
-           
+                report.Distance = (double) drivenRoute.Length/1000;
+
+
+            }
             report = _calculator.Calculate(report);
+
+
+            
 
             var createdReport = _driveReportRepository.Insert(report);
             _driveReportRepository.Save();
 
-            for (var i = 0; i < createdReport.DriveReportPoints.Count; i++)
+            if (report.KilometerAllowance != KilometerAllowance.Read)
             {
-                var currentPoint = createdReport.DriveReportPoints.ElementAt(i);
+                for (var i = 0; i < createdReport.DriveReportPoints.Count; i++)
+                {
+                    var currentPoint = createdReport.DriveReportPoints.ElementAt(i);
 
-                if (i == report.DriveReportPoints.Count - 1)
-                {
-                    // last element   
-                    currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
+                    if (i == report.DriveReportPoints.Count - 1)
+                    {
+                        // last element   
+                        currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
+                    }
+                    else if (i == 0)
+                    {
+                        // first element
+                        currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
+                    }
+                    else
+                    {
+                        // between first and last
+                        currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
+                        currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
+                    }
                 }
-                else if (i == 0)
-                {
-                    // first element
-                    currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
-                }
-                else
-                {
-                    // between first and last
-                    currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
-                    currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
-                }
+                _driveReportRepository.Save();
             }
 
-            _driveReportRepository.Save();
+            
+
+
 
             return report;
         }
 
         private bool Validate(DriveReport report)
         {
-            bool hasError = report.Distance <= 0 || report.DriveReportPoints.Count < 2 || string.IsNullOrEmpty(report.Purpose) || _licensePlateRepository.AsQueryable().First(x => x.PersonId == report.PersonId && x.Plate == report.Licenseplate) == null;
-
-            return hasError;
+            if (report.KilometerAllowance == KilometerAllowance.Read && report.Distance <= 0)
+            {
+                return false;
+            }
+            if (report.KilometerAllowance != KilometerAllowance.Read && report.DriveReportPoints.Count < 2)
+            {
+                return false;
+            }
+            if (string.IsNullOrEmpty(report.Purpose))
+            {
+                return false;
+            }
+            if (_licensePlateRepository.AsQueryable().FirstOrDefault(x => x.PersonId == report.PersonId && x.Plate == report.Licenseplate) == null)
+            {
+                return false;
+            }
+            return true;
         }
+
+        public void SendMailIfRejectedReport(int key, Delta<DriveReport> delta)
+        {
+            var status = new object();
+            if (delta.TryGetPropertyValue("Status", out status) && status.ToString().Equals("Rejected"))
+            {
+                var recipient = _driveReportRepository.AsQueryable().First(r => r.Id == key).Person.Mail;
+                var comment = new object();
+                if (delta.TryGetPropertyValue("Comment", out comment))
+                {
+                    _mailSender.SendMail(recipient, "Afvist indberetning",
+                        "Din indberetning er blevet afvist med kommentaren: \n \n" + comment);
+                }
+            }
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,9 +38,25 @@ namespace Infrastructure.DataAccess
                 }                
                 else if (propertyInfo.PropertyType.IsGenericType)
                 {
-                    foreach (var obj in (ICollection)propertyInfo.GetValue(entity))
+                    if (propertyInfo.GetValue(entity) == null)
                     {
-                        _context.Set(obj.GetType()).Attach(obj);
+                        continue;
+                    }
+                    var collection = propertyInfo.GetValue(entity) as ICollection;
+                    if (collection == null)
+                    {
+                        continue;
+                    }   
+                    foreach (var obj in collection)
+                    {
+                        if (GetPrimaryKeyValue(obj) == 0) //If ID == 0; This is a new object and should be added
+                        {
+                            _context.Set(obj.GetType()).Add(obj);
+                        }
+                        else
+                        {
+                            _context.Set(obj.GetType()).Attach(obj);
+                        }
                     }
                 }
             }
@@ -91,25 +108,41 @@ namespace Infrastructure.DataAccess
             _dbSet.Remove(entity);
         }
 
+        private int GetPrimaryKeyValue(Object obj)
+        {
+            var t = obj.GetType();
+
+            IEnumerable<dynamic> keyMembers = getKeyMenbers(t);
+
+            var primaryKeyName = keyMembers.Select(k => (string)k.Name).First();
+            
+            return (int)t.GetProperty(primaryKeyName).GetValue(obj);
+        }
+
+        private IEnumerable<dynamic> getKeyMenbers(Type t)
+        {
+
+            while (t.BaseType != typeof(object))
+                t = t.BaseType;
+
+            var objectContext = ((IObjectContextAdapter)_context).ObjectContext;
+
+            //create method CreateObjectSet with the generic parameter of the base-type
+            var method = typeof(ObjectContext)
+                                      .GetMethod("CreateObjectSet", Type.EmptyTypes)
+                                      .MakeGenericMethod(t);
+            dynamic objectSet = method.Invoke(objectContext, null);
+
+            return objectSet.EntitySet.ElementType.KeyMembers;
+        } 
+
         public PropertyInfo GetPrimaryKeyProperty()
         {
             var t = typeof(T);
 
             if (_primaryKeyName == null)
             {
-                //retrieve the base type
-                while (t.BaseType != typeof(object))
-                    t = t.BaseType;
-
-                var objectContext = ((IObjectContextAdapter)_context).ObjectContext;
-
-                //create method CreateObjectSet with the generic parameter of the base-type
-                var method = typeof(ObjectContext)
-                                          .GetMethod("CreateObjectSet", Type.EmptyTypes)
-                                          .MakeGenericMethod(t);
-                dynamic objectSet = method.Invoke(objectContext, null);
-
-                IEnumerable<dynamic> keyMembers = objectSet.EntitySet.ElementType.KeyMembers;
+                IEnumerable<dynamic> keyMembers = getKeyMenbers(t);
 
                 _primaryKeyName = keyMembers.Select(k => (string)k.Name).First();
             }

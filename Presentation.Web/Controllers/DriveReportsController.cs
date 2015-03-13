@@ -6,14 +6,18 @@ using System.Web.OData.Query;
 using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
+using Ninject;
 
 namespace OS2Indberetning.Controllers
 {
     public class DriveReportsController : BaseController<DriveReport>
     {
-        private readonly DriveReportService _driveService = new DriveReportService();
+        private readonly DriveReportService _driveService;
 
-        public DriveReportsController(IGenericRepository<DriveReport> repo) : base(repo) {}
+        public DriveReportsController(IGenericRepository<DriveReport> repo, DriveReportService driveService) : base(repo)
+        {
+            _driveService = driveService;
+        }
 
         // GET: odata/DriveReports
         [EnableQuery]
@@ -55,6 +59,8 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
         {
+
+            _driveService.SendMailIfRejectedReport(key,delta);
             return base.Patch(key, delta);
         }
 
