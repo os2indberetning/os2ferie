@@ -4,7 +4,10 @@
 <div class="modal-body">
     <div class="form-group form-inline">
         <label>Vælg stedfortræder:</label>
-        <input class="form-control pull-right" kendo-auto-complete k-options="personOptions" k-data-source="persons" k-ng-model="person" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" /> <!--typeahead="person as person.FullName for person in persons | filter:$viewValue"-->
+      <!--  <input class="form-control pull-right" kendo-auto-complete k-options="personOptions" k-data-source="persons" k-ng-model="person" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" /> <!--typeahead="person as person.FullName for person in persons | filter:$viewValue"-->
+
+        <input type="text" typeahead-editable="false" ng-model="person[0]" placeholder="Indtast navn" typeahead="person as person.FullName for person in persons | filter:$viewValue" class="form-control pull-right" />
+
         <div class="seperator"></div>
         <label>Fra:</label>
         <input class="fill-fifty pull-right" k-format="'dd/MM/yyyy'" kendo-datepicker k-options="dateOptions" k-ng-model="substituteFromDate" />
