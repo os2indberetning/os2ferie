@@ -50,7 +50,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(Substitute Substitute)
         {
-            var targets = Substitute.Persons;
+            var targets = Substitute.Person;
 
             return base.Post(Substitute);
         }
@@ -74,7 +74,7 @@ namespace OS2Indberetning.Controllers
         [HttpGet]
         public IQueryable<Substitute> Personal()
         {
-            var res = Repo.AsQueryable().Where(x => x.Persons.Any(y => y.Id != x.LeaderId));
+            var res = Repo.AsQueryable().Where(x => x.Person.Id != x.LeaderId);
             _sub.AddFullName(res);
             _sub.ScrubCprFromPersons(res);
             return res;
@@ -85,7 +85,7 @@ namespace OS2Indberetning.Controllers
         [HttpGet]
         public IQueryable<Substitute> Substitute()
         {
-            var res = Repo.AsQueryable().Where(x => x.Persons.Any(y => y.Id == x.LeaderId));
+            var res = Repo.AsQueryable().Where(x => x.Person.Id == x.LeaderId);
             _sub.AddFullName(res);
             _sub.ScrubCprFromPersons(res);
             return res;

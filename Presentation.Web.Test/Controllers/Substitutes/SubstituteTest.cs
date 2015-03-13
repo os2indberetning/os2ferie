@@ -92,7 +92,7 @@ namespace Presentation.Web.Test.Controllers.Substitutes
                                     'FirstName' : 'Carsten',
                                     'LastName'  : 'Jensen'
                                     },
-                        'Persons' : [{'FirstName' : 'Brian', 'LastName' : 'Sørensen'}] 
+                        'Person' : {'FirstName' : 'Brian', 'LastName' : 'Sørensen'} 
             }";
         }
 

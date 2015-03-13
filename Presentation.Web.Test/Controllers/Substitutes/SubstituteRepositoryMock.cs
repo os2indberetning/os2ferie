@@ -35,10 +35,7 @@ namespace Presentation.Web.Test.Controllers.Substitutes
                     StartDateTimestamp = 1336,
                     Leader = p1,
                     Sub = p2,
-                    Persons = new List<Person>()
-                    {
-                        p1,p2
-                    }
+                    Person = p2
                 },
                 new Substitute
                 {
@@ -47,10 +44,7 @@ namespace Presentation.Web.Test.Controllers.Substitutes
                     StartDateTimestamp = 2336,
                     Leader = p1,
                     Sub = p2,
-                    Persons = new List<Person>()
-                    {
-                        p1,p2
-                    }
+                    Person = p2
                 },
                 new Substitute
                 {
@@ -59,10 +53,7 @@ namespace Presentation.Web.Test.Controllers.Substitutes
                     StartDateTimestamp = 3336,
                     Leader = p1,
                     Sub = p2,
-                    Persons = new List<Person>()
-                    {
-                        p1,p2
-                    }
+                    Person = p2
                 }
             };
         }

@@ -36,22 +36,13 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                        FirstName = "Morten",
                        LastName = "Rasmussen"
                     },
-                    Persons = new List<Person>()
-                    {
-                        new Person()
-                        {
-                            CprNumber = "123123",
-                            FirstName = "Jacob",
-                            MiddleName = "Overgaard",
-                            LastName = "Jensen"
-                        },
+                    Person =
                         new Person()
                         {
                             CprNumber = "123123",
                             FirstName = "Morten",
                             LastName = "Rasmussen"
-                        }
-                    }
+                        },
                 },
                 new Substitute()
                 {
@@ -68,22 +59,13 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                        FirstName = "Morten",
                        LastName = "Rasmussen"
                     },
-                    Persons = new List<Person>()
-                    {
-                        new Person()
+                    Person = new Person()
                         {
                             CprNumber = "123123",
                             FirstName = "Jacob",
                             MiddleName = "Overgaard",
                             LastName = "Jensen"
                         },
-                        new Person()
-                        {
-                            CprNumber = "123123",
-                            FirstName = "Morten",
-                            LastName = "Rasmussen"
-                        }
-                    }
                 }
             };
 
@@ -95,17 +77,14 @@ namespace ApplicationServices.Test.SubstituteServiceTest
             // Precondition
             Assert.AreEqual(null, repo[0].Leader.FullName);
             Assert.AreEqual(null, repo[0].Sub.FullName);
-            foreach (var person in repo[0].Persons)
-            {
-                Assert.AreEqual(null, person.FullName);
-            }
+
+            Assert.AreEqual(null, repo[0].Person.FullName);
+
 
             Assert.AreEqual(null, repo[1].Leader.FullName);
             Assert.AreEqual(null, repo[1].Sub.FullName);
-            foreach (var person in repo[1].Persons)
-            {
-                Assert.AreEqual(null, person.FullName);
-            }
+            Assert.AreEqual(null, repo[1].Person.FullName);
+
 
             // Act
             _uut.AddFullName(repo.AsQueryable());
@@ -114,13 +93,11 @@ namespace ApplicationServices.Test.SubstituteServiceTest
             // Postcondition
             Assert.AreEqual("Morten Rasmussen", repo[0].Leader.FullName);
             Assert.AreEqual("Jacob Overgaard Jensen", repo[0].Sub.FullName);
-            Assert.AreEqual("Jacob Overgaard Jensen", repo[0].Persons.ElementAt(0).FullName);
-            Assert.AreEqual("Morten Rasmussen", repo[0].Persons.ElementAt(1).FullName);
+            Assert.AreEqual("Morten Rasmussen", repo[0].Person.FullName);
 
             Assert.AreEqual("Morten Rasmussen", repo[1].Leader.FullName);
             Assert.AreEqual("Jacob Overgaard Jensen", repo[1].Sub.FullName);
-            Assert.AreEqual("Jacob Overgaard Jensen", repo[1].Persons.ElementAt(0).FullName);
-            Assert.AreEqual("Morten Rasmussen", repo[1].Persons.ElementAt(1).FullName);
+            Assert.AreEqual("Jacob Overgaard Jensen", repo[1].Person.FullName);
         }
 
         [Test]
@@ -131,17 +108,12 @@ namespace ApplicationServices.Test.SubstituteServiceTest
 
             Assert.AreEqual("123123", repo[0].Leader.CprNumber);
             Assert.AreEqual("123123", repo[0].Sub.CprNumber);
-            foreach (var person in repo[0].Persons)
-            {
-                Assert.AreEqual("123123", person.CprNumber);
-            }
+            Assert.AreEqual("123123", repo[0].Person.CprNumber);
+
 
             Assert.AreEqual("123123", repo[1].Leader.CprNumber);
             Assert.AreEqual("123123", repo[1].Sub.CprNumber);
-            foreach (var person in repo[1].Persons)
-            {
-                Assert.AreEqual("123123", person.CprNumber);
-            }
+            Assert.AreEqual("123123", repo[1].Person.CprNumber);
 
             // Act
             _uut.ScrubCprFromPersons(repo.AsQueryable());
@@ -149,17 +121,14 @@ namespace ApplicationServices.Test.SubstituteServiceTest
             // Postcondition
             Assert.AreEqual("", repo[0].Leader.CprNumber);
             Assert.AreEqual("", repo[0].Sub.CprNumber);
-            foreach (var person in repo[0].Persons)
-            {
-                Assert.AreEqual("", person.CprNumber);
-            }
+
+            Assert.AreEqual("", repo[0].Person.CprNumber);
+
 
             Assert.AreEqual("", repo[1].Leader.CprNumber);
             Assert.AreEqual("", repo[1].Sub.CprNumber);
-            foreach (var person in repo[1].Persons)
-            {
-                Assert.AreEqual("", person.CprNumber);
-            }
+
+            Assert.AreEqual("", repo[1].Person.CprNumber);
         }
     }
 }

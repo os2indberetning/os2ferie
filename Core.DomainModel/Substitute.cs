@@ -13,7 +13,8 @@ namespace Core.DomainModel
         public virtual Person Leader { get; set; }
         public int SubId { get; set; }
         public virtual Person Sub { get; set; }
-        public virtual ICollection<Person> Persons { get; set; }
+        public virtual Person Person { get; set; }
+        public int PersonId { get; set; }
         public int OrgUnitId { get; set; }
         public virtual OrgUnit OrgUnit{ get; set; }
     }

@@ -22,7 +22,7 @@
                 LeaderId: leader.Id,
                 SubId: $scope.person[0].Id,
                 OrgUnitId: $scope.orgUnit.Id,
-                Persons: [leader]
+                PersonId: leader.Id
             });
 
             sub.$post(function (data) {

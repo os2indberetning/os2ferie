@@ -2,18 +2,58 @@
     <h3 class="modal-title">Ret personlig godkender</h3>
 </div>
 <div class="modal-body">
-    <div class="form-group form-inline">
-        <label>Vælg godkender:</label>
-        <input class="form-control pull-right" kendo-auto-complete="acApprover" k-data-source="persons" k-ng-model="approver" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Vælg godkender:</label>
+            </div>
+            <div class="col-md-6">
+                <input type="text" typeahead-editable="false" ng-model="approver" placeholder="Indtast navn" typeahead="person as person.FullName for person in persons | filter:$viewValue" class="form-control fill-width" />
+            </div>
+        </div>
+        
         <div class="seperator"></div>
-        <label>Fra</label>
-        <input class="pull-right" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverFromDate" />
+
+        <div class="row">
+            <div class="col-md-6">
+                <label>Fra</label>
+            </div>
+            <div class="col-md-6">
+                <input class="fill-width" culture="'da-DK'" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverFromDate" />
+            </div>
+        </div>
+
         <div class="seperator"></div>
-        <label>Til</label>
-        <input class="pull-right" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverToDate" />
+
+        <div class="row">
+            <div class="col-md-6">
+                <label>Til</label>
+            </div>
+            <div class="col-md-6">
+                <input class="fill-width" culture="'da-DK'" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverToDate" />
+            </div>
+        </div>
+        
         <div class="seperator"></div>
-        <label>Vælg ansat:</label>
-        <input class="form-control pull-right" kendo-auto-complete="acTarget" k-data-source="persons" k-ng-model="target" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+
+        <div class="row">
+            <div class="col-md-6">
+                <label>Vælg ansat:</label>
+            </div>
+
+            <div class="col-md-6">
+                <input type="text" typeahead-editable="false" ng-model="target" placeholder="Indtast navn" typeahead="person as person.FullName for person in persons | filter:$viewValue" class="form-control fill-width" />
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+        <!-- <input class="form-control pull-right" kendo-auto-complete="acTarget" k-data-source="persons" k-ng-model="target" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />-->
     </div>
 </div>
 <div class="modal-footer">

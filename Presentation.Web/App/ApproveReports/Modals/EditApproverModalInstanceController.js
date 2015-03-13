@@ -5,20 +5,18 @@
         $scope.approverToDate = new Date();
         $scope.orgUnits = orgUnits;
         $scope.orgUnit = $scope.orgUnits[0];
-        $scope.approver = [];
-        $scope.target = [];
+
 
         $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
 
             $scope.substitute = data.value[0]; // Should change the service
 
-            $scope.target[0] = $scope.substitute.Persons[0];
-            $scope.approver[0] = $scope.substitute.Sub;
+            $scope.target = $scope.substitute.Person;
+            $scope.approver = $scope.substitute.Sub;
 
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000);
             $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000);
             $scope.orgUnit = $.grep($scope.orgUnits, function (e) { return e.Id == $scope.substitute.OrgUnitId; })[0];
-
         });
 
         $scope.saveNewApprover = function () {
@@ -31,14 +29,14 @@
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Du skal vælge en ansat");
                 return;
             }
-            
+
             var sub = new Substitute({
                 StartDateTimestamp: Math.floor($scope.approverFromDate.getTime() / 1000),
                 EndDateTimestamp: Math.floor($scope.approverToDate.getTime() / 1000),
                 LeaderId: leader.Id,
-                SubId: $scope.approver[0].Id,
+                SubId: $scope.approver.Id,
                 OrgUnitId: $scope.orgUnit.Id,
-                Persons: [$scope.target[0].Id]
+                PersonId: $scope.target.Id
             });
 
             sub.$patch({ id: substituteId }, function (data) {

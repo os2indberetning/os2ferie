@@ -22,7 +22,7 @@
                         beforeSend: function (req) {
                             req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                         },
-                        url: "odata/Substitutes?$expand=Leader,Sub,OrgUnit, Persons",//"?$expand=OrgUnit and Sub",
+                        url: "odata/Substitutes?$expand=Leader,Sub,OrgUnit, Person",//"?$expand=OrgUnit and Sub",
                         dataType: "json",
                         cache: false
                     },
@@ -40,8 +40,8 @@
                     data: function (data) {
                         var resultSet = [];
                         angular.forEach(data.value, function (value, key) {
-                            // If the PersonId in SubstitutePersons is equal to the LeaderId in Substitutes then it is a substitute.
-                            if (value.Persons[0].PersonId == value.LeaderId) {
+                            // If the PersonId in Substitutes is equal to the LeaderId in Substitutes then it is a substitute.
+                            if (value.PersonId == value.LeaderId) {
                                 resultSet.push(value);
                             }
                         });
@@ -110,7 +110,7 @@
                         beforeSend: function (req) {
                             req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                         },
-                        url: "odata/Substitutes?$expand=Leader,Sub,OrgUnit, Persons",
+                        url: "odata/Substitutes?$expand=Leader,Sub,OrgUnit, Person",
                         dataType: "json",
                         cache: false
                     },
@@ -128,8 +128,8 @@
                     data: function (data) {
                         var resultSet = [];
                         angular.forEach(data.value, function (value, key) {
-                            // If the PersonId in SubstitutePersons is not equal to the LeaderId in Substitutes then it is a personal approver.
-                            if (value.Persons[0].PersonId != value.LeaderId) {
+                            // If the PersonId in Substitutes is not equal to the LeaderId in Substitutes then it is a personal approver.
+                            if (value.PersonId != value.LeaderId) {
                                 resultSet.push(value);
                             }
                         });
@@ -168,21 +168,8 @@
                 field: "Leader.FullName",
                 title: "Udpeget af"
             }, {
-                field: "Persons",
-                title: "Ansatte",
-                template: function (data) {
-                  
-                    var employees = "";
-
-                    for (var i = 0; i < data.Persons.length - 1; i++) {
-                        employees += data.Persons[i].FullName + ", <br/>";
-                    }
-                    employees += data.Persons[data.Persons.length - 1].FullName;
-
-                   
-                    return employees;
-
-                }
+                field: "Person.FullName",
+                title: "Ansat",
             }, {
                 field: "StartDateTimestamp",
                 title: "Fra",

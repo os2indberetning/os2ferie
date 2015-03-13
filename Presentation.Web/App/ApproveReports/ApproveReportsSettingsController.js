@@ -73,7 +73,7 @@
                    title: "Organisation"
                }, {
                    title: "Muligheder",
-                   template: "<a class='k-button' ng-click='openEditSubstitute(${Id})'>Rediger</a><a class='k-button' ng-click='openDeleteSubstitute(${Id})'>Slet</a>"
+                   template: "<a ng-click='openEditSubstitute(${Id})'>Rediger</a> | <a ng-click='openDeleteSubstitute(${Id})'>Slet</a>"
                }]
            };
 
@@ -132,7 +132,7 @@
                    template: "#= kendo.toString(new Date(EndDateTimestamp*1000), 'MM/dd/yyyy') #"
                }, {
                    title: "Muligheder",
-                   template: "<a class='k-button' ng-click='openEditApprover(${Id})'>Rediger</a><a class='k-button' ng-click='openDeleteApprover(${Id})'>Slet</a>"
+                   template: "<a ng-click='openEditApprover(${Id})'>Rediger</a> | <a ng-click='openDeleteApprover(${Id})'>Slet</a>"
                }]
            };
        }

@@ -8,7 +8,7 @@
 
             $scope.substitute = data.value[0]; // This is bad, but can't change the service
             $scope.sub = $scope.substitute.Sub;
-            $scope.person = $scope.substitute.Persons[0];
+            $scope.person = $scope.substitute.Person;
             console.log($scope.substitute);
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000).toLocaleDateString();
             $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000).toLocaleDateString();

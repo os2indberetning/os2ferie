@@ -209,7 +209,7 @@ namespace Infrastructure.DataAccess
 
             modelBuilder.Entity<Substitute>().HasRequired(p => p.Leader).WithMany(p => p.Substitutes);
             modelBuilder.Entity<Substitute>().HasRequired(p => p.Sub).WithMany(p => p.SubstituteLeaders);
-            modelBuilder.Entity<Substitute>().HasMany<Person>(p => p.Persons).WithMany(p => p.SubstituteFor);
+            modelBuilder.Entity<Substitute>().HasRequired(p => p.Person).WithMany(p => p.SubstituteFor);
         }
 
         public class DateTimeOffsetConvention : Convention

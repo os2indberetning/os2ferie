@@ -53,8 +53,8 @@ namespace Core.ApplicationServices.MailerService.Impl
             // Check if the leaders have substitutes.
             foreach (var leader in leadersNoDupe)
             {
-                leadersOrSubs.Add(substitutes.Any(s => s.Persons.Contains(leader) && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp)
-                    ? substitutes.First(s => s.Persons.Contains(leader) && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp).Sub.Mail
+                leadersOrSubs.Add(substitutes.Any(s => s.Person == leader && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp)
+                    ? substitutes.First(s => s.Person == leader && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp).Sub.Mail
                     : leader.Mail);
             }
 

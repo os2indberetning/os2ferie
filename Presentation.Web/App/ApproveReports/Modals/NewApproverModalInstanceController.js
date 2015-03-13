@@ -29,7 +29,7 @@
                 LeaderId: leader.Id,
                 SubId: $scope.approver[0].Id,
                 OrgUnitId: $scope.orgUnit.Id,
-                Persons: [$scope.target[0]]
+                PersonId: $scope.target[0].Id
             });
 
             console.log(sub);

@@ -4,7 +4,7 @@
             method: "GET",
             isArray: false,
             headers: { 'Accept': 'application/json;odata=fullmetadata' },
-            url: "odata/Substitutes(:id)?$expand=OrgUnit,Sub,Persons&:query",
+            url: "odata/Substitutes(:id)?$expand=OrgUnit,Sub,Person&:query",
             data: ''
         },
         "patch": { method: "PATCH", isArray: false },

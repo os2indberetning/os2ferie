@@ -15,10 +15,9 @@ namespace Core.ApplicationServices
                 sub.Sub.CprNumber = "";
                 sub.Leader.CprNumber = "";
 
-                foreach (var person in sub.Persons)
-                {
-                    person.CprNumber = "";
-                }
+
+                sub.Person.CprNumber = "";
+
             }
         }
 
@@ -46,19 +45,14 @@ namespace Core.ApplicationServices
                 }
 
                 sub.Leader.FullName += " " + sub.Leader.LastName;
+                sub.Person.FullName = sub.Person.FirstName;
 
-                foreach (var person in sub.Persons)
+                if (!string.IsNullOrEmpty(sub.Person.MiddleName))
                 {
-                    person.FullName = person.FirstName;
-
-                    if (!string.IsNullOrEmpty(person.MiddleName))
-                    {
-                        person.FullName += " " + person.MiddleName;
-                    }
-
-                    person.FullName += " " + person.LastName;
-
+                    sub.Person.FullName += " " + sub.Person.MiddleName;
                 }
+
+                sub.Person.FullName += " " + sub.Person.LastName;
 
             }
 

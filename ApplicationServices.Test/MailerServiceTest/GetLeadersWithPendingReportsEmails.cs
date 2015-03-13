@@ -42,10 +42,8 @@ namespace ApplicationServices.Test.MailerServiceTest
                 Sub = DriveRepoMock.p2,
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(-1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
-                Persons = new List<Person>()
-                        {
-                            DriveRepoMock.p1
-                        }
+                Person = DriveRepoMock.p1
+
             });
 
             var res = uut.GetLeadersWithPendingReportsMails();
@@ -73,10 +71,7 @@ namespace ApplicationServices.Test.MailerServiceTest
                 Sub = DriveRepoMock.p2,
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(-1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
-                Persons = new List<Person>()
-                        {
-                            DriveRepoMock.p1
-                        }
+                Person = DriveRepoMock.p1
             });
             subRepoMock.Substitutes.Add(new Core.DomainModel.Substitute()
             {
@@ -85,10 +80,7 @@ namespace ApplicationServices.Test.MailerServiceTest
                 Sub = DriveRepoMock.p4,
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(-1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
-                Persons = new List<Person>()
-                        {
-                            DriveRepoMock.p3
-                        }
+                Person = DriveRepoMock.p3
             });
 
             var res = uut.GetLeadersWithPendingReportsMails();
@@ -109,10 +101,7 @@ namespace ApplicationServices.Test.MailerServiceTest
                 Sub = DriveRepoMock.p4,
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(-1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
-                Persons = new List<Person>()
-                        {
-                            DriveRepoMock.p1
-                        }
+                Person = DriveRepoMock.p1
             });
 
             var res = uut.GetLeadersWithPendingReportsMails();
@@ -195,10 +184,7 @@ namespace ApplicationServices.Test.MailerServiceTest
                 Sub = DriveRepoMock.p2,
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(-1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
-                Persons = new List<Person>()
-                        {
-                            DriveRepoMock.p1
-                        }
+                Person = DriveRepoMock.p1
             });
 
             var res = uut.GetLeadersWithPendingReportsMails();
@@ -216,10 +202,7 @@ namespace ApplicationServices.Test.MailerServiceTest
                 Sub = DriveRepoMock.p2,
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(2).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
-                Persons = new List<Person>()
-                        {
-                            DriveRepoMock.p1
-                        }
+                Person = DriveRepoMock.p1
             });
             subRepoMock.Substitutes.Add(new Core.DomainModel.Substitute()
             {
@@ -228,10 +211,7 @@ namespace ApplicationServices.Test.MailerServiceTest
                 Sub = DriveRepoMock.p4,
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(2).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
-                Persons = new List<Person>()
-                        {
-                            DriveRepoMock.p3
-                        }
+                Person = DriveRepoMock.p3
             });
 
             var res = uut.GetLeadersWithPendingReportsMails();
@@ -252,10 +232,7 @@ namespace ApplicationServices.Test.MailerServiceTest
                 Sub = DriveRepoMock.p2,
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(-2).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(-1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
-                Persons = new List<Person>()
-                        {
-                            DriveRepoMock.p1
-                        }
+                Person = DriveRepoMock.p1
             });
             subRepoMock.Substitutes.Add(new Core.DomainModel.Substitute()
             {
@@ -264,10 +241,7 @@ namespace ApplicationServices.Test.MailerServiceTest
                 Sub = DriveRepoMock.p4,
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(-1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.AddDays(-2).Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
-                Persons = new List<Person>()
-                        {
-                            DriveRepoMock.p3
-                        }
+                Person = DriveRepoMock.p3
             });
 
             var res = uut.GetLeadersWithPendingReportsMails();
