@@ -38,11 +38,11 @@ namespace ApplicationServices.Test.FileGenerator
         private const string cpr = "1234567890";
 
         [Test]
-        public void FileRecordStringsShouldHaveALengthOf54()
+        public void FileRecordStringsShouldHaveALengthOf55()
         {
             var record = new FileRecord(_report, cpr);
             var recordString = record.ToString();
-            Assert.AreEqual(54, recordString.Length, "Length of each record string should be 54 chars");
+            Assert.AreEqual(55, recordString.Length, "Length of each record string should be 54 chars");
         }
 
         [Test]

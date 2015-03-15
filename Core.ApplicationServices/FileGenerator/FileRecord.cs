@@ -19,10 +19,9 @@ namespace Core.ApplicationServices.FileGenerator
             // Unix timestamp is seconds past epoch
             DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             var reportDate = dtDateTime.AddSeconds(report.DriveDateTimestamp).ToLocalTime();
-            var date = new DateTime(reportDate.Year, reportDate.Month, 1);
 
             CprNr = ownerCpr;
-            Date = date;
+            Date = reportDate;
             EmploymentId = report.Employment.EmploymentId;
             EmploymentTypeId = report.Employment.EmploymentType;
             ReimbursementDistance = report.Distance;
