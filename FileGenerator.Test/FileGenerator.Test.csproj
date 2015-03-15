@@ -68,10 +68,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ReportRepositoryMock.cs" />
-    <Compile Include="FileRecordTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportGeneratorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core.ApplicationServices\Core.ApplicationServices.csproj">
@@ -86,10 +83,6 @@
       <Project>{3A54FD98-5ECF-47C1-98C1-D827CFEBA317}</Project>
       <Name>Core.DomainServices</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FileGenerator\FileGenerator.csproj">
-      <Project>{ABF76537-CB6D-4F47-A172-AA69A3AA7E71}</Project>
-      <Name>FileGenerator</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Infrastructure.DataAccess\Infrastructure.DataAccess.csproj">
       <Project>{9914DB94-E465-4751-939C-8121C30AC945}</Project>
       <Name>Infrastructure.DataAccess</Name>
@@ -97,9 +90,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="PrivateSettings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -1,9 +1,10 @@
-﻿using Core.DomainModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Core.ApplicationServices.FileGenerator;
+using Core.DomainModel;
+using NUnit.Framework;
 
-namespace FileGenerator.Test
+namespace ApplicationServices.Test.FileGenerator
 {
-    [TestClass]
+    [TestFixture]
     public class FileRecordTest
     {
         /**
@@ -36,15 +37,15 @@ namespace FileGenerator.Test
 
         private const string cpr = "1234567890";
 
-        [TestMethod]
-        public void FileRecordStringsShouldHaveALengthOf54()
+        [Test]
+        public void FileRecordStringsShouldHaveALengthOf55()
         {
             var record = new FileRecord(_report, cpr);
             var recordString = record.ToString();
-            Assert.AreEqual(54, recordString.Length, "Length of each record string should be 54 chars");
+            Assert.AreEqual(55, recordString.Length, "Length of each record string should be 54 chars");
         }
 
-        [TestMethod]
+        [Test]
         public void DistanceWithoutDecimalsShouldHave00Appended()
         {
             _report.Distance = 3999;
@@ -53,7 +54,7 @@ namespace FileGenerator.Test
             Assert.AreEqual("399900", getDistanceFromRecordString(recordString));
         }
 
-        [TestMethod]
+        [Test]
         public void DistanceShouldBePaddedToFourDigitsBeforeDecimal()
         {
             _report.Distance = 39.99;
@@ -62,7 +63,7 @@ namespace FileGenerator.Test
             Assert.AreEqual("003999", getDistanceFromRecordString(recordString));
         }
 
-        [TestMethod]
+        [Test]
         public void DistanceShouldBePaddedToTwoDigitsAfterDecimal()
         {
             _report.Distance = 3999.9;

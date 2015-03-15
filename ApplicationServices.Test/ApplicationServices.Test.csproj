@@ -101,6 +101,9 @@
   <ItemGroup>
     <Compile Include="DriveReportServiceTest\DriveReportMock.cs" />
     <Compile Include="DriveReportServiceTest\DriveReportServiceTest.cs" />
+    <Compile Include="FileGenerator\FileRecordTest.cs" />
+    <Compile Include="FileGenerator\ReportGeneratorTest.cs" />
+    <Compile Include="FileGenerator\ReportRepositoryMock.cs" />
     <Compile Include="MailerServiceTest\RepoMock.cs" />
     <Compile Include="MailerServiceTest\GetLeadersWithPendingReportsEmails.cs" />
     <Compile Include="MailerServiceTest\SendMails.cs" />
@@ -113,6 +116,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="PrivateSettings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

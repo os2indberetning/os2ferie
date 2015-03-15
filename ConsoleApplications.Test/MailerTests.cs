@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Core.ApplicationServices;
+using ConsoleApplications.Test.Mailer;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
-using Core.DomainServices;
 using Mail;
-using Ninject;
 using NSubstitute;
 using NUnit.Framework;
 
-
-namespace ConsoleApplications.Test.Mailer
+namespace ConsoleApplications.Test
 {
     [TestFixture]
     public class MailerTests
