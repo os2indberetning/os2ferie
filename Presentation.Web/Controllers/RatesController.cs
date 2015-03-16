@@ -59,7 +59,7 @@ namespace OS2Indberetning.Controllers
             return base.Delete(key);
         }
         
-        // GET: odata/Rates/RateService.ThisYearsRates
+        // GET: odata/Rates/Service.ThisYearsRates
         [EnableQuery]
         [HttpGet]
         public IQueryable<Rate> ThisYearsRates()

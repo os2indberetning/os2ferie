@@ -75,7 +75,7 @@ namespace OS2Indberetning.Controllers
             return result.AsQueryable();
         }
 
-        // GET: odata/Person(5)/PersonService.HasLicensePlate
+        // GET: odata/Person(5)/Service.HasLicensePlate
         [EnableQuery]
         [HttpGet]
         public IHttpActionResult HasLicensePlate([FromODataUri] int key, ODataActionParameters parameters)
