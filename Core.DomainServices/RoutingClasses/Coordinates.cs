@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.AddressServices.Classes
+﻿namespace Core.DomainServices.RoutingClasses
 {
     public class Coordinates
     {
@@ -16,7 +16,7 @@
 
         public override bool Equals(object obj)
         {
-            var address = obj as Coordinates;
+            var address = obj as Coordinates; 
             if (address == null)
             {
                 return false;

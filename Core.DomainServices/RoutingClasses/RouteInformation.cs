@@ -1,5 +1,5 @@
 ﻿
-namespace Infrastructure.AddressServices.Classes
+namespace Core.DomainServices.RoutingClasses
 {
     public class RouteInformation
     {
@@ -10,7 +10,7 @@ namespace Infrastructure.AddressServices.Classes
         /// <summary>
         /// Route length.
         /// </summary>
-        public double Length { get; set; }
+        public int Length { get; set; }
         /// <summary>
         /// Route duration.
         /// </summary>

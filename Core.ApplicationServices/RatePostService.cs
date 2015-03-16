@@ -5,7 +5,6 @@ using System.Linq;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.AddressServices;
-using Infrastructure.AddressServices.Classes;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 

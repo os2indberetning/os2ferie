@@ -1,7 +1,7 @@
-﻿using System;
+﻿﻿using System;
 using System.Runtime.Serialization;
 
-namespace Infrastructure.AddressServices.Classes
+namespace Core.DomainServices.RoutingClasses
 {
     [Serializable]
     public class AddressLaunderingException : ApplicationException
@@ -23,14 +23,10 @@ namespace Infrastructure.AddressServices.Classes
         {
         }
 
-        public AddressLaunderingException(string message, int errorCode) : base(message)
+        public AddressLaunderingException(string message, int errorCode)
+            : base(message)
         {
             _errorCode = errorCode;
-        }
-
-        public AddressLaunderingException(string message, Exception inner) : base(message, inner)
-        {
-            
         }
 
         public AddressLaunderingException(SerializationInfo info, StreamingContext context)
@@ -47,6 +43,11 @@ namespace Infrastructure.AddressServices.Classes
                 info.AddValue("_errorCode", _errorCode);
             }
         }
+
+        public AddressLaunderingException(string message, Exception e) : base(message, e)
+        {
+            
+        }
     }
 
     public class AddressCoordinatesException : ApplicationException
@@ -55,11 +56,13 @@ namespace Infrastructure.AddressServices.Classes
         {
         }
 
-        public AddressCoordinatesException(string message) : base(message)
+        public AddressCoordinatesException(string message)
+            : base(message)
         {
         }
 
-        public AddressCoordinatesException(string message, Exception inner) : base(message, inner)
+        public AddressCoordinatesException(string message, Exception inner)
+            : base(message, inner)
         {
         }
     }

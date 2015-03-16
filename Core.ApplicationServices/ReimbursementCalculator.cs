@@ -4,7 +4,7 @@ using System.Linq;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
-using Infrastructure.AddressServices.Classes;
+using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 
@@ -102,7 +102,7 @@ namespace Core.ApplicationServices
             if (report.FourKmRule)
             {
                 //Take users provided distance from home to border of municipality
-                var borderDistance = person.DistanceFromHomeToBorder * 1000;
+                var borderDistance = person.DistanceFromHomeToBorder;
 
                 //Adjust distance based on if user starts or ends at home
                 if (report.StartsAtHome)
@@ -116,7 +116,7 @@ namespace Core.ApplicationServices
                 }
 
                 //Subtract 4 km because reasons.
-                toSubtract += 4000;
+                toSubtract += 4;
             }
             else
             {
@@ -159,6 +159,13 @@ namespace Core.ApplicationServices
                     var drivenRoute = _route.GetRoute(report.DriveReportPoints);
 
                     report.Distance = drivenRoute.Length;
+
+                    if (report.FourKmRule)
+                    {
+                        report.Distance -= 4;
+                    }
+
+
                     break;
                 }
 
@@ -181,14 +188,12 @@ namespace Core.ApplicationServices
             
             SetAmountToReimburse(report);
 
-            report.Distance = report.Distance/1000;
-
             return report;
         }
 
         private void SetAmountToReimburse(DriveReport report)
         {
-            report.AmountToReimburse = (report.Distance / 1000) * (report.KmRate / 100);
+            report.AmountToReimburse = (report.Distance) * (report.KmRate / 100);
 
             if (report.AmountToReimburse < 0)
             {

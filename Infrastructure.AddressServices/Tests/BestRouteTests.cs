@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using Core.DomainServices;
-using Infrastructure.AddressServices.Classes;
+using System.Linq;
+using System.Text;
+using Core.DomainServices.RoutingClasses;
+using Core.DomainServices.Ínterfaces;
+using Infrastructure.AddressServices.Interfaces;
 using Infrastructure.AddressServices.Routing;
 using NUnit.Framework;
 using Address = Core.DomainModel.Address;

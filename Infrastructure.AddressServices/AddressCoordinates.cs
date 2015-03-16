@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Core.DomainServices.RoutingClasses;
 using Core.DomainServices;
-using Infrastructure.AddressServices.Classes;
 using Newtonsoft.Json.Linq;
 using Core.DomainModel;
 
@@ -35,7 +35,7 @@ namespace Infrastructure.AddressServices
         /// Get address information for given coordinates.
         /// </summary>
         /// <param name="addressCoord"></param>
-        /// <exception cref="Classes.AddressCoordinatesException">Thrown if the coordinates did not return an address.</exception>
+        /// <exception cref="AddressCoordinatesException">Thrown if the coordinates did not return an address.</exception>
         /// <returns></returns>
         public Address GetAddressFromCoordinates(Address addressCoord)
         {
@@ -220,7 +220,7 @@ namespace Infrastructure.AddressServices
             Stream responseStream;
             try
             {
-                var distanceResponse = request.GetResponse();
+            var distanceResponse = request.GetResponse();
                 responseStream = distanceResponse.GetResponseStream();
             }
             catch (WebException e)

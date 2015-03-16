@@ -1,13 +1,12 @@
 ﻿
-namespace Infrastructure.AddressServices.Classes
+namespace Core.DomainServices.RoutingClasses
 {
-    static class UrlDefinitions
+    public class UrlDefinitions
     {
         private const string _coordinateToAddressUrl = @"http://dawa.aws.dk/adgangsadresser/reverse?";
         private const string _launderingURL = @"http://service.adressevask.dk/favrskov-HIEEPKWJED/json?json=";
         private const string _coordinatesURL = @"http://dawa.aws.dk/adresser?";
         private const string _routingURL = @"http://routing.septima.dk/favrskov-HIEEPKWJED/car/viaroute?";
-        private const string _newRoutingURL = @"http://new-routing.septima.dk/favrskov-HIEEPKWJED/car/viaroute?";
 
         /// <summary>
         /// URL for address laundering.
@@ -35,7 +34,7 @@ namespace Infrastructure.AddressServices.Classes
         /// </summary>
         public static string RoutingUrl
         {
-            get { return _newRoutingURL; }
+            get { return _routingURL; }
         }
     }
 }
