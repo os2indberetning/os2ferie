@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core.DomainModel;
 using Core.DomainServices;
@@ -56,9 +57,59 @@ namespace Core.ApplicationServices.FileGenerator
             return _reportRepo.AsQueryable().Where(r => r.Status == ReportStatus.Accepted).ToList();
         }
 
-        private static List<FileRecord> RecordListBuilder(Dictionary<string, List<DriveReport>> usersToReimburse)
+        private List<FileRecord> RecordListBuilder(Dictionary<string, List<DriveReport>> usersToReimburse)
         {
-            return (from pair in usersToReimburse from report in pair.Value select new FileRecord(report, pair.Key)).ToList();
+            var fileRecords = new List<FileRecord>();
+            foreach (var cpr in usersToReimburse.Keys)
+            {
+                var driveReports = usersToReimburse[cpr].OrderBy(x => x.TFCode).ThenBy(x => x.DriveDateTimestamp);
+                DriveReport currentDriveReport = null;
+                var currentTFCode = "";
+                var currentMonth = -1;
+                foreach (var driveReport in driveReports)
+                {
+                    var driveDate = TimestampToDate(driveReport.DriveDateTimestamp);
+                    if ( ! driveReport.TFCode.Equals(currentTFCode) || driveDate.Month != currentMonth)
+                    {
+                        if (currentDriveReport != null)
+                        {
+                            fileRecords.Add(new FileRecord(currentDriveReport, cpr));
+                        }
+                        currentMonth = driveDate.Month;
+                        currentTFCode = driveReport.TFCode;
+                        currentDriveReport = new DriveReport
+                        {
+                            TFCode = driveReport.TFCode,
+                            Employment = driveReport.Employment,
+                            EmploymentId = driveReport.EmploymentId,
+                            Distance = 0,
+                            DriveDateTimestamp = TimetsmpOfLastDayInMonth(driveDate)
+                        };
+
+                    }
+                    currentDriveReport.Distance += driveReport.Distance;
+                }
+                if (currentDriveReport != null) { 
+                    fileRecords.Add(new FileRecord(currentDriveReport, cpr));
+                }
+
+            }
+            return fileRecords;
+        }
+
+        private DateTime TimestampToDate(long timestamp)
+        {
+            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(timestamp).ToLocalTime();
+            return dtDateTime;
+        }
+
+        private long TimetsmpOfLastDayInMonth(DateTime date)
+        {
+            var Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            var lastDay = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+            return (long)(lastDay - Epoch).TotalSeconds;
         }
     }
 }
