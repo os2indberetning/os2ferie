@@ -19,6 +19,14 @@
             transformResponse: function (data) {
                 return angular.fromJson(data).value;
             }
+        },
+        "setCoordinatesOnAddress": {
+            method: "POST",
+            url: "/odata/Addresses/Service.SetCoordinatesOnAddress",
+            isArray: true,
+            transformResponse: function(data) {
+                return angular.fromJson(data).value;
+            }
         }
     });
 }]);

@@ -89,7 +89,7 @@ namespace Core.ApplicationServices
 
                 var drivenRoute = _route.GetRoute(report.DriveReportPoints);
 
-                report.Distance = (double) drivenRoute.Length/1000;
+                report.Distance = (double)drivenRoute.Length / 1000;
 
 
             }

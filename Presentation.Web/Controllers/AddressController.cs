@@ -1,12 +1,18 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
+using System.Web.Http.OData.Routing;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
+using Ninject;
 
 namespace OS2Indberetning.Controllers
 {
+    
+
     public class AddressesController : BaseController<Address>
     {
           //GET: odata/Addresses
@@ -24,6 +30,18 @@ namespace OS2Indberetning.Controllers
         {
             return GetQueryable(key, queryOptions);
         }
+
+        [EnableQuery]
+        public IQueryable<Address> SetCoordinatesOnAddress(Address address)
+        {
+            var coordinates = NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>();
+            var result = coordinates.GetAddressCoordinates(address);
+            var list = new List<Address>()
+            {
+                result
+            }.AsQueryable();
+            return list;
+        } 
 
         //PUT: odata/Addresses(5)
         public new IHttpActionResult Put([FromODataUri] int key, Delta<Address> delta)

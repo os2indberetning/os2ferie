@@ -9,7 +9,7 @@
         $scope.Routes = [];
         $scope.IsRoute = false;
 
-        $scope.personalRouteDropdownChange = function(e) {
+        $scope.personalRouteDropdownChange = function (e) {
             var index = e.sender.selectedIndex;
 
             if (index == 0) {
@@ -29,20 +29,20 @@
 
             $scope.DriveReport.Addresses = [];
 
-            angular.forEach($scope.Routes[index - 1].Points, function(value, key) {
+            angular.forEach($scope.Routes[index - 1].Points, function (value, key) {
                 $scope.DriveReport.Addresses.push({ Name: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town, Save: false });
             });
 
             $scope.validateInput();
         }
 
-        $scope.Person = Person.get({ id: 1 }, function() {
+        $scope.Person = Person.get({ id: 1 }, function () {
             Address.get({ query: "$filter=PersonId eq " + $scope.Person.Id + " and Type eq Core.DomainModel.PersonalAddressType'Standard'" }, function (data) {
                 var temp = [{ value: "Vælg fast adresse" }];
 
                 angular.forEach(data.value, function (value, key) {
                     var street = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
-                    var presentation = (function() {
+                    var presentation = (function () {
                         if (value.Description != "" && value.Description != undefined) {
                             return value.Description + " : " + street;
                         }
@@ -66,7 +66,7 @@
                     $scope.Routes.push(value);
                 });
 
-                $scope.PersonalRoutes = temp;                
+                $scope.PersonalRoutes = temp;
             });
         });
 
@@ -80,7 +80,7 @@
         $scope.Employments = PersonEmployments.get({ id: 1 }, function () {
             $scope.PositionDropDown.dataSource.read();
         });
-        
+
         $scope.Licenseplates = LicensePlate.get({ id: 1 }, function (data) {
             if (data.length > 0) {
                 $scope.LicenseplateDropDown.dataSource.read();
@@ -90,7 +90,7 @@
             }
         });
 
-        
+
 
         $scope.DriveReport.Addresses = [];
 
@@ -110,8 +110,7 @@
         $scope.RemainingKilometers = 0;
         $scope.PayoutAmount = 0;
 
-        var getKmRate = function()
-        {
+        var getKmRate = function () {
             for (var i = 0; i < $scope.KmRate.length; i++) {
                 if ($scope.KmRate[i].Id == $scope.DriveReport.KmRate) {
                     return $scope.KmRate[i];
@@ -121,7 +120,7 @@
 
         $scope.validateInput = function () {
             $scope.canSubmitDriveReport = true;
-            
+
             if ($scope.DriveReport.KilometerAllowance === "Read") {
                 if ($scope.DriveReport.Purpose == "" || $scope.DriveReport.Purpose == undefined) {
                     $scope.canSubmitDriveReport = false;
@@ -139,17 +138,47 @@
                     $scope.canSubmitDriveReport = false;
                 }
             }
+            $scope.populateMap();
+        }
+
+
+        //TODO: Make this function work. The problem seems to be that setCoordinatesOnAddress is called before the formatterservice has finished.
+
+        $scope.populateMap = function () {
+
+            var tempAddr = [];
+
+
+            angular.forEach($scope.DriveReport.Addresses, function (address, key) {
+                if ((address.Personal == undefined || address.Personal == "Vælg fast adresse") && address.Name != "") {
+                    var currAddr = new Address(AddressFormatter.fn(address.Name));
+                    Address.setCoordinatesOnAddress(currAddr, function (res) {
+                        debugger;
+                        tempAddr.push(res);
+                    });
+                }
+                else {
+                    var currAddr = new Address(AddressFormatter.fn(address.Personal));
+                    Address.setCoordinatesOnAddress(currAddr, function (res) {
+                        tempAddr.push(res);
+                        debugger;
+                    });
+                }
+            });
+            debugger;
         }
 
         $scope.Save = function () {
+
+
             $scope.validateInput();
 
             if (!$scope.canSubmitDriveReport) {
                 return;
-            }            
+            }
 
             var driveReport = new DriveReport();
-            
+
             // Prepare all data to  be uploaded
             driveReport.Purpose = $scope.DriveReport.Purpose;
             driveReport.DriveDateTimestamp = Math.floor($scope.DriveReport.Date.getTime() / 1000);
@@ -252,7 +281,7 @@
                 $scope.TransportAllowance = 0;
                 $scope.RemainingKilometers = 0;
                 $scope.PayoutAmount = response.AmountToReimburse;
-
+                debugger;
                 NotificationService.AutoFadeNotification("success", "Success", "Din kørselsindberetning blev gemt");
 
 
@@ -264,7 +293,7 @@
 
         $scope.AddViapoint = function () {
             var temp = $scope.DriveReport.Addresses.pop();
-            $scope.DriveReport.Addresses.push({ Name: "", Personal:"", Save: false });
+            $scope.DriveReport.Addresses.push({ Name: "", Personal: "", Save: false });
             $scope.DriveReport.Addresses.push(temp);
         };
 
@@ -317,8 +346,29 @@
                 openDatePicker = false;
             }
         });
-       
 
+        OS2RouteMap.show({
+            id: 'map',
+            Addresses: [
+
+                { name: "Randersvej 200, 8200 Aarhus N", lat: 56.1820, lng: 10.1981 },
+                { name: "Katrinebjervej 93B, 8200 Aarhus N", lat: 56.1731, lng: 10.1897 },
+                { name: "Banegårdpladen 1, 8000 Aarhus", lat: 56.1504, lng: 10.2045 },
+
+            ],
+            change: function (obj) {
+
+                var tempAddr = [];
+
+                var address = new Address();
+                address.StreetName = "Jens Baggesens Vej";
+                address.StreetNumber = "42";
+                address.ZipCode = 8210;
+                Address.setCoordinatesOnAddress(address, function (res) {
+                    debugger;
+                });
+            }
+        });
 
     }
 ]);

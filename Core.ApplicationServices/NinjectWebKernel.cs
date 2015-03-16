@@ -6,6 +6,7 @@ using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Impl;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainServices;
+using Infrastructure.AddressServices;
 using Infrastructure.DataAccess;
 using Ninject;
 using Ninject.Web.Common;
@@ -56,6 +57,7 @@ namespace Core.ApplicationServices
             kernel.Bind<IMailService>().To<MailService>();
             kernel.Bind<ISubstituteService>().To<SubstituteService>();
             kernel.Bind<IDriveReportService>().To<DriveReportService>();
+            kernel.Bind<IAddressCoordinates>().To<AddressCoordinates>();
 
 
         }        

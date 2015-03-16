@@ -38,7 +38,7 @@ namespace OS2Indberetning
 
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
-            
+
         }
 
         public static Microsoft.OData.Edm.IEdmModel GetModel()
@@ -51,6 +51,10 @@ namespace OS2Indberetning
 
             builder.EntitySet<Address>("Addresses");
 
+            builder.EntityType<Address>().Collection
+            .Action("SetCoordinatesOnAddress")
+            .ReturnsFromEntitySet<Address>("Addresses");
+
             builder.EntitySet<DriveReport>("DriveReports");
 
             builder.EntitySet<DriveReportPoint>("DriveReportPoints");
@@ -60,7 +64,7 @@ namespace OS2Indberetning
             eType.HasKey(e => e.Id);
 
             builder.EntitySet<FileGenerationSchedule>("FileGenerationSchedules");
-            
+
             var lType = builder.EntityType<LicensePlate>();
             lType.Ignore(l => l.Person);
             builder.EntitySet<LicensePlate>("LicensePlates");
@@ -86,7 +90,7 @@ namespace OS2Indberetning
 
             builder.EntitySet<Report>("Reports");
 
-            
+
 
             builder.EntitySet<BankAccount>("BankAccounts");
 
@@ -114,3 +118,5 @@ namespace OS2Indberetning
         }
     }
 }
+
+
