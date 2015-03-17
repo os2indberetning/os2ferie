@@ -78,7 +78,7 @@
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label for="">Vælg standardrute:</label>
-                        <select class="fill-width" kendo-drop-down-list="dropdownContainer.PersonalRouteDropDown" k-on-change="personalRouteDropdownChange(kendoEvent)" ng-model="DriveReport.PersonalRoute" k-data-source="PersonalRoutes" k-data-text-field="'presentation'"></select>
+                        <select class="fill-width" kendo-drop-down-list="container.PersonalRouteDropDown" k-on-change="personalRouteDropdownChange(kendoEvent)" ng-model="DriveReport.PersonalRoute" k-data-source="PersonalRoutes" k-data-text-field="'presentation'"></select>
                     </div>
                 </div>
             </div>
@@ -107,11 +107,11 @@
                         <div class="row form-group">
                             <div class="col-lg-7">
                                 <label for="">Vælg adresse:</label>
-                                <select ng-hide="DriveReport.Addresses[$index].Name.length != 0" class="fill-width" kendo-drop-down-list="dropdownContainer.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="validateInput()" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"></select>
+                                <select ng-hide="DriveReport.Addresses[$index].Name.length != 0" class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="validateInput()" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"></select>
                             </div>
                             <div ng-show="DriveReport.Addresses[$index].Personal == 'Vælg fast adresse'">
                                 <div class="col-lg-7">
-                                    <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
+                                    <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-options="autoCompleteOptions" k-data-value-field="'presentationString'"
                                            k-data-source="SmartAddress" ng-change="validateInput()" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="'Eller skriv her'" />
                                 </div>
                                 <div class="col-lg-1" ng-if="$middle">

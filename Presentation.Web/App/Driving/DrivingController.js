@@ -1,8 +1,8 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", "Address", "Route", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state, Address, Route) {
+    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", "Address", "Route", "$q", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state, Address, Route, $q) {
 
 
-        $scope.dropdownContainer = {};
+        $scope.container = {};
 
         $scope.DriveReport = new DriveReport();
         $scope.canSubmitDriveReport = true;
@@ -73,25 +73,6 @@
         $scope.FourKmRule = {}
         $scope.FourKmRule.Using = false;
 
-        $scope.KmRate = Rate.ThisYearsRates(function () {
-            $scope.KmRateDropDown.dataSource.read();
-        });
-
-        $scope.Employments = PersonEmployments.get({ id: 1 }, function () {
-            $scope.PositionDropDown.dataSource.read();
-        });
-
-        $scope.Licenseplates = LicensePlate.get({ id: 1 }, function (data) {
-            if (data.length > 0) {
-                $scope.LicenseplateDropDown.dataSource.read();
-                $scope.canSubmitDriveReport = data.length > 0;
-            } else {
-                $scope.openNoLicensePlateModal();
-            }
-        });
-
-
-
         $scope.DriveReport.Addresses = [];
 
         $scope.DriveReport.Addresses.push({ Name: "", Personal: "", Save: false });
@@ -138,35 +119,10 @@
                     $scope.canSubmitDriveReport = false;
                 }
             }
-            $scope.populateMap();
+                $scope.generateMapWidget();
         }
 
 
-        //TODO: Make this function work. The problem seems to be that setCoordinatesOnAddress is called before the formatterservice has finished.
-
-        $scope.populateMap = function () {
-
-            var tempAddr = [];
-
-
-            angular.forEach($scope.DriveReport.Addresses, function (address, key) {
-                if ((address.Personal == undefined || address.Personal == "Vælg fast adresse") && address.Name != "") {
-                    var currAddr = new Address(AddressFormatter.fn(address.Name));
-                    Address.setCoordinatesOnAddress(currAddr, function (res) {
-                        debugger;
-                        tempAddr.push(res);
-                    });
-                }
-                else {
-                    var currAddr = new Address(AddressFormatter.fn(address.Personal));
-                    Address.setCoordinatesOnAddress(currAddr, function (res) {
-                        tempAddr.push(res);
-                        debugger;
-                    });
-                }
-            });
-            debugger;
-        }
 
         $scope.Save = function () {
 
@@ -281,7 +237,6 @@
                 $scope.TransportAllowance = 0;
                 $scope.RemainingKilometers = 0;
                 $scope.PayoutAmount = response.AmountToReimburse;
-                debugger;
                 NotificationService.AutoFadeNotification("success", "Success", "Din kørselsindberetning blev gemt");
 
 
@@ -331,9 +286,9 @@
             openDatePicker = true;
 
             $scope.DriveReport.Purpose = "";
-            $scope.dropdownContainer.PersonalRouteDropDown.select(0);
+            $scope.container.PersonalRouteDropDown.select(0);
             $scope.personalRouteDropdownChange(event);
-            $scope.dropdownContainer.PersonalAddressDropDown.select(0);
+            $scope.container.PersonalAddressDropDown.select(0);
 
         }
 
@@ -345,30 +300,96 @@
                 $scope.driveDatePicker.open();
                 openDatePicker = false;
             }
+
+            // Load data into kendo components once they are finished rendering.
+            $scope.KmRate = Rate.ThisYearsRates(function () {
+                $scope.KmRateDropDown.dataSource.read();
+            });
+
+            $scope.Employments = PersonEmployments.get({ id: 1 }, function () {
+                $scope.PositionDropDown.dataSource.read();
+            });
+
+            $scope.Licenseplates = LicensePlate.get({ id: 1 }, function (data) {
+                if (data.length > 0) {
+                    $scope.LicenseplateDropDown.dataSource.read();
+                    $scope.canSubmitDriveReport = data.length > 0;
+                } else {
+                    $scope.openNoLicensePlateModal();
+                }
+            });
+
+
+
         });
 
-        OS2RouteMap.show({
-            id: 'map',
-            Addresses: [
+        $scope.generateMapWidget = function () {
 
-                { name: "Randersvej 200, 8200 Aarhus N", lat: 56.1820, lng: 10.1981 },
-                { name: "Katrinebjervej 93B, 8200 Aarhus N", lat: 56.1731, lng: 10.1897 },
-                { name: "Banegårdpladen 1, 8000 Aarhus", lat: 56.1504, lng: 10.2045 },
+            var checkArray = [];
+            angular.forEach($scope.DriveReport.Addresses, function (address, key) {
+                checkArray[key] = false;
+                if ((address.Name == "" || address.Name == undefined) && (address.Personal == "" || address.Personal == "Vælg fast adresse" || address.Personal == undefined)) {
+                    // Data is not valid.
+                    return;
+                } else if (address.Name != "") {
+                    var format = AddressFormatter.fn(address.Name);
+                    if (format != undefined) {
+                        Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }, function(res) {
+                            address.Latitude = res[0].Latitude;
+                            address.Longitude = res[0].Longitude;
+                            checkArray[key] = true;
 
-            ],
-            change: function (obj) {
+                            if (checkArray.every(function(element, index, array) {
+                                return element;
+                            })) {
+                                $scope.populateMap();
+                            }
 
-                var tempAddr = [];
+                        });
+                    }
+                } else {
+                    var format = AddressFormatter.fn(address.Personal);
+                    if (format != undefined) {
+                        Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }, function (res) {
+                            address.Latitude = res[0].Latitude;
+                            address.Longitude = res[0].Longitude;
+                            checkArray[key] = true;
 
-                var address = new Address();
-                address.StreetName = "Jens Baggesens Vej";
-                address.StreetNumber = "42";
-                address.ZipCode = 8210;
-                Address.setCoordinatesOnAddress(address, function (res) {
-                    debugger;
-                });
-            }
-        });
+                            if (checkArray.every(function (element, index, array) {
+                                return element;
+                            })) {
+                                $scope.populateMap();
+                            }
+
+                        });
+                    }
+                }
+
+
+
+            });
+        }
+
+        $scope.populateMap = function () {
+            var mapArray = [];
+
+            angular.forEach($scope.DriveReport.Addresses, function (address, key) {
+                console.log(address);
+                mapArray.push({ name: address.Name, lat: address.Latitude, lng: address.Longitude });
+            });
+
+
+            OS2RouteMap.show({
+                id: 'map',
+                Addresses: mapArray,
+                change: function (obj) {
+                }
+            });
+        }
+
+
+
+
 
     }
 ]);

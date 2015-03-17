@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.OData.Routing;
 using System.Web.OData;
@@ -41,7 +43,7 @@ namespace OS2Indberetning.Controllers
                 result
             }.AsQueryable();
             return list;
-        } 
+        }
 
         //PUT: odata/Addresses(5)
         public new IHttpActionResult Put([FromODataUri] int key, Delta<Address> delta)
