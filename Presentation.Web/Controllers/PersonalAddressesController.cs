@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
+using Ninject;
 
 namespace OS2Indberetning.Controllers
 {
@@ -36,6 +39,10 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(PersonalAddress personalAddress)
         {
+            var coordinates = NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>();
+            var result = coordinates.GetAddressCoordinates(personalAddress);
+            personalAddress.Latitude = result.Latitude;
+            personalAddress.Longitude = result.Longitude;
             return base.Post(personalAddress);
         }
 

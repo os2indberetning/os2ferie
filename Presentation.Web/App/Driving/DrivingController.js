@@ -4,6 +4,13 @@
 
         $scope.container = {};
 
+
+        // Magic variable. Is checked when calling generateMapWidget to make sure it is only called when we manually change the gui. IE. not by changes on the map.
+        // When the map is changes by the map, the variable is set to the number of address points and is decremented by one for each time a gui element changes
+        // which it does once for each address.
+        // Simply put: if the var is <= 0 then the map will be drawn.
+        $scope.guiChangedByMap = 0;
+
         $scope.DriveReport = new DriveReport();
         $scope.canSubmitDriveReport = true;
         $scope.Routes = [];
@@ -119,7 +126,10 @@
                     $scope.canSubmitDriveReport = false;
                 }
             }
+            if ($scope.guiChangedByMap <= 0) {
                 $scope.generateMapWidget();
+            }
+            $scope.guiChangedByMap--;
         }
 
 
@@ -254,6 +264,7 @@
 
         $scope.Remove = function (array, index) {
             array.splice(index, 1);
+            $scope.validateInput();
         };
 
         $scope.openNoLicensePlateModal = function () {
@@ -278,17 +289,15 @@
 
 
         $scope.clearClicked = function () {
-            var event = {};
-            event.sender = {};
-            event.sender.selectedIndex = 0;
-
             // Make the datepicker pop open when clear is clicked.
             openDatePicker = true;
 
             $scope.DriveReport.Purpose = "";
             $scope.container.PersonalRouteDropDown.select(0);
-            $scope.personalRouteDropdownChange(event);
+            $scope.container.PersonalRouteDropDown.trigger("change");
             $scope.container.PersonalAddressDropDown.select(0);
+            $scope.container.PersonalAddressDropDown.trigger("change");
+
 
         }
 
@@ -323,45 +332,62 @@
 
         });
 
+
+
         $scope.generateMapWidget = function () {
 
+            var setCheckArrayIndexAndPopulateMap = function (key, checkArray) {
+                checkArray[key] = true;
+                if (checkArray.every(function (element, index, array) {
+                                    return element;
+                })) {
+                    $scope.populateMap();
+                }
+            }
+
+
             var checkArray = [];
+            angular.forEach($scope.DriveReport.Addresses, function (value, key) {
+                checkArray[key] = false;
+            });
+
             angular.forEach($scope.DriveReport.Addresses, function (address, key) {
                 checkArray[key] = false;
+
                 if ((address.Name == "" || address.Name == undefined) && (address.Personal == "" || address.Personal == "Vælg fast adresse" || address.Personal == undefined)) {
                     // Data is not valid.
                     return;
                 } else if (address.Name != "") {
                     var format = AddressFormatter.fn(address.Name);
+
                     if (format != undefined) {
-                        Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }, function(res) {
-                            address.Latitude = res[0].Latitude;
-                            address.Longitude = res[0].Longitude;
-                            checkArray[key] = true;
+                        if (address.Latitude == undefined) {
+                            Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }, function (res) {
+                                address.Latitude = res[0].Latitude;
+                                address.Longitude = res[0].Longitude;
 
-                            if (checkArray.every(function(element, index, array) {
-                                return element;
-                            })) {
-                                $scope.populateMap();
-                            }
+                                setCheckArrayIndexAndPopulateMap(key, checkArray);
 
-                        });
+
+                            });
+                        } else {
+                            setCheckArrayIndexAndPopulateMap(key, checkArray);
+                        }
                     }
                 } else {
                     var format = AddressFormatter.fn(address.Personal);
                     if (format != undefined) {
-                        Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }, function (res) {
-                            address.Latitude = res[0].Latitude;
-                            address.Longitude = res[0].Longitude;
-                            checkArray[key] = true;
+                        if (address.Latitude == undefined) {
+                            Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }, function(res) {
+                                address.Latitude = res[0].Latitude;
+                                address.Longitude = res[0].Longitude;
 
-                            if (checkArray.every(function (element, index, array) {
-                                return element;
-                            })) {
-                                $scope.populateMap();
-                            }
+                                setCheckArrayIndexAndPopulateMap(key, checkArray);
 
-                        });
+                            });
+                        } else {
+                            setCheckArrayIndexAndPopulateMap(key, checkArray);
+                        }
                     }
                 }
 
@@ -374,22 +400,70 @@
             var mapArray = [];
 
             angular.forEach($scope.DriveReport.Addresses, function (address, key) {
-                console.log(address);
-                mapArray.push({ name: address.Name, lat: address.Latitude, lng: address.Longitude });
+                var name = (function () {
+                    if (address.Name == "") {
+                        return address.Personal;
+                    }
+                    return address.Name;
+                })();
+
+                mapArray.push({ name: name, lat: address.Latitude, lng: address.Longitude });
             });
 
+            $scope.mapChangedByGui = true;
 
             OS2RouteMap.show({
                 id: 'map',
                 Addresses: mapArray,
-                change: function (obj) {
-                }
+                change: routeMapChanged
             });
         }
 
+        var routeMapChanged = function (obj) {
+            if (!$scope.mapChangedByGui) {
+                // Clear personal route dropdown.
+                $scope.isRoute = false;
+                $scope.container.PersonalRouteDropDown.select(0);
+                $scope.container.PersonalRouteDropDown.trigger("change");
+
+                // Empty the addresses in the current driveReport
+                $scope.DriveReport.Addresses = [];
+                // Iterate all selected addresses on the map and push them to the drivereport
+                angular.forEach(obj.Addresses, function (address, key) {
+                    var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
+                    $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
+                });
+                $scope.guiChangedByMap = obj.Addresses.length;
 
 
 
+                // apply to notify angular and have it run ng-repeat, filling in the addreses in the view.
+                $scope.$apply();
+            }
+            $scope.mapChangedByGui = false;
+        }
+
+        $scope.shaveExtraCommasOffAddressString = function (address) {
+            var res = address.replace(/,/, "###");
+            res = res.replace(/,/g, "");
+            res = res.replace(/###/, ",");
+            return res;
+        }
+
+        OS2RouteMap.show({
+            id: 'map',
+            Addresses: [{ name: "Banegårdspladsen 1, 8000, Aarhus C", lat: 56.1504, lng: 10.2045 },
+                        { name: "Banegårdspladsen 1, 8000, Aarhus C", lat: 56.1504, lng: 10.2045 }],
+            change: routeMapChanged
+        });
+
+        $scope.addressInputChanged = function (index) {
+            if ($scope.guiChangedByMap <= 0) {
+                $scope.DriveReport.Addresses[index].Latitude = undefined;
+                $scope.DriveReport.Addresses[index].Longitude = undefined;
+            }
+            $scope.validateInput();
+        }
 
     }
 ]);
