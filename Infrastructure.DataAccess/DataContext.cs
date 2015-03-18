@@ -91,6 +91,7 @@ namespace Infrastructure.DataAccess
         private void ConfigurePropertiesForRateType(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RateType>().Property(p => p.Description).IsRequired();
+            modelBuilder.Entity<RateType>().Property(p => p.TFCode).IsRequired();
         }
 
         private void ConfigurePropertiesForPersonalAddress(DbModelBuilder modelBuilder)
@@ -136,7 +137,6 @@ namespace Infrastructure.DataAccess
         private void ConfigurePropertiesForRate(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Rate>().Property(p => p.Year).IsRequired();
-            modelBuilder.Entity<Rate>().Property(p => p.TFCode).IsRequired();
             modelBuilder.Entity<Rate>().Property(p => p.KmRate).IsRequired();
             modelBuilder.Entity<Rate>().Property(p => p.TypeId).IsRequired();
             modelBuilder.Entity<Rate>().Property(p => p.Active).IsRequired();

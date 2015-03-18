@@ -124,6 +124,10 @@
     <Compile Include="Migrations\201503131429263_MadePersonsInSubstitutesSingleInsteadOfList.Designer.cs">
       <DependentUpon>201503131429263_MadePersonsInSubstitutesSingleInsteadOfList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503181416178_MovedTFCodeFromRateToRateType.cs" />
+    <Compile Include="Migrations\201503181416178_MovedTFCodeFromRateToRateType.Designer.cs">
+      <DependentUpon>201503181416178_MovedTFCodeFromRateToRateType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -186,6 +190,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503131429263_MadePersonsInSubstitutesSingleInsteadOfList.resx">
       <DependentUpon>201503131429263_MadePersonsInSubstitutesSingleInsteadOfList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503181416178_MovedTFCodeFromRateToRateType.resx">
+      <DependentUpon>201503181416178_MovedTFCodeFromRateToRateType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

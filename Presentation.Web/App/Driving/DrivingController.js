@@ -149,7 +149,8 @@
             driveReport.Purpose = $scope.DriveReport.Purpose;
             driveReport.DriveDateTimestamp = Math.floor($scope.DriveReport.Date.getTime() / 1000);
             driveReport.KmRate = parseFloat(getKmRate().KmRate);
-            driveReport.TFCode = getKmRate().TFCode;
+            driveReport.TFCode = getKmRate().Type.TFCode;
+
             driveReport.KilometerAllowance = $scope.DriveReport.KilometerAllowance;
             driveReport.Distance = 0;
             driveReport.AmountToReimburse = 0;
