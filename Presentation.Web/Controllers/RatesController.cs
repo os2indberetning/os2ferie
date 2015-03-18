@@ -64,7 +64,7 @@ namespace OS2Indberetning.Controllers
         [HttpGet]
         public IQueryable<Rate> ThisYearsRates()
         {
-            var result = Repo.AsQueryable().Where(x => x.Year == (DateTime.Now).Year);
+            var result = Repo.AsQueryable().Where(x => x.Year == (DateTime.Now).Year && x.Active);
             return result;
         }
     }
