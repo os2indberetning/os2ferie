@@ -41,20 +41,10 @@
 
             <div class="col-md-12 margin-5">
                 <div class="col-md-4">
-                    <label class="pull-left">TF kode</label>
-                </div>
-                <div class="col-md-8">
-                    <input type="text" class="form-control" ng-model="container.newRateTFCode" />
-                </div>
-
-            </div>
-
-            <div class="col-md-12 margin-5">
-                <div class="col-md-4">
                     <label>Taksttype</label>
                 </div>
                 <div class="col-md-4">
-                    <select kendo-drop-down-list class="form-control" ng-options="rate.Id as rate.Description for rate in rateTypes" ng-model="container.newRateRateType"></select>
+                    <select kendo-drop-down-list="container.rateDropDown" class="form-control" k-data-source="rateTypes" k-data-text-field="'Description'" k-data-value-field="'Id'" ng-model="container.newRateRateType"></select>
                 </div>
                 <div class="col-md-4">
                     <button class="btn btn-primary fill-width" ng-click="addNewRateClick()">Opret</button>
@@ -65,7 +55,6 @@
 
             <label class="text-danger" ng-bind="newRateYearError"></label><br />
             <label class="text-danger" ng-bind="newRateRateError"></label><br />
-            <label class="text-danger" ng-bind="newRateTFCodeError"></label><br />
             <label class="text-danger" ng-bind="newRateRateTypeError"></label>
 
         </div>

@@ -3,7 +3,7 @@
         "get": {
             method: "GET",
             isArray: true,
-            transformResponse: function(data) {
+            transformResponse: function (data) {
                 return angular.fromJson(data).value;
             }
         },

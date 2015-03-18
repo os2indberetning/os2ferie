@@ -83,14 +83,21 @@
 
     
 
-        $scope.rateTypes = RateType.get();
+        
 
         $scope.updateRatesGrid = function () {
             $scope.container.rateGrid.dataSource.read();
         }
 
 
-
+        $scope.$on("kendoWidgetCreated", function (event, widget) {
+            if (widget === $scope.container.rateDropDown) {
+                $scope.rateTypes = RateType.get(function() {
+                    $scope.container.rateDropDown.dataSource.read();
+                    $scope.container.rateDropDown.select(0);
+                });
+            }
+        });
 
       
         $scope.loadRates();
@@ -112,10 +119,6 @@
                 $scope.newRateRateError = "* Du skal skrive en gyldig takst."
                 error = true;
             }
-            if ($scope.container.newRateTFCode == "" || $scope.container.newRateTFCode == undefined) {
-                $scope.newRateTFCodeError = "* Du skal skrive en gyldig TF kode."
-                error = true;
-            }
             if ($scope.container.newRateRateType == "" || $scope.container.newRateRateType == undefined) {
                 $scope.newRateRateTypeError = "* Du skal vælge en gyldig taksttype."
                 error = true;
@@ -125,9 +128,7 @@
                 Rate.post({ "Year": $scope.container.newRateYear, "TFCode": $scope.container.newRateTFCode, "KmRate": $scope.container.newRateRate, "TypeId": $scope.container.newRateRateType, "Active": true }, function () {
                     $scope.updateRatesGrid();
                     $scope.container.newRateYear = "";
-                    $scope.container.newRateTFCode = "";
                     $scope.container.newRateRate = "";
-                    $scope.container.newRateRateType = "";
                     NotificationService.AutoFadeNotification("success", "Opret", "Ny takst oprettet!");
                 });
             }
