@@ -20,10 +20,10 @@
 
                {
                    type: "splitButton",
-                   text: "Godkend Alle",
+                   text: "Godkend alle",
                    click: approveAllClick,
                    menuButtons: [
-                       { text: "Anden Kontering", click: approveAllWithAccountClick }
+                       { text: "Anden kontering", click: approveAllWithAccountClick }
                    ]
                },
            ]
@@ -34,10 +34,10 @@
 
                {
                    type: "splitButton",
-                   text: "Godkend Markerede",
+                   text: "Godkend markerede",
                    click: approveSelectedClick,
                    menuButtons: [
-                       { text: "Anden Kontering", click: approveSelectedWithAccountClick }
+                       { text: "Anden kontering", click: approveSelectedWithAccountClick }
                    ]
                }
            ]

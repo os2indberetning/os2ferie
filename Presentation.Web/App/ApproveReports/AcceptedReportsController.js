@@ -232,7 +232,7 @@
                        footerTemplate: "Side: {{currentPageDistanceSum}} KM <br/> Total: {{allPagesDistanceSum}} KM"
                    }, {
                        field: "AccountNumber",
-                       title: "Anden Kontering",
+                       title: "Anden kontering",
                        template: function (data) {
                            if (data.AccountNumber == "" || data.AccountNumber == null) {
                                return "Nej";

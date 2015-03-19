@@ -35,7 +35,7 @@
         <input type="text" typeahead-on-select="personChanged($item)" typeahead-editable="false" ng-model="person.chosenPerson" placeholder="Indtast navn" typeahead="person as person.FullName for person in people | filter:$viewValue" class="form-control" />
     </div>
     <div class="col-md-2">
-        <button class="btn btn-danger" ng-click="clearClicked()"><i class="fa fa-times"></i> Nulstil</button>
+        <button class="btn btn-danger" ng-click="clearClicked()">Nulstil</button>
     </div>
     <div class="col-md-2">
         <select ng-model="gridContainer.gridPageSize" kendo-drop-down-list class="form-control" ng-change="pageSizeChanged()">
