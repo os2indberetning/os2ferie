@@ -331,7 +331,9 @@
 
 
 
+
         });
+
 
 
 
@@ -412,7 +414,7 @@
             });
 
             $scope.mapChangedByGui = true;
-
+            debugger;
             OS2RouteMap.show({
                 id: 'map',
                 Addresses: mapArray,
@@ -451,12 +453,7 @@
             return res;
         }
 
-        OS2RouteMap.show({
-            id: 'map',
-            Addresses: [{ name: "Banegårdspladsen 1, 8000, Aarhus C", lat: 56.1504, lng: 10.2045 },
-                        { name: "Banegårdspladsen 1, 8000, Aarhus C", lat: 56.1504, lng: 10.2045 }],
-            change: routeMapChanged
-        });
+
 
         $scope.addressInputChanged = function (index) {
             if ($scope.guiChangedByMap <= 0) {
@@ -465,6 +462,20 @@
             }
             $scope.validateInput();
         }
+
+        var loadInitialMap = function () {
+            console.log("kaldt");
+            OS2RouteMap.show({
+                id: 'map',
+                Addresses: [
+                    { name: "Banegårdspladsen 1, 8000, Aarhus C", lat: 56.1504, lng: 10.2045 },
+                    { name: "Banegårdspladsen 1, 8000, Aarhus C", lat: 56.1504, lng: 10.2045 }
+                ],
+                change: routeMapChanged
+            });
+        }
+
+        loadInitialMap();
 
     }
 ]);

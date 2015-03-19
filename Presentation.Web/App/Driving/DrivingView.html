@@ -107,7 +107,7 @@
                         <div class="row form-group">
                             <div class="col-lg-7">
                                 <label for="">Vælg adresse:</label>
-                                <select ng-hide="DriveReport.Addresses[$index].Name.length != 0" class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="validateInput()" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"></select>
+                                <select ng-hide="DriveReport.Addresses[$index].Name.length != 0" class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"></select>
                             </div>
                             <div ng-show="DriveReport.Addresses[$index].Personal == 'Vælg fast adresse'">
                                 <div class="col-lg-7">

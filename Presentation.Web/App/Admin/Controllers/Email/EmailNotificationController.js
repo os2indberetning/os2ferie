@@ -64,7 +64,7 @@
                         }
                     }, {
                         field: "Repeat",
-                        title: "Gentag Månedligt",
+                        title: "Gentag månedligt",
                         template: function (data) {
                             if (data.Repeat) {
                                 return "Ja";

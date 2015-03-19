@@ -29,6 +29,8 @@ namespace Core.DomainModel
         public string AccountNumber { get; set; }
         public string TFCode { get; set; }
         public KilometerAllowance KilometerAllowance { get; set; }
+        public bool IsFromApp { get; set; }
+
 
         public ICollection<DriveReportPoint> DriveReportPoints { get; set; }
     }
