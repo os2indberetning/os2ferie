@@ -62,9 +62,9 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             Assert.Null(driveReports.Last().Fullname, "Before the service is run the full name should be null");
             var service = NinjectWebKernel.CreateKernel().Get<DriveReportService>();
             driveReports = service.AddFullName(driveReports);
-            Assert.AreEqual("Jacob Overgaard Jensen", driveReports.First().Fullname,
+            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", driveReports.First().Fullname,
                 "Service should add full name to the drive report");
-            Assert.AreEqual("Morten Rasmussen", driveReports.Last().Fullname,
+            Assert.AreEqual("Morten Rasmussen [MR]", driveReports.Last().Fullname,
                 "Service should add full name to the drive report (no middle name)");
         }
 
@@ -77,7 +77,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
             var service = NinjectWebKernel.CreateKernel().Get<DriveReportService>();
             service.AddFullName(report);
-            Assert.AreEqual("Jacob Overgaard Jensen", report.Fullname,
+            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", report.Fullname,
                 "Service should add full name to the drive report");
         }
 
@@ -90,7 +90,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
             var service = NinjectWebKernel.CreateKernel().Get<DriveReportService>();
             service.AddFullName(report);
-            Assert.AreEqual("Morten Rasmussen", report.Fullname, "Service should add full name to the drive report");
+            Assert.AreEqual("Morten Rasmussen [MR]", report.Fullname, "Service should add full name to the drive report");
         }
 
         [Test]

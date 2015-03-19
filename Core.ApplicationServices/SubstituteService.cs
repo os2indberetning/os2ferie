@@ -36,6 +36,8 @@ namespace Core.ApplicationServices
 
                 sub.Sub.FullName += " " + sub.Sub.LastName;
 
+                sub.Sub.FullName += " [" + sub.Sub.Initials + "]";
+
 
                 sub.Leader.FullName = sub.Leader.FirstName;
 
@@ -45,6 +47,9 @@ namespace Core.ApplicationServices
                 }
 
                 sub.Leader.FullName += " " + sub.Leader.LastName;
+                sub.Leader.FullName += " [" + sub.Leader.Initials + "]";
+
+
                 sub.Person.FullName = sub.Person.FirstName;
 
                 if (!string.IsNullOrEmpty(sub.Person.MiddleName))
@@ -53,6 +58,7 @@ namespace Core.ApplicationServices
                 }
 
                 sub.Person.FullName += " " + sub.Person.LastName;
+                sub.Person.FullName += " [" + sub.Person.Initials + "]";
 
             }
 

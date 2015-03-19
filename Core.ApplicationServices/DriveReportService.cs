@@ -64,6 +64,7 @@ namespace Core.ApplicationServices
             }
 
             driveReport.Fullname += " " + driveReport.Person.LastName;
+            driveReport.Fullname += " [" + driveReport.Person.Initials + "]";
         }
 
         public DriveReport Create(DriveReport report)
