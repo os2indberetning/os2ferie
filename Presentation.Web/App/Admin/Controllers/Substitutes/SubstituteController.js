@@ -4,8 +4,8 @@
 
         $scope.container = {};
 
-        $scope.container.subGridPageSize = 5;
-        $scope.container.appGridPageSize = 5;
+        $scope.container.subGridPageSize = 20;
+        $scope.container.appGridPageSize = 20;
 
         $scope.pageSizeChanged = function () {
             $scope.container.approverGrid.dataSource.pageSize(Number($scope.container.appGridPageSize));
@@ -15,7 +15,7 @@
 
         $scope.substitutes = {
             dataSource: {
-                pageSize: 5,
+                pageSize: 20,
                 type: "odata",
                 transport: {
                     read: {
@@ -103,7 +103,7 @@
        
         $scope.personalApprovers = {
             dataSource: {
-                pageSize: 5,
+                pageSize: 20,
                 type: "odata",
                 transport: {
                     read: {

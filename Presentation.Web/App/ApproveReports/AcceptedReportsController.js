@@ -56,9 +56,20 @@
                }
 
            }
-           $scope.currentPageAmountSum = resAmount.toFixed(2);
-           $scope.currentPageDistanceSum = resDistance.toFixed(2);
+           $scope.currentPageAmountSum = resAmount.toFixed(2).toString().replace('.', ',');
+           $scope.currentPageDistanceSum = resDistance.toFixed(2).toString().replace('.', ',');
 
+       }
+
+       $scope.getAllPagesSums = function () {
+           var resAmount = 0;
+           var resDistance = 0;
+           angular.forEach(allReports, function (rep, key) {
+               resAmount += rep.AmountToReimburse;
+               resDistance += rep.Distance;
+           });
+           $scope.allPagesAmountSum = resAmount.toFixed(2).toString().replace('.', ',');
+           $scope.allPagesDistanceSum = resDistance.toFixed(2).toString().replace('.', ',');
        }
 
 
@@ -143,14 +154,10 @@
                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                        }
                    },
-                   pageSize: 5,
+                   pageSize: 20,
                    serverPaging: false,
                    serverAggregates: false,
                    serverSorting: true,
-
-
-                   aggregate: [{ field: "Distance", aggregate: "sum" },
-                                 { field: "AmountToReimburse", aggregate: "sum" }]
                },
                sortable: true,
                scrollable: false,
@@ -170,6 +177,7 @@
                },
                dataBound: function () {
                    $scope.getCurrentPageSums();
+                   $scope.getAllPagesSums();
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
 
@@ -211,13 +219,17 @@
                    }, {
                        field: "AmountToReimburse",
                        title: "Beløb",
-                       format:"{0:n2}",
-                       footerTemplate: "Side: {{currentPageAmountSum}}, total: #= kendo.toString(sum, '0.00') # "
+                       template: function (data) {
+                           return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " DKK";
+                       },
+                       footerTemplate: "Side: {{currentPageAmountSum}} DKK<br/> Total: {{allPagesAmountSum}} DKK"
                    }, {
                        field: "Distance",
                        title: "Afstand",
-                       format: "{0:n2}",
-                       footerTemplate: "Side: {{currentPageDistanceSum}}, total: #= kendo.toString(sum, '0.00') # "
+                       template: function (data) {
+                           return data.Distance.toFixed(2).toString().replace('.', ',') + " KM";
+                       },
+                       footerTemplate: "Side: {{currentPageDistanceSum}} KM <br/> Total: {{allPagesDistanceSum}} KM"
                    }, {
                        field: "AccountNumber",
                        title: "Anden Kontering",
@@ -344,7 +356,7 @@
        $scope.person = {};
 
        // Set initial value for grid pagesize
-       $scope.gridContainer.gridPageSize = 5;
+       $scope.gridContainer.gridPageSize = 20;
 
        Person.getAll().$promise.then(function (res) {
            angular.forEach(res.value, function (value, key) {

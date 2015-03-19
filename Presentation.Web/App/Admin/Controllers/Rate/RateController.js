@@ -4,7 +4,7 @@
 
         $scope.container = {};
 
-        $scope.container.gridPageSize = 5;
+        $scope.container.gridPageSize = 20;
 
         $scope.pageSizeChanged = function () {
             $scope.container.rateGrid.dataSource.pageSize(Number($scope.container.gridPageSize));
@@ -38,7 +38,7 @@
                             return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                         }
                     },
-                    pageSize: 5,
+                    pageSize: 20,
                     serverPaging: false,
                     serverSorting: true,
                 },

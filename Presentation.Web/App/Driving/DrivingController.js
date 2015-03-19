@@ -244,10 +244,10 @@
 
             driveReport.$save(function (response) {
                 // success
-                $scope.DrivenKilometers = response.Distance;
+                $scope.DrivenKilometers = response.Distance.toFixed(2).toString().replace('.',',');
                 $scope.TransportAllowance = 0;
                 $scope.RemainingKilometers = 0;
-                $scope.PayoutAmount = response.AmountToReimburse;
+                $scope.PayoutAmount = response.AmountToReimburse.toFixed(2).toString().replace('.',',');
                 NotificationService.AutoFadeNotification("success", "Success", "Din kørselsindberetning blev gemt");
 
 
@@ -265,7 +265,7 @@
 
         $scope.Remove = function (array, index) {
             array.splice(index, 1);
-            $scope.validateInput();
+            $scope.addressInputChanged(index);
         };
 
         $scope.openNoLicensePlateModal = function () {
@@ -381,7 +381,7 @@
                     var format = AddressFormatter.fn(address.Personal);
                     if (format != undefined) {
                         if (address.Latitude == undefined) {
-                            Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }, function(res) {
+                            Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }, function (res) {
                                 address.Latitude = res[0].Latitude;
                                 address.Longitude = res[0].Longitude;
 
@@ -414,7 +414,6 @@
             });
 
             $scope.mapChangedByGui = true;
-            debugger;
             OS2RouteMap.show({
                 id: 'map',
                 Addresses: mapArray,
@@ -423,6 +422,7 @@
         }
 
         var routeMapChanged = function (obj) {
+            $scope.DrivenKilometers = obj.distance.toFixed(2).toString().replace('.',',');
             if (!$scope.mapChangedByGui) {
                 // Clear personal route dropdown.
                 $scope.isRoute = false;
@@ -454,8 +454,7 @@
         }
 
 
-
-        $scope.addressInputChanged = function (index) {
+        $scope.addressInputChanged = function(index) {
             if ($scope.guiChangedByMap <= 0) {
                 $scope.DriveReport.Addresses[index].Latitude = undefined;
                 $scope.DriveReport.Addresses[index].Longitude = undefined;
@@ -463,8 +462,13 @@
             $scope.validateInput();
         }
 
-        var loadInitialMap = function () {
-            console.log("kaldt");
+            // Clear the routemap fields.
+            // If you dont do this, then the map wont load when navigating to a different page and back again.
+            OS2RouteMap.id = null;
+            OS2RouteMap.map = null;
+            OS2RouteMap.options = null;
+            OS2RouteMap.routeControl = null;
+
             OS2RouteMap.show({
                 id: 'map',
                 Addresses: [
@@ -473,9 +477,5 @@
                 ],
                 change: routeMapChanged
             });
-        }
-
-        loadInitialMap();
-
     }
 ]);

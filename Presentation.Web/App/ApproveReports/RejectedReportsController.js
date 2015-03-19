@@ -105,7 +105,7 @@
 
                        },
                    },
-                   pageSize: 5,
+                   pageSize: 20,
                    serverPaging: false,
                    serverSorting: true
                },
@@ -164,11 +164,15 @@
                                   }, {
                                       field: "AmountToReimburse",
                                       title: "Beløb",
-                                      format: "{0:n2}",
+                                      template: function (data) {
+                                          return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " DKK";
+                                      },
                                   }, {
                                       field: "Distance",
                                       title: "Afstand",
-                                      format: "{0:n2}",
+                                      template: function (data) {
+                                          return data.Distance.toFixed(2).toString().replace('.', ',') + " KM";
+                                      },
                                   }
                ]
            };
@@ -262,7 +266,7 @@
        $scope.person = {};
 
        // Set initial value for grid pagesize
-       $scope.gridContainer.gridPageSize = 5;
+       $scope.gridContainer.gridPageSize = 20;
 
        Person.getAll().$promise.then(function (res) {
            angular.forEach(res.value, function (value, key) {

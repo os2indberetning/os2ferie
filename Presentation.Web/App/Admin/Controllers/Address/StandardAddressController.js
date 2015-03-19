@@ -31,7 +31,7 @@
                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                        }
                    },
-                   pageSize: 5,
+                   pageSize: 20,
                    serverPaging: false,
                    serverSorting: true,
                },
@@ -82,7 +82,7 @@
            $scope.gridContainer.addressGrid.dataSource.read();
        }
 
-       $scope.gridContainer.gridPageSize = 5;
+       $scope.gridContainer.gridPageSize = 20;
 
        $scope.editClick = function (id) {
            var modalInstance = $modal.open({

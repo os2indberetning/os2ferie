@@ -97,6 +97,7 @@ namespace Infrastructure.AddressServices.Routing
                 }
             }
 
+            bestRoute.Length /= 1000;
             return bestRoute;
         }
     }

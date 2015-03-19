@@ -60,7 +60,7 @@ angular.module("application").controller("MyRejectedReportsController", [
                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                        }
                    },
-                   pageSize: 5,
+                   pageSize: 20,
                    serverPaging: false,
                    serverSorting: true
                },
@@ -200,6 +200,6 @@ angular.module("application").controller("MyRejectedReportsController", [
            format: "dd/MM/yyyy",
        };
 
-       $scope.gridContainer.gridPageSize = 5;
+       $scope.gridContainer.gridPageSize = 20;
    }
 ]);
