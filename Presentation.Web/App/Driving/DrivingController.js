@@ -43,6 +43,14 @@
             $scope.validateInput();
         }
 
+
+        $scope.getDefaultMapAddresses = function () {
+            return [
+                { name: "Banegårdspladsen 1, 8000, Aarhus C", lat: 56.1504, lng: 10.2045 },
+                { name: "Banegårdspladsen 1, 8000, Aarhus C", lat: 56.1504, lng: 10.2045 }
+            ];
+        }
+
         $scope.Person = Person.get({ id: 1 }, function () {
             Address.get({ query: "$filter=PersonId eq " + $scope.Person.Id + " and Type eq Core.DomainModel.PersonalAddressType'Standard'" }, function (data) {
                 var temp = [{ value: "Vælg fast adresse" }];
@@ -299,7 +307,11 @@
             $scope.container.PersonalAddressDropDown.select(0);
             $scope.container.PersonalAddressDropDown.trigger("change");
 
-
+            OS2RouteMap.show({
+                id: 'map',
+                Addresses: $scope.getDefaultMapAddresses(),
+                change: routeMapChanged
+            });
         }
 
 
@@ -471,10 +483,7 @@
 
             OS2RouteMap.show({
                 id: 'map',
-                Addresses: [
-                    { name: "Banegårdspladsen 1, 8000, Aarhus C", lat: 56.1504, lng: 10.2045 },
-                    { name: "Banegårdspladsen 1, 8000, Aarhus C", lat: 56.1504, lng: 10.2045 }
-                ],
+                Addresses: $scope.getDefaultMapAddresses(),
                 change: routeMapChanged
             });
     }
