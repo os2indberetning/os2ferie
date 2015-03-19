@@ -38,6 +38,8 @@ namespace Core.ApplicationServices
                 }
 
                 person.FullName += " " + person.LastName;
+
+                person.FullName += " [" + person.Initials + "]";
             }            
         }
     }

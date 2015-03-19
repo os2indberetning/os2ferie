@@ -132,6 +132,10 @@
     <Compile Include="Migrations\201503190930363_AddedIsFromAppToDriveReport.Designer.cs">
       <DependentUpon>201503190930363_AddedIsFromAppToDriveReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503191447347_AddedInitialsToPerson.cs" />
+    <Compile Include="Migrations\201503191447347_AddedInitialsToPerson.Designer.cs">
+      <DependentUpon>201503191447347_AddedInitialsToPerson.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -200,6 +204,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503190930363_AddedIsFromAppToDriveReport.resx">
       <DependentUpon>201503190930363_AddedIsFromAppToDriveReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503191447347_AddedInitialsToPerson.resx">
+      <DependentUpon>201503191447347_AddedInitialsToPerson.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

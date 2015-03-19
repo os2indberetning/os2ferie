@@ -28,20 +28,24 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                         CprNumber = "123123",
                         FirstName = "Jacob",
                         MiddleName = "Overgaard",
-                        LastName = "Jensen"
+                        LastName = "Jensen",
+                        Initials = "JOJ"
                     },
                     Leader = new Person()
                     {
                        CprNumber = "123123",
                        FirstName = "Morten",
-                       LastName = "Rasmussen"
+                       LastName = "Rasmussen",
+                       Initials = "MR"
                     },
                     Person =
                         new Person()
                         {
                             CprNumber = "123123",
                             FirstName = "Morten",
-                            LastName = "Rasmussen"
+                            LastName = "Rasmussen",
+                            Initials = "MR"
+                            
                         },
                 },
                 new Substitute()
@@ -51,20 +55,23 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                         CprNumber = "123123",
                         FirstName = "Jacob",
                         MiddleName = "Overgaard",
-                        LastName = "Jensen"
+                        LastName = "Jensen",
+                        Initials = "JOJ"
                     },
                     Leader = new Person()
                     {
                        CprNumber = "123123",
                        FirstName = "Morten",
-                       LastName = "Rasmussen"
+                       LastName = "Rasmussen",
+                       Initials = "MR"
                     },
                     Person = new Person()
                         {
                             CprNumber = "123123",
                             FirstName = "Jacob",
                             MiddleName = "Overgaard",
-                            LastName = "Jensen"
+                            LastName = "Jensen",
+                            Initials = "JOJ"
                         },
                 }
             };
@@ -91,13 +98,13 @@ namespace ApplicationServices.Test.SubstituteServiceTest
 
 
             // Postcondition
-            Assert.AreEqual("Morten Rasmussen", repo[0].Leader.FullName);
-            Assert.AreEqual("Jacob Overgaard Jensen", repo[0].Sub.FullName);
-            Assert.AreEqual("Morten Rasmussen", repo[0].Person.FullName);
+            Assert.AreEqual("Morten Rasmussen [MR]", repo[0].Leader.FullName);
+            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", repo[0].Sub.FullName);
+            Assert.AreEqual("Morten Rasmussen [MR]", repo[0].Person.FullName);
 
-            Assert.AreEqual("Morten Rasmussen", repo[1].Leader.FullName);
-            Assert.AreEqual("Jacob Overgaard Jensen", repo[1].Sub.FullName);
-            Assert.AreEqual("Jacob Overgaard Jensen", repo[1].Person.FullName);
+            Assert.AreEqual("Morten Rasmussen [MR]", repo[1].Leader.FullName);
+            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", repo[1].Sub.FullName);
+            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", repo[1].Person.FullName);
         }
 
         [Test]

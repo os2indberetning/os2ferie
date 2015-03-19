@@ -24,7 +24,8 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                     {
                         FirstName = "Jacob",
                         MiddleName = "Overgaard",
-                        LastName = "Jensen"
+                        LastName = "Jensen",
+                        Initials = "JOJ"
                     }
                 },
                 new DriveReport()
@@ -32,8 +33,8 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                     Person = new Person()
                     {
                         FirstName = "Morten",
-                        MiddleName = "",
-                        LastName = "Rasmussen"
+                        LastName = "Rasmussen",
+                        Initials = "MR"
                     }
                 }
             };

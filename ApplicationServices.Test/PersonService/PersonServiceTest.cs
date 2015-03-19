@@ -19,14 +19,16 @@ namespace ApplicationServices.Test.PersonService
                 Id = 1,
                 FirstName = "Morten",
                 LastName = "Rasmussen",
-                CprNumber = "1234567890"
+                CprNumber = "1234567890",
+                Initials = "MR"
             },
             new Person
             {
                 Id = 2,
                 FirstName = "Morten",
                 LastName = "Jørgensen",
-                CprNumber = "0987654321"
+                CprNumber = "0987654321",
+                Initials = "MJ"
             },
             new Person
             {
@@ -34,7 +36,8 @@ namespace ApplicationServices.Test.PersonService
                 FirstName = "Jacob",
                 MiddleName = "Overgaard",
                 LastName = "Jensen",
-                CprNumber = "456456456"
+                CprNumber = "456456456",
+                Initials = "JOJ"
             }
         }.AsQueryable();
 
@@ -56,14 +59,14 @@ namespace ApplicationServices.Test.PersonService
         public void AddFullName_WithMiddleName_ShouldAddCorrectFullName()
         {
             NinjectWebKernel.CreateKernel().Get<IPersonService>().AddFullName(persons);
-            Assert.AreEqual("Jacob Overgaard Jensen", persons.Single(p => p.Id == 3).FullName);
+            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", persons.Single(p => p.Id == 3).FullName);
         }
 
         [Test]
         public void AddFullName_WithoutMiddleName_ShouldAddCorrectFullName()
         {
             NinjectWebKernel.CreateKernel().Get<IPersonService>().AddFullName(persons);
-            Assert.AreEqual("Morten Rasmussen", persons.Single(p => p.Id == 1).FullName);
+            Assert.AreEqual("Morten Rasmussen [MR]", persons.Single(p => p.Id == 1).FullName);
         }
 
         [Test]
