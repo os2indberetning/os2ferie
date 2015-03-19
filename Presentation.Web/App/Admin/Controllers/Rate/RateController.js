@@ -67,7 +67,7 @@
                         title: "Takst",
                         template: "${KmRate} ører pr/km"
                     }, {
-                        field: "TFCode",
+                        field: "Type.TFCode",
                         title: "TF kode",
                     },
                     {
@@ -92,7 +92,10 @@
 
         $scope.$on("kendoWidgetCreated", function (event, widget) {
             if (widget === $scope.container.rateDropDown) {
-                $scope.rateTypes = RateType.get(function() {
+                $scope.rateTypes = RateType.get(function () {
+                    angular.forEach($scope.rateTypes, function(rateType, key) {
+                        rateType.Description += " (" + rateType.TFCode + ")"
+                    });
                     $scope.container.rateDropDown.dataSource.read();
                     $scope.container.rateDropDown.select(0);
                 });

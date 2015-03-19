@@ -51,7 +51,11 @@ namespace Presentation.Web.Test.Controllers.PersonalAddresses
             return new PersonalAddress
             {
                 Id = 4,
-                Type = PersonalAddressType.AlternativeWork
+                Type = PersonalAddressType.AlternativeWork,
+                StreetName = "Katrinebjergvej",
+                StreetNumber = "93B",
+                ZipCode = 8200,
+                Town = "Aarhus N"
             };
         }
 
@@ -74,7 +78,12 @@ namespace Presentation.Web.Test.Controllers.PersonalAddresses
         {
             return @"{
                         'Id': 4,
-                        'Type': 'AlternativeWork'
+                        'Type': 'AlternativeWork',
+                        'StreetName'    :   'Katrinebjergvej',
+                        'StreetNumber'  :   '93B',
+                        'ZipCode'       :   8200,
+                        'Town'          :   'Aarhus N'
+
             }";
         }
 
