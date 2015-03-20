@@ -1,5 +1,5 @@
 ﻿angular.module("application").service("PersonEmployments", ["$resource", function ($resource) {
-    return $resource("/odata/Person(:id)/Employments", { id: "@id" }, {
+    return $resource("/odata/Person(:id)/Employments?$expand=OrgUnit", { id: "@id" }, {
         "get": {
             method: "GET",
             isArray: true,

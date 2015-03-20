@@ -282,10 +282,12 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App\Admin\Controllers\OrgUnit\OrgUnitController.js" />
     <Content Include="App\Admin\Controllers\Account\DeleteAccountController.js" />
     <Content Include="App\Admin\Controllers\Account\AccountController.js" />
     <Content Include="App\Admin\Controllers\Rate\RateController.js" />
     <Content Include="App\Admin\Controllers\Substitutes\SubstituteController.js" />
+    <Content Include="App\Admin\HTML\OrgUnit\View.html" />
     <Content Include="App\Admin\HTML\Substitutes\View.html" />
     <Content Include="App\Admin\HTML\Account\ConfirmDeleteAccountTemplate.html" />
     <Content Include="App\Admin\HTML\Account\View.html" />
@@ -1159,8 +1161,6 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\custom.css" />
-    <Content Include="Content\customcss\approvereports.css" />
-    <Content Include="Content\customcss\myreports.css" />
     <Content Include="Content\jasmine\jasmine.css" />
     <Content Include="Content\jasmine\jasmine_favicon.png" />
     <Content Include="Content\Themes\SbAdmin\css\bootstrap-rtl.css" />

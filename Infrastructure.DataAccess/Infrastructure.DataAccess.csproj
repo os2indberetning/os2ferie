@@ -141,6 +141,10 @@
     <Compile Include="Migrations\201503201130372_AddedUserCommentToDriveReport.Designer.cs">
       <DependentUpon>201503201130372_AddedUserCommentToDriveReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503201159063_AddedHasAccessToFourKmRuleToOrgUnit.cs" />
+    <Compile Include="Migrations\201503201159063_AddedHasAccessToFourKmRuleToOrgUnit.Designer.cs">
+      <DependentUpon>201503201159063_AddedHasAccessToFourKmRuleToOrgUnit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -215,6 +219,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503201130372_AddedUserCommentToDriveReport.resx">
       <DependentUpon>201503201130372_AddedUserCommentToDriveReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503201159063_AddedHasAccessToFourKmRuleToOrgUnit.resx">
+      <DependentUpon>201503201159063_AddedHasAccessToFourKmRuleToOrgUnit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

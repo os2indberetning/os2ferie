@@ -516,5 +516,21 @@
             Addresses: $scope.getDefaultMapAddresses(),
             change: routeMapChanged
         });
+
+        $scope.employmentChanged = function () {
+            // Clear the checkbox and the value field before checking.
+            $scope.DriveReport.FourKmRule = {};
+            $scope.DriveReport.FourKmRule.Using = false;
+            $scope.DriveReport.FourKmRule.Value = "";
+
+            // Is there a better way to do this?
+            // My guess is this might take a long time if there are a lot of org units. 
+            angular.forEach($scope.Employments, function(empl, key) {
+                // Show checkbox and value field, if the chosen orgunit allows it. 
+                if (empl.Id == $scope.DriveReport.Position) {
+                    $scope.hasAccessToFourKmRule = empl.OrgUnit.HasAccessToFourKmRule;
+                }
+            });
+        }
     }
 ]);
