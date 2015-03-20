@@ -122,7 +122,7 @@
             $scope.purposeErrorMessage = "";
             $scope.readDistanceErrorMessage = "";
             $scope.addressSelectionErrorMessage = "";
-
+            $scope.userCommentErrorMessage = "";
             if ($scope.DriveReport.KilometerAllowance === "Read") {
                 if ($scope.DriveReport.Purpose == "" || $scope.DriveReport.Purpose == undefined) {
                     $scope.canSubmitDriveReport = false;
@@ -131,6 +131,10 @@
                 if ($scope.DriveReport.ReadDistance === "" || $scope.DriveReport.ReadDistance == undefined) {
                     $scope.canSubmitDriveReport = false;
                     $scope.readDistanceErrorMessage = "* Du skal angive en afstand.";
+                }
+                if ($scope.DriveReport.UserComment === "" || $scope.DriveReport.UserComment == undefined) {
+                    $scope.canSubmitDriveReport = false;
+                    $scope.userCommentErrorMessage = "* Du skal angive en kommentar";
                 }
             } else {
                 angular.forEach($scope.DriveReport.Addresses, function (address, key) {
@@ -189,6 +193,7 @@
             if ($scope.DriveReport.KilometerAllowance === "Read") {
 
                 driveReport.Distance = Number($scope.DriveReport.ReadDistance) * 1000;
+                driveReport.UserComment = $scope.DriveReport.UserComment;
 
                 if ($scope.DriveReport.StartOrEndedAtHome === 'Started') {
                     driveReport.StartsAtHome = true;
@@ -312,6 +317,11 @@
             openDatePicker = true;
 
             $scope.DriveReport.Purpose = "";
+            $scope.container.kilometerAllowanceDropDown.select(0);
+            $scope.DriveReport.KilometerAllowance = "Calculated";
+            
+
+
             $scope.container.PersonalRouteDropDown.select(0);
             $scope.container.PersonalRouteDropDown.trigger("change");
             $scope.container.PersonalAddressDropDown.select(0);
@@ -321,7 +331,7 @@
             $scope.DriveReport.FourKmRule.Value = "";
             $scope.DriveReport.RoundTrip = false;
             $scope.DriveReport.ReadDistance = "";
-
+            $scope.DriveReport.UserComment = "";
 
 
             // Set mapChangedByGui to true.

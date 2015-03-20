@@ -54,7 +54,7 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label for="">Kilometeropgørelse:</label>
-                        <select kendo-drop-down-list k-options="KilometerAllowanceOptions" ng-change="validateInput()" class="fill-width" id="KilometerAllowance" ng-model="DriveReport.KilometerAllowance">
+                        <select kendo-drop-down-list="container.kilometerAllowanceDropDown" k-options="KilometerAllowanceOptions" ng-change="validateInput()" class="fill-width" id="KilometerAllowance" ng-model="DriveReport.KilometerAllowance">
                             <option value="Calculated">Beregnet</option>
                             <option value="Read">Aflæst</option>
                             <option value="CalculatedWithoutExtraDistance">Beregnet med merkørsel</option>
@@ -86,16 +86,30 @@
             <div ng-switch="DriveReport.KilometerAllowance">
                 <div ng-switch-when="Read">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <label for="ReadDistance">Antal kørte kilometer:</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="UserComment">Kommentar:</label>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <input type="number" min="0" ng-model="DriveReport.ReadDistance" id="ReadDistance" ng-blur="validateInput()" name="FourKmRuleValue" class="k-textbox" />
                         </div>
+                        <div class="col-lg-6">
+                            <input type="text" ng-model="DriveReport.UserComment" id="UserComment" ng-blur="validateInput()" name="UserComment" class="k-textbox fill-width" />     
+                        </div>
                     </div>
-                    <label ng-bind="readDistanceErrorMessage" class="text-danger"></label>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label ng-bind="readDistanceErrorMessage" class="text-danger"></label>
+                        </div>
+                        <div class="col-lg-6">
+                            <label ng-bind="userCommentErrorMessage" class="text-danger"></label>
+                        </div>
+                    </div>
+                        
                 </div>
                 <div ng-switch-default>
                     <div ng-if="!IsRoute" ng-repeat="Address in DriveReport.Addresses">
@@ -123,7 +137,7 @@
                                     <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" /><label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
                                 </div>
                             </div>
-                            
+
                         </div>
 
                     </div>
