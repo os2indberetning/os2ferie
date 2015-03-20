@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using Core.DomainModel;
 using Core.DomainServices;
 using NUnit.Framework;
-using Presentation.Web.Test.Controllers.Addresses;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace Presentation.Web.Test.Controllers.Addresss
+namespace Presentation.Web.Test.Controllers.Addresses
 {
     [TestFixture]
     public class AddressTest : BaseControllerTest<Address>
@@ -101,6 +100,27 @@ namespace Presentation.Web.Test.Controllers.Addresss
 
         protected override void ReSeed()
         {
+            AddressRepositoryMock.addresses = new List<Address>()
+            {
+                new Address
+                {
+                    Id  = 1,
+                    Description = "Desc 1",
+                    StreetName = "First street"
+                },
+                new Address
+                {
+                    Id  = 2,
+                    Description = "Desc 2",
+                    StreetName = "Second street"
+                },
+                new Address
+                {
+                    Id  = 3,
+                    Description = "Desc 3",
+                    StreetName = "Third street"
+                }
+            };
             new AddressRepositoryMock().ReSeed();
         }
     }

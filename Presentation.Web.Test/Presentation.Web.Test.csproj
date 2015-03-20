@@ -122,6 +122,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Controllers\Addresses\GetPersonalAndStandard.cs" />
     <Compile Include="Controllers\BaseControllerTest.cs" />
     <Compile Include="Controllers\DriveReports\DriveReportsRepositoryMock.cs" />
     <Compile Include="Controllers\DriveReports\DriveReportsTest.cs" />

@@ -27,6 +27,14 @@
             transformResponse: function(data) {
                 return angular.fromJson(data).value;
             }
+        },
+        "GetPersonalAndStandard": {
+            method: "GET",
+            url: "/odata/Addresses/Service.GetPersonalAndStandard?personId=:personId",
+            isArray: true,
+            transformResponse: function (data) {
+                return angular.fromJson(data).value;
+            }
         }
     });
 }]);

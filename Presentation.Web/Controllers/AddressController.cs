@@ -71,5 +71,26 @@ namespace OS2Indberetning.Controllers
         {
             return base.Delete(key);
         }
+
+        [EnableQuery]
+        public IQueryable<Address> GetPersonalAndStandard(int personId)
+        {
+            var rep = Repo.AsQueryable();
+            var temp = rep.Where(elem => !(elem is DriveReportPoint || elem is Point));
+            var res = new List<Address>();
+            foreach (var address in temp)
+            {
+                if (address is PersonalAddress && ((PersonalAddress)address).PersonId == personId && ((PersonalAddress)address).Type == PersonalAddressType.Standard)
+                {
+                    res.Add(address);
+                }
+                else if (!(address is PersonalAddress))
+                {
+                    res.Add(address);
+                }
+            }
+            
+            return res.AsQueryable();
+        }
     }
 }

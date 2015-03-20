@@ -10,6 +10,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
         {
             FirstName = "Morten",
             LastName = "Tester",
+            Initials = "MT",
             Mail = "testMail@asd.dk"
         };
 
@@ -17,6 +18,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
         {
             FirstName = "Morten",
             LastName = "Tester",
+            Initials = "MT",
             Mail = "AndenTestMail@asd.dk"
         };
 

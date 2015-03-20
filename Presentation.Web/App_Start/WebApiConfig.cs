@@ -55,6 +55,12 @@ namespace OS2Indberetning
             .Action("SetCoordinatesOnAddress")
             .ReturnsFromEntitySet<Address>("Addresses");
 
+            builder.EntityType<Address>().Collection
+            .Function("GetPersonalAndStandard")
+            .ReturnsFromEntitySet<Address>("Addresses");
+
+
+
             builder.EntitySet<DriveReport>("DriveReports");
 
             builder.EntitySet<DriveReportPoint>("DriveReportPoints");

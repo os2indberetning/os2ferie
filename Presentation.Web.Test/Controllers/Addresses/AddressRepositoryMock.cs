@@ -6,11 +6,9 @@ namespace Presentation.Web.Test.Controllers.Addresses
 {
     public class AddressRepositoryMock: GenericRepositoryMock<Address>
     {
-        protected override List<Address> Seed()
+        public static List<Address> addresses = new List<Address>()
         {
-            return new List<Address>
-            {
-                new Address
+             new Address
                 {
                     Id  = 1,
                     Description = "Desc 1",
@@ -28,7 +26,11 @@ namespace Presentation.Web.Test.Controllers.Addresses
                     Description = "Desc 3",
                     StreetName = "Third street"
                 }
-            };
+        }; 
+
+        protected override List<Address> Seed()
+        {
+            return addresses;
         }
     }
 }

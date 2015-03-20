@@ -38,7 +38,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment 1",
                 Distance = 3.4f,
                 ClosedDateTimestamp = 4444,
-                Fullname = "Morten Tester"
+                Fullname = "Morten Tester [MT]"
             };
         }
 
@@ -50,7 +50,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment 2",
                 Distance = 3.5f,
                 ClosedDateTimestamp = 4455,
-                Fullname = "Morten Tester"
+                Fullname = "Morten Tester [MT]"
             };
         }
 
@@ -62,7 +62,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment 3",
                 Distance = 3.6778f,
                 ClosedDateTimestamp = 7777,
-                Fullname = "Morten Tester",
+                Fullname = "Morten Tester [MT]",
             };
         }
 
@@ -74,7 +74,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment posted",
                 Distance = 3.6778f,
                 ClosedDateTimestamp = 7777,
-                Fullname = "Morten Tester"
+                Fullname = "Morten Tester [MT]"
             };
         }
 
@@ -86,7 +86,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment patched",
                 Distance = 3.6778f,
                 ClosedDateTimestamp = 666,
-                Fullname = "Morten Tester"
+                Fullname = "Morten Tester [MT]"
             };
         }
 

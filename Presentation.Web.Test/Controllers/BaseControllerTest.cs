@@ -130,6 +130,7 @@ namespace Presentation.Web.Test.Controllers
         [Test]
         public async Task GetWithKeyShouldReturnCorrectElement()
         {
+            ReSeed();
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(2)").GetAsync();
             var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Response to get request should be OK");
