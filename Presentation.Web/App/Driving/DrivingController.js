@@ -111,12 +111,23 @@
         $scope.RemainingKilometers = 0;
         $scope.PayoutAmount = 0;
 
-        var getKmRate = function () {
+        var getKmRate = function() {
             for (var i = 0; i < $scope.KmRate.length; i++) {
                 if ($scope.KmRate[i].Id == $scope.DriveReport.KmRate) {
                     return $scope.KmRate[i];
                 }
             }
+        }
+
+        $scope.transportChanged = function () {
+            $scope.lastSelectedTransport = $scope.KmRateDropDown.select();
+            $scope.showLicensePlate = true;
+            angular.forEach($scope.KmRate, function (rate, key) {
+                if ($scope.DriveReport.KmRate == rate.Id) {
+                    $scope.showLicensePlate = rate.Type.RequiresLicensePlate;
+                }
+            });
+
         }
 
         $scope.validateInput = function () {
@@ -154,6 +165,8 @@
                 $scope.generateMapWidget();
             }
             $scope.guiChangedByMap--;
+
+
         }
 
 
@@ -178,7 +191,14 @@
             driveReport.KilometerAllowance = $scope.DriveReport.KilometerAllowance;
             driveReport.Distance = 0;
             driveReport.AmountToReimburse = 0;
-            driveReport.Licenseplate = $scope.DriveReport.Licenseplate;
+
+            if ($scope.showLicensePlate) {
+                driveReport.LicensePlate = $scope.DriveReport.LicensePlate;
+            } else {
+                driveReport.LicensePlate = "0000000";
+            }
+
+
             driveReport.PersonId = $scope.Person.Id;
             driveReport.Status = "Pending";
             driveReport.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
@@ -358,18 +378,19 @@
             // Load data into kendo components once they are finished rendering.
             $scope.KmRate = Rate.ThisYearsRates(function () {
                 $scope.KmRateDropDown.dataSource.read();
+                $scope.KmRateDropDown.select($scope.lastSelectedTransport);
             });
+
+
 
             $scope.Employments = PersonEmployments.get({ id: personId }, function () {
                 $scope.PositionDropDown.dataSource.read();
             });
 
-            $scope.Licenseplates = LicensePlate.get({ id: personId }, function (data) {
+            $scope.LicensePlates = LicensePlate.get({ id: personId }, function (data) {
                 if (data.length > 0) {
-                    $scope.LicenseplateDropDown.dataSource.read();
+                    $scope.LicensePlateDropDown.dataSource.read();
                     $scope.canSubmitDriveReport = data.length > 0;
-                } else {
-                    $scope.openNoLicensePlateModal();
                 }
             });
 

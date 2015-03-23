@@ -174,7 +174,6 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<DriveReport>().Property(p => p.FourKmRule).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.StartsAtHome).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.EndsAtHome).IsRequired();
-            modelBuilder.Entity<DriveReport>().Property(p => p.Licenseplate).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.TFCode).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.IsFromApp).IsRequired();
             modelBuilder.Entity<DriveReport>().Ignore(p => p.Fullname);

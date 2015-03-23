@@ -17,12 +17,6 @@ namespace Core.ApplicationServices
         private readonly IPersonService _personService;
         private readonly IGenericRepository<Person> _personRepo; 
 
-        public ReimbursementCalculator()
-        {
-            _route = new BestRoute();
-            _personRepo = new GenericRepository<Person>(new DataContext());
-        }
-
         public ReimbursementCalculator(IRoute<RouteInformation> route, IPersonService personService, IGenericRepository<Person> personRepo)
         {
             _route = route;
@@ -56,8 +50,8 @@ namespace Core.ApplicationServices
 
             var person = _personRepo.AsQueryable().First(x => x.Id == report.PersonId);
 
-            var homeAddress = _personService.GetHomeAddress(report.Person);
-            var workAddress = _personService.GetWorkAddress(report.Person);
+            var homeAddress = _personService.GetHomeAddress(person);
+            var workAddress = _personService.GetWorkAddress(person);
 
             if (report.KilometerAllowance != KilometerAllowance.Read)
             {
@@ -85,7 +79,7 @@ namespace Core.ApplicationServices
 
 
 
-            homeWorkDistance = _personService.GetDistanceFromHomeToWork(report.Person);
+            homeWorkDistance = _personService.GetDistanceFromHomeToWork(person);
 
             
             //Calculate distance to subtract

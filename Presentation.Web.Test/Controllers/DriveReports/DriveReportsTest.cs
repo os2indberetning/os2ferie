@@ -5,12 +5,18 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Core.ApplicationServices;
+using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
+using Core.DomainServices.RoutingClasses;
+using Infrastructure.AddressServices;
+using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 using Microsoft.Owin.Security;
 using NUnit.Framework;
+using Presentation.Web.Test.Controllers.Persons;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Presentation.Web.Test.Controllers.DriveReports
@@ -26,7 +32,12 @@ namespace Presentation.Web.Test.Controllers.DriveReports
             {
                 new KeyValuePair<Type, Type>(typeof (IGenericRepository<DriveReport>),typeof (DriveReportsRepositoryMock)),
                     new KeyValuePair<Type, Type>(typeof (IMailSender), typeof (MailSenderMock)),
-                    new KeyValuePair<Type, Type>(typeof(IGenericRepository<LicensePlate>), typeof(GenericRepository<LicensePlate>))
+                    new KeyValuePair<Type, Type>(typeof(IDriveReportService), typeof(DriveReportService)),
+                    new KeyValuePair<Type, Type>(typeof(IReimbursementCalculator), typeof(ReimbursementCalculator)),
+                    new KeyValuePair<Type, Type>(typeof(IPersonService), typeof(PersonService)),
+                    new KeyValuePair<Type, Type>(typeof(IRoute<RouteInformation>), typeof(BestRoute)),
+                    new KeyValuePair<Type, Type>(typeof(IAddressCoordinates), typeof(AddressCoordinates)),
+                new KeyValuePair<Type, Type>(typeof(IGenericRepository<>), typeof(GenericRepository<>)),
             };
         }
 

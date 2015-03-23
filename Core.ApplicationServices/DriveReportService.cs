@@ -24,18 +24,16 @@ namespace Core.ApplicationServices
         private readonly IRoute<RouteInformation> _route;
         private readonly IAddressCoordinates _coordinates;
         private readonly IGenericRepository<DriveReport> _driveReportRepository;
-        private readonly IGenericRepository<LicensePlate> _licensePlateRepository;
-        private readonly ReimbursementCalculator _calculator;
+        private readonly IReimbursementCalculator _calculator;
         private readonly IMailSender _mailSender;
 
-        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IGenericRepository<LicensePlate> licensePlateRepository)
+        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator)
         {
             _route = new BestRoute();
             _coordinates = new AddressCoordinates();
-            _calculator = new ReimbursementCalculator();
+            _calculator = calculator;
             _mailSender = mailSender;
             _driveReportRepository = driveReportRepository;
-            _licensePlateRepository = licensePlateRepository;
         }
 
         public IQueryable<DriveReport> AddFullName(IQueryable<DriveReport> repo)
@@ -94,6 +92,8 @@ namespace Core.ApplicationServices
 
 
             }
+         
+
             report = _calculator.Calculate(report);
 
 
@@ -146,10 +146,6 @@ namespace Core.ApplicationServices
                 return false;
             }
             if (string.IsNullOrEmpty(report.Purpose))
-            {
-                return false;
-            }
-            if (_licensePlateRepository.AsQueryable().FirstOrDefault(x => x.PersonId == report.PersonId && x.Plate == report.Licenseplate) == null)
             {
                 return false;
             }

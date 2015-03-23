@@ -56,7 +56,7 @@ namespace Core.ApplicationServices
             }            
         }
 
-        public PersonalAddress GetHomeAddress(Person person)
+        public virtual PersonalAddress GetHomeAddress(Person person)
         {
             var hasAlternative = _addressRepo.AsQueryable()
                     .FirstOrDefault(x => x.PersonId == person.PersonId && x.Type == PersonalAddressType.AlternativeHome);
@@ -75,7 +75,7 @@ namespace Core.ApplicationServices
             return home;
         }
 
-        public PersonalAddress GetWorkAddress(Person person)
+        public virtual PersonalAddress GetWorkAddress(Person person)
         {
             var hasAlternative = _addressRepo.AsQueryable()
                     .FirstOrDefault(x => x.PersonId == person.PersonId && x.Type == PersonalAddressType.AlternativeWork);

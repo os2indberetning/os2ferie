@@ -64,7 +64,7 @@ namespace Infrastructure.DataAccess.Migrations
                         FourKmRule = c.Boolean(),
                         StartsAtHome = c.Boolean(),
                         EndsAtHome = c.Boolean(),
-                        Licenseplate = c.String(unicode: false),
+                        LicensePlate = c.String(unicode: false),
                         Discriminator = c.String(nullable: false, maxLength: 128, storeType: "nvarchar"),
                     })
                 .PrimaryKey(t => t.Id)                

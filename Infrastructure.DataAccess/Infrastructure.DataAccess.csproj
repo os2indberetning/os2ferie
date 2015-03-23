@@ -149,6 +149,18 @@
     <Compile Include="Migrations\201503231405526_ChangedWorkDistanceOverrideInPersonFromIntToDouble.Designer.cs">
       <DependentUpon>201503231405526_ChangedWorkDistanceOverrideInPersonFromIntToDouble.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503231421232_AddedBoolRequiresLicensePlateToRateType.cs" />
+    <Compile Include="Migrations\201503231421232_AddedBoolRequiresLicensePlateToRateType.Designer.cs">
+      <DependentUpon>201503231421232_AddedBoolRequiresLicensePlateToRateType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503231432350_MadeLicensePlateNotRequiredOnDriveReport.cs" />
+    <Compile Include="Migrations\201503231432350_MadeLicensePlateNotRequiredOnDriveReport.Designer.cs">
+      <DependentUpon>201503231432350_MadeLicensePlateNotRequiredOnDriveReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503231508527_ChangedPInLicensePlateOnDriveReportToUpperCase.cs" />
+    <Compile Include="Migrations\201503231508527_ChangedPInLicensePlateOnDriveReportToUpperCase.Designer.cs">
+      <DependentUpon>201503231508527_ChangedPInLicensePlateOnDriveReportToUpperCase.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -229,6 +241,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503231405526_ChangedWorkDistanceOverrideInPersonFromIntToDouble.resx">
       <DependentUpon>201503231405526_ChangedWorkDistanceOverrideInPersonFromIntToDouble.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503231421232_AddedBoolRequiresLicensePlateToRateType.resx">
+      <DependentUpon>201503231421232_AddedBoolRequiresLicensePlateToRateType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503231432350_MadeLicensePlateNotRequiredOnDriveReport.resx">
+      <DependentUpon>201503231432350_MadeLicensePlateNotRequiredOnDriveReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503231508527_ChangedPInLicensePlateOnDriveReportToUpperCase.resx">
+      <DependentUpon>201503231508527_ChangedPInLicensePlateOnDriveReportToUpperCase.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

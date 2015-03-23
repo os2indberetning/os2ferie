@@ -61,6 +61,7 @@ namespace Core.ApplicationServices
             kernel.Bind<IDriveReportService>().To<DriveReportService>();
             kernel.Bind<IAddressCoordinates>().To<AddressCoordinates>();
             kernel.Bind<IRoute<RouteInformation>>().To<BestRoute>();
+            kernel.Bind<IReimbursementCalculator>().To<ReimbursementCalculator>();
 
 
         }        
