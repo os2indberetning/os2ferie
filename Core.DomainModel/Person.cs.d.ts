@@ -12,6 +12,7 @@
 		distanceFromHomeToBorder: number;
 		initials: string;
 		fullName: string;
+		distanceFromHomeToWork: number;
 		personalAddresses: any[];
 		personalRoutes: any[];
 		licensePlates: any[];

@@ -4,7 +4,6 @@
 
         $scope.container = {};
 
-
         // Hardcoded personId
         var personId = 1;
 
@@ -55,8 +54,11 @@
             ];
         }
 
-        $scope.Person = Person.get({ id: personId}, function () {
-            Address.GetPersonalAndStandard({personId : personId}, function (data) {
+        $scope.Person = Person.get({ id: personId }, function () {
+            // Show the persons distance from home to work.
+            $scope.TransportAllowance = $scope.Person.DistanceFromHomeToWork.toFixed(2).toString().replace('.',',');
+
+            Address.GetPersonalAndStandard({ personId: personId }, function (data) {
                 var temp = [{ value: "Vælg fast adresse" }];
                 angular.forEach(data, function (value, key) {
                     var street = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
@@ -319,7 +321,7 @@
             $scope.DriveReport.Purpose = "";
             $scope.container.kilometerAllowanceDropDown.select(0);
             $scope.DriveReport.KilometerAllowance = "Calculated";
-            
+
 
 
             $scope.container.PersonalRouteDropDown.select(0);
@@ -464,6 +466,13 @@
         }
 
         var routeMapChanged = function (obj) {
+            var remKm = Number(obj.distance - $scope.Person.DistanceFromHomeToWork);
+            $scope.RemainingKilometers = remKm.toFixed(2).toString().replace('.',',');
+            if (remKm < 0) {
+                $scope.RemainingKilometers = 0;
+            }
+
+
             $scope.DrivenKilometers = obj.distance.toFixed(2).toString().replace('.', ',');
             if (!$scope.mapChangedByGui) {
                 // Clear personal route dropdown.
@@ -486,6 +495,7 @@
                 $scope.$apply();
             }
             $scope.mapChangedByGui = false;
+
         }
 
         $scope.shaveExtraCommasOffAddressString = function (address) {
@@ -525,7 +535,7 @@
 
             // Is there a better way to do this?
             // My guess is this might take a long time if there are a lot of org units. 
-            angular.forEach($scope.Employments, function(empl, key) {
+            angular.forEach($scope.Employments, function (empl, key) {
                 // Show checkbox and value field, if the chosen orgunit allows it. 
                 if (empl.Id == $scope.DriveReport.Position) {
                     $scope.hasAccessToFourKmRule = empl.OrgUnit.HasAccessToFourKmRule;

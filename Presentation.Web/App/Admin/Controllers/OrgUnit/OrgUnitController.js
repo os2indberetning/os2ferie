@@ -74,7 +74,7 @@
                     },
                     {
                         field: "HasAccessToFourKmRule",
-                        title: "Kan benytte 4KM regel",
+                        title: "Kan benytte 4km-regel",
                         template: function(data) {
                             var res = "<input type='checkbox' ng-model='checkboxes[" + data.Id + "]' ng-change='rowChecked(" + data.Id + ")'></input>";
                             return res;
@@ -102,20 +102,15 @@
             $scope.loadOrgUnits();
         });
 
-        $scope.orgUnitChanged = function(item) {
-            var url = "/odata/OrgUnits?$filter=Id eq " + item.Id;
-
-
-
-            $scope.gridContainer.grid.dataSource.transport.options.read.url = url;
-            $scope.gridContainer.grid.dataSource.read();
+        $scope.orgUnitChanged = function (item) {
+            var filter = [];
+            filter.push({ field: "ShortDescription", operator: "contains", value: $scope.orgUnit.chosenUnit });
+            $scope.gridContainer.grid.dataSource.filter(filter);
         }
 
         $scope.clearClicked = function() {
             $scope.orgUnit.chosenUnit = "";
-            var url = "/odata/OrgUnits";
-            $scope.gridContainer.grid.dataSource.transport.options.read.url = url;
-            $scope.gridContainer.grid.dataSource.read();
+            $scope.gridContainer.grid.dataSource.filter({});
 
         }
        

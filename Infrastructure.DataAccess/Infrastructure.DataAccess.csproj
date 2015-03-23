@@ -145,6 +145,10 @@
     <Compile Include="Migrations\201503201159063_AddedHasAccessToFourKmRuleToOrgUnit.Designer.cs">
       <DependentUpon>201503201159063_AddedHasAccessToFourKmRuleToOrgUnit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503231405526_ChangedWorkDistanceOverrideInPersonFromIntToDouble.cs" />
+    <Compile Include="Migrations\201503231405526_ChangedWorkDistanceOverrideInPersonFromIntToDouble.Designer.cs">
+      <DependentUpon>201503231405526_ChangedWorkDistanceOverrideInPersonFromIntToDouble.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -222,6 +226,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503201159063_AddedHasAccessToFourKmRuleToOrgUnit.resx">
       <DependentUpon>201503201159063_AddedHasAccessToFourKmRuleToOrgUnit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503231405526_ChangedWorkDistanceOverrideInPersonFromIntToDouble.resx">
+      <DependentUpon>201503231405526_ChangedWorkDistanceOverrideInPersonFromIntToDouble.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

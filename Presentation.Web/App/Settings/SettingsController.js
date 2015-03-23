@@ -22,7 +22,7 @@
 
         $scope.GetPerson = Person.get({ id: 1 }, function (data) {
             $scope.currentPerson = data;
-            $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride;
+            $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride.toString().replace('.',',');
             $scope.recieveMail = data.RecieveMail;
 
             //Sæt valg af mailnotifikationer
@@ -317,8 +317,8 @@
 
         $scope.setHomeWorkOverride = function () {
             var newPerson = new Person({
-                WorkDistanceOverride: $scope.workDistanceOverride
-            });
+                WorkDistanceOverride: $scope.workDistanceOverride.toString().replace(',', '.')
+        });
 
             newPerson.$patch({ id: 1 }, function (data) {
                 NotificationService.AutoFadeNotification("success", "Success", "Afstand mellem hjemme- og arbejdsadresse blev gemt");

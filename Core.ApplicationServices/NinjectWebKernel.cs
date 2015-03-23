@@ -6,7 +6,9 @@ using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Impl;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainServices;
+using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices;
+using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 using Ninject;
 using Ninject.Web.Common;
@@ -58,6 +60,7 @@ namespace Core.ApplicationServices
             kernel.Bind<ISubstituteService>().To<SubstituteService>();
             kernel.Bind<IDriveReportService>().To<DriveReportService>();
             kernel.Bind<IAddressCoordinates>().To<AddressCoordinates>();
+            kernel.Bind<IRoute<RouteInformation>>().To<BestRoute>();
 
 
         }        

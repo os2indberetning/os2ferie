@@ -14,20 +14,19 @@ namespace Core.ApplicationServices
     public class ReimbursementCalculator : IReimbursementCalculator
     {
         private readonly IRoute<RouteInformation> _route;
-        private readonly IGenericRepository<PersonalAddress> _addressRepo;
+        private readonly IPersonService _personService;
         private readonly IGenericRepository<Person> _personRepo; 
 
         public ReimbursementCalculator()
         {
             _route = new BestRoute();
-            _addressRepo = new GenericRepository<PersonalAddress>(new DataContext());
             _personRepo = new GenericRepository<Person>(new DataContext());
         }
 
-        public ReimbursementCalculator(IRoute<RouteInformation> route, IGenericRepository<PersonalAddress> addressRepo, IGenericRepository<Person> personRepo)
+        public ReimbursementCalculator(IRoute<RouteInformation> route, IPersonService personService, IGenericRepository<Person> personRepo)
         {
             _route = route;
-            _addressRepo = addressRepo;
+            _personService = personService;
             _personRepo = personRepo;
         }
 
@@ -57,8 +56,8 @@ namespace Core.ApplicationServices
 
             var person = _personRepo.AsQueryable().First(x => x.Id == report.PersonId);
 
-            var homeAddress = GetHomeAddress(report);
-            var workAddress = GetWorkAddress(report);
+            var homeAddress = _personService.GetHomeAddress(report.Person);
+            var workAddress = _personService.GetWorkAddress(report.Person);
 
             if (report.KilometerAllowance != KilometerAllowance.Read)
             {
@@ -83,17 +82,11 @@ namespace Core.ApplicationServices
                 }
             }
 
-           
 
-            //Check if user has overriden the distance between the users home and work address
-            if (person.WorkDistanceOverride > 0)
-            {
-                homeWorkDistance = person.WorkDistanceOverride;
-            }
-            else
-            {                
-                homeWorkDistance = _route.GetRoute(new List<Address>() { homeAddress, workAddress }).Length;    
-            }
+
+
+            homeWorkDistance = _personService.GetDistanceFromHomeToWork(report.Person);
+
             
             //Calculate distance to subtract
             double toSubtract = 0;
@@ -201,36 +194,6 @@ namespace Core.ApplicationServices
             }
         }
 
-        private PersonalAddress GetHomeAddress(DriveReport report)
-        {
-            var hasAlternative = _addressRepo.AsQueryable()
-                    .FirstOrDefault(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.AlternativeHome);
-
-            if (hasAlternative != null)
-            {
-                return hasAlternative;
-            }
-
-            var home = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.Home);
-
-            return home;
-        }
-
-        private PersonalAddress GetWorkAddress(DriveReport report)
-        {
-            var hasAlternative = _addressRepo.AsQueryable()
-                    .FirstOrDefault(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.AlternativeWork);
-
-            if (hasAlternative != null)
-            {
-                return hasAlternative;
-            }
-
-            var work = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.Work);
-
-            return work;
-        }
+       
     }
 }

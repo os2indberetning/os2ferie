@@ -15,15 +15,14 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
     {
 
 
-        protected IGenericRepository<PersonalAddress> GetPersonalAddressRepository()
+        protected IPersonService GetPersonServiceMock()
         {
 
 
 
-            var repo = Substitute.For<IGenericRepository<PersonalAddress>>();
+            var personService = Substitute.For<IPersonService>();
 
-            repo.AsQueryable().Returns(info => new List<PersonalAddress>()
-            {
+            personService.GetHomeAddress(new Person()).ReturnsForAnyArgs(info =>
                 new PersonalAddress()
                 {
                     Description = "TestHomeAddress",
@@ -34,7 +33,9 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
                     StreetNumber = "46",
                     ZipCode = 8210,
                     Town = "Aarhus"
-                },
+                });
+
+            personService.GetWorkAddress(new Person()).ReturnsForAnyArgs(info =>
                 new PersonalAddress()
                 {
                     Description = "TestWorkAddress",
@@ -45,10 +46,9 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
                     StreetNumber = "95",
                     ZipCode = 8200,
                     Town = "Aarhus"
-                }
-            }.AsQueryable());
+                });
 
-            return repo;
+            return personService;
         }
 
         protected IGenericRepository<Person> GetPersonRepository()
@@ -73,7 +73,7 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
 
         protected IReimbursementCalculator GetCalculator()
         {
-            return new ReimbursementCalculator(new RouterMock(), GetPersonalAddressRepository(), GetPersonRepository());
+            return new ReimbursementCalculator(new RouterMock(), GetPersonServiceMock(), GetPersonRepository());
         }
 
         protected DriveReport GetDriveReport()

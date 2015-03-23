@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-md-9"></div>
             <div class="col-md-2">
-                <input type="text" typeahead-on-select="orgUnitChanged($item)" typeahead-editable="false" ng-model="orgUnit.chosenUnit" placeholder="Indtast navn" typeahead="orgUnit as orgUnit.ShortDescription for orgUnit in typeAheadOrgUnits | filter:$viewValue" class="form-control" />
+                <input type="text" kendo-auto-complete ng-change="orgUnitChanged($item)" ng-model="orgUnit.chosenUnit" placeholder="'Indtast beskrivelse'" k-data-source="typeAheadOrgUnits" k-data-value-field="'ShortDescription'" k-data-text-field="'ShortDescription'" class="form-control" />
             </div>
             <div class="col-md-1">
                 <button class="btn btn-danger pull-right" ng-click="clearClicked()">Nulstil</button>

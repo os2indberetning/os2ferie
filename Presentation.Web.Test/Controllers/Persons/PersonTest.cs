@@ -4,6 +4,8 @@ using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
+using Core.DomainServices.RoutingClasses;
+using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
@@ -24,7 +26,8 @@ namespace Presentation.Web.Test.Controllers.Persons
                 new KeyValuePair<Type, Type>(typeof(IPersonService), typeof(PersonService)),
                 new KeyValuePair<Type, Type>(typeof(IGenericRepository<Employment>), typeof(GenericRepository<Employment>)),
                 new KeyValuePair<Type, Type>(typeof(IGenericRepository<LicensePlate>), typeof(GenericRepository<LicensePlate>)),
-                
+                new KeyValuePair<Type, Type>(typeof(IGenericRepository<PersonalAddress>), typeof(GenericRepository<PersonalAddress>)),
+                new KeyValuePair<Type, Type>(typeof(IRoute<RouteInformation>), typeof(BestRoute)),
             };
         }
 
