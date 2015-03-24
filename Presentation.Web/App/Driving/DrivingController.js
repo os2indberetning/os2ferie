@@ -359,11 +359,7 @@
             // Set mapChangedByGui to true.
             // If you dont do this, then the change function will be called and the address fields will be filled with the default addresses.
             $scope.mapChangedByGui = true;
-            OS2RouteMap.show({
-                id: 'map',
-                Addresses: $scope.getDefaultMapAddresses(),
-                change: routeMapChanged
-            });
+            OS2RouteMap.set($scope.getDefaultMapAddresses());
         }
 
 
@@ -479,11 +475,7 @@
             });
 
             $scope.mapChangedByGui = true;
-            OS2RouteMap.show({
-                id: 'map',
-                Addresses: mapArray,
-                change: routeMapChanged
-            });
+            OS2RouteMap.set(mapArray);
         }
 
         var routeMapChanged = function (obj) {
@@ -535,18 +527,12 @@
             $scope.validateInput();
         }
 
-        // Clear the routemap fields.
-        // If you dont do this, then the map wont load when navigating to a different page and back again.
-        OS2RouteMap.id = null;
-        OS2RouteMap.map = null;
-        OS2RouteMap.options = null;
-        OS2RouteMap.routeControl = null;
-
-        OS2RouteMap.show({
+        OS2RouteMap.create({
             id: 'map',
-            Addresses: $scope.getDefaultMapAddresses(),
             change: routeMapChanged
         });
+
+        OS2RouteMap.set($scope.getDefaultMapAddresses());
 
         $scope.employmentChanged = function () {
             // Clear the checkbox and the value field before checking.
