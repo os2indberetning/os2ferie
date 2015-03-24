@@ -4,17 +4,27 @@
         <h3 class="panel-title"><i class="fa fa-money"></i> Kontostyring</h3>
     </div>
 
-
+   
 
     <div class="panel-body">
+        
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="pull-left">Opret afvigende kontering</h2>
+            </div>
+        </div>
+
         <div class="col-md-6">
-            <h2 class="inline">Nyt kontonummer</h2>
+
             <div class="col-md-12 margin-5">
                 <div class="col-md-4">
-                    <label>Registreringsnummer</label>
+                    <label>Type</label>
                 </div>
                 <div class="col-md-8">
-                    <input type="number" min="0" class="form-control" ng-model="container.newAccountRegNumber" />
+                    <select kendo-drop-down-list ng-model="container.newAccountType" class="fill-width">
+                        <option value="0">Omkostningssted</option>
+                        <option value="1">PSP-element</option>
+                    </select>
                 </div>
             </div>
 
@@ -23,7 +33,7 @@
                     <label>Kontonummer</label>
                 </div>
                 <div class="col-md-8">
-                    <input type="number" min="0" class="form-control" ng-model="container.newAccountAccountNumber" />
+                    <input class="form-control" ng-model="container.newAccountAccountNumber" />
                 </div>
             </div>
 
@@ -32,7 +42,7 @@
                     <label>Beskrivelse</label>
                 </div>
                 <div class="col-md-8">
-                    <textarea type="text" class="form-control min-height-100" ng-model="container.newAccountDescription"></textarea>
+                    <textarea type="text" class="form-control min-height-100 max-width-100p" ng-model="container.newAccountDescription"></textarea>
                 </div>
             </div>
             <div class="col-md-12 margin-5">
@@ -50,16 +60,9 @@
 
 
         <div class="col-md-6">
-            <label class="pull-right margin-5">Visninger pr. side</label>
-            <h2 class="inline">
-                Eksisterende konti<select ng-model="container.gridPageSize" kendo-drop-down-list class="form-control pull-right max-width-100" ng-change="pageSizeChanged()">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                    <option value="40">40</option>
-                    <option value="50">50</option>
-                </select>
+
+            <h2>
+                Afvigende konteringer
             </h2>
             <div kendo-grid="container.accountGrid" class="margin-5" options="accounts"></div>
         </div>

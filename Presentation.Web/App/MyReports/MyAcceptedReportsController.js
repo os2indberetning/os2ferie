@@ -72,7 +72,8 @@ angular.module("application").controller("MyAcceptedReportsController", [
                        next: "Gå til næste side",
                        last: "Gå til sidste side",
                        refresh: "Genopfrisk"
-                   }
+                   },
+                   pageSizes: [5, 10, 20, 30, 40, 50]
                },
                dataBound: function () {
                    this.expandRow(this.tbody.find("tr.k-master-row").first());

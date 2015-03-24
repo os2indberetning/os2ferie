@@ -49,7 +49,8 @@
                         next: "Gå til næste side",
                         last: "Gå til sidste side",
                         refresh: "Genopfrisk"
-                    }
+                    },
+                    pageSizes: [5, 10, 20, 30, 40, 50]
                 },
                 scrollable: false,
                 columns: [

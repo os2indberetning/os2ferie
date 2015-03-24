@@ -54,27 +54,23 @@
                         next: "Gå til næste side",
                         last: "Gå til sidste side",
                         refresh: "Genopfrisk"
-                    }
+                    },
+                    pageSizes: [5, 10, 20, 30, 40, 50]
                 },
                 scrollable: false,
                 columns: [
                     {
-                        field: "Number",
-                        title: "Registreringsnummer",
+                        field: "Type",
+                        title: "Type",
                         template: function (data) {
-                            var split = data.Number.split("-");
-                            // Return registreringsnummer
-                            return split[0];
-
+                            if (data.Type == "PSPElement") {
+                                return "PSP-element";
+                            }
+                            return data.Type;
                         }
                     }, {
                         field: "Number",
                         title: "Kontonummer",
-                        template: function (data) {
-                            var split = data.Number.split("-");
-                            // return account number
-                            return split[1];
-                        }
                     }, {
                         field: "Description",
                         title: "Beskrivelse",
@@ -92,18 +88,13 @@
         }
 
         $scope.loadAccounts();
- 
+
         $scope.addNewAccountClick = function () {
             $scope.accountNumberErrorMessage = "";
             $scope.accountDescriptionErrorMessage = "";
-            $scope.accountNumberRegNumberErrorMessage = "";
             var error = false;
             if ($scope.container.newAccountAccountNumber == "" || $scope.container.newAccountAccountNumber == undefined) {
                 $scope.accountNumberErrorMessage = "* Du skal skrive et gyldigt kontonummer."
-                error = true;
-            }
-            if ($scope.container.newAccountRegNumber == "" || $scope.container.newAccountRegNumber == undefined) {
-                $scope.accountNumberRegNumberErrorMessage = "* Du skal skrive et gyldigt registreringsnummer.";
                 error = true;
             }
             if ($scope.container.newAccountDescription == "" || $scope.container.newAccountDescription == undefined) {
@@ -111,9 +102,8 @@
                 error = true;
             }
 
-
             if (!error) {
-                BankAccount.post({ "Description": $scope.container.newAccountDescription, "Number": $scope.container.newAccountRegNumber + "-" + $scope.container.newAccountAccountNumber }, function () {
+                BankAccount.post({ "Description": $scope.container.newAccountDescription, "Number": $scope.container.newAccountAccountNumber, "Type": $scope.container.newAccountType }, function () {
                     $scope.updateAccountGrid();
                     $scope.container.newAccountDescription = "";
                     $scope.container.newAccountRegNumber = "";

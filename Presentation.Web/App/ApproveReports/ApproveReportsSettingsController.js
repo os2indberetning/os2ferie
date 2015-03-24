@@ -43,6 +43,7 @@
                            return d;
                        }
                    },
+                   pageSize: 20,
                    schema: {
                        data: function (data) {
                            return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
@@ -53,7 +54,21 @@
                    }
                },
                sortable: true,
-               pageable: true,
+               pageable: {
+                   messages: {
+                       display: "{0} - {1} af {2} ", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                       empty: "Ingen stedfortrædere at vise",
+                       page: "Side",
+                       of: "af {0}", //{0} is total amount of pages
+                       itemsPerPage: "stedfortrædere pr. side",
+                       first: "Gå til første side",
+                       previous: "Gå til forrige side",
+                       next: "Gå til næste side",
+                       last: "Gå til sidste side",
+                       refresh: "Genopfrisk",
+                   },
+                   pageSizes: [5, 10, 20, 30, 40, 50]
+               },
                dataBound: function () {
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
@@ -99,6 +114,7 @@
                            return d;
                        }
                    },
+                   pageSize: 20,
                    schema: {
                        data: function (data) {
                            return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
@@ -108,8 +124,23 @@
                        }
                    },
                },
+
                sortable: true,
-               pageable: true,
+               pageable: {
+                   messages: {
+                       display: "{0} - {1} af {2} ", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                       empty: "Ingen personlige godkendere at vise",
+                       page: "Side",
+                       of: "af {0}", //{0} is total amount of pages
+                       itemsPerPage: "personlige godkendere pr. side",
+                       first: "Gå til første side",
+                       previous: "Gå til forrige side",
+                       next: "Gå til næste side",
+                       last: "Gå til sidste side",
+                       refresh: "Genopfrisk",
+                   },
+                   pageSizes: [5, 10, 20, 30, 40, 50]
+               },
                dataBound: function () {
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },

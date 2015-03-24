@@ -387,7 +387,7 @@
                             return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                         }
                     },
-                    pageSize: 5,
+                    pageSize: 20,
                     serverPaging: true,
                     serverSorting: true
                 },
@@ -404,7 +404,8 @@
                         next: "Gå til næste side",
                         last: "Gå til sidste side",
                         refresh: "Genopfrisk",
-                    }
+                    },
+                    pageSizes: [5, 10, 20, 30, 40, 50]
                 },
                 dataBound: function () {
                     this.expandRow(this.tbody.find("tr.k-master-row").first());
@@ -499,7 +500,8 @@
                         next: "Gå til næste side",
                         last: "Gå til sidste side",
                         refresh: "Genopfrisk",
-                    }
+                    },
+                    pageSizes: [5, 10, 20, 30, 40, 50]
                 },
                 dataBound: function () {
                     this.expandRow(this.tbody.find("tr.k-master-row").first());
