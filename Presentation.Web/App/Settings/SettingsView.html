@@ -15,7 +15,7 @@
                     <label for="">Registreringsnummer på bil:</label>
                     <div></div>
                     <input ng-model="newLicensePlate" class="" kendo-masked-text-box k-mask="'&& && &&&'" placeholder="AB 12 345" />
-                    <input ng-model="newLicensePlateDescription" class="k-textbox" placeholder="VW Polo" />
+                    <input ng-model="newLicensePlateDescription" class="k-textbox" placeholder="Kommentar" />
                     <button type="submit" class="btn btn-primary" ng-click="saveNewLicensePlate()">Tilføj</button>
                     <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Vis nummerplader</button>
                     <div collapse="isCollapsed">
@@ -28,7 +28,8 @@
                         </div>
                     </div>
                     <div class="seperator"></div>
-                    <label for="">Afstand mellem hjemme- og arbejdsadresse:</label>
+                    <label for="">Afvigende afstand mellem hjemme- og arbejdsadresse:</label>
+                    <span class="info-popup" popover="Du kan taste en afvigende afstand mellem bopæl og arbejdsplads ind hér, hvis systemet beregner en anden afstand end den du egentlig kører. HUSK! Denne afvigende afstand også er dén du skal indberette til rubrik 51 på din forskudsopgørelse ved Skat." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                     <div></div>
                     <input ng-model="workDistanceOverride" class="k-textbox" placeholder="0" /><label>km</label>
                     <button type="submit" class="btn btn-primary" ng-click="setHomeWorkOverride()">Gem ændringer</button>
@@ -69,9 +70,37 @@
         <div class="row setting-area">
             <div class="col-lg-12">
                 <div class="form-group form-inline">
-                    <h3>Mobil tokens</h3>
+                    <h3>Mobiltokens til app</h3>
+                    
                     <label for="">Se eller opret tokens til din mobiltelefon</label>
-                    <button class="btn btn-default" ng-click="openTokenModal()">Mine tokens</button>
+                    <span class="info-popup" popover="Der er også mulighed for at indberette befordring via en app. Mobiltoken bruges til at forbinde din mobile enhed med eIndberetning. Du kan høre mere om app’en ved din leder." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+                    <div class="col-md-12 margin-bottom-5">
+                        <div>
+                            <ol class="dl-horizontal token-list">
+                                <li ng-repeat="token in tokens">
+                                    <pre><strong>{{ token.Token }} | {{ token.StatusToPresent }} | {{ token.Description }}</strong><button class="btn btn-danger pull-right" ng-click="openConfirmDeleteTokenModal(token)">Slet</button></pre>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 margin-bottom-10">
+                        <div collapse="tokenIsCollapsed">
+                            <input ng-model="newTokenDescription" class="form-control  fill-fifty pull-left" placeholder="Beskrivelse" />
+                            <button class="btn btn-success pull-right" ng-click="saveToken()">Gem</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 margin-bottom-5">
+
+                        <button class="btn btn-success pull-right fill-width" ng-click="newToken()">Opret ny token</button>
+
+
+                    </div>
+
+
+
+
                 </div>
             </div>
         </div>
