@@ -161,6 +161,10 @@
     <Compile Include="Migrations\201503231508527_ChangedPInLicensePlateOnDriveReportToUpperCase.Designer.cs">
       <DependentUpon>201503231508527_ChangedPInLicensePlateOnDriveReportToUpperCase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503240937541_AddedBoolIsPrimaryToLicensePlate.cs" />
+    <Compile Include="Migrations\201503240937541_AddedBoolIsPrimaryToLicensePlate.Designer.cs">
+      <DependentUpon>201503240937541_AddedBoolIsPrimaryToLicensePlate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -250,6 +254,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503231508527_ChangedPInLicensePlateOnDriveReportToUpperCase.resx">
       <DependentUpon>201503231508527_ChangedPInLicensePlateOnDriveReportToUpperCase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503240937541_AddedBoolIsPrimaryToLicensePlate.resx">
+      <DependentUpon>201503240937541_AddedBoolIsPrimaryToLicensePlate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

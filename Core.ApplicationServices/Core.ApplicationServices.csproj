@@ -103,7 +103,9 @@
     <Compile Include="FileGenerator\ReportFileWriter.cs" />
     <Compile Include="FileGenerator\ReportGenerator.cs" />
     <Compile Include="Interfaces\IDriveReportService.cs" />
+    <Compile Include="Interfaces\ILicensePlateService.cs" />
     <Compile Include="Interfaces\ISubstituteService.cs" />
+    <Compile Include="LicensePlateService.cs" />
     <Compile Include="MailerService\Impl\MailService.cs" />
     <Compile Include="MailerService\Interface\IMailSender.cs" />
     <Compile Include="MailerService\Impl\MailSender.cs" />

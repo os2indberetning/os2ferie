@@ -71,9 +71,11 @@ namespace OS2Indberetning
 
             builder.EntitySet<FileGenerationSchedule>("FileGenerationSchedules");
 
-            var lType = builder.EntityType<LicensePlate>();
-            lType.Ignore(l => l.Person);
             builder.EntitySet<LicensePlate>("LicensePlates");
+
+            //var lType = builder.EntityType<LicensePlate>();
+            //lType.Ignore(l => l.Person);
+           
 
             builder.EntitySet<MailNotificationSchedule>("MailNotifications");
 
@@ -86,7 +88,7 @@ namespace OS2Indberetning
             builder.EntitySet<Person>("Person");
             var pType = builder.EntityType<Person>();
             pType.HasKey(p => p.Id);
-            pType.Ignore(p => p.LicensePlates);
+            //pType.Ignore(p => p.LicensePlates);
 
             builder.EntitySet<PersonalAddress>("PersonalAddresses");
 

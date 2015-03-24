@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
@@ -62,7 +63,7 @@ namespace Core.ApplicationServices
             kernel.Bind<IAddressCoordinates>().To<AddressCoordinates>();
             kernel.Bind<IRoute<RouteInformation>>().To<BestRoute>();
             kernel.Bind<IReimbursementCalculator>().To<ReimbursementCalculator>();
-
+            kernel.Bind<ILicensePlateService>().To<LicensePlateService>();
 
         }        
     }

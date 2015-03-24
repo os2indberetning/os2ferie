@@ -32,14 +32,14 @@
             $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride.toString().replace('.',',');
             $scope.recieveMail = data.RecieveMail;
 
-            //Sæt valg af mailnotifikationer
+            //Set choice of mail notification
             if ($scope.recieveMail == true) {
                 $scope.mailAdvice = 'Yes';
             } else {
                 $scope.mailAdvice = 'No';
             }
 
-            //Hent nummerplader
+            //Load licenseplates
             LicensePlate.get({ id: personId }, function (data) {
                 $scope.licenseplates = data;
             });
@@ -52,7 +52,7 @@
             NotificationService.AutoFadeNotification("danger", "Fejl", "Person ikke fundet");
         });
 
-        //Hent alternativ hjemmeadresse
+        //Load alternative home address
         $scope.loadAlternativeHomeAddress = function () {
             Address.get({ query: "$filter=Type eq Core.DomainModel.PersonalAddressType'AlternativeHome' and PersonId eq " + $scope.currentPerson.Id }, function (data) {
                 if (data.value[0] != undefined) {
@@ -68,7 +68,7 @@
             });
         }
 
-        //Hent alternativ arbejdsadresse
+        //Load alternative work address
         $scope.loadAlternativeWorkAddress = function () {
             Address.get({ query: "$filter=Type eq Core.DomainModel.PersonalAddressType'AlternativeWork' and PersonId eq " + $scope.currentPerson.Id }, function (data) {
                 if (data.value[0] != undefined) {
@@ -155,7 +155,7 @@
             });
 
             newPlate.$save(function (data) {
-                $scope.licenseplates.push(data.value[0]);
+                $scope.licenseplates.push(data);
                 $scope.licenseplates.sort(function (a, b) {
                     return a.Id > b.Id;
                 });
@@ -717,5 +717,14 @@
 
             });
         };
+
+        $scope.makeLicensePlatePrimary = function(plate) {
+            LicensePlate.patch({ id: plate.Id }, { IsPrimary: true }, function() {
+                //Load licenseplates when finished request.
+                LicensePlate.get({ id: personId }, function (data) {
+                    $scope.licenseplates = data;
+                });
+            });
+        }
     }
 ]);

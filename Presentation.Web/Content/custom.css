@@ -48,6 +48,10 @@ a {
     margin: 10px;
 }
 
+.margin-15 {
+    margin: 15px;
+}
+
 
 
 .no-border {
@@ -85,6 +89,10 @@ a {
     margin: 6px;
     
 
+}
+
+.margin-left-5 {
+    margin-left: 5px;
 }
 
 .margin-bottom-5 {
@@ -135,18 +143,6 @@ a {
     padding-bottom: 30px;
 }
 
-.token-list {
-    right: auto;
-    left: auto;
-    margin-left: -40px;
-}
-
-.license-plate-list {
-    right: auto;
-    left: auto;
-    margin-left: -40px;
-}
-
 .new-token-btn {
     width: 79%;
 }
@@ -159,6 +155,9 @@ a {
     margin-top: 20px;
 }
 
+.margin-right-5 {
+    margin-right: 5px;
+}
 
 .no-max-width {
     max-width: none;

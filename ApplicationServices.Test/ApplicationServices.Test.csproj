@@ -104,6 +104,7 @@
     <Compile Include="FileGenerator\FileRecordTest.cs" />
     <Compile Include="FileGenerator\ReportGeneratorTest.cs" />
     <Compile Include="FileGenerator\ReportRepositoryMock.cs" />
+    <Compile Include="LicensePlateTest\LicensePlateServiceTest.cs" />
     <Compile Include="MailerServiceTest\RepoMock.cs" />
     <Compile Include="MailerServiceTest\GetLeadersWithPendingReportsEmails.cs" />
     <Compile Include="MailerServiceTest\SendMails.cs" />

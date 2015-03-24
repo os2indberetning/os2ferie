@@ -9,5 +9,6 @@ namespace Core.DomainModel
         public String Description { get; set; }
         public int PersonId { get; set; }
         public virtual Person Person { get; set; }
+        public bool IsPrimary { get; set; }
     }
 }

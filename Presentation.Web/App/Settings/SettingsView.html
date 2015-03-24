@@ -11,7 +11,7 @@
             <div class="col-lg-12">
                 <div class="form-group form-inline">
                     <h3>Diverse</h3>
-                    
+
                     <label for="">Registreringsnummer på bil:</label>
                     <div></div>
                     <input ng-model="newLicensePlate" class="" kendo-masked-text-box k-mask="'&& && &&&'" placeholder="AB 12 345" />
@@ -20,11 +20,37 @@
                     <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Vis nummerplader</button>
                     <div collapse="isCollapsed">
                         <div class="well well-lg">
-                            <ul class="license-plate-list">
-                                <li ng-repeat="plate in licenseplates">
-                                    <pre><strong>{{plate.Description}}:{{ plate.Plate}}</strong><button class="btn btn-danger pull-right" ng-click="deleteLicensePlate(plate)">Slet</button></pre>
-                                </li>
-                            </ul>
+                            <div class="row margin-5">
+                                <div class="col-md-3">
+                                    <p class="margin-5"><strong>Beskrivelse</strong></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="margin-5"><strong>Nummerplade</strong></p>
+                                </div>
+                                <div class="col-md-1">
+                                    <p class="margin-5"><strong>Primær</strong></p>
+                                </div>
+                                <div class="col-md-1">
+                                    <span class="info-popup pull-right margin-5" popover="Den primære nummerplade bruges ved mobil-indberetninger." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+                                </div>
+                            </div>
+                            <div class="row margin-5" ng-repeat="plate in licenseplates">
+                                <div class="col-md-3">
+                                    <p class="margin-5">{{plate.Description}}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="margin-5">{{ plate.Plate}}</p>
+                                </div>
+                                <div class="col-md-1">
+                                    <p class="margin-5" ng-if="plate.IsPrimary"><i class="fa fa-check"></i></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <button ng-disabled="plate.IsPrimary" class="btn btn-primary pull-right" ng-click="makeLicensePlatePrimary(plate)">Gør primær</button>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger pull-left margin-left-5" ng-click="deleteLicensePlate(plate)">Slet</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="seperator"></div>
@@ -71,29 +97,44 @@
             <div class="col-lg-12">
                 <div class="form-group form-inline">
                     <h3>Mobiltokens til app</h3>
-                    
+
                     <label for="">Se eller opret tokens til din mobiltelefon</label>
                     <span class="info-popup" popover="Der er også mulighed for at indberette befordring via en app. Mobiltoken bruges til at forbinde din mobile enhed med eIndberetning. Du kan høre mere om app’en ved din leder." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
-                    <div class="col-md-12 margin-bottom-5">
-                        <div>
-                            <ol class="dl-horizontal token-list">
-                                <li ng-repeat="token in tokens">
-                                    <pre><strong>{{ token.Token }} | {{ token.StatusToPresent }} | {{ token.Description }}</strong><button class="btn btn-danger pull-right" ng-click="openConfirmDeleteTokenModal(token)">Slet</button></pre>
-                                </li>
-                            </ol>
+                    <div class="row margin-5">
+                        <div class="col-md-4">
+                            <p class="margin-5"><strong>Token</strong></p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="margin-5"><strong>Beskrivelse</strong></p>
+                        </div>
+                        
+                    </div>
+                    <div class="row margin-5" ng-repeat="token in tokens">
+                        <div class="col-md-4">
+                            <p class="margin-5">{{ token.Token }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="margin-5">{{ token.Description }}</p>
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            <button class="btn btn-danger pull-right margin-left-5" ng-click="openConfirmDeleteTokenModal(token)">Slet</button>
                         </div>
                     </div>
 
-                    <div class="col-md-12 margin-bottom-10">
-                        <div collapse="tokenIsCollapsed">
-                            <input ng-model="newTokenDescription" class="form-control  fill-fifty pull-left" placeholder="Beskrivelse" />
-                            <button class="btn btn-success pull-right" ng-click="saveToken()">Gem</button>
+                    <div collapse="tokenIsCollapsed">
+                        <div class="row margin-5">
+                            <div class="col-md-10 margin-bottom-10">
+                                <input ng-model="newTokenDescription" class="form-control  fill-fifty pull-left" placeholder="Beskrivelse" />
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success pull-right margin-left-5" ng-click="saveToken()">Gem</button>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-md-12 margin-bottom-5">
 
-                        <button class="btn btn-success pull-right fill-width" ng-click="newToken()">Opret ny token</button>
+                        <button class="btn btn-success pull-right fill-width" ng-click="newToken()"><span ng-if="tokenIsCollapsed">Opret ny token</span><span ng-if="!tokenIsCollapsed">Annuller</span></button>
 
 
                     </div>
@@ -121,8 +162,8 @@
                     <h3>Personlige ruter</h3>
                     <div kendo-grid="gridcontainer.personalRoutesGrid" options="personalRoutes"></div>
                     <button class="btn btn-default set-margin-top-10" ng-click="openRouteEditModal()">Opret ny rute</button>
-                </div>                
-            </div>            
+                </div>
+            </div>
         </div>
     </div>
 </div>
