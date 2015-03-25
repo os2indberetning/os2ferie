@@ -33,6 +33,6 @@ namespace Core.DomainModel
         public string UserComment { get; set; }
 
 
-        public ICollection<DriveReportPoint> DriveReportPoints { get; set; }
+        public virtual ICollection<DriveReportPoint> DriveReportPoints { get; set; }
     }
 }

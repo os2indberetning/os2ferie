@@ -59,7 +59,7 @@ namespace Core.ApplicationServices
         public virtual PersonalAddress GetHomeAddress(Person person)
         {
             var hasAlternative = _addressRepo.AsQueryable()
-                    .FirstOrDefault(x => x.PersonId == person.PersonId && x.Type == PersonalAddressType.AlternativeHome);
+                    .FirstOrDefault(x => x.PersonId == person.Id && x.Type == PersonalAddressType.AlternativeHome);
 
             if (hasAlternative != null)
             {
@@ -67,7 +67,7 @@ namespace Core.ApplicationServices
             }
 
             var home = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == person.PersonId && x.Type == PersonalAddressType.Home);
+                    .First(x => x.PersonId == person.Id && x.Type == PersonalAddressType.Home);
 
             AddCoordinatesToAddressIfNonExisting(home);
 
@@ -78,7 +78,7 @@ namespace Core.ApplicationServices
         public virtual PersonalAddress GetWorkAddress(Person person)
         {
             var hasAlternative = _addressRepo.AsQueryable()
-                    .FirstOrDefault(x => x.PersonId == person.PersonId && x.Type == PersonalAddressType.AlternativeWork);
+                    .FirstOrDefault(x => x.PersonId == person.Id && x.Type == PersonalAddressType.AlternativeWork);
 
             if (hasAlternative != null)
             {
@@ -86,7 +86,7 @@ namespace Core.ApplicationServices
             }
 
             var work = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == person.PersonId && x.Type == PersonalAddressType.Work);
+                    .First(x => x.PersonId == person.Id && x.Type == PersonalAddressType.Work);
 
             AddCoordinatesToAddressIfNonExisting(work);
 

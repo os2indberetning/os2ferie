@@ -169,6 +169,10 @@
     <Compile Include="Migrations\201503241349341_AddedAccountTypeToBankAccount.Designer.cs">
       <DependentUpon>201503241349341_AddedAccountTypeToBankAccount.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503251504302_CouldThisWork.cs" />
+    <Compile Include="Migrations\201503251504302_CouldThisWork.Designer.cs">
+      <DependentUpon>201503251504302_CouldThisWork.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -264,6 +268,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503241349341_AddedAccountTypeToBankAccount.resx">
       <DependentUpon>201503241349341_AddedAccountTypeToBankAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503251504302_CouldThisWork.resx">
+      <DependentUpon>201503251504302_CouldThisWork.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
