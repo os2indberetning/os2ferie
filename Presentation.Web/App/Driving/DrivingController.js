@@ -56,7 +56,7 @@
 
         $scope.Person = Person.get({ id: personId }, function () {
             // Show the persons distance from home to work.
-            $scope.TransportAllowance = $scope.Person.DistanceFromHomeToWork.toFixed(2).toString().replace('.',',');
+            $scope.TransportAllowance = $scope.Person.DistanceFromHomeToWork.toFixed(2).toString().replace('.', ',');
 
             Address.GetPersonalAndStandard({ personId: personId }, function (data) {
                 var temp = [{ value: "Vælg fast adresse" }];
@@ -111,7 +111,7 @@
         $scope.RemainingKilometers = 0;
         $scope.PayoutAmount = 0;
 
-        var getKmRate = function() {
+        var getKmRate = function () {
             for (var i = 0; i < $scope.KmRate.length; i++) {
                 if ($scope.KmRate[i].Id == $scope.DriveReport.KmRate) {
                     return $scope.KmRate[i];
@@ -174,11 +174,15 @@
         $scope.Save = function () {
 
 
+
+
             $scope.validateInput();
 
             if (!$scope.canSubmitDriveReport) {
                 return;
             }
+
+            $scope.canSubmitDriveReport = false;
 
             var driveReport = new DriveReport();
 
@@ -207,10 +211,6 @@
             driveReport.ClosedDateTimestamp = 0;
             driveReport.ProcessedDateTimestamp = 0;
             driveReport.EmploymentId = $scope.DriveReport.Position;
-
-            // These two should be removed, they are in a future branch
-            //driveReport.Fullname = "";
-            //driveReport.Timestamp = "";
 
             if ($scope.DriveReport.KilometerAllowance === "Read") {
 
@@ -289,7 +289,9 @@
 
             driveReport.$save(function (response) {
                 // success
-                $scope.DrivenKilometers = response.Distance.toFixed(2).toString().replace('.', ',');
+
+                latestDriveReport = response;
+
                 $scope.TransportAllowance = 0;
                 $scope.RemainingKilometers = 0;
                 $scope.PayoutAmount = response.AmountToReimburse.toFixed(2).toString().replace('.', ',');
@@ -338,11 +340,12 @@
             // Make the datepicker pop open when clear is clicked.
             openDatePicker = true;
 
+
+
             $scope.DriveReport.Purpose = "";
-            $scope.container.kilometerAllowanceDropDown.select(0);
-            $scope.DriveReport.KilometerAllowance = "Calculated";
 
 
+            
 
             $scope.container.PersonalRouteDropDown.select(0);
             $scope.container.PersonalRouteDropDown.trigger("change");
@@ -356,12 +359,50 @@
             $scope.DriveReport.UserComment = "";
 
 
+
+
             // Set mapChangedByGui to true.
             // If you dont do this, then the change function will be called and the address fields will be filled with the default addresses.
             $scope.mapChangedByGui = true;
+
             OS2RouteMap.set($scope.getDefaultMapAddresses());
+
+            
+
         }
 
+        $scope.loadValuesFromLatestDriveReport = function () {
+
+
+            latestDriveReport.$promise.then(function (res) {
+                $scope.PositionDropDown.select(function (item) {
+                    return item.Id === res.Employment.Id;
+                });
+
+                $scope.LicensePlateDropDown.select(function (item) {
+                    return item.Plate == res.LicensePlate;
+                });
+
+                $scope.KmRateDropDown.select(function (item) {
+                    return item.Type.TFCode == res.TFCode;
+                });
+
+                $scope.container.kilometerAllowanceDropDown.select(function (item) {
+                    return item.value == res.KilometerAllowance;
+                });
+
+                $scope.kilometerAllowanceChanged();
+
+            });
+        }
+
+        $scope.kilometerAllowanceChanged = function() {
+            $scope.DriveReport.KilometerAllowance = $scope.container.kilometerAllowanceDropDown._selectedValue;
+            if ($scope.DriveReport.KilometerAllowance != "Read") {
+                $scope.DriveReport.UserComment = "";
+                $scope.DriveReport.ReadDistance = 0;
+            }
+        }
 
         var openDatePicker = true;
         // Open the datepicker when the page finishes loading
@@ -369,33 +410,38 @@
             if (openDatePicker) {
                 $scope.driveDatePicker.open();
                 openDatePicker = false;
+
+                $scope.loadValuesFromLatestDriveReport();
+
             }
 
-            // Load data into kendo components once they are finished rendering.
-            $scope.KmRate = Rate.ThisYearsRates(function () {
+            $scope.KmRate.$promise.then(function () {
                 $scope.KmRateDropDown.dataSource.read();
                 $scope.KmRateDropDown.select($scope.lastSelectedTransport);
             });
 
-
-
-            $scope.Employments = PersonEmployments.get({ id: personId }, function () {
+            $scope.Employments.$promise.then(function () {
                 $scope.PositionDropDown.dataSource.read();
+
             });
 
-            $scope.LicensePlates = LicensePlate.get({ id: personId }, function (data) {
-                if (data.length > 0) {
-                    $scope.LicensePlateDropDown.dataSource.read();
-                    $scope.canSubmitDriveReport = data.length > 0;
-                }
+            $scope.LicensePlates.$promise.then(function (data) {
+                $scope.LicensePlateDropDown.dataSource.read();
+                $scope.canSubmitDriveReport = data.length > 0;
             });
 
 
-
+            $scope.validateInput();
 
         });
 
+        $scope.Employments = PersonEmployments.get({ id: personId });
 
+        $scope.LicensePlates = LicensePlate.get({ id: personId });
+
+        $scope.KmRate = Rate.ThisYearsRates();
+
+        var latestDriveReport = DriveReport.getLatest({ id: personId });
 
 
         $scope.generateMapWidget = function () {
@@ -476,17 +522,13 @@
 
             $scope.mapChangedByGui = true;
             OS2RouteMap.set(mapArray);
+
         }
 
         var routeMapChanged = function (obj) {
-            var remKm = Number(obj.distance - $scope.Person.DistanceFromHomeToWork);
-            $scope.RemainingKilometers = remKm.toFixed(2).toString().replace('.',',');
-            if (remKm < 0) {
-                $scope.RemainingKilometers = 0;
-            }
 
+            updateDrivenKilometerFields(obj);
 
-            $scope.DrivenKilometers = obj.distance.toFixed(2).toString().replace('.', ',');
             if (!$scope.mapChangedByGui) {
                 // Clear personal route dropdown.
                 $scope.isRoute = false;
@@ -548,6 +590,33 @@
                     $scope.hasAccessToFourKmRule = empl.OrgUnit.HasAccessToFourKmRule;
                 }
             });
+        }
+
+        $scope.readDistanceChanged = function () {
+            updateDrivenKilometerFields();
+        }
+
+        var updateDrivenKilometerFields = function (obj) {
+            if ($scope.DriveReport.KilometerAllowance === "Read") {
+                $scope.DrivenKilometers = $scope.DriveReport.ReadDistance;
+
+                var drivenKm = Number($scope.DriveReport.ReadDistance.toString().replace(',', '.'));
+
+                var remKm = Number(drivenKm - $scope.Person.DistanceFromHomeToWork);
+
+                $scope.RemainingKilometers = remKm.toFixed(2).toString().replace('.', ',');
+                if (remKm < 0) {
+                    $scope.RemainingKilometers = 0;
+                }
+            } else {
+                var remKm = Number(obj.distance - $scope.Person.DistanceFromHomeToWork);
+                $scope.RemainingKilometers = remKm.toFixed(2).toString().replace('.', ',');
+                if (remKm < 0) {
+                    $scope.RemainingKilometers = 0;
+                }
+                $scope.DrivenKilometers = obj.distance.toFixed(2).toString().replace('.', ',');
+            }
+            $scope.$apply();
         }
     }
 ]);

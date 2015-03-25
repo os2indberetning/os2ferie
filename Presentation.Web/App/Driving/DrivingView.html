@@ -95,7 +95,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-6">
-                    <input type="number" min="0" ng-model="DriveReport.ReadDistance" id="ReadDistance" ng-blur="validateInput()" name="FourKmRuleValue" class="k-textbox" />
+                    <input type="number" min="0" ng-model="DriveReport.ReadDistance" ng-change="readDistanceChanged()" id="ReadDistance" ng-blur="validateInput()" name="FourKmRuleValue" class="k-textbox" />
                 </div>
                 <div class="col-lg-6">
                     <input type="text" ng-model="DriveReport.UserComment" id="UserComment" ng-blur="validateInput()" name="UserComment" class="k-textbox fill-width" />
@@ -216,14 +216,6 @@
         </div>
         <div class="col-lg-6 text-right">
             {{RemainingKilometers}}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <p class="text-primary">Beløb til udbetaling</p>
-        </div>
-        <div class="col-lg-6 text-right">
-            {{PayoutAmount}}
         </div>
     </div>
 </div>

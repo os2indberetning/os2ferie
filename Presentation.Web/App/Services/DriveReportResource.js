@@ -5,7 +5,7 @@
         "getLatest": {
             method: "GET",
             isArray: false,
-            url: "/odata/DriveReports?$filter=PersonId eq :id &$top=1&$orderby=CreatedDateTimestamp desc",
+            url: "/odata/DriveReports?$filter=PersonId eq :id &$top=1&$orderby=CreatedDateTimestamp desc &$expand=Employment",
             transformResponse: function (data) {
                 return angular.fromJson(data).value[0];
             }
