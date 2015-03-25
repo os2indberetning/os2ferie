@@ -105,6 +105,7 @@
                serverPaging: false,
                serverAggregates: false,
                serverSorting: true,
+               sort: { field: "DriveDateTimestamp", dir: "desc" }
            },
            sortable: true,
            pageable: {
@@ -217,8 +218,16 @@
 
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
+
+           initialLoad = 2;
+
+           var from = new Date();
+           from.setDate(from.getDate() - 30);
+
            $scope.dateContainer.toDate = new Date();
-           $scope.dateContainer.fromDate = new Date();
+           $scope.dateContainer.fromDate = from;
+
+           $scope.$apply();
        }
 
 
@@ -259,6 +268,7 @@
            queryOptions.personQuery = "";
            $scope.person.chosenPerson = "";
            $scope.updateReports();
+           $scope.loadInitialDates();
 
        }
 
@@ -514,8 +524,8 @@
                // This leads to sorting the grid content on load, which is not what we want.
                // Therefore the sorting is not done the first 2 times the dates change - Which are the 2 times we set the default values.
                if (initialLoad <= 0) {
-
-                   $scope.updateReports(to + and + from);
+                   queryOptions.dateQuery = to + and + from;
+                   $scope.updateReports();
                }
                initialLoad--;
            }, 0);

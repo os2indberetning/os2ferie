@@ -107,7 +107,8 @@
                    },
                    pageSize: 20,
                    serverPaging: false,
-                   serverSorting: true
+                   serverSorting: true,
+                   sort: { field: "DriveDateTimestamp", dir: "desc" }
                },
                sortable: true,
                scrollable: false,
@@ -181,8 +182,16 @@
 
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
+
+           initialLoad = 2;
+
+           var from = new Date();
+           from.setDate(from.getDate() - 30);
+
            $scope.dateContainer.toDate = new Date();
-           $scope.dateContainer.fromDate = new Date();
+           $scope.dateContainer.fromDate = from;
+
+           $scope.$apply();
        }
 
        $scope.getEndOfDayStamp = function (d) {
@@ -210,6 +219,7 @@
            queryOptions.personQuery = "";
            $scope.person.chosenPerson = "";
            $scope.updateReports();
+           $scope.loadInitialDates();
        }
 
        var initialLoad = 2;

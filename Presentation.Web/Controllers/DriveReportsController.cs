@@ -59,6 +59,18 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
         {
+            var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
+            if (report == null)
+            {
+                return NotFound();
+            }
+            // Return Unauthorized if the status is not pending when trying to patch.
+            // User should not be allowed to change a Report which has been accepted or rejected.
+            if (report.Status != ReportStatus.Pending)
+            {
+                return Unauthorized();
+            }
+
 
             _driveService.SendMailIfRejectedReport(key,delta);
             return base.Patch(key, delta);
