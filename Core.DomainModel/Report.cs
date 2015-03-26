@@ -21,6 +21,9 @@ namespace Core.DomainModel
         public String Comment { get; set; }
         public long ClosedDateTimestamp { get; set; }
         public long ProcessedDateTimestamp { get; set; }
+        public Person ResponsibleLeader { get; set; }
+        public virtual Person ApprovedBy { get; set; }
+        public int? ApprovedById { get; set; }
 
         public int PersonId { get; set; }
         public virtual Person Person { get; set; }

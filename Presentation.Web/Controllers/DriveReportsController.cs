@@ -23,13 +23,14 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions)
         {
-            return _driveService.AddFullName(GetQueryable(queryOptions));
+            return _driveService.AttachResponsibleLeader(_driveService.AddFullName(GetQueryable(queryOptions)));
         }
 
         //GET: odata/DriveReports(5)
         public IQueryable<DriveReport> GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
-            return _driveService.AddFullName(GetQueryable(key, queryOptions));
+            var res = _driveService.AttachResponsibleLeader(_driveService.AddFullName(GetQueryable(key, queryOptions)));
+            return res;
         }
 
         // PUT: odata/DriveReports(5)

@@ -8,14 +8,16 @@ namespace Presentation.Web.Test.Controllers.DriveReports
     {
         readonly Person _person = new Person
         {
+            Id = 1,
             FirstName = "Morten",
             LastName = "Tester",
             Initials = "MT",
-            Mail = "testMail@asd.dk"
+            Mail = "testMail@asd.dk",
         };
 
         readonly Person _person2 = new Person
         {
+            Id = 2,
             FirstName = "Morten",
             LastName = "Tester",
             Initials = "MT",
@@ -35,7 +37,12 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                     Comment = "comment 1",
                     Distance = 3.4f,
                     ClosedDateTimestamp = 4444,
-                    Person = _person2
+                    Person = _person2,
+                     Employment = new Employment()
+                    {
+                        Id = 1,
+                        OrgUnitId = 1
+                    }
                 },
                 new DriveReport
                 {
@@ -43,7 +50,12 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                     Comment = "comment 2",
                     Distance = 3.5f,
                     ClosedDateTimestamp = 4455,
-                    Person = _person2
+                    Person = _person2,
+                     Employment = new Employment()
+                    {
+                        Id = 1,
+                        OrgUnitId = 1
+                    }
                 },
                 new DriveReport
                 {
@@ -51,7 +63,12 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                     Comment = "comment 3",
                     Distance = 3.6778f,
                     ClosedDateTimestamp = 7777,
-                    Person = _person
+                    Person = _person,
+                    Employment = new Employment()
+                    {
+                        Id = 1,
+                        OrgUnitId = 1
+                    }
                 }
             };
         }

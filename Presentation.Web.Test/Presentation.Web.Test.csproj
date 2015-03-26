@@ -127,6 +127,8 @@
   <ItemGroup>
     <Compile Include="Controllers\Addresses\GetPersonalAndStandard.cs" />
     <Compile Include="Controllers\BaseControllerTest.cs" />
+    <Compile Include="Controllers\DriveReports\EmploymentRepositoryMock.cs" />
+    <Compile Include="Controllers\DriveReports\OrgUnitRepositoryMock.cs" />
     <Compile Include="Controllers\DriveReports\DriveReportsRepositoryMock.cs" />
     <Compile Include="Controllers\DriveReports\DriveReportsTest.cs" />
     <Compile Include="Controllers\MobileTokens\MobileTokenRepositoryMock.cs" />

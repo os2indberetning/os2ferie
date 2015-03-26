@@ -25,13 +25,19 @@ namespace Core.ApplicationServices
         private readonly IAddressCoordinates _coordinates;
         private readonly IGenericRepository<DriveReport> _driveReportRepository;
         private readonly IReimbursementCalculator _calculator;
+        private readonly IGenericRepository<OrgUnit> _orgUnitRepository;
+        private readonly IGenericRepository<Employment> _employmentRepository;
+        private readonly IGenericRepository<Substitute> _substituteRepository;
         private readonly IMailSender _mailSender;
 
-        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator)
+        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository )
         {
             _route = new BestRoute();
             _coordinates = new AddressCoordinates();
             _calculator = calculator;
+            _orgUnitRepository = orgUnitRepository;
+            _employmentRepository = employmentRepository;
+            _substituteRepository = substituteRepository;
             _mailSender = mailSender;
             _driveReportRepository = driveReportRepository;
         }
@@ -166,6 +172,58 @@ namespace Core.ApplicationServices
                 }
             }
         }
+
+        public IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> repo)
+        {
+            var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            foreach (var driveReport in repo)
+            {
+                var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == driveReport.Employment.OrgUnitId);
+
+                if (orgUnit != null)
+                {
+                    var leaderEmpl = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnitId == orgUnit.Id && e.IsLeader);
+                    if (leaderEmpl != null)
+                    {
+                        var leader = leaderEmpl.Person;
+                        var sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
+                        if (sub != null)
+                        {
+                            // Attach sub if one exists.
+                            driveReport.ResponsibleLeader = sub.Sub;
+                            driveReport.ResponsibleLeader.FullName = sub.Sub.FirstName;
+                            if (!string.IsNullOrEmpty(sub.Sub.MiddleName))
+                            {
+                                driveReport.ResponsibleLeader.FullName += " " + sub.Sub.MiddleName;
+                            }
+                            driveReport.ResponsibleLeader.FullName += " " + sub.Sub.LastName;
+                            driveReport.ResponsibleLeader.FullName += " [" + sub.Sub.Initials + "]";
+                        }
+                        else
+                        {
+                            // Attach leader if no sub exists.
+                            driveReport.ResponsibleLeader = leaderEmpl.Person;
+
+                            driveReport.ResponsibleLeader.FullName = leaderEmpl.Person.FirstName;
+                            if (!string.IsNullOrEmpty(leaderEmpl.Person.MiddleName))
+                            {
+                                driveReport.ResponsibleLeader.FullName += " " + leaderEmpl.Person.MiddleName;
+                            }
+                            driveReport.ResponsibleLeader.FullName += " " + leaderEmpl.Person.LastName;
+                            driveReport.ResponsibleLeader.FullName += " [" + leaderEmpl.Person.Initials + "]";
+                        }
+                    }
+                }
+            }
+
+            return repo;
+
+
+
+
+
+
+        } 
 
     }
 }

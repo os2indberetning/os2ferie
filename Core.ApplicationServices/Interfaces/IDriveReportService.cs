@@ -14,5 +14,6 @@ namespace Core.ApplicationServices.Interfaces
         void AddFullName(DriveReport driveReport);
         DriveReport Create(DriveReport report);
         void SendMailIfRejectedReport(int key, Delta<DriveReport> delta);
+        IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> driveReport);
     }
 }

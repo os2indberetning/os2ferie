@@ -173,6 +173,22 @@
     <Compile Include="Migrations\201503251504302_CouldThisWork.Designer.cs">
       <DependentUpon>201503251504302_CouldThisWork.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503261028522_AddedResponsibleLeaderAndApprovedByToReport.cs" />
+    <Compile Include="Migrations\201503261028522_AddedResponsibleLeaderAndApprovedByToReport.Designer.cs">
+      <DependentUpon>201503261028522_AddedResponsibleLeaderAndApprovedByToReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503261044569_MadeApprovedByOptional.cs" />
+    <Compile Include="Migrations\201503261044569_MadeApprovedByOptional.Designer.cs">
+      <DependentUpon>201503261044569_MadeApprovedByOptional.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503261052387_dunno.cs" />
+    <Compile Include="Migrations\201503261052387_dunno.Designer.cs">
+      <DependentUpon>201503261052387_dunno.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503261053542_dunno2.cs" />
+    <Compile Include="Migrations\201503261053542_dunno2.Designer.cs">
+      <DependentUpon>201503261053542_dunno2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -271,6 +287,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503251504302_CouldThisWork.resx">
       <DependentUpon>201503251504302_CouldThisWork.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503261028522_AddedResponsibleLeaderAndApprovedByToReport.resx">
+      <DependentUpon>201503261028522_AddedResponsibleLeaderAndApprovedByToReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503261044569_MadeApprovedByOptional.resx">
+      <DependentUpon>201503261044569_MadeApprovedByOptional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503261052387_dunno.resx">
+      <DependentUpon>201503261052387_dunno.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503261053542_dunno2.resx">
+      <DependentUpon>201503261053542_dunno2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

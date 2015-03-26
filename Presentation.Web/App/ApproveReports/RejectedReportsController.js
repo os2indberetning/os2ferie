@@ -5,20 +5,21 @@
 
        var queryOptions = { dateQuery: "", personQuery: "" };
 
-
-       $scope.checkboxes = {};
-
-       var checkedReports = [];
-
        var allReports = [];
 
-       // Helper Methods
 
+       $scope.orgUnit = {};
+       $scope.orgUnits = [];
 
+       OrgUnit.get().$promise.then(function (res) {
+           $scope.orgUnits = res.value;
+       });
 
-
-
-
+       $scope.orgUnitChanged = function (item) {
+           var filter = [];
+           filter.push({ field: "Employment.OrgUnit.ShortDescription", operator: "contains", value: $scope.orgUnit.chosenUnit });
+           $scope.gridContainer.grid.dataSource.filter(filter);
+       }
 
        $scope.updateReports = function () {
            var dateAnd = "and ";
@@ -35,7 +36,7 @@
 
            var query = dateQuery + personQuery;
 
-           var url = "/odata/DriveReports?$expand=Employment &$filter=Status eq Core.DomainModel.ReportStatus'Rejected' " + query;
+           var url = "/odata/DriveReports?$expand=Employment($expand=OrgUnit),DriveReportPoints &$filter=Status eq Core.DomainModel.ReportStatus'Rejected' " + query;
 
 
 
@@ -81,11 +82,13 @@
                    type: "odata-v4",
                    transport: {
                        read: {
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected'&$expand=Employment",
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected'&$expand=Employment($expand=OrgUnit),DriveReportPoints",
                        },
                    },
                    schema: {
                        data: function (data) {
+
+                           allReports = data.value;
 
                            var leaderOrgId = 1;
                            var resultSet = [];
@@ -108,9 +111,9 @@
                    pageSize: 20,
                    serverPaging: false,
                    serverSorting: true,
-                   sort: { field: "DriveDateTimestamp", dir: "desc" }
+                   sort: [{ field: "Fullname", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }]
                },
-               sortable: true,
+               sortable: { mode: "multiple" },
                scrollable: false,
                pageable: {
                    messages: {
@@ -128,55 +131,107 @@
                    pageSizes: [5, 10, 20, 30, 40, 50]
                },
                dataBound: function () {
+                   $scope.getCurrentPageSums();
+                   $scope.getAllPagesSums();
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
                columns: [
-                                  {
-                                      field: "Fullname",
-                                      title: "Navn"
-                                  }, {
-                                      field: "CreationDate",
-                                      template: function (data) {
-                                          var m = moment.unix(data.CreatedDateTimestamp);
-                                          return m._d.getDate() + "/" +
-                                                (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                                                 m._d.getFullYear();
-                                      },
-                                      title: "Indberettet den"
-                                  }, {
-                                      field: "DriveDateTimestamp",
-                                      template: function (data) {
-                                          var m = moment.unix(data.DriveDateTimestamp);
-                                          return m._d.getDate() + "/" +
-                                              (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                                              m._d.getFullYear();
-                                      },
-                                      title: "Kørselsdato"
-                                  }, {
-                                      field: "Id",
-                                      template: function (data) {
-                                          if (data.Comment != "") {
-                                              return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"transparent-background pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
-                                          }
-                                          return data.Purpose;
+               {
+                   field: "Fullname",
+                   title: "Navn"
+               }, {
+                   field: "Employment.OrgUnit.ShortDescription",
+                   title: "Organisationsenhed"
+               }, {
+                   field: "DriveDateTimestamp",
+                   template: function (data) {
+                       var m = moment.unix(data.DriveDateTimestamp);
+                       return m._d.getDate() + "/" +
+                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                           m._d.getFullYear();
+                   },
+                   title: "Kørselsdato"
+               }, {
+                   field: "Purpose",
+                   title: "Formål",
+               }, {
+                   title: "Rute",
+                   field: "DriveReportPoints",
+                   template: function (data) {
+                       var tooltipContent = "";
+                       var gridContent = "";
+                       angular.forEach(data.DriveReportPoints, function (point, key) {
+                           if (key != data.DriveReportPoints.length - 1) {
+                               tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
+                               gridContent += point.StreetName + "<br/>";
+                           } else {
+                               tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
+                               gridContent += point.StreetName;
+                           }
+                       });
+                       var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
 
-                                      },
-                                      title: "Formål"
+                       if (data.KilometerAllowance != "Read") {
+                           return result;
+                       } else {
+                           return data.UserComment;
+                       }
+                   }
+               }, {
+                   field: "Distance",
+                   title: "Km",
+                   template: function (data) {
+                       return data.Distance.toFixed(2).toString().replace('.', ',') + " Km";
+                   },
+                   footerTemplate: "Siden: {{currentPageDistanceSum}} KM <br/> Total: {{allPagesDistanceSum}} KM"
+               }, {
+                   field: "AmountToReimburse",
+                   title: "Beløb",
+                   template: function (data) {
+                       return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
+                   },
+                   footerTemplate: "Siden: {{currentPageAmountSum}} Dkk. <br/> Total: {{allPagesAmountSum}} Dkk."
+               }, {
+                   field: "KilometerAllowance",
+                   title: "Merkørsel",
+                   template: function (data) {
+                       if (data.KilometerAllowance == "CalculatedWithoutExtraDistance") {
+                           return "<i class='fa fa-check'></i>";
+                       }
+                       return "";
+                   }
+               }, {
+                   field: "FourKmRule",
+                   title: "4 km",
+                   template: function (data) {
+                       if (data.FourKmRule) {
+                           return "<i class='fa fa-check'></i>";
+                       }
+                       return "";
+                   }
+               }, {
+                   field: "CreatedDateTimestamp",
+                   title: "Indberetningsdato",
+                   template: function (data) {
+                       var m = moment.unix(data.CreatedDateTimestamp);
+                       return m._d.getDate() + "/" +
+                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                           m._d.getFullYear();
+                   },
+               }, {
+                       field: "ClosedDateTimestamp",
+                       title: "Afvist dato",
+                       template: function (data) {
+                               var m = moment.unix(data.ClosedDateTimestamp);
+                               var date = m._d.getDate() + "/" +
+                                   (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                   m._d.getFullYear();
 
-                                  }, {
-                                      field: "AmountToReimburse",
-                                      title: "Beløb",
-                                      template: function (data) {
-                                          return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " DKK";
-                                      },
-                                  }, {
-                                      field: "Distance",
-                                      title: "Afstand",
-                                      template: function (data) {
-                                          return data.Distance.toFixed(2).toString().replace('.', ',') + " KM";
-                                      },
-                                  }
-               ]
+                               return date +  "<div class='inline' kendo-tooltip k-content=\"'" + data.Comment + "'\"> <i class='fa fa-comment-o'></i></div>";
+
+                       }
+                   }
+               ],
            };
        }
 
@@ -191,7 +246,36 @@
            $scope.dateContainer.toDate = new Date();
            $scope.dateContainer.fromDate = from;
 
-           $scope.$apply();
+       }
+
+       $scope.getCurrentPageSums = function () {
+           var pageNumber = $scope.gridContainer.grid.dataSource.page();
+           var pageSize = $scope.gridContainer.grid.dataSource.pageSize();
+           var first = pageSize * (pageNumber - 1);
+           var last = first + pageSize - 1;
+           var resAmount = 0;
+           var resDistance = 0;
+           for (var i = first; i <= last; i++) {
+               if (allReports[i] != undefined) {
+                   resAmount += allReports[i].AmountToReimburse;
+                   resDistance += allReports[i].Distance;
+               }
+
+           }
+           $scope.currentPageAmountSum = resAmount.toFixed(2).toString().replace('.', ',');
+           $scope.currentPageDistanceSum = resDistance.toFixed(2).toString().replace('.', ',');
+
+       }
+
+       $scope.getAllPagesSums = function () {
+           var resAmount = 0;
+           var resDistance = 0;
+           angular.forEach(allReports, function (rep, key) {
+               resAmount += rep.AmountToReimburse;
+               resDistance += rep.Distance;
+           });
+           $scope.allPagesAmountSum = resAmount.toFixed(2).toString().replace('.', ',');
+           $scope.allPagesDistanceSum = resDistance.toFixed(2).toString().replace('.', ',');
        }
 
        $scope.getEndOfDayStamp = function (d) {
