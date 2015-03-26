@@ -30,7 +30,7 @@ namespace Core.ApplicationServices
         private readonly IGenericRepository<Substitute> _substituteRepository;
         private readonly IMailSender _mailSender;
 
-        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository )
+        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository)
         {
             _route = new BestRoute();
             _coordinates = new AddressCoordinates();
@@ -87,7 +87,7 @@ namespace Core.ApplicationServices
             {
                 var pointsWithCoordinates =
                     report.DriveReportPoints.Select((t, i) => report.DriveReportPoints.ElementAt(i))
-                        .Select(currentPoint => (DriveReportPoint) _coordinates.GetAddressCoordinates(currentPoint))
+                        .Select(currentPoint => (DriveReportPoint)_coordinates.GetAddressCoordinates(currentPoint))
                         .ToList();
 
                 report.DriveReportPoints = pointsWithCoordinates;
@@ -98,12 +98,12 @@ namespace Core.ApplicationServices
 
 
             }
-         
+
 
             report = _calculator.Calculate(report);
 
 
-            
+
 
             var createdReport = _driveReportRepository.Insert(report);
             _driveReportRepository.Save();
@@ -134,7 +134,7 @@ namespace Core.ApplicationServices
                 _driveReportRepository.Save();
             }
 
-            
+
 
 
 
@@ -217,13 +217,49 @@ namespace Core.ApplicationServices
             }
 
             return repo;
+        }
 
+        public IQueryable<DriveReport> FilterByLeader(IQueryable<DriveReport> repo, int leaderId)
+        {
+            var result = new List<DriveReport>();
 
+            var leaderEmpl = _employmentRepository.AsQueryable().Where(e => e.Person.Id == leaderId && e.IsLeader);
+            if (leaderEmpl.Any())
+            {
+                // Iterate all employments belonging to the leader.
+                foreach (var employment in leaderEmpl)
+                {
+                    // Get the orgunit of the empl.
+                    var orgUnitId = employment.OrgUnit.Id;
 
+                    // Get the leader of the childOrg if one exists.
+                    var childOrg = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.ParentId == orgUnitId);
+                    if (childOrg != null)
+                    {
+                        var childEmpl = _employmentRepository.AsQueryable().SingleOrDefault(e => e.IsLeader && e.OrgUnit.Id == childOrg.Id);
+                        if (childEmpl != null)
+                        {
+                            // Get and add all reports belonging to the leader of the child org.
+                            var childLeader = childEmpl.Person;
+                            var childLeaderReports = repo.AsQueryable().Where(dr => dr.Person.Id == childLeader.Id);
+                            result.AddRange(childLeaderReports);
+                        }
+                    }
 
+                    var reports = repo.AsQueryable()
+                        .Where(dr => dr.Employment.OrgUnit.Id == orgUnitId);
 
+                    //TODO: Crashes here.
+                    if (reports.Any())
+                    {
+                        result.AddRange(reports);
+                    }
 
-        } 
+                }
+            }
+
+            return result.AsQueryable();
+        }
 
     }
 }

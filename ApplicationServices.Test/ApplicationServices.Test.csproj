@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="DriveReportServiceTest\DriveReportMock.cs" />
     <Compile Include="DriveReportServiceTest\DriveReportServiceTest.cs" />
+    <Compile Include="DriveReportServiceTest\FilterByLeaderTests.cs" />
     <Compile Include="DriveReportServiceTest\SubstituteRepositoryMock.cs" />
     <Compile Include="DriveReportServiceTest\EmploymentRepositoryMock.cs" />
     <Compile Include="DriveReportServiceTest\OrgUnitRepositoryMock.cs" />
