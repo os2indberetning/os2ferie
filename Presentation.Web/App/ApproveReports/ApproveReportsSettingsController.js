@@ -125,10 +125,12 @@
                    title: "Ansatte"
                }, {
                    field: "StartDateTimestamp",
-                   title: "Fra"
+                   title: "Fra",
+                   template: "#= kendo.toString(new Date(StartDateTimestamp*1000), 'MM/dd/yyyy') #"
                }, {
                    field: "EndDateTimestamp",
-                   title: "Til"
+                   title: "Til",
+                   template: "#= kendo.toString(new Date(EndDateTimestamp*1000), 'MM/dd/yyyy') #"
                }, {
                    field: "Title",
                    title: "Muligheder"
