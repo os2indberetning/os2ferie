@@ -8,7 +8,11 @@
 
 
     $scope.saveNewApprover = function () {
-        $modalInstance.close($scope.selected.item);
+        //$modalInstance.close($scope.selected.item);
+
+        console.log($scope.approver);
+        console.log($scope.target);
+
     };
 
     $scope.cancelNewApprover = function () {

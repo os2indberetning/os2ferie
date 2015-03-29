@@ -51,7 +51,7 @@
                        total: function (data) {
                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                        }
-                   },
+                   }
                },
                sortable: true,
                pageable: true,
@@ -63,10 +63,12 @@
                    title: "Stedfortræder"
                }, {
                    field: "StartDateTimestamp",
-                   title: "Fra"
+                   title: "Fra",
+                   template: "#= kendo.toString(new Date(StartDateTimestamp*1000), 'MM/dd/yyyy') #"
                }, {
                    field: "EndDateTimestamp",
-                   title: "Til"
+                   title: "Til",
+                   template: "#= kendo.toString(new Date(EndDateTimestamp*1000), 'MM/dd/yyyy') #"
                }, {
                    field: "Id",
                    title: "Organisation"
