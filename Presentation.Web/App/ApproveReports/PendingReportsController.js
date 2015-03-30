@@ -15,10 +15,7 @@
        });
 
        $scope.orgUnitChanged = function (item) {
-           var filter = [];
-           filter.push({ field: "Employment.OrgUnit.ShortDescription", operator: "contains", value: $scope.orgUnit.chosenUnit });
-           $scope.gridContainer.grid.dataSource.filter(filter);
-           allReports = $scope.gridContainer.grid.dataSource.view();
+           $scope.applyOrgUnitFilter($scope.orgUnit.chosenUnit);
        }
 
 
@@ -47,6 +44,32 @@
            ]
        };
 
+       $scope.applyOrgUnitFilter = function (shortDescription) {
+           var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           var newFilters = [];
+
+
+           if (oldFilters == undefined) {
+               // If no filters exist, just add the filters.
+               if (shortDescription != "") {
+                   newFilters.push({ field: "Employment.OrgUnit.ShortDescription", operator: "eq", value: shortDescription });
+               }
+           } else {
+               // If filters already exist then get the old filters, that arent drivedate.
+               // Then add the new drivedate filters to these.
+               angular.forEach(oldFilters.filters, function (value, key) {
+                   if (value.field != "Employment.OrgUnit.ShortDescription") {
+                       newFilters.push(value);
+                   }
+               });
+               if (shortDescription != "") {
+                   newFilters.push({ field: "Employment.OrgUnit.ShortDescription", operator: "eq", value: shortDescription });
+               }
+
+           }
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
+
        $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
 
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
@@ -73,28 +96,38 @@
 
        $scope.applyPersonFilter = function (fullName) {
 
+
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            var newFilters = [];
 
 
            if (oldFilters == undefined) {
-               // If no filters exist, just add the filter.
-               newFilters.push({ field: "FullName", operator: "contains", value: fullName });
+               // If no filters exist, just add the filters.
+               if (fullName != "") {
+                   newFilters.push({ field: "FullName", operator: "eq", value: fullName });
+               }
            } else {
-               // If filters already exist then get the old filters, that arent name.
+               // If filters already exist then get the old filters, that arent drivedate.
                // Then add the new drivedate filters to these.
                angular.forEach(oldFilters.filters, function (value, key) {
                    if (value.field != "FullName") {
                        newFilters.push(value);
                    }
                });
-               newFilters.push({ field: "FullName", operator: "contains", value: fullName });
+               if (fullName != "") {
+                   newFilters.push({ field: "FullName", operator: "eq", value: fullName });
+               }
+               
            }
            $scope.gridContainer.grid.dataSource.filter(newFilters);
        }
 
        $scope.removePersonFilter = function () {
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           if (oldFilters == undefined) {
+               return;
+           }
+
            var newFilters = [];
            angular.forEach(oldFilters.filters, function (value, key) {
                if (value.field != "FullName") {
@@ -106,6 +139,9 @@
 
        $scope.removeDateFilter = function() {
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           if (oldFilters == undefined) {
+               return;
+           }
            var newFilters = [];
            angular.forEach(oldFilters.filters, function (value, key) {
                if (value.field != "DriveDateTimestamp") {
@@ -121,7 +157,7 @@
                    type: "odata-v4",
                    transport: {
                        read: {
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending'&$expand=Employment($expand=OrgUnit),DriveReportPoints",
+                           url: "/odata/DriveReports?$expand=Employment($expand=OrgUnit),DriveReportPoints",
                        },
 
                    },
@@ -137,7 +173,7 @@
                    serverSorting: true,
                    serverFiltering: true,
                    sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
-
+                  // filter: [{ field: "Status", operator: "eq", value: "Core.DomainModel.ReportStatus%270%27" }]
                },
 
            sortable: { mode: "multiple" },

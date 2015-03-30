@@ -12,7 +12,7 @@ namespace Infrastructure.DataAccess.Migrations
         
         public override void Down()
         {
-            DropColumn("Reports", "FullName");
+            DropColumn("Reports", "FullName"); 
         }
     }
 }

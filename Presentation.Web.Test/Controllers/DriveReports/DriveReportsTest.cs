@@ -43,7 +43,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment 1",
                 Distance = 3.4f,
                 ClosedDateTimestamp = 4444,
-                Fullname = "Morten Tester [MT]"
+                FullName = "Morten Tester [MT]"
             };
         }
 
@@ -55,7 +55,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment 2",
                 Distance = 3.5f,
                 ClosedDateTimestamp = 4455,
-                Fullname = "Morten Tester [MT]"
+                FullName = "Morten Tester [MT]"
             };
         }
 
@@ -67,7 +67,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment 3",
                 Distance = 3.6778f,
                 ClosedDateTimestamp = 7777,
-                Fullname = "Morten Tester [MT]",
+                FullName = "Morten Tester [MT]",
             };
         }
 
@@ -79,7 +79,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment posted",
                 Distance = 3.6778f,
                 ClosedDateTimestamp = 7777,
-                Fullname = "Morten Tester [MT]"
+                FullName = "Morten Tester [MT]"
             };
         }
 
@@ -91,7 +91,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment patched",
                 Distance = 3.6778f,
                 ClosedDateTimestamp = 666,
-                Fullname = "Morten Tester [MT]"
+                FullName = "Morten Tester [MT]"
             };
         }
 
@@ -101,7 +101,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
             Assert.AreEqual(entity1.Comment, entity2.Comment, "Comment of the two drive reports should be the same");
             Assert.AreEqual(entity1.DriveReportPoints, entity2.DriveReportPoints, "DriveReportPoints of the two drive reports should be the same");
             Assert.AreEqual(entity1.Comment, entity2.Comment, "Comment of the two drive reports should be the same");
-            Assert.AreEqual(entity1.Fullname, entity2.Fullname, "Full name should be the same on both reports");
+            Assert.AreEqual(entity1.FullName, entity2.FullName, "Full name should be the same on both reports");
         }
 
         protected override string GetPostBodyContent()
