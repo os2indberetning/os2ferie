@@ -17,7 +17,6 @@ namespace Presentation.Web.Test.Controllers.Substitutes
             return new List<KeyValuePair<Type, Type>>
             {
                 new KeyValuePair<Type, Type>(typeof (IGenericRepository<Substitute>),typeof (SubstituteRepositoryMock)),
-                new KeyValuePair<Type, Type>(typeof (ISubstituteService),typeof (SubstituteService))
             };
         }
 
