@@ -74,13 +74,7 @@ namespace Presentation.Web.Test.Controllers.Persons
             {
                 new KeyValuePair<Type, Type>(typeof (IGenericRepository<Person>), typeof (PersonRepositoryMock)),
                 new KeyValuePair<Type, Type>(typeof (IMailSender), typeof (MailSenderMock)),
-                    new KeyValuePair<Type, Type>(typeof(IDriveReportService), typeof(DriveReportService)),
-                    new KeyValuePair<Type, Type>(typeof(IReimbursementCalculator), typeof(ReimbursementCalculator)),
-                    new KeyValuePair<Type, Type>(typeof(IPersonService), typeof(PersonServiceMock)),
-                    new KeyValuePair<Type, Type>(typeof(IRoute<RouteInformation>), typeof(BestRoute)),
-                    new KeyValuePair<Type, Type>(typeof(IAddressCoordinates), typeof(AddressCoordinates)),
-                new KeyValuePair<Type, Type>(typeof(IGenericRepository<>), typeof(GenericRepository<>)),
-
+                    new KeyValuePair<Type, Type>(typeof(IPersonService), typeof(PersonServiceMock))
             };
         }
 

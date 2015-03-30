@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using Microsoft.Owin.Testing;
 using OS2Indberetning;
-using OS2Indberetning.App_Start;
 using Owin;
 using System.Net.Http;
 using System.Threading.Tasks;

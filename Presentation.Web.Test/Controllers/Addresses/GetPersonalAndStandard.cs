@@ -11,7 +11,6 @@ using Core.DomainServices;
 using Microsoft.Owin.Testing;
 using NUnit.Framework;
 using OS2Indberetning;
-using OS2Indberetning.App_Start;
 using Owin;
 using Presentation.Web.Test.Controllers.Models;
 
