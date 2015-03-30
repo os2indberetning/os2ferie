@@ -21,11 +21,16 @@
         <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.fromDateString" k-ng-model="dateContainer.toDate" ng-change="dateChanged()" />
     </div>
 
-    <div class="col-md-2">
+    <div class="col-md-1">
         <button class="btn btn-danger" ng-click="clearClicked()">Nulstil</button>
     </div>
-
+    
     <div class="col-md-2">
+        <label for=""></label>
+        <input type="checkbox" ng-model="showSubstitutedReports"/>
+    </div>
+
+    <div class="col-md-1">
         <span class="info-popup pull-right margin-5" popover="Du kan klikke på kolonnetitlerne for at sortere tabellen." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
     </div>
 
