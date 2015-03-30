@@ -1,12 +1,12 @@
 ﻿angular.module("application").controller("RejectedReportsController", [
    "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService) {
 
-
-
-       var queryOptions = { dateQuery: "", personQuery: "" };
+       var personId = 1;
 
        var allReports = [];
 
+       $scope.checkboxes = {};
+       $scope.checkboxes.showSubbed = false;
 
        $scope.orgUnit = {};
        $scope.orgUnits = [];
@@ -16,65 +16,138 @@
        });
 
        $scope.orgUnitChanged = function (item) {
-           var filter = [];
-           filter.push({ field: "Employment.OrgUnit.ShortDescription", operator: "contains", value: $scope.orgUnit.chosenUnit });
-           $scope.gridContainer.grid.dataSource.filter(filter);
+           $scope.applyOrgUnitFilter($scope.orgUnit.chosenUnit);
        }
 
-       $scope.updateReports = function () {
-           var dateAnd = "and ";
-           if (queryOptions.dateQuery == "") {
-               dateAnd = "";
-           }
-           var dateQuery = dateAnd + queryOptions.dateQuery;
 
-           var personAnd = "and ";
-           if (queryOptions.personQuery == "") {
-               personAnd = "";
-           }
-           var personQuery = personAnd + queryOptions.personQuery;
-
-           var query = dateQuery + personQuery;
-
-           var url = "/odata/DriveReports?$expand=Employment($expand=OrgUnit),DriveReportPoints &$filter=Status eq Core.DomainModel.ReportStatus'Rejected' " + query;
-
-
-
-           $scope.gridContainer.grid.dataSource.transport.options.read.url = url;
+       $scope.showSubsChanged = function () {
+           $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/DriveReports?leaderId=" + personId + "&status=Rejected" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints",
            $scope.gridContainer.grid.dataSource.read();
        }
 
+       $scope.applyOrgUnitFilter = function (shortDescription) {
+           var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           var newFilters = [];
 
 
-       $scope.filterReportsByLeaderOrg = function (orgs, data, leaderOrgId) {
-           var orgUnits = {};
-
-           var resultSet = [];
-
-           angular.forEach(orgs.value, function (value, key) {
-               orgUnits[value.Id] = value;
-           });
-
-           angular.forEach(data.value, function (value, key) {
-               var repOrg = orgUnits[value.Employment.OrgUnitId];
-
-               if (orgUnits[leaderOrgId].Level == repOrg.Level && orgUnits[leaderOrgId].Id == repOrg.Id) {
-
-                   resultSet.push(value);
-               } else if (orgUnits[leaderOrgId].Level < repOrg.Level) {
-                   while (orgUnits[leaderOrgId].Level < repOrg.Level) {
-                       repOrg = orgUnits[repOrg.ParentId];
+           if (oldFilters == undefined) {
+               // If no filters exist, just add the filters.
+               if (shortDescription != "") {
+                   newFilters.push({ field: "Employment.OrgUnit.ShortDescription", operator: "eq", value: shortDescription });
+               }
+           } else {
+               // If filters already exist then get the old filters, that arent drivedate.
+               // Then add the new drivedate filters to these.
+               angular.forEach(oldFilters.filters, function (value, key) {
+                   if (value.field != "Employment.OrgUnit.ShortDescription") {
+                       newFilters.push(value);
                    }
-                   if (repOrg.Id == orgUnits[leaderOrgId].Id) {
-                       resultSet.push(value);
-                   }
+               });
+               if (shortDescription != "") {
+                   newFilters.push({ field: "Employment.OrgUnit.ShortDescription", operator: "eq", value: shortDescription });
                }
 
-           });
-           return resultSet;
+           }
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
        }
 
+       $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
 
+           var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           var newFilters = [];
+
+
+           if (oldFilters == undefined) {
+               // If no filters exist, just add the filters.
+               newFilters.push({ field: "DriveDateTimestamp", operator: "ge", value: fromDateStamp });
+               newFilters.push({ field: "DriveDateTimestamp", operator: "le", value: toDateStamp });
+           } else {
+               // If filters already exist then get the old filters, that arent drivedate.
+               // Then add the new drivedate filters to these.
+               angular.forEach(oldFilters.filters, function (value, key) {
+                   if (value.field != "DriveDateTimestamp") {
+                       newFilters.push(value);
+                   }
+               });
+               newFilters.push({ field: "DriveDateTimestamp", operator: "ge", value: fromDateStamp });
+               newFilters.push({ field: "DriveDateTimestamp", operator: "le", value: toDateStamp });
+           }
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
+
+       $scope.applyPersonFilter = function (fullName) {
+
+
+           var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           var newFilters = [];
+
+
+           if (oldFilters == undefined) {
+               // If no filters exist, just add the filters.
+               if (fullName != "") {
+                   newFilters.push({ field: "FullName", operator: "eq", value: fullName });
+               }
+           } else {
+               // If filters already exist then get the old filters, that arent drivedate.
+               // Then add the new drivedate filters to these.
+               angular.forEach(oldFilters.filters, function (value, key) {
+                   if (value.field != "FullName") {
+                       newFilters.push(value);
+                   }
+               });
+               if (fullName != "") {
+                   newFilters.push({ field: "FullName", operator: "eq", value: fullName });
+               }
+
+           }
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
+
+       $scope.removePersonFilter = function () {
+           $scope.person.chosenPerson = "";
+           var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           if (oldFilters == undefined) {
+               return;
+           }
+
+           var newFilters = [];
+           angular.forEach(oldFilters.filters, function (value, key) {
+               if (value.field != "FullName") {
+                   newFilters.push(value);
+               }
+           });
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
+
+       $scope.removeDateFilter = function () {
+           $scope.loadInitialDates();
+           var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           if (oldFilters == undefined) {
+               return;
+           }
+           var newFilters = [];
+           angular.forEach(oldFilters.filters, function (value, key) {
+               if (value.field != "DriveDateTimestamp") {
+                   newFilters.push(value);
+               }
+           });
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
+
+       $scope.removeOrgUnitFilter = function () {
+           $scope.orgUnit.chosenUnit = "";
+           var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           if (oldFilters == undefined) {
+               return;
+           }
+           var newFilters = [];
+           angular.forEach(oldFilters.filters, function (value, key) {
+               if (value.field != "Employment.OrgUnit.ShortDescription") {
+                   newFilters.push(value);
+               }
+           });
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
 
        $scope.loadReports = function () {
            $scope.reports = {
@@ -82,36 +155,25 @@
                    type: "odata-v4",
                    transport: {
                        read: {
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected'&$expand=Employment($expand=OrgUnit),DriveReportPoints",
+                           url: "/odata/DriveReports?leaderId=" + personId + "&status=Rejected" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints",
                        },
                    },
                    schema: {
                        data: function (data) {
 
-                           allReports = data.value;
-
-                           var leaderOrgId = 1;
-                           var resultSet = [];
-
-                           var orgs = OrgUnit.get();
-
-                           orgs.$promise.then(function (res) {
-
-
-                               resultSet = $scope.filterReportsByLeaderOrg(orgs, data, leaderOrgId);
-
-                               $scope.gridContainer.grid.dataSource.data(resultSet);
-                               $scope.gridContainer.grid.refresh();
-
-                           });
-                           return resultSet;
+                           return data.value;
 
                        },
                    },
                    pageSize: 20,
-                   serverPaging: false,
+                   serverPaging: true,
                    serverSorting: true,
-                   sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }]
+                   serverFiltering: true,
+                   sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
+                   aggregate: [
+                        { field: "Distance", aggregate: "sum" },
+                        { field: "AmountToReimburse", aggregate: "sum" },
+                   ]
                },
                sortable: { mode: "multiple" },
                scrollable: false,
@@ -179,18 +241,18 @@
                    }
                }, {
                    field: "Distance",
-                   title: "Km",
+                   title: "Afstand",
                    template: function (data) {
-                       return data.Distance.toFixed(2).toString().replace('.', ',') + " Km";
+                       return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
                    },
-                   footerTemplate: "Siden: {{currentPageDistanceSum}} KM <br/> Total: {{allPagesDistanceSum}} KM"
+                   footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
                }, {
                    field: "AmountToReimburse",
                    title: "Beløb",
                    template: function (data) {
                        return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
                    },
-                   footerTemplate: "Siden: {{currentPageAmountSum}} Dkk. <br/> Total: {{allPagesAmountSum}} Dkk."
+                   footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
                }, {
                    field: "KilometerAllowance",
                    title: "Merkørsel",
@@ -219,18 +281,18 @@
                            m._d.getFullYear();
                    },
                }, {
-                       field: "ClosedDateTimestamp",
-                       title: "Afvist dato",
-                       template: function (data) {
-                               var m = moment.unix(data.ClosedDateTimestamp);
-                               var date = m._d.getDate() + "/" +
-                                   (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                                   m._d.getFullYear();
+                   field: "ClosedDateTimestamp",
+                   title: "Afvist dato",
+                   template: function (data) {
+                       var m = moment.unix(data.ClosedDateTimestamp);
+                       var date = m._d.getDate() + "/" +
+                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                           m._d.getFullYear();
 
-                               return date +  "<div class='inline' kendo-tooltip k-content=\"'" + data.Comment + "'\"> <i class='fa fa-comment-o'></i></div>";
+                       return date + "<div class='inline' kendo-tooltip k-content=\"'" + data.Comment + "'\"> <i class='fa fa-comment-o'></i></div>";
 
-                       }
                    }
+               }
                ],
            };
        }
@@ -299,30 +361,25 @@
        }
 
        $scope.clearClicked = function () {
-           queryOptions.dateQuery = "";
-           queryOptions.personQuery = "";
-           $scope.person.chosenPerson = "";
-           $scope.updateReports();
            $scope.loadInitialDates();
+           $scope.removeDateFilter();
+           $scope.removePersonFilter();
+           $scope.removeOrgUnitFilter();
        }
 
        var initialLoad = 2;
        $scope.dateChanged = function () {
            // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
            $timeout(function () {
-               var from, to, and;
-               and = " and ";
-               from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
-               to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDate);
-
+               var from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
+               var to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
 
                // Initial load is also a bit of a hack.
                // dateChanged is called twice when the default values for the datepickers are set.
                // This leads to sorting the grid content on load, which is not what we want.
                // Therefore the sorting is not done the first 2 times the dates change - Which are the 2 times we set the default values.
                if (initialLoad <= 0) {
-                   queryOptions.dateQuery = from + and + to;
-                   $scope.updateReports();
+                   $scope.applyDateFilter(from, to);
                }
                initialLoad--;
            }, 0);
@@ -352,8 +409,8 @@
        $scope.loadReports();
 
        $scope.personChanged = function (item) {
-           queryOptions.personQuery = "PersonId eq " + item.Id;
-           $scope.updateReports();
+           $scope.applyPersonFilter($scope.person.chosenPerson);
+
        }
 
        // Load people for auto-complete textbox

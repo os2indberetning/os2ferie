@@ -26,8 +26,8 @@
     </div>
     
     <div class="col-md-2">
-        <label for="showSubsCheckBox">Vis sub</label>
-        <input id="showSubsCheckBox" type="checkbox" ng-model="showSubstitutedReports"/>
+        <label for="showSubsCheckBox">Inkludér rapporter <br/> for stedfortræder</label>
+        <input id="showSubsCheckBox" ng-change="showSubsChanged()" type="checkbox" ng-model="checkboxes.showSubbed"/>
     </div>
 
     <div class="col-md-1">

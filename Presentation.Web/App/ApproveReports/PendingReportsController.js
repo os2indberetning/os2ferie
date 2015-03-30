@@ -22,6 +22,7 @@
        $scope.checkAllBox = {};
 
        $scope.checkboxes = {};
+       $scope.checkboxes.showSubbed = false;
 
        var checkedReports = [];
 
@@ -44,6 +45,11 @@
            ]
        };
 
+       $scope.showSubsChanged = function () {
+           $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/DriveReports?leaderId=" + personId + "&status=Pending" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints",
+           $scope.gridContainer.grid.dataSource.read();
+       }
+
        $scope.applyOrgUnitFilter = function (shortDescription) {
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            var newFilters = [];
@@ -55,7 +61,7 @@
                    newFilters.push({ field: "Employment.OrgUnit.ShortDescription", operator: "eq", value: shortDescription });
                }
            } else {
-               // If filters already exist then get the old filters, that arent drivedate.
+               // If filters already exist then get the old filters, that arent ShortDescription.
                // Then add the new drivedate filters to these.
                angular.forEach(oldFilters.filters, function (value, key) {
                    if (value.field != "Employment.OrgUnit.ShortDescription") {
@@ -117,12 +123,13 @@
                if (fullName != "") {
                    newFilters.push({ field: "FullName", operator: "eq", value: fullName });
                }
-               
+
            }
            $scope.gridContainer.grid.dataSource.filter(newFilters);
        }
 
        $scope.removePersonFilter = function () {
+           $scope.person.chosenPerson = "";
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            if (oldFilters == undefined) {
                return;
@@ -137,7 +144,8 @@
            $scope.gridContainer.grid.dataSource.filter(newFilters);
        }
 
-       $scope.removeDateFilter = function() {
+       $scope.removeDateFilter = function () {
+           $scope.loadInitialDates();
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            if (oldFilters == undefined) {
                return;
@@ -151,30 +159,48 @@
            $scope.gridContainer.grid.dataSource.filter(newFilters);
        }
 
+       $scope.removeOrgUnitFilter = function () {
+           $scope.orgUnit.chosenUnit = "";
+           var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           if (oldFilters == undefined) {
+               return;
+           }
+           var newFilters = [];
+           angular.forEach(oldFilters.filters, function (value, key) {
+               if (value.field != "Employment.OrgUnit.ShortDescription") {
+                   newFilters.push(value);
+               }
+           });
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
+
        $scope.reports = {
            dataSource:
-               {
-                   type: "odata-v4",
-                   transport: {
-                       read: {
-                           url: "/odata/DriveReports?$expand=Employment($expand=OrgUnit),DriveReportPoints",
-                       },
+           {
+               type: "odata-v4",
+               transport: {
+                   read: {
+                       url: "/odata/DriveReports?leaderId=" + personId + "&status=Pending" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints",
+                   },
 
-                   },
-                   schema: {
-                       data: function (data) {
-                           allReports = data.value;
-                           return data.value;
-                       },
-                   },
-                   pageSize: 1,
-                   serverPaging: true,
-                   serverAggregates: false,
-                   serverSorting: true,
-                   serverFiltering: true,
-                   sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
-                  // filter: [{ field: "Status", operator: "eq", value: "Core.DomainModel.ReportStatus%270%27" }]
                },
+               schema: {
+                   data: function (data) {
+                       allReports = data.value;
+                       return data.value;
+                   },
+               },
+               pageSize: 20,
+               serverPaging: true,
+               serverAggregates: false,
+               serverSorting: true,
+               serverFiltering: true,
+               sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
+               aggregate: [
+                   { field: "Distance", aggregate: "sum" },
+                   { field: "AmountToReimburse", aggregate: "sum" },
+               ]
+           },
 
            sortable: { mode: "multiple" },
            resizable: true,
@@ -194,136 +220,129 @@
                pageSizes: [5, 10, 20, 30, 40, 50]
            },
            scrollable: false,
+           dataBinding: function () {
+               checkedReports = [];
+               $scope.checkAllBox.isChecked = false;
+               var temp = $scope.checkboxes.showSubbed;
+               $scope.checkboxes = {};
+               $scope.checkboxes.showSubbed = temp;
+           },
            dataBound: function () {
-               $scope.getCurrentPageSums();
-               $scope.getAllPagesSums();
                this.expandRow(this.tbody.find("tr.k-master-row").first());
            },
            columns: [
-               {
-                   field: "FullName",
-                   title: "Medarbejder"
-               }, {
-                   field: "Employment.OrgUnit.ShortDescription",
-                   title: "Organisationsenhed"
-               }, {
-                   field: "DriveDateTimestamp",
-                   template: function (data) {
-                       var m = moment.unix(data.DriveDateTimestamp);
-                       return m._d.getDate() + "/" +
-                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                           m._d.getFullYear();
-                   },
-                   title: "Kørselsdato"
-               }, {
-                   field: "Purpose",
-                   title: "Formål",
-               }, {
-                   title: "Rute",
-                   field: "DriveReportPoints",
-                   template: function (data) {
-                       var tooltipContent = "";
-                       var gridContent = "";
-                       angular.forEach(data.DriveReportPoints, function (point, key) {
-                           if (key != data.DriveReportPoints.length - 1) {
-                               tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
-                               gridContent += point.Town + "<br/>";
-                           } else {
-                               tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
-                               gridContent += point.Town;
-                           }
-                       });
-                       var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
-
-                       if (data.KilometerAllowance != "Read") {
-                           return result;
+           {
+               field: "FullName",
+               title: "Medarbejder"
+           }, {
+               field: "Employment.OrgUnit.ShortDescription",
+               title: "Organisationsenhed"
+           }, {
+               field: "DriveDateTimestamp",
+               template: function (data) {
+                   var m = moment.unix(data.DriveDateTimestamp);
+                   return m._d.getDate() + "/" +
+                       (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                       m._d.getFullYear();
+               },
+               title: "Kørselsdato"
+           }, {
+               field: "Purpose",
+               title: "Formål",
+           }, {
+               title: "Rute",
+               field: "DriveReportPoints",
+               template: function (data) {
+                   var tooltipContent = "";
+                   var gridContent = "";
+                   angular.forEach(data.DriveReportPoints, function (point, key) {
+                       if (key != data.DriveReportPoints.length - 1) {
+                           tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
+                           gridContent += point.Town + "<br/>";
                        } else {
-                           if (data.IsFromApp) {
-                               return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst fra GPS</div>";
-                           } else {
-                               return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
-                           }
+                           tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
+                           gridContent += point.Town;
+                       }
+                   });
+                   var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
 
+                   if (data.KilometerAllowance != "Read") {
+                       return result;
+                   } else {
+                       if (data.IsFromApp) {
+                           return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst fra GPS</div>";
+                       } else {
+                           return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
                        }
+
                    }
-               }, {
-                   field: "Distance",
-                   title: "Km",
-                   template: function (data) {
-                       return data.Distance.toFixed(2).toString().replace('.', ',') + " Km";
-                   },
-                   footerTemplate: "Side: {{currentPageDistanceSum}} KM <br/> Total: {{allPagesDistanceSum}} KM"
-               }, {
-                   field: "AmountToReimburse",
-                   title: "Beløb",
-                   template: function (data) {
-                       return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
-                   },
-                   footerTemplate: "Side: {{currentPageAmountSum}} Dkk. <br/> Total: {{allPagesAmountSum}} Dkk."
-               }, {
-                   field: "KilometerAllowance",
-                   title: "Merkørsel",
-                   template: function (data) {
-                       if (data.KilometerAllowance == "CalculatedWithoutExtraDistance") {
-                           return "<i class='fa fa-check'></i>";
-                       }
-                       return "";
-                   }
-               }, {
-                   field: "FourKmRule",
-                   title: "4 km",
-                   template: function (data) {
-                       if (data.FourKmRule) {
-                           return "<i class='fa fa-check'></i>";
-                       }
-                       return "";
-                   }
-               }, {
-                   field: "CreatedDateTimestamp",
-                   title: "Indberetningsdato",
-                   template: function (data) {
-                       var m = moment.unix(data.CreatedDateTimestamp);
-                       return m._d.getDate() + "/" +
-                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                           m._d.getFullYear();
-                   },
-               }, {
-                   sortable: false,
-                   field: "Id",
-                   template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> <div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'></input></div>",
-                   headerTemplate: "Muligheder <div class='col-md-1 pull-right'><input ng-change='checkAllBoxesOnPage()' type='checkbox' ng-model='checkAllBox.isChecked'></input></div>",
-                   footerTemplate: "<div class='pull-right fill-width' kendo-toolbar k-options='approveSelectedToolbar'></div>"
                }
+           }, {
+               field: "Distance",
+               title: "Afstand",
+               template: function(data) {
+                   return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
+               },
+               footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+           }, {
+               field: "AmountToReimburse",
+               title: "Beløb",
+               template: function(data) {
+                   return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
+               },
+               footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+           }, {
+               field: "KilometerAllowance",
+               title: "Merkørsel",
+               template: function (data) {
+                   if (data.KilometerAllowance == "CalculatedWithoutExtraDistance") {
+                       return "<i class='fa fa-check'></i>";
+                   }
+                   return "";
+               }
+           }, {
+               field: "FourKmRule",
+               title: "4 km",
+               template: function (data) {
+                   if (data.FourKmRule) {
+                       return "<i class='fa fa-check'></i>";
+                   }
+                   return "";
+               }
+           }, {
+               field: "CreatedDateTimestamp",
+               title: "Indberetningsdato",
+               template: function (data) {
+                   var m = moment.unix(data.CreatedDateTimestamp);
+                   return m._d.getDate() + "/" +
+                       (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                       m._d.getFullYear();
+               },
+           }, {
+               sortable: false,
+               field: "Id",
+               template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> <div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'></input></div>",
+               headerTemplate: "Muligheder <div class='col-md-1 pull-right'><input ng-change='checkAllBoxesOnPage()' type='checkbox' ng-model='checkAllBox.isChecked'></input></div>",
+               footerTemplate: "<div class='pull-right fill-width' kendo-toolbar k-options='approveSelectedToolbar'></div>"
+           }
            ],
        };
 
        $scope.checkAllBoxesOnPage = function () {
            if ($scope.checkAllBox.isChecked) {
-               var pageNumber = $scope.gridContainer.grid.dataSource.page();
-               var pageSize = $scope.gridContainer.grid.dataSource.pageSize();
-               var first = pageSize * (pageNumber - 1);
-               var last = first + pageSize - 1;
-               for (var i = first; i <= last; i++) {
-                   if (allReports[i] != undefined) {
-                       var repId = allReports[i].Id;
-                       $scope.checkboxes[repId] = true;
-                       checkedReports.push(repId);
-                   }
-
-               }
+               checkedReports = [];
+               angular.forEach(allReports, function (value, key) {
+                   var repId = value.Id;
+                   $scope.checkboxes[repId] = true;
+                   checkedReports.push(repId);
+               });
            } else {
-               var pageNumber = $scope.gridContainer.grid.dataSource.page();
-               var pageSize = $scope.gridContainer.grid.dataSource.pageSize();
-               var first = pageSize * (pageNumber - 1);
-               var last = first + pageSize - 1;
-               for (var i = first; i <= last; i++) {
-                   if (allReports[i] != undefined) {
-                       var repId = allReports[i].Id;
-                       $scope.checkboxes[repId] = false;
-                       var index = checkedReports.indexOf(repId);
-                       checkedReports.splice(index, 1);
-                   }
-               }
+               angular.forEach(allReports, function (value, key) {
+                   var repId = value.Id;
+                   $scope.checkboxes[repId] = false;
+                   var index = checkedReports.indexOf(repId);
+                   checkedReports.splice(index, 1);
+               });
            }
        }
 
@@ -378,37 +397,7 @@
            $scope.loadInitialDates();
            $scope.removeDateFilter();
            $scope.removePersonFilter();
-           $scope.person.chosenPerson = "";
-       }
-
-       $scope.getCurrentPageSums = function () {
-           var pageNumber = $scope.gridContainer.grid.dataSource.page();
-           var pageSize = $scope.gridContainer.grid.dataSource.pageSize();
-           var first = pageSize * (pageNumber - 1);
-           var last = first + pageSize - 1;
-           var resAmount = 0;
-           var resDistance = 0;
-           for (var i = first; i <= last; i++) {
-               if (allReports[i] != undefined) {
-                   resAmount += allReports[i].AmountToReimburse;
-                   resDistance += allReports[i].Distance;
-               }
-
-           }
-           $scope.currentPageAmountSum = resAmount.toFixed(2).toString().replace('.', ',');
-           $scope.currentPageDistanceSum = resDistance.toFixed(2).toString().replace('.', ',');
-
-       }
-
-       $scope.getAllPagesSums = function () {
-           var resAmount = 0;
-           var resDistance = 0;
-           angular.forEach(allReports, function (rep, key) {
-               resAmount += rep.AmountToReimburse;
-               resDistance += rep.Distance;
-           });
-           $scope.allPagesAmountSum = resAmount.toFixed(2).toString().replace('.', ',');
-           $scope.allPagesDistanceSum = resDistance.toFixed(2).toString().replace('.', ',');
+           $scope.removeOrgUnitFilter();
        }
 
        $scope.approveClick = function (id) {
@@ -426,7 +415,7 @@
 
            modalInstance.result.then(function () {
                Report.patch({ id: id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix() }, function () {
-                   $scope.updateReports();
+                   $scope.gridContainer.grid.dataSource.read();
                });
            });
        }
@@ -450,7 +439,7 @@
                modalInstance.result.then(function (accountNumber) {
                    angular.forEach(checkedReports, function (value, key) {
                        Report.patch({ id: value }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix(), "AccountNumber": accountNumber }, function () {
-                           $scope.updateReports();
+                           $scope.gridContainer.grid.dataSource.read();
                        });
                    });
                    checkedReports = [];
@@ -475,10 +464,10 @@
                });
 
                modalInstance.result.then(function () {
+                   debugger;
                    angular.forEach(checkedReports, function (value, key) {
                        Report.patch({ id: value }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix() }, function () {
-                           $scope.updateReports();
-
+                           $scope.gridContainer.grid.dataSource.read();
                        });
                    });
                    checkedReports = [];
@@ -487,26 +476,26 @@
        }
 
 
-       $scope.ApproveWithAccountClick = function (id) {
-           var modalInstance = $modal.open({
-               templateUrl: '/App/ApproveReports/Modals/ConfirmApproveWithAccountTemplate.html',
-               controller: "AcceptWithAccountController",
-               backdrop: "static",
-               resolve: {
-                   itemId: function () {
-                       return id;
-                   },
-                   pageNumber: -1
-               }
-           });
+       //$scope.ApproveWithAccountClick = function (id) {
+       //    var modalInstance = $modal.open({
+       //        templateUrl: '/App/ApproveReports/Modals/ConfirmApproveWithAccountTemplate.html',
+       //        controller: "AcceptWithAccountController",
+       //        backdrop: "static",
+       //        resolve: {
+       //            itemId: function () {
+       //                return id;
+       //            },
+       //            pageNumber: -1
+       //        }
+       //    });
 
-           modalInstance.result.then(function (res) {
-               Report.patch({ id: id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix(), "AccountNumber": res.AccountNumber }, function () {
-                   $scope.updateReports();
+       //    modalInstance.result.then(function (res) {
+       //        Report.patch({ id: id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix(), "AccountNumber": res.AccountNumber }, function () {
+       //            $scope.gridContainer.grid.dataSource.read();
 
-               });
-           });
-       }
+       //        });
+       //    });
+       //}
 
        $scope.rejectClick = function (id) {
            var modalInstance = $modal.open({
@@ -522,7 +511,7 @@
 
            modalInstance.result.then(function (res) {
                Report.patch({ id: id }, { "Status": "Rejected", "ClosedDateTimestamp": moment().unix(), "Comment": res.Comment }, function () {
-                   $scope.updateReports();
+                   $scope.gridContainer.grid.dataSource.read();
 
                });
            });

@@ -23,13 +23,22 @@ namespace OS2Indberetning.Controllers
 
         // GET: odata/DriveReports
         [EnableQuery]
-        public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions, int leaderId = 0, bool getReportsWhereSubExists = false)
+        public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions, string status = "", int leaderId = 0, bool getReportsWhereSubExists = false)
         {
-            if (leaderId == 0)
+            var queryably = GetQueryable(queryOptions);
+
+            ReportStatus reportStatus;
+            if (ReportStatus.TryParse(status, true, out reportStatus))
             {
-                return GetQueryable(queryOptions);
+                queryably = queryably.Where(dr => dr.Status == reportStatus);
             }
-            return _driveService.FilterByLeader(GetQueryable(queryOptions), leaderId, getReportsWhereSubExists);
+
+            if (leaderId != 0)
+            {
+                queryably = _driveService.FilterByLeader(queryably, leaderId, getReportsWhereSubExists);
+            }
+
+            return queryably;
         }
 
         //GET: odata/DriveReports(5)
