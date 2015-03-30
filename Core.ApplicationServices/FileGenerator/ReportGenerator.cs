@@ -24,11 +24,15 @@ namespace Core.ApplicationServices.FileGenerator
 
             _fileWriter.WriteRecordsToFile(records);
 
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+
             foreach (var reports in usersToReimburse.Values)
             {
                 foreach (var report in reports)
                 {
                     report.Status = ReportStatus.Invoiced;
+                    var deltaTime = DateTime.Now.ToUniversalTime() - epoch;
+                    report.ProcessedDateTimestamp = (long)deltaTime.TotalSeconds;
                 }
             }
             _reportRepo.Save();

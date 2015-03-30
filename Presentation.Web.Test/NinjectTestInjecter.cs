@@ -1,18 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
 using System.Web.Http;
 using Core.ApplicationServices;
-using Core.DomainModel;
-using Core.DomainServices;
-using Infrastructure.DataAccess;
+using Ninject;
+using Ninject.Web.Common;
+using OS2Indberetning;
 
-namespace OS2Indberetning.App_Start
+namespace Presentation.Web.Test
 {
-    using System;
-    using System.Web;
-
-    using Ninject;
-    using Ninject.Web.Common;
-
     public static class NinjectTestInjector
     {
         private static List<KeyValuePair<Type, Type>> _injectedServices;  
@@ -29,6 +25,8 @@ namespace OS2Indberetning.App_Start
             {
                 kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
                 kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
+
+                NinjectWebKernel.RegisterServices(kernel);
 
                 RegisterServices(kernel);
 
@@ -50,10 +48,9 @@ namespace OS2Indberetning.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<DataContext>().ToSelf();
             foreach (var injectedServicePair in _injectedServices)
             {
-                kernel.Bind(injectedServicePair.Key).To(injectedServicePair.Value);
+                kernel.Rebind(injectedServicePair.Key).To(injectedServicePair.Value);
             }
         }
     }

@@ -13,11 +13,11 @@ using Microsoft.Owin.Testing;
 using Ninject;
 using NUnit.Framework;
 using OS2Indberetning;
-using OS2Indberetning.App_Start;
 using Owin;
 using Presentation.Web.Test.Controllers.DriveReports;
 using Presentation.Web.Test.Controllers.PersonalRoutes;
 using NSubstitute;
+using Presentation.Web.Test;
 using Substitute = NSubstitute.Substitute;
 
 namespace ApplicationServices.Test.DriveReportServiceTest
