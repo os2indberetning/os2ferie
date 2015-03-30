@@ -189,6 +189,14 @@
     <Compile Include="Migrations\201503261053542_dunno2.Designer.cs">
       <DependentUpon>201503261053542_dunno2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503271244370_ChangedFullnameToFullNameInDriveReport.cs" />
+    <Compile Include="Migrations\201503271244370_ChangedFullnameToFullNameInDriveReport.Designer.cs">
+      <DependentUpon>201503271244370_ChangedFullnameToFullNameInDriveReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503271250352_MadeFullNameOnDriveReportNotIgnored.cs" />
+    <Compile Include="Migrations\201503271250352_MadeFullNameOnDriveReportNotIgnored.Designer.cs">
+      <DependentUpon>201503271250352_MadeFullNameOnDriveReportNotIgnored.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -299,6 +307,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503261053542_dunno2.resx">
       <DependentUpon>201503261053542_dunno2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503271244370_ChangedFullnameToFullNameInDriveReport.resx">
+      <DependentUpon>201503271244370_ChangedFullnameToFullNameInDriveReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503271250352_MadeFullNameOnDriveReportNotIgnored.resx">
+      <DependentUpon>201503271250352_MadeFullNameOnDriveReportNotIgnored.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

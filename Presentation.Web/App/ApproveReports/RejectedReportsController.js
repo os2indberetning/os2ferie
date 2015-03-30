@@ -111,7 +111,7 @@
                    pageSize: 20,
                    serverPaging: false,
                    serverSorting: true,
-                   sort: [{ field: "Fullname", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }]
+                   sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }]
                },
                sortable: { mode: "multiple" },
                scrollable: false,
@@ -137,7 +137,7 @@
                },
                columns: [
                {
-                   field: "Fullname",
+                   field: "FullName",
                    title: "Navn"
                }, {
                    field: "Employment.OrgUnit.ShortDescription",

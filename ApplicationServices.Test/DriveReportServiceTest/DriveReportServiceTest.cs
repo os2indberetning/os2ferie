@@ -55,30 +55,16 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             };
         }
 
-        [Test]
-        public void AddFullName_CalledWithIQueryable_PopulatesFullNameCorrect()
-        {
-            var driveReports = GetDriveReportAsQueryable();
-            Assert.Null(driveReports.First().Fullname, "Before the service is run the full name should be null");
-            Assert.Null(driveReports.Last().Fullname, "Before the service is run the full name should be null");
-            var service = NinjectWebKernel.CreateKernel().Get<DriveReportService>();
-            driveReports = service.AddFullName(driveReports);
-            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", driveReports.First().Fullname,
-                "Service should add full name to the drive report");
-            Assert.AreEqual("Morten Rasmussen [MR]", driveReports.Last().Fullname,
-                "Service should add full name to the drive report (no middle name)");
-        }
-
-        [Test]
+      [Test]
         public void AddFullName_CalledWithDriveReport_WithMiddleName_PopulatesFullNameCorrect()
         {
             var driveReports = GetDriveReportAsQueryable();
             var report = driveReports.First();
-            Assert.Null(report.Fullname, "Before the service is run the full name should be null");
+            Assert.Null(report.FullName, "Before the service is run the full name should be null");
 
             var service = NinjectWebKernel.CreateKernel().Get<DriveReportService>();
             service.AddFullName(report);
-            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", report.Fullname,
+            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", report.FullName,
                 "Service should add full name to the drive report");
         }
 
@@ -87,11 +73,11 @@ namespace ApplicationServices.Test.DriveReportServiceTest
         {
             var driveReports = GetDriveReportAsQueryable();
             var report = driveReports.Last();
-            Assert.Null(report.Fullname, "Before the service is run the full name should be null");
+            Assert.Null(report.FullName, "Before the service is run the full name should be null");
 
             var service = NinjectWebKernel.CreateKernel().Get<DriveReportService>();
             service.AddFullName(report);
-            Assert.AreEqual("Morten Rasmussen [MR]", report.Fullname, "Service should add full name to the drive report");
+            Assert.AreEqual("Morten Rasmussen [MR]", report.FullName, "Service should add full name to the drive report");
         }
 
         [Test]

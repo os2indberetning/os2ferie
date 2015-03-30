@@ -25,7 +25,7 @@ namespace Core.DomainModel
         public bool StartsAtHome { get; set; }
         public bool EndsAtHome { get; set; }
         public string LicensePlate { get; set; }
-        public string Fullname { get; set; }
+        public string FullName { get; set; }
         public string AccountNumber { get; set; }
         public string TFCode { get; set; }
         public KilometerAllowance KilometerAllowance { get; set; }

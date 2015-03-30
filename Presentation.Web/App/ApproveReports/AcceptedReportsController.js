@@ -114,7 +114,7 @@
        $scope.loadReports = function () {
            $scope.reports = {
                dataSource: {
-                   sort: [{ field: "Fullname", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
+                   sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
                    type: "odata",
                    transport: {
                        read: {
@@ -198,7 +198,7 @@
 
                columns: [
                {
-                   field: "Fullname",
+                   field: "FullName",
                    title: "Medarbejder"
                }, {
                    field: "Employment.OrgUnit.ShortDescription",

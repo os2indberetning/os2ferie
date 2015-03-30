@@ -9,7 +9,7 @@
 </div>
 <div class="row">
     <div class="col-md-2">
-        <input type="text" typeahead-on-select="personChanged($item)" typeahead-editable="false" ng-model="person.chosenPerson" placeholder="Indtast navn" typeahead="person as person.FullName for person in people | filter:$viewValue" class="form-control" />
+        <input type="text" typeahead-on-select="personChanged()" ng-change="personChanged()" typeahead-editable="true" ng-model="person.chosenPerson" placeholder="Indtast navn" typeahead="person.FullName for person in people | filter:$viewValue" class="form-control" />
     </div>
     <div class="col-md-2">
         <input type="text" typeahead-on-select="orgUnitChanged($item)" ng-change="orgUnitChanged()" typeahead-editable="true" ng-model="orgUnit.chosenUnit" placeholder="Indtast beskrivelse" typeahead="orgUnit.ShortDescription for orgUnit in orgUnits | filter:$viewValue" class="form-control" />

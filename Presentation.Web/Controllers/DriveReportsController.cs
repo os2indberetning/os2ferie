@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
 using Core.ApplicationServices;
+using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using Ninject;
@@ -12,24 +13,29 @@ namespace OS2Indberetning.Controllers
 {
     public class DriveReportsController : BaseController<DriveReport>
     {
-        private readonly DriveReportService _driveService;
+        private readonly IDriveReportService _driveService;
 
-        public DriveReportsController(IGenericRepository<DriveReport> repo, DriveReportService driveService) : base(repo)
+        public DriveReportsController(IGenericRepository<DriveReport> repo, IDriveReportService driveService)
+            : base(repo)
         {
             _driveService = driveService;
         }
 
         // GET: odata/DriveReports
         [EnableQuery]
-        public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions)
+        public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions, int leaderId = 0, bool getReportsWhereSubExists = false)
         {
-            return _driveService.AttachResponsibleLeader(_driveService.AddFullName(GetQueryable(queryOptions)));
+            if (leaderId == 0)
+            {
+                return GetQueryable(queryOptions);
+            }
+            return _driveService.FilterByLeader(GetQueryable(queryOptions), leaderId, getReportsWhereSubExists);
         }
 
         //GET: odata/DriveReports(5)
         public IQueryable<DriveReport> GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
-            var res = _driveService.AttachResponsibleLeader(_driveService.AddFullName(GetQueryable(key, queryOptions)));
+            var res = _driveService.AttachResponsibleLeader(GetQueryable(key, queryOptions));
             return res;
         }
 
@@ -45,9 +51,9 @@ namespace OS2Indberetning.Controllers
         {
             //try
             //{
-                var result = _driveService.Create(driveReport);
+            var result = _driveService.Create(driveReport);
 
-                return Ok(result);
+            return Ok(result);
             //}
             //catch (Exception e)
             //{
@@ -73,7 +79,7 @@ namespace OS2Indberetning.Controllers
             }
 
 
-            _driveService.SendMailIfRejectedReport(key,delta);
+            _driveService.SendMailIfRejectedReport(key, delta);
             return base.Patch(key, delta);
         }
 

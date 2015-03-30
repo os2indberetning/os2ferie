@@ -7,6 +7,9 @@
        $scope.orgUnit = {};
        $scope.orgUnits = [];
 
+       //Hardcoded personid 
+       var personId = 1;
+
        OrgUnit.get().$promise.then(function (res) {
            $scope.orgUnits = res.value;
        });
@@ -44,39 +47,73 @@
            ]
        };
 
+       $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
+
+           var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           var newFilters = [];
 
 
-
-
-       $scope.updateReports = function () {
-
-           var dateAnd = "and ";
-           var dateQuery = dateAnd + queryOptions.dateQuery;
-           if (queryOptions.dateQuery == "") {
-               dateAnd = "";
-               dateQuery = "";
+           if (oldFilters == undefined) {
+               // If no filters exist, just add the filters.
+               newFilters.push({ field: "DriveDateTimestamp", operator: "ge", value: fromDateStamp });
+               newFilters.push({ field: "DriveDateTimestamp", operator: "le", value: toDateStamp });
+           } else {
+               // If filters already exist then get the old filters, that arent drivedate.
+               // Then add the new drivedate filters to these.
+               angular.forEach(oldFilters.filters, function (value, key) {
+                   if (value.field != "DriveDateTimestamp") {
+                       newFilters.push(value);
+                   }
+               });
+               newFilters.push({ field: "DriveDateTimestamp", operator: "ge", value: fromDateStamp });
+               newFilters.push({ field: "DriveDateTimestamp", operator: "le", value: toDateStamp });
            }
-
-           var personAnd = "and ";
-           var personQuery = personAnd + queryOptions.personQuery;
-           if (queryOptions.personQuery == "") {
-               personAnd = "";
-               personQuery = "";
-           }
-
-           var query = dateQuery + personQuery;
-
-           var url = "/odata/DriveReports?$expand=Employment($expand=OrgUnit),DriveReportPoints,ResponsibleLeader &$filter=Status eq Core.DomainModel.ReportStatus'Pending' " + query;
-
-
-
-           $scope.gridContainer.grid.dataSource.transport.options.read.url = url;
-           $scope.gridContainer.grid.dataSource.read();
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
        }
 
+       $scope.applyPersonFilter = function (fullName) {
+
+           var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           var newFilters = [];
 
 
+           if (oldFilters == undefined) {
+               // If no filters exist, just add the filter.
+               newFilters.push({ field: "FullName", operator: "contains", value: fullName });
+           } else {
+               // If filters already exist then get the old filters, that arent name.
+               // Then add the new drivedate filters to these.
+               angular.forEach(oldFilters.filters, function (value, key) {
+                   if (value.field != "FullName") {
+                       newFilters.push(value);
+                   }
+               });
+               newFilters.push({ field: "FullName", operator: "contains", value: fullName });
+           }
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
 
+       $scope.removePersonFilter = function () {
+           var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           var newFilters = [];
+           angular.forEach(oldFilters.filters, function (value, key) {
+               if (value.field != "FullName") {
+                   newFilters.push(value);
+               }
+           });
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
+
+       $scope.removeDateFilter = function() {
+           var oldFilters = $scope.gridContainer.grid.dataSource.filter();
+           var newFilters = [];
+           angular.forEach(oldFilters.filters, function (value, key) {
+               if (value.field != "DriveDateTimestamp") {
+                   newFilters.push(value);
+               }
+           });
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
 
        $scope.reports = {
            dataSource:
@@ -84,7 +121,7 @@
                    type: "odata-v4",
                    transport: {
                        read: {
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending'&$expand=Employment($expand=OrgUnit),DriveReportPoints,ResponsibleLeader",
+                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending'&$expand=Employment($expand=OrgUnit),DriveReportPoints",
                        },
 
                    },
@@ -94,11 +131,12 @@
                            return data.value;
                        },
                    },
-                   pageSize: 20,
-                   serverPaging: false,
+                   pageSize: 1,
+                   serverPaging: true,
                    serverAggregates: false,
                    serverSorting: true,
-                   sort: [{ field: "Fullname", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
+                   serverFiltering: true,
+                   sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
 
                },
 
@@ -127,7 +165,7 @@
            },
            columns: [
                {
-                   field: "Fullname",
+                   field: "FullName",
                    title: "Medarbejder"
                }, {
                    field: "Employment.OrgUnit.ShortDescription",
@@ -213,7 +251,7 @@
                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                            m._d.getFullYear();
                    },
-               },{
+               }, {
                    sortable: false,
                    field: "Id",
                    template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> <div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'></input></div>",
@@ -302,10 +340,9 @@
 
        $scope.clearClicked = function () {
            $scope.loadInitialDates();
-           queryOptions.dateQuery = "";
-           queryOptions.personQuery = "";
+           $scope.removeDateFilter();
+           $scope.removePersonFilter();
            $scope.person.chosenPerson = "";
-           $scope.updateReports();
        }
 
        $scope.getCurrentPageSums = function () {
@@ -460,19 +497,15 @@
        $scope.dateChanged = function () {
            // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
            $timeout(function () {
-               var from, to, and;
-               and = " and ";
-               from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
-               to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDate);
-
+               var from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
+               var to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
 
                // Initial load is also a bit of a hack.
                // dateChanged is called twice when the default values for the datepickers are set.
                // This leads to sorting the grid content on load, which is not what we want.
                // Therefore the sorting is not done the first 2 times the dates change - Which are the 2 times we set the default values.
                if (initialLoad <= 0) {
-                   queryOptions.dateQuery = to + and + from;
-                   $scope.updateReports();
+                   $scope.applyDateFilter(from, to);
                }
                initialLoad--;
            }, 0);
@@ -502,16 +535,11 @@
        };
 
        $scope.personChanged = function (item) {
-           queryOptions.personQuery = "PersonId eq " + item.Id;
-           $scope.updateReports();
+           $scope.applyPersonFilter($scope.person.chosenPerson);
+
        }
 
-       var queryOptions = { dateQuery: "", personQuery: "" };
        $scope.person.chosenPerson = "";
-
-
-       // Set initial value for grid pagesize
-       $scope.gridContainer.gridPageSize = 20;
 
        Person.getAll().$promise.then(function (res) {
            angular.forEach(res.value, function (value, key) {
