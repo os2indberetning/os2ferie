@@ -20,8 +20,6 @@
             }
             
 
-            console.log($scope.target);
-            console.log(leader);
 
             var sub = new Substitute({
                 StartDateTimestamp: Math.floor($scope.approverFromDate.getTime() / 1000),
@@ -32,7 +30,11 @@
                 PersonId: $scope.target[0].Id
             });
 
-            console.log(sub);
+            if ($scope.infinitePeriod) {
+                sub.EndDateTimestamp = 9999999999;
+            }
+
+            debugger;
 
             sub.$post(function (data) {
                 NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev oprettet");

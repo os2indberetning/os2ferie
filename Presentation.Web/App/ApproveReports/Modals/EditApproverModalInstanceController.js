@@ -7,7 +7,11 @@
         $scope.orgUnit = $scope.orgUnits[0];
 
 
-        $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
+        $scope.substitute = Substitute.get({ id: substituteId }, function(data) {
+
+            if (data.value[0].EndDateTimestamp == 9999999999) {
+                $scope.infinitePeriod = true;
+            }
 
             $scope.substitute = data.value[0]; // Should change the service
 
@@ -38,6 +42,10 @@
                 OrgUnitId: $scope.orgUnit.Id,
                 PersonId: $scope.target.Id
             });
+
+            if ($scope.infinitePeriod) {
+                sub.EndDateTimestamp = 9999999999;
+            }
 
             sub.$patch({ id: substituteId }, function (data) {
                 NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev oprettet");

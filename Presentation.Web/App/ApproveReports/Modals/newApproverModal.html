@@ -3,6 +3,9 @@
 </div>
 <div class="modal-body">
     <div class="form-group form-inline">
+        <label>Vælg ansat der skal godkendes for:</label>
+        <input class="form-control pull-right" kendo-auto-complete k-data-source="persons" k-ng-model="target" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+        <div class="seperator"></div>
         <label>Vælg godkender:</label>
         <input class="form-control pull-right" kendo-auto-complete k-data-source="persons" k-ng-model="approver" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
         <div class="seperator"></div>
@@ -10,10 +13,11 @@
         <input class="pull-right" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverFromDate" />
         <div class="seperator"></div>
         <label>Til</label>
-        <input class="pull-right" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverToDate" />
+        <input ng-disabled="infinitePeriod" class="pull-right" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverToDate" />
         <div class="seperator"></div>
-        <label>Vælg ansat:</label>
-        <input class="form-control pull-right" kendo-auto-complete k-data-source="persons" k-ng-model="target" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+        <label>Tidsubegrænset</label>
+        <input class="pull-right" type="checkbox" ng-model="infinitePeriod"/>
+
     </div>
 </div>
 <div class="modal-footer">

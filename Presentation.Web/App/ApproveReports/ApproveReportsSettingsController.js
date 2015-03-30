@@ -89,7 +89,8 @@
                }, {
                    title: "Muligheder",
                    template: "<a ng-click='openEditSubstitute(${Id})'>Rediger</a> | <a ng-click='openDeleteSubstitute(${Id})'>Slet</a>"
-               }]
+               }],
+               scrollable: false
            };
 
            $scope.personalApprovers = {
@@ -151,20 +152,34 @@
                    field: "Leader.FullName",
                    title: "Afviger"
                }, {
-                   field: "Title", // Kendo grid doesn't support arrays
+                   field: "Title",
                    title: "Ansatte"
                }, {
                    field: "StartDateTimestamp",
                    title: "Fra",
-                   template: "#= kendo.toString(new Date(StartDateTimestamp*1000), 'MM/dd/yyyy') #"
+                   template: function (data) {
+                       var m = moment.unix(data.StartDateTimestamp);
+                       return m._d.getDate() + "/" +
+                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                           m._d.getFullYear();
+                   },
                }, {
                    field: "EndDateTimestamp",
                    title: "Til",
-                   template: "#= kendo.toString(new Date(EndDateTimestamp*1000), 'MM/dd/yyyy') #"
+                   template: function (data) {
+                       if (data.EndDateTimestamp == 9999999999) {
+                           return "Uendelig";
+                       }
+                       var m = moment.unix(data.EndDateTimestamp);
+                       return m._d.getDate() + "/" +
+                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                           m._d.getFullYear();
+                   },
                }, {
                    title: "Muligheder",
                    template: "<a ng-click='openEditApprover(${Id})'>Rediger</a> | <a ng-click='openDeleteApprover(${Id})'>Slet</a>"
-               }]
+               }],
+               scrollable: false
            };
        }
 
