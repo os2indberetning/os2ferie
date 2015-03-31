@@ -6,6 +6,15 @@
         $scope.orgUnits = orgUnits;
         $scope.orgUnit = $scope.orgUnits[0];
         
+        $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
+
+        // Remove leader from array
+        angular.forEach($scope.persons, function (value, key) {
+            if (value.Id == leader.Id) {
+                $scope.personsWithoutLeader.splice(key, 1);
+            }
+        });
+
         $scope.orgUnitSelected = function (id) {
             console.log(id);
         }

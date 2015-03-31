@@ -4,7 +4,7 @@
 <div class="modal-body">
     <div class="form-group form-inline">
         <label>Vælg ansat der skal godkendes for:</label>
-        <input class="form-control pull-right" kendo-auto-complete k-data-source="persons" k-ng-model="target" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+        <input class="form-control pull-right" kendo-auto-complete k-data-source="personsWithoutLeader" k-ng-model="target" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
         <div class="seperator"></div>
         <label>Vælg godkender:</label>
         <input class="form-control pull-right" kendo-auto-complete k-data-source="persons" k-ng-model="approver" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />

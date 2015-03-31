@@ -16,11 +16,16 @@
            $scope.persons = data.value;
        });
 
-       $scope.substituteOrgUnit = "";
-
        OrgUnit.get(function (data) {
            $scope.orgUnits = data.value;
        });
+
+
+
+
+       $scope.substituteOrgUnit = "";
+
+
 
        $scope.loadGrids = function () {
            $scope.substitutes = {

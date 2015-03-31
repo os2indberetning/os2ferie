@@ -4,6 +4,14 @@
         $scope.orgUnits = orgUnits;
         $scope.orgUnit = $scope.orgUnits[0];
 
+        $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
+
+        // Remove leader from array
+        angular.forEach($scope.persons, function(value, key) {
+            if (value.Id == leader.Id) {
+                $scope.personsWithoutLeader.splice(key, 1);
+            }
+        });
 
         $scope.substitute = Substitute.get({ id: substituteId }, function(data) {
 
@@ -46,7 +54,7 @@
             }
 
             sub.$patch({ id: substituteId }, function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev oprettet");
+                NotificationService.AutoFadeNotification("success", "Success", "Godkender blev oprettet");
                 $modalInstance.close();
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette stedfortræder");

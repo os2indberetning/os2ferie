@@ -21,6 +21,10 @@
     margin: 5px;
 }
 
+.margin-left-10 {
+    margin-left: 10px;
+}
+
 .info-popup {
     border-radius: 8px;
     border-style: solid; 

@@ -1,5 +1,5 @@
 ﻿<div class="modal-header">
-    <h3 class="modal-title">Ret personlig godkender</h3>
+    <h3 class="modal-title">Rediger personlig godkender</h3>
 </div>
 <div class="modal-body">
     <div class="form-group">
@@ -9,7 +9,7 @@
             </div>
 
             <div class="col-md-6">
-                <input type="text" typeahead-editable="false" ng-model="target" placeholder="Indtast navn" typeahead="person as person.FullName for person in persons | filter:$viewValue" class="form-control fill-width" />
+                <input type="text" typeahead-editable="false" ng-model="target" placeholder="Indtast navn" typeahead="person as person.FullName for person in personsWithoutLeader | filter:$viewValue" class="form-control fill-width" />
             </div>
         </div>
 

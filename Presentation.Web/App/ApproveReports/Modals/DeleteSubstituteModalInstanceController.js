@@ -10,7 +10,11 @@
             $scope.person = $scope.substitute.Sub;
             console.log($scope.substitute);
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000).toLocaleDateString();
-            $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000).toLocaleDateString();
+            if ($scope.substitute.EndDateTimestamp == 9999999999) {
+                $scope.substituteToDate = "tidsubegrænset";
+            } else {
+                $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000).toLocaleDateString();
+            }
         });
 
         
