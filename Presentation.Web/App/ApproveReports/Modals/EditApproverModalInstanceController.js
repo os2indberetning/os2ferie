@@ -1,8 +1,6 @@
 ﻿angular.module('application').controller('EditApproverModalInstanceController',
     ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId) {
         $scope.persons = persons;
-        $scope.approverFromDate = new Date();
-        $scope.approverToDate = new Date();
         $scope.orgUnits = orgUnits;
         $scope.orgUnit = $scope.orgUnits[0];
 
@@ -18,8 +16,8 @@
             $scope.target = $scope.substitute.Person;
             $scope.approver = $scope.substitute.Sub;
 
-            $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000);
-            $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000);
+            $scope.approverFromDate = new Date($scope.substitute.StartDateTimestamp * 1000);
+            $scope.approverToDate = new Date($scope.substitute.EndDateTimestamp * 1000);
             $scope.orgUnit = $.grep($scope.orgUnits, function (e) { return e.Id == $scope.substitute.OrgUnitId; })[0];
         });
 

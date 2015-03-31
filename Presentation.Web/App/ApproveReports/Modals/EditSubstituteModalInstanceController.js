@@ -6,14 +6,16 @@
 
         $scope.person = [];
 
-        console.log(substituteId);
 
         $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
 
+            if (data.value[0].EndDateTimestamp == 9999999999) {
+                $scope.infinitePeriod = true;
+            }
+
             $scope.substitute = data.value[0]; // This is bad, but can't change the service
 
-            console.log($scope.substitute);
-
+   
             $scope.person[0] = $scope.substitute.Sub;
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000);
             $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000);
@@ -24,7 +26,7 @@
 
         
         $scope.orgUnitSelected = function (id) {
-            console.log(id);
+         
         }
 
         $scope.saveNewSubstitute = function () {
@@ -40,6 +42,10 @@
                 SubId: $scope.person[0].Id,
                 OrgUnitId: $scope.orgUnit.Id
             });
+
+            if ($scope.infinitePeriod) {
+                sub.EndDateTimestamp = 9999999999;
+            }
 
             sub.$patch({ id: $scope.substitute.Id }, function (data) {
                 NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev gemt");

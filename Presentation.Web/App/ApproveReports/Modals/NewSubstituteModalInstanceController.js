@@ -25,6 +25,10 @@
                 PersonId: leader.Id
             });
 
+            if ($scope.infinitePeriod) {
+                sub.EndDateTimestamp = 9999999999;
+            }
+
             sub.$post(function (data) {
                 NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev oprettet");
                 $modalInstance.close();

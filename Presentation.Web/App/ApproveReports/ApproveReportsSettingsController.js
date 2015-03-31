@@ -100,6 +100,9 @@
                    title: "Til",
                    field: "EndDateTimestamp",
                    template: function (data) {
+                       if (data.EndDateTimestamp == 9999999999) {
+                           return "Tidsubegrænset";
+                       }
                        var m = moment.unix(data.EndDateTimestamp);
                        return m._d.getDate() + "/" +
                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
@@ -187,7 +190,7 @@
                    title: "Til",
                    template: function (data) {
                        if (data.EndDateTimestamp == 9999999999) {
-                           return "Uendelig";
+                           return "Tidsubegrænset";
                        }
                        var m = moment.unix(data.EndDateTimestamp);
                        return m._d.getDate() + "/" +
@@ -279,6 +282,9 @@
                    title: "Til",
                    field: "EndDateTimestamp",
                    template: function (data) {
+                       if (data.EndDateTimestamp == 9999999999) {
+                           return "Tidsubegrænset";
+                       }
                        var m = moment.unix(data.EndDateTimestamp);
                        return m._d.getDate() + "/" +
                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
