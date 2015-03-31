@@ -73,6 +73,16 @@
                             return "Nej";
                         }
                     }, {
+                        field: "Notified",
+                        title: "Er kørt",
+                        template: function(data) {
+                            if (data.Notified) {
+                                return "<i class='fa fa-check'></i>";
+                            }
+                            return "";
+                        }
+                    },
+                    {
                         field: "Id",
                         template: "<a ng-click=editClick(${Id})>Redigér</a> | <a ng-click=deleteClick(${Id})>Slet</a>",
                         title: "Muligheder",
@@ -155,6 +165,6 @@
             });
         }
 
-        
+
     }
 ]);
