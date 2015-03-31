@@ -38,8 +38,10 @@ namespace OS2Indberetning.Controllers
         public IQueryable<Person> GetPerson([FromODataUri] int key, ODataQueryOptions<Person> queryOptions)
         {
             var cprScrubbed = _person.ScrubCprFromPersons(GetQueryable(key, queryOptions));
+            _person.AddFullName(cprScrubbed);
             var res = cprScrubbed.ToList();
             res[0].DistanceFromHomeToWork = _person.GetDistanceFromHomeToWork(res[0]);
+
             return res.AsQueryable();
         }
 

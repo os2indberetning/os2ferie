@@ -164,7 +164,8 @@ namespace Core.ApplicationServices
         public IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> repo)
         {
             var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            foreach (var driveReport in repo.ToList())
+            var res = repo.ToList();
+            foreach (var driveReport in res)
             {
                 var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == driveReport.Employment.OrgUnitId);
 
@@ -204,7 +205,7 @@ namespace Core.ApplicationServices
                 }
             }
 
-            return repo;
+            return res.AsQueryable();
         }
 
         public IQueryable<DriveReport> FilterByLeader(IQueryable<DriveReport> repo, int leaderId, bool getReportsWhereSubExists = false)

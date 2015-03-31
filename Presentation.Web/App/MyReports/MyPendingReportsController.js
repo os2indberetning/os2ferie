@@ -1,24 +1,10 @@
 ﻿angular.module("application").controller("MyPendingReportsController", [
    "$scope", "$modal", "$rootScope", "Report", "$timeout", function ($scope, $modal, $rootScope, Report, $timeout) {
 
-       // Hardcoded personid == 4 until we can get current user from their system.
+       // Hardcoded personid == 1 until we can get current user from their system.
        var personId = 1;
 
        // Helper Methods
-
-
-
-       $scope.updateReports = function (oDataQuery) {
-
-           var and = "and ";
-           if (oDataQuery == "") {
-               and = "";
-           }
-
-           $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' and PersonId eq " + personId + " " + and + oDataQuery;
-           $scope.gridContainer.grid.dataSource.read();
-       }
-
 
 
        $scope.loadReports = function () {
@@ -30,7 +16,7 @@
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Pending' and PersonId eq " + 1,
+                           url: "/odata/DriveReports?type=pending &$expand=DriveReportPoints,ResponsibleLeader",
                            dataType: "json",
                            cache: false
                        },
@@ -53,9 +39,16 @@
                        }
                    },
                    pageSize: 20,
-                   serverPaging: false,
+                   serverPaging: true,
+                   serverAggregates: false,
                    serverSorting: true,
-                   sort: { field: "DriveDateTimestamp", dir: "desc"}
+                   serverFiltering: true,
+                   filter: [{field: "PersonId", operator: "eq", value: personId}],
+                   sort: { field: "DriveDateTimestamp", dir: "desc" },
+                   aggregate: [
+                   { field: "Distance", aggregate: "sum" },
+                   { field: "AmountToReimburse", aggregate: "sum" },
+                   ]
                },
                sortable: true,
                pageable: {
@@ -78,18 +71,6 @@
                },
                columns: [
                    {
-                       field: "Fullname",
-                       title: "Navn"
-                   }, {
-                       field: "CreationDate",
-                       template: function (data) {
-                           var m = moment.unix(data.CreatedDateTimestamp);
-                           return m._d.getDate() + "/" +
-                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                                  m._d.getFullYear();
-                       },
-                       title: "Indberettet den"
-                   }, {
                        field: "DriveDateTimestamp",
                        template: function (data) {
                            var m = moment.unix(data.DriveDateTimestamp);
@@ -109,14 +90,66 @@
                        },
                        title: "Formål"
                    }, {
-                       field: "TFCode",
-                       title: "TF Kode"
+                       title: "Rute",
+                       field: "DriveReportPoints",
+                       template: function (data) {
+                           var tooltipContent = "";
+                           var gridContent = "";
+                           angular.forEach(data.DriveReportPoints, function (point, key) {
+                               if (key != data.DriveReportPoints.length - 1) {
+                                   tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
+                                   gridContent += point.Town + "<br/>";
+                               } else {
+                                   tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
+                                   gridContent += point.Town;
+                               }
+                           });
+                           var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
+
+                           if (data.KilometerAllowance != "Read") {
+                               return result;
+                           } else {
+                               if (data.IsFromApp) {
+                                   return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst fra GPS</div>";
+                               } else {
+                                   return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
+                               }
+
+                           }
+                       }
+                   }, {
+                       field: "Distance",
+                       title: "Afstand",
+                       template: function (data) {
+                           return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
+                       },
+                       footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+                   }, {
+                       field: "AmountToReimburse",
+                       title: "Beløb",
+                       template: function (data) {
+                           return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
+                       },
+                       footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+                   }, {
+                       field: "CreationDate",
+                       template: function (data) {
+                           var m = moment.unix(data.CreatedDateTimestamp);
+                           return m._d.getDate() + "/" +
+                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                  m._d.getFullYear();
+                       },
+                       title: "Indberettet dato"
+                   }, {
+                       field: "ResponsibleLeader.FullName",
+                       title: "Godkender"
                    }, {
                        field: "Id",
                        template: "<a ng-click=deleteClick(${Id})>Slet</a> | <a ng-click=editClick(${Id})>Rediger</a>",
                        title: "Muligheder"
                    }
-               ]
+               ],
+               scrollable: false,
            };
        }
 
@@ -124,16 +157,12 @@
 
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
-
-           initialLoad = 2;
-
            var from = new Date();
            from.setDate(from.getDate() - 30);
 
            $scope.dateContainer.toDate = new Date();
            $scope.dateContainer.fromDate = from;
 
-           $scope.$apply();
        }
 
        $scope.getEndOfDayStamp = function (d) {
@@ -148,16 +177,6 @@
 
        // Event handlers
 
-       $scope.searchClicked = function () {
-           var from, to;
-
-           from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
-           to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
-
-           var q = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
-           $scope.updateReports(q);
-       }
-
        $scope.deleteClick = function (id) {
            var modalInstance = $modal.open({
                templateUrl: '/App/MyReports/ConfirmDeleteTemplate.html',
@@ -171,10 +190,7 @@
 
            modalInstance.result.then(function (res) {
                Report.delete({ id: id }, function () {
-                   var from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
-                   var to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
-                   var q = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
-                   $scope.updateReports(q);
+                   $scope.gridContainer.grid.dataSource.read();
                });
            });
        }
@@ -208,11 +224,9 @@
        $scope.dateChanged = function () {
            // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
            $timeout(function () {
-               var from, to, and;
-               and = " and ";
-               from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
-               to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDate);
 
+               var from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
+               var to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
 
                // Initial load is also a bit of a hack.
                // dateChanged is called twice when the default values for the datepickers are set.
@@ -220,18 +234,16 @@
                // Therefore the sorting is not done the first 2 times the dates change - Which are the 2 times we set the default values.
                if (initialLoad <= 0) {
 
-                   $scope.updateReports(to + and + from);
+                   $scope.applyDateFilter(from, to);
                }
                initialLoad--;
            }, 0);
        }
 
        $scope.clearClicked = function () {
+           $scope.gridContainer.grid.dataSource.filter([{ field: "PersonId", operator: "eq", value: personId }]);
            $scope.loadInitialDates();
-           $scope.updateReports("");
        }
-
-       // Init
 
 
        // Load up the grid.
@@ -249,8 +261,15 @@
            format: "dd/MM/yyyy",
        };
 
-       $scope.gridContainer.gridPageSize = 20;
 
+
+       $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
+           var newFilters = [];
+           newFilters.push({ field: "PersonId", operator: "eq", value: personId });
+           newFilters.push({ field: "DriveDateTimestamp", operator: "gte", value: fromDateStamp });
+           newFilters.push({ field: "DriveDateTimestamp", operator: "lte", value: toDateStamp });
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
 
    }
 ]);

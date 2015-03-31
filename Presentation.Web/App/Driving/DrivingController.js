@@ -204,6 +204,8 @@
 
 
             driveReport.PersonId = $scope.Person.Id;
+            driveReport.FullName = $scope.Person.FullName;
+            debugger;
             driveReport.Status = "Pending";
             driveReport.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
             driveReport.EditedDateTimestamp = driveReport.CreatedDateTimestamp;

@@ -85,41 +85,91 @@ angular.module("application").controller("MyRejectedReportsController", [
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
                },
                columns: [
-                   {
-                       field: "Fullname",
-                       title: "Navn"
-                   }, {
-                       field: "CreationDate",
-                       template: function (data) {
-                           var m = moment.unix(data.CreatedDateTimestamp);
-                           return m._d.getDate() + "/" +
-                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                                  m._d.getFullYear();
-                       },
-                       title: "Indberettet den"
-                   }, {
-                       field: "DriveDateTimestamp",
-                       template: function (data) {
-                           var m = moment.unix(data.DriveDateTimestamp);
-                           return m._d.getDate() + "/" +
-                               (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                               m._d.getFullYear();
-                       },
-                       title: "Kørselsdato"
-                   }, {
-                       field: "Id",
-                       template: function (data) {
-                           if (data.Comment != "") {
-                               return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"transparent-background pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
-                           }
-                           return data.Purpose;
+                  {
+                      field: "DriveDateTimestamp",
+                      template: function (data) {
+                          var m = moment.unix(data.DriveDateTimestamp);
+                          return m._d.getDate() + "/" +
+                              (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                              m._d.getFullYear();
+                      },
+                      title: "Kørselsdato"
+                  }, {
+                      field: "Purpose",
+                      template: function (data) {
+                          if (data.Comment != "") {
+                              return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"transparent-background pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                          }
+                          return data.Purpose;
 
-                       },
-                       title: "Formål"
-                   }, {
-                       field: "TFCode",
-                       title: "TF Kode"
-                   }
+                      },
+                      title: "Formål"
+                  }, {
+                      title: "Rute",
+                      field: "DriveReportPoints",
+                      template: function (data) {
+                          var tooltipContent = "";
+                          var gridContent = "";
+                          angular.forEach(data.DriveReportPoints, function (point, key) {
+                              if (key != data.DriveReportPoints.length - 1) {
+                                  tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
+                                  gridContent += point.Town + "<br/>";
+                              } else {
+                                  tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
+                                  gridContent += point.Town;
+                              }
+                          });
+                          var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
+
+                          if (data.KilometerAllowance != "Read") {
+                              return result;
+                          } else {
+                              if (data.IsFromApp) {
+                                  return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst fra GPS</div>";
+                              } else {
+                                  return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
+                              }
+
+                          }
+                      }
+                  }, {
+                      field: "Distance",
+                      title: "Afstand",
+                      template: function (data) {
+                          return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
+                      },
+                      footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+                  }, {
+                      field: "AmountToReimburse",
+                      title: "Beløb",
+                      template: function (data) {
+                          return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
+                      },
+                      footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+                  }, {
+                      field: "CreationDate",
+                      template: function (data) {
+                          var m = moment.unix(data.CreatedDateTimestamp);
+                          return m._d.getDate() + "/" +
+                                (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                 m._d.getFullYear();
+                      },
+                      title: "Indberettet dato"
+                  }, {
+                      field: "ClosedDateTimestamp",
+                      title: "Afvist dato",
+                      template: function (data) {
+                          var m = moment.unix(data.ClosedDateTimestamp);
+                          var date = m._d.getDate() + "/" +
+                                (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                 m._d.getFullYear();
+                          return date + "<div kendo-tooltip k-content=\"'" + data.Comment + "'\"><i class='fa fa-comment-o'></i></div>";
+
+                      },
+                  }, {
+                      field: "ApprovedBy.FullName",
+                      title: "Afvist af"
+                  }
                ]
            };
        }
@@ -134,8 +184,6 @@ angular.module("application").controller("MyRejectedReportsController", [
 
            $scope.dateContainer.toDate = new Date();
            $scope.dateContainer.fromDate = from;
-
-           $scope.$apply();
        }
 
        $scope.getEndOfDayStamp = function (d) {

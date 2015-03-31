@@ -38,7 +38,7 @@ namespace OS2Indberetning.Controllers
                 queryably = _driveService.FilterByLeader(queryably, leaderId, getReportsWhereSubExists);
             }
 
-            return queryably;
+            return _driveService.AttachResponsibleLeader(queryably);
         }
 
         //GET: odata/DriveReports(5)
