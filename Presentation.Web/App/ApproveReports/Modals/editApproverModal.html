@@ -5,6 +5,18 @@
     <div class="form-group">
         <div class="row">
             <div class="col-md-6">
+                <label>Vælg ansat der skal godkendes for:</label>
+            </div>
+
+            <div class="col-md-6">
+                <input type="text" typeahead-editable="false" ng-model="target" placeholder="Indtast navn" typeahead="person as person.FullName for person in persons | filter:$viewValue" class="form-control fill-width" />
+            </div>
+        </div>
+
+        <div class="seperator"></div>
+
+        <div class="row">
+            <div class="col-md-6">
                 <label>Vælg godkender:</label>
             </div>
             <div class="col-md-6">
@@ -30,7 +42,7 @@
                 <label>Til</label>
             </div>
             <div class="col-md-6">
-                <input class="fill-width" culture="'da-DK'" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverToDate" />
+                <input class="fill-width" ng-disabled="infinitePeriod" culture="'da-DK'" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverToDate" />
             </div>
         </div>
         
@@ -38,13 +50,18 @@
 
         <div class="row">
             <div class="col-md-6">
-                <label>Vælg ansat:</label>
+                <label>Tidsubegrænset</label>
             </div>
-
             <div class="col-md-6">
-                <input type="text" typeahead-editable="false" ng-model="target" placeholder="Indtast navn" typeahead="person as person.FullName for person in persons | filter:$viewValue" class="form-control fill-width" />
+                <input class="pull-right" type="checkbox" ng-model="infinitePeriod" />
             </div>
         </div>
+        
+
+    
+        
+
+        
 
 
 

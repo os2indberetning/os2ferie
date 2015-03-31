@@ -1,8 +1,8 @@
 ﻿<div class=" row col-lg-12 setting-area">
-    <h3 ng-click="collapseSubtitute = !collapseSubtitute">Opret ny stedfortræder i en periode</h3>
+    <h3 ng-click="collapseSubtitute = !collapseSubtitute">Opret ny stedfortræder for organisatorisk enhed i en periode</h3>
     <div collapse="collapseSubtitute">
         <div class="col-md-2 pull-right">
-            <button type="submit" class="btn btn-primary pull-right" ng-click="createNewSubstitute()">Opret</button>
+            <button type="submit" class="btn btn-primary pull-right margin-5" ng-click="createNewSubstitute()">Opret</button>
         </div>
         <div class="row">
             <div class="form-group form-inline">
@@ -14,10 +14,11 @@
     </div>
 </div>
 <div class="row col-lg-12 setting-area">
-    <h3 ng-click="collapsePersonalApprover = !collapsePersonalApprover">Opret personlige godkendere for medarbejdere</h3>
+    <br/>
+    <h3 ng-click="collapsePersonalApprover = !collapsePersonalApprover" class="inline">Opret personlig godkender for enkelte medarbejdere i en periode </h3><span class="info-popup" popover-trigger="mouseenter" popover="test"><i class="fa fa-question"></i></span>
     <div collapse="collapsePersonalApprover">
         <div class="col-md-2 pull-right">
-            <button type="submit" class="btn btn-primary pull-right" ng-click="createNewApprover()">Opret</button>
+            <button type="submit" class="btn btn-primary pull-right margin-5" ng-click="createNewApprover()">Opret</button>
         </div>
         <div class="row">
             <div class="form-group form-inline">
@@ -26,9 +27,18 @@
                 </div>
             </div>
         </div>
-
-
-
     </div>
+</div>
 
+<div class="row col-lg-12 setting-area">
+    <h3 ng-click="collapseMySubstitutes = !collapseMySubstitutes">Stedfortræder for</h3>
+    <div collapse="collapseMySubstitutes">
+        <div class="row">
+            <div class="form-group form-inline">
+                <div class="col-md-12">
+                    <div id="mySubstitutesGrid" kendo-grid="mySubstitutesGrid" class="margin-bottom-10" k-options="mySubstitutes"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

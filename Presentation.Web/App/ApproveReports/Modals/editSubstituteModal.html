@@ -11,6 +11,17 @@
                 <input type="text" typeahead-editable="false" ng-model="person[0]" placeholder="Indtast navn" typeahead="person as person.FullName for person in persons | filter:$viewValue" class="form-control fill-width " />
             </div>
         </div>
+        
+        <div class="seperator"></div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label>Organisation:</label>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control fill-width" kendo-drop-down-list="PositionDropDown" k-ng-model="orgUnit" k-data-text-field="'ShortDescription'" id=" " k-data-source="orgUnits" k-data-value-field="'Id'"></select>
+            </div>
+        </div>
 
         <div class="seperator"></div>
        
@@ -30,20 +41,20 @@
                 <label>Til:</label>
             </div>
             <div class="col-md-6">
-                <input class="fill-width" k-format="'dd/MM/yyyy'" kendo-datepicker k-options="dateOptions" k-ng-model="substituteToDate" />
+                <input ng-disabled="infinitePeriod" class="fill-width" k-format="'dd/MM/yyyy'" kendo-datepicker k-options="dateOptions" k-ng-model="substituteToDate" />
             </div>
         </div>
        
         <div class="seperator"></div>
-        
+
         <div class="row">
             <div class="col-md-6">
-                <label>Organisation:</label>
+                <label>Tidsubegrænset:</label>
             </div>
             <div class="col-md-6">
-                <select class="form-control fill-width" kendo-drop-down-list="PositionDropDown" k-ng-model="orgUnit" k-data-text-field="'ShortDescription'" id=" " k-data-source="orgUnits" k-data-value-field="'Id'"></select>
+                <input class="pull-right" type="checkbox" ng-model="infinitePeriod" />
             </div>
-        </div>
+        </div>  
      
     </div>
 </div>
