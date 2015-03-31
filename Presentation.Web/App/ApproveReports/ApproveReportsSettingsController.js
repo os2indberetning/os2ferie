@@ -6,7 +6,9 @@
        $scope.persons = [];
        $scope.currentPerson = {};
 
-       Person.get({ id: 1 }, function (data) {
+       var personId = 1;
+
+       Person.get({ id: personId }, function (data) {
            $scope.currentPerson = data;
        });
 
@@ -29,7 +31,7 @@
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "odata/Substitutes/Service.Substitute?$expand=OrgUnit,Sub",
+                           url: "odata/Substitutes/Service.Substitute?$expand=OrgUnit,Sub,Person,Leader &$filter=PersonId eq " + personId,
                            dataType: "json",
                            cache: false
                        },
@@ -75,17 +77,34 @@
                columns: [{
                    field: "Sub.FullName",
                    title: "Stedfortræder"
+               },
+               {
+                   field: "Person.FullName",
+                   title: "Stedfortræder for"
+               }, {
+                   field: "OrgUnit.ShortDescription",
+                   title: "Organisationsenhed",
+               }, {
+                   field: "Leader.FullName",
+                   title: "Opsat af"
                }, {
                    field: "StartDateTimestamp",
                    title: "Fra",
-                   template: "#= kendo.toString(new Date(StartDateTimestamp*1000), 'MM/dd/yyyy') #"
+                   template: function (data) {
+                       var m = moment.unix(data.StartDateTimestamp);
+                       return m._d.getDate() + "/" +
+                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                           m._d.getFullYear();
+                   }
                }, {
-                   field: "EndDateTimestamp",
                    title: "Til",
-                   template: "#= kendo.toString(new Date(EndDateTimestamp*1000), 'MM/dd/yyyy') #"
-               }, {
-                   field: "OrgUnit.ShortDescription",
-                   title: "Organisation"
+                   field: "EndDateTimestamp",
+                   template: function (data) {
+                       var m = moment.unix(data.EndDateTimestamp);
+                       return m._d.getDate() + "/" +
+                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                           m._d.getFullYear();
+                   }
                }, {
                    title: "Muligheder",
                    template: "<a ng-click='openEditSubstitute(${Id})'>Rediger</a> | <a ng-click='openDeleteSubstitute(${Id})'>Slet</a>"
@@ -101,7 +120,7 @@
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "odata/Substitutes/Service.Personal?$expand=OrgUnit,Sub,Leader",
+                           url: "odata/Substitutes/Service.Personal?$expand=OrgUnit,Sub,Leader,Person&$filter=LeaderId eq " + personId,
                            dataType: "json",
                            cache: false
                        },
@@ -149,11 +168,11 @@
                    field: "Sub.FullName",
                    title: "Godkender"
                }, {
-                   field: "Leader.FullName",
-                   title: "Afviger"
+                   field: "Person.FullName",
+                   title: "Godkender for"
                }, {
-                   field: "Title",
-                   title: "Ansatte"
+                   field: "Leader.FullName",
+                   title: "Opsat af"
                }, {
                    field: "StartDateTimestamp",
                    title: "Fra",
@@ -181,6 +200,94 @@
                }],
                scrollable: false
            };
+
+           $scope.mySubstitutes = {
+               dataSource: {
+                   type: "odata",
+                   transport: {
+                       read: {
+                           beforeSend: function (req) {
+                               req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
+                           },
+                           url: "odata/Substitutes?$expand=Sub,Person,Leader,OrgUnit &$filter=PersonId eq LeaderId and SubId eq " + personId,
+                           dataType: "json",
+                           cache: false
+                       },
+                       parameterMap: function (options, type) {
+                           var d = kendo.data.transports.odata.parameterMap(options);
+
+                           delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
+
+                           d.$count = true;
+
+                           return d;
+                       }
+                   },
+                   pageSize: 20,
+                   schema: {
+                       data: function (data) {
+                           return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
+                       },
+                       total: function (data) {
+                           return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
+                       }
+                   }
+               },
+               sortable: true,
+               pageable: {
+                   messages: {
+                       display: "{0} - {1} af {2} ", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                       empty: "Ingen stedfortrædere at vise",
+                       page: "Side",
+                       of: "af {0}", //{0} is total amount of pages
+                       itemsPerPage: "stedfortrædere pr. side",
+                       first: "Gå til første side",
+                       previous: "Gå til forrige side",
+                       next: "Gå til næste side",
+                       last: "Gå til sidste side",
+                       refresh: "Genopfrisk",
+                   },
+                   pageSizes: [5, 10, 20, 30, 40, 50]
+               },
+               dataBound: function () {
+                   this.expandRow(this.tbody.find("tr.k-master-row").first());
+               },
+               columns: [
+               {
+                   field: "Sub.FullName",
+                   title: "Stedfortræder"
+               },
+               {
+                   field: "Person.FullName",
+                   title: "Stedfortræder for"
+               }, {
+                   field: "OrgUnit.ShortDescription",
+                   title: "Organisationsenhed",
+               }, {
+                   field: "Leader.FullName",
+                   title: "Opsat af"
+               }, {
+                   field: "StartDateTimestamp",
+                   title: "Fra",
+                   template: function (data) {
+                       var m = moment.unix(data.StartDateTimestamp);
+                       return m._d.getDate() + "/" +
+                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                           m._d.getFullYear();
+                   }
+               }, {
+                   title: "Til",
+                   field: "EndDateTimestamp",
+                   template: function (data) {
+                       var m = moment.unix(data.EndDateTimestamp);
+                       return m._d.getDate() + "/" +
+                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                           m._d.getFullYear();
+                   }
+               }],
+               scrollable: false
+           };
+
        }
 
        $scope.loadGrids();
@@ -221,13 +328,13 @@
                backdrop: 'static',
                size: 'lg',
                resolve: {
-                   persons: function() {
+                   persons: function () {
                        return $scope.persons;
                    },
-                   orgUnits: function() {
+                   orgUnits: function () {
                        return $scope.orgUnits;
                    },
-                   leader: function() {
+                   leader: function () {
                        return $scope.currentPerson;
                    },
                    substituteId: function () {
@@ -273,7 +380,7 @@
            });
        }
 
-       $scope.openEditApprover = function(id) {
+       $scope.openEditApprover = function (id) {
            var modalInstance = $modal.open({
                templateUrl: 'App/ApproveReports/Modals/editApproverModal.html',
                controller: 'EditApproverModalInstanceController',
@@ -354,7 +461,7 @@
            });
        };
 
-       $scope.refreshGrids = function() {
+       $scope.refreshGrids = function () {
            // Below ain't working with angular bindings, or I can't get it to work
 
            $('#substituteGrid').data('kendoGrid').dataSource.read();
