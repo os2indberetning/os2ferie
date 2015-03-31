@@ -346,10 +346,12 @@
     <Content Include="App\Services\OrgUnitResource.js" />
     <Content Include="App\Services\RouteContainerResource.js" />
     <Content Include="App\Services\SubstituteResource.js" />
+    <Content Include="App\Settings\AddressAddModal.html" />
     <Content Include="App\Settings\ModalControllers\AddressDeleteModalController.js" />
     <Content Include="App\Settings\ModalControllers\RouteDeleteModalController.js" />
     <Content Include="App\Settings\AddressDeleteModal.html" />
     <Content Include="App\Settings\RouteDeleteModal.html" />
+    <Content Include="App\Settings\RouteAddModal.html" />
     <Content Include="Content\kendo\Black\editor.png" />
     <Content Include="Content\kendo\Black\imagebrowser.png" />
     <Content Include="Content\kendo\Black\indeterminate.gif" />

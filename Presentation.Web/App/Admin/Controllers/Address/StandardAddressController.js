@@ -12,7 +12,7 @@
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/Addresses",
+                           url: "/odata/Addresses/Service.GetStandard",
                            dataType: "json",
                            cache: false
                        },

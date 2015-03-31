@@ -92,5 +92,13 @@ namespace OS2Indberetning.Controllers
             
             return res.AsQueryable();
         }
+
+        [EnableQuery]
+        public IQueryable<Address> GetStandard()
+        {
+            var rep = Repo.AsQueryable();
+            var res = rep.Where(elem => !(elem is DriveReportPoint || elem is Point)).Where(elem => !(elem is PersonalAddress));
+            return res.AsQueryable();
+        }
     }
 }

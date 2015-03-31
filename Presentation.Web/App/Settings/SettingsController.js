@@ -592,6 +592,27 @@
             });
         };
 
+        $scope.openRouteAddModal = function (id) {
+
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/RouteAddModal.html',
+                controller: 'RouteEditModalInstanceController',
+                backdrop: 'static',
+                resolve: {
+                    routeId: function () {
+                        return;
+                    },
+                    personId: function () {
+                        return $scope.currentPerson.Id;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                $scope.updatePersonalRoutes();
+            });
+        };
+
         $scope.openRouteDeleteModal = function (id) {
 
             var modalInstance = $modal.open({
@@ -610,6 +631,27 @@
 
             modalInstance.result.then(function () {
                 $scope.updatePersonalRoutes();
+            });
+        };
+
+        $scope.openAddressAddModal = function () {
+
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/AddressAddModal.html',
+                controller: 'AddressEditModalInstanceController',
+                backdrop: 'static',
+                resolve: {
+                    addressId: function () {
+                        return;
+                    },
+                    personId: function () {
+                        return $scope.currentPerson.Id;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                $scope.updatePersonalAddresses();
             });
         };
 

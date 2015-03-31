@@ -59,6 +59,10 @@ namespace OS2Indberetning
             .Function("GetPersonalAndStandard")
             .ReturnsFromEntitySet<Address>("Addresses");
 
+            builder.EntityType<Address>().Collection
+            .Function("GetStandard")
+            .ReturnsFromEntitySet<Address>("Addresses");
+
 
 
             builder.EntitySet<DriveReport>("DriveReports");
