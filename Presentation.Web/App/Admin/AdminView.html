@@ -28,8 +28,11 @@
             <tab heading="Administration" ng-controller="AdministrationController">
                 <div ng-include='"App/Admin/HTML/Administration/View.html"'></div>
             </tab>
-
-
+            
+            <tab heading="Indberetninger" ng-controller="AdminPendingReportsController">
+                <div ng-include='"App/Admin/HTML/Reports/View.html"'></div>
+            </tab>
+            
             <tab heading="Stedfortrædere/Godkendere" ng-controller="SubstituteController">
                 <div ng-include='"App/Admin/HTML/Substitutes/View.html"'></div>
             </tab>

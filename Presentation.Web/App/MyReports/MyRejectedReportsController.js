@@ -34,7 +34,6 @@ angular.module("application").controller("MyRejectedReportsController", [
                    },
                    schema: {
                        data: function (data) {
-                           debugger;
                            return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
                        },
                        total: function (data) {
