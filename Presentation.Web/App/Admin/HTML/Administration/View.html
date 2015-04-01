@@ -1,0 +1,32 @@
+﻿<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-users"></i> Administration</h3>
+    </div>
+
+
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="inline pull-left">Administration</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="col-md-2">
+                <input type="text" kendo-auto-complete k-ng-model="person.chosenAdmin" placeholder="'Indtast medarbejder'" k-data-source="nonAdmins" k-data-value-field="'Id'" k-data-text-field="'FullName'" class="form-control" />
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary pull-right" ng-click="addAdminClicked()">Opret admin</button>
+            </div>
+        </div>
+        <div kendo-grid="gridContainer.grid" class="margin-top-10" options="admins"></div>
+
+        <div class="row margin-top-20">
+            <div class="col-md-12">
+                <button class="btn btn-danger fill-width" ng-click="generateKMDFileClicked()">Generer fil til KMD</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -13,6 +13,7 @@
 		initials: string;
 		fullName: string;
 		distanceFromHomeToWork: number;
+		isAdmin: boolean;
 		personalAddresses: any[];
 		personalRoutes: any[];
 		licensePlates: any[];

@@ -278,11 +278,19 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App\Admin\Controllers\Administration\AdministrationController.js" />
+    <Content Include="App\Admin\Controllers\Administration\Modal\GenerateFileModalController.js" />
+    <Content Include="App\Admin\Controllers\Administration\Modal\RemoveAdminModalController.js" />
+    <Content Include="App\Admin\Controllers\Administration\Modal\AddAdminModalController.js" />
     <Content Include="App\Admin\Controllers\OrgUnit\OrgUnitController.js" />
     <Content Include="App\Admin\Controllers\Account\DeleteAccountController.js" />
     <Content Include="App\Admin\Controllers\Account\AccountController.js" />
     <Content Include="App\Admin\Controllers\Rate\RateController.js" />
     <Content Include="App\Admin\Controllers\Substitutes\SubstituteController.js" />
+    <Content Include="App\Admin\HTML\Administration\Modal\ConfirmGenerateFileModalTemplate.html" />
+    <Content Include="App\Admin\HTML\Administration\Modal\RemoveAdminModalTemplate.html" />
+    <Content Include="App\Admin\HTML\Administration\Modal\AddAdminModalTemplate.html" />
+    <Content Include="App\Admin\HTML\Administration\View.html" />
     <Content Include="App\Admin\HTML\OrgUnit\View.html" />
     <Content Include="App\Admin\HTML\Substitutes\View.html" />
     <Content Include="App\Admin\HTML\Account\ConfirmDeleteAccountTemplate.html" />
@@ -341,6 +349,7 @@
     <Content Include="App\MyReports\View.html" />
     <Content Include="App\Services\BankAccountService.js" />
     <Content Include="App\Services\EmailNotificationResouce.js" />
+    <Content Include="App\Services\FileResource.js" />
     <Content Include="App\Services\RateTypeResource.js" />
     <Content Include="App\Services\StandardAddressResource.js" />
     <Content Include="App\Services\OrgUnitResource.js" />

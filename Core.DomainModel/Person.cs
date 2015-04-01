@@ -21,6 +21,7 @@ namespace Core.DomainModel
         public string Initials { get; set; }
         public string FullName { get; set; }
         public double DistanceFromHomeToWork { get; set; }
+        public bool IsAdmin { get; set; }
 
         public ICollection<PersonalAddress> PersonalAddresses { get; set; }
         public ICollection<PersonalRoute> PersonalRoutes { get; set; }
