@@ -16,7 +16,7 @@
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports?type=pending &$expand=DriveReportPoints,ResponsibleLeader",
+                           url: "/odata/DriveReports?status=Pending &$expand=DriveReportPoints,ResponsibleLeader",
                            dataType: "json",
                            cache: false
                        },
@@ -139,7 +139,7 @@
                                  (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                   m._d.getFullYear();
                        },
-                       title: "Indberettet dato"
+                       title: "Indberetningsdato"
                    }, {
                        field: "ResponsibleLeader.FullName",
                        title: "Godkender"

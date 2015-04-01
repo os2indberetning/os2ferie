@@ -200,7 +200,7 @@
                columns: [
                {
                    field: "FullName",
-                   title: "Navn"
+                   title: "Medarbejder"
                }, {
                    field: "Employment.OrgUnit.ShortDescription",
                    title: "Organisationsenhed"

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Web.OData;
 using Core.ApplicationServices.Interfaces;
@@ -57,6 +58,24 @@ namespace Core.ApplicationServices
 
             driveReport.FullName += " " + driveReport.Person.LastName;
             driveReport.FullName += " [" + driveReport.Person.Initials + "]";
+        }
+
+        public IQueryable<DriveReport> AddApprovedByFullName(IQueryable<DriveReport> repo)
+        {
+            foreach (var driveReport in repo.Where(driveReport => driveReport.ApprovedBy != null))
+            {
+                driveReport.ApprovedBy.FullName = driveReport.ApprovedBy.FirstName;
+
+                if (!string.IsNullOrEmpty(driveReport.ApprovedBy.MiddleName))
+                {
+                    driveReport.ApprovedBy.FullName += " " + driveReport.ApprovedBy.MiddleName;
+                }
+
+                driveReport.ApprovedBy.FullName += " " + driveReport.ApprovedBy.LastName;
+
+                driveReport.ApprovedBy.FullName += " [" + driveReport.ApprovedBy.Initials + "]";
+            }
+            return repo;
         }
 
         public DriveReport Create(DriveReport report)

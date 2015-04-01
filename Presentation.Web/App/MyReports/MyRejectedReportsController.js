@@ -5,26 +5,6 @@ angular.module("application").controller("MyRejectedReportsController", [
        // Hardcoded personid until we can get current user from their system.
        var personId = 1;
 
-       // Helper Methods
-
-
-
-
-
-
-       $scope.updateReports = function (oDataQuery) {
-           var and = "and ";
-           if (oDataQuery == "") {
-               and = "";
-           }
-
-           $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' and PersonId eq " + personId + " " + and + oDataQuery;
-           $scope.gridContainer.grid.dataSource.read();
-       }
-
-
-
-
 
        $scope.loadReports = function () {
            $scope.Reports = {
@@ -38,7 +18,7 @@ angular.module("application").controller("MyRejectedReportsController", [
 
 
 
-                           url: "/odata/DriveReports?$filter=Status eq Core.DomainModel.ReportStatus'Rejected' and PersonId eq " + personId,
+                           url: "/odata/DriveReports?status=Rejected &$expand=DriveReportPoints,ApprovedBy",
                            dataType: "json",
                            cache: false
                        },
@@ -54,6 +34,7 @@ angular.module("application").controller("MyRejectedReportsController", [
                    },
                    schema: {
                        data: function (data) {
+                           debugger;
                            return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
                        },
                        total: function (data) {
@@ -63,7 +44,12 @@ angular.module("application").controller("MyRejectedReportsController", [
                    pageSize: 20,
                    serverPaging: false,
                    serverSorting: true,
-                   sort: { field: "DriveDateTimestamp", dir: "desc" }
+                   filter: { field: "PersonId", operator: "eq", value: personId },
+                   sort: { field: "DriveDateTimestamp", dir: "desc" },
+                   aggregate: [
+                   { field: "Distance", aggregate: "sum" },
+                   { field: "AmountToReimburse", aggregate: "sum" },
+                   ]
                },
                sortable: true,
                pageable: {
@@ -154,7 +140,7 @@ angular.module("application").controller("MyRejectedReportsController", [
                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                  m._d.getFullYear();
                       },
-                      title: "Indberettet dato"
+                      title: "Indberetningsdato"
                   }, {
                       field: "ClosedDateTimestamp",
                       title: "Afvist dato",
@@ -170,7 +156,8 @@ angular.module("application").controller("MyRejectedReportsController", [
                       field: "ApprovedBy.FullName",
                       title: "Afvist af"
                   }
-               ]
+               ],
+               scrollable: false
            };
        }
 
@@ -198,30 +185,14 @@ angular.module("application").controller("MyRejectedReportsController", [
 
        // Event handlers
 
-       $scope.pageSizeChanged = function () {
-           $scope.gridContainer.grid.dataSource.pageSize($scope.gridContainer.gridPageSize);
-       }
-
-       $scope.searchClicked = function () {
-           var from, to;
-
-
-           from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
-           to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
-
-           var q = "DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
-           $scope.updateReports(q);
-       }
 
        var initialLoad = 2;
        $scope.dateChanged = function () {
            // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
            $timeout(function () {
-               var from, to, and;
-               and = " and ";
-               from = "DriveDateTimestamp ge " + $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
-               to = "DriveDateTimestamp le " + $scope.getEndOfDayStamp($scope.dateContainer.toDate);
 
+               var from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
+               var to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
 
                // Initial load is also a bit of a hack.
                // dateChanged is called twice when the default values for the datepickers are set.
@@ -229,19 +200,24 @@ angular.module("application").controller("MyRejectedReportsController", [
                // Therefore the sorting is not done the first 2 times the dates change - Which are the 2 times we set the default values.
                if (initialLoad <= 0) {
 
-                   $scope.updateReports(to + and + from);
+                   $scope.applyDateFilter(from, to);
                }
                initialLoad--;
            }, 0);
        }
 
        $scope.clearClicked = function () {
+           $scope.gridContainer.grid.dataSource.filter([{ field: "PersonId", operator: "eq", value: personId }]);
            $scope.loadInitialDates();
-           $scope.updateReports("");
        }
 
-       // Init
-
+       $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
+           var newFilters = [];
+           newFilters.push({ field: "PersonId", operator: "eq", value: personId });
+           newFilters.push({ field: "DriveDateTimestamp", operator: "gte", value: fromDateStamp });
+           newFilters.push({ field: "DriveDateTimestamp", operator: "lte", value: toDateStamp });
+           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
 
        // Load up the grids.
        $scope.loadReports();
@@ -257,7 +233,5 @@ angular.module("application").controller("MyRejectedReportsController", [
        $scope.dateOptions = {
            format: "dd/MM/yyyy",
        };
-
-       $scope.gridContainer.gridPageSize = 20;
    }
 ]);

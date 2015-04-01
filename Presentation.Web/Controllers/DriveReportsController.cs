@@ -38,13 +38,13 @@ namespace OS2Indberetning.Controllers
                 queryably = _driveService.FilterByLeader(queryably, leaderId, getReportsWhereSubExists);
             }
 
-            return _driveService.AttachResponsibleLeader(queryably);
+            return _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(queryably));
         }
 
         //GET: odata/DriveReports(5)
         public IQueryable<DriveReport> GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
-            var res = _driveService.AttachResponsibleLeader(GetQueryable(key, queryOptions));
+            var res = _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(GetQueryable(key, queryOptions)));
             return res;
         }
 

@@ -43,7 +43,8 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                         Id = 1,
                         OrgUnitId = 1
                     },
-                    FullName = "Morten Tester [MT]"
+                    FullName = "Morten Tester [MT]",
+                    Status = ReportStatus.Rejected
                 },
                 new DriveReport
                 {
@@ -57,7 +58,8 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                         Id = 1,
                         OrgUnitId = 1
                     },
-                    FullName = "Morten Tester [MT]"
+                    FullName = "Morten Tester [MT]",
+                    Status = ReportStatus.Accepted
                 },
                 new DriveReport
                 {
@@ -71,8 +73,9 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                         Id = 1,
                         OrgUnitId = 1
                     },
-                    FullName = "Morten Tester [MT]"
-                }
+                    FullName = "Morten Tester [MT]",
+                    Status = ReportStatus.Pending
+                },
             };
         }
         

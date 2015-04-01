@@ -16,6 +16,7 @@ using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 using Microsoft.Owin.Security;
 using NUnit.Framework;
+using Presentation.Web.Test.Controllers.Models;
 using Presentation.Web.Test.Controllers.Persons;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
@@ -251,6 +252,39 @@ namespace Presentation.Web.Test.Controllers.DriveReports
             var patchResponse = await request.SendAsync("PATCH");
 
             Assert.AreEqual(false, MailSenderMock.SendHasBeenCalled);
+        }
+
+        [Test]
+        public async void GetWithStatus_Pending_ShouldReturn_OneReport()
+        {
+            var request =
+                Server.CreateRequest(GetUriPath() + "?status=Pending");
+
+            var response = await request.SendAsync(("GET"));
+            var result = await response.Content.ReadAsAsync<ODataResponse<DriveReport>>();
+            Assert.AreEqual(1,result.value.Count);
+        }
+
+        [Test]
+        public async void GetWithStatus_Accepted_ShouldReturn_OneReport()
+        {
+            var request =
+                Server.CreateRequest(GetUriPath() + "?status=Accepted");
+
+            var response = await request.SendAsync(("GET"));
+            var result = await response.Content.ReadAsAsync<ODataResponse<DriveReport>>();
+            Assert.AreEqual(1, result.value.Count);
+        }
+
+        [Test]
+        public async void GetWithStatus_Rejected_ShouldReturn_OneReport()
+        {
+            var request =
+                Server.CreateRequest(GetUriPath() + "?status=Rejected");
+
+            var response = await request.SendAsync(("GET"));
+            var result = await response.Content.ReadAsAsync<ODataResponse<DriveReport>>();
+            Assert.AreEqual(1, result.value.Count);
         }
     }
 

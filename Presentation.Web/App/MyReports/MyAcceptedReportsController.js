@@ -13,7 +13,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
                            beforeSend: function (req) {
                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                            },
-                           url: "/odata/DriveReports?type=Accepted &$expand=DriveReportPoints,ApprovedBy",
+                           url: "/odata/DriveReports?status=Accepted &$expand=DriveReportPoints,ApprovedBy",
                            dataType: "json",
                            cache: false
                        },
@@ -41,7 +41,11 @@ angular.module("application").controller("MyAcceptedReportsController", [
                    serverSorting: true,
                    serverFiltering: true,
                    filter: [{ field: "PersonId", operator: "eq", value: personId }],
-                   sort: { field: "DriveDateTimestamp", dir: "desc" }
+                   sort: { field: "DriveDateTimestamp", dir: "desc" },
+                   aggregate: [
+                   { field: "Distance", aggregate: "sum" },
+                   { field: "AmountToReimburse", aggregate: "sum" },
+                   ]
                },
                sortable: true,
                pageable: {
@@ -132,7 +136,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                  m._d.getFullYear();
                       },
-                      title: "Indberettet dato"
+                      title: "Indberetningsdato"
                   }, {
                       field: "ClosedDateTimestamp",
                       title: "Godkendelsesdato",

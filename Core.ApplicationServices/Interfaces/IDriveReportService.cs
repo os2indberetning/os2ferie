@@ -15,5 +15,6 @@ namespace Core.ApplicationServices.Interfaces
         void SendMailIfRejectedReport(int key, Delta<DriveReport> delta);
         IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> driveReport);
         IQueryable<DriveReport> FilterByLeader(IQueryable<DriveReport> repo, int leaderId, bool getReportsWhereSubExists = false);
+        IQueryable<DriveReport> AddApprovedByFullName(IQueryable<DriveReport> repo);
     }
 }
