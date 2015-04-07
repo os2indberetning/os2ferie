@@ -1,5 +1,6 @@
 ﻿/**
   * Sets the color of the frame of the page
+  * and the color of selected tabs.
   */
 body, 
 .navbar-inverse,
@@ -8,6 +9,9 @@ body,
 .side-nav li a:focus, 
 .navbar-inverse .navbar-nav>.active>a, 
 .navbar-inverse .navbar-nav>.active>a:focus,
-.navbar-inverse .navbar-nav>.active>a:hover {
+.navbar-inverse .navbar-nav>.active>a:hover,
+.nav-tabs.nav-justified > .active > a,
+ .nav-tabs.nav-justified > .active > a:focus,
+ .nav-tabs.nav-justified > .active > a:hover {
     background-color: #6B2D52 !important;
 }

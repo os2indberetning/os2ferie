@@ -120,7 +120,8 @@ a {
 }
 
 .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:focus, .nav-tabs.nav-justified > .active > a:hover {
-    background-color: #F5F5F5;
+    color: #fff;
+    opacity: 0.75;
     border-color: #ddd;
 }
 
