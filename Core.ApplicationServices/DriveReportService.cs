@@ -168,15 +168,19 @@ namespace Core.ApplicationServices
         public void SendMailIfRejectedReport(int key, Delta<DriveReport> delta)
         {
             var status = new object();
-            if (delta.TryGetPropertyValue("Status", out status) && status.ToString().Equals("Rejected"))
+            if (delta.TryGetPropertyValue("Status", out status))
             {
-                var recipient = _driveReportRepository.AsQueryable().First(r => r.Id == key).Person.Mail;
-                var comment = new object();
-                if (delta.TryGetPropertyValue("Comment", out comment))
+                if (status.ToString().Equals("Rejected"))
                 {
-                    _mailSender.SendMail(recipient, "Afvist indberetning",
-                        "Din indberetning er blevet afvist med kommentaren: \n \n" + comment);
+                    var recipient = _driveReportRepository.AsQueryable().First(r => r.Id == key).Person.Mail;
+                    var comment = new object();
+                    if (delta.TryGetPropertyValue("Comment", out comment))
+                    {
+                        _mailSender.SendMail(recipient, "Afvist indberetning",
+                            "Din indberetning er blevet afvist med kommentaren: \n \n" + comment);
+                    }
                 }
+                
             }
         }
 

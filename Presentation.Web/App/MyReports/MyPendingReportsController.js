@@ -181,6 +181,7 @@
            var modalInstance = $modal.open({
                templateUrl: '/App/MyReports/ConfirmDeleteTemplate.html',
                controller: 'ConfirmDeleteReportController',
+               backdrop: "static",
                resolve: {
                    itemId: function () {
                        return id;
@@ -196,27 +197,16 @@
        }
 
        $scope.editClick = function (id) {
-           // Create a new scope to inject into EditReportController
-           var scope = $rootScope.$new();
-
-           // Get the report from the server
-           Report.get({ id: id }, function (data) {
-               // Set values in the scope.
-               scope.purpose = data[0].purpose;
-               scope.driveDate = moment.unix(data[0].driveDateTimestamp).format("DD/MM/YYYY");
-           });
-
-
-
            var modalInstance = $modal.open({
-               scope: scope,
-               templateUrl: '/App/MyReports/EditReportModal.html',
+               templateUrl: '/App/MyReports/EditReportTemplate.html',
                controller: 'EditReportController',
-               windowClass: 'full',
-           });
-
-           modalInstance.result.then(function (itemId) {
-
+               backdrop: "static",
+               windowClass: "app-modal-window-full",
+               resolve: {
+                   reportId: function () {
+                       return id;
+                   }
+               }
            });
        }
 

@@ -341,3 +341,7 @@ a {
 .transparent-background {
     background: transparent;
 }
+
+.app-modal-window-full .modal-dialog {
+  width: 95%;
+}
