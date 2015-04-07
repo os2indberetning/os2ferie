@@ -7,6 +7,8 @@
         // Hardcoded personId
         var personId = 1;
 
+        // Is filled with the default address for the map widget.
+        var mapStartAddress = [];
 
         // Magic variable. Is checked when calling generateMapWidget to make sure it is only called when we manually change the gui. IE. not by changes on the map.
         // When the map is changes by the map, the variable is set to the number of address points and is decremented by one for each time a gui element changes
@@ -48,10 +50,7 @@
 
 
         $scope.getDefaultMapAddresses = function () {
-            return [
-                { name: "Banegårdspladsen 1, 8000, Aarhus C", lat: 56.1504, lng: 10.2045 },
-                { name: "Banegårdspladsen 1, 8000, Aarhus C", lat: 56.1504, lng: 10.2045 }
-            ];
+            return mapStartAddress;
         }
 
         $scope.Person = Person.get({ id: personId }, function () {
@@ -571,12 +570,21 @@
             $scope.validateInput();
         }
 
-        OS2RouteMap.create({
-            id: 'map',
-            change: routeMapChanged
+        Address.getMapStart(function(res) {
+            mapStartAddress = [
+                { name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude },
+                { name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude }
+            ];
+
+            OS2RouteMap.create({
+                id: 'map',
+                change: routeMapChanged
+            });
+
+            OS2RouteMap.set($scope.getDefaultMapAddresses());
         });
 
-        OS2RouteMap.set($scope.getDefaultMapAddresses());
+        
 
         $scope.employmentChanged = function () {
             // Clear the checkbox and the value field before checking.

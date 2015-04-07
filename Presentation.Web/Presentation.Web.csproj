@@ -289,6 +289,8 @@
     <Content Include="App\Admin\Controllers\Reports\AdminAcceptedReportsController.js" />
     <Content Include="App\Admin\Controllers\Reports\AdminPendingReportsController.js" />
     <Content Include="App\Admin\Controllers\Reports\AdminRejectedReportsController.js" />
+    <Content Include="App\Admin\Controllers\Reports\Modal\ShowRouteModalController.js" />
+    <Content Include="App\Admin\HTML\Reports\Modal\ShowRouteModalTemplate.html" />
     <Content Include="App\Admin\Controllers\Substitutes\SubstituteController.js" />
     <Content Include="App\Admin\HTML\Administration\Modal\ConfirmGenerateFileModalTemplate.html" />
     <Content Include="App\Admin\HTML\Administration\Modal\RemoveAdminModalTemplate.html" />

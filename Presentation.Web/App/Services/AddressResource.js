@@ -35,6 +35,11 @@
             transformResponse: function (data) {
                 return angular.fromJson(data).value;
             }
+        },
+        "getMapStart": {
+            method: "GET",
+            url: "/odata/Addresses/Service.GetMapStart",
+            isArray: false
         }
     });
 }]);

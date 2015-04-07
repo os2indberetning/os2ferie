@@ -201,6 +201,10 @@
     <Compile Include="Migrations\201504010838439_AddedIsAdminToUser.Designer.cs">
       <DependentUpon>201504010838439_AddedIsAdminToUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504070851025_AddedRouteGeometryToDriveReport.cs" />
+    <Compile Include="Migrations\201504070851025_AddedRouteGeometryToDriveReport.Designer.cs">
+      <DependentUpon>201504070851025_AddedRouteGeometryToDriveReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -320,6 +324,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504010838439_AddedIsAdminToUser.resx">
       <DependentUpon>201504010838439_AddedIsAdminToUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504070851025_AddedRouteGeometryToDriveReport.resx">
+      <DependentUpon>201504070851025_AddedRouteGeometryToDriveReport.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

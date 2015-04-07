@@ -136,6 +136,9 @@ namespace Core.ApplicationServices
                     //Set distance to corrected
                     report.Distance = correctDistance;
 
+                    //Save RouteGeometry
+                    report.RouteGeometry = drivenRoute.GeoPoints;
+
                     break;
                 }
                 case KilometerAllowance.CalculatedWithoutExtraDistance:
@@ -151,6 +154,9 @@ namespace Core.ApplicationServices
                     {
                         report.Distance -= 4;
                     }
+
+                    //Save RouteGeometry
+                    report.RouteGeometry = drivenRoute.GeoPoints;
 
 
                     break;

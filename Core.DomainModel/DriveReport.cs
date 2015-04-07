@@ -31,6 +31,7 @@ namespace Core.DomainModel
         public KilometerAllowance KilometerAllowance { get; set; }
         public bool IsFromApp { get; set; }
         public string UserComment { get; set; }
+        public string RouteGeometry { get; set; }
 
 
         public virtual ICollection<DriveReportPoint> DriveReportPoints { get; set; }

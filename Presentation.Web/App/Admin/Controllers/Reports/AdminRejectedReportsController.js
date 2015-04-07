@@ -1,6 +1,6 @@
 
 angular.module("application").controller("AdminRejectedReportsController", [
-   "$scope", "$timeout", function ($scope, $timeout) {
+   "$scope", "$timeout", "$modal", function ($scope, $timeout, $modal) {
 
        // Hardcoded personid until we can get current user from their system.
        var personId = 1;
@@ -119,7 +119,7 @@ angular.module("application").controller("AdminRejectedReportsController", [
                                gridContent += point.StreetName;
                            }
                        });
-                       var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
+                       var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
 
                        if (data.KilometerAllowance != "Read") {
                            return result;
@@ -201,7 +201,18 @@ angular.module("application").controller("AdminRejectedReportsController", [
            $scope.dateContainer.fromDate = from;
        }
 
-
+       $scope.showRouteModal = function (routeId) {
+           var modalInstance = $modal.open({
+               templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
+               controller: 'ShowRouteModalController',
+               backdrop: "static",
+               resolve: {
+                   routeId: function () {
+                       return routeId;
+                   }
+               }
+           });
+       }
 
        // Event handlers
 

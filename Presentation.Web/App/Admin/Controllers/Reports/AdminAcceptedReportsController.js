@@ -1,5 +1,5 @@
 angular.module("application").controller("AdminAcceptedReportsController", [
-   "$scope", "$timeout", function ($scope, $timeout) {
+   "$scope", "$timeout", "$modal", function ($scope, $timeout, $modal) {
 
        // Hardcoded personid until we can get current user from their system.
        var personId = 1;
@@ -116,13 +116,13 @@ angular.module("application").controller("AdminAcceptedReportsController", [
                                gridContent += point.Town;
                            }
                        });
-                       var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
+                       var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
 
                        if (data.KilometerAllowance != "Read") {
                            return result;
                        } else {
                            if (data.IsFromApp) {
-                               return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst fra GPS</div>";
+                               return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
                            } else {
                                return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
                            }
@@ -226,7 +226,18 @@ angular.module("application").controller("AdminAcceptedReportsController", [
            $scope.dateContainer.fromDate = from;
        }
 
-
+       $scope.showRouteModal = function (routeId) {
+           var modalInstance = $modal.open({
+               templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
+               controller: 'ShowRouteModalController',
+               backdrop: "static",
+               resolve: {
+                   routeId: function () {
+                       return routeId;
+                   }
+               }
+           });
+       }
 
 
        var initialLoad = 2;

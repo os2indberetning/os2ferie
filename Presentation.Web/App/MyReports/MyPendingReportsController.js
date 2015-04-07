@@ -104,13 +104,13 @@
                                    gridContent += point.Town;
                                }
                            });
-                           var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
+                           var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
 
                            if (data.KilometerAllowance != "Read") {
                                return result;
                            } else {
                                if (data.IsFromApp) {
-                                   return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst fra GPS</div>";
+                                   return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
                                } else {
                                    return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
                                }
@@ -269,6 +269,19 @@
            newFilters.push({ field: "DriveDateTimestamp", operator: "gte", value: fromDateStamp });
            newFilters.push({ field: "DriveDateTimestamp", operator: "lte", value: toDateStamp });
            $scope.gridContainer.grid.dataSource.filter(newFilters);
+       }
+
+       $scope.showRouteModal = function (routeId) {
+           var modalInstance = $modal.open({
+               templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
+               controller: 'ShowRouteModalController',
+               backdrop: "static",
+               resolve: {
+                   routeId: function () {
+                       return routeId;
+                   }
+               }
+           });
        }
 
    }

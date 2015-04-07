@@ -63,7 +63,9 @@ namespace OS2Indberetning
             .Function("GetStandard")
             .ReturnsFromEntitySet<Address>("Addresses");
 
-
+            builder.EntityType<Address>().Collection
+                .Function("GetMapStart")
+                .ReturnsFromEntitySet<Address>("Addresses");
 
             builder.EntitySet<DriveReport>("DriveReports");
 
@@ -79,7 +81,7 @@ namespace OS2Indberetning
 
             //var lType = builder.EntityType<LicensePlate>();
             //lType.Ignore(l => l.Person);
-           
+
 
             builder.EntitySet<MailNotificationSchedule>("MailNotifications");
 

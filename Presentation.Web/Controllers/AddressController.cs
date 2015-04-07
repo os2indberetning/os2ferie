@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -17,7 +18,9 @@ namespace OS2Indberetning.Controllers
 
     public class AddressesController : BaseController<Address>
     {
-          //GET: odata/Addresses
+        private static Address MapStartAddress { get; set; }
+        
+        //GET: odata/Addresses
         public AddressesController(IGenericRepository<Address> repository) : base(repository){}
 
         [EnableQuery]
@@ -26,6 +29,24 @@ namespace OS2Indberetning.Controllers
             var res = GetQueryable(queryOptions);
             return res;
         }
+
+        public Address GetMapStart()
+        {
+            if (MapStartAddress == null)
+            {
+                var coordinates = NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>();
+                MapStartAddress = new Address
+                {
+                    StreetName = ConfigurationManager.AppSettings["MapStartStreetName"],
+                    StreetNumber = ConfigurationManager.AppSettings["MapStartStreetNumber"],
+                    ZipCode = int.Parse(ConfigurationManager.AppSettings["MapStartZipCode"]),
+                    Town = ConfigurationManager.AppSettings["MapStartTown"],
+                };
+
+                MapStartAddress = coordinates.GetAddressCoordinates(MapStartAddress);
+            }
+            return MapStartAddress;
+        } 
 
         //GET: odata/Addresses(5)
         public IQueryable<Address> Get([FromODataUri] int key, ODataQueryOptions<Address> queryOptions)
