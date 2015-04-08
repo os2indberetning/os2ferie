@@ -24,11 +24,16 @@ namespace Core.DomainModel
         public bool FourKmRule { get; set; }
         public bool StartsAtHome { get; set; }
         public bool EndsAtHome { get; set; }
-        public string Licenseplate { get; set; }
-        public string Fullname { get; set; }
+        public string LicensePlate { get; set; }
+        public string FullName { get; set; }
         public string AccountNumber { get; set; }
+        public string TFCode { get; set; }
         public KilometerAllowance KilometerAllowance { get; set; }
+        public bool IsFromApp { get; set; }
+        public string UserComment { get; set; }
+        public string RouteGeometry { get; set; }
 
-        public ICollection<DriveReportPoint> DriveReportPoints { get; set; }
+
+        public virtual ICollection<DriveReportPoint> DriveReportPoints { get; set; }
     }
 }

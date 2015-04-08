@@ -19,6 +19,27 @@
             transformResponse: function (data) {
                 return angular.fromJson(data).value;
             }
+        },
+        "setCoordinatesOnAddress": {
+            method: "POST",
+            url: "/odata/Addresses/Service.SetCoordinatesOnAddress",
+            isArray: true,
+            transformResponse: function(data) {
+                return angular.fromJson(data).value;
+            }
+        },
+        "GetPersonalAndStandard": {
+            method: "GET",
+            url: "/odata/Addresses/Service.GetPersonalAndStandard?personId=:personId",
+            isArray: true,
+            transformResponse: function (data) {
+                return angular.fromJson(data).value;
+            }
+        },
+        "getMapStart": {
+            method: "GET",
+            url: "/odata/Addresses/Service.GetMapStart",
+            isArray: false
         }
     });
 }]);

@@ -28,13 +28,21 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<Person> GetPerson(ODataQueryOptions<Person> queryOptions)
         {
-            return _person.ScrubCprFromPersons(GetQueryable(queryOptions));
+            var res = GetQueryable(queryOptions);
+            _person.ScrubCprFromPersons(res);
+            _person.AddFullName(res);
+            return res;
         }
 
         //GET: odata/Person(5)
         public IQueryable<Person> GetPerson([FromODataUri] int key, ODataQueryOptions<Person> queryOptions)
         {
-            return _person.ScrubCprFromPersons(GetQueryable(key, queryOptions));
+            var cprScrubbed = _person.ScrubCprFromPersons(GetQueryable(key, queryOptions));
+            _person.AddFullName(cprScrubbed);
+            var res = cprScrubbed.ToList();
+            res[0].DistanceFromHomeToWork = _person.GetDistanceFromHomeToWork(res[0]);
+
+            return res.AsQueryable();
         }
 
         // PUT: odata/Person(5)
@@ -72,7 +80,7 @@ namespace OS2Indberetning.Controllers
             return result.AsQueryable();
         }
 
-        // GET: odata/Person(5)/PersonService.HasLicensePlate
+        // GET: odata/Person(5)/Service.HasLicensePlate
         [EnableQuery]
         [HttpGet]
         public IHttpActionResult HasLicensePlate([FromODataUri] int key, ODataActionParameters parameters)

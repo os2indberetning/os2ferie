@@ -1,0 +1,75 @@
+﻿<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-money"></i> Kontostyring</h3>
+    </div>
+
+   
+
+    <div class="panel-body">
+        
+        
+        <div class="col-md-6">
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="pull-left">Opret afvigende kontering</h2>
+                </div>
+            </div>
+
+
+            <div class="col-md-12 margin-5">
+                <div class="col-md-4">
+                    <label>Type</label>
+                </div>
+                <div class="col-md-8">
+                    <select kendo-drop-down-list ng-model="container.newAccountType" class="fill-width">
+                        <option value="0">Omkostningssted</option>
+                        <option value="1">PSP-element</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-12 margin-5">
+                <div class="col-md-4">
+                    <label>Kontonummer</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="form-control" ng-model="container.newAccountAccountNumber" />
+                </div>
+            </div>
+
+            <div class="col-md-12 margin-5">
+                <div class="col-md-4">
+                    <label>Beskrivelse</label>
+                </div>
+                <div class="col-md-8">
+                    <textarea type="text" class="form-control min-height-100 max-width-100p" ng-model="container.newAccountDescription"></textarea>
+                </div>
+            </div>
+            <div class="col-md-12 margin-5">
+                <div class="col-md-3 pull-right">
+                    <button class="btn btn-primary fill-width" ng-click="addNewAccountClick()">Opret</button>
+                </div>
+
+            </div>
+            <label class="text-danger" ng-bind="accountNumberRegNumberErrorMessage"></label><br />
+            <label class="text-danger" ng-bind="accountNumberErrorMessage"></label><br />
+            <label class="text-danger" ng-bind="accountDescriptionErrorMessage"></label>
+
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <h2>
+                Afvigende konteringer
+            </h2>
+            <div kendo-grid="container.accountGrid" class="margin-5" options="accounts"></div>
+        </div>
+
+
+
+    </div>
+</div>

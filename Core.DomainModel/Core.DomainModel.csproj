@@ -68,6 +68,7 @@
     <Compile Include="Example\TestReport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rate.cs" />
+    <Compile Include="RateType.cs" />
     <Compile Include="Report.cs" />
     <Compile Include="Substitute.cs" />
     <Compile Include="Example\Product.cs" />

@@ -10,7 +10,13 @@ packages\OpenCover.4.5.3522\OpenCover.Console.exe -target:RunPresentationWebTest
 packages\ReportGenerator.2.1.1.0\reportgenerator.exe -reports:results.xml -targetdir:coverage/PresentationWeb
 
 
+REM Run ConsoleApplications tests and generate a report containing the coverage
+
+packages\OpenCover.4.5.3522\OpenCover.Console.exe -target:RunConsoleApplicationsTests.bat -register:user -filter:+* 
+packages\ReportGenerator.2.1.1.0\reportgenerator.exe -reports:results.xml -targetdir:coverage/ConsoleApplications
+
 REM Run all tests and generate one report containing the coverage
 
 packages\OpenCover.4.5.3522\OpenCover.Console.exe -target:RunAllTests.bat -register:user -filter:+* 
 packages\ReportGenerator.2.1.1.0\reportgenerator.exe -reports:results.xml -targetdir:coverage/AllTests
+

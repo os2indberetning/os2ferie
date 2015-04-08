@@ -24,7 +24,7 @@ namespace Presentation.Web.Test.Controllers.Rates
             return new Rate
             {
                 Id = 1,
-                Type = "Type 1",
+                Type = new RateType(){Description = "Type 1"},
                 Year = 2015
             };
         }
@@ -34,7 +34,7 @@ namespace Presentation.Web.Test.Controllers.Rates
             return new Rate
             {
                 Id = 2,
-                Type = "Type 2",
+                Type = new RateType() { Description = "Type 2" },
                 Year = 2035
             };
         }
@@ -44,7 +44,7 @@ namespace Presentation.Web.Test.Controllers.Rates
             return new Rate
             {
                 Id = 3,
-                Type = "Type 3",
+                Type = new RateType() { Description = "Type 3" },
                 Year = 2013
             };
         }
@@ -54,7 +54,7 @@ namespace Presentation.Web.Test.Controllers.Rates
             return new Rate
             {
                 Id = 4,
-                Type = "Type Posted",
+                Type = new RateType() { Description = "Type Posted" },
                 Year = 1313
             };
         }
@@ -64,7 +64,7 @@ namespace Presentation.Web.Test.Controllers.Rates
             return new Rate
             {
                 Id = 3,
-                Type = "Type Patched",
+                Type = new RateType() { Description = "Type Patched" },
                 Year = 2000
             };
         }
@@ -72,7 +72,6 @@ namespace Presentation.Web.Test.Controllers.Rates
         protected override void AsssertEqualEntities(Rate entity1, Rate entity2)
         {
             Assert.AreEqual(entity1.Id, entity2.Id, "Id of the two rates should be the same");
-            Assert.AreEqual(entity1.Type, entity2.Type, "Type of the two rates should be the same");
             Assert.AreEqual(entity1.Year, entity2.Year, "Year of the two rates should be the same");
         }
 
@@ -80,7 +79,7 @@ namespace Presentation.Web.Test.Controllers.Rates
         {
             return @"{
                         'Id': 4,
-                        'Type': 'Type Posted',
+                        'Type': {'Description' : 'Type Posted'},
                         'Year': 1313
             }";
         }
@@ -88,7 +87,6 @@ namespace Presentation.Web.Test.Controllers.Rates
         protected override string GetPatchBodyContent()
         {
             return @"{
-                        'Type' : 'Type Patched',
                         'Year' : 2000
                     }";
         }

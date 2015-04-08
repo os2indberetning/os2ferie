@@ -22,14 +22,14 @@
             return;
         }
 
-        Route.get({ id: personId, query: "$filter=Id eq " + routeId }, function (data) {
+        Route.get({ query: "$filter=Id eq " + routeId }, function (data) {
             $scope.oldRouteDescription = data.value[0].Description;
             $scope.newRouteDescription = $scope.oldRouteDescription;
         }, function () {
             NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke hente ruteinformation");
         });
 
-        $scope.routePoints = Point.get({ id: personId, query: "$filter=PersonalRouteId eq " + routeId }, function (data) {
+        $scope.routePoints = Point.get({ query: "$filter=PersonalRouteId eq " + routeId }, function (data) {
             angular.forEach(data.value, function (value, key) {
                 if (value.NextPointId == null) {
                     $scope.oldEndPointId = value.Id;
@@ -158,10 +158,10 @@
                     queryTwo = $scope.viaPoints[key + 1].Id;
                 }
 
-                Point.get({ id: personId, query: "$filter=Id eq " + queryOne }, function (data1) {
+                Point.get({ query: "$filter=Id eq " + queryOne }, function (data1) {
                     newViaPoint.PreviousPointId = data1.value[0].Id;
 
-                    Point.get({ id: personId, query: "$filter=Id eq " + queryTwo }, function (data2) {
+                    Point.get({ query: "$filter=Id eq " + queryTwo }, function (data2) {
                         newViaPoint.NextPointId = data2.value[0].Id;
 
                         var id = routeId;
@@ -172,18 +172,19 @@
 
                         newViaPoint.$post(function (data3) {
                             var previous = new Point({
-                                NextPointId: data3.value[0].Id,
+                                NextPointId: data3.Id,
                                 PersonalRouteId: id
                             });
 
                             var next = new Point({
-                                PreviousPointId: data3.value[0].Id,
+                                PreviousPointId: data3.Id,
                                 PersonalRouteId: id
                             });
 
-                            previous.$patch({ id: data3.value[0].PreviousPointId }, function () {
-                                next.$patch({ id: data3.value[0].NextPointId }, function () {
+                            previous.$patch({ id: data3.PreviousPointId }, function () {
+                                next.$patch({ id: data3.NextPointId }, function () {
                                     NotificationService.AutoFadeNotification("success", "Success", "Viapunkt oprettet");
+                                    $modalInstance.close('');
                                 });
                             });
 
@@ -203,6 +204,7 @@
 
                 existingViaPoint.$patch({ id: $scope.viaPoints[key].Id }, function () {
                     NotificationService.AutoFadeNotification("success", "Success", "Viapunkt opdateret");
+                    $modalInstance.close('');
                 });
             }
         });
@@ -240,6 +242,7 @@
             route.$patch({ id: routeId }, function () {
                 $scope.handleStartPointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Rutebeskrivelse opdateret");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Rutebeskrivelse blev ikke opdateret");
             });
@@ -253,6 +256,7 @@
                 $scope.newRouteId = data.Id;
                 $scope.handleStartPointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Ny rute oprettet");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette ny rute");
                 return;
@@ -283,6 +287,7 @@
             startPoint.$patch({ id: result1.Id }, function (data) {
                 $scope.handleEndpointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Startadresse opdateret");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Startadresse blev ikke opdateret");
             });
@@ -304,6 +309,7 @@
                 $scope.newRouteStartPointId = data.Id;
                 $scope.handleEndpointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Startadresse til ny rute oprettet");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Startadresse blev ikke opdateret");
                 return;
@@ -334,6 +340,7 @@
 
             endPoint.$patch({ id: result2.Id }, function () {
                 NotificationService.AutoFadeNotification("success", "Success", "Slutadresse opdateret");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Slutadresse blev ikke opdateret");
             });
@@ -355,19 +362,20 @@
                 $scope.newRouteEndPointId = data1.Id;
 
                 //PATCH START ADDRESS FOR NEW ROUTE
-                Point.get({ id: personId, query: "$filter=Id eq " + $scope.newRouteStartPointId }, function (data2) {
+                Point.get({ query: "$filter=Id eq " + $scope.newRouteStartPointId }, function (data2) {
                     var patchedStartPoint = new Point({
                         NextPointId: data1.Id,
                         PersonalRouteId: data1.PersonalRouteId
                     });
 
-                    patchedStartPoint.$patch({ id: data2.Id }, function() {
+                    patchedStartPoint.$patch({ id: data2.value[0].Id }, function() {
                         //Handle via points
                         $scope.saveViaPoints();
                     });
                 });
 
                 NotificationService.AutoFadeNotification("success", "Success", "Slutadresse til ny rute oprettet");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Slutadresse blev ikke opdateret");
                 return;

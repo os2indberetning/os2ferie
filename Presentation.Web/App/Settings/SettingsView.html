@@ -1,7 +1,7 @@
 ﻿<div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            Personlige indstillinger <small>Administrer personlige indstillinger</small>
+            Personlige indstillinger
         </h1>
     </div>
 </div>
@@ -11,26 +11,53 @@
             <div class="col-lg-12">
                 <div class="form-group form-inline">
                     <h3>Diverse</h3>
-                    
+
                     <label for="">Registreringsnummer på bil:</label>
                     <div></div>
-                    <input ng-model="newLicensePlate" class="form-control" placeholder="AB 12 345" />
-                    <input ng-model="newLicensePlateDescription" class="form-control" placeholder="VW Polo" />
+                    <input ng-model="newLicensePlate" class="" kendo-masked-text-box k-mask="'&& && &&&'" placeholder="AB 12 345" />
+                    <input ng-model="newLicensePlateDescription" class="k-textbox" placeholder="Kommentar" />
                     <button type="submit" class="btn btn-primary" ng-click="saveNewLicensePlate()">Tilføj</button>
                     <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Vis nummerplader</button>
                     <div collapse="isCollapsed">
                         <div class="well well-lg">
-                            <ul class="license-plate-list">
-                                <li ng-repeat="plate in licenseplates">
-                                    <pre><strong>{{plate.Description}}: {{ plate.Plate }}</strong><button class="btn btn-danger pull-right" ng-click="deleteLicensePlate(plate)">Slet</button></pre>
-                                </li>
-                            </ul>
+                            <div class="row margin-5">
+                                <div class="col-md-3">
+                                    <p class="margin-5"><strong>Beskrivelse</strong></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="margin-5"><strong>Nummerplade</strong></p>
+                                </div>
+                                <div class="col-md-1">
+                                    <p class="margin-5"><strong>Primær</strong></p>
+                                </div>
+                                <div class="col-md-1">
+                                    <span class="info-popup pull-right margin-5" popover="Den primære nummerplade bruges ved mobil-indberetninger." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+                                </div>
+                            </div>
+                            <div class="row margin-5" ng-repeat="plate in licenseplates">
+                                <div class="col-md-3">
+                                    <p class="margin-5">{{plate.Description}}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="margin-5">{{ plate.Plate}}</p>
+                                </div>
+                                <div class="col-md-1">
+                                    <p class="margin-5" ng-if="plate.IsPrimary"><i class="fa fa-check"></i></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <button ng-disabled="plate.IsPrimary" class="btn btn-primary pull-right" ng-click="makeLicensePlatePrimary(plate)">Gør primær</button>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-danger pull-left margin-left-5" ng-click="deleteLicensePlate(plate)">Slet</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="seperator"></div>
-                    <label for="">Afstand mellem hjemme- og arbejdsadresse:</label>
+                    <label for="">Afvigende afstand mellem hjemme- og arbejdsadresse:</label>
+                    <span class="info-popup" popover="Du kan taste en afvigende afstand mellem bopæl og arbejdsplads ind hér, hvis systemet beregner en anden afstand end den du egentlig kører. HUSK! Denne afvigende afstand også er dén du skal indberette til rubrik 51 på din forskudsopgørelse ved Skat." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                     <div></div>
-                    <input ng-model="workDistanceOverride" class="form-control" placeholder="0" /><label>km</label>
+                    <input ng-model="workDistanceOverride" class="k-textbox" placeholder="0" /><label>km</label>
                     <button type="submit" class="btn btn-primary" ng-click="setHomeWorkOverride()">Gem ændringer</button>
                 </div>
             </div>
@@ -69,9 +96,52 @@
         <div class="row setting-area">
             <div class="col-lg-12">
                 <div class="form-group form-inline">
-                    <h3>Mobil tokens</h3>
+                    <h3>Mobiltokens til app</h3>
+
                     <label for="">Se eller opret tokens til din mobiltelefon</label>
-                    <button class="btn btn-default" ng-click="openTokenModal()">Mine tokens</button>
+                    <span class="info-popup" popover="Der er også mulighed for at indberette befordring via en app. Mobiltoken bruges til at forbinde din mobile enhed med eIndberetning. Du kan høre mere om app’en ved din leder." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+                    <div class="row margin-5">
+                        <div class="col-md-4">
+                            <p class="margin-5"><strong>Token</strong></p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="margin-5"><strong>Beskrivelse</strong></p>
+                        </div>
+                        
+                    </div>
+                    <div class="row margin-5" ng-repeat="token in tokens">
+                        <div class="col-md-4">
+                            <p class="margin-5">{{ token.Token }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="margin-5">{{ token.Description }}</p>
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            <button class="btn btn-danger pull-right margin-left-5" ng-click="openConfirmDeleteTokenModal(token)">Slet</button>
+                        </div>
+                    </div>
+
+                    <div collapse="tokenIsCollapsed">
+                        <div class="row margin-5">
+                            <div class="col-md-10 margin-bottom-10">
+                                <input ng-model="newTokenDescription" class="form-control  fill-fifty pull-left" placeholder="Beskrivelse" />
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success pull-right margin-left-5" ng-click="saveToken()">Gem</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 margin-bottom-5">
+
+                        <button class="btn btn-success pull-right fill-width" ng-click="newToken()"><span ng-if="tokenIsCollapsed">Opret ny token</span><span ng-if="!tokenIsCollapsed">Annuller</span></button>
+
+
+                    </div>
+
+
+
+
                 </div>
             </div>
         </div>
@@ -82,7 +152,7 @@
                 <div class="form-group form-inline">
                     <h3>Personlige adresser</h3>
                     <div kendo-grid="gridContainer.personalAddressesGrid" options="personalAddresses"></div>
-                    <button class="btn btn-default set-margin-top-10" ng-click="openAddressEditModal()">Opret ny personlig adresse</button>
+                    <button class="btn btn-default set-margin-top-10" ng-click="openAddressAddModal()">Tilføj ny personlig adresse</button>
                 </div>
             </div>
         </div>
@@ -91,9 +161,9 @@
                 <div class="form-group form-inline">
                     <h3>Personlige ruter</h3>
                     <div kendo-grid="gridcontainer.personalRoutesGrid" options="personalRoutes"></div>
-                    <button class="btn btn-default set-margin-top-10" ng-click="openRouteEditModal()">Opret ny rute</button>
-                </div>                
-            </div>            
+                    <button class="btn btn-default set-margin-top-10" ng-click="openRouteAddModal()">Tilføj ny personlig rute</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

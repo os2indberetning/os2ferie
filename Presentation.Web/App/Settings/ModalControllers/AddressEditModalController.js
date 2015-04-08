@@ -6,10 +6,10 @@
 
     $scope.loadAddressData= function() {
         if (addressId != undefined) {
-            Address.get({ id: personId, query: "$filter=Id eq " + addressId }, function (data) {
-                $scope.oldAddressId = data[0].Id;
-                $scope.addressDescription = data[0].Description;
-                $scope.oldAddress = data[0].StreetName + " " + data[0].StreetNumber + ", " + data[0].ZipCode + " " + data[0].Town;
+            Address.get({ query: "$filter=Id eq " + addressId }, function (data) {
+                $scope.oldAddressId = data.value[0].Id;
+                $scope.addressDescription = data.value[0].Description;
+                $scope.oldAddress = data.value[0].StreetName + " " + data.value[0].StreetNumber + ", " + data.value[0].ZipCode + " " + data.value[0].Town;
             });
         }
     }
@@ -38,6 +38,7 @@
 
             updatedAddress.$patch({ id: result.Id }, function () {
                 NotificationService.AutoFadeNotification("success", "Success", "Adresse opdateret");
+                $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke opdateret");
             });
@@ -50,15 +51,18 @@
                 Town: result.Town,
                 Description: $scope.addressDescription,
                 Latitude: "",
-                Longitude: ""
+                Longitude: "",
+                Type: "Standard"
             });
 
             newAddress.$post(function() {
                 NotificationService.AutoFadeNotification("success", "Success", "Adresse oprettet");
+                $modalInstance.close('');
             }, function() {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke oprettet");
             });
         }
+
     }
 
     $scope.SmartAddress = {

@@ -1,7 +1,7 @@
-﻿
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.OData.Builder;
 using System.Web.OData.Extensions;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainModel.Example;
 using Newtonsoft.Json;
@@ -13,7 +13,7 @@ namespace OS2Indberetning
     {
         public static void Register(HttpConfiguration config)
         {
-            config.DependencyResolver = new NinjectDependencyResolver(NinjectWebCommon.CreateKernel());
+            config.DependencyResolver = new NinjectDependencyResolver(NinjectWebKernel.CreateKernel());
 
             config.MapHttpAttributeRoutes();
 
@@ -38,7 +38,7 @@ namespace OS2Indberetning
 
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
-            
+
         }
 
         public static Microsoft.OData.Edm.IEdmModel GetModel()
@@ -51,6 +51,22 @@ namespace OS2Indberetning
 
             builder.EntitySet<Address>("Addresses");
 
+            builder.EntityType<Address>().Collection
+            .Action("SetCoordinatesOnAddress")
+            .ReturnsFromEntitySet<Address>("Addresses");
+
+            builder.EntityType<Address>().Collection
+            .Function("GetPersonalAndStandard")
+            .ReturnsFromEntitySet<Address>("Addresses");
+
+            builder.EntityType<Address>().Collection
+            .Function("GetStandard")
+            .ReturnsFromEntitySet<Address>("Addresses");
+
+            builder.EntityType<Address>().Collection
+                .Function("GetMapStart")
+                .ReturnsFromEntitySet<Address>("Addresses");
+
             builder.EntitySet<DriveReport>("DriveReports");
 
             builder.EntitySet<DriveReportPoint>("DriveReportPoints");
@@ -60,12 +76,16 @@ namespace OS2Indberetning
             eType.HasKey(e => e.Id);
 
             builder.EntitySet<FileGenerationSchedule>("FileGenerationSchedules");
-            
-            var lType = builder.EntityType<LicensePlate>();
-            lType.Ignore(l => l.Person);
+
             builder.EntitySet<LicensePlate>("LicensePlates");
 
-            builder.EntitySet<MailNotificationSchedule>("MailNotificationSchedules");
+            //var lType = builder.EntityType<LicensePlate>();
+            //lType.Ignore(l => l.Person);
+
+
+            builder.EntitySet<MailNotificationSchedule>("MailNotifications");
+
+            builder.EntitySet<RateType>("RateTypes");
 
             builder.EntitySet<MobileToken>("MobileToken");
 
@@ -74,7 +94,7 @@ namespace OS2Indberetning
             builder.EntitySet<Person>("Person");
             var pType = builder.EntityType<Person>();
             pType.HasKey(p => p.Id);
-            pType.Ignore(p => p.LicensePlates);
+            //pType.Ignore(p => p.LicensePlates);
 
             builder.EntitySet<PersonalAddress>("PersonalAddresses");
 
@@ -84,22 +104,33 @@ namespace OS2Indberetning
 
             builder.EntitySet<Report>("Reports");
 
-            builder.EntitySet<Substitute>("Substitutes");
+
 
             builder.EntitySet<BankAccount>("BankAccounts");
 
             builder.EntitySet<Person>("Person");
-            builder.Namespace = "PersonService";
             builder.EntityType<Person>()
                 .Action("HasLicensePlate");
 
+
+            builder.EntitySet<Substitute>("Substitutes");
+            builder.EntityType<Substitute>().Collection
+                .Function("Personal")
+                .ReturnsFromEntitySet<Substitute>("Substitutes");
+            builder.EntityType<Substitute>().Collection
+                .Function("Substitute")
+                .ReturnsFromEntitySet<Substitute>("Substitutes");
+
             builder.EntitySet<Rate>("Rates");
-            builder.Namespace = "RateService";
             builder.EntityType<Rate>().Collection
                 .Function("ThisYearsRates")
                 .ReturnsFromEntitySet<Rate>("Rates");
+
+            builder.Namespace = "Service";
 
             return builder.GetEdmModel();
         }
     }
 }
+
+

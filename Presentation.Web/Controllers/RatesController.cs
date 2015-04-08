@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
 
@@ -10,6 +12,8 @@ namespace OS2Indberetning.Controllers
 {
     public class RatesController : BaseController<Rate>
     {
+        RatePostService ratePostService = new RatePostService();
+
           //GET: odata/Rates
         public RatesController(IGenericRepository<Rate> repository) : base(repository){}
 
@@ -26,6 +30,7 @@ namespace OS2Indberetning.Controllers
             return GetQueryable(key, queryOptions);
         }
 
+
         //PUT: odata/Rates(5)
         public new IHttpActionResult Put([FromODataUri] int key, Delta<Rate> delta)
         {
@@ -36,6 +41,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(Rate Rate)
         {
+            ratePostService.DeactivateExistingRate(Repo.AsQueryable(), Rate);
             return base.Post(Rate);
         }
 
@@ -53,12 +59,12 @@ namespace OS2Indberetning.Controllers
             return base.Delete(key);
         }
         
-        // GET: odata/Rates/RateService.ThisYearsRates
+        // GET: odata/Rates/Service.ThisYearsRates
         [EnableQuery]
         [HttpGet]
         public IQueryable<Rate> ThisYearsRates()
         {
-            var result = Repo.AsQueryable().Where(x => x.Year == (DateTime.Now).Year);
+            var result = Repo.AsQueryable().Where(x => x.Year == (DateTime.Now).Year && x.Active);
             return result;
         }
     }

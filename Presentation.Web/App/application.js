@@ -6,11 +6,7 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
     $stateProvider
         .state("Default", {
             url: "/",
-            templateUrl: "/App/Frontpage/FrontpageView.html"
-        })
-        .state("frontpage", {
-            url: "/frontpage",
-            templateUrl: "/App/Frontpage/FrontpageView.html"
+            templateUrl: "/App/Driving/DrivingView.html"
         })
         .state("driving", {
             url: "/driving",

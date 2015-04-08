@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using Infrastructure.AddressServices.Classes;
+using Core.DomainServices.RoutingClasses;
 using Newtonsoft.Json.Linq;
 
 namespace Infrastructure.AddressServices.Routing

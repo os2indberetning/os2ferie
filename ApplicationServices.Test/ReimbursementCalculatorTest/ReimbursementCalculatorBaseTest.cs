@@ -4,7 +4,8 @@ using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
-using Infrastructure.AddressServices.Classes;
+using Core.DomainServices.RoutingClasses;
+using Core.DomainServices.Ínterfaces;
 using NSubstitute;
 using Substitute = NSubstitute.Substitute;
 
@@ -12,52 +13,67 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
 {
     public class ReimbursementCalculatorBaseTest
     {
-        protected readonly string reportMethodIsRead = "Read";
-        protected readonly string reportMethodIscalculated = "Calculated";
-        protected readonly string reportMethodIscalculatedwithoutallowance = "CalculatedWithoutAllowance";
 
-        protected IGenericRepository<PersonalAddress> GetPersonalAddressRepository()
+
+        protected IPersonService GetPersonServiceMock()
         {
-            var repo = Substitute.For<IGenericRepository<PersonalAddress>>();
 
-            repo.AsQueryable().Returns(info => new List<PersonalAddress>().AsQueryable());
 
-            return repo;
+
+            var personService = Substitute.For<IPersonService>();
+
+            personService.GetHomeAddress(new Person()).ReturnsForAnyArgs(info =>
+                new PersonalAddress()
+                {
+                    Description = "TestHomeAddress",
+                    Id = 1,
+                    Type = PersonalAddressType.Home,
+                    PersonId = 1,
+                    StreetName = "Jens Baggesens Vej",
+                    StreetNumber = "46",
+                    ZipCode = 8210,
+                    Town = "Aarhus"
+                });
+
+            personService.GetWorkAddress(new Person()).ReturnsForAnyArgs(info =>
+                new PersonalAddress()
+                {
+                    Description = "TestWorkAddress",
+                    Id = 2,
+                    Type = PersonalAddressType.Work,
+                    PersonId = 1,
+                    StreetName = "Katrinebjergvej",
+                    StreetNumber = "95",
+                    ZipCode = 8200,
+                    Town = "Aarhus"
+                });
+
+            return personService;
         }
 
         protected IGenericRepository<Person> GetPersonRepository()
         {
             var repo = Substitute.For<IGenericRepository<Person>>();
 
-            repo.AsQueryable().Returns(info => new List<Person>().AsQueryable());
+            repo.AsQueryable().Returns(info => new List<Person>()
+            {
+                new Person()
+                {
+                    Id = 1,
+                    FirstName = "Jacob",
+                    MiddleName = "Overgaard",
+                    LastName = "Jensen",
+                    DistanceFromHomeToBorder = 2,
+                    WorkDistanceOverride = 20
+                }
+            }.AsQueryable());
 
             return repo;
         } 
 
         protected IReimbursementCalculator GetCalculator()
         {
-            return new ReimbursementCalculator(GetRouter(), GetPersonalAddressRepository(), GetPersonRepository());
-        }
-
-        protected IRoute<RouteInformation> GetRouter()
-        {
-            var router = Substitute.For<IRoute<RouteInformation>>();
-
-            router.GetRoute(Arg.Any<List<Address>>()).Returns(GetRouteInformation());
-
-            return router;
-        }
-
-        protected RouteInformation GetRouteInformation()
-        {
-            return new RouteInformation()
-            {
-                 Duration = 1337,
-                 EndStreet = "",
-                 StartStreet = "",
-                 GeoPoints = "",
-                 Length = 42
-            };
+            return new ReimbursementCalculator(new RouterMock(), GetPersonServiceMock(), GetPersonRepository());
         }
 
         protected DriveReport GetDriveReport()
@@ -66,8 +82,33 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
             {
                 KmRate = 1337,
                 Distance = 42,
-                Person = new Person() { DistanceFromHomeToBorder = 2, WorkDistanceOverride = 20 },
-                PersonId = 1
+                PersonId = 1,
+                DriveReportPoints = new List<DriveReportPoint>()
+                {
+                    new DriveReportPoint()
+                    {
+                        Id = 1
+                    },
+                    new DriveReportPoint()
+                    {
+                        Id = 2
+                    }
+                }
+            };
+        }
+    }
+
+    class RouterMock : IRoute<RouteInformation>
+    {
+        public RouteInformation GetRoute(IEnumerable<Address> addresses)
+        {
+            return new RouteInformation()
+            {
+                Duration = 1337,
+                EndStreet = "Katrinebjergvej 95, 8200 Aarhus",
+                StartStreet = "Katrinebjergvej 40, 8200 Aarhus",
+                GeoPoints = "",
+                Length = 42
             };
         }
     }

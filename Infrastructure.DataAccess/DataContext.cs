@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Dynamic;
@@ -32,6 +33,8 @@ namespace Infrastructure.DataAccess
         public IDbSet<OrgUnit> OrgUnits { get; set; }
         public IDbSet<Substitute> Substitutes { get; set; }
         public IDbSet<BankAccount> BankAccounts { get; set; } 
+        public IDbSet<RateType> RateTypes { get; set; } 
+        
   
 
         /**
@@ -60,6 +63,7 @@ namespace Infrastructure.DataAccess
             ConfigurePropertiesForOrgUnit(modelBuilder);
             ConfigurePropertiesForSubstitute(modelBuilder);
             ConfigurePropertiesForBankAccount(modelBuilder);
+            ConfigurePropertiesForRateType(modelBuilder);
         }
 
         private void ConfigurePropertiesForPerson(DbModelBuilder modelBuilder)
@@ -70,8 +74,11 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Person>().Property(p => p.PersonId).IsRequired();
             modelBuilder.Entity<Person>().Property(p => p.Mail).IsRequired();
             modelBuilder.Entity<Person>().Property(p => p.WorkDistanceOverride).IsRequired();
-
+            modelBuilder.Entity<Person>().Property(p => p.Initials).IsRequired();
             modelBuilder.Entity<Person>().Property(t => t.CprNumber).IsFixedLength().HasMaxLength(10);
+            modelBuilder.Entity<Person>().Ignore(t => t.FullName);
+            modelBuilder.Entity<Person>().Ignore(t => t.DistanceFromHomeToWork);
+
         }
 
         private void ConfigurePropertiesForAddress(DbModelBuilder modelBuilder)
@@ -82,6 +89,12 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Address>().Property(p => p.Town).IsRequired();
             modelBuilder.Entity<Address>().Property(p => p.Longitude).IsRequired();
             modelBuilder.Entity<Address>().Property(p => p.Latitude).IsRequired();      
+        }
+
+        private void ConfigurePropertiesForRateType(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<RateType>().Property(p => p.Description).IsRequired();
+            modelBuilder.Entity<RateType>().Property(p => p.TFCode).IsRequired();
         }
 
         private void ConfigurePropertiesForPersonalAddress(DbModelBuilder modelBuilder)
@@ -127,9 +140,8 @@ namespace Infrastructure.DataAccess
         private void ConfigurePropertiesForRate(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Rate>().Property(p => p.Year).IsRequired();
-            modelBuilder.Entity<Rate>().Property(p => p.TFCode).IsRequired();
             modelBuilder.Entity<Rate>().Property(p => p.KmRate).IsRequired();
-            modelBuilder.Entity<Rate>().Property(p => p.Type).IsRequired();
+            modelBuilder.Entity<Rate>().Property(p => p.TypeId).IsRequired();
             modelBuilder.Entity<Rate>().Property(p => p.Active).IsRequired();
         }
 
@@ -137,7 +149,8 @@ namespace Infrastructure.DataAccess
         {
             modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.DateTimestamp).IsRequired();
             modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.Notified).IsRequired();
-            modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.NextGenerationDateTimestamp).IsRequired();
+            modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.Repeat).IsRequired();
+            
         }
 
         private void ConfigurePropertiesForFileGenerationSchedule(DbModelBuilder modelBuilder)
@@ -162,8 +175,8 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<DriveReport>().Property(p => p.FourKmRule).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.StartsAtHome).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.EndsAtHome).IsRequired();
-            modelBuilder.Entity<DriveReport>().Property(p => p.Licenseplate).IsRequired();
-            modelBuilder.Entity<DriveReport>().Ignore(p => p.Fullname);
+            modelBuilder.Entity<DriveReport>().Property(p => p.TFCode).IsRequired();
+            modelBuilder.Entity<DriveReport>().Property(p => p.IsFromApp).IsRequired();
         }
 
         private void ConfigurePropertiesForReport(DbModelBuilder modelBuilder)
@@ -173,6 +186,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Report>().Property(p => p.Comment).IsRequired();
             modelBuilder.Entity<Report>().HasRequired(p => p.Person);
             modelBuilder.Entity<Report>().HasRequired(p => p.Employment);
+            modelBuilder.Entity<Report>().Ignore(p => p.ResponsibleLeader);
         }
 
         private void ConfigurePropertiesForEmployment(DbModelBuilder modelBuilder)
@@ -198,7 +212,7 @@ namespace Infrastructure.DataAccess
 
             modelBuilder.Entity<Substitute>().HasRequired(p => p.Leader).WithMany(p => p.Substitutes);
             modelBuilder.Entity<Substitute>().HasRequired(p => p.Sub).WithMany(p => p.SubstituteLeaders);
-            modelBuilder.Entity<Substitute>().HasMany<Person>(p => p.Persons).WithMany(p => p.SubstituteFor);
+            modelBuilder.Entity<Substitute>().HasRequired(p => p.Person).WithMany(p => p.SubstituteFor);
         }
 
         public class DateTimeOffsetConvention : Convention

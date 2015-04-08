@@ -1,0 +1,17 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Bekræft godkend alle med anden kontering</h3>
+</div>
+<div class="modal-body">
+    <div>
+        Er du sikker på at du vil godkende alle indberetninger på side {{pageNumber}}?
+        <br/>
+        <select class="form-control" ng-model="selectedAccount" ng-options="account as account.Description + ' - ' + account.Number for account in accounts">
+            <option value="" disabled selected style="display:none">Vælg konto</option>
+        </select>
+        <label class="text-danger" ng-bind="errorMessage"></label>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger pull-right" style="margin: 5px" ng-click="noClicked()">Nej</button>
+    <button class="btn btn-success pull-right" style="margin: 5px" ng-click="approveAllWithAccountClick()">Ja</button>
+</div>

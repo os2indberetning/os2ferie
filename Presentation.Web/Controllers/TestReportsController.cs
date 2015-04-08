@@ -182,7 +182,7 @@ namespace OS2Indberetning.Controllers
             //    KmRate = 42,
             //    AmountToReimburse = 42,                
             //    CreatedDateTimestamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
-            //    Licenseplate = "AH 12 345",
+            //    LicensePlate = "AH 12 345",
             //    PersonId = personResult.Id,
             //    Purpose = "Test",
 

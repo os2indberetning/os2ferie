@@ -1,21 +1,27 @@
-﻿<div class="modal-header">
-    <h3 class="modal-title">Mine tokens</h3>
-</div>
-<div class="modal-body">
+﻿<div class="col-md-12 margin-bottom-5">
     <div>
         <ol class="dl-horizontal token-list">
             <li ng-repeat="token in tokens">
-                <pre><strong>{{ token.Token }} | {{ token.StatusToPresent }} | {{ token.Description }}</strong><button class="btn btn-danger pull-right" ng-click="openConfirmDeleteModal(token)">Slet</button></pre>
+                <pre><strong>{{ token.Token }} | {{ token.StatusToPresent }} | {{ token.Description }}</strong><button class="btn btn-danger pull-right" ng-click="openConfirmDeleteTokenModal(token)">Slet</button></pre>
             </li>
         </ol>
     </div>
-    <div collapse="isCollapsed">
+</div>
+
+<div class="col-md-12 margin-bottom-10">
+    <div collapse="tokenIsCollapsed">
         <input ng-model="newTokenDescription" class="form-control  fill-fifty pull-left" placeholder="Beskrivelse" />
-        <div class="seperator"></div>
         <button class="btn btn-success pull-right" ng-click="saveToken()">Gem</button>
     </div>
 </div>
-<div class="modal-footer">
+
+<div class="col-md-12 margin-bottom-5">
+
     <button class="btn btn-success pull-left new-token-btn" ng-click="newToken()">Opret ny token</button>
-    <button class="btn btn-primary pull-right close-token-modal" ng-click="closeTokenModal()">OK</button>    
+    <button class="btn btn-primary pull-right close-token-modal" ng-click="closeTokenModal()">OK</button>
+
+
 </div>
+
+   
+

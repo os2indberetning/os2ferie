@@ -13,7 +13,6 @@ using Core.DomainServices;
 using Microsoft.Owin.Testing;
 using NUnit.Framework;
 using OS2Indberetning;
-using OS2Indberetning.App_Start;
 using Owin;
 using Presentation.Web.Test.Controllers.Models;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
@@ -123,7 +122,6 @@ namespace Presentation.Web.Test.Controllers.MobileTokens
             return new List<KeyValuePair<Type, Type>>
             {
                 new KeyValuePair<Type, Type>(typeof (IGenericRepository<MobileToken>), typeof (MobileTokenRepositoryMock)),
-                new KeyValuePair<Type, Type>(typeof (IMobileTokenService), typeof(MobileTokenService))
             };
         }
 

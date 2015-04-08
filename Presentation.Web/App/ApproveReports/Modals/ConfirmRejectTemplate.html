@@ -1,0 +1,21 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Bekræft afvis</h3>
+</div>
+<div class="modal-body">
+    <div>
+        Er du sikker på at du vil afvise indberetningen?
+    <br/><br/>
+        <div class="form-group">
+            <label>Kommentar:</label>
+            <textarea type="" class="form-control max-width-100p min-height-100" ng-model="comment"></textarea>
+            <label ng-bind="errorMessage" class="text-danger"></label>
+        </div>
+
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger pull-right" style="margin: 5px" ng-click="noClicked()">Nej</button>
+    <button class="btn btn-success pull-right" style="margin: 5px" ng-click="yesClicked()">Ja</button>
+
+</div>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<Tests>
+  <Test>
+    <Name>DefaultTest Test Variable should be 1 (PhantomJS 1.9.8 (Windows 8))</Name>
+    <DisplayName>DefaultTest Test Variable should be 1 (PhantomJS 1.9.8 (Windows 8))</DisplayName>
+    <Outcome>Passed</Outcome>
+  </Test>
+</Tests>

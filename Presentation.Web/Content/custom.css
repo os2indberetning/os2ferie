@@ -5,12 +5,78 @@
     color: #555;
 }
 
+.margin-top-20 {
+    margin-top: 20px;
+}
+
+.margin-top-30 {
+    margin-top: 30px;
+}
+
+.margin-right-10 {
+    margin-right: 10px;
+}
+
+.margin-5 {
+    margin: 5px;
+}
+
+.margin-left-10 {
+    margin-left: 10px;
+}
+
+.info-popup {
+    border-radius: 8px;
+    border-style: solid; 
+    border-width: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+a {
+    cursor: hand;
+    cursor: pointer;
+}
+
+.rounded-border {
+    border: 1px solid;
+    border-radius: 20px;
+    border-color: #8a2be2;
+}
+
+.margin-top-5 {
+    margin-top: 5px;
+}
+
+.margin-10 {
+    margin: 10px;
+}
+
+.margin-15 {
+    margin: 15px;
+}
+
+
+
 .no-border {
     border: none;
 }
 
+.inline {
+    display: inline;
+    
+}
+
+.vertical-text-bottom {
+    vertical-align: bottom;
+}
+
 .margin-top-10 {
     margin-top: 10px;
+}
+
+.margin-top-40 {
+    margin-top: 40px;
 }
 
 .k-tooltip {
@@ -29,12 +95,33 @@
 
 }
 
+.margin-left-5 {
+    margin-left: 5px;
+}
+
+.margin-bottom-5 {
+    margin-bottom: 5px;
+}
+
 .margin-bottom-10 {
     margin-bottom: 10px;
 }
 
+.margin-bottom-20 {
+    margin-bottom: 20px;
+}
+
+.margin-bottom-30 {
+    margin-bottom: 30px;
+}
+
+.margin-bottom-40 {
+    margin-bottom: 40px;
+}
+
 .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:focus, .nav-tabs.nav-justified > .active > a:hover {
-    background-color: #F5F5F5;
+    color: #fff;
+    opacity: 0.75;
     border-color: #ddd;
 }
 
@@ -61,18 +148,6 @@
     padding-bottom: 30px;
 }
 
-.token-list {
-    right: auto;
-    left: auto;
-    margin-left: -40px;
-}
-
-.license-plate-list {
-    right: auto;
-    left: auto;
-    margin-left: -40px;
-}
-
 .new-token-btn {
     width: 79%;
 }
@@ -85,6 +160,9 @@
     margin-top: 20px;
 }
 
+.margin-right-5 {
+    margin-right: 5px;
+}
 
 .no-max-width {
     max-width: none;
@@ -95,6 +173,10 @@
 }
 
 .max-width-100 {
+    max-width: 100px;
+}
+
+.max-width-100p {
     max-width: 100%;
 }
 
@@ -200,4 +282,62 @@
 
 .m-b-l {
     margin-bottom: 15px;
+}
+
+.k-toolbar {
+        border: none;
+        margin: 0;
+    }
+
+        .k-toolbar .k-split-button {
+            border-radius: 4px;
+        }
+
+            .k-toolbar .k-split-button .k-button {
+                margin: 0;
+                color: #ffffff;
+                background-color: #5cb85c;
+                border-color: #4cae4c;
+                text-align: center;
+                vertical-align: text-top;
+            }
+
+                .k-toolbar .k-split-button .k-button:hover,
+                .k-toolbar .k-split-button .k-button:focus,
+                .k-toolbar .k-split-button .k-button:active,
+                .k-toolbar .k-split-button .k-button.active,
+                .open .dropdown-toggle.k-toolbar .k-split-button .k-button {
+                    color: #ffffff;
+                    background-color: #47a447;
+                    border-color: #398439;
+                }
+
+                .k-toolbar .k-split-button .k-button:active,
+                .k-toolbar .k-split-button .k-button.active,
+                .open .dropdown-toggle.k-toolbar .k-split-button .k-button {
+                    background-image: none;
+                }
+
+                .k-toolbar .k-split-button .k-button.disabled,
+                .k-toolbar .k-split-button .k-button[disabled],
+                fieldset[disabled] .k-toolbar .k-split-button .k-button,
+                .k-toolbar .k-split-button .k-button.disabled:hover,
+                .k-toolbar .k-split-button .k-button[disabled]:hover,
+                fieldset[disabled] .k-toolbar .k-split-button .k-button:hover,
+                .k-toolbar .k-split-button .k-button.disabled:focus,
+                .k-toolbar .k-split-button .k-button[disabled]:focus,
+                fieldset[disabled] .k-toolbar .k-split-button .k-button:focus,
+                .k-toolbar .k-split-button .k-button.disabled:active,
+                .k-toolbar .k-split-button .k-button[disabled]:active,
+                fieldset[disabled] .k-toolbar .k-split-button .k-button:active,
+                .k-toolbar .k-split-button .k-button.disabled.active,
+                .k-toolbar .k-split-button .k-button[disabled].active,
+                fieldset[disabled] .k-toolbar .k-split-button .k-button.active {
+                    background-color: #5cb85c;
+                    border-color: #4cae4c;
+                }
+
+
+.transparent-background {
+    background: transparent;
 }

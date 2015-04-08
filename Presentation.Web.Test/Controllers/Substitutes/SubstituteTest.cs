@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.ApplicationServices;
+using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using NUnit.Framework;
@@ -14,8 +16,7 @@ namespace Presentation.Web.Test.Controllers.Substitutes
         {
             return new List<KeyValuePair<Type, Type>>
             {
-                new KeyValuePair<Type, Type>(typeof (IGenericRepository<Substitute>),
-                    typeof (SubstituteRepositoryMock))
+                new KeyValuePair<Type, Type>(typeof (IGenericRepository<Substitute>),typeof (SubstituteRepositoryMock)),
             };
         }
 
@@ -81,7 +82,16 @@ namespace Presentation.Web.Test.Controllers.Substitutes
             return @"{
                         'Id': 4,
                         'EndDateTimestamp': 4337,
-                        'StartDateTimestamp': 4336
+                        'StartDateTimestamp': 4336,
+                        'Leader' : {
+                                    'FirstName' : 'Preben',
+                                    'LastName'  : 'Hansen'
+                                   },
+                        'Sub'    :  {
+                                    'FirstName' : 'Carsten',
+                                    'LastName'  : 'Jensen'
+                                    },
+                        'Person' : {'FirstName' : 'Brian', 'LastName' : 'Sørensen'} 
             }";
         }
 

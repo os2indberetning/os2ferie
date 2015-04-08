@@ -4,7 +4,7 @@ using System.Linq;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
-using Infrastructure.AddressServices.Classes;
+using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 
@@ -14,20 +14,13 @@ namespace Core.ApplicationServices
     public class ReimbursementCalculator : IReimbursementCalculator
     {
         private readonly IRoute<RouteInformation> _route;
-        private readonly IGenericRepository<PersonalAddress> _addressRepo;
+        private readonly IPersonService _personService;
         private readonly IGenericRepository<Person> _personRepo; 
 
-        public ReimbursementCalculator()
-        {
-            _route = new BestRoute();
-            _addressRepo = new GenericRepository<PersonalAddress>(new DataContext());
-            _personRepo = new GenericRepository<Person>(new DataContext());
-        }
-
-        public ReimbursementCalculator(IRoute<RouteInformation> route, IGenericRepository<PersonalAddress> addressRepo, IGenericRepository<Person> personRepo)
+        public ReimbursementCalculator(IRoute<RouteInformation> route, IPersonService personService, IGenericRepository<Person> personRepo)
         {
             _route = route;
-            _addressRepo = addressRepo;
+            _personService = personService;
             _personRepo = personRepo;
         }
 
@@ -56,37 +49,38 @@ namespace Core.ApplicationServices
             var homeWorkDistance = 0.0;
 
             var person = _personRepo.AsQueryable().First(x => x.Id == report.PersonId);
-            
-            var homeAddress = GetHomeAddress(report);
-            var workAddress = GetWorkAddress(report);
 
-            //Check if drivereport starts at users home address.
-            if (homeAddress.StreetName == report.DriveReportPoints.First().StreetName
-                && homeAddress.StreetNumber == report.DriveReportPoints.First().StreetNumber
-                && homeAddress.ZipCode == report.DriveReportPoints.First().ZipCode
-                && homeAddress.Town == report.DriveReportPoints.First().Town)
+            var homeAddress = _personService.GetHomeAddress(person);
+            var workAddress = _personService.GetWorkAddress(person);
+
+            if (report.KilometerAllowance != KilometerAllowance.Read)
             {
-                report.StartsAtHome = true;
+
+
+                //Check if drivereport starts at users home address.
+                if (homeAddress.StreetName == report.DriveReportPoints.First().StreetName
+                    && homeAddress.StreetNumber == report.DriveReportPoints.First().StreetNumber
+                    && homeAddress.ZipCode == report.DriveReportPoints.First().ZipCode
+                    && homeAddress.Town == report.DriveReportPoints.First().Town)
+                {
+                    report.StartsAtHome = true;
+                }
+
+                //Check if drivereport ends at users home address.
+                if (homeAddress.StreetName == report.DriveReportPoints.Last().StreetName
+                    && homeAddress.StreetNumber == report.DriveReportPoints.Last().StreetNumber
+                    && homeAddress.ZipCode == report.DriveReportPoints.Last().ZipCode
+                    && homeAddress.Town == report.DriveReportPoints.Last().Town)
+                {
+                    report.EndsAtHome = true;
+                }
             }
 
-            //Check if drivereport ends at users home address.
-            if (homeAddress.StreetName == report.DriveReportPoints.Last().StreetName
-                && homeAddress.StreetNumber == report.DriveReportPoints.Last().StreetNumber
-                && homeAddress.ZipCode == report.DriveReportPoints.Last().ZipCode
-                && homeAddress.Town == report.DriveReportPoints.Last().Town)
-            {
-                report.EndsAtHome = true;
-            }
 
-            //Check if user has overriden the distance between the users home and work address
-            if (person.WorkDistanceOverride > 0)
-            {
-                homeWorkDistance = person.WorkDistanceOverride;
-            }
-            else
-            {                
-                homeWorkDistance = _route.GetRoute(new List<Address>() { homeAddress, workAddress }).Length;    
-            }
+
+
+            homeWorkDistance = _personService.GetDistanceFromHomeToWork(person);
+
             
             //Calculate distance to subtract
             double toSubtract = 0;
@@ -95,7 +89,7 @@ namespace Core.ApplicationServices
             if (report.FourKmRule)
             {
                 //Take users provided distance from home to border of municipality
-                var borderDistance = person.DistanceFromHomeToBorder * 1000;
+                var borderDistance = person.DistanceFromHomeToBorder;
 
                 //Adjust distance based on if user starts or ends at home
                 if (report.StartsAtHome)
@@ -109,7 +103,7 @@ namespace Core.ApplicationServices
                 }
 
                 //Subtract 4 km because reasons.
-                toSubtract += 4000;
+                toSubtract += 4;
             }
             else
             {
@@ -142,6 +136,9 @@ namespace Core.ApplicationServices
                     //Set distance to corrected
                     report.Distance = correctDistance;
 
+                    //Save RouteGeometry
+                    report.RouteGeometry = drivenRoute.GeoPoints;
+
                     break;
                 }
                 case KilometerAllowance.CalculatedWithoutExtraDistance:
@@ -152,6 +149,16 @@ namespace Core.ApplicationServices
                     var drivenRoute = _route.GetRoute(report.DriveReportPoints);
 
                     report.Distance = drivenRoute.Length;
+
+                    if (report.FourKmRule)
+                    {
+                        report.Distance -= 4;
+                    }
+
+                    //Save RouteGeometry
+                    report.RouteGeometry = drivenRoute.GeoPoints;
+
+
                     break;
                 }
 
@@ -171,48 +178,22 @@ namespace Core.ApplicationServices
             }
 
             //Calculate the actual amount to reimburse
-            report.AmountToReimburse = (report.Distance / 1000) * (report.KmRate / 100);
+            
+            SetAmountToReimburse(report);
+
+            return report;
+        }
+
+        private void SetAmountToReimburse(DriveReport report)
+        {
+            report.AmountToReimburse = (report.Distance) * (report.KmRate / 100);
 
             if (report.AmountToReimburse < 0)
             {
                 report.AmountToReimburse = 0;
             }
-
-            report.Distance = report.Distance/1000;
-
-            return report;
         }
 
-        private PersonalAddress GetHomeAddress(DriveReport report)
-        {
-            var hasAlternative = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.AlternativeHome);
-
-            if (hasAlternative != null)
-            {
-                return hasAlternative;
-            }
-
-            var home = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.Home);
-
-            return home;
-        }
-
-        private PersonalAddress GetWorkAddress(DriveReport report)
-        {
-            var hasAlternative = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.AlternativeWork);
-
-            if (hasAlternative != null)
-            {
-                return hasAlternative;
-            }
-
-            var work = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == report.PersonId && x.Type == PersonalAddressType.Work);
-
-            return work;
-        }
+       
     }
 }

@@ -10,9 +10,19 @@
             }
 
             var splittet = (addressString.split(","));
+
+
+            if (splittet.length != 2) {
+                return undefined;
+            }
+
             var first = splittet[0].split(" ");
 
-            for (i = 0; i < first.length - 1; i++) {
+            if (first.length < 2) {
+                return undefined;
+            }
+
+            for (var i = 0; i < first.length - 1; i++) {
                 res.StreetName += first[i];
                 if (!(i + 1 == first.length - 1)) {
                     res.StreetName += " ";
@@ -20,8 +30,23 @@
             }
 
             res.StreetNumber = first[first.length - 1];
-            res.ZipCode = splittet[1].split(" ")[1];
-            res.Town = splittet[1].split(" ")[2];
+
+
+            var second = splittet[1].split(" ");
+
+            if (second.length < 3) {
+                return undefined;
+            }
+
+            res.ZipCode = second[1];
+
+
+            for (var a = 2; a < second.length; a++) {
+                res.Town += second[a];
+                if (!(a + 1 == second.length)) {
+                    res.Town += " ";
+                }
+            }
 
             return {
                 Id: null,
