@@ -7,87 +7,80 @@
 
 
     <div class="panel-body">
-        
+
         <div class="row">
             <div class="col-md-12">
                 <h2 class="pull-left">Stedfortrædere/Godkendere</h2>
             </div>
         </div>
 
-        <div class="col-md-12">
-            <div class="setting-area">
-                <h2 ng-click="collapseSubstitute = !collapseSubstitute" class="margin-10">Stedfortrædere</h2>
-                
-                <div collapse="collapseSubstitute">
-                    <div class="row">
-                        <div class="col-md-2 margin-left-10">
-                            <label>Fra:</label>
-                        </div>
-                        <div class="col-md-2">
-                            <label>Til:</label>
-                        </div>
-                        <div class="col-md-2">
-                            <label>Tidsubegrænset:</label>
-                        </div>
+        <div class="col-md-12 setting-area">
+            <h2>Stedfortrædere</h2>
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-xs-3 col-lg-2 margin-left-10">
+                        <label>Fra:</label>
                     </div>
-                    <div class="row">
-                        <div class="col-md-2 margin-left-10">
-                            <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="container.substituteFromDateString" k-ng-model="container.substituteFromDate" ng-change="dateChanged('substitute')" />
-                        </div>
-                        <div class="col-md-2">
-                            <input kendo-datepicker ng-disabled="container.subInfinitePeriod" culture="'da-DK'" k-options="dateOptions" ng-model="container.substituteToDateString" k-ng-model="container.substituteToDate" ng-change="dateChanged('substitute')" />
-                        </div>
-                        <div class="col-md-2">
-                            <input type="checkbox" ng-model="container.subInfinitePeriod" ng-change="dateChanged('substitute')"/>
-                        </div>
-                        <div class="col-md-2">
-                            <button class="btn btn-danger" ng-click="clearClicked('substitute')">Nulstil</button>
-                        </div>
+                    <div class="col-xs-3 col-lg-2">
+                        <label>Til:</label>
                     </div>
-                    <div kendo-grid="container.substituteGrid" class="margin-10" options="substitutes"></div>
+                    <div class="col-xs-3 col-lg-2">
+                        <label>Tidsubegrænset:</label>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-3 col-lg-2 margin-left-10">
+                        <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="container.substituteFromDateString" k-ng-model="container.substituteFromDate" ng-change="dateChanged('substitute')" />
+                    </div>
+                    <div class="col-xs-3 col-lg-2">
+                        <input kendo-datepicker ng-disabled="container.subInfinitePeriod" culture="'da-DK'" k-options="dateOptions" ng-model="container.substituteToDateString" k-ng-model="container.substituteToDate" ng-change="dateChanged('substitute')" />
+                    </div>
+                    <div class="col-xs-2 col-lg-2">
+                        <input type="checkbox" ng-model="container.subInfinitePeriod" ng-change="dateChanged('substitute')" />
+                    </div>
+                    <div class="col-xs-2 col-lg-2">
+                        <button class="btn btn-danger" ng-click="clearClicked('substitute')">Nulstil</button>
+                    </div>
+                </div>
+                    <div kendo-grid="container.substituteGrid" class="margin-10 scrollable" options="substitutes"></div>
             </div>
         </div>
-        <div class="col-md-12">
-            <div class="setting-area">
-                <h2 ng-click="collapseApprove = !collapseApprove" class="margin-10">Personlige godkendere</h2>
-                <div collapse="collapseApprove">
+        <div class="col-md-12 setting-area">
+            <h2>Personlige godkendere</h2>
+            <div class="row">
 
-                    <div class="row">
-                        <div class="col-md-2 margin-left-10">
-                            <label>Fra:</label>
-                        </div>
-                        <div class="col-md-2">
-                            <label>Til:</label>
-                        </div>
-                        <div class="col-md-2">
-                            <label>Tidsubegrænset:</label>
-                        </div>
+                <div class="row">
+                    <div class="col-xs-3 col-lg-2 margin-left-10">
+                        <label>Fra:</label>
+                    </div>
+                    <div class="col-xs-3 col-lg-2">
+                        <label>Til:</label>
+                    </div>
+                    <div class="col-xs-3 col-lg-2">
+                        <label>Tidsubegrænset:</label>
+                    </div>
 
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2 margin-left-10">
-                            <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="container.approverFromDateString" k-ng-model="container.approverFromDate" ng-change="dateChanged('approver')" />
-                        </div>
-                        <div class="col-md-2">
-                            <input ng-disabled="container.appInfinitePeriod" kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="container.approverToDateString" k-ng-model="container.approverToDate" ng-change="dateChanged('approver')" />
-                        </div>
-                        <div class="col-md-2">
-                            <input type="checkbox" ng-model="container.appInfinitePeriod" ng-change="dateChanged('approver')"/>
-                        </div>
-                        <div class="col-md-2">
-                            <button class="btn btn-danger" ng-click="clearClicked('approver')">Nulstil</button>
-                        </div>
-                        <div class="col-md-2 pull-right">
-                            <button type="submit" class="btn btn-primary pull-right margin-right-10" ng-click="createNewApprover()">Opret</button>
-                        </div>
-                    </div>
-                    <div kendo-grid="container.approverGrid" class="margin-10" options="personalApprovers"></div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-3 col-lg-2 margin-left-10">
+                        <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="container.approverFromDateString" k-ng-model="container.approverFromDate" ng-change="dateChanged('approver')" />
+                    </div>
+                    <div class="col-xs-3 col-lg-2">
+                        <input ng-disabled="container.appInfinitePeriod" kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="container.approverToDateString" k-ng-model="container.approverToDate" ng-change="dateChanged('approver')" />
+                    </div>
+                    <div class="col-xs-2 col-lg-2">
+                        <input type="checkbox" ng-model="container.appInfinitePeriod" ng-change="dateChanged('approver')" />
+                    </div>
+                    <div class="col-xs-2 col-lg-2">
+                        <button class="btn btn-danger" ng-click="clearClicked('approver')">Nulstil</button>
+                    </div>
+                    <div class="col-lg-2 pull-right">
+                        <button type="submit" class="btn btn-primary pull-right margin-right-10" ng-click="createNewApprover()">Opret</button>
+                    </div>
+                </div>
+                    <div kendo-grid="container.approverGrid" class="margin-10 scrollable" options="personalApprovers"></div>
             </div>
-
-
         </div>
-
     </div>
 </div>

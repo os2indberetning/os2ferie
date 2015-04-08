@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -75,6 +77,10 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
         {
+
+           
+            
+
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
             if (report == null)
             {

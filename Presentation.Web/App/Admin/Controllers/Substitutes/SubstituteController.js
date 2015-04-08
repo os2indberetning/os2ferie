@@ -60,6 +60,7 @@
             serverSorting: true,
             serverFiltering: true,
             sortable: true,
+            scrollable: false,
             pageable: {
                 messages: {
                     display: "{0} - {1} af {2} stedfortrædere", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
@@ -179,6 +180,7 @@
             serverSorting: true,
             serverFiltering: true,
             sortable: true,
+            scrollable: false,
             pageable: {
                 messages: {
                     display: "{0} - {1} af {2} personlige godkendere", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records

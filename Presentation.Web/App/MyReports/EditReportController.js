@@ -472,6 +472,9 @@
                     var currentAddress = new PersonalAddress(AddressFormatter.fn(tempAddress));
 
                     driveReport.DriveReportPoints.push({
+                        DriveReportId: $scope.DriveReport.Id,
+                        NextPointId: 0,
+                        PreviousPointId: 0,
                         StreetName: currentAddress.StreetName,
                         StreetNumber: currentAddress.StreetNumber,
                         ZipCode: currentAddress.ZipCode,
