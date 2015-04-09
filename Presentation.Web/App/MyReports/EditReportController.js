@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("EditReportController", [
-    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", "Address", "Route", "reportId", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state, Address, Route, reportId) {
+    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", "Address", "Route", "reportId", "$modalInstance", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state, Address, Route, reportId, $modalInstance) {
 
         var personId = 1;
 
@@ -13,6 +13,8 @@
         // which it does once for each address.
         // Simply put: if the var is <= 0 then the map will be drawn.
         $scope.guiChangedByMap = 0;
+
+        $scope.SmartAddress = SmartAdresseSource;
 
         $scope.DriveReport = DriveReport.getWithPoints({ id: reportId }, function () {
             $scope.DriveReport.Date = moment.unix($scope.DriveReport.DriveDateTimestamp)._d;
@@ -428,90 +430,144 @@
         }
 
         $scope.saveEditClick = function () {
-            var driveReport = new DriveReport();
 
-            if ($scope.showLicensePlate) {
-                driveReport.LicensePlate = $scope.DriveReport.LicensePlate;
-            } else {
-                driveReport.LicensePlate = "0000000";
-            }
+            DriveReport.delete({ id: $scope.DriveReport.Id }, function(res) {
+                $scope.validateInput();
 
-            driveReport.Distance = 0;
-            driveReport.UserComment = "";
-
-            if ($scope.DriveReport.KilometerAllowance === "Read") {
-
-                driveReport.Distance = Number($scope.DriveReport.ReadDistance) * 1000;
-                driveReport.UserComment = $scope.DriveReport.UserComment;
-
-                if ($scope.DriveReport.StartOrEndedAtHome === 'Started') {
-                    driveReport.StartsAtHome = true;
-                    driveReport.EndsAtHome = false;
-                } else if ($scope.DriveReport.StartOrEndedAtHome === 'Ended') {
-                    driveReport.StartsAtHome = false;
-                    driveReport.EndsAtHome = true;
-                } else if ($scope.DriveReport.StartOrEndedAtHome === 'Both') {
-                    driveReport.StartsAtHome = true;
-                    driveReport.EndsAtHome = true;
-                } else {
-                    driveReport.StartsAtHome = false;
-                    driveReport.EndsAtHome = false;
+                if (!$scope.canSubmitDriveReport) {
+                    return;
                 }
-            } else {
 
-                driveReport.StartsAtHome = false;
-                driveReport.EndsAtHome = false;
+                $scope.canSubmitDriveReport = false;
 
-                driveReport.DriveReportPoints = [];
+                var driveReport = new DriveReport();
 
-                angular.forEach($scope.DriveReport.Addresses, function (address, key) {
+                // Prepare all data to  be uploaded
+                driveReport.Purpose = $scope.DriveReport.Purpose;
+                driveReport.DriveDateTimestamp = Math.floor($scope.DriveReport.Date.getTime() / 1000);
+                driveReport.KmRate = parseFloat(getKmRate().KmRate);
+                driveReport.TFCode = getKmRate().Type.TFCode;
+
+                driveReport.KilometerAllowance = $scope.DriveReport.KilometerAllowance;
+                driveReport.Distance = 0;
+                driveReport.AmountToReimburse = 0;
+
+                if ($scope.showLicensePlate) {
+                    driveReport.LicensePlate = $scope.DriveReport.LicensePlate;
+                } else {
+                    driveReport.LicensePlate = "0000000";
+                }
 
 
-                    var tempAddress = (address.Name.length != 0) ? address.Name : address.Personal;
+                driveReport.PersonId = $scope.Person.Id;
+                driveReport.FullName = $scope.Person.FullName;
+                driveReport.Status = "Pending";
+                driveReport.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
+                driveReport.EditedDateTimestamp = driveReport.CreatedDateTimestamp;
+                driveReport.Comment = "";
+                driveReport.ClosedDateTimestamp = 0;
+                driveReport.ProcessedDateTimestamp = 0;
+                driveReport.EmploymentId = $scope.DriveReport.Position;
 
-                    var currentAddress = new PersonalAddress(AddressFormatter.fn(tempAddress));
+                if ($scope.DriveReport.KilometerAllowance === "Read") {
 
-                    driveReport.DriveReportPoints.push({
-                        DriveReportId: $scope.DriveReport.Id,
-                        NextPointId: 0,
-                        PreviousPointId: 0,
-                        StreetName: currentAddress.StreetName,
-                        StreetNumber: currentAddress.StreetNumber,
-                        ZipCode: currentAddress.ZipCode,
-                        Town: currentAddress.Town,
-                        Description: "",
-                        Latitude: "",
-                        Longitude: ""
+                    driveReport.Distance = Number($scope.DriveReport.ReadDistance) * 1000;
+                    driveReport.UserComment = $scope.DriveReport.UserComment;
+
+                    if ($scope.DriveReport.StartOrEndedAtHome === 'Started') {
+                        driveReport.StartsAtHome = true;
+                        driveReport.EndsAtHome = false;
+                    } else if ($scope.DriveReport.StartOrEndedAtHome === 'Ended') {
+                        driveReport.StartsAtHome = false;
+                        driveReport.EndsAtHome = true;
+                    } else if ($scope.DriveReport.StartOrEndedAtHome === 'Both') {
+                        driveReport.StartsAtHome = true;
+                        driveReport.EndsAtHome = true;
+                    } else {
+                        driveReport.StartsAtHome = false;
+                        driveReport.EndsAtHome = false;
+                    }
+                } else {
+
+                    driveReport.StartsAtHome = false;
+                    driveReport.EndsAtHome = false;
+
+                    driveReport.DriveReportPoints = [];
+
+                    angular.forEach($scope.DriveReport.Addresses, function (address, key) {
+
+
+                        var tempAddress = (address.Name.length != 0) ? address.Name : address.Personal;
+
+                        var currentAddress = new PersonalAddress(AddressFormatter.fn(tempAddress));
+
+                        driveReport.DriveReportPoints.push({
+                            StreetName: currentAddress.StreetName,
+                            StreetNumber: currentAddress.StreetNumber,
+                            ZipCode: currentAddress.ZipCode,
+                            Town: currentAddress.Town,
+                            Description: "",
+                            Latitude: "",
+                            Longitude: ""
+                        });
+
                     });
 
+                    if (typeof $scope.DriveReport.RoundTrip !== "undefined" && $scope.DriveReport.RoundTrip === true) {
+                        for (var i = driveReport.DriveReportPoints.length - 2; i >= 0; --i) {
+                            driveReport.DriveReportPoints.push(driveReport.DriveReportPoints[i]);
+                        }
+                    }
+
+                    // go through addresses and see which is going to be saved
+                    angular.forEach($scope.DriveReport.Addresses, function (address, key) {
+
+                        if (address.Save) {
+                            var personalAddress = new PersonalAddress(AddressFormatter.fn(address.Name));
+
+                            personalAddress.PersonId = $scope.Person.Id;
+                            personalAddress.Type = PersonalAddressType.Standard;
+                            personalAddress.Longitude = "";
+                            personalAddress.Latitude = "";
+                            personalAddress.Description = "";
+
+                            delete personalAddress.Id;
+
+                            personalAddress.$save();
+                        }
+                    });
+                }
+
+                if (typeof $scope.DriveReport.FourKmRule !== "undefined" && $scope.DriveReport.FourKmRule.Using === true) {
+                    driveReport.FourKmRule = true;
+                } else {
+                    driveReport.FourKmRule = false;
+                }
+
+                driveReport.$save(function (response) {
+                    // success
+
+                    $scope.TransportAllowance = 0;
+                    $scope.RemainingKilometers = 0;
+                    $scope.PayoutAmount = response.AmountToReimburse.toFixed(2).toString().replace('.', ',');
+                    NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev redigeret.");
+                    $modalInstance.close('success');
+
+                }, function (response) {
+                    // failure
+                    NotificationService.AutoFadeNotification("danger", "", "Din tjenestekørselsindberetning blev ikke redigeret.");
                 });
-
-                driveReport.FourKmRule = $scope.DriveReport.FourKmRule.Using;
-
-            }
-
-            debugger;
-
-            DriveReport.patch({ id: $scope.DriveReport.Id }, {
-                Purpose: $scope.DriveReport.Purpose,
-                DriveDateTimestamp: Math.floor($scope.DriveReport.Date.getTime() / 1000),
-                KmRate: parseFloat(getKmRate().KmRate),
-                TFCode: getKmRate().Type.TFCode,
-                KilometerAllowance: $scope.DriveReport.KilometerAllowance,
-                LicensePlate: driveReport.LicensePlate,
-                EditedDateTimestamp: Math.floor(Date.now() / 1000),
-                EmploymentId: $scope.DriveReport.Position,
-                StartsAtHome: driveReport.StartsAtHome,
-                EndsAtHome: driveReport.EndsAtHome,
-                DriveReportPoints: [],
-                FourKmRule: driveReport.FourKmRule,
-                Distance: driveReport.Distance,
-                UserComment: driveReport.UserComment,
+            }, function (res) {
+                // Failed to edit report.
+                NotificationService.AutoFadeNotification("danger", "", "Redigering af indberetningen fejlede.");
             });
+
+
+            
         }
 
         $scope.cancelClick = function () {
-
+            $modalInstance.dismiss('cancel');
         }
 
     }

@@ -208,6 +208,10 @@
                    }
                }
            });
+
+           modalInstance.result.then(function (res) {
+                   $scope.gridContainer.grid.dataSource.read();
+           });
        }
 
        var initialLoad = 2;
