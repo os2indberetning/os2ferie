@@ -83,8 +83,6 @@
            $scope.gridContainer.addressGrid.dataSource.read();
        }
 
-       $scope.gridContainer.gridPageSize = 20;
-
        $scope.editClick = function (id) {
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Address/EditAddressTemplate.html',
@@ -109,10 +107,6 @@
                    $scope.updateAddressGrid();
                });
            });
-       }
-
-       $scope.pageSizeChanged = function () {
-           $scope.gridContainer.addressGrid.dataSource.pageSize(Number($scope.gridContainer.gridPageSize));
        }
 
        $scope.deleteClick = function (id) {

@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller('RouteEditModalInstanceController', [
-    "$scope", "Route", "Point", "NotificationService", "$modalInstance", "routeId", "personId", "AddressFormatter", function ($scope, Route, Point, NotificationService, $modalInstance, routeId, personId, AddressFormatter) {
+    "$scope", "Route", "Point", "NotificationService", "$modalInstance", "routeId", "personId", "AddressFormatter", "SmartAdresseSource", function ($scope, Route, Point, NotificationService, $modalInstance, routeId, personId, AddressFormatter, SmartAdresseSource) {
     $scope.newStartPoint = "";
     $scope.newEndPoint = "";
     $scope.oldStartPointId = 0;
@@ -242,7 +242,7 @@
             route.$patch({ id: routeId }, function () {
                 $scope.handleStartPointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Rutebeskrivelse opdateret");
-                $modalInstance.close('');
+               // $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Rutebeskrivelse blev ikke opdateret");
             });
@@ -256,7 +256,7 @@
                 $scope.newRouteId = data.Id;
                 $scope.handleStartPointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Ny rute oprettet");
-                $modalInstance.close('');
+               // $modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette ny rute");
                 return;
@@ -287,7 +287,7 @@
             startPoint.$patch({ id: result1.Id }, function (data) {
                 $scope.handleEndpointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Startadresse opdateret");
-                $modalInstance.close('');
+                //$modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Startadresse blev ikke opdateret");
             });
@@ -309,7 +309,7 @@
                 $scope.newRouteStartPointId = data.Id;
                 $scope.handleEndpointOnSave();
                 NotificationService.AutoFadeNotification("success", "Success", "Startadresse til ny rute oprettet");
-                $modalInstance.close('');
+                //$modalInstance.close('');
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Startadresse blev ikke opdateret");
                 return;
@@ -387,35 +387,8 @@
     }
 
     $scope.closeRouteEditModal = function () {
-        $modalInstance.close({
-
-        });
+        $modalInstance.dismiss();
     };
 
-    $scope.SmartAddress = {
-        type: "json",
-        minLength: 3,
-        serverFiltering: true,
-        crossDomain: true,
-        transport: {
-            read: {
-                url: function (item) {
-                    return 'https://smartadresse.dk/service/locations/3/detect/json/' + item.filter.filters[0].value + '%200';
-                },
-                dataType: "jsonp",
-                data: {
-                    apikey: 'FCF3FC50-C9F6-4D89-9D7E-6E3706C1A0BD',
-                    limit: 15,                   // REST limit
-                    crs: 'EPSG:25832',           // REST projection
-                    nogeo: 'true',                 // REST nogeo
-                    noadrspec: 'true'             // REST noadrspec
-                }
-            }
-        },
-        schema: {
-            data: function (data) {
-                return data.data; // <-- The result is just the data, it doesn't need to be unpacked.
-            }
-        },
-    }
+    $scope.SmartAddress = SmartAdresseSource;
 }]);

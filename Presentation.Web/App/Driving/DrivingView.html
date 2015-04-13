@@ -127,7 +127,7 @@
                     </div>
                     <div ng-show="DriveReport.Addresses[$index].Personal == 'Vælg fast adresse'">
                         <div class="col-lg-7">
-                            <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-options="autoCompleteOptions" k-data-value-field="'presentationString'"
+                            <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
                                    k-data-source="SmartAddress" ng-blur="addressInputChanged($index)" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="'Eller skriv her'" />
                         </div>
                         <div class="col-lg-1" ng-if="$middle">

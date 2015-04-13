@@ -68,8 +68,8 @@
                                 else {
                                     // place result in autocomplete
                                     response($.map(result.data, function (item) {
-                                        displayLabel = item.presentationString;
-                                        displayValue = item.presentationString;
+                                        displayLabel = item.tekst;
+                                        displayValue = item.tekst;
                                         return {
                                             label: displayLabel,
                                             value: displayValue,

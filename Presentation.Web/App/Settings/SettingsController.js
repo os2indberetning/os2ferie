@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("SettingController", [
-    "$scope", "$modal", "Person", "LicensePlate", "Personalroute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token) {
+    "$scope", "$modal", "Person", "LicensePlate", "Personalroute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource) {
         $scope.gridContainer = {};
         $scope.isCollapsed = true;
         $scope.mailAdvice = '';
@@ -85,32 +85,8 @@
         }
 
         //Funtionalitet til opslag af adresser
-        $scope.SmartAddress = {
-            type: "json",
-            minLength: 3,
-            serverFiltering: true,
-            crossDomain: true,
-            transport: {
-                read: {
-                    url: function (item) {
-                        return 'https://smartadresse.dk/service/locations/3/detect/json/' + item.filter.filters[0].value + '%200';
-                    },
-                    dataType: "jsonp",
-                    data: {
-                        apikey: 'FCF3FC50-C9F6-4D89-9D7E-6E3706C1A0BD',
-                        limit: 15,                   // REST limit
-                        crs: 'EPSG:25832',           // REST projection
-                        nogeo: 'true',                 // REST nogeo
-                        noadrspec: 'true'             // REST noadrspec
-                    }
-                }
-            },
-            schema: {
-                data: function (data) {
-                    return data.data; // <-- The result is just the data, it doesn't need to be unpacked.
-                }
-            },
-        }
+        $scope.SmartAddress = SmartAdresseSource;
+           
 
         //Gem ny nummerplade
         $scope.saveNewLicensePlate = function () {
@@ -435,7 +411,7 @@
                             var temp = [];
 
                             angular.forEach(data.Points, function (value, key) {
-                                if (value.NextPointId == undefined) {
+                                if (value.NextPointId == null) {
                                     this.push(value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town);
                                 }
 

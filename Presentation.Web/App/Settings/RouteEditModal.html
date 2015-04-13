@@ -6,17 +6,17 @@
     <input class="form-control" ng-model="newRouteDescription" />
     <div class="seperator"></div>
     <label>Adresse 1</label>
-    <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
+    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
            k-data-source="SmartAddress" ng-model="newStartPoint" class="fill-width" k-placeholder="'Skriv her'" />
     <div class="seperator"></div>
     <label>Adresse 2</label>
-    <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
+    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
            k-data-source="SmartAddress" ng-model="newEndPoint" class="fill-width" k-placeholder="'Skriv her'" />
     <div class="seperator"></div>
     <label>Viapunkter</label>
     <div ng-repeat="viapoint in viaPoints">
         <label>Viapunkt nr: {{$index + 1}}</label>
-        <input type="text" kendo-auto-complete k-data-text-field="'presentationString'" k-data-value-field="'presentationString'"
+        <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
                k-data-source="SmartAddress" ng-model="updatedViaPointModels[$index]" class="fill-90" k-placeholder="'Skriv her'" />
         <button class="btn btn-danger pull-right" ng-click="removeViaPoint($index, viapoint)">Slet</button>
         <div class="seperator"></div>

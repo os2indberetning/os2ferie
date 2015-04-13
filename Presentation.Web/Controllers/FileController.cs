@@ -29,9 +29,9 @@ namespace OS2Indberetning.Controllers
                 Logger.Info("Fil til KMD genereret.");
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Logger.Error("Fejl ved generering af fil til KMD", e);
+                Logger.Error("Fejl ved generering af fil til KMD",e);
                 return InternalServerError();
             }
         }

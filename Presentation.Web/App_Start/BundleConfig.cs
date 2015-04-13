@@ -36,7 +36,7 @@ namespace OS2Indberetning
                       "~/Content/bootstrap.min.css",
                       "~/Content/Themes/SbAdmin/css/bootstrap.min.css",
                       "~/Content/Themes/SbAdmin/css/sb-admin.css",
-                      "~/Content/Themes/SbAdmin/css/plugins/morris.css",
+                      //"~/Content/Themes/SbAdmin/css/plugins/morris.css",
                       "~/Content/Themes/SbAdmin/font-awesome/css/font-awesome.min.css",
                       "~/Content/site.css",
                       "~/Content/timeline.css",

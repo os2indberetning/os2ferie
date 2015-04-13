@@ -283,8 +283,6 @@
                 driveReport.FourKmRule = false;
             }
 
-            debugger;
-
             driveReport.$save(function (response) {
                 // success
 

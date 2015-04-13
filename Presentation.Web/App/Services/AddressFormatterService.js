@@ -11,9 +11,12 @@
 
             var splittet = (addressString.split(","));
 
-
             if (splittet.length != 2) {
-                return undefined;
+                if (splittet.length == 3) {
+                    splittet = [splittet[0], splittet[2]];
+                } else {
+                    return undefined;
+                }
             }
 
             var first = splittet[0].split(" ");
