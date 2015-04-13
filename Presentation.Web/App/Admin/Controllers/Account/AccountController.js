@@ -102,7 +102,7 @@
             $scope.accountDescriptionErrorMessage = "";
             var error = false;
             if ($scope.container.newAccountAccountNumber == "" || $scope.container.newAccountAccountNumber == undefined || $scope.container.newAccountAccountNumber.indexOf("_") > -1) {
-                $scope.accountNumberErrorMessage = "* Du skal skrive et gyldigt kontonummer."
+                $scope.accountNumberErrorMessage = "* Du skal skrive et gyldigt kontonummer.";
                 error = true;
             }
             if ($scope.container.newAccountDescription == "" || $scope.container.newAccountDescription == undefined) {

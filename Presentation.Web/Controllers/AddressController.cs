@@ -10,6 +10,7 @@ using System.Web.OData.Query;
 using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
+using log4net;
 using Ninject;
 
 namespace OS2Indberetning.Controllers
@@ -19,6 +20,8 @@ namespace OS2Indberetning.Controllers
     public class AddressesController : BaseController<Address>
     {
         private static Address MapStartAddress { get; set; }
+
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         
         //GET: odata/Addresses
         public AddressesController(IGenericRepository<Address> repository) : base(repository){}

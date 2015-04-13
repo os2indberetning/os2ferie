@@ -9,6 +9,7 @@ using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
+using log4net;
 using Ninject;
 
 namespace OS2Indberetning.Controllers
@@ -16,6 +17,8 @@ namespace OS2Indberetning.Controllers
     public class DriveReportsController : BaseController<DriveReport>
     {
         private readonly IDriveReportService _driveService;
+
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public DriveReportsController(IGenericRepository<DriveReport> repo, IDriveReportService driveService)
             : base(repo)
@@ -90,6 +93,7 @@ namespace OS2Indberetning.Controllers
             // User should not be allowed to change a Report which has been accepted or rejected.
             if (report.Status != ReportStatus.Pending)
             {
+                Logger.Info("Forsøg på at redigere indberetning med anden status end afventende.");
                 return Unauthorized();
             }
 

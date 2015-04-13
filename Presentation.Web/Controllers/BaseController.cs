@@ -7,7 +7,9 @@ using System.Reflection;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.DomainModel.Example;
 using Core.DomainServices;
+using log4net;
 using Expression = System.Linq.Expressions.Expression;
 
 namespace OS2Indberetning.Controllers
@@ -17,6 +19,9 @@ namespace OS2Indberetning.Controllers
         protected ODataValidationSettings ValidationSettings = new ODataValidationSettings();
         protected IGenericRepository<T> Repo;
         private readonly PropertyInfo _primaryKeyProp;
+
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 
         public BaseController(IGenericRepository<T> repository)
         {
@@ -63,6 +68,7 @@ namespace OS2Indberetning.Controllers
             }
             catch (Exception e)
             {
+                Logger.Error("Exception doing post of type " + typeof(T), e);
                 return InternalServerError(e);
             }
         }
@@ -89,6 +95,7 @@ namespace OS2Indberetning.Controllers
             }
             catch (Exception e)
             {
+                Logger.Error("Exception doing patch of type " + typeof(T), e);
                 return InternalServerError(e);
             }
 
@@ -109,6 +116,7 @@ namespace OS2Indberetning.Controllers
             }
             catch (Exception e)
             {
+                Logger.Error("Exception doing delete", e);
                 return InternalServerError(e);
             }
             return Ok();

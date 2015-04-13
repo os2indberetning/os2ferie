@@ -14,6 +14,7 @@ using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
+using log4net;
 using Ninject;
 using OS2Indberetning;
 
@@ -30,6 +31,8 @@ namespace Core.ApplicationServices
         private readonly IGenericRepository<Employment> _employmentRepository;
         private readonly IGenericRepository<Substitute> _substituteRepository;
         private readonly IMailSender _mailSender;
+
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository)
         {
@@ -82,11 +85,13 @@ namespace Core.ApplicationServices
         {
             if (report.PersonId == 0)
             {
+                Logger.Info("Forsøg på at oprette indberetning uden person angivet.");
                 throw new Exception("No person provided");
             }
 
             if (!Validate(report))
             {
+                Logger.Info("Forsøg på at oprette indberetning med ugyldige parametre.");
                 throw new Exception("DriveReport has some invalid parameters");
             }
 
