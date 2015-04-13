@@ -3,8 +3,9 @@
         $scope.persons = persons;
         $scope.substituteFromDate = new Date();
         $scope.substituteToDate = new Date();
-        $scope.orgUnits = $scope.orgUnits = OrgUnit.getWhereUserIsLeader({ id: leader.Id });
-        $scope.orgUnit = $scope.orgUnits[0];
+        $scope.orgUnits = $scope.orgUnits = OrgUnit.getWhereUserIsLeader({ id: leader.Id }, function() {
+            $scope.orgUnit = $scope.orgUnits[0];
+        });
         
         $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
 
