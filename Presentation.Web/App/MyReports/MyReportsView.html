@@ -14,12 +14,11 @@
         <tabset justified="false">
             <tab heading="Afventer godkendelse" ng-controller="MyPendingReportsController" ng-click="updateReports('')">
                 <div class="panel panel-default">
-
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-file-text-o fa-fw"></i> Afventende</h3>
+                    
+                    <div class="col-xs-12">
+                        <h2 class="inline pull-left">Afventer godkendelse</h2>
                     </div>
-
-
+              
 
                     <div class="panel-body">
                         <div ng-include="'App/MyReports/View.html'"></div>
@@ -29,8 +28,9 @@
 
             <tab heading="Godkendte" ng-controller="MyAcceptedReportsController" ng-click="updateReports('')">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-file-text-o fa-fw"></i> Godkendte</h3>
+                 
+                    <div class="col-xs-12">
+                        <h2 class="inline pull-left">Godkendte</h2>
                     </div>
 
                     <div class="panel-body">
@@ -41,8 +41,9 @@
 
             <tab heading="Afviste" ng-controller="MyRejectedReportsController" ng-click="updateReports('')">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-file-text-o fa-fw"></i> Afviste</h3>
+                  
+                    <div class="col-xs-12">
+                        <h2 class="inline pull-left">Afviste</h2>
                     </div>
 
                     <div class="panel-body">
