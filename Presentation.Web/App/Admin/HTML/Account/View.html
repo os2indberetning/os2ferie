@@ -23,7 +23,7 @@
                     <label>Type</label>
                 </div>
                 <div class="col-md-8">
-                    <select kendo-drop-down-list ng-model="container.newAccountType" class="fill-width">
+                    <select kendo-drop-down-list ng-model="container.newAccountType" ng-change="accountTypeChanged()" class="fill-width">
                         <option value="0">Omkostningssted</option>
                         <option value="1">PSP-element</option>
                     </select>
@@ -35,7 +35,10 @@
                     <label>Kontonummer</label>
                 </div>
                 <div class="col-md-8">
-                    <input class="form-control" ng-model="container.newAccountAccountNumber" />
+                    <input ng-show="container.newAccountType == '0'" kendo-masked-text-box options="maskOptions" class="form-control" ng-model="container.newAccountAccountNumber" />
+                </div>
+                <div class="col-md-8">
+                    <input ng-show="container.newAccountType == '1'" kendo-masked-text-box options="PSPMaskOptions" class="form-control" ng-model="container.newAccountAccountNumber" />
                 </div>
             </div>
 

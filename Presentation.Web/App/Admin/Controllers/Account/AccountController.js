@@ -3,10 +3,18 @@
 
         $scope.container = {};
 
-        $scope.container.gridPageSize = 20;
+        $scope.maskOptions = {
+            //Omkostningssted
+            mask: "0000000000"
+        }
+        
+        $scope.PSPMaskOptions = {
+            //PSP
+            mask: "LL-0000000000-00000"
+        }
 
-        $scope.pageSizeChanged = function () {
-            $scope.container.accountGrid.dataSource.pageSize(Number($scope.container.gridPageSize));
+        $scope.accountTypeChanged = function() {
+            $scope.newAccountAccountNumber = "";
         }
 
         $scope.loadAccounts = function () {
@@ -93,7 +101,7 @@
             $scope.accountNumberErrorMessage = "";
             $scope.accountDescriptionErrorMessage = "";
             var error = false;
-            if ($scope.container.newAccountAccountNumber == "" || $scope.container.newAccountAccountNumber == undefined) {
+            if ($scope.container.newAccountAccountNumber == "" || $scope.container.newAccountAccountNumber == undefined || $scope.container.newAccountAccountNumber.indexOf("_") > -1) {
                 $scope.accountNumberErrorMessage = "* Du skal skrive et gyldigt kontonummer."
                 error = true;
             }
