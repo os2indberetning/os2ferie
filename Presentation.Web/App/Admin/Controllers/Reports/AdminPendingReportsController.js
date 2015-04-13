@@ -138,14 +138,14 @@
                template: function (data) {
                    return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
                },
-               footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+               footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
            }, {
                field: "AmountToReimburse",
                title: "Beløb",
                template: function (data) {
                    return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
                },
-               footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+               footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
            }, {
                field: "KilometerAllowance",
                title: "Merkørsel",

@@ -75,7 +75,7 @@
                     },
                     {
                         field: "HasAccessToFourKmRule",
-                        title: "Kan benytte 4km-regel",
+                        title: "Kan benytte 4 km-regel",
                         template: function(data) {
                             var res = "<input type='checkbox' ng-model='checkboxes[" + data.Id + "]' ng-change='rowChecked(" + data.Id + ")'></input>";
                             return res;
