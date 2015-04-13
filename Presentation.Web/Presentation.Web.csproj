@@ -293,6 +293,7 @@
     <Content Include="App\Admin\Controllers\Reports\AdminPendingReportsController.js" />
     <Content Include="App\Admin\Controllers\Reports\AdminRejectedReportsController.js" />
     <Content Include="App\Admin\Controllers\Reports\Modal\ShowRouteModalController.js" />
+    <Content Include="App\Admin\Controllers\Substitutes\Modals\AdminNewSubstituteModalInstanceController.js" />
     <Content Include="App\Admin\HTML\Reports\Modal\ShowRouteModalTemplate.html" />
     <Content Include="App\Admin\Controllers\Substitutes\SubstituteController.js" />
     <Content Include="App\Admin\HTML\Administration\Modal\ConfirmGenerateFileModalTemplate.html" />
@@ -302,6 +303,7 @@
     <Content Include="App\Admin\HTML\OrgUnit\View.html" />
     <Content Include="App\Admin\HTML\Reports\InnerView.html" />
     <Content Include="App\Admin\HTML\Reports\View.html" />
+    <Content Include="App\Admin\HTML\Substitutes\Modals\newSubstituteModal.html" />
     <Content Include="App\Admin\HTML\Substitutes\View.html" />
     <Content Include="App\Admin\HTML\Account\ConfirmDeleteAccountTemplate.html" />
     <Content Include="App\Admin\HTML\Account\View.html" />

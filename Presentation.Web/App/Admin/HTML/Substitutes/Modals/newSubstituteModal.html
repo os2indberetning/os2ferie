@@ -8,7 +8,7 @@
                 <label>Vælg stedfortræder:</label>
             </div>
             <div class="col-md-6">
-                <input class="form-control pull-right fill-width" kendo-auto-complete k-data-source="personsWithoutLeader" k-ng-model="person" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+                <input class="form-control pull-right fill-width" kendo-auto-complete k-data-source="persons" k-ng-model="person" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
             </div>
         </div>
         
@@ -17,10 +17,22 @@
         
         <div class="row">
             <div class="col-md-6">
+                <label>Stedfortræder for:</label>
+            </div>
+            <div class="col-md-6">
+                <input options="personForOptions" class="form-control pull-right fill-width" kendo-auto-complete k-data-source="persons" k-ng-model="personFor" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+            </div>
+        </div>
+
+
+        <div class="seperator"></div>
+        
+        <div class="row">
+            <div class="col-md-6">
                 <label>Organisationsenhed:</label>
             </div>
             <div class="col-md-6">
-                <select class="fill-width pull-right" kendo-drop-down-list="PositionDropDown" k-ng-model="orgUnit" k-data-text-field="'ShortDescription'" id=" " k-data-source="orgUnits" k-data-value-field="'Id'"></select>
+                <select ng-disabled="orgUnitsDisabled" class="fill-width pull-right" kendo-drop-down-list="PositionDropDown" k-ng-model="orgUnit" k-data-text-field="'ShortDescription'" id=" " k-data-source="orgUnits" k-data-value-field="'Id'"></select>
             </div>
         </div>  
         

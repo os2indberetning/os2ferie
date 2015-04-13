@@ -403,6 +403,32 @@
             });
         };
 
+        $scope.createNewSubstitute = function () {
+            var modalInstance = $modal.open({
+                templateUrl: 'App/Admin/HTML/Substitutes/Modals/newSubstituteModal.html',
+                controller: 'AdminNewSubstituteModalInstanceController',
+                backdrop: 'static',
+                size: 'lg',
+                resolve: {
+                    persons: function () {
+                        return $scope.persons;
+                    },
+                    orgUnits: function () {
+                        return $scope.orgUnits;
+                    },
+                    leader: function () {
+                        return $scope.currentPerson;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                $scope.container.substituteGrid.dataSource.read();
+            }, function () {
+
+            });
+        };
+
 
         $scope.openEditSubstitute = function (id) {
             var modalInstance = $modal.open({

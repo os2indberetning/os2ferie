@@ -1,9 +1,9 @@
 ﻿angular.module('application').controller('NewSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService) {
+    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService) {
         $scope.persons = persons;
         $scope.substituteFromDate = new Date();
         $scope.substituteToDate = new Date();
-        $scope.orgUnits = orgUnits;
+        $scope.orgUnits = $scope.orgUnits = OrgUnit.getWhereUserIsLeader({ id: leader.Id });
         $scope.orgUnit = $scope.orgUnits[0];
         
         $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
