@@ -106,7 +106,7 @@
                    field: "EndDateTimestamp",
                    template: function (data) {
                        if (data.EndDateTimestamp == 9999999999) {
-                           return "Tidsubegrænset";
+                           return "På ubestemt tid";
                        }
                        var m = moment.unix(data.EndDateTimestamp);
                        return m._d.getDate() + "/" +
@@ -195,7 +195,7 @@
                    title: "Til",
                    template: function (data) {
                        if (data.EndDateTimestamp == 9999999999) {
-                           return "Tidsubegrænset";
+                           return "På ubestemt tid";
                        }
                        var m = moment.unix(data.EndDateTimestamp);
                        return m._d.getDate() + "/" +
@@ -288,7 +288,7 @@
                    field: "EndDateTimestamp",
                    template: function (data) {
                        if (data.EndDateTimestamp == 9999999999) {
-                           return "Tidsubegrænset";
+                           return "På ubestemt tid";
                        }
                        var m = moment.unix(data.EndDateTimestamp);
                        return m._d.getDate() + "/" +
