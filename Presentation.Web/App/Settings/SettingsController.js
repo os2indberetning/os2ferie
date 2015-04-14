@@ -29,7 +29,7 @@
 
         $scope.GetPerson = Person.get({ id: personId }, function (data) {
             $scope.currentPerson = data;
-            $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride.toString().replace('.',',');
+            $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride.toString().replace('.', ',');
             $scope.recieveMail = data.RecieveMail;
 
             //Set choice of mail notification
@@ -86,7 +86,7 @@
 
         //Funtionalitet til opslag af adresser
         $scope.SmartAddress = SmartAdresseSource;
-           
+
 
         //Gem ny nummerplade
         $scope.saveNewLicensePlate = function () {
@@ -146,16 +146,13 @@
 
         //Slet eksisterende nummerplade
         $scope.deleteLicensePlate = function (plate) {
-            var objIndex = $scope.licenseplates.indexOf(plate);
-            $scope.licenseplates.splice(objIndex, 1);
-
-            LicensePlate.delete({ id: plate.Id }, function (data) {
+            LicensePlate.delete({ id: plate.Id }, function () {
                 NotificationService.AutoFadeNotification("success", "Success", "Nummerplade blev slettet");
-            }), function () {
-                $scope.licenseplates.push(plate);
-                $scope.licenseplates.sort(function (a, b) {
-                    return a.Id > b.Id;
+                //Load licenseplates again
+                LicensePlate.get({ id: personId }, function (data) {
+                    $scope.licenseplates = data;
                 });
+            }), function () {
                 NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade blev ikke slettet");
             };
         }
@@ -318,7 +315,7 @@
         $scope.setHomeWorkOverride = function () {
             var newPerson = new Person({
                 WorkDistanceOverride: $scope.workDistanceOverride.toString().replace(',', '.')
-        });
+            });
 
             newPerson.$patch({ id: personId }, function (data) {
                 NotificationService.AutoFadeNotification("success", "Success", "Afstand mellem hjemme- og arbejdsadresse blev gemt");
@@ -434,14 +431,14 @@
                     type: "odata",
                     transport: {
                         read: {
-                            beforeSend: function(req) {
+                            beforeSend: function (req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
                             url: "odata/PersonalAddresses()?$filter=PersonId eq " + personId + " and (Type eq Core.DomainModel.PersonalAddressType'Standard' or Type eq Core.DomainModel.PersonalAddressType'Home' or Type eq Core.DomainModel.PersonalAddressType'Work')",
                             dataType: "json",
                             cache: false
                         },
-                        parameterMap: function(options, type) {
+                        parameterMap: function (options, type) {
                             var d = kendo.data.transports.odata.parameterMap(options);
 
                             delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
@@ -486,7 +483,7 @@
                     {
                         field: "Description",
                         title: "Beskrivelse",
-                        template: function(data) {
+                        template: function (data) {
                             if (data.Type == "Work") {
                                 return "Arbejdsadresse";
                             }
@@ -503,7 +500,7 @@
                     }, {
                         field: "Id",
                         title: "Muligheder",
-                        template: function(data) {
+                        template: function (data) {
                             if (!(data.Type == "Home" || data.Type == "Work")) {
                                 return "<a ng-click='openAddressEditModal(" + data.Id + ")'>Rediger</a> | <a ng-click='openAddressDeleteModal(" + data.Id + ")'>Slet</a>";
                             }
@@ -738,8 +735,8 @@
             });
         };
 
-        $scope.makeLicensePlatePrimary = function(plate) {
-            LicensePlate.patch({ id: plate.Id }, { IsPrimary: true }, function() {
+        $scope.makeLicensePlatePrimary = function (plate) {
+            LicensePlate.patch({ id: plate.Id }, { IsPrimary: true }, function () {
                 //Load licenseplates when finished request.
                 LicensePlate.get({ id: personId }, function (data) {
                     $scope.licenseplates = data;

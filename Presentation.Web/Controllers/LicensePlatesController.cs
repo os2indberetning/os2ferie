@@ -41,6 +41,11 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(LicensePlate LicensePlate)
         {
+            if (!Repo.AsQueryable().Any(lp => lp.PersonId == LicensePlate.PersonId))
+            {
+                LicensePlate.IsPrimary = true;
+            }
+
             return base.Post(LicensePlate);
         }
 
@@ -60,8 +65,23 @@ namespace OS2Indberetning.Controllers
         //DELETE: odata/LicensePlates(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
+            // Get the plate to be deleted
+            var plate = Repo.AsQueryable().SingleOrDefault(lp => lp.Id == key);
+            if (plate != null && plate.IsPrimary)
+            {
+                // Delete the plate. Save the result.
+                var res = base.Delete(key);
+                // Find a new plate to make primary.
+                var newPrimary = Repo.AsQueryable().FirstOrDefault(lp => lp.PersonId == plate.PersonId);
+                if (newPrimary != null)
+                {
+                    _plateService.MakeLicensePlatePrimary(newPrimary.Id);
+                }
+                // Make the new plate primary and return the result of the delete action.
+                return res;
+            }
+
             return base.Delete(key);
-        
         }
 
         public IHttpActionResult MakePrimary(int plateId)

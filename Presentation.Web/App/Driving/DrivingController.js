@@ -125,6 +125,7 @@
                     $scope.showLicensePlate = rate.Type.RequiresLicensePlate;
                 }
             });
+            $scope.validateInput();
 
         }
 
@@ -134,6 +135,7 @@
             $scope.readDistanceErrorMessage = "";
             $scope.addressSelectionErrorMessage = "";
             $scope.userCommentErrorMessage = "";
+            $scope.licensePlateErrorMessage = "";
             if ($scope.DriveReport.KilometerAllowance === "Read") {
                 if ($scope.DriveReport.Purpose == "" || $scope.DriveReport.Purpose == undefined) {
                     $scope.canSubmitDriveReport = false;
@@ -159,6 +161,17 @@
                     $scope.purposeErrorMessage = "* Du skal angive et formål.";
                 }
             }
+
+
+            angular.forEach($scope.KmRate, function (rate, key) {
+                if ($scope.DriveReport.KmRate == rate.Id) {
+                    if (rate.Type.RequiresLicensePlate && $scope.DriveReport.LicensePlate == "Ingen nummerplade") {
+                        $scope.licensePlateErrorMessage = "* Det valgte transportmiddel kræver en nummerplade";
+                        $scope.canSubmitDriveReport = false;
+                    }
+                }
+            });
+
             if ($scope.guiChangedByMap <= 0) {
                 $scope.generateMapWidget();
             }
@@ -376,6 +389,7 @@
 
                 $scope.LicensePlateDropDown.select(function (item) {
                     return item.Plate == latestDriveReport.LicensePlate;
+
                 });
 
                 $scope.KmRateDropDown.select(function (item) {
@@ -388,7 +402,6 @@
 
                 $scope.kilometerAllowanceChanged();
             } else {
-
                 // Else will be hit when the page is freshly loaded and latestDriveReport is retrieved from the server via get.
                 latestDriveReport.$promise.then(function (res) {
 
@@ -443,8 +456,12 @@
             });
 
             $scope.LicensePlates.$promise.then(function (data) {
-                $scope.LicensePlateDropDown.dataSource.read();
-                $scope.canSubmitDriveReport = data.length > 0;
+                if ($scope.LicensePlates.length > 0) {
+                    $scope.LicensePlateDropDown.dataSource.read();
+                    $scope.canSubmitDriveReport = data.length > 0;
+                } else {
+                    $scope.LicensePlates = [{ Plate: "Ingen nummerplade" }];
+                }
             });
 
 
@@ -455,6 +472,7 @@
         $scope.Employments = PersonEmployments.get({ id: personId });
 
         $scope.LicensePlates = LicensePlate.get({ id: personId });
+
 
         $scope.KmRate = Rate.ThisYearsRates();
 

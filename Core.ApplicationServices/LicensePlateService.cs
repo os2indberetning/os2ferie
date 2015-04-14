@@ -38,6 +38,7 @@ namespace Core.ApplicationServices
             }
             // Make the requested plate primary.
             plate.IsPrimary = true;
+            _repo.Save();
             return true;
 
         }
