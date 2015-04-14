@@ -17,7 +17,7 @@
     <div ng-repeat="viapoint in viaPoints">
         <label>Viapunkt nr: {{$index + 1}}</label>
         <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
-               k-data-source="SmartAddress" ng-model="updatedViaPointModels[$index]" class="fill-90" k-placeholder="'Skriv her'" />
+               k-data-source="SmartAddress" ng-model="viaPointModels[$index]" class="fill-90" k-placeholder="'Skriv her'" />
         <button class="btn btn-danger pull-right" ng-click="removeViaPoint($index, viapoint)">Slet</button>
         <div class="seperator"></div>
     </div>
