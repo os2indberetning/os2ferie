@@ -104,8 +104,8 @@
                         <div class="col-md-4">
                             <p class="margin-5"><strong>Token</strong></p>
                         </div>
-                        <div class="col-md-4">
-                            <p class="margin-5"><strong>Beskrivelse</strong></p>
+                        <div class="col-md-8">
+                            <p class="margin-5"><strong>Beskrivelse</strong> (f.eks. arbejdstelefon eller telefonnummer)</p>
                         </div>
                         
                     </div>
@@ -123,10 +123,11 @@
 
                     <div collapse="tokenIsCollapsed">
                         <div class="row margin-5">
-                            <div class="col-md-10 margin-bottom-10">
-                                <input ng-model="newTokenDescription" class="form-control  fill-fifty pull-left" placeholder="Beskrivelse" />
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4 margin-bottom-10">
+                                <input ng-model="newTokenDescription" class="form-control fill-width" placeholder="Beskrivelse" />
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 pull-right">
                                 <button class="btn btn-success pull-right margin-left-5" ng-click="saveToken()">Gem</button>
                             </div>
                         </div>
