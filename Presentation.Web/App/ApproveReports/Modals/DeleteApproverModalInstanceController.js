@@ -1,5 +1,8 @@
 ﻿angular.module('application').controller('ConfirmDeleteApproverModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId) {
+    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId",
+        function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId) {
+
+        
 
         $scope.persons = persons;
         $scope.orgUnits = orgUnits;

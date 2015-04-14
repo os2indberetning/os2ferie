@@ -1,5 +1,9 @@
 ﻿angular.module("application").controller("EditMailNotificationController", [
-    "$scope", "$modalInstance", "itemId", "NotificationService", "EmailNotification", function ($scope, $modalInstance, itemId, NotificationService, EmailNotification) {
+    "$scope", "$modalInstance", "itemId", "NotificationService", "EmailNotification",
+    function ($scope, $modalInstance, itemId, NotificationService, EmailNotification) {
+
+
+     
 
         $scope.repeatMonthly = "";
 

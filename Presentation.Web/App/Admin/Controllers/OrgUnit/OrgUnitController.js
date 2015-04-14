@@ -7,7 +7,6 @@
         $scope.orgUnit = {};
         $scope.people = [];
 
-
         $scope.loadOrgUnits = function () {
             $scope.OrgUnits = {
                 dataSource: {

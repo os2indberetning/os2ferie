@@ -1,7 +1,8 @@
 ﻿angular.module("application").controller("DeleteMailNotificationController", [
-    "$scope", "$modalInstance", "itemId", "NotificationService", "StandardAddress", function($scope, $modalInstance, itemId, NotificationService, StandardAddress) {
+    "$scope", "$modalInstance", "itemId", "NotificationService",
+    function ($scope, $modalInstance, itemId, NotificationService) {
 
-        $scope.confirmDelete = function () {
+     $scope.confirmDelete = function () {
             $modalInstance.close($scope.itemId);
             NotificationService.AutoFadeNotification("success", "Slet", "Adviseringen blev slettet.");
         }

@@ -1,5 +1,6 @@
 ﻿angular.module("application").controller("AddNewAddressController", [
-    "$scope", "$modalInstance", "NotificationService", "StandardAddress", "AddressFormatter", "SmartAdresseSource", function ($scope, $modalInstance, NotificationService, AddressFormatter, SmartAdresseSource) {
+    "$scope", "$modalInstance", "NotificationService", "StandardAddress", "AddressFormatter", "SmartAdresseSource",
+    function ($scope, $modalInstance, NotificationService, StandardAddress , AddressFormatter, SmartAdresseSource) {
 
         $scope.SmartAddress = {
             type: "json",

@@ -1,6 +1,7 @@
 ﻿angular.module('application').controller('EditSubstituteModalInstanceController',
     ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId) {
 
+
         $scope.persons = persons;
         $scope.orgUnits = orgUnits;
 
@@ -23,7 +24,7 @@
 
             $scope.substitute = data.value[0]; // This is bad, but can't change the service
 
-   
+
             $scope.person[0] = $scope.substitute.Sub;
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000);
             $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000);
@@ -32,9 +33,9 @@
 
         });
 
-        
+
         $scope.orgUnitSelected = function (id) {
-         
+
         }
 
         $scope.saveNewSubstitute = function () {

@@ -14,10 +14,10 @@
 
                     <label for="">Registreringsnummer på bil:</label>
                     <div></div>
-                    <input ng-model="newLicensePlate" class="" kendo-masked-text-box k-mask="'&& && &&&'" placeholder="AB 12 345" />
-                    <input ng-model="newLicensePlateDescription" class="k-textbox" placeholder="Kommentar" />
+                    <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlate" class="" kendo-masked-text-box k-mask="'&& && &&&'" placeholder="AB 12 345" />
+                    <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlateDescription" class="k-textbox" placeholder="Kommentar" />
                     <button type="submit" class="btn btn-primary" ng-click="saveNewLicensePlate()">Tilføj</button>
-                    <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Vis nummerplader</button>
+                    <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed"><span ng-if="isCollapsed">vis nummerplader</span> <span ng-if="!isCollapsed">Skjul nummerplader</span></button>
                     <div collapse="isCollapsed">
                         <div class="well well-lg">
                             <div class="row margin-5">
@@ -57,7 +57,7 @@
                     <label for="">Afvigende afstand mellem hjemme- og arbejdsadresse:</label>
                     <span class="info-popup" popover="Hvis systemet beregner en anden afstand end den du egentlig kører, kan du her indtaste en afvigende afstand mellem bopæl og arbejdsplads. HUSK! Denne afvigende afstand også er dén du skal indberette til rubrik 51 på din forskudsopgørelse ved Skat." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                     <div></div>
-                    <input ng-model="workDistanceOverride" class="k-textbox" placeholder="0" /><label>km</label>
+                    <input ng-enter="setHomeWorkOverride()" ng-model="workDistanceOverride" class="k-textbox" placeholder="0" /><label>km</label>
                     <button type="submit" class="btn btn-primary" ng-click="setHomeWorkOverride()">Gem ændringer</button>
                 </div>
             </div>
@@ -68,13 +68,13 @@
                     <h3>Afvigende adresser</h3>
                     <label for="">Afvigende hjemmeadresse:</label>
                     <div></div>
-                    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+                    <input ng-enter="saveAlternativeHomeAddress()" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
                            k-data-source="SmartAddress" ng-model="newAlternativeHomeAddress" class="fill-fifty" k-placeholder="'Skriv her'" />
                     <button type="submit" class="btn btn-primary" ng-click="saveAlternativeHomeAddress()">Gem afvigende hjemmeadresse</button>
                     <div class="seperator"></div>
                     <label for="">Afvigende arbejdsadresse:</label>
                     <div></div>
-                    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+                    <input ng-enter="saveAlternativeWorkAddress()" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
                            k-data-source="SmartAddress" ng-model="newAlternativeWorkAddress" class="fill-fifty" k-placeholder="'Skriv her'" />
                     <button type="submit" class="btn btn-primary" ng-click="saveAlternativeWorkAddress()">Gem afvigende arbejdsadresse</button>
                 </div>
@@ -125,7 +125,7 @@
                         <div class="row margin-5">
                             <div class="col-md-4"></div>
                             <div class="col-md-4 margin-bottom-10">
-                                <input ng-model="newTokenDescription" class="form-control fill-width" placeholder="Beskrivelse" />
+                                <input ng-enter="saveToken()" ng-model="newTokenDescription" class="form-control fill-width" placeholder="Beskrivelse" />
                             </div>
                             <div class="col-md-2 pull-right">
                                 <button class="btn btn-success pull-right margin-left-5" ng-click="saveToken()">Gem</button>

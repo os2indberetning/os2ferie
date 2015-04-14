@@ -1,5 +1,6 @@
 ﻿angular.module('application').controller('NewApproverModalInstanceController',
     ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService) {
+
         $scope.persons = persons;
         $scope.approverFromDate = new Date();
         $scope.approverToDate = new Date();

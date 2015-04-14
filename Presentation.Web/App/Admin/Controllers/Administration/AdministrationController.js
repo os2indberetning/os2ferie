@@ -1,5 +1,6 @@
 ﻿angular.module("application").controller("AdministrationController", [
-   "$scope", "Person", "$modal", "NotificationService", "File", function ($scope, Person, $modal, NotificationService, File) {
+   "$scope", "Person", "$modal", "NotificationService", "File",
+   function ($scope, Person, $modal, NotificationService, File) {
 
        Person.getNonAdmins(function (res) {
            $scope.nonAdmins = res.value;

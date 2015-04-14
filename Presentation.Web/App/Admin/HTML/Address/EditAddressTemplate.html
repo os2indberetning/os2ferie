@@ -9,7 +9,7 @@
                    k-data-source="SmartAddress" ng-model="address" class="fill-width no-max-width margin-5" k-placeholder="'Skriv her'" />
 
             <label class="margin-5">Beskrivelse</label>
-            <input type="text" class="form-control margin-5" ng-model="description"/>
+            <input ng-enter="confirmEdit()" type="text" class="form-control margin-5" ng-model="description"/>
         </div>
     </div>
 

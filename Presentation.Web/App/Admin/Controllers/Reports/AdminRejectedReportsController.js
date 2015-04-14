@@ -1,6 +1,9 @@
 
-angular.module("application").controller("AdminRejectedReportsController", [
-   "$scope", "$timeout", "$modal", function ($scope, $timeout, $modal) {
+angular.module("application").controller("AdminRejectedReportsController",
+    ["$scope", "$timeout", "$modal",
+    function ($scope, $timeout, $modal) {
+
+
 
        // Hardcoded personid until we can get current user from their system.
        var personId = 1;

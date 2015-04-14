@@ -1,6 +1,8 @@
 ﻿angular.module("application").controller("AdminPendingReportsController", [
    "$scope", "$timeout", "$modal", function ($scope, $timeout, $modal) {
 
+
+
        // Hardcoded personid == 1 until we can get current user from their system.
        var personId = 1;
 

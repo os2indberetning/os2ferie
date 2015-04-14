@@ -1,7 +1,6 @@
 ﻿angular.module("application").controller("DrivingController", [
     "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", "Address", "Route", "$q", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state, Address, Route, $q) {
 
-
         $scope.container = {};
 
         // Hardcoded personId
@@ -341,7 +340,7 @@
             $scope.DriveReport.Purpose = "";
 
 
-            
+
 
             $scope.container.PersonalRouteDropDown.select(0);
             $scope.container.PersonalRouteDropDown.trigger("change");
@@ -363,36 +362,58 @@
 
             OS2RouteMap.set($scope.getDefaultMapAddresses());
 
-            
+
 
         }
 
         $scope.loadValuesFromLatestDriveReport = function () {
 
-
-            latestDriveReport.$promise.then(function (res) {
+            if (latestDriveReport.$promise == undefined) {
+                // This if is true, if latestDriveReport is the result of a post.
                 $scope.PositionDropDown.select(function (item) {
-                    return item.Id === res.Employment.Id;
+                    return item.Id === latestDriveReport.EmploymentId;
                 });
 
                 $scope.LicensePlateDropDown.select(function (item) {
-                    return item.Plate == res.LicensePlate;
+                    return item.Plate == latestDriveReport.LicensePlate;
                 });
 
                 $scope.KmRateDropDown.select(function (item) {
-                    return item.Type.TFCode == res.TFCode;
+                    return item.Type.TFCode == latestDriveReport.TFCode;
                 });
 
                 $scope.container.kilometerAllowanceDropDown.select(function (item) {
-                    return item.value == res.KilometerAllowance;
+                    return item.value == latestDriveReport.KilometerAllowance;
                 });
 
                 $scope.kilometerAllowanceChanged();
+            } else {
 
-            });
+                // Else will be hit when the page is freshly loaded and latestDriveReport is retrieved from the server via get.
+                latestDriveReport.$promise.then(function (res) {
+
+                    $scope.PositionDropDown.select(function (item) {
+                        return item.Id === res.Employment.Id;
+                    });
+
+                    $scope.LicensePlateDropDown.select(function (item) {
+                        return item.Plate == res.LicensePlate;
+                    });
+
+                    $scope.KmRateDropDown.select(function (item) {
+                        return item.Type.TFCode == res.TFCode;
+                    });
+
+                    $scope.container.kilometerAllowanceDropDown.select(function (item) {
+                        return item.value == res.KilometerAllowance;
+                    });
+
+                    $scope.kilometerAllowanceChanged();
+                });
+            }
         }
 
-        $scope.kilometerAllowanceChanged = function() {
+        $scope.kilometerAllowanceChanged = function () {
             $scope.DriveReport.KilometerAllowance = $scope.container.kilometerAllowanceDropDown._selectedValue;
             if ($scope.DriveReport.KilometerAllowance != "Read") {
                 $scope.DriveReport.UserComment = "";
@@ -565,7 +586,7 @@
             $scope.validateInput();
         }
 
-        Address.getMapStart(function(res) {
+        Address.getMapStart(function (res) {
             mapStartAddress = [
                 { name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude },
                 { name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude }
@@ -579,7 +600,7 @@
             OS2RouteMap.set($scope.getDefaultMapAddresses());
         });
 
-        
+
 
         $scope.employmentChanged = function () {
             // Clear the checkbox and the value field before checking.

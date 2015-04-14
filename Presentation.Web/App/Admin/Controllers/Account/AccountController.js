@@ -1,6 +1,8 @@
 ﻿angular.module("application").controller("AccountController", [
-    "$scope", "$modal", "BankAccount", "NotificationService", function ($scope, $modal, BankAccount, NotificationService) {
+    "$scope", "$modal", "BankAccount", "NotificationService",
+    function ($scope, $modal, BankAccount, NotificationService) {
 
+       
         $scope.container = {};
 
         $scope.maskOptions = {

@@ -9,7 +9,7 @@
                    k-data-source="SmartAddress" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="'Indtast adresse'" />
         
             <label class="margin-5">Beskrivelse</label>
-            <input type="text" class="form-control margin-5" ng-model="description" />
+            <input ng-enter="confirmSave()" type="text" class="form-control margin-5" ng-model="description" />
          
          
          

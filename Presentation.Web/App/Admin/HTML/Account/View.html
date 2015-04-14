@@ -32,10 +32,10 @@
                     <label>Kontonummer</label>
                 </div>
                 <div class="col-md-8">
-                    <input ng-show="container.newAccountType == '0'" kendo-masked-text-box options="maskOptions" class="form-control" ng-model="container.newAccountAccountNumber" />
+                    <input ng-enter="addNewAccountClick()" ng-show="container.newAccountType == '0'" kendo-masked-text-box options="maskOptions" class="form-control" ng-model="container.newAccountAccountNumber" />
                 </div>
                 <div class="col-md-8">
-                    <input ng-show="container.newAccountType == '1'" kendo-masked-text-box options="PSPMaskOptions" class="form-control" ng-model="container.newAccountAccountNumber" />
+                    <input ng-enter="addNewAccountClick()" ng-show="container.newAccountType == '1'" kendo-masked-text-box options="PSPMaskOptions" class="form-control" ng-model="container.newAccountAccountNumber" />
                 </div>
             </div>
 
@@ -44,7 +44,7 @@
                     <label>Beskrivelse</label>
                 </div>
                 <div class="col-md-8">
-                    <textarea type="text" class="form-control min-height-100 max-width-100p" ng-model="container.newAccountDescription"></textarea>
+                    <textarea ng-enter="addNewAccountClick()" type="text" class="form-control min-height-100 max-width-100p" ng-model="container.newAccountDescription"></textarea>
                 </div>
             </div>
             <div class="col-md-12 margin-5">

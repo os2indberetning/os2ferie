@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("SubstituteController", [
-    "$scope", "$modal", "NotificationService", "$timeout", "Person", "OrgUnit", function ($scope, $modal, NotificationService, $timeout, Person, OrgUnit) {
-
+    "$scope", "$modal", "NotificationService", "$timeout", "Person", "OrgUnit",
+    function ($scope, $modal, NotificationService, $timeout, Person, OrgUnit) {
 
         $scope.container = {};
 

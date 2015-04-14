@@ -1,5 +1,6 @@
 ﻿angular.module("application").controller("DeleteAccountController", [
-    "$scope", "$modalInstance", "itemId", "NotificationService", function ($scope, $modalInstance, itemId, NotificationService) {
+    "$scope", "$modalInstance", "itemId", "NotificationService",
+    function ($scope, $modalInstance, itemId, NotificationService) {
 
         $scope.confirmDelete = function () {
             $modalInstance.close($scope.itemId);
