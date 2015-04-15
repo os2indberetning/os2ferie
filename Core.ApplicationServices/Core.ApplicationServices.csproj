@@ -108,10 +108,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PersonalRouteService.cs" />
     <Compile Include="FileGenerator\FileRecord.cs" />
     <Compile Include="FileGenerator\IReportFileWriter.cs" />
     <Compile Include="FileGenerator\ReportFileWriter.cs" />
     <Compile Include="FileGenerator\ReportGenerator.cs" />
+    <Compile Include="Interfaces\IPersonalRouteService.cs" />
     <Compile Include="Interfaces\IDriveReportService.cs" />
     <Compile Include="Interfaces\ILicensePlateService.cs" />
     <Compile Include="Interfaces\ISubstituteService.cs" />

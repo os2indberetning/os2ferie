@@ -37,7 +37,7 @@ namespace Presentation.Web.Test.Controllers
             return _list.AsQueryable();
         }
 
-        public void Save()
+        public virtual void Save()
         {
 
         }

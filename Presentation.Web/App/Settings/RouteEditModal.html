@@ -14,16 +14,16 @@
            k-data-source="SmartAddress" ng-model="newEndPoint" class="fill-width" k-placeholder="'Skriv her'" />
     <div class="seperator"></div>
     <label>Viapunkter</label>
-    <div ng-repeat="viapoint in viaPoints">
+    <div ng-repeat="viapoint in viaPointModels track by $index">
         <label>Viapunkt nr: {{$index + 1}}</label>
         <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
-               k-data-source="SmartAddress" ng-model="updatedViaPointModels[$index]" class="fill-90" k-placeholder="'Skriv her'" />
-        <button class="btn btn-danger pull-right" ng-click="removeViaPoint($index, viapoint)">Slet</button>
+               k-data-source="SmartAddress" ng-model="viaPointModels[$index]" class="fill-90" k-placeholder="'Skriv her'" />
+        <button class="btn btn-danger pull-right" ng-click="removeViaPoint($index)">Slet</button>
         <div class="seperator"></div>
     </div>
     <button class="btn" ng-click="addNewViaPoint()"><i class="fa fa-plus"></i> Viapunkt</button>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-success pull-left new-token-btn" ng-click="saveRoute()">Gem</button>
+    <button class="btn btn-success pull-left new-token-btn" ng-disabled="isSaveDisabled" ng-click="saveRoute()">Gem</button>
     <button class="btn btn-primary pull-right close-token-modal" ng-click="closeRouteEditModal()">Luk</button>
 </div>

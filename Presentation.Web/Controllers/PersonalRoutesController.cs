@@ -2,6 +2,7 @@
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 
@@ -9,8 +10,12 @@ namespace OS2Indberetning.Controllers
 {
     public class PersonalRoutesController : BaseController<PersonalRoute>
     {
+        private readonly IPersonalRouteService _routeService;
         //GET: odata/PersonalRoutes
-        public PersonalRoutesController(IGenericRepository<PersonalRoute> repository) : base(repository){}
+        public PersonalRoutesController(IGenericRepository<PersonalRoute> repository, IPersonalRouteService routeService) : base(repository)
+        {
+            _routeService = routeService;
+        }
 
         [EnableQuery]
         public IQueryable<PersonalRoute> Get(ODataQueryOptions<PersonalRoute> queryOptions)
@@ -33,9 +38,12 @@ namespace OS2Indberetning.Controllers
 
         //POST: odata/PersonalRoutes
         [EnableQuery]
-        public new IHttpActionResult Post(PersonalRoute PersonalRoute)
+        public new IHttpActionResult Post(PersonalRoute personalRoute)
         {
-            return base.Post(PersonalRoute);
+            var res = _routeService.Create(personalRoute);
+
+            return Ok(res);
+
         }
 
         //PATCH: odata/PersonalRoutes(5)

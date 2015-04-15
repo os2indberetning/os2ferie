@@ -64,7 +64,7 @@ namespace Core.ApplicationServices
             kernel.Bind<IRoute<RouteInformation>>().To<BestRoute>();
             kernel.Bind<IReimbursementCalculator>().To<ReimbursementCalculator>();
             kernel.Bind<ILicensePlateService>().To<LicensePlateService>();
-
+            kernel.Bind<IPersonalRouteService>().To<PersonalRouteService>();
         }        
     }
 }

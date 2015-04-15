@@ -417,6 +417,22 @@
                             return temp;
                         },
                         title: "Til"
+                    }, {
+                        title: "Via",
+                        field: "Points",
+                        width: 50,
+                        template: function (data) {
+                            var tooltipContent = "";
+                            var gridContent = data.Points.length - 2;
+                            angular.forEach(data.Points, function (point, key) {
+                                if (key != 0 && key != data.Points.length - 1) {
+                                    tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
+                                }
+                            });
+                            
+                            var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
+                            return result;
+                        }
                     },
                     {
                         field: "Id",
