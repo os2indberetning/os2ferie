@@ -5,12 +5,12 @@
 
         $scope.confirmDelete = function() {
             $modalInstance.close($scope.itemId);
-            NotificationService.AutoFadeNotification("success", "Slet", "Indberetningen blev slettet.");
+            NotificationService.AutoFadeNotification("success", "", "Indberetningen blev slettet.");
         }
 
         $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
-            NotificationService.AutoFadeNotification("warning", "Slet", "Sletning af indberetningen blev annulleret.");
+            NotificationService.AutoFadeNotification("warning", "", "Sletning af indberetningen blev annulleret.");
         }
     }
 ]);

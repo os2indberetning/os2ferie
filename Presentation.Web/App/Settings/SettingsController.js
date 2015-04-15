@@ -49,7 +49,7 @@
 
             //NotificationService.AutoFadeNotification("success", "Success", "Person fundet");
         }, function () {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Person ikke fundet");
+            NotificationService.AutoFadeNotification("danger", "", "Person ikke fundet");
         });
 
         //Load alternative home address
@@ -95,12 +95,12 @@
             var array = $scope.newLicensePlate.split('');
 
             if ($scope.newLicensePlateDescription == "") {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade skal have en beskrivelse");
+                NotificationService.AutoFadeNotification("danger", "", "Nummerplade skal have en beskrivelse");
                 return;
             }
 
             if (array.length < 7 || array.length > 9) {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade er ikke i korrekt format. Eksempel: AB 12 345");
+                NotificationService.AutoFadeNotification("danger", "", "Nummerplade er ikke i korrekt format. Eksempel: AB 12 345");
                 return;
             }
 
@@ -138,22 +138,22 @@
                 $scope.newLicensePlate = "";
                 $scope.newLicensePlateDescription = "";
 
-                NotificationService.AutoFadeNotification("success", "Success", "Ny nummerplade blev gemt");
+                NotificationService.AutoFadeNotification("success", "", "Ny nummerplade blev gemt");
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade blev ikke gemt");
+                NotificationService.AutoFadeNotification("danger", "", "Nummerplade blev ikke gemt");
             });
         };
 
         //Slet eksisterende nummerplade
         $scope.deleteLicensePlate = function (plate) {
             LicensePlate.delete({ id: plate.Id }, function () {
-                NotificationService.AutoFadeNotification("success", "Success", "Nummerplade blev slettet");
+                NotificationService.AutoFadeNotification("success", "", "Nummerplade blev slettet");
                 //Load licenseplates again
                 LicensePlate.get({ id: personId }, function (data) {
                     $scope.licenseplates = data;
                 });
             }), function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade blev ikke slettet");
+                NotificationService.AutoFadeNotification("danger", "", "Nummerplade blev ikke slettet");
             };
         }
 
@@ -166,10 +166,10 @@
             });
 
             newPerson.$patch({ id: personId }, function () {
-                NotificationService.AutoFadeNotification("success", "Success", "Valg om modtagelse af mails blev gemt");
+                NotificationService.AutoFadeNotification("success", "", "Valg om modtagelse af mails blev gemt");
             }), function () {
                 $scope.recieveMail = !$scope.recieveMail;
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Valg om modtagelse af mails blev ikke gemt");
+                NotificationService.AutoFadeNotification("danger", "", "Valg om modtagelse af mails blev ikke gemt");
             };
         }
 
@@ -195,21 +195,21 @@
 
                 newAlternativeHomeAddress.$post({}, function (data) {
                     $scope.loadAlternativeHomeAddress();
-                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse gemt");
+                    NotificationService.AutoFadeNotification("success", "", "Alternativ hjemmeadresse gemt");
 
                     // Save HomeWorkOverride as 0 when saving home address.
                     $scope.workDistanceOverride = 0;
                     $scope.setHomeWorkOverride();
                 }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse kunne ikke gemmes");
+                    NotificationService.AutoFadeNotification("danger", "", "Alternativ hjemmeadresse kunne ikke gemmes");
                 });
 
             } else if ($scope.newAlternativeHomeAddress == "") { // DELETE IT
                 Address.delete({ id: $scope.oldAlternativeHomeAddressId }, function () {
                     $scope.loadAlternativeHomeAddress();
-                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse slettet");
+                    NotificationService.AutoFadeNotification("success", "", "Alternativ hjemmeadresse slettet");
                 }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse kunne ikke slettes");
+                    NotificationService.AutoFadeNotification("danger", "", "Alternativ hjemmeadresse kunne ikke slettes");
                 });
 
             } else if ($scope.newAlternativeHomeAddress != $scope.oldAlternativeHomeAddress) { // UPDATE IT                
@@ -231,13 +231,13 @@
 
                 editedAlternativeHomeAddress.$patch({ id: result.Id }, function (data) {
                     $scope.loadAlternativeHomeAddress();
-                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse opdateret");
+                    NotificationService.AutoFadeNotification("success", "", "Alternativ hjemmeadresse opdateret");
 
                     // Save HomeWorkOverride as 0 when saving home address.
                     $scope.workDistanceOverride = 0;
                     $scope.setHomeWorkOverride();
                 }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse blev ikke opdateret");
+                    NotificationService.AutoFadeNotification("danger", "", "Alternativ hjemmeadresse blev ikke opdateret");
                 });
             }
         }
@@ -264,22 +264,22 @@
 
                 newAlternativeWorkAddress.$post({}, function (data) {
                     $scope.loadAlternativeWorkAddress();
-                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ arbejdsadresse gemt");
+                    NotificationService.AutoFadeNotification("success", "", "Alternativ arbejdsadresse gemt");
 
                     // Save HomeWorkOverride as 0 when saving work address.
                     $scope.workDistanceOverride = 0;
                     $scope.setHomeWorkOverride();
 
                 }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ arbejdsadresse kunne ikke gemmes");
+                    NotificationService.AutoFadeNotification("danger", "", "Alternativ arbejdsadresse kunne ikke gemmes");
                 });
 
             } else if ($scope.newAlternativeWorkAddress == "") { // DELETE IT
                 Address.delete({ id: $scope.oldAlternativeWorkAddressId }, function () {
                     $scope.loadAlternativeWorkAddress();
-                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ arbejdsadresse slettet");
+                    NotificationService.AutoFadeNotification("success", "", "Alternativ arbejdsadresse slettet");
                 }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ arbejdsadresse kunne ikke slettes");
+                    NotificationService.AutoFadeNotification("danger", "", "Alternativ arbejdsadresse kunne ikke slettes");
                 });
 
             } else if ($scope.newAlternativeWorkAddress != $scope.oldAlternativeWorkAddress) { // UPDATE IT
@@ -301,13 +301,13 @@
 
                 editedAlternativeWorkAddress.$patch({ id: result.Id }, function (data) {
                     $scope.loadAlternativeWorkAddress();
-                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse opdateret");
+                    NotificationService.AutoFadeNotification("success", "", "Alternativ hjemmeadresse opdateret");
 
                     // Save HomeWorkOverride as 0 when saving work address.
                     $scope.workDistanceOverride = 0;
                     $scope.setHomeWorkOverride();
                 }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse blev ikke opdateret");
+                    NotificationService.AutoFadeNotification("danger", "", "Alternativ hjemmeadresse blev ikke opdateret");
                 });
             }
         }
@@ -318,14 +318,14 @@
             });
 
             newPerson.$patch({ id: personId }, function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Afstand mellem hjemme- og arbejdsadresse blev gemt");
+                NotificationService.AutoFadeNotification("success", "", "Afstand mellem hjemme- og arbejdsadresse blev gemt");
             }), function () {
                 if ($scope.mailAdvice == 'No') {
                     $scope.mailAdvice = 'Yes';
                 } else {
                     $scope.mailAdvice = 'No';
                 }
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Afstand mellem hjemme- og arbejdsadresse blev ikke gemt");
+                NotificationService.AutoFadeNotification("danger", "", "Afstand mellem hjemme- og arbejdsadresse blev ikke gemt");
             };
         };
 
@@ -689,7 +689,7 @@
         Token.get({ id: personId }, function (data) {
             $scope.tokens = data.value;
         }, function () {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke hente tokens");
+            NotificationService.AutoFadeNotification("danger", "", "Kunne ikke hente tokens");
         });
 
         $scope.deleteToken = function (token) {
@@ -697,10 +697,10 @@
             $scope.tokens.splice(objIndex, 1);
 
             Token.delete({ id: token.Id }, function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Token blev slettet");
+                NotificationService.AutoFadeNotification("success", "", "Token blev slettet");
             }, function () {
                 $scope.tokens.push(token);
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Token blev ikke slettet");
+                NotificationService.AutoFadeNotification("danger", "", "Token blev ikke slettet");
             });
         }
 
@@ -713,11 +713,11 @@
 
             newToken.$save(function (data) {
                 $scope.tokens.push(data);
-                NotificationService.AutoFadeNotification("success", "Success", "Ny token oprettet");
+                NotificationService.AutoFadeNotification("success", "", "Ny token oprettet");
                 $scope.newTokenDescription = "";
                 $scope.tokenIsCollapsed = !$scope.tokenIsCollapsed;
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette ny token");
+                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette ny token");
             });
         }
 

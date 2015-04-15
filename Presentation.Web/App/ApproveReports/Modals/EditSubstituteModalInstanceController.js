@@ -40,7 +40,7 @@
 
         $scope.saveNewSubstitute = function () {
             if ($scope.person == undefined) {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Du skal vælge en person");
+                NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en person");
                 return;
             }
 
@@ -57,10 +57,10 @@
             }
 
             sub.$patch({ id: $scope.substitute.Id }, function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev gemt");
+                NotificationService.AutoFadeNotification("success", "", "Stedfortræder blev gemt");
                 $modalInstance.close();
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke gemme stedfortræder");
+                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke gemme stedfortræder");
             });
         };
 

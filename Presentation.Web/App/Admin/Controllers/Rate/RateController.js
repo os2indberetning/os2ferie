@@ -118,7 +118,7 @@
                     $scope.updateRatesGrid();
                     $scope.container.newRateYear = "";
                     $scope.container.newRateRate = "";
-                    NotificationService.AutoFadeNotification("success", "Opret", "Ny takst oprettet!");
+                    NotificationService.AutoFadeNotification("success", "", "Ny takst oprettet!");
                 });
             }
 

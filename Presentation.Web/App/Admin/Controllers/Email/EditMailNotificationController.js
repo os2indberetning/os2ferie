@@ -45,14 +45,14 @@
 
             if (!error) {
                 $modalInstance.close(result);
-                NotificationService.AutoFadeNotification("success", "Redigér", "Email-adviseringen blev redigeret.");
+                NotificationService.AutoFadeNotification("success", "", "Email-adviseringen blev redigeret.");
             }
             
         }
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
-            NotificationService.AutoFadeNotification("warning", "Redigér", "Oprettelse af email adviseringen blev annulleret.");
+            NotificationService.AutoFadeNotification("warning", "", "Oprettelse af email adviseringen blev annulleret.");
         }
     }
 ]);

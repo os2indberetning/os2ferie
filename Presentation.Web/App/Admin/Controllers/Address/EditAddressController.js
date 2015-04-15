@@ -18,12 +18,12 @@
             result.address = $scope.address;
             result.description = $scope.description;
             $modalInstance.close(result);
-            NotificationService.AutoFadeNotification("success", "Rediger", "Adressen blev redigeret.");
+            NotificationService.AutoFadeNotification("success", "", "Adressen blev redigeret.");
         }
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
-            NotificationService.AutoFadeNotification("warning", "Rediger", "Redigering af adressen blev annulleret.");
+            NotificationService.AutoFadeNotification("warning", "", "Redigering af adressen blev annulleret.");
         }
     }
 ]);

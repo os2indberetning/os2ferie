@@ -28,10 +28,10 @@
             var sub = new Substitute();
 
             sub.$delete({ id: $scope.substitute.Id }, function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Stedfortræderen er blev slettet gemt");
+                NotificationService.AutoFadeNotification("success", "", "Stedfortræderen er blev slettet gemt");
                 $modalInstance.close();
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke slette stedfortræder");
+                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke slette stedfortræder");
             });
         };
 

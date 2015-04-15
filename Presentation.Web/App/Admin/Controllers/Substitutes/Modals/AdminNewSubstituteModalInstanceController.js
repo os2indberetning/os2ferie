@@ -39,17 +39,17 @@
 
             $scope.saveNewSubstitute = function () {
                 if ($scope.person == undefined) {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Du skal vælge en stedfortræder");
+                    NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en stedfortræder");
                     return;
                 }
 
                 if ($scope.personFor == undefined) {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Du skal vælge en person der skal stedfortrædes for");
+                    NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en person der skal stedfortrædes for");
                     return;
                 }
 
                 if ($scope.orgUnit == undefined) {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Du skal vælge en organisationsenhed.");
+                    NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en organisationsenhed.");
                     return;
                 }
 
@@ -68,10 +68,10 @@
                 }
 
                 sub.$post(function (data) {
-                    NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev oprettet");
+                    NotificationService.AutoFadeNotification("success", "", "Stedfortræder blev oprettet");
                     $modalInstance.close();
                 }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette stedfortræder");
+                    NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette stedfortræder");
                 });
             };
 

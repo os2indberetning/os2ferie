@@ -180,7 +180,7 @@
 
         }
 
-
+        //TODO: problemet er, at drivenkilometers osv ikke opdaterer, når man ændrer ruten via gui.
 
         $scope.Save = function () {
             $scope.validateInput();
@@ -303,12 +303,12 @@
                 $scope.TransportAllowance = 0;
                 $scope.RemainingKilometers = 0;
                 $scope.PayoutAmount = response.AmountToReimburse.toFixed(2).toString().replace('.', ',');
-                NotificationService.AutoFadeNotification("success", "Success", "Din tjenestekørselsindberetning blev gemt");
+                NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev gemt");
                 $scope.clearClicked();
 
             }, function (response) {
                 // failure
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Din tjenestekørselsindberetning blev ikke gemt");
+                NotificationService.AutoFadeNotification("danger", "", "Din tjenestekørselsindberetning blev ikke gemt");
             });
         };
 
@@ -450,17 +450,23 @@
                 $scope.KmRateDropDown.select($scope.lastSelectedTransport);
             });
 
-            $scope.Employments.$promise.then(function () {
+            $scope.Employments.$promise.then(function (data) {
+                angular.forEach(data, function (employment, key) {
+                    employment.PresentationString = employment.Position + " - " + employment.OrgUnit.ShortDescription;
+                });
                 $scope.PositionDropDown.dataSource.read();
 
             });
 
             $scope.LicensePlates.$promise.then(function (data) {
                 if ($scope.LicensePlates.length > 0) {
+                    angular.forEach(data, function (plate, key) {
+                        plate.PresentationString = plate.Plate + " - " + plate.Description;
+                    });
                     $scope.LicensePlateDropDown.dataSource.read();
                     $scope.canSubmitDriveReport = data.length > 0;
                 } else {
-                    $scope.LicensePlates = [{ Plate: "Ingen nummerplade" }];
+                    $scope.LicensePlates = [{ PresentationString: "Ingen nummerplade" }];
                 }
             });
 
@@ -562,7 +568,21 @@
 
         var routeMapChanged = function (obj) {
 
-            updateDrivenKilometerFields(obj);
+            if ($scope.DriveReport.RoundTrip == true) {
+                $scope.DrivenKilometers = Number(obj.distance.toFixed(2).toString().replace(",", ".")) * 2;
+            } else {
+                $scope.DrivenKilometers = obj.distance.toFixed(2).toString().replace(",", ".");
+            }
+
+            $scope.RemainingKilometers = Number(Number($scope.DrivenKilometers - $scope.Person.DistanceFromHomeToWork)).toFixed(2).toString().replace(".", ",");
+
+
+            if (Number($scope.RemainingKilometers.toString().replace(",",".")) < 0) {
+                $scope.RemainingKilometers = 0;
+            }
+
+            
+            $scope.DrivenKilometers = $scope.DrivenKilometers.toString().replace(".", ",");
 
             if (!$scope.mapChangedByGui) {
                 // Clear personal route dropdown.
@@ -597,6 +617,9 @@
 
 
         $scope.addressInputChanged = function (index) {
+
+
+
             if ($scope.guiChangedByMap <= 0) {
                 $scope.DriveReport.Addresses[index].Latitude = undefined;
                 $scope.DriveReport.Addresses[index].Longitude = undefined;
@@ -636,31 +659,39 @@
             });
         }
 
-        $scope.readDistanceChanged = function () {
-            updateDrivenKilometerFields();
-        }
-
-        var updateDrivenKilometerFields = function (obj) {
-            if ($scope.DriveReport.KilometerAllowance === "Read") {
-                $scope.DrivenKilometers = $scope.DriveReport.ReadDistance;
-
-                var drivenKm = Number($scope.DriveReport.ReadDistance.toString().replace(',', '.'));
-
-                var remKm = Number(drivenKm - $scope.Person.DistanceFromHomeToWork);
-
-                $scope.RemainingKilometers = remKm.toFixed(2).toString().replace('.', ',');
-                if (remKm < 0) {
-                    $scope.RemainingKilometers = 0;
-                }
+        $scope.roundTripChanged = function () {
+            if ($scope.DriveReport.RoundTrip == true) {
+                $scope.DrivenKilometers = Number($scope.DrivenKilometers.toString().replace(",", ".")).toFixed(2) * 2;
             } else {
-                var remKm = Number(obj.distance - $scope.Person.DistanceFromHomeToWork);
-                $scope.RemainingKilometers = remKm.toFixed(2).toString().replace('.', ',');
-                if (remKm < 0) {
-                    $scope.RemainingKilometers = 0;
-                }
-                $scope.DrivenKilometers = obj.distance.toFixed(2).toString().replace('.', ',');
+                $scope.DrivenKilometers = Number($scope.DrivenKilometers.toString().replace(",", ".")).toFixed(2) / 2;
             }
-            $scope.$apply();
+
+            $scope.RemainingKilometers = (Number($scope.DrivenKilometers) - Number($scope.Person.DistanceFromHomeToWork)).toFixed(2).toString().replace(".", ",");
+            if (Number($scope.RemainingKilometers.toString().replace(",", ".")) < 0) {
+                $scope.RemainingKilometers = 0;
+            }
+            $scope.DrivenKilometers = $scope.DrivenKilometers.toString().replace(".", ",");
         }
+
+        $scope.readDistanceChanged = function () {
+            if ($scope.DriveReport.RoundTrip == true) {
+                $scope.DrivenKilometers = Number($scope.DriveReport.ReadDistance.toFixed(2).toString().replace(",", ".")) * 2;
+                $scope.RemainingKilometers = Number(Number($scope.DrivenKilometers - $scope.Person.DistanceFromHomeToWork)).toFixed(2);
+            } else {
+                $scope.DrivenKilometers = $scope.DriveReport.ReadDistance.toFixed(2).toString().replace(",", ".");
+                $scope.RemainingKilometers = Number(Number($scope.DrivenKilometers - $scope.Person.DistanceFromHomeToWork)).toFixed(2);
+            }
+
+            if (Number($scope.RemainingKilometers) < 0) {
+                $scope.RemainingKilometers = 0;
+            }
+
+            $scope.DrivenKilometers = $scope.DrivenKilometers.replace(".", ",");
+            $scope.RemainingKilometers = $scope.RemainingKilometers.toString().replace(".", ",");
+
+
+        }
+
+
     }
 ]);

@@ -430,7 +430,7 @@
 
        function approveSelectedWithAccountClick() {
            if (checkedReports.length == 0) {
-               NotificationService.AutoFadeNotification("danger", "Fejl", "Ingen indberetninger er markerede!");
+               NotificationService.AutoFadeNotification("danger", "", "Ingen indberetninger er markerede!");
            } else {
                var modalInstance = $modal.open({
                    templateUrl: '/App/ApproveReports/Modals/ConfirmApproveSelectedWithAccountTemplate.html',
@@ -457,7 +457,7 @@
 
        function approveSelectedClick() {
            if (checkedReports.length == 0) {
-               NotificationService.AutoFadeNotification("danger", "Fejl", "Ingen indberetninger er markerede!");
+               NotificationService.AutoFadeNotification("danger", "", "Ingen indberetninger er markerede!");
            } else {
                var modalInstance = $modal.open({
                    templateUrl: '/App/ApproveReports/Modals/ConfirmApproveSelectedTemplate.html',

@@ -34,12 +34,12 @@
             result.address = $scope.Address.Name;
             result.description = $scope.description;
             $modalInstance.close(result);
-            NotificationService.AutoFadeNotification("success", "Opret", "Adressen blev oprettet.");
+            NotificationService.AutoFadeNotification("success", "", "Adressen blev oprettet.");
         }
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
-            NotificationService.AutoFadeNotification("warning", "Opret", "Oprettelse af adressen blev annulleret.");
+            NotificationService.AutoFadeNotification("warning", "", "Oprettelse af adressen blev annulleret.");
         }
     }
 ]);

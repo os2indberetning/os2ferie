@@ -4,12 +4,12 @@
 
      $scope.confirmDelete = function () {
             $modalInstance.close($scope.itemId);
-            NotificationService.AutoFadeNotification("success", "Slet", "Adviseringen blev slettet.");
+            NotificationService.AutoFadeNotification("success", "", "Adviseringen blev slettet.");
         }
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
-            NotificationService.AutoFadeNotification("warning", "Slet", "Sletning af adviseringen blev annulleret.");
+            NotificationService.AutoFadeNotification("warning", "", "Sletning af adviseringen blev annulleret.");
         }
     }
 ]);

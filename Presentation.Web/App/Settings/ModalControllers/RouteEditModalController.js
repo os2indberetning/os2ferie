@@ -42,14 +42,14 @@
         var handleSaveRoute = function () {
             // Validate start and end point
             if ($scope.newStartPoint == undefined || $scope.newStartPoint == "" || $scope.newEndPoint == undefined || $scope.newEndPoint == "") {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Start- og slutadresse skal udfyldes.");
+                NotificationService.AutoFadeNotification("danger", "", "Start- og slutadresse skal udfyldes.");
                 $scope.isSaveDisabled = false;
                 return;
             }
 
             // Validate description
             if ($scope.newRouteDescription == "" || $scope.newRouteDescription == undefined) {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Beskrivelse må ikke være tom.");
+                NotificationService.AutoFadeNotification("danger", "", "Beskrivelse må ikke være tom.");
                 $scope.isSaveDisabled = false;
                 return;
             }

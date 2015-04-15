@@ -118,7 +118,7 @@
                     $scope.container.newAccountDescription = "";
                     $scope.container.newAccountRegNumber = "";
                     $scope.container.newAccountAccountNumber = "";
-                    NotificationService.AutoFadeNotification("success", "Opret", "Ny konto oprettet!");
+                    NotificationService.AutoFadeNotification("success", "", "Ny konto oprettet!");
                 });
             }
 

@@ -30,10 +30,10 @@
             var sub = new Substitute();
 
             sub.$delete({ id: $scope.substitute.Id }, function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Personlig godkender er blevet slettet");
+                NotificationService.AutoFadeNotification("success", "", "Personlig godkender er blevet slettet");
                 $modalInstance.close();
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke slette personlig godkender");
+                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke slette personlig godkender");
             });
         };
 

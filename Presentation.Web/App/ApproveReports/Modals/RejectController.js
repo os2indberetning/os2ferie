@@ -8,7 +8,7 @@
 
        $scope.noClicked = function () {
            $modalInstance.dismiss('cancel');
-           NotificationService.AutoFadeNotification("warning", "Afvisning", "Afvisning af indberetningen blev annulleret.");
+           NotificationService.AutoFadeNotification("warning", "", "Afvisning af indberetningen blev annulleret.");
        }
 
        $scope.yesClicked = function () {
@@ -18,7 +18,7 @@
                $scope.result.Comment = $scope.comment;
                $scope.result.Id = itemId;
                $modalInstance.close($scope.result);
-               NotificationService.AutoFadeNotification("success", "Afvisning", "Indberetningen blev afvist.");
+               NotificationService.AutoFadeNotification("success", "", "Indberetningen blev afvist.");
            }
            
        }

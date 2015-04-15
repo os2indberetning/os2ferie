@@ -37,10 +37,10 @@
             });
 
             updatedAddress.$patch({ id: result.Id }, function () {
-                NotificationService.AutoFadeNotification("success", "Success", "Adresse opdateret");
+                NotificationService.AutoFadeNotification("success", "", "Adresse opdateret");
                 $modalInstance.close('');
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke opdateret");
+                NotificationService.AutoFadeNotification("danger", "", "Adresse blev ikke opdateret");
             });
         } else {
             var newAddress = new Address({
@@ -56,10 +56,10 @@
             });
 
             newAddress.$post(function() {
-                NotificationService.AutoFadeNotification("success", "Success", "Adresse oprettet");
+                NotificationService.AutoFadeNotification("success", "", "Adresse oprettet");
                 $modalInstance.close('');
             }, function() {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Adresse blev ikke oprettet");
+                NotificationService.AutoFadeNotification("danger", "", "Adresse blev ikke oprettet");
             });
         }
 
