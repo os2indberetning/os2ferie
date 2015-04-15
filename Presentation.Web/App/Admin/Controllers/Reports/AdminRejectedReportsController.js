@@ -217,9 +217,11 @@ angular.module("application").controller("AdminRejectedReportsController",
            });
        }
 
-       // Event handlers
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
-
+    
        var initialLoad = 2;
        $scope.dateChanged = function () {
            // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
@@ -254,6 +256,10 @@ angular.module("application").controller("AdminRejectedReportsController",
 
        // Load up the grids.
        $scope.loadReports();
+
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
 
        // Contains references to kendo ui grids.

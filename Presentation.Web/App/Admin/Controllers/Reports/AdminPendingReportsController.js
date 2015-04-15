@@ -278,6 +278,10 @@
            $scope.loadInitialDates();
        }
 
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
+
 
        // Load up the grid.
        $scope.loadReports();
@@ -293,6 +297,10 @@
        $scope.dateOptions = {
            format: "dd/MM/yyyy",
        };
+
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
 
 

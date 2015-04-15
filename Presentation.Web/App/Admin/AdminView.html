@@ -34,7 +34,7 @@
                     <div ng-include='"App/Admin/HTML/Reports/View.html"'></div>
                 </tab>
 
-                <tab heading="Stedfortrædere/Godkendere" ng-controller="SubstituteController">
+                <tab heading="Stedfortrædere/Godkendere" ng-controller="SubstituteController" ng-click="refreshGrids()">
                     <div ng-include='"App/Admin/HTML/Substitutes/View.html"'></div>
                 </tab>
 

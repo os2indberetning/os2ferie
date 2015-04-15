@@ -11,7 +11,7 @@
 
 
                 <tabset justified="false">
-                    <tab heading="Afventer godkendelse" ng-controller="AdminPendingReportsController">
+                    <tab heading="Afventer godkendelse" ng-controller="AdminPendingReportsController" ng-click="refreshGrid()">
                         <div class="panel panel-default">
 
 
@@ -22,7 +22,7 @@
                         </div>
                     </tab>
 
-                    <tab heading="Godkendte" ng-controller="AdminAcceptedReportsController">
+                    <tab heading="Godkendte" ng-controller="AdminAcceptedReportsController" ng-click="refreshGrid()">
                         <div class="panel panel-default">
 
                             <div class="panel-body">
@@ -34,7 +34,7 @@
                         </div>
                     </tab>
 
-                    <tab heading="Afviste" ng-controller="AdminRejectedReportsController">
+                    <tab heading="Afviste" ng-controller="AdminRejectedReportsController" ng-click="refreshGrid()">
                         <div class="panel panel-default">
 
 

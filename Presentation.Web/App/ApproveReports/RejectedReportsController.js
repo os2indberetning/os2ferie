@@ -5,6 +5,25 @@
 
        var allReports = [];
 
+
+       $scope.getEndOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.endOf('day').unix();
+       }
+
+       $scope.getStartOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.startOf('day').unix();
+       }
+
+
+
+       // dates for kendo filter.
+       var fromDateFilter = new Date();
+       fromDateFilter.setDate(fromDateFilter.getDate() - 30);
+       fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
+       var toDateFilter = $scope.getEndOfDayStamp(new Date());
+
        $scope.checkboxes = {};
        $scope.checkboxes.showSubbed = false;
 
@@ -169,6 +188,7 @@
                    serverPaging: true,
                    serverSorting: true,
                    serverFiltering: true,
+                   filter: [{ field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }],
                    sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
                    aggregate: [
                         { field: "Distance", aggregate: "sum" },
@@ -340,15 +360,7 @@
            $scope.allPagesDistanceSum = resDistance.toFixed(2).toString().replace('.', ',');
        }
 
-       $scope.getEndOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.endOf('day').unix();
-       }
-
-       $scope.getStartOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.startOf('day').unix();
-       }
+      
 
        // Event handlers
 
@@ -398,7 +410,9 @@
            });
        }
 
-
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
 
        // Init

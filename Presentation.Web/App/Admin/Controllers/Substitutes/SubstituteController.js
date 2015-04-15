@@ -325,7 +325,10 @@
             }, 0);
         }
 
-
+        $scope.refreshGrids = function () {
+            $scope.container.approverGrid.dataSource.read();
+            $scope.container.substituteGrid.dataSource.read();
+        }
 
         $scope.clearClicked = function (type) {
             var from = new Date();

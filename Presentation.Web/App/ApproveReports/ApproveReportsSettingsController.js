@@ -480,6 +480,10 @@
 
            $('#personalApproverGrid').data('kendoGrid').dataSource.read();
            $("#personalApproverGrid").data('kendoGrid').refresh();
+
+           $('#mySubstitutesGrid').data('kendoGrid').dataSource.read();
+           $("#mySubstitutesGrid").data('kendoGrid').refresh();
+           
        }
    }
 ]);

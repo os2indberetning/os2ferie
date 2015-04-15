@@ -18,6 +18,21 @@
            $scope.applyOrgUnitFilter($scope.orgUnit.chosenUnit);
        }
 
+       $scope.getEndOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.endOf('day').unix();
+       }
+
+       $scope.getStartOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.startOf('day').unix();
+       }
+
+       // dates for kendo filter.
+       var fromDateFilter = new Date();
+       fromDateFilter.setDate(fromDateFilter.getDate() - 30);
+       fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
+       var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
        $scope.checkAllBox = {};
 
@@ -195,6 +210,7 @@
                serverAggregates: false,
                serverSorting: true,
                serverFiltering: true,
+               filter: [{ field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }],
                sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
                aggregate: [
                    { field: "Distance", aggregate: "sum" },
@@ -375,15 +391,7 @@
 
 
 
-       $scope.getEndOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.endOf('day').unix();
-       }
-
-       $scope.getStartOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.startOf('day').unix();
-       }
+      
 
        // Event handlers
 
@@ -550,7 +558,9 @@
        }
 
 
-
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
 
 
@@ -574,7 +584,6 @@
 
        $scope.personChanged = function (item) {
            $scope.applyPersonFilter($scope.person.chosenPerson);
-
        }
 
        $scope.person.chosenPerson = "";

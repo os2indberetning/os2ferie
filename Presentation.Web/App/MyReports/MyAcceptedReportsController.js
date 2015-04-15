@@ -4,6 +4,22 @@ angular.module("application").controller("MyAcceptedReportsController", [
        // Hardcoded personid until we can get current user from their system.
        var personId = 1;
 
+       $scope.getEndOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.endOf('day').unix();
+       }
+
+       $scope.getStartOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.startOf('day').unix();
+       }
+
+       // dates for kendo filter.
+       var fromDateFilter = new Date();
+       fromDateFilter.setDate(fromDateFilter.getDate() - 30);
+       fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
+       var toDateFilter = $scope.getEndOfDayStamp(new Date());
+
        $scope.loadReports = function () {
            $scope.Reports = {
                dataSource: {
@@ -40,7 +56,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
                    serverAggregates: false,
                    serverSorting: true,
                    serverFiltering: true,
-                   filter: [{ field: "PersonId", operator: "eq", value: personId }],
+                   filter: [{ field: "PersonId", operator: "eq", value: personId }, { field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }],
                    sort: { field: "DriveDateTimestamp", dir: "desc" },
                    aggregate: [
                    { field: "Distance", aggregate: "sum" },
@@ -172,15 +188,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
            $scope.dateContainer.fromDate = from;
        }
 
-       $scope.getEndOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.endOf('day').unix();
-       }
-
-       $scope.getStartOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.startOf('day').unix();
-       }
+      
 
 
        var initialLoad = 2;
@@ -201,6 +209,10 @@ angular.module("application").controller("MyAcceptedReportsController", [
                }
                initialLoad--;
            }, 0);
+       }
+
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
        }
 
 

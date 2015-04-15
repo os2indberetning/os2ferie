@@ -261,7 +261,10 @@ angular.module("application").controller("AdminAcceptedReportsController", [
        }
 
 
-       // Init
+
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
 
        // Load up the grid.
@@ -278,6 +281,10 @@ angular.module("application").controller("AdminAcceptedReportsController", [
        $scope.dateOptions = {
            format: "dd/MM/yyyy",
        };
+
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
        $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
            var newFilters = [];
