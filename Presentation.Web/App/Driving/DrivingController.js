@@ -224,7 +224,7 @@
 
             if ($scope.DriveReport.KilometerAllowance === "Read") {
 
-                driveReport.Distance = Number($scope.DriveReport.ReadDistance) * 1000;
+                driveReport.Distance = Number($scope.DriveReport.ReadDistance);
                 driveReport.UserComment = $scope.DriveReport.UserComment;
 
                 if ($scope.DriveReport.StartOrEndedAtHome === 'Started') {
