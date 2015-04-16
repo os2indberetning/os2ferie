@@ -1,6 +1,8 @@
 ﻿angular.module("application").controller("DrivingController", [
     "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", "Address", "Route", "$q", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state, Address, Route, $q) {
 
+        $scope.DrivenKMDisplay = 0;
+
         $scope.container = {};
 
         // Hardcoded personId
@@ -649,24 +651,32 @@
         var updateDrivenKilometerFields = function (obj) {
             if ($scope.DriveReport.KilometerAllowance === "Read") {
                 $scope.DrivenKilometers = $scope.DriveReport.ReadDistance;
-
-                var drivenKm = Number($scope.DriveReport.ReadDistance.toString().replace(',', '.'));
-
-                var remKm = Number(drivenKm - $scope.Person.DistanceFromHomeToWork);
-
-                $scope.RemainingKilometers = remKm.toFixed(2).toString().replace('.', ',');
-                if (remKm < 0) {
-                    $scope.RemainingKilometers = 0;
-                }
             } else {
-                var remKm = Number(obj.distance - $scope.Person.DistanceFromHomeToWork);
-                $scope.RemainingKilometers = remKm.toFixed(2).toString().replace('.', ',');
-                if (remKm < 0) {
-                    $scope.RemainingKilometers = 0;
-                }
                 $scope.DrivenKilometers = obj.distance.toFixed(2).toString().replace('.', ',');
             }
             $scope.$apply();
+        }
+
+        $scope.$watch("DrivenKilometers", function () {
+            drivenKmChanged();
+        });
+
+        var drivenKmChanged = function () {
+            if ($scope.DriveReport.RoundTrip === true) {
+                $scope.DrivenKMDisplay = (2 * Number($scope.DrivenKilometers.toString().replace(",", "."))).toString().replace(".", ",");
+            } else {
+                $scope.DrivenKMDisplay = $scope.DrivenKilometers.toString().replace(".", ",");
+            }
+            var remKM = Number($scope.DrivenKMDisplay.toString().replace(",", ".")) - Number($scope.Person.DistanceFromHomeToWork);
+            if (remKM > 0) {
+                $scope.RemainingKilometers = Number(remKM).toFixed(2).toString().replace(".", ",");
+            } else {
+                $scope.RemainingKilometers = 0;
+            }
+        }
+
+        $scope.roundTripChanged = function () {
+            drivenKmChanged();
         }
     }
 ]);
