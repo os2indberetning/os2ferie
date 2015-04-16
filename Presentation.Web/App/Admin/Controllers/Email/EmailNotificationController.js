@@ -1,6 +1,8 @@
 ﻿angular.module("application").controller("EmailNotificationController", [
-    "$scope", "$modal", "EmailNotification", function ($scope, $modal, EmailNotification) {
+    "$scope", "$modal", "EmailNotification", "HelpText", function ($scope, $modal, EmailNotification, HelpText) {
 
+
+        $scope.EmailHelpText = HelpText.get({ id: "EmailHelpText" });
 
         $scope.gridContainer = {};
 
