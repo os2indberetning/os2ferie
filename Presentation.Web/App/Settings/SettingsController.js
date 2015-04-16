@@ -194,6 +194,7 @@
                 });
 
                 newAlternativeHomeAddress.$post({}, function (data) {
+                    $scope.updatePersonalAddresses();
                     $scope.loadAlternativeHomeAddress();
                     NotificationService.AutoFadeNotification("success", "", "Alternativ hjemmeadresse gemt");
 
@@ -207,6 +208,7 @@
             } else if ($scope.newAlternativeHomeAddress == "") { // DELETE IT
                 Address.delete({ id: $scope.oldAlternativeHomeAddressId }, function () {
                     $scope.loadAlternativeHomeAddress();
+                    $scope.updatePersonalAddresses();
                     NotificationService.AutoFadeNotification("success", "", "Alternativ hjemmeadresse slettet");
                 }, function () {
                     NotificationService.AutoFadeNotification("danger", "", "Alternativ hjemmeadresse kunne ikke slettes");
@@ -231,6 +233,7 @@
 
                 editedAlternativeHomeAddress.$patch({ id: result.Id }, function (data) {
                     $scope.loadAlternativeHomeAddress();
+                    $scope.updatePersonalAddresses();
                     NotificationService.AutoFadeNotification("success", "", "Alternativ hjemmeadresse opdateret");
 
                     // Save HomeWorkOverride as 0 when saving home address.
@@ -264,6 +267,7 @@
 
                 newAlternativeWorkAddress.$post({}, function (data) {
                     $scope.loadAlternativeWorkAddress();
+                    $scope.updatePersonalAddresses();
                     NotificationService.AutoFadeNotification("success", "", "Alternativ arbejdsadresse gemt");
 
                     // Save HomeWorkOverride as 0 when saving work address.
@@ -277,6 +281,7 @@
             } else if ($scope.newAlternativeWorkAddress == "") { // DELETE IT
                 Address.delete({ id: $scope.oldAlternativeWorkAddressId }, function () {
                     $scope.loadAlternativeWorkAddress();
+                    $scope.updatePersonalAddresses();
                     NotificationService.AutoFadeNotification("success", "", "Alternativ arbejdsadresse slettet");
                 }, function () {
                     NotificationService.AutoFadeNotification("danger", "", "Alternativ arbejdsadresse kunne ikke slettes");
@@ -301,6 +306,7 @@
 
                 editedAlternativeWorkAddress.$patch({ id: result.Id }, function (data) {
                     $scope.loadAlternativeWorkAddress();
+                    $scope.updatePersonalAddresses();
                     NotificationService.AutoFadeNotification("success", "", "Alternativ hjemmeadresse opdateret");
 
                     // Save HomeWorkOverride as 0 when saving work address.
