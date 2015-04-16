@@ -104,7 +104,7 @@ namespace OS2Indberetning.Controllers
             var res = new List<Address>();
             foreach (var address in temp)
             {
-                if (address is PersonalAddress && ((PersonalAddress)address).PersonId == personId && ((PersonalAddress)address).Type == PersonalAddressType.Standard)
+                if (address is PersonalAddress && ((PersonalAddress)address).PersonId == personId)
                 {
                     res.Add(address);
                 }

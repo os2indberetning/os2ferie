@@ -450,7 +450,7 @@
                             beforeSend: function (req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
-                            url: "odata/PersonalAddresses()?$filter=PersonId eq " + personId + " and (Type eq Core.DomainModel.PersonalAddressType'Standard' or Type eq Core.DomainModel.PersonalAddressType'Home' or Type eq Core.DomainModel.PersonalAddressType'Work')",
+                            url: "odata/PersonalAddresses()?$filter=PersonId eq " + personId,
                             dataType: "json",
                             cache: false
                         },
@@ -505,6 +505,10 @@
                             }
                             else if (data.Type == "Home") {
                                 return "Hjemmeadresse";
+                            } else if (data.Type == "AlternativeWork") {
+                                return "Afvigende arbejdsadresse";
+                            } else if (data.Type == "AlternativeHome") {
+                                return "Afvigende hjemmeadresse";
                             } else return data.Description;
                         }
                     }, {
@@ -517,7 +521,7 @@
                         field: "Id",
                         title: "Muligheder",
                         template: function (data) {
-                            if (!(data.Type == "Home" || data.Type == "Work")) {
+                            if (data.Type == "Standard") {
                                 return "<a ng-click='openAddressEditModal(" + data.Id + ")'>Rediger</a> | <a ng-click='openAddressDeleteModal(" + data.Id + ")'>Slet</a>";
                             }
                             return "";

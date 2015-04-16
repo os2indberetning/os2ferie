@@ -63,6 +63,15 @@
                 angular.forEach(data, function (value, key) {
                     var street = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
                     var presentation = (function () {
+                        if (value.Type == "Home") {
+                            value.Description = "Hjemmeadresse";
+                        } else if (value.Type == "Work") {
+                            value.Description = "Arbejdsadresse";
+                        } else if (value.Type == "AlternativeHome") {
+                            value.Description = "Afvigende hjemmeadresse";
+                        } else if (value.Type == "AlternativeWork") {
+                            value.Description = "Afvigende arbejdsadresse";
+                        }
                         if (value.Description != "" && value.Description != undefined) {
                             return value.Description + " : " + street;
                         }
