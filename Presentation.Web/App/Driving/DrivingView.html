@@ -125,7 +125,9 @@
                         <div class="row form-group">
                             <div class="col-lg-7">
                                 <label for="">Vælg adresse:</label> <label ng-bind="addressSelectionErrorMessage" class="text-danger"></label>
-                                <select ng-hide="DriveReport.Addresses[$index].Name.length != 0" class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"></select>
+                                <div>
+                                    <select ng-show="DriveReport.Addresses[$index].Name.length == 0" class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"> </select>
+                                </div>
                             </div>
                             <div ng-show="DriveReport.Addresses[$index].Personal == 'Vælg fast adresse'">
                                 <div class="col-lg-7">
@@ -188,39 +190,39 @@
                 </div>
             </div>
         </form>
-</div>
-<div class="col-lg-6">
+    </div>
+    <div class="col-lg-6">
 
-    <div class="row">
-        <div ng-show="DriveReport.KilometerAllowance != 'Read'" class="col-lg-12" style="height:500px">
-            <div id="map" style="width:100%;height:100%;"></div>
+        <div class="row">
+            <div ng-show="DriveReport.KilometerAllowance != 'Read'" class="col-lg-12" style="height:500px">
+                <div id="map" style="width:100%;height:100%;"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <p class="text-primary">Kørte kilometer</p>
+            </div>
+            <div class="col-lg-6 text-right">
+                {{DrivenKMDisplay}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <p class="text-primary">Merkørselsfradrag</p>
+            </div>
+            <div class="col-lg-6 text-right">
+                {{TransportAllowance}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <p class="text-primary">Kilometer til indberetning</p>
+            </div>
+            <div class="col-lg-6 text-right">
+                {{RemainingKilometers}}
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <p class="text-primary">Kørte kilometer</p>
-        </div>
-        <div class="col-lg-6 text-right">
-            {{DrivenKMDisplay}}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <p class="text-primary">Merkørselsfradrag</p>
-        </div>
-        <div class="col-lg-6 text-right">
-            {{TransportAllowance}}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <p class="text-primary">Kilometer til indberetning</p>
-        </div>
-        <div class="col-lg-6 text-right">
-            {{RemainingKilometers}}
-        </div>
-    </div>
-</div>
 
 </div>
 

@@ -666,7 +666,6 @@
             } else {
                 $scope.DrivenKilometers = obj.distance.toFixed(2).toString().replace('.', ',');
             }
-            $scope.$apply();
         }
 
         $scope.$watch("DrivenKilometers", function () {
