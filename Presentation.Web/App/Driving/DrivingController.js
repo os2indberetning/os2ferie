@@ -166,7 +166,6 @@
                 }
             } else {
                 angular.forEach($scope.DriveReport.Addresses, function (address, key) {
-                    console.log("from validate");
                     if ($scope.isAddressNameSet(address) === false && address.Personal == "Vælg fast adresse") {
                         $scope.canSubmitDriveReport = false;
                         $scope.addressSelectionErrorMessage = "* Du skal udfylde alle adressefelter.";
@@ -521,7 +520,6 @@
             angular.forEach($scope.DriveReport.Addresses, function (address, key) {
                 checkArray[key] = false;
 
-                console.log("From generate map widget");
                 if ($scope.isAddressNameSet(address) === false && (address.Personal == "" || address.Personal == "Vælg fast adresse" || address.Personal == undefined)) {
                     // Data is not valid.
                     return;
@@ -569,7 +567,6 @@
 
             angular.forEach($scope.DriveReport.Addresses, function (address, key) {
                 var name = (function () {
-                    console.log("From populate map");
                     if ($scope.isAddressNameSet(address) === false ) {
                         return address.Personal;
                     }
@@ -585,7 +582,6 @@
         }
 
         $scope.isAddressNameSet = function (address) {
-            console.log("Checking if address name is set for " + address);
             return !( address.Name == "" || address.Name == $scope.addressPlaceholderText || address.Name == undefined);
         }
 
