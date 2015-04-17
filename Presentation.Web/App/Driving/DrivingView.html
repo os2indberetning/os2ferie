@@ -125,19 +125,23 @@
                         <div class="row form-group">
                             <div class="col-lg-7">
                                 <label for="">Vælg adresse:</label> <label ng-bind="addressSelectionErrorMessage" class="text-danger"></label>
-                                <div>
-                                    <select ng-show="DriveReport.Addresses[$index].Name.length == 0" class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"> </select>
+                                <div ng-show="isAddressNameSet(DriveReport.Addresses[$index]) === false">
+                                    <!--Dropdown for selecting standard addresses-->
+                                    <select class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"> </select>
                                 </div>
                             </div>
                             <div ng-show="DriveReport.Addresses[$index].Personal == 'Vælg fast adresse'">
                                 <div class="col-lg-7">
-                                    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
-                                           k-data-source="SmartAddress" ng-blur="addressInputChanged($index)" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="'Eller skriv her'" />
+                                    <!--Text field for adding addresses-->
+                                    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'" ng-enter="" k-placeholder="addressPlaceholderText"
+                                           k-data-source="SmartAddress" ng-blur="addressInputChanged($index)" ng-model="DriveReport.Addresses[$index].Name" class="fill-width no-max-width" />
                                 </div>
                                 <div class="col-lg-1" ng-if="$middle">
+                                    <!--Remove button for via points-->
                                     <button class="k-button k-button-no-shadow" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
                                 </div>
                                 <div class="col-lg-4">
+                                    <!-- checkbox indicating if a address should be saved-->
                                     <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" /><label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
                                 </div>
                             </div>

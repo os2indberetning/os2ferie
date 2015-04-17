@@ -5,6 +5,7 @@
 
         $scope.container = {};
 
+        $scope.addressPlaceholderText = 'Eller skriv adresse her';
 
         $scope.ReadReportCommentHelp = HelpText.get({ id: "ReadReportCommentHelp" });
 
@@ -165,7 +166,8 @@
                 }
             } else {
                 angular.forEach($scope.DriveReport.Addresses, function (address, key) {
-                    if (address.Name == "" && address.Personal == "Vælg fast adresse") {
+                    console.log("from validate");
+                    if ($scope.isAddressNameSet(address) === false && address.Personal == "Vælg fast adresse") {
                         $scope.canSubmitDriveReport = false;
                         $scope.addressSelectionErrorMessage = "* Du skal udfylde alle adressefelter.";
                     }
@@ -519,7 +521,8 @@
             angular.forEach($scope.DriveReport.Addresses, function (address, key) {
                 checkArray[key] = false;
 
-                if ((address.Name == "" || address.Name == undefined) && (address.Personal == "" || address.Personal == "Vælg fast adresse" || address.Personal == undefined)) {
+                console.log("From generate map widget");
+                if ($scope.isAddressNameSet(address) === false && (address.Personal == "" || address.Personal == "Vælg fast adresse" || address.Personal == undefined)) {
                     // Data is not valid.
                     return;
                 } else if (address.Name != "") {
@@ -566,7 +569,8 @@
 
             angular.forEach($scope.DriveReport.Addresses, function (address, key) {
                 var name = (function () {
-                    if (address.Name == "") {
+                    console.log("From populate map");
+                    if ($scope.isAddressNameSet(address) === false ) {
                         return address.Personal;
                     }
                     return address.Name;
@@ -578,6 +582,11 @@
             $scope.mapChangedByGui = true;
             OS2RouteMap.set(mapArray);
 
+        }
+
+        $scope.isAddressNameSet = function (address) {
+            console.log("Checking if address name is set for " + address);
+            return !( address.Name == "" || address.Name == $scope.addressPlaceholderText || address.Name == undefined);
         }
 
         var routeMapChanged = function (obj) {
