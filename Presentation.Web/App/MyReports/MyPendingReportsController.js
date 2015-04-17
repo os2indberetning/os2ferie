@@ -159,7 +159,7 @@
                        title: "Godkender"
                    }, {
                        field: "Id",
-                       template: "<a ng-click=deleteClick(${Id})>Slet</a> | <a ng-disabled='true' ng-click=editClick(${Id})>Rediger</a>",
+                       template: "<a ng-click=deleteClick(${Id})>Slet</a> | <a ng-click=editClick(${Id})>Rediger</a>",
                        title: "Muligheder"
                    }
                ],

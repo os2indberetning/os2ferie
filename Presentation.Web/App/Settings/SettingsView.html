@@ -14,8 +14,8 @@
 
                     <label for="">Registreringsnummer på bil:</label>
                     <div></div>
-                    <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlate" class="" kendo-masked-text-box k-mask="'&& && &&&'" placeholder="AB 12 345" />
-                    <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlateDescription" class="k-textbox" placeholder="Kommentar" />
+                    <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlate" kendo-auto-complete k-placeholder="'AB 12 345'" />
+                    <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlateDescription" kendo-auto-complete k-placeholder="'Beskrivelse'" />
                     <button type="submit" class="btn btn-primary" ng-click="saveNewLicensePlate()">Tilføj</button>
                     <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed"><span ng-if="isCollapsed">vis nummerplader</span> <span ng-if="!isCollapsed">Skjul nummerplader</span></button>
                     <div collapse="isCollapsed">

@@ -90,42 +90,19 @@
 
         //Gem ny nummerplade
         $scope.saveNewLicensePlate = function () {
-            var plate = "";
-
-            var array = $scope.newLicensePlate.split('');
-
             if ($scope.newLicensePlateDescription == "") {
                 NotificationService.AutoFadeNotification("danger", "", "Nummerplade skal have en beskrivelse");
                 return;
             }
 
-            if (array.length < 7 || array.length > 9) {
-                NotificationService.AutoFadeNotification("danger", "", "Nummerplade er ikke i korrekt format. Eksempel: AB 12 345");
+            var plateWithoutSpaces = $scope.newLicensePlate.replace(/ /g, "");
+            if (plateWithoutSpaces.length < 2 || plateWithoutSpaces.length > 7) {
+                NotificationService.AutoFadeNotification("danger", "", "Nummerpladens længde skal være mellem 2 og 7 tegn (Mellemrum tæller ikke med)");
                 return;
             }
 
-            var first = array[0];
-            var second = array[1];
-
-            array[0] = first.toUpperCase();
-            array[1] = second.toUpperCase();
-
-            var cleanArray = [];
-            if (array.length >= 7 || array.length <= 9) {
-                for (var i = 0; i < array.length; i++) {
-                    if (array[i] != ' ') {
-                        cleanArray[i] = array[i];
-                    }
-                }
-            }
-
-            cleanArray.splice(2, 0, ' ');
-            cleanArray.splice(5, 0, ' ');
-
-            plate = cleanArray.join("");
-
             var newPlate = new LicensePlate({
-                Plate: plate,
+                Plate: $scope.newLicensePlate,
                 Description: $scope.newLicensePlateDescription,
                 PersonId: personId
             });
