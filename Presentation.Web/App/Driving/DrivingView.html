@@ -138,11 +138,11 @@
                                 </div>
                                 <div class="col-lg-1" ng-if="$middle">
                                     <!--Remove button for via points-->
-                                    <button class="k-button k-button-no-shadow" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
+                                    <button class="k-button k-button-no-shadow" ng-enter="" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
                                 </div>
                                 <div class="col-lg-4">
                                     <!-- checkbox indicating if a address should be saved-->
-                                    <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" /><label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
+                                    <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" ng-enter=""/><label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
                                 </div>
                             </div>
 
@@ -154,7 +154,7 @@
             <div class="row" ng-if="DriveReport.KilometerAllowance != 'Read'">
                 <div class="col-lg-12" ng-if="!IsRoute">
                     <label>
-                        <button class="btn btn-default" ng-click="AddViapoint()">Tilføj delmål</button>
+                        <button class="btn btn-default" ng-enter="" ng-click="AddViapoint()">Tilføj delmål</button>
                     </label>
                 </div>
             </div>
@@ -187,10 +187,10 @@
 
             <div class="row">
                 <div class="col-lg-6">
-                    <button type="button" ng-click="clearClicked()" class="btn btn-danger">Nulstil</button>
+                    <button type="button" ng-enter="" ng-click="clearClicked()" class="btn btn-danger">Nulstil</button>
                 </div>
                 <div class="col-lg-6 pull-right text-right">
-                    <button type="button" class="btn btn-primary" ng-disabled="!canSubmitDriveReport" ng-click="Save()">Indberet</button>
+                    <button type="button" ng-enter="" class="btn btn-primary" ng-disabled="!canSubmitDriveReport" ng-click="Save()">Indberet</button>
                 </div>
             </div>
         </form>
