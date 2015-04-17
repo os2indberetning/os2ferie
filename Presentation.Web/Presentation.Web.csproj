@@ -660,6 +660,7 @@
     <Content Include="Content\Themes\SbAdmin\css\plugins\morris.css" />
     <Content Include="Content\Themes\SbAdmin\css\sb-admin-rtl.css" />
     <Content Include="Content\Themes\SbAdmin\css\sb-admin.css" />
+    <Content Include="Scripts\kendo-ie-fix.js" />
     <Content Include="Scripts\kendo\angular.min.js" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.af-ZA.min.js" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.af.min.js" />

@@ -23,6 +23,7 @@ namespace OS2Indberetning
                 .Include("~/Scripts/moment-timezone-with-data.js")
                 .Include("~/Scripts/angular-moment.js")
                 .Include("~/Scripts/angular-resource.min.js")
+                .Include("~/Scripts/kendo-ie-fix.js")
 );
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
