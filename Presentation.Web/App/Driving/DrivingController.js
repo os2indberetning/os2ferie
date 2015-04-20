@@ -49,7 +49,6 @@
             angular.forEach($scope.Routes[index - 1].Points, function (value, key) {
                 $scope.DriveReport.Addresses.push({ Name: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town, Save: false });
             });
-
             $scope.validateInput();
         }
 
@@ -470,7 +469,6 @@
                     employment.PresentationString = employment.Position + " - " + employment.OrgUnit.ShortDescription;
                 });
                 $scope.PositionDropDown.dataSource.read();
-
             });
 
             $scope.LicensePlates.$promise.then(function (data) {
@@ -523,7 +521,7 @@
                 if ($scope.isAddressNameSet(address) === false && (address.Personal == "" || address.Personal == "Vælg fast adresse" || address.Personal == undefined)) {
                     // Data is not valid.
                     return;
-                } else if (address.Name != "") {
+                } else if ($scope.isAddressNameSet(address) === true) {
                     var format = AddressFormatter.fn(address.Name);
 
                     if (format != undefined) {
@@ -562,6 +560,7 @@
             });
         }
 
+
         $scope.populateMap = function () {
             var mapArray = [];
 
@@ -586,7 +585,6 @@
         }
 
         var routeMapChanged = function (obj) {
-
             updateDrivenKilometerFields(obj);
 
             if (!$scope.mapChangedByGui) {
@@ -670,6 +668,7 @@
                 $scope.DrivenKilometers = $scope.DriveReport.ReadDistance;
             } else {
                 $scope.DrivenKilometers = obj.distance.toFixed(2).toString().replace('.', ',');
+                $scope.$apply();
             }
         }
 

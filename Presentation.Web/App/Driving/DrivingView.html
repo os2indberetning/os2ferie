@@ -79,6 +79,7 @@
             <div class="row" ng-if="DriveReport.KilometerAllowance != 'Read'">
                 <div class="col-lg-12">
                     <div class="form-group">
+                        <!--Dropdown for selecting personal route-->
                         <label for="">Vælg standardrute:</label>
                         <select class="fill-width" kendo-drop-down-list="container.PersonalRouteDropDown" k-on-change="personalRouteDropdownChange(kendoEvent)" ng-model="DriveReport.PersonalRoute" k-data-source="PersonalRoutes" k-data-text-field="'presentation'"></select>
                     </div>

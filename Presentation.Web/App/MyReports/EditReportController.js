@@ -5,6 +5,14 @@
 
         $scope.container = {};
 
+
+        $scope.addressPlaceholderText = 'Eller skriv adresse her';
+
+
+
+
+
+
         // Is filled with the default address for the map widget.
         var mapStartAddress = [];
 
@@ -16,7 +24,7 @@
 
         $scope.SmartAddress = SmartAdresseSource;
 
-        $scope.DriveReport = DriveReport.getWithPoints({ id: reportId }, function () {
+        $scope.DriveReport = DriveReport.getWithPoints({ id: reportId }, function (res) {
             $scope.DriveReport.Date = moment.unix($scope.DriveReport.DriveDateTimestamp)._d;
             $scope.DriveReport.Addresses = [];
 
@@ -50,17 +58,12 @@
             }
 
             $scope.IsRoute = true;
-
             var route = $scope.Routes[index - 1];
-
             var lastIndex = route.Points.length - 1;
-
             $scope.DriveReport.Addresses = [];
-
             angular.forEach($scope.Routes[index - 1].Points, function (value, key) {
                 $scope.DriveReport.Addresses.push({ Name: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town, Save: false });
             });
-
             $scope.validateInput();
         }
 
@@ -78,6 +81,15 @@
                 angular.forEach(data, function (value, key) {
                     var street = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
                     var presentation = (function () {
+
+
+
+
+
+
+
+
+
                         if (value.Description != "" && value.Description != undefined) {
                             return value.Description + " : " + street;
                         }
@@ -105,6 +117,27 @@
             });
         });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         var getKmRate = function () {
             for (var i = 0; i < $scope.KmRate.length; i++) {
                 if ($scope.KmRate[i].Id == $scope.DriveReport.KmRate) {
@@ -122,6 +155,7 @@
                 }
             });
 
+
         }
 
         $scope.validateInput = function () {
@@ -130,6 +164,7 @@
             $scope.readDistanceErrorMessage = "";
             $scope.addressSelectionErrorMessage = "";
             $scope.userCommentErrorMessage = "";
+            $scope.licensePlateErrorMessage = "";
             if ($scope.DriveReport.KilometerAllowance === "Read") {
                 if ($scope.DriveReport.Purpose == "" || $scope.DriveReport.Purpose == undefined) {
                     $scope.canSubmitDriveReport = false;
@@ -145,7 +180,7 @@
                 }
             } else {
                 angular.forEach($scope.DriveReport.Addresses, function (address, key) {
-                    if (address.Name == "" && address.Personal == "Vælg fast adresse") {
+                    if ($scope.isAddressNameSet(address) === false && address.Personal == "Vælg fast adresse") {
                         $scope.canSubmitDriveReport = false;
                         $scope.addressSelectionErrorMessage = "* Du skal udfylde alle adressefelter.";
                     }
@@ -155,6 +190,17 @@
                     $scope.purposeErrorMessage = "* Du skal angive et formål.";
                 }
             }
+
+
+            angular.forEach($scope.KmRate, function (rate, key) {
+                if ($scope.DriveReport.KmRate == rate.Id) {
+                    if (rate.Type.RequiresLicensePlate && $scope.DriveReport.LicensePlate == "Ingen nummerplade") {
+                        $scope.licensePlateErrorMessage = "* Det valgte transportmiddel kræver en nummerplade";
+                        $scope.canSubmitDriveReport = false;
+                    }
+                }
+            });
+
             if ($scope.guiChangedByMap <= 0) {
                 $scope.generateMapWidget();
             }
@@ -173,6 +219,7 @@
             array.splice(index, 1);
             $scope.addressInputChanged(index);
         };
+
 
         $scope.clearClicked = function () {
             // Make the datepicker pop open when clear is clicked.
@@ -209,6 +256,53 @@
 
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         $scope.kilometerAllowanceChanged = function () {
             $scope.DriveReport.KilometerAllowance = $scope.container.kilometerAllowanceDropDown._selectedValue;
             if ($scope.DriveReport.KilometerAllowance != "Read") {
@@ -218,7 +312,18 @@
         }
 
 
+
+
+
         $scope.$on("kendoRendered", function (event) {
+
+
+
+
+
+
+
+
             $scope.KmRate.$promise.then(function () {
                 $scope.DriveReport.$promise.then(function () {
                     $scope.KmRateDropDown.dataSource.read();
@@ -227,16 +332,32 @@
                     });
                 });
 
+
+
+
+
             });
 
-            $scope.Employments.$promise.then(function () {
+            $scope.Employments.$promise.then(function (data) {
+                angular.forEach(data, function (employment, key) {
+                    employment.PresentationString = employment.Position + " - " + employment.OrgUnit.ShortDescription;
+                });
                 $scope.PositionDropDown.dataSource.read();
-
+                $scope.PositionDropDown.select(function (item) {
+                    return item.Id === $scope.DriveReport.EmploymentId;
+                });
             });
 
             $scope.LicensePlates.$promise.then(function (data) {
-                $scope.LicensePlateDropDown.dataSource.read();
-                $scope.canSubmitDriveReport = data.length > 0;
+                if ($scope.LicensePlates.length > 0) {
+                    angular.forEach(data, function (plate, key) {
+                        plate.PresentationString = plate.Plate + " - " + plate.Description;
+                    });
+                    $scope.LicensePlateDropDown.dataSource.read();
+                    $scope.canSubmitDriveReport = data.length > 0;
+                } else {
+                    $scope.LicensePlates = [{ PresentationString: "Ingen nummerplade" }];
+                }
             });
 
 
@@ -248,7 +369,14 @@
 
         $scope.LicensePlates = LicensePlate.get({ id: personId });
 
+
         $scope.KmRate = Rate.ThisYearsRates();
+
+        $scope.isAddressNameSet = function (address) {
+            return !(address.Name == "" || address.Name == $scope.addressPlaceholderText || address.Name == undefined);
+        }
+
+
 
         $scope.generateMapWidget = function () {
 
@@ -270,10 +398,10 @@
             angular.forEach($scope.DriveReport.Addresses, function (address, key) {
                 checkArray[key] = false;
 
-                if ((address.Name == "" || address.Name == undefined) && (address.Personal == "" || address.Personal == "Vælg fast adresse" || address.Personal == undefined)) {
+                if ($scope.isAddressNameSet(address) === false && (address.Personal == "" || address.Personal == "Vælg fast adresse" || address.Personal == undefined)) {
                     // Data is not valid.
                     return;
-                } else if (address.Name != "") {
+                } else if ($scope.isAddressNameSet(address) === true) {
                     var format = AddressFormatter.fn(address.Name);
 
                     if (format != undefined) {
@@ -317,7 +445,7 @@
 
             angular.forEach($scope.DriveReport.Addresses, function (address, key) {
                 var name = (function () {
-                    if (address.Name == "") {
+                    if ($scope.isAddressNameSet(address) === false) {
                         return address.Personal;
                     }
                     return address.Name;
@@ -330,6 +458,10 @@
             OS2RouteMap.set(mapArray);
 
         }
+
+
+
+
 
         var routeMapChanged = function (obj) {
 
@@ -392,6 +524,11 @@
 
 
         $scope.employmentChanged = function () {
+
+
+
+
+
             // Is there a better way to do this?
             // My guess is this might take a long time if there are a lot of org units. 
             angular.forEach($scope.Employments, function (empl, key) {
@@ -431,7 +568,7 @@
 
         $scope.saveEditClick = function () {
 
-            DriveReport.delete({ id: $scope.DriveReport.Id }, function(res) {
+            DriveReport.delete({ id: $scope.DriveReport.Id }, function (res) {
                 $scope.validateInput();
 
                 if (!$scope.canSubmitDriveReport) {
@@ -535,7 +672,11 @@
 
                             personalAddress.$save();
                         }
+
+
+
                     });
+
                 }
 
                 if (typeof $scope.DriveReport.FourKmRule !== "undefined" && $scope.DriveReport.FourKmRule.Using === true) {
@@ -563,7 +704,7 @@
             });
 
 
-            
+
         }
 
         $scope.cancelClick = function () {
