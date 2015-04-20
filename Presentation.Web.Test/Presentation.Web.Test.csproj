@@ -198,7 +198,11 @@
     <Content Include="ProtractorTests\protractor.conf.js" />
     <Content Include="Sandbox\conf.js" />
     <Content Include="Sandbox\test.js" />
+    <Content Include="connections.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.json" />
+    <None Include="CustomSettings.config" />
     <None Include="run-casper-tests.bat" />
   </ItemGroup>
   <ItemGroup>
