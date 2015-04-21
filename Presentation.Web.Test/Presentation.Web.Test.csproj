@@ -157,7 +157,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <Content Include="AppTests\controllers\ApproveReports\RejectedReportsController.js" />
     <Content Include="AppTests\controllers\ApproveReports\AcceptedReportsController.js" />
     <Content Include="packages.config">
@@ -201,6 +200,7 @@
     <Content Include="connections.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="App.config" />
     <None Include="packages.json" />
     <None Include="CustomSettings.config" />
     <None Include="run-casper-tests.bat" />
