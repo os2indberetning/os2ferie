@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ImportDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="ImportDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errors Found During Generation:
 warning 6002: The table/view 'MDM.eindberetning.Medarbejder' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Medarbejder">
@@ -33,7 +33,8 @@ warning 6002: The table/view 'MDM.eindberetning.Medarbejder' does not have a pri
         </EntityType>
         <!--Errors Found During Generation:
 warning 6013: The table/view 'MDM.eindberetning.Organisation' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        --><EntityType Name="Organisation">
+        -->
+        <EntityType Name="Organisation">
           <Key>
             <PropertyRef Name="LOSOrgId"></PropertyRef>
           </Key>
@@ -50,27 +51,29 @@ warning 6013: The table/view 'MDM.eindberetning.Organisation' does not have a pr
         </EntityType>
         <EntityContainer Name="ImportDBModelStoreContainer">
           <EntitySet Name="Medarbejder" EntityType="Self.Medarbejder" store:Type="Views" store:Schema="eindberetning">
-            <DefiningQuery>SELECT 
-    [Medarbejder].[MaNr] AS [MaNr], 
-    [Medarbejder].[Ansaettelsesdato] AS [Ansaettelsesdato], 
-    [Medarbejder].[Ophoersdato] AS [Ophoersdato], 
-    [Medarbejder].[Fornavn] AS [Fornavn], 
-    [Medarbejder].[Efternavn] AS [Efternavn], 
-    [Medarbejder].[ADBrugerNavn] AS [ADBrugerNavn], 
-    [Medarbejder].[Adresse] AS [Adresse], 
-    [Medarbejder].[Stednavn] AS [Stednavn], 
-    [Medarbejder].[PostNr] AS [PostNr], 
-    [Medarbejder].[By] AS [By], 
-    [Medarbejder].[Land] AS [Land], 
-    [Medarbejder].[email] AS [email], 
-    [Medarbejder].[CPR] AS [CPR], 
-    [Medarbejder].[LOSOrgId] AS [LOSOrgId], 
-    [Medarbejder].[Leder] AS [Leder], 
-    [Medarbejder].[Stillingsbetegnelse] AS [Stillingsbetegnelse], 
-    [Medarbejder].[Omkostningssted] AS [Omkostningssted], 
-    [Medarbejder].[AnsatForhold] AS [AnsatForhold], 
-    [Medarbejder].[EkstraCiffer] AS [EkstraCiffer]
-    FROM [eindberetning].[Medarbejder] AS [Medarbejder]</DefiningQuery>
+            <DefiningQuery>
+              SELECT
+              [Medarbejder].[MaNr] AS [MaNr],
+              [Medarbejder].[Ansaettelsesdato] AS [Ansaettelsesdato],
+              [Medarbejder].[Ophoersdato] AS [Ophoersdato],
+              [Medarbejder].[Fornavn] AS [Fornavn],
+              [Medarbejder].[Efternavn] AS [Efternavn],
+              [Medarbejder].[ADBrugerNavn] AS [ADBrugerNavn],
+              [Medarbejder].[Adresse] AS [Adresse],
+              [Medarbejder].[Stednavn] AS [Stednavn],
+              [Medarbejder].[PostNr] AS [PostNr],
+              [Medarbejder].[By] AS [By],
+              [Medarbejder].[Land] AS [Land],
+              [Medarbejder].[email] AS [email],
+              [Medarbejder].[CPR] AS [CPR],
+              [Medarbejder].[LOSOrgId] AS [LOSOrgId],
+              [Medarbejder].[Leder] AS [Leder],
+              [Medarbejder].[Stillingsbetegnelse] AS [Stillingsbetegnelse],
+              [Medarbejder].[Omkostningssted] AS [Omkostningssted],
+              [Medarbejder].[AnsatForhold] AS [AnsatForhold],
+              [Medarbejder].[EkstraCiffer] AS [EkstraCiffer]
+              FROM [eindberetning].[Medarbejder] AS [Medarbejder]
+            </DefiningQuery>
           </EntitySet>
           <EntitySet Name="Organisation" EntityType="Self.Organisation" store:Type="Views" store:Schema="eindberetning">
             <DefiningQuery>
@@ -89,7 +92,8 @@ warning 6013: The table/view 'MDM.eindberetning.Organisation' does not have a pr
             </DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ImportDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">

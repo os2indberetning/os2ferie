@@ -25,6 +25,7 @@ namespace DBUpdater
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Medarbejder> Medarbejders { get; set; }
+        public virtual DbSet<Medarbejder> Medarbejder { get; set; }
+        public virtual DbSet<Organisation> Organisation { get; set; }
     }
 }
