@@ -4,7 +4,22 @@
             method: "GET",
             isArray: true,
             transformResponse: function (data) {
-                return angular.fromJson(data).value;
+                var res = angular.fromJson(data);
+                if (res.error == undefined) {
+                    return res.value;
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    controller: "ServiceErrorController",
+                    backdrop: "static",
+                    resolve: {
+                        errorMsg: function () {
+                            return res.error.innererror.message;
+                        }
+                    }
+                });
+                return res;
             }
         }
     });

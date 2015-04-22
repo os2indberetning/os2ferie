@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -6,7 +7,9 @@ using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
+using Core.DomainServices.RoutingClasses;
 using Infrastructure.DataAccess;
+using log4net.Repository.Hierarchy;
 
 namespace OS2Indberetning.Controllers
 {
@@ -37,12 +40,20 @@ namespace OS2Indberetning.Controllers
         //GET: odata/Person(5)
         public IQueryable<Person> GetPerson([FromODataUri] int key, ODataQueryOptions<Person> queryOptions)
         {
-            var cprScrubbed = _person.ScrubCprFromPersons(GetQueryable(key, queryOptions));
-            _person.AddFullName(cprScrubbed);
-            var res = cprScrubbed.ToList();
-            res[0].DistanceFromHomeToWork = _person.GetDistanceFromHomeToWork(res[0]);
+            try
+            {
+                var cprScrubbed = _person.ScrubCprFromPersons(GetQueryable(key, queryOptions));
+                _person.AddFullName(cprScrubbed);
+                var res = cprScrubbed.ToList();
 
-            return res.AsQueryable();
+                res[0].DistanceFromHomeToWork = _person.GetDistanceFromHomeToWork(res[0]);
+
+                return res.AsQueryable();
+            }
+            catch (RouteInformationException e)
+            {
+                throw new Exception("Kunne ikke beregne rute mellem hjemme- og arbejdsadresse.");
+            }
         }
 
         // PUT: odata/Person(5)
