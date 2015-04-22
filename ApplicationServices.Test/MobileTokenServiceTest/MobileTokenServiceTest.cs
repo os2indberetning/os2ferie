@@ -11,18 +11,28 @@ namespace ApplicationServices.Test.MobileTokenServiceTest
     [TestFixture]
     public class MobileTokenServiceTest
     {
+
+        private List<MobileToken> list;
+        IGenericRepository<MobileToken> repoMock = NSubstitute.Substitute.For<IGenericRepository<MobileToken>>();
+
+        [SetUp]
+        public void SetUp()
+        {
+            list = new List<MobileToken>();
+            repoMock.AsQueryable().ReturnsForAnyArgs(list.AsQueryable());
+        }
+
         [Test]
         public void Create_CalledTwice_TokensNotIdentical()
         {
-            var repoMock = NSubstitute.Substitute.For<IGenericRepository<MobileToken>>();
-
+            
             var token1 = new MobileToken();
             var token2 = new MobileToken();
 
-            repoMock.AsQueryable().Returns(info => new List<MobileToken>().AsQueryable());
-            repoMock.Insert(token1).Returns(token1);
-            repoMock.Insert(token2).Returns(token2);
-            repoMock.When(repository => repository.Save()).Do(info => { });
+            repoMock.Insert(new MobileToken())
+                .ReturnsForAnyArgs(x => x.Arg<MobileToken>())
+                .AndDoes(r => list.Add(r.Arg<MobileToken>()));
+
 
             var service = new MobileTokenService(repoMock);
 

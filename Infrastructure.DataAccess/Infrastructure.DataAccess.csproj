@@ -209,6 +209,14 @@
     <Compile Include="Migrations\201504220645399_UnknownChanges.Designer.cs">
       <DependentUpon>201504220645399_UnknownChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504220905137_AddedCachedAddress.cs" />
+    <Compile Include="Migrations\201504220905137_AddedCachedAddress.Designer.cs">
+      <DependentUpon>201504220905137_AddedCachedAddress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504220917054_EditedCachedAddress.cs" />
+    <Compile Include="Migrations\201504220917054_EditedCachedAddress.Designer.cs">
+      <DependentUpon>201504220917054_EditedCachedAddress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -334,6 +342,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504220645399_UnknownChanges.resx">
       <DependentUpon>201504220645399_UnknownChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504220905137_AddedCachedAddress.resx">
+      <DependentUpon>201504220905137_AddedCachedAddress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504220917054_EditedCachedAddress.resx">
+      <DependentUpon>201504220917054_EditedCachedAddress.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

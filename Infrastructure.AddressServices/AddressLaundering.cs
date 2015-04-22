@@ -3,12 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Core.DomainServices.RoutingClasses;
+using Infrastructure.AddressServices.Interfaces;
 using Newtonsoft.Json.Linq;
 using Core.DomainModel;
 
 namespace Infrastructure.AddressServices
 {
-    public class AddressLaundering
+    public class AddressLaundering : IAddressLaunderer
     {
         #region Public methods
 
@@ -142,5 +143,15 @@ namespace Infrastructure.AddressServices
         }
 
         #endregion
+
+        public Address Launder(Address inputAddress)
+        {
+            return LaunderAddress(inputAddress);
+        }
+
+        public Address Launder(string inputAddress)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

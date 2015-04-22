@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Core.DomainServices, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Presentation.Web\Bin\Core.DomainServices.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -54,9 +58,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CachedAddressLaunderer.cs" />
     <Compile Include="Example\IExample.cs" />
     <Compile Include="IAddressCoordinates.cs" />
     <Compile Include="IGenericRepository.cs" />
+    <Compile Include="Interfaces\IAddressLaunderer.cs" />
     <Compile Include="IRoute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingClasses\Coordinates.cs" />
@@ -64,8 +70,8 @@
     <Compile Include="RoutingClasses\JsonObjects.cs" />
     <Compile Include="RoutingClasses\RouteInformation.cs" />
     <Compile Include="RoutingClasses\URLDefinitions.cs" />
-    <Compile Include="Ínterfaces\IAddressCoordinates.cs" />
-    <Compile Include="Ínterfaces\IRoute.cs" />
+    <Compile Include="Interfaces\IAddressCoordinates.cs" />
+    <Compile Include="Interfaces\IRoute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core.DomainModel\Core.DomainModel.csproj">

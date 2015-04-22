@@ -7,9 +7,8 @@ using Core.DomainModel;
 
 namespace Infrastructure.AddressServices.Interfaces
 {
-    interface IAddressLaunderer
+    public interface IAddressLaunderer
     {
-        Address Launder(string inputAddress);
         Address Launder(Address inputAddress);
     }
 }

@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mail.Test", "ConsoleApplica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBUpdater", "DBUpdater\DBUpdater.csproj", "{A7C2603A-669B-408D-842F-08DB1E08F166}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainServices.Test", "DomainServices.Test\DomainServices.Test.csproj", "{68D912C8-DDF9-43BD-89AD-2F9612FB2B54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{A7C2603A-669B-408D-842F-08DB1E08F166}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7C2603A-669B-408D-842F-08DB1E08F166}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7C2603A-669B-408D-842F-08DB1E08F166}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68D912C8-DDF9-43BD-89AD-2F9612FB2B54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68D912C8-DDF9-43BD-89AD-2F9612FB2B54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68D912C8-DDF9-43BD-89AD-2F9612FB2B54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68D912C8-DDF9-43BD-89AD-2F9612FB2B54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

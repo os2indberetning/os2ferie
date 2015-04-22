@@ -208,7 +208,7 @@
     <Content Include="connections.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="App.config" />
+    <None Include="app.config" />
     <None Include="packages.json" />
     <None Include="CustomSettings.config" />
     <None Include="run-casper-tests.bat" />

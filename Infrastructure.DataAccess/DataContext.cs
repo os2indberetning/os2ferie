@@ -33,7 +33,8 @@ namespace Infrastructure.DataAccess
         public IDbSet<OrgUnit> OrgUnits { get; set; }
         public IDbSet<Substitute> Substitutes { get; set; }
         public IDbSet<BankAccount> BankAccounts { get; set; } 
-        public IDbSet<RateType> RateTypes { get; set; } 
+        public IDbSet<RateType> RateTypes { get; set; }
+        public IDbSet<CachedAddress> CachedAddresses { get; set; } 
         
   
 
@@ -64,6 +65,7 @@ namespace Infrastructure.DataAccess
             ConfigurePropertiesForSubstitute(modelBuilder);
             ConfigurePropertiesForBankAccount(modelBuilder);
             ConfigurePropertiesForRateType(modelBuilder);
+            ConfigurePropertiesForCachedAddress(modelBuilder);
         }
 
         private void ConfigurePropertiesForPerson(DbModelBuilder modelBuilder)
@@ -79,6 +81,11 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Person>().Ignore(t => t.FullName);
             modelBuilder.Entity<Person>().Ignore(t => t.DistanceFromHomeToWork);
 
+        }
+
+        private void ConfigurePropertiesForCachedAddress(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CachedAddress>().Property(p => p.IsDirty).IsRequired();
         }
 
         private void ConfigurePropertiesForAddress(DbModelBuilder modelBuilder)
