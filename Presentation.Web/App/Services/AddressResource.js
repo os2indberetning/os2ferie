@@ -11,7 +11,7 @@
             transformResponse: function (data) {
                 var res = angular.fromJson(data);
                 if (res.error == undefined) {
-                    return data.value;
+                    return res.value;
                 }
 
                 var modalInstance = $modal.open({
@@ -34,7 +34,7 @@
             transformResponse: function (data) {
                 var res = angular.fromJson(data);
                 if (res.error == undefined) {
-                    return data.value;
+                    return res.value;
                 }
 
                 var modalInstance = $modal.open({
@@ -57,7 +57,7 @@
             transformResponse: function(data) {
                 var res = angular.fromJson(data);
                 if (res.error == undefined) {
-                    return data.value;
+                    return res.value;
                 }
 
                 var modalInstance = $modal.open({
@@ -80,7 +80,7 @@
             transformResponse: function (data) {
                 var res = angular.fromJson(data);
                 if (res.error == undefined) {
-                    return data.value;
+                    return res.value;
                 }
 
                 var modalInstance = $modal.open({
