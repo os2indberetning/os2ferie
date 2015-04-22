@@ -23,6 +23,7 @@ namespace Infrastructure.AddressServices
             var request = CreateRequest(address.StreetName, address.StreetNumber, address.ZipCode.ToString());
 
             var laundered = ExecuteAndRead(request);
+            
 
             if (!laundered.Any())
             {

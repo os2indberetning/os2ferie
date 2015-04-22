@@ -205,6 +205,10 @@
     <Compile Include="Migrations\201504070851025_AddedRouteGeometryToDriveReport.Designer.cs">
       <DependentUpon>201504070851025_AddedRouteGeometryToDriveReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504220645399_UnknownChanges.cs" />
+    <Compile Include="Migrations\201504220645399_UnknownChanges.Designer.cs">
+      <DependentUpon>201504220645399_UnknownChanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -327,6 +331,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504070851025_AddedRouteGeometryToDriveReport.resx">
       <DependentUpon>201504070851025_AddedRouteGeometryToDriveReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504220645399_UnknownChanges.resx">
+      <DependentUpon>201504220645399_UnknownChanges.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
