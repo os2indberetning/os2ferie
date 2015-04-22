@@ -1,17 +1,66 @@
-﻿angular.module("application").service('Person', ["$resource", function ($resource) {
+﻿angular.module("application").service('Person', ["$resource", "$modal", function ($resource, $modal) {
     return $resource("/odata/Person(:id)", { id: "@id" }, {
         "get": {
             method: "GET", isArray: false, transformResponse: function (data) {
-                return angular.fromJson(data).value[0];
+                var res = angular.fromJson(data);
+                if (res.error == undefined) {
+                    return res.value[0];
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    controller: "ServiceErrorController",
+                    backdrop: "static",
+                    resolve: {
+                        errorMsg: function () {
+                            return res.error.innererror.message;
+                        }
+                    }
+                });
+                return res;
             }
         },
         "getAll": {
-            method: "GET", isArray: false
+            method: "GET", isArray: false, url: "/odata/Person", transformResponse: function(data) {
+                var res = angular.fromJson(data);
+                if (res.error == undefined) {
+                    return res;
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    controller: "ServiceErrorController",
+                    backdrop: "static",
+                    resolve: {
+                        errorMsg: function () {
+                            return res.error.innererror.message;
+                        }
+                    }
+                });
+                return res;
+            }
         },
         "patch": { method: "PATCH" },
         "getNonAdmins": {
             url: "/odata/Person?$filter=IsAdmin eq false",
-            methdo: "GET", isArray: false
-        }
+            method: "GET", isArray: false, transformResponse: function() {
+                var res = angular.fromJson(data);
+                if (res.error == undefined) {
+                    return data;
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    controller: "ServiceErrorController",
+                    backdrop: "static",
+                    resolve: {
+                        errorMsg: function () {
+                            return res.error.innererror.message;
+                        }
+                    }
+                });
+                return res;
+            }
+        },
     });
 }]);

@@ -86,12 +86,16 @@ namespace Infrastructure.AddressServices.Routing
 			}
 			catch (InvalidOperationException e)
 			{
-				throw new RouteInformationException("Mutltiple coordinates with type Origin and/or Destination.", e);
+                var up = new RouteInformationException("Mutltiple coordinates with type Origin and/or Destination.", e);
+                Logger.Error("Multiple coordinates with type origin and/or destination", up);
+                throw up;
 			}
 
 			if (origin == null || destination == null)
 			{
-				throw new RouteInformationException("Coordinate of type Origin and/or Destination missing.");
+                var up = new RouteInformationException("Coordinate of type Origin and/or Destination missing.");
+                Logger.Error("Coordinate of type Origin and/or destination missing.", up);
+                throw up;
 			}
 
 			if( !((origin.Latitude.Length - origin.Latitude.IndexOf(".") + 1) <= 5) )
@@ -126,7 +130,9 @@ namespace Infrastructure.AddressServices.Routing
 			}
 			catch (WebException e)
 			{
-				throw new RouteInformationException("Server error, coordinates invalid.", e);
+                var up = new RouteInformationException("Server error", e);
+			    Logger.Error("Server error", up);
+			    throw up;
 			}
 
 			if (responseStream == null) return null;

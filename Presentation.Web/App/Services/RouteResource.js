@@ -6,7 +6,22 @@
             isArray: false,
             url: "/odata/PersonalRoutes?$expand=Points &$filter=Id eq :id",
             transformResponse: function (data) {
-                return angular.fromJson(data).value[0];
+                var res = angular.fromJson(data);
+                if (res.error == undefined) {
+                    return res.value[0];
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    controller: "ServiceErrorController",
+                    backdrop: "static",
+                    resolve: {
+                        errorMsg: function () {
+                            return res.error.innererror.message;
+                        }
+                    }
+                });
+                return res;
             }
         },
         "patch": { method: "PATCH", isArray: false },
