@@ -89,6 +89,23 @@ namespace DBUpdater
             }
         }
 
+        public void MigrateEmployees()
+        {
+            var empls = GetEmployeesAsQueryably();
+
+            var personRepo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<Person>>();
+            var emplRepo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<Employment>>();
+
+            foreach (var employee in empls)
+            {
+                var personToInsert = new Person()
+                {
+                    CprNumber = employee.CPR,
+                    //TODO: Carry on here
+                };
+            }
+        }
+
 
         public IQueryable<Employee> GetEmployeesAsQueryably()
         {
