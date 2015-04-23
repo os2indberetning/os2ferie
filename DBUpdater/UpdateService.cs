@@ -6,10 +6,12 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
 using DBUpdater.Models;
 using Infrastructure.AddressServices.Interfaces;
+using Ninject;
 
 namespace DBUpdater
 {
@@ -38,21 +40,52 @@ namespace DBUpdater
 
                 while (reader.Read())
                 {
-                    var currentRow = new Organisation();
-                    currentRow.LOSOrgId = SafeGetInt32(reader, 0);
-                    currentRow.ParentLosOrgId = SafeGetInt32(reader, 1);
-                    currentRow.KortNavn = SafeGetString(reader, 2);
-                    currentRow.Navn = SafeGetString(reader, 3);
-                    currentRow.Gade = SafeGetString(reader, 4);
-                    currentRow.Stednavn = SafeGetString(reader, 5);
-                    currentRow.Postnr = SafeGetInt16(reader, 6);
-                    currentRow.By = SafeGetString(reader, 7);
-                    currentRow.Omkostningssted = SafeGetInt64(reader, 8);
-                    currentRow.Level = SafeGetInt32(reader, 9);
+                    var currentRow = new Organisation
+                    {
+                        LOSOrgId = reader.GetInt32(0),
+                        ParentLosOrgId = SafeGetInt32(reader, 1),
+                        KortNavn = SafeGetString(reader, 2),
+                        Navn = SafeGetString(reader, 3),
+                        Gade = SafeGetString(reader, 4),
+                        Stednavn = SafeGetString(reader, 5),
+                        Postnr = SafeGetInt16(reader, 6),
+                        By = SafeGetString(reader, 7),
+                        Omkostningssted = SafeGetInt64(reader, 8),
+                        Level = reader.GetInt32(9)
+                    };
                     result.Add(currentRow);
                 }
             }
             return result.AsQueryable();
+        }
+
+        public void MigrateOrganisations()
+        {
+            var orgs = GetOrganisationsAsQueryable().OrderBy(x => x.Level);
+
+            var repo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<OrgUnit>>();
+
+            foreach (var org in orgs)
+            {
+                var orgToInsert = repo.AsQueryable().FirstOrDefault(x => x.OrgId == org.LOSOrgId);
+
+                if (orgToInsert == null)
+                {
+                    orgToInsert = repo.Insert(new OrgUnit());
+                }
+
+                orgToInsert.Level = org.Level;
+                orgToInsert.LongDescription = org.Navn;
+                orgToInsert.ShortDescription = org.KortNavn;
+                orgToInsert.HasAccessToFourKmRule = false;
+                orgToInsert.OrgId = org.LOSOrgId;
+                
+                if (orgToInsert.Level > 0)
+                {
+                    orgToInsert.ParentId = repo.AsQueryable().Single(x => x.OrgId == org.ParentLosOrgId).Id;
+                }
+            }
+            repo.Save();
         }
 
 
@@ -75,26 +108,28 @@ namespace DBUpdater
 
                 while (reader.Read())
                 {
-                    var currentRow = new Employee();
-                    currentRow.MaNr = SafeGetInt32(reader,0);
-                    currentRow.AnsaettelsesDato = SafeGetDate(reader,1);
-                    currentRow.OphoersDato = SafeGetDate(reader,2);
-                    currentRow.Fornavn = SafeGetString(reader,3);
-                    currentRow.Efternavn = SafeGetString(reader,4);
-                    currentRow.ADBrugerNavn = SafeGetString(reader,5);
-                    currentRow.Adresse = SafeGetString(reader,6);
-                    currentRow.Stednavn = SafeGetString(reader,7);
-                    currentRow.PostNr = int.Parse(SafeGetString(reader,8));
-                    currentRow.By = SafeGetString(reader,9);
-                    currentRow.Land = SafeGetString(reader,10);
-                    currentRow.Email = SafeGetString(reader,11);
-                    currentRow.CPR = SafeGetString(reader,12);
-                    currentRow.LOSOrgId = SafeGetInt32(reader,13);
-                    currentRow.Leder = reader.GetBoolean(14);
-                    currentRow.Stillingsbetegnelse = SafeGetString(reader,15);
-                    currentRow.Omkostningssted = SafeGetInt64(reader,16);
-                    currentRow.AnsatForhold = SafeGetString(reader,17);
-                    currentRow.EkstraCiffer = SafeGetInt16(reader,18);
+                    var currentRow = new Employee
+                    {
+                        MaNr = SafeGetInt32(reader, 0),
+                        AnsaettelsesDato = SafeGetDate(reader, 1),
+                        OphoersDato = SafeGetDate(reader, 2),
+                        Fornavn = SafeGetString(reader, 3),
+                        Efternavn = SafeGetString(reader, 4),
+                        ADBrugerNavn = SafeGetString(reader, 5),
+                        Adresse = SafeGetString(reader, 6),
+                        Stednavn = SafeGetString(reader, 7),
+                        PostNr = int.Parse(SafeGetString(reader, 8)),
+                        By = SafeGetString(reader, 9),
+                        Land = SafeGetString(reader, 10),
+                        Email = SafeGetString(reader, 11),
+                        CPR = SafeGetString(reader, 12),
+                        LOSOrgId = SafeGetInt32(reader, 13),
+                        Leder = reader.GetBoolean(14),
+                        Stillingsbetegnelse = SafeGetString(reader, 15),
+                        Omkostningssted = SafeGetInt64(reader, 16),
+                        AnsatForhold = SafeGetString(reader, 17),
+                        EkstraCiffer = SafeGetInt16(reader, 18)
+                    };
                     result.Add(currentRow);
                 }
             }

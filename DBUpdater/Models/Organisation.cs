@@ -8,7 +8,7 @@ namespace DBUpdater.Models
 {
     public class Organisation
     {
-        public int? LOSOrgId { get; set; }
+        public int LOSOrgId { get; set; }
         public int? ParentLosOrgId { get; set; }
         public string KortNavn { get; set; }
         public string Navn { get; set; }
@@ -17,6 +17,6 @@ namespace DBUpdater.Models
         public int? Postnr { get; set; }
         public string By { get; set; }
         public long? Omkostningssted { get; set; }
-        public int? Level { get; set; }
+        public int Level { get; set; }
     }
 }

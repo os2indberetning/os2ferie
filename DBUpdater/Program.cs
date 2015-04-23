@@ -18,7 +18,7 @@ namespace DBUpdater
         {
             var service = new UpdateService();
 
-            var res = service.GetEmployeesAsQueryably();
+            service.MigrateOrganisations();
 
         }
 
