@@ -140,10 +140,10 @@
                 }
             });
             $scope.validateInput();
-
         }
 
         $scope.validateInput = function () {
+            $scope.drivenKmChanged();
             $scope.canSubmitDriveReport = true;
             $scope.purposeErrorMessage = "";
             $scope.readDistanceErrorMessage = "";
@@ -673,25 +673,48 @@
         }
 
         $scope.$watch("DrivenKilometers", function () {
-            drivenKmChanged();
+            $scope.drivenKmChanged();
         });
 
-        var drivenKmChanged = function () {
-            if ($scope.DriveReport.RoundTrip === true) {
-                $scope.DrivenKMDisplay = (2 * Number($scope.DrivenKilometers.toString().replace(",", "."))).toString().replace(".", ",");
-            } else {
-                $scope.DrivenKMDisplay = $scope.DrivenKilometers.toString().replace(".", ",");
-            }
-            var remKM = Number($scope.DrivenKMDisplay.toString().replace(",", ".")) - Number($scope.Person.DistanceFromHomeToWork);
-            if (remKM > 0) {
-                $scope.RemainingKilometers = Number(remKM).toFixed(2).toString().replace(".", ",");
-            } else {
-                $scope.RemainingKilometers = 0;
-            }
+        $scope.drivenKmChanged = function () {
+            // Wait for Person to finish loading from server.
+            // Otherwise sometimes Person.DistanceFromHomeToWork will be undefined when the code is run.
+            $scope.Person.$promise.then(function() {
+                if ($scope.DriveReport.KilometerAllowance == "CalculatedWithoutExtraDistance") {
+                    $scope.TransportAllowance = 0;
+                } else if ($scope.DriveReport.KilometerAllowance == "Calculated") {
+                    $scope.TransportAllowance = Number($scope.Person.DistanceFromHomeToWork);
+                } else {
+                    if ($scope.DriveReport.StartOrEndedAtHome == "Both") {
+                        $scope.TransportAllowance = 2 * Number($scope.Person.DistanceFromHomeToWork);
+                    } else if ($scope.DriveReport.StartOrEndedAtHome == "Neither") {
+                        $scope.TransportAllowance = 0;
+                    } else {
+                        $scope.TransportAllowance = $scope.Person.DistanceFromHomeToWork;
+                    }
+                }
+
+                debugger;
+                $scope.TransportAllowance = Number($scope.TransportAllowance.toString().replace(",", ".")).toFixed(2).toString().replace(".", ",");
+
+
+                if ($scope.DriveReport.RoundTrip === true) {
+                    $scope.DrivenKMDisplay = (2 * Number($scope.DrivenKilometers.toString().replace(",", "."))).toString().replace(".", ",");
+                } else {
+                    $scope.DrivenKMDisplay = $scope.DrivenKilometers.toString().replace(".", ",");
+                }
+                var remKM = Number($scope.DrivenKMDisplay.toString().replace(",", ".")) - Number($scope.TransportAllowance.toString().replace(",", "."));
+                if (remKM > 0) {
+                    $scope.RemainingKilometers = Number(remKM).toFixed(2).toString().replace(".", ",");
+                } else {
+                    $scope.RemainingKilometers = 0;
+                }
+            });
+            
         }
 
         $scope.roundTripChanged = function () {
-            drivenKmChanged();
+            $scope.drivenKmChanged();
         }
     }
 ]);
