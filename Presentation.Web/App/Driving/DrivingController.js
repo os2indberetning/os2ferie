@@ -58,6 +58,19 @@
         }
 
         $scope.Person = Person.get({ id: personId }, function () {
+            PersonalAddress.GetWorkAndHomeForUser({ id: personId }, function (data) {
+                angular.forEach(data, function(address, key) {
+                    if (address.Type == "AlternativeHome" || address.Type == "Home") {
+                        $scope.Person.HomeAddress = address;
+                    }
+                    if (address.Type == "AlternativeWork" || address.Type == "Work") {
+                        $scope.Person.WorkAddress = address;
+                    }
+                });
+                debugger;
+            });
+
+
             // Show the persons distance from home to work.
             $scope.TransportAllowance = $scope.Person.DistanceFromHomeToWork.toFixed(2).toString().replace('.', ',');
 
@@ -694,7 +707,6 @@
                     }
                 }
 
-                debugger;
                 $scope.TransportAllowance = Number($scope.TransportAllowance.toString().replace(",", ".")).toFixed(2).toString().replace(".", ",");
 
 

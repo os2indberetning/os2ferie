@@ -98,6 +98,10 @@ namespace OS2Indberetning
 
             builder.EntitySet<PersonalAddress>("PersonalAddresses");
 
+            builder.EntityType<PersonalAddress>().Collection
+.Function("GetHomeAndWork")
+.ReturnsFromEntitySet<PersonalAddress>("PersonalAddresses");
+
             builder.EntitySet<PersonalRoute>("PersonalRoutes");
 
             builder.EntitySet<Point>("Points");
