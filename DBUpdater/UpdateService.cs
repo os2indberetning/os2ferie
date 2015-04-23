@@ -21,7 +21,40 @@ namespace DBUpdater
       
         }
 
-       
+        public IQueryable<Organisation> GetOrganisationsAsQueryable()
+        {
+            var result = new List<Organisation>();
+            using (var sqlConnection1 =new SqlConnection("data source=706sofd01.intern.syddjurs.dk;initial catalog=MDM;persist security info=True;user id=sofdeindberetning;password=soa2ieCh>e"))
+            {
+                var cmd = new SqlCommand
+                {
+                    CommandText = "SELECT * FROM eindberetning.organisation",
+                    CommandType = CommandType.Text,
+                    Connection = sqlConnection1
+                };
+
+                sqlConnection1.Open();
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var currentRow = new Organisation();
+                    currentRow.LOSOrgId = SafeGetInt32(reader, 0);
+                    currentRow.ParentLosOrgId = SafeGetInt32(reader, 1);
+                    currentRow.KortNavn = SafeGetString(reader, 2);
+                    currentRow.Navn = SafeGetString(reader, 3);
+                    currentRow.Gade = SafeGetString(reader, 4);
+                    currentRow.Stednavn = SafeGetString(reader, 5);
+                    currentRow.Postnr = SafeGetInt16(reader, 6);
+                    currentRow.By = SafeGetString(reader, 7);
+                    currentRow.Omkostningssted = SafeGetInt64(reader, 8);
+                    currentRow.Level = SafeGetInt32(reader, 9);
+                    result.Add(currentRow);
+                }
+            }
+            return result.AsQueryable();
+        }
+
 
         public IQueryable<Employee> GetEmployeesAsQueryably()
         {
