@@ -84,8 +84,9 @@ namespace DBUpdater
                 {
                     orgToInsert.ParentId = repo.AsQueryable().Single(x => x.OrgId == org.ParentLosOrgId).Id;
                 }
+
+                repo.Save();
             }
-            repo.Save();
         }
 
 
