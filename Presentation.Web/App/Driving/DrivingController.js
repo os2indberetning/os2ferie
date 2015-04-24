@@ -1,9 +1,16 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", "Address", "Route", "$q", "HelpText", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state, Address, Route, $q, HelpText) {
+    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", "Address", "Route", "$q", "HelpText", "$timeout", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state, Address, Route, $q, HelpText, $timeout) {
+
+
+        var valuesFromLatestReportPopulated = false;
 
         $scope.DrivenKMDisplay = 0;
 
         $scope.container = {};
+
+        $scope.container.thingsLoaded = 0;
+        $scope.container.thingsToLoad = 12;
+
 
         $scope.addressPlaceholderText = 'Eller skriv adresse her';
 
@@ -33,8 +40,8 @@
                 $scope.IsRoute = false;
                 $scope.DriveReport.Addresses = [];
 
-                $scope.DriveReport.Addresses.push({ Name: "", Save: false });
-                $scope.DriveReport.Addresses.push({ Name: "", Save: false });
+                $scope.DriveReport.Addresses.push({Personal: "", Name: "", Save: false });
+                $scope.DriveReport.Addresses.push({Personal: "", Name: "", Save: false });
                 return;
             }
 
@@ -47,7 +54,7 @@
             $scope.DriveReport.Addresses = [];
 
             angular.forEach($scope.Routes[index - 1].Points, function (value, key) {
-                $scope.DriveReport.Addresses.push({ Name: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town, Save: false });
+                $scope.DriveReport.Addresses.push({Personal: "", Name: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town, Save: false });
             });
             $scope.validateInput();
         }
@@ -58,7 +65,9 @@
         }
 
         $scope.Person = Person.get({ id: personId }, function () {
+            $scope.container.thingsLoaded++;
             $scope.Person.HomeAddress = PersonalAddress.GetHomeForUser({ id: personId }, function (data) {
+                $scope.container.thingsLoaded++;
                 $scope.Person.HomeAddressString = data.StreetName + " " + data.StreetNumber + ", " + data.ZipCode;
             });
 
@@ -67,6 +76,7 @@
             $scope.TransportAllowance = $scope.Person.DistanceFromHomeToWork.toFixed(2).toString().replace('.', ',');
 
             Address.GetPersonalAndStandard({ personId: personId }, function (data) {
+                $scope.container.thingsLoaded++;
                 var temp = [{ value: "Vælg fast adresse" }];
                 angular.forEach(data, function (value, key) {
                     var street = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
@@ -92,7 +102,7 @@
             });
 
             Route.get({ query: "&filter=PersonId eq " + personId }, function (data) {
-
+                $scope.container.thingsLoaded++;
                 var temp = [{ addressOne: "", addressTwo: "", viaPointCounr: "", presentation: "" }];
 
                 angular.forEach(data.value, function (value, key) {
@@ -342,38 +352,31 @@
             $scope.addressInputChanged(index);
         };
 
-        $scope.openNoLicensePlateModal = function () {
+        //$scope.openNoLicensePlateModal = function () {
 
-            var modalInstance = $modal.open({
-                templateUrl: '/App/Driving/noLicensePlateModal.html',
-                controller: 'noLicensePlateModalController',
-                //size: size,
-                backdrop: 'static',
-                resolve: {
+        //    var modalInstance = $modal.open({
+        //        templateUrl: '/App/Driving/noLicensePlateModal.html',
+        //        controller: 'noLicensePlateModalController',
+        //        //size: size,
+        //        backdrop: 'static',
+        //        resolve: {
 
-                }
-            });
+        //        }
+        //    });
 
-            modalInstance.result.then(function () {
-                $state.go("settings");
-            }, function () {
+        //    modalInstance.result.then(function () {
+        //        $state.go("settings");
+        //    }, function () {
 
-            });
-        };
+        //    });
+        //};
 
 
 
         $scope.clearClicked = function () {
             // Make the datepicker pop open when clear is clicked.
             openDatePicker = true;
-
-
-
             $scope.DriveReport.Purpose = "";
-
-
-
-
             $scope.container.PersonalRouteDropDown.select(0);
             $scope.container.PersonalRouteDropDown.trigger("change");
             $scope.container.PersonalAddressDropDown.select(0);
@@ -454,22 +457,36 @@
         }
 
         var openDatePicker = true;
+
         // Open the datepicker when the page finishes loading
         $scope.$on("kendoRendered", function (event) {
-            if (openDatePicker) {
-                $scope.driveDatePicker.open();
-                openDatePicker = false;
 
+
+            $scope.$watch("container.thingsLoaded", function () {
+                if ($scope.container.thingsLoaded >= $scope.container.thingsToLoad) {
+                    if (openDatePicker) {
+                        // Small timeout to allow the datepicker to be rendered. Otherwise the open will be displayed in the top left corner.
+                        $timeout(function () {
+                            $scope.driveDatePicker.open();
+                            openDatePicker = false;
+                        }, 0);
+                    }
+                }
+            });
+
+            if (!valuesFromLatestReportPopulated) {
                 $scope.loadValuesFromLatestDriveReport();
-
+                valuesFromLatestReportPopulated = true;
             }
 
             $scope.KmRate.$promise.then(function () {
+                $scope.container.thingsLoaded++;
                 $scope.KmRateDropDown.dataSource.read();
                 $scope.KmRateDropDown.select($scope.lastSelectedTransport);
             });
 
             $scope.Employments.$promise.then(function (data) {
+                $scope.container.thingsLoaded++;
                 angular.forEach(data, function (employment, key) {
                     employment.PresentationString = employment.Position + " - " + employment.OrgUnit.ShortDescription;
                 });
@@ -477,6 +494,7 @@
             });
 
             $scope.LicensePlates.$promise.then(function (data) {
+                $scope.container.thingsLoaded++;
                 if ($scope.LicensePlates.length > 0) {
                     angular.forEach(data, function (plate, key) {
                         plate.PresentationString = plate.Plate + " - " + plate.Description;
@@ -493,14 +511,22 @@
 
         });
 
-        $scope.Employments = PersonEmployments.get({ id: personId });
+        $scope.Employments = PersonEmployments.get({ id: personId }, function () {
+            $scope.container.thingsLoaded++;
+        });
 
-        $scope.LicensePlates = LicensePlate.get({ id: personId });
+        $scope.LicensePlates = LicensePlate.get({ id: personId }, function () {
+            $scope.container.thingsLoaded++;
+        });
 
 
-        $scope.KmRate = Rate.ThisYearsRates();
+        $scope.KmRate = Rate.ThisYearsRates(function () {
+            $scope.container.thingsLoaded++;
+        });
 
-        var latestDriveReport = DriveReport.getLatest({ id: personId });
+        var latestDriveReport = DriveReport.getLatest({ id: personId }, function () {
+            $scope.container.thingsLoaded++;
+        });
 
 
         $scope.generateMapWidget = function () {
@@ -565,7 +591,6 @@
             });
         }
 
-
         $scope.populateMap = function () {
             var mapArray = [];
 
@@ -590,6 +615,7 @@
         }
 
         var routeMapChanged = function (obj) {
+
             updateDrivenKilometerFields(obj);
 
             if (!$scope.mapChangedByGui) {
@@ -603,7 +629,7 @@
                 // Iterate all selected addresses on the map and push them to the drivereport
                 angular.forEach(obj.Addresses, function (address, key) {
                     var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
-                    $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
+                    $scope.DriveReport.Addresses.push({Personal: "", Name: shavedName, Latitude: address.lat, Longitude: address.lng });
                 });
                 $scope.guiChangedByMap = obj.Addresses.length;
 
@@ -633,6 +659,7 @@
         }
 
         Address.getMapStart(function (res) {
+            $scope.container.thingsLoaded++;
             mapStartAddress = [
                 { name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude },
                 { name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude }
@@ -693,7 +720,7 @@
                         if ($scope.DriveReport.Addresses[0].Name.indexOf($scope.Person.HomeAddressString) > -1 || $scope.DriveReport.Addresses[0].Personal.indexOf($scope.Person.HomeAddressString) > -1) {
                             toSubtract += $scope.Person.DistanceFromHomeToWork;
                         }
-                        if ($scope.DriveReport.Addresses[$scope.DriveReport.Addresses.length-1].Name.indexOf($scope.Person.HomeAddressString) > -1 || $scope.DriveReport.Addresses[$scope.DriveReport.Addresses.length-1].Personal.indexOf($scope.Person.HomeAddressString) > -1) {
+                        if ($scope.DriveReport.Addresses[$scope.DriveReport.Addresses.length - 1].Name.indexOf($scope.Person.HomeAddressString) > -1 || $scope.DriveReport.Addresses[$scope.DriveReport.Addresses.length - 1].Personal.indexOf($scope.Person.HomeAddressString) > -1) {
                             toSubtract += $scope.Person.DistanceFromHomeToWork;
                         }
                         $scope.TransportAllowance = toSubtract;
