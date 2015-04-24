@@ -5,8 +5,8 @@
 
         $scope.container = {};
 
-        $scope.container.thingsLoaded = 0;
-        $scope.container.thingsToLoad = 9;
+        $scope.container.editThingsLoaded = 0;
+        $scope.container.editThingsToLoad = 8;
 
 
 
@@ -24,7 +24,7 @@
         $scope.SmartAddress = SmartAdresseSource;
 
         $scope.DriveReport = DriveReport.getWithPoints({ id: reportId }, function (res) {
-            $scope.container.thingsLoaded++;
+            $scope.container.editThingsLoaded++;
             $scope.DriveReport.Date = moment.unix($scope.DriveReport.DriveDateTimestamp)._d;
             $scope.DriveReport.Addresses = [];
 
@@ -73,9 +73,9 @@
         }
 
         $scope.Person = Person.get({ id: personId }, function () {
-            $scope.container.thingsLoaded++;
+            $scope.container.editThingsLoaded++;
             $scope.Person.HomeAddress = PersonalAddress.GetHomeForUser({ id: personId }, function (data) {
-                $scope.container.thingsLoaded++;
+                $scope.container.editThingsLoaded++;
                 $scope.Person.HomeAddressString = data.StreetName + " " + data.StreetNumber + ", " + data.ZipCode;
             });
 
@@ -83,7 +83,7 @@
             $scope.TransportAllowance = $scope.Person.DistanceFromHomeToWork.toFixed(2).toString().replace('.', ',');
 
             Address.GetPersonalAndStandard({ personId: personId }, function (data) {
-                $scope.container.thingsLoaded++;
+                $scope.container.editThingsLoaded++;
                 var temp = [{ value: "Vælg fast adresse" }];
                 angular.forEach(data, function (value, key) {
                     var street = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
@@ -100,7 +100,7 @@
             });
 
             Route.get({ query: "&filter=PersonId eq " + personId }, function (data) {
-                $scope.container.thingsLoaded++;
+                $scope.container.editThingsLoaded++;
 
                 var temp = [{ addressOne: "", addressTwo: "", viaPointCounr: "", presentation: "" }];
 
@@ -293,21 +293,33 @@
             }
         });
 
-        $scope.$on("kendoRendered", function (event) {
-            $scope.validateInput();
+
+
+        var unwatch = $scope.$watch("container.editThingsLoaded", function () {
+            if ($scope.container.editThingsLoaded >= $scope.container.editThingsToLoad) {
+                // Create the map once loading is done. Otherwise the map wont display properly.
+                OS2RouteMap.create({
+                    id: 'map',
+                    change: routeMapChanged
+                });
+
+                //Unregister the watch
+                unwatch();
+            }
         });
 
+
         $scope.Employments = PersonEmployments.get({ id: personId }, function () {
-            $scope.container.thingsLoaded++;
+            $scope.container.editThingsLoaded++;
         });
 
         $scope.LicensePlates = LicensePlate.get({ id: personId }, function () {
-            $scope.container.thingsLoaded++;
+            $scope.container.editThingsLoaded++;
         });
 
 
         $scope.KmRate = Rate.ThisYearsRates(function () {
-            $scope.container.thingsLoaded++;
+            $scope.container.editThingsLoaded++;
         });
 
         $scope.isAddressNameSet = function (address) {
@@ -416,7 +428,7 @@
                 // Iterate all selected addresses on the map and push them to the drivereport
                 angular.forEach(obj.Addresses, function (address, key) {
                     var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
-                    $scope.DriveReport.Addresses.push({Personal: "", Name: shavedName, Latitude: address.lat, Longitude: address.lng });
+                    $scope.DriveReport.Addresses.push({ Personal: "", Name: shavedName, Latitude: address.lat, Longitude: address.lng });
                 });
                 $scope.guiChangedByMap = obj.Addresses.length;
 
@@ -446,18 +458,10 @@
         }
 
         Address.getMapStart(function (res) {
-            $scope.container.thingsLoaded++;
             mapStartAddress = [
                 { name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude },
                 { name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude }
             ];
-
-            OS2RouteMap.create({
-                id: 'map',
-                change: routeMapChanged
-            });
-
-            OS2RouteMap.set($scope.getDefaultMapAddresses());
         });
 
 

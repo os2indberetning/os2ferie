@@ -40,8 +40,8 @@
                 $scope.IsRoute = false;
                 $scope.DriveReport.Addresses = [];
 
-                $scope.DriveReport.Addresses.push({Personal: "", Name: "", Save: false });
-                $scope.DriveReport.Addresses.push({Personal: "", Name: "", Save: false });
+                $scope.DriveReport.Addresses.push({ Personal: "", Name: "", Save: false });
+                $scope.DriveReport.Addresses.push({ Personal: "", Name: "", Save: false });
                 return;
             }
 
@@ -54,7 +54,7 @@
             $scope.DriveReport.Addresses = [];
 
             angular.forEach($scope.Routes[index - 1].Points, function (value, key) {
-                $scope.DriveReport.Addresses.push({Personal: "", Name: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town, Save: false });
+                $scope.DriveReport.Addresses.push({ Personal: "", Name: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town, Save: false });
             });
             $scope.validateInput();
         }
@@ -458,21 +458,35 @@
 
         var openDatePicker = true;
 
+        var watchFunction = function () {
+            if ($scope.container.thingsLoaded >= $scope.container.thingsToLoad) {
+                // Create the map once loading is done. Otherwise the map wont display properly.
+                OS2RouteMap.create({
+                    id: 'map',
+                    change: routeMapChanged
+                });
+
+                OS2RouteMap.set($scope.getDefaultMapAddresses());
+
+                if (openDatePicker) {
+                    // Small timeout to allow the datepicker to be rendered. Otherwise the open will be displayed in the top left corner.
+                    $timeout(function () {
+                        $scope.driveDatePicker.open();
+                        openDatePicker = false;
+                    }, 0);
+                }
+                // Clear the function to have it not do anything anymore.
+                watchFunction = function () {};
+            }
+        }
+
         // Open the datepicker when the page finishes loading
         $scope.$on("kendoRendered", function (event) {
 
+            
 
-            $scope.$watch("container.thingsLoaded", function () {
-                if ($scope.container.thingsLoaded >= $scope.container.thingsToLoad) {
-                    if (openDatePicker) {
-                        // Small timeout to allow the datepicker to be rendered. Otherwise the open will be displayed in the top left corner.
-                        $timeout(function () {
-                            $scope.driveDatePicker.open();
-                            openDatePicker = false;
-                        }, 0);
-                    }
-                }
-            });
+
+            $scope.$watch("container.thingsLoaded", watchFunction());
 
             if (!valuesFromLatestReportPopulated) {
                 $scope.loadValuesFromLatestDriveReport();
@@ -629,7 +643,7 @@
                 // Iterate all selected addresses on the map and push them to the drivereport
                 angular.forEach(obj.Addresses, function (address, key) {
                     var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
-                    $scope.DriveReport.Addresses.push({Personal: "", Name: shavedName, Latitude: address.lat, Longitude: address.lng });
+                    $scope.DriveReport.Addresses.push({ Personal: "", Name: shavedName, Latitude: address.lat, Longitude: address.lng });
                 });
                 $scope.guiChangedByMap = obj.Addresses.length;
 
@@ -664,13 +678,6 @@
                 { name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude },
                 { name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude }
             ];
-
-            OS2RouteMap.create({
-                id: 'map',
-                change: routeMapChanged
-            });
-
-            OS2RouteMap.set($scope.getDefaultMapAddresses());
         });
 
 

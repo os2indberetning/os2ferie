@@ -2,222 +2,224 @@
     <h3 class="modal-title">Rediger kørselsindberetning</h3>
 </div>
 <div class="modal-body">
-    
-    <div ng-show="container.thingsLoaded < container.thingsToLoad">
+
+    <div ng-show="container.editThingsLoaded < container.editThingsToLoad">
         <!-- Generate Favrskov gif here. I didnt have the color available. http://spiffygif.com/?color=6B2D52&length=45&radius=27&width=6&halo=false -->
         <img src="../../Content/loading.gif" class="center-block" />
     </div>
 
-    <div class="row" ng-show="container.thingsLoaded >= container.thingsToLoad">
-        <div class="col-lg-6">
-            <form novalidate class="driving-report-form">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group form-inline">
-                            <label for="date">Dato for tjenestekørsel: </label>
-                            <input culture="'da-DK'" kendo-date-picker="driveDatePicker" k-format="'dd/MM/yyyy'" k-ng-model="DriveReport.Date" k-options="DateOptions" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row m-b-l">
-                    <div class="col-lg-12">
-                        <div class="form-group form-inline">
-                            <label for="purpose">Formål med tjenestekørsel: </label>
-                            <input type="text" class="no-max-width fill-width k-textbox" placeholder="Skriv formålet med din tjenestekørsel" ng-model="DriveReport.Purpose" id="purpose" ng-blur="validateInput()" />
-                            <label ng-bind="purposeErrorMessage" class="text-danger"></label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row m-b-l">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label for="">Stilling og ansættelsested:</label>
-                            <select class="fill-width" kendo-drop-down-list="PositionDropDown" ng-model="DriveReport.Position" id="" ng-change="employmentChanged()" k-data-source="Employments" k-data-text-field="'PresentationString'" k-data-value-field="'Id'" k-placeholder="'Brugerens stilling(er)'"><option>' '</option></select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row m-b-l">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="">Nummerplade:</label>
-                            <select ng-disabled="!showLicensePlate" class="fill-width" kendo-drop-down-list="LicensePlateDropDown" ng-model="DriveReport.LicensePlate" id="" k-data-source="LicensePlates" k-data-text-field="'PresentationString'" k-data-value-field="'Plate'" k-placeholder="'Brugerens nummerplade(r)'"></select>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="">Transportmiddel:</label>
-                            <select class="fill-width" kendo-drop-down-list="KmRateDropDown" ng-change="transportChanged()" ng-model="DriveReport.KmRate" k-data-source="KmRate" k-data-text-field="'Type.Description'" k-data-value-field="'Id'" k-placeholder="'Vælg transportmiddel'"></select>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="">Kilometeropgørelse:</label>
-                            <select kendo-drop-down-list="container.kilometerAllowanceDropDown" k-options="KilometerAllowanceOptions" ng-change="validateInput()" class="fill-width" id="KilometerAllowance" ng-model="DriveReport.KilometerAllowance">
-                                <option value="Calculated">Beregnet</option>
-                                <option value="Read">Aflæst</option>
-                                <option value="CalculatedWithoutExtraDistance">Beregnet med merkørsel</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row m-b-l" ng-if="DriveReport.KilometerAllowance == 'Read'">
-                    <div class=" col-lg-12">
-                        <div class="form-group">
-                            <label for="">Startede eller sluttede din rute hjemmefra:</label>
-                            <select ng-change="drivenKmChanged()" class="fill-width" kendo-drop-down-list="container.StartEndHomeDropDown" id="" ng-model="DriveReport.StartOrEndedAtHome">
-                                <option value="Neither">Ingen af delene</option>
-                                <option value="Started">Startede hjemmefra</option>
-                                <option value="Ended">Sluttede hjemmefra</option>
-                                <option value="Both">Startede og sluttede hjemme</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" ng-if="DriveReport.KilometerAllowance != 'Read'">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <!--Dropdown for selecting personal route-->
-                            <label for="">Vælg standardrute:</label>
-                            <select class="fill-width" kendo-drop-down-list="container.PersonalRouteDropDown" k-on-change="personalRouteDropdownChange(kendoEvent)" ng-model="DriveReport.PersonalRoute" k-data-source="PersonalRoutes" k-data-text-field="'presentation'"></select>
-                        </div>
-                    </div>
-                </div>
-                <div ng-switch="DriveReport.KilometerAllowance">
-                    <div ng-switch-when="Read">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label for="ReadDistance">Antal kørte kilometer:</label>
-                            </div>
-                            <div class="col-lg-6">
-                                <label for="UserComment">Kommentar:</label>
+    <div ng-show="container.editThingsLoaded >= container.editThingsToLoad">
+        <div class="row">
+            <div class="col-lg-6">
+                <form novalidate class="driving-report-form">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group form-inline">
+                                <label for="date">Dato for tjenestekørsel: </label>
+                                <input culture="'da-DK'" kendo-date-picker="driveDatePicker" k-format="'dd/MM/yyyy'" k-ng-model="DriveReport.Date" k-options="DateOptions" />
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <input type="text" ng-model="DriveReport.ReadDistance" ng-change="readDistanceChanged()" id="ReadDistance" ng-blur="validateInput()" name="FourKmRuleValue" class="k-textbox" />
-                            </div>
-                            <div class="col-lg-6">
-                                <input type="text" ng-model="DriveReport.UserComment" id="UserComment" ng-blur="validateInput()" name="UserComment" class="k-textbox fill-width" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label ng-bind="readDistanceErrorMessage" class="text-danger"></label>
-                            </div>
-                            <div class="col-lg-6">
-                                <label ng-bind="userCommentErrorMessage" class="text-danger"></label>
-                            </div>
-                        </div>
-
                     </div>
-                    <div ng-switch-default>
-                        <div ng-if="!IsRoute" ng-repeat="Address in DriveReport.Addresses">
+                    <div class="row m-b-l">
+                        <div class="col-lg-12">
+                            <div class="form-group form-inline">
+                                <label for="purpose">Formål med tjenestekørsel: </label>
+                                <input type="text" class="no-max-width fill-width k-textbox" placeholder="Skriv formålet med din tjenestekørsel" ng-model="DriveReport.Purpose" id="purpose" ng-blur="validateInput()" />
+                                <label ng-bind="purposeErrorMessage" class="text-danger"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-b-l">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="">Stilling og ansættelsested:</label>
+                                <select class="fill-width" kendo-drop-down-list="PositionDropDown" ng-model="DriveReport.Position" id="" ng-change="employmentChanged()" k-data-source="Employments" k-data-text-field="'PresentationString'" k-data-value-field="'Id'" k-placeholder="'Brugerens stilling(er)'"><option>' '</option></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-b-l">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="">Nummerplade:</label>
+                                <select ng-disabled="!showLicensePlate" class="fill-width" kendo-drop-down-list="LicensePlateDropDown" ng-model="DriveReport.LicensePlate" id="" k-data-source="LicensePlates" k-data-text-field="'PresentationString'" k-data-value-field="'Plate'" k-placeholder="'Brugerens nummerplade(r)'"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="">Transportmiddel:</label>
+                                <select class="fill-width" kendo-drop-down-list="KmRateDropDown" ng-change="transportChanged()" ng-model="DriveReport.KmRate" k-data-source="KmRate" k-data-text-field="'Type.Description'" k-data-value-field="'Id'" k-placeholder="'Vælg transportmiddel'"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="">Kilometeropgørelse:</label>
+                                <select kendo-drop-down-list="container.kilometerAllowanceDropDown" k-options="KilometerAllowanceOptions" ng-change="validateInput()" class="fill-width" id="KilometerAllowance" ng-model="DriveReport.KilometerAllowance">
+                                    <option value="Calculated">Beregnet</option>
+                                    <option value="Read">Aflæst</option>
+                                    <option value="CalculatedWithoutExtraDistance">Beregnet med merkørsel</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-b-l" ng-if="DriveReport.KilometerAllowance == 'Read'">
+                        <div class=" col-lg-12">
+                            <div class="form-group">
+                                <label for="">Startede eller sluttede din rute hjemmefra:</label>
+                                <select ng-change="drivenKmChanged()" class="fill-width" kendo-drop-down-list="container.StartEndHomeDropDown" id="" ng-model="DriveReport.StartOrEndedAtHome">
+                                    <option value="Neither">Ingen af delene</option>
+                                    <option value="Started">Startede hjemmefra</option>
+                                    <option value="Ended">Sluttede hjemmefra</option>
+                                    <option value="Both">Startede og sluttede hjemme</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="DriveReport.KilometerAllowance != 'Read'">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <!--Dropdown for selecting personal route-->
+                                <label for="">Vælg standardrute:</label>
+                                <select class="fill-width" kendo-drop-down-list="container.PersonalRouteDropDown" k-on-change="personalRouteDropdownChange(kendoEvent)" ng-model="DriveReport.PersonalRoute" k-data-source="PersonalRoutes" k-data-text-field="'presentation'"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-switch="DriveReport.KilometerAllowance">
+                        <div ng-switch-when="Read">
                             <div class="row">
-                                <div class="col-lg-12">
-                                    <label for="" ng-if="$first">Fra</label>
-                                    <label for="" ng-if="$last && !$first">Til</label>
-                                    <label for="" ng-if="!first && $index == 1 && !$last">Via</label>
+                                <div class="col-lg-6">
+                                    <label for="ReadDistance">Antal kørte kilometer:</label>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="UserComment">Kommentar:</label>
                                 </div>
                             </div>
-                            <div class="row form-group">
-                                <div class="col-lg-7">
-                                    <label for="">Vælg adresse:</label> <label ng-bind="addressSelectionErrorMessage" class="text-danger"></label>
-                                    <select ng-hide="DriveReport.Addresses[$index].Name.length != 0" class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"></select>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input type="text" ng-model="DriveReport.ReadDistance" ng-change="readDistanceChanged()" id="ReadDistance" ng-blur="validateInput()" name="FourKmRuleValue" class="k-textbox" />
                                 </div>
-                                <div ng-show="DriveReport.Addresses[$index].Personal == 'Vælg fast adresse'">
+                                <div class="col-lg-6">
+                                    <input type="text" ng-model="DriveReport.UserComment" id="UserComment" ng-blur="validateInput()" name="UserComment" class="k-textbox fill-width" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label ng-bind="readDistanceErrorMessage" class="text-danger"></label>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label ng-bind="userCommentErrorMessage" class="text-danger"></label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div ng-switch-default>
+                            <div ng-if="!IsRoute" ng-repeat="Address in DriveReport.Addresses">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label for="" ng-if="$first">Fra</label>
+                                        <label for="" ng-if="$last && !$first">Til</label>
+                                        <label for="" ng-if="!first && $index == 1 && !$last">Via</label>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
                                     <div class="col-lg-7">
-                                        <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-options="autoCompleteOptions" k-data-value-field="'tekst'"
-                                               k-data-source="SmartAddress" ng-blur="addressInputChanged($index)" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="addressPlaceholderText" />
+                                        <label for="">Vælg adresse:</label> <label ng-bind="addressSelectionErrorMessage" class="text-danger"></label>
+                                        <select ng-hide="DriveReport.Addresses[$index].Name.length != 0" class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"></select>
                                     </div>
-                                    <div class="col-lg-1" ng-if="$middle">
-                                        <button class="k-button k-button-no-shadow" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
+                                    <div ng-show="DriveReport.Addresses[$index].Personal == 'Vælg fast adresse'">
+                                        <div class="col-lg-7">
+                                            <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-options="autoCompleteOptions" k-data-value-field="'tekst'"
+                                                   k-data-source="SmartAddress" ng-blur="addressInputChanged($index)" ng-model="Address.Name" class="fill-width no-max-width" k-placeholder="addressPlaceholderText" />
+                                        </div>
+                                        <div class="col-lg-1" ng-if="$middle">
+                                            <button class="k-button k-button-no-shadow" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" /><label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-4">
-                                        <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" /><label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
-                                    </div>
+
                                 </div>
 
                             </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="DriveReport.KilometerAllowance != 'Read'">
+                        <div class="col-lg-12" ng-if="!IsRoute">
+                            <label>
+                                <button class="btn btn-default" ng-click="AddViapoint()">Tilføj delmål</button>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
 
                         </div>
                     </div>
-                </div>
-                <div class="row" ng-if="DriveReport.KilometerAllowance != 'Read'">
-                    <div class="col-lg-12" ng-if="!IsRoute">
-                        <label>
-                            <button class="btn btn-default" ng-click="AddViapoint()">Tilføj delmål</button>
-                        </label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 text-center">
+                    <div class="row m-b-l">
+                        <div ng-show="hasAccessToFourKmRule">
 
-                    </div>
-                </div>
-                <div class="row m-b-l">
-                    <div ng-show="hasAccessToFourKmRule">
-
-                        <div class="col-lg-6 m-b-l">
-                            <input type="checkbox" class="k-checkbox" id="FourKmRule" ng-model="DriveReport.FourKmRule.Using" /><label for="FourKmRule" class="k-checkbox-label">Jeg bruger 4 Km reglen</label>
-                            <span popover="4 km reglen kan kun bruges af medarbejdere ansat i hjemmeplejen. Forhør dig ved din leder, hvis du er i tvivl." popover-trigger="mouseenter" class="info-popup"><i class="fa fa-question"></i></span>
-                        </div>
-
-                        <div class="col-lg-6 m-b-l" ng-if="DriveReport.FourKmRule.Using">
-                            <div class="col-lg-12">
-                                <input type="text" ng-model="DriveReport.FourKmRule.Value" id="FourKmRuleValue" name="FourKmRuleValue" class="k-textbox" placeholder="4 Km regel værdi" />
+                            <div class="col-lg-6 m-b-l">
+                                <input type="checkbox" class="k-checkbox" id="FourKmRule" ng-model="DriveReport.FourKmRule.Using" /><label for="FourKmRule" class="k-checkbox-label">Jeg bruger 4 Km reglen</label>
+                                <span popover="4 km reglen kan kun bruges af medarbejdere ansat i hjemmeplejen. Forhør dig ved din leder, hvis du er i tvivl." popover-trigger="mouseenter" class="info-popup"><i class="fa fa-question"></i></span>
                             </div>
+
+                            <div class="col-lg-6 m-b-l" ng-if="DriveReport.FourKmRule.Using">
+                                <div class="col-lg-12">
+                                    <input type="text" ng-model="DriveReport.FourKmRule.Value" id="FourKmRuleValue" name="FourKmRuleValue" class="k-textbox" placeholder="4 Km regel værdi" />
+                                </div>
+                            </div>
+
                         </div>
+
+
 
                     </div>
 
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <button type="button" ng-click="cancelClick()" class="btn btn-danger">Annuller</button>
+                        </div>
+                        <div class="col-lg-6 pull-right text-right">
+                            <button type="button" class="btn btn-primary" ng-disabled="!canSubmitDriveReport" ng-click="saveEditClick()">Gem redigering</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-6">
 
-
+                <div class="row">
+                    <div ng-show="DriveReport.KilometerAllowance != 'Read'" class="col-lg-12" style="height:600px">
+                        <div id="map" style="width:100%;height:100%;"></div>
+                    </div>
                 </div>
-
                 <div class="row">
                     <div class="col-lg-6">
-                        <button type="button" ng-click="cancelClick()" class="btn btn-danger">Annuller</button>
+                        <p class="text-primary">Kørte kilometer</p>
                     </div>
-                    <div class="col-lg-6 pull-right text-right">
-                        <button type="button" class="btn btn-primary" ng-disabled="!canSubmitDriveReport" ng-click="saveEditClick()">Gem redigering</button>
+                    <div class="col-lg-6 text-right">
+                        {{DrivenKMDisplay}} km
                     </div>
                 </div>
-            </form>
-        </div>
-        <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <p class="text-primary">Merkørselsfradrag</p>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        {{TransportAllowance}} km
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <p class="text-primary">Kilometer til indberetning</p>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        {{RemainingKilometers}} km
+                    </div>
+                </div>
+            </div>
 
-            <div class="row">
-                <div ng-show="DriveReport.KilometerAllowance != 'Read'" class="col-lg-12" style="height:500px">
-                    <div id="map" style="width:100%;height:100%;"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <p class="text-primary">Kørte kilometer</p>
-                </div>
-                <div class="col-lg-6 text-right">
-                    {{DrivenKMDisplay}} km
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <p class="text-primary">Merkørselsfradrag</p>
-                </div>
-                <div class="col-lg-6 text-right">
-                    {{TransportAllowance}} km
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <p class="text-primary">Kilometer til indberetning</p>
-                </div>
-                <div class="col-lg-6 text-right">
-                    {{RemainingKilometers}} km
-                </div>
-            </div>
         </div>
 
+        <script src="http://widget.cdn.septima.dk/1.0.18/driver.js"></script>
     </div>
-
-    <script src="http://widget.cdn.septima.dk/1.0.18/driver.js"></script>
 </div>
