@@ -58,16 +58,8 @@
         }
 
         $scope.Person = Person.get({ id: personId }, function () {
-            PersonalAddress.GetWorkAndHomeForUser({ id: personId }, function (data) {
-                angular.forEach(data, function(address, key) {
-                    if (address.Type == "AlternativeHome" || address.Type == "Home") {
-                        $scope.Person.HomeAddress = address;
-                    }
-                    if (address.Type == "AlternativeWork" || address.Type == "Work") {
-                        $scope.Person.WorkAddress = address;
-                    }
-                });
-                debugger;
+            $scope.Person.HomeAddress = PersonalAddress.GetHomeForUser({ id: personId }, function (data) {
+                $scope.Person.HomeAddressString = data.StreetName + " " + data.StreetNumber + ", " + data.ZipCode;
             });
 
 
@@ -579,7 +571,7 @@
 
             angular.forEach($scope.DriveReport.Addresses, function (address, key) {
                 var name = (function () {
-                    if ($scope.isAddressNameSet(address) === false ) {
+                    if ($scope.isAddressNameSet(address) === false) {
                         return address.Personal;
                     }
                     return address.Name;
@@ -594,7 +586,7 @@
         }
 
         $scope.isAddressNameSet = function (address) {
-            return !( address.Name == "" || address.Name == $scope.addressPlaceholderText || address.Name == undefined);
+            return !(address.Name == "" || address.Name == $scope.addressPlaceholderText || address.Name == undefined);
         }
 
         var routeMapChanged = function (obj) {
@@ -692,37 +684,45 @@
         $scope.drivenKmChanged = function () {
             // Wait for Person to finish loading from server.
             // Otherwise sometimes Person.DistanceFromHomeToWork will be undefined when the code is run.
-            $scope.Person.$promise.then(function() {
-                if ($scope.DriveReport.KilometerAllowance == "CalculatedWithoutExtraDistance") {
-                    $scope.TransportAllowance = 0;
-                } else if ($scope.DriveReport.KilometerAllowance == "Calculated") {
-                    $scope.TransportAllowance = Number($scope.Person.DistanceFromHomeToWork);
-                } else {
-                    if ($scope.DriveReport.StartOrEndedAtHome == "Both") {
-                        $scope.TransportAllowance = 2 * Number($scope.Person.DistanceFromHomeToWork);
-                    } else if ($scope.DriveReport.StartOrEndedAtHome == "Neither") {
+            $scope.Person.$promise.then(function () {
+                $scope.Person.HomeAddress.$promise.then(function () {
+                    if ($scope.DriveReport.KilometerAllowance == "CalculatedWithoutExtraDistance") {
                         $scope.TransportAllowance = 0;
+                    } else if ($scope.DriveReport.KilometerAllowance == "Calculated") {
+                        var toSubtract = 0;
+                        if ($scope.DriveReport.Addresses[0].Name.indexOf($scope.Person.HomeAddressString) > -1 || $scope.DriveReport.Addresses[0].Personal.indexOf($scope.Person.HomeAddressString) > -1) {
+                            toSubtract += $scope.Person.DistanceFromHomeToWork;
+                        }
+                        if ($scope.DriveReport.Addresses[$scope.DriveReport.Addresses.length-1].Name.indexOf($scope.Person.HomeAddressString) > -1 || $scope.DriveReport.Addresses[$scope.DriveReport.Addresses.length-1].Personal.indexOf($scope.Person.HomeAddressString) > -1) {
+                            toSubtract += $scope.Person.DistanceFromHomeToWork;
+                        }
+                        $scope.TransportAllowance = toSubtract;
                     } else {
-                        $scope.TransportAllowance = $scope.Person.DistanceFromHomeToWork;
+                        if ($scope.DriveReport.StartOrEndedAtHome == "Both") {
+                            $scope.TransportAllowance = 2 * Number($scope.Person.DistanceFromHomeToWork);
+                        } else if ($scope.DriveReport.StartOrEndedAtHome == "Neither") {
+                            $scope.TransportAllowance = 0;
+                        } else {
+                            $scope.TransportAllowance = $scope.Person.DistanceFromHomeToWork;
+                        }
                     }
-                }
 
-                $scope.TransportAllowance = Number($scope.TransportAllowance.toString().replace(",", ".")).toFixed(2).toString().replace(".", ",");
+                    $scope.TransportAllowance = Number($scope.TransportAllowance.toString().replace(",", ".")).toFixed(2).toString().replace(".", ",");
 
 
-                if ($scope.DriveReport.RoundTrip === true) {
-                    $scope.DrivenKMDisplay = (2 * Number($scope.DrivenKilometers.toString().replace(",", "."))).toString().replace(".", ",");
-                } else {
-                    $scope.DrivenKMDisplay = $scope.DrivenKilometers.toString().replace(".", ",");
-                }
-                var remKM = Number($scope.DrivenKMDisplay.toString().replace(",", ".")) - Number($scope.TransportAllowance.toString().replace(",", "."));
-                if (remKM > 0) {
-                    $scope.RemainingKilometers = Number(remKM).toFixed(2).toString().replace(".", ",");
-                } else {
-                    $scope.RemainingKilometers = 0;
-                }
+                    if ($scope.DriveReport.RoundTrip === true) {
+                        $scope.DrivenKMDisplay = (2 * Number($scope.DrivenKilometers.toString().replace(",", "."))).toString().replace(".", ",");
+                    } else {
+                        $scope.DrivenKMDisplay = $scope.DrivenKilometers.toString().replace(".", ",");
+                    }
+                    var remKM = Number($scope.DrivenKMDisplay.toString().replace(",", ".")) - Number($scope.TransportAllowance.toString().replace(",", "."));
+                    if (remKM > 0) {
+                        $scope.RemainingKilometers = Number(remKM).toFixed(2).toString().replace(".", ",");
+                    } else {
+                        $scope.RemainingKilometers = 0;
+                    }
+                });
             });
-            
         }
 
         $scope.roundTripChanged = function () {

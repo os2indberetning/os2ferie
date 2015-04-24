@@ -2,12 +2,12 @@
     return $resource("/odata/PersonalAddresses(:id)", { id: "@id" }, {
         "get": { method: "GET", isArray: false },
         "patch": { method: "PATCH" },
-        "GetWorkAndHomeForUser": {
+        "GetHomeForUser": {
             method: "GET",
-            isArray: true,
-            url: "/odata/PersonalAddresses/Service.GetHomeAndWork?personId=:id",
+            isArray: false,
+            url: "/odata/PersonalAddresses/Service.GetHome?personId=:id",
             transformResponse: function(data) {
-                return angular.fromJson(data).value;
+                return angular.fromJson(data).value[0];
                 
             }
         }

@@ -12,9 +12,9 @@ namespace OS2Indberetning.Controllers
 {
     public class PersonalAddressesController : BaseController<PersonalAddress>
     {
-        
+
         //GET: odata/PersonalAddresses
-        public PersonalAddressesController(IGenericRepository<PersonalAddress> repository) : base(repository){}
+        public PersonalAddressesController(IGenericRepository<PersonalAddress> repository) : base(repository) { }
 
         [EnableQuery]
         public IQueryable<PersonalAddress> Get(ODataQueryOptions<PersonalAddress> queryOptions)
@@ -66,23 +66,19 @@ namespace OS2Indberetning.Controllers
             return GetQueryable(queryOptions).Where(x => x.PersonId == key && x.Type == PersonalAddressType.AlternativeHome);
         }
 
-        //GET odata/PersonalAddresses(5)/GetAlternativeHome
-        public IQueryable<PersonalAddress> GetHomeAndWork(int personId)
+        //GET odata/PersonalAddresses/Service.GetAlternativeHome?personId=1
+        public IQueryable<PersonalAddress> GetHome(int personId)
         {
             var addresses =
                 Repo.AsQueryable()
                     .Where(
                         x =>
-                            (x.Type == PersonalAddressType.Home || x.Type == PersonalAddressType.Work ||
-                            x.Type == PersonalAddressType.AlternativeHome ||
-                            x.Type == PersonalAddressType.AlternativeWork) && x.PersonId == personId);
+                            (x.Type == PersonalAddressType.Home || x.Type == PersonalAddressType.AlternativeHome)
+                            && x.PersonId == personId);
 
 
             var res = new List<PersonalAddress>
             {
-                addresses.Any(x => x.Type == PersonalAddressType.AlternativeWork)
-                    ? addresses.First(x => x.Type == PersonalAddressType.AlternativeWork)
-                    : addresses.First(x => x.Type == PersonalAddressType.Work),
                 addresses.Any(x => x.Type == PersonalAddressType.AlternativeHome)
                     ? addresses.First(x => x.Type == PersonalAddressType.AlternativeHome)
                     : addresses.First(x => x.Type == PersonalAddressType.Home)
