@@ -364,6 +364,7 @@
     <Content Include="App\ApproveReports\SettingsView.html" />
     <Content Include="App\ApproveReports\View.html" />
     <Content Include="App\Directives\EnterKeypress.js" />
+    <Content Include="App\Directives\RouteLoader.js" />
     <Content Include="App\MyReports\MyAcceptedReportsController.js" />
     <Content Include="App\MyReports\MyRejectedReportsController.js" />
     <Content Include="App\MyReports\MyPendingReportsController.js" />

@@ -1,17 +1,4 @@
-﻿<div ng-controller="DrivingController">
-
-
-
-
-    <div ng-show="container.thingsLoaded < container.thingsToLoad">
-        <!-- Generate Favrskov gif here. I didnt have the color available. http://spiffygif.com/?color=6B2D52&length=45&radius=27&width=6&halo=false -->
-        <img src="../../Content/loading.gif" class="center-block" />
-    </div>
-
-
-
-    <div ng-show="container.thingsLoaded >= container.thingsToLoad">
-        <div class="row">
+﻿        <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">
                     Indberet tjenestekørsel
@@ -60,7 +47,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="">Transportmiddel:</label>
-                                <select class="fill-width" kendo-drop-down-list="KmRateDropDown" ng-change="transportChanged()" ng-model="DriveReport.KmRate" k-data-source="KmRate" k-data-text-field="'Type.Description'" k-data-value-field="'Id'" k-placeholder="'Vælg transportmiddel'"></select>
+                                <select class="fill-width" kendo-drop-down-list="container.KmRateDropDown" ng-change="transportChanged()" ng-model="DriveReport.KmRate" k-data-source="KmRate" k-data-text-field="'Type.Description'" k-data-value-field="'Id'" k-placeholder="'Vælg transportmiddel'"></select>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -92,7 +79,7 @@
                             <div class="form-group">
                                 <!--Dropdown for selecting personal route-->
                                 <label for="">Vælg standardrute:</label>
-                                <select class="fill-width" kendo-drop-down-list="container.PersonalRouteDropDown" k-on-change="personalRouteDropdownChange(kendoEvent)" ng-model="DriveReport.PersonalRoute" k-data-source="PersonalRoutes" k-data-text-field="'presentation'"></select>
+                                <select class="fill-width" kendo-drop-down-list="container.PersonalRouteDropDown" k-on-change="personalRouteDropdownChange(kendoEvent)" ng-model="DriveReport.PersonalRoute" k-data-source="Routes" k-data-text-field="'presentation'"></select>
                             </div>
                         </div>
                     </div>
@@ -104,7 +91,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="UserComment">Kommentar:</label>
-                                    <span popover="{{ReadReportCommentHelp.text}}" popover-trigger="mouseenter" class="info-popup"><i class="fa fa-question"></i></span>
+                                    <span popover="{{ReadReportCommentHelp}}" popover-trigger="mouseenter" class="info-popup"><i class="fa fa-question"></i></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -242,8 +229,5 @@
 
         </div>
 
-    </div>
-
     <script src="http://widget.cdn.septima.dk/1.0.18/driver.js"></script>
-</div>
 
