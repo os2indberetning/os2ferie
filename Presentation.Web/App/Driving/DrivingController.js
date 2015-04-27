@@ -31,9 +31,9 @@
         $scope.TransportAllowance = 0;
         $scope.RemainingKilometers = 0;
 
-        
 
-        
+
+
 
         // Hardcoded personId
         var personId = 1;
@@ -71,7 +71,7 @@
             $scope.validateInput();
         }
 
-        var getKmRate = function() {
+        var getKmRate = function () {
             for (var i = 0; i < $scope.KmRate.length; i++) {
                 if ($scope.KmRate[i].Id == $scope.DriveReport.KmRate) {
                     return $scope.KmRate[i];
@@ -304,22 +304,23 @@
             OS2RouteMap.set(MapStartAddress);
         }
 
-        $scope.loadValuesFromLatestDriveReport = function() {
-            $scope.PositionDropDown.select(function(item) {
+        $scope.loadValuesFromLatestDriveReport = function () {
+            $scope.PositionDropDown.select(function (item) {
                 return item.Id === LatestDriveReport.EmploymentId;
             });
 
-            $scope.LicensePlateDropDown.select(function(item) {
+            $scope.LicensePlateDropDown.select(function (item) {
+
                 return item.Plate == LatestDriveReport.LicensePlate;
             });
 
-            $scope.container.KmRateDropDown.select(function(item) {
+            $scope.container.KmRateDropDown.select(function (item) {
                 return item.Type.TFCode == LatestDriveReport.TFCode;
             });
 
             $scope.container.KmRateDropDown.trigger("change");
 
-            $scope.container.kilometerAllowanceDropDown.select(function(item) {
+            $scope.container.kilometerAllowanceDropDown.select(function (item) {
                 return item.value == LatestDriveReport.KilometerAllowance;
             });
 
@@ -339,12 +340,9 @@
         // Open the datepicker when the page finishes loading
         $scope.$on("kendoRendered", function (event) {
             if (openDatePicker) {
-                // Small timeout to allow the datepicker to be rendered. Otherwise the open will be displayed in the top left corner.
-                $timeout(function () {
-                    $scope.driveDatePicker.open();
-                    openDatePicker = false;
-                    $scope.loadValuesFromLatestDriveReport();
-                }, 0);
+                $scope.driveDatePicker.open();
+                openDatePicker = false;
+                $scope.loadValuesFromLatestDriveReport();
             }
             $scope.validateInput();
 
@@ -513,41 +511,41 @@
         });
 
         $scope.drivenKmChanged = function () {
-                    if ($scope.DriveReport.KilometerAllowance == "CalculatedWithoutExtraDistance") {
-                        $scope.TransportAllowance = 0;
-                    } else if ($scope.DriveReport.KilometerAllowance == "Calculated") {
-                        var toSubtract = 0;
-                        if ($scope.DriveReport.Addresses[0].Name.indexOf(HomeAddress) > -1 || $scope.DriveReport.Addresses[0].Personal.indexOf(HomeAddress) > -1) {
-                            toSubtract += Person.DistanceFromHomeToWork;
-                        }
-                        if ($scope.DriveReport.Addresses[$scope.DriveReport.Addresses.length - 1].Name.indexOf(HomeAddress) > -1 || $scope.DriveReport.Addresses[$scope.DriveReport.Addresses.length - 1].Personal.indexOf(HomeAddress) > -1) {
-                            toSubtract += Person.DistanceFromHomeToWork;
-                        }
-                        $scope.TransportAllowance = toSubtract;
-                    } else {
-                        if ($scope.DriveReport.StartOrEndedAtHome == "Both") {
-                            $scope.TransportAllowance = 2 * Number(Person.DistanceFromHomeToWork);
-                        } else if ($scope.DriveReport.StartOrEndedAtHome == "Neither") {
-                            $scope.TransportAllowance = 0;
-                        } else {
-                            $scope.TransportAllowance = Person.DistanceFromHomeToWork;
-                        }
-                    }
+            if ($scope.DriveReport.KilometerAllowance == "CalculatedWithoutExtraDistance") {
+                $scope.TransportAllowance = 0;
+            } else if ($scope.DriveReport.KilometerAllowance == "Calculated") {
+                var toSubtract = 0;
+                if ($scope.DriveReport.Addresses[0].Name.indexOf(HomeAddress) > -1 || $scope.DriveReport.Addresses[0].Personal.indexOf(HomeAddress) > -1) {
+                    toSubtract += Person.DistanceFromHomeToWork;
+                }
+                if ($scope.DriveReport.Addresses[$scope.DriveReport.Addresses.length - 1].Name.indexOf(HomeAddress) > -1 || $scope.DriveReport.Addresses[$scope.DriveReport.Addresses.length - 1].Personal.indexOf(HomeAddress) > -1) {
+                    toSubtract += Person.DistanceFromHomeToWork;
+                }
+                $scope.TransportAllowance = toSubtract;
+            } else {
+                if ($scope.DriveReport.StartOrEndedAtHome == "Both") {
+                    $scope.TransportAllowance = 2 * Number(Person.DistanceFromHomeToWork);
+                } else if ($scope.DriveReport.StartOrEndedAtHome == "Neither") {
+                    $scope.TransportAllowance = 0;
+                } else {
+                    $scope.TransportAllowance = Person.DistanceFromHomeToWork;
+                }
+            }
 
-                    $scope.TransportAllowance = Number($scope.TransportAllowance.toString().replace(",", ".")).toFixed(2).toString().replace(".", ",");
+            $scope.TransportAllowance = Number($scope.TransportAllowance.toString().replace(",", ".")).toFixed(2).toString().replace(".", ",");
 
 
-                    if ($scope.DriveReport.RoundTrip === true) {
-                        $scope.DrivenKMDisplay = (2 * Number($scope.DrivenKilometers.toString().replace(",", "."))).toString().replace(".", ",");
-                    } else {
-                        $scope.DrivenKMDisplay = $scope.DrivenKilometers.toString().replace(".", ",");
-                    }
-                    var remKM = Number($scope.DrivenKMDisplay.toString().replace(",", ".")) - Number($scope.TransportAllowance.toString().replace(",", "."));
-                    if (remKM > 0) {
-                        $scope.RemainingKilometers = Number(remKM).toFixed(2).toString().replace(".", ",");
-                    } else {
-                        $scope.RemainingKilometers = 0;
-                    }
+            if ($scope.DriveReport.RoundTrip === true) {
+                $scope.DrivenKMDisplay = (2 * Number($scope.DrivenKilometers.toString().replace(",", "."))).toString().replace(".", ",");
+            } else {
+                $scope.DrivenKMDisplay = $scope.DrivenKilometers.toString().replace(".", ",");
+            }
+            var remKM = Number($scope.DrivenKMDisplay.toString().replace(",", ".")) - Number($scope.TransportAllowance.toString().replace(",", "."));
+            if (remKM > 0) {
+                $scope.RemainingKilometers = Number(remKM).toFixed(2).toString().replace(".", ",");
+            } else {
+                $scope.RemainingKilometers = 0;
+            }
 
         }
 
