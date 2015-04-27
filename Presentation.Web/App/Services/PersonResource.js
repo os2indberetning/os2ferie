@@ -43,10 +43,10 @@
         "patch": { method: "PATCH" },
         "getNonAdmins": {
             url: "/odata/Person?$filter=IsAdmin eq false",
-            method: "GET", isArray: false, transformResponse: function() {
+            method: "GET", isArray: false, transformResponse: function(data) {
                 var res = angular.fromJson(data);
                 if (res.error == undefined) {
-                    return data;
+                    return res;
                 }
 
                 var modalInstance = $modal.open({

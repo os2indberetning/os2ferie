@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Core.ApplicationServices;
 using Core.DomainModel;
@@ -17,16 +18,25 @@ namespace DBUpdater
 {
     public class UpdateService
     {
-        
+
         public UpdateService()
         {
-      
+
+        }
+
+        public List<String> SplitAddressOnNumber(string address)
+        {
+            var result = new List<string>();
+            var index = address.IndexOfAny("0123456789".ToCharArray());
+            result.Add(address.Substring(0, index));
+            result.Add(address.Substring(index, address.Length - index));
+            return result;
         }
 
         public IQueryable<Organisation> GetOrganisationsAsQueryable()
         {
             var result = new List<Organisation>();
-            using (var sqlConnection1 =new SqlConnection("data source=706sofd01.intern.syddjurs.dk;initial catalog=MDM;persist security info=True;user id=sofdeindberetning;password=soa2ieCh>e"))
+            using (var sqlConnection1 = new SqlConnection("data source=706sofd01.intern.syddjurs.dk;initial catalog=MDM;persist security info=True;user id=sofdeindberetning;password=soa2ieCh>e"))
             {
                 var cmd = new SqlCommand
                 {
@@ -79,7 +89,7 @@ namespace DBUpdater
                 orgToInsert.ShortDescription = org.KortNavn;
                 orgToInsert.HasAccessToFourKmRule = false;
                 orgToInsert.OrgId = org.LOSOrgId;
-                
+
                 if (orgToInsert.Level > 0)
                 {
                     orgToInsert.ParentId = repo.AsQueryable().Single(x => x.OrgId == org.ParentLosOrgId).Id;
@@ -98,14 +108,97 @@ namespace DBUpdater
 
             foreach (var employee in empls)
             {
-                var personToInsert = new Person()
+                var personToInsert = personRepo.AsQueryable().FirstOrDefault(x => x.PersonId == employee.MaNr);
+
+                if (personToInsert == null)
                 {
-                    CprNumber = employee.CPR,
-                    //TODO: Carry on here
-                };
+                    personToInsert = personRepo.Insert(new Person());
+                }
+
+                personToInsert.CprNumber = employee.CPR;
+                personToInsert.RecieveMail = false;
+                personToInsert.FirstName = employee.Fornavn;
+                personToInsert.LastName = employee.Efternavn;
+                personToInsert.IsAdmin = false;
+                personToInsert.Initials = employee.ADBrugerNavn ?? " ";
+                personToInsert.Mail = employee.Email ?? "";
+                personToInsert.PersonId = employee.MaNr ?? default(int);
+
+                personRepo.Save();
+
+                CreateEmployment(employee, personToInsert.Id);
+                SaveHomeAddress(employee, personToInsert.Id);
             }
         }
 
+
+        private Employment CreateEmployment(Employee empl, int personId)
+        {
+            var orgRepo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<OrgUnit>>();
+            var emplRepo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<Employment>>();
+
+            var orgUnit = orgRepo.AsQueryable().FirstOrDefault(x => x.OrgId == empl.LOSOrgId);
+
+            var employment = emplRepo.AsQueryable().FirstOrDefault(x => x.OrgUnitId == orgUnit.Id && x.PersonId == personId);
+
+            if (employment == null)
+            {
+                employment = emplRepo.Insert(new Employment());
+            }
+
+            employment.OrgUnitId = orgUnit.Id;
+            employment.Position = empl.Stillingsbetegnelse ?? "";
+            employment.IsLeader = empl.Leder;
+            employment.PersonId = personId;
+            var startDate = empl.AnsaettelsesDato ?? new DateTime();
+            employment.StartDateTimestamp = (Int32)(startDate.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            employment.ExtraNumber = empl.EkstraCiffer ?? 0;
+            employment.EmploymentType = int.Parse(empl.AnsatForhold);
+
+            if (empl.OphoersDato != null)
+            {
+                employment.EndDateTimestamp = (Int32)(((DateTime)empl.OphoersDato).Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            }
+            else
+            {
+                employment.EndDateTimestamp = 0;
+            }
+
+            emplRepo.Save();
+            return employment;
+
+
+        }
+
+        private void SaveHomeAddress(Employee empl, int personId)
+        {
+            var launderer = new CachedAddressLaunderer(NinjectWebKernel.CreateKernel().Get<IGenericRepository<CachedAddress>>(), NinjectWebKernel.CreateKernel().Get<IAddressLaunderer>());
+
+            var addressRepo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<PersonalAddress>>();
+            var addressToLaunder = new Address
+            {
+                StreetName = SplitAddressOnNumber(empl.Adresse).ElementAt(0),
+                StreetNumber = SplitAddressOnNumber(empl.Adresse).ElementAt(1),
+                ZipCode = empl.PostNr ?? 0,
+                Town = empl.By,
+            };
+            addressToLaunder = launderer.Launder(addressToLaunder);
+
+            var launderedAddress = new PersonalAddress()
+            {
+                PersonId = personId,
+                Type = PersonalAddressType.Home,
+                StreetName = addressToLaunder.StreetName,
+                StreetNumber = addressToLaunder.StreetNumber,
+                ZipCode = addressToLaunder.ZipCode,
+                Town = addressToLaunder.Town,
+                Latitude = addressToLaunder.Latitude ?? "",
+                Longitude = addressToLaunder.Longitude ?? "",
+            };
+
+            addressRepo.Insert(launderedAddress);
+            addressRepo.Save();
+        }
 
         public IQueryable<Employee> GetEmployeesAsQueryably()
         {
