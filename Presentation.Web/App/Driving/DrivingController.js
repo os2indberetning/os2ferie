@@ -97,6 +97,12 @@
             $scope.addressSelectionErrorMessage = "";
             $scope.userCommentErrorMessage = "";
             $scope.licensePlateErrorMessage = "";
+
+
+            if (Number($scope.RemainingKilometers.toString().replace(",",".")) <= 0) {
+                $scope.canSubmitDriveReport = false;
+            }
+
             if ($scope.DriveReport.KilometerAllowance === "Read") {
                 if ($scope.DriveReport.Purpose == "" || $scope.DriveReport.Purpose == undefined) {
                     $scope.canSubmitDriveReport = false;
