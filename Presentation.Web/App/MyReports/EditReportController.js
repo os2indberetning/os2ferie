@@ -5,8 +5,6 @@
 
         $scope.container = {};
 
-        $scope.container.editThingsLoaded = 0;
-        $scope.container.editThingsToLoad = 8;
 
 
 
@@ -24,7 +22,6 @@
         $scope.SmartAddress = SmartAdresseSource;
 
         $scope.DriveReport = DriveReport.getWithPoints({ id: reportId }, function (res) {
-            $scope.container.editThingsLoaded++;
             $scope.DriveReport.Date = moment.unix($scope.DriveReport.DriveDateTimestamp)._d;
             $scope.DriveReport.Addresses = [];
 
@@ -73,9 +70,7 @@
         }
 
         $scope.Person = Person.get({ id: personId }, function () {
-            $scope.container.editThingsLoaded++;
             $scope.Person.HomeAddress = PersonalAddress.GetHomeForUser({ id: personId }, function (data) {
-                $scope.container.editThingsLoaded++;
                 $scope.Person.HomeAddressString = data.StreetName + " " + data.StreetNumber + ", " + data.ZipCode;
             });
 
@@ -83,7 +78,6 @@
             $scope.TransportAllowance = $scope.Person.DistanceFromHomeToWork.toFixed(2).toString().replace('.', ',');
 
             Address.GetPersonalAndStandard({ personId: personId }, function (data) {
-                $scope.container.editThingsLoaded++;
                 var temp = [{ value: "Vælg fast adresse" }];
                 angular.forEach(data, function (value, key) {
                     var street = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
@@ -100,7 +94,6 @@
             });
 
             Route.get({ query: "&filter=PersonId eq " + personId }, function (data) {
-                $scope.container.editThingsLoaded++;
 
                 var temp = [{ addressOne: "", addressTwo: "", viaPointCounr: "", presentation: "" }];
 
@@ -294,33 +287,19 @@
         });
 
 
-
-        var unwatch = $scope.$watch("container.editThingsLoaded", function () {
-            if ($scope.container.editThingsLoaded >= $scope.container.editThingsToLoad) {
-                // Create the map once loading is done. Otherwise the map wont display properly.
-                OS2RouteMap.create({
-                    id: 'map',
-                    change: routeMapChanged
-                });
-
-                //Unregister the watch
-                unwatch();
-            }
+        $scope.$on("kendoRendered", function () {
+            OS2RouteMap.create({
+                id: 'map',
+                change: routeMapChanged
+            });
         });
 
 
-        $scope.Employments = PersonEmployments.get({ id: personId }, function () {
-            $scope.container.editThingsLoaded++;
-        });
-
-        $scope.LicensePlates = LicensePlate.get({ id: personId }, function () {
-            $scope.container.editThingsLoaded++;
-        });
+        $scope.Employments = PersonEmployments.get({ id: personId });
+        $scope.LicensePlates = LicensePlate.get({ id: personId });
 
 
-        $scope.KmRate = Rate.ThisYearsRates(function () {
-            $scope.container.editThingsLoaded++;
-        });
+        $scope.KmRate = Rate.ThisYearsRates();
 
         $scope.isAddressNameSet = function (address) {
             return !(address.Name == "" || address.Name == $scope.addressPlaceholderText || address.Name == undefined);
