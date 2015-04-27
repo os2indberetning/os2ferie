@@ -15,7 +15,7 @@ namespace DBUpdater
         private readonly CachedAddressLaunderer _cachedLaunderer; 
         public UpdateService(CachedAddressLaunderer cachedLaunderer)
         {
-            _cachedLaunderer = cachedLaunderer;
+            _cachedLaunderer = cachedLaunderer; 
         }
 
         public Address GetCleanAddress(Address input)
