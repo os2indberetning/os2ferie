@@ -43,7 +43,7 @@ namespace Core.DomainServices.RoutingClasses
             get
             {
                 var apiKey = ConfigurationManager.AppSettings["SEPTIMA_API_KEY"];
-                return "http://routing.septima.dk/" + apiKey + "/car/viaroute?";
+                return "http://new-routing.septima.dk/" + apiKey + "/car/viaroute?";
             }
         }
     }
