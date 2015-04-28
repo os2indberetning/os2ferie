@@ -9,7 +9,7 @@ namespace Infrastructure.AddressServices.Tests
     public class AddressTests
     {
         [Test]
-        public void DistanceBetweenTwoAddresses_ReturnsSeventeenPointEightKm()
+        public void DistanceBetweenTwoAddresses_ReturnsFourteenPointSixKm()
         {
             var addresses = new List<Address>();
 
@@ -37,9 +37,9 @@ namespace Infrastructure.AddressServices.Tests
 
             var route = new BestRoute().GetRoute(addresses);
 
-            double result = (double)route.Length / 1000;
+            double result = (double)route.Length;
 
-            Assert.That(result, Is.EqualTo(17.8));
+            Assert.That(result, Is.EqualTo(14.43).Within(2));
         }
 
         [Test]
@@ -81,9 +81,9 @@ namespace Infrastructure.AddressServices.Tests
 
             var route = new BestRoute().GetRoute(addresses);
 
-            double result = (double)route.Length / 1000;
+            double result = (double)route.Length;
 
-            Assert.That(result, Is.EqualTo(31.4));
+            Assert.That(result, Is.EqualTo(31.4).Within(2));
         }
     }
 }

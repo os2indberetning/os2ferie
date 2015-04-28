@@ -52,7 +52,7 @@ namespace OS2Indberetning.Controllers
             }
             catch (RouteInformationException e)
             {
-                throw new Exception("Kunne ikke beregne rute mellem hjemme- og arbejdsadresse.");
+                throw new Exception("Kunne ikke beregne rute mellem hjemme- og arbejdsadresse.", e);
             }
         }
 

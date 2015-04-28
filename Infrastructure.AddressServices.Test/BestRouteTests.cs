@@ -55,7 +55,7 @@ namespace Infrastructure.AddressServices.Tests
         [Test]
         public void BestRoute_CheckIfDistanceIs30882()
         {
-            Assert.That(_result.Length, Is.EqualTo(30882));
+            Assert.That(_result.Length, Is.EqualTo(30.88).Within(0.01));
             //Assert.IsTrue(result.Length == 30886);
         }
 

@@ -10,6 +10,7 @@ using Infrastructure.AddressServices;
 using Infrastructure.AddressServices.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
+using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
 
 namespace DomainServices.Test
 {
@@ -19,10 +20,13 @@ namespace DomainServices.Test
         private CachedAddressLaunderer uut;
         private IAddressLaunderer laundryMock;
         private IGenericRepository<CachedAddress> repoMock;
+        private IAddressCoordinates coordinatesMock;
         
         [SetUp]
         public void SetUp()
         {
+
+            coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
             repoMock = NSubstitute.Substitute.For<IGenericRepository<CachedAddress>>();
             repoMock.AsQueryable().ReturnsForAnyArgs(new List<CachedAddress>()
             {
@@ -47,7 +51,7 @@ namespace DomainServices.Test
             laundryMock = NSubstitute.Substitute.For<IAddressLaunderer>();
             laundryMock.WhenForAnyArgs(x => x.Launder(new Address())).DoNotCallBase();
 
-            uut = new CachedAddressLaunderer(repoMock, laundryMock);    
+            uut = new CachedAddressLaunderer(repoMock, laundryMock, coordinatesMock);    
         }
 
         [Test]
