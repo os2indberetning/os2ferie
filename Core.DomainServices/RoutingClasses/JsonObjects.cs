@@ -163,7 +163,6 @@ namespace Core.DomainServices.RoutingClasses
     {
         public RootRouteObject(JToken token)
         {
-            version = (double)token["version"];
             status = (int)token["status"];
             status_message = (string)token["status_message"];
             route_geometry = (string)token["route_geometry"];
@@ -172,7 +171,6 @@ namespace Core.DomainServices.RoutingClasses
             alternative_summaries = new List<AlternativeSummary>();
         }
 
-        public double version { get; set; }
         public int status { get; set; }
         public string status_message { get; set; }
         public string route_geometry { get; set; }
