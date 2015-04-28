@@ -12,9 +12,9 @@ namespace OS2Indberetning.Controllers
 {
     public class PersonalAddressesController : BaseController<PersonalAddress>
     {
-        
+
         //GET: odata/PersonalAddresses
-        public PersonalAddressesController(IGenericRepository<PersonalAddress> repository) : base(repository){}
+        public PersonalAddressesController(IGenericRepository<PersonalAddress> repository) : base(repository) { }
 
         [EnableQuery]
         public IQueryable<PersonalAddress> Get(ODataQueryOptions<PersonalAddress> queryOptions)
@@ -64,6 +64,27 @@ namespace OS2Indberetning.Controllers
         public IQueryable<PersonalAddress> GetAlternativeHome([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
         {
             return GetQueryable(queryOptions).Where(x => x.PersonId == key && x.Type == PersonalAddressType.AlternativeHome);
+        }
+
+        //GET odata/PersonalAddresses/Service.GetAlternativeHome?personId=1
+        public IQueryable<PersonalAddress> GetHome(int personId)
+        {
+            var addresses =
+                Repo.AsQueryable()
+                    .Where(
+                        x =>
+                            (x.Type == PersonalAddressType.Home || x.Type == PersonalAddressType.AlternativeHome)
+                            && x.PersonId == personId);
+
+
+            var res = new List<PersonalAddress>
+            {
+                addresses.Any(x => x.Type == PersonalAddressType.AlternativeHome)
+                    ? addresses.First(x => x.Type == PersonalAddressType.AlternativeHome)
+                    : addresses.First(x => x.Type == PersonalAddressType.Home)
+            };
+
+            return res.AsQueryable();
         }
 
         //GET odata/PersonalAddresses(5)/GetAlternativeWork

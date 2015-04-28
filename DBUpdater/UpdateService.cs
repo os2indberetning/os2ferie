@@ -157,9 +157,9 @@ namespace DBUpdater
         {
 
             if (!_personRepo.AsQueryable().Any(x => x.Id == personId))
-            {
+        {
                 throw new Exception("Person does not exist.");
-            }
+        }
 
             var launderer = new CachedAddressLaunderer(_cachedRepo, _actualLaunderer, _coordinates);
 
@@ -173,7 +173,7 @@ namespace DBUpdater
             addressToLaunder = launderer.Launder(addressToLaunder);
 
             var launderedAddress = new PersonalAddress()
-            {
+        {
                 PersonId = personId,
                 Type = PersonalAddressType.Home,
                 StreetName = addressToLaunder.StreetName,
