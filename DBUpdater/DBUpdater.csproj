@@ -63,6 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SyddjursDataProvider.cs" />
+    <Compile Include="IDBUpdaterDataProvider.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\Organisation.cs" />
     <Compile Include="Program.cs" />

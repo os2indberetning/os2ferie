@@ -51,6 +51,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBUpdater", "DBUpdater\DBUp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainServices.Test", "DomainServices.Test\DomainServices.Test.csproj", "{68D912C8-DDF9-43BD-89AD-2F9612FB2B54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBUpdater.Test", "DBUpdater.Test\DBUpdater.Test.csproj", "{51279FD1-B6BC-421E-B751-BC60781676A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.AddressServices.Test", "Infrastructure.AddressServices.Test\Infrastructure.AddressServices.Test.csproj", "{5B3D69E4-AACF-42A6-95B1-23484E689346}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +109,14 @@ Global
 		{68D912C8-DDF9-43BD-89AD-2F9612FB2B54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68D912C8-DDF9-43BD-89AD-2F9612FB2B54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68D912C8-DDF9-43BD-89AD-2F9612FB2B54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51279FD1-B6BC-421E-B751-BC60781676A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51279FD1-B6BC-421E-B751-BC60781676A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51279FD1-B6BC-421E-B751-BC60781676A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51279FD1-B6BC-421E-B751-BC60781676A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B3D69E4-AACF-42A6-95B1-23484E689346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B3D69E4-AACF-42A6-95B1-23484E689346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B3D69E4-AACF-42A6-95B1-23484E689346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B3D69E4-AACF-42A6-95B1-23484E689346}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

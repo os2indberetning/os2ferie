@@ -13,11 +13,13 @@ namespace Core.DomainServices
     {
         private IGenericRepository<CachedAddress> _repo;
         private readonly IAddressLaunderer _actualLaunderer;
+        private readonly IAddressCoordinates _coordinates;
 
-        public CachedAddressLaunderer(IGenericRepository<CachedAddress> repo, IAddressLaunderer actualLaunderer)
+        public CachedAddressLaunderer(IGenericRepository<CachedAddress> repo, IAddressLaunderer actualLaunderer, IAddressCoordinates coordinates)
         {
             _repo = repo;
             _actualLaunderer = actualLaunderer;
+            _coordinates = coordinates;
         }
 
         public Address Launder(Address inputAddress)
@@ -40,6 +42,12 @@ namespace Core.DomainServices
             }
 
             _actualLaunderer.Launder(cachedAddress);
+
+            if (cachedAddress.Latitude == null || cachedAddress.Latitude.Equals("0"))
+            {
+                _coordinates.GetAddressCoordinates(cachedAddress);
+            }
+
             cachedAddress.IsDirty = false;
             _repo.Save();
 
