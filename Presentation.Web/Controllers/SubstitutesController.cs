@@ -15,8 +15,8 @@ namespace OS2Indberetning.Controllers
         private ISubstituteService _sub;
 
           //GET: odata/Substitutes
-        public SubstitutesController(IGenericRepository<Substitute> repository, ISubstituteService sub)
-            : base(repository)
+        public SubstitutesController(IGenericRepository<Substitute> repository, ISubstituteService sub, IGenericRepository<Person> personRepo)
+            : base(repository, personRepo)
         {
             _sub = sub;
         }
@@ -50,9 +50,12 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(Substitute Substitute)
         {
-            var targets = Substitute.Person;
+            if (CurrentUser.IsAdmin || CurrentUser.Id.Equals(Substitute.LeaderId))
+            {
+                return base.Post(Substitute);
+            }
+            return Unauthorized();
 
-            return base.Post(Substitute);
         }
 
         //PATCH: odata/Substitutes(5)
@@ -60,35 +63,43 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Substitute> delta)
         {
-            return base.Patch(key, delta);
+            if (CurrentUser.IsAdmin || CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).LeaderId))
+            {
+                return base.Patch(key, delta);
+            }
+            return Unauthorized();
         }
 
         //DELETE: odata/Substitutes(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            if (CurrentUser.IsAdmin || CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).LeaderId))
+            {
+                return base.Delete(key);
+            }
+            return Unauthorized();
         }
 
         // GET: odata/Substitutes/SubstituteService.Personal
         [EnableQuery]
         [HttpGet]
-        public IQueryable<Substitute> Personal()
+        public IHttpActionResult Personal()
         {
             var res = Repo.AsQueryable().Where(x => x.Person.Id != x.LeaderId);
             _sub.AddFullName(res);
             _sub.ScrubCprFromPersons(res);
-            return res;
+            return Ok(res);
         }
 
         // GET: odata/Substitutes/SubstituteService.Substitute
         [EnableQuery]
         [HttpGet]
-        public IQueryable<Substitute> Substitute()
+        public IHttpActionResult Substitute()
         {
             var res = Repo.AsQueryable().Where(x => x.Person.Id == x.LeaderId);
             _sub.AddFullName(res);
             _sub.ScrubCprFromPersons(res);
-            return res;
+            return Ok(res);
         }
     }
 }

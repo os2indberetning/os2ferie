@@ -29,7 +29,7 @@ namespace OS2Indberetning.Controllers
     */
     public class PointsController : BaseController<Point>
     {
-        public PointsController(IGenericRepository<Point> repo) : base(repo){}
+        public PointsController(IGenericRepository<Point> repo, IGenericRepository<Person> personRepo) : base(repo, personRepo){}
 
         //GET: odata/Points
         [EnableQuery]

@@ -6,14 +6,18 @@ namespace Presentation.Web.Test.Controllers.DriveReports
 {
     public class DriveReportsRepositoryMock : GenericRepositoryMock<DriveReport>
     {
-        readonly Person _person = new Person
+        private readonly Person _person1 = new Person
         {
             Id = 1,
-            FirstName = "Morten",
-            LastName = "Tester",
-            Initials = "MT",
-            Mail = "testMail@asd.dk",
+            CprNumber = "1234567894",
+            FirstName = "Fissirul",
+            LastName = "Lehmann",
+            IsAdmin = true,
+            Initials = "FL",
+            Mail = "testMail@asd.dk"
         };
+
+        
 
         readonly Person _person2 = new Person
         {
@@ -28,7 +32,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
 
         protected override List<DriveReport> Seed()
         {
-      
+
             return new List<DriveReport>
             {
                 new DriveReport
@@ -37,13 +41,13 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                     Comment = "comment 1",
                     Distance = 3.4f,
                     ClosedDateTimestamp = 4444,
-                    Person = _person2,
+                    Person = _person1,
                      Employment = new Employment()
                     {
                         Id = 1,
                         OrgUnitId = 1
                     },
-                    FullName = "Morten Tester [MT]",
+                    FullName = "Fissirul Lehmann [FL]",
                     Status = ReportStatus.Rejected
                 },
                 new DriveReport
@@ -52,13 +56,13 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                     Comment = "comment 2",
                     Distance = 3.5f,
                     ClosedDateTimestamp = 4455,
-                    Person = _person2,
+                    Person = _person1,
                      Employment = new Employment()
                     {
                         Id = 1,
                         OrgUnitId = 1
                     },
-                    FullName = "Morten Tester [MT]",
+                    FullName = "Fissirul Lehmann [FL]",
                     Status = ReportStatus.Accepted
                 },
                 new DriveReport
@@ -66,22 +70,22 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                     Id = 3,
                     Comment = "comment 3",
                     Distance = 3.6778f,
-                    ClosedDateTimestamp = 7777,
-                    Person = _person,
+                    Person = _person1,
+                    PersonId = 1,
                     Employment = new Employment()
                     {
                         Id = 1,
                         OrgUnitId = 1
                     },
-                    FullName = "Morten Tester [MT]",
+                    FullName = "Fissirul Lehmann [FL]",
                     Status = ReportStatus.Pending
                 },
             };
         }
-        
+
         public override DriveReport Insert(DriveReport entity)
         {
-            entity.Person = _person;
+            entity.Person = _person1;
             return base.Insert(entity);
         }
     }

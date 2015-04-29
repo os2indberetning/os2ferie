@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using Core.DomainModel;
+using Presentation.Web.Test.Controllers;
 
-namespace Presentation.Web.Test.Controllers.Persons
+namespace Presentation.Web.Test
 {
     class PersonRepositoryMock : GenericRepositoryMock<Person>
     {
@@ -13,22 +14,37 @@ namespace Presentation.Web.Test.Controllers.Persons
                 {
                     Id = 1,
                     CprNumber = "1234567894",
+                    FirstName = "Fissirul",
+                    LastName = "Lehmann",
+                    IsAdmin = true,
+                    Initials = "FL",
+                },
+                new Person
+                {
+                    Id = 4,
+                    CprNumber = "1234567894",
                     FirstName = "Morten",
-                    LastName = "Rasmussen"
+                    LastName = "Rasmussen",
+                    IsAdmin = true,
+                    Initials = "MR",
                 },
                 new Person
                 {
                     Id = 2,
                     CprNumber = "5761587423",
                     FirstName = "Morten",
-                    LastName = "Jørgensen"
+                    LastName = "Jørgensen",
+                    IsAdmin = true,
+                    Initials = "MJ"
                 },
                 new Person
                 {
                     Id = 3,
                     CprNumber = "8754875412",
                     FirstName = "Morten",
-                    LastName = "Foo"
+                    LastName = "Foo",
+                    IsAdmin = true,
+                    Initials = "MF"
                 }
             };
         }

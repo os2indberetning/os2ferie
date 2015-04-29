@@ -9,7 +9,7 @@ namespace OS2Indberetning.Controllers
 {
     public class MailNotificationsController : BaseController<MailNotificationSchedule>
     {
-        public MailNotificationsController(IGenericRepository<MailNotificationSchedule> repo) : base(repo){}
+        public MailNotificationsController(IGenericRepository<MailNotificationSchedule> repo, IGenericRepository<Person> personRepo) : base(repo, personRepo){}
         
         //GET: odata/MailNotificationSchedules
         [EnableQuery]
@@ -35,7 +35,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(MailNotificationSchedule MailNotificationSchedule)
         {
-            return base.Post(MailNotificationSchedule);
+            return CurrentUser.IsAdmin ? base.Post(MailNotificationSchedule) : Unauthorized();
         }
 
         //PATCH: odata/MailNotificationSchedules(5)
@@ -43,13 +43,13 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<MailNotificationSchedule> delta)
         {
-            return base.Patch(key, delta);
+            return CurrentUser.IsAdmin ? base.Patch(key, delta) : Unauthorized();
         }
 
         //DELETE: odata/MailNotificationSchedules(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            return CurrentUser.IsAdmin ? base.Delete(key) : Unauthorized();
         }
     }
 }

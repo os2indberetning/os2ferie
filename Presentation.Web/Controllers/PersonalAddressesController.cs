@@ -14,19 +14,29 @@ namespace OS2Indberetning.Controllers
     {
 
         //GET: odata/PersonalAddresses
-        public PersonalAddressesController(IGenericRepository<PersonalAddress> repository) : base(repository) { }
+        public PersonalAddressesController(IGenericRepository<PersonalAddress> repository, IGenericRepository<Person> personRepo) : base(repository, personRepo) { }
 
         [EnableQuery]
-        public IQueryable<PersonalAddress> Get(ODataQueryOptions<PersonalAddress> queryOptions)
+        public IHttpActionResult Get(ODataQueryOptions<PersonalAddress> queryOptions)
         {
             var res = GetQueryable(queryOptions);
-            return res;
+
+            if (CurrentUser.IsAdmin || !res.Any(x => !x.PersonId.Equals(CurrentUser.Id)))
+            {
+                return Ok(res);
+            }
+            return Unauthorized();
         }
 
         //GET: odata/PersonalAddresses(5)
-        public IQueryable<PersonalAddress> Get([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
+        public IHttpActionResult Get([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
         {
-            return GetQueryable(key, queryOptions);
+            var res = GetQueryable(key, queryOptions);
+            if (CurrentUser.IsAdmin || !res.Any(x => !x.PersonId.Equals(CurrentUser.Id)))
+            {
+                return Ok(res);
+            }
+            return Unauthorized();
         }
 
         //PUT: odata/PersonalAddresses(5)
@@ -39,6 +49,11 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(PersonalAddress personalAddress)
         {
+            if (!CurrentUser.Id.Equals(personalAddress.PersonId))
+            {
+                return Unauthorized();
+            }
+
             var coordinates = NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>();
             var result = coordinates.GetAddressCoordinates(personalAddress);
             personalAddress.Latitude = result.Latitude;
@@ -51,13 +66,13 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<PersonalAddress> delta)
         {
-            return base.Patch(key, delta);
+            return CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).PersonId) ? base.Patch(key, delta) : Unauthorized();
         }
 
         //DELETE: odata/PersonalAddresses(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            return CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).PersonId) ? base.Delete(key) : Unauthorized();
         }
 
         //GET odata/PersonalAddresses(5)/GetAlternativeHome

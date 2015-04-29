@@ -32,7 +32,10 @@ namespace Presentation.Web.Test.Controllers.DriveReports
             return new List<KeyValuePair<Type, Type>>
             {
                 new KeyValuePair<Type, Type>(typeof (IGenericRepository<DriveReport>),typeof (DriveReportsRepositoryMock)),
-                    new KeyValuePair<Type, Type>(typeof (IMailSender), typeof (MailSenderMock))
+                    new KeyValuePair<Type, Type>(typeof (IMailSender), typeof (MailSenderMock)),
+                    new KeyValuePair<Type, Type>(typeof (IGenericRepository<Person>), typeof (PersonRepositoryMock)),
+                    new KeyValuePair<Type, Type>(typeof (IGenericRepository<Employment>), typeof (EmploymentRepositoryMock)),
+                    new KeyValuePair<Type, Type>(typeof (IGenericRepository<OrgUnit>), typeof (OrgUnitRepositoryMock)),
             };
         }
 
@@ -53,10 +56,10 @@ namespace Presentation.Web.Test.Controllers.DriveReports
             return new DriveReport
             {
                 Id = 2,
-                Comment = "comment 2",
-                Distance = 3.5f,
-                ClosedDateTimestamp = 4455,
-                FullName = "Morten Tester [MT]"
+                Comment = "comment 3",
+                Distance = 3.6778f,
+                ClosedDateTimestamp = 7777,
+                FullName = "Fissirul Lehmann [FL]",
             };
         }
 
@@ -68,7 +71,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment 3",
                 Distance = 3.6778f,
                 ClosedDateTimestamp = 7777,
-                FullName = "Morten Tester [MT]",
+                FullName = "Fissirul Lehmann [FL]",
             };
         }
 

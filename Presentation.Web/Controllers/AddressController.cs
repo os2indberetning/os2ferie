@@ -24,7 +24,7 @@ namespace OS2Indberetning.Controllers
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         
         //GET: odata/Addresses
-        public AddressesController(IGenericRepository<Address> repository) : base(repository){}
+        public AddressesController(IGenericRepository<Address> repository, IGenericRepository<Person> personRepo) : base(repository, personRepo){}
 
         [EnableQuery]
         public IQueryable<Address> Get(ODataQueryOptions<Address> queryOptions)
@@ -93,7 +93,7 @@ namespace OS2Indberetning.Controllers
         //DELETE: odata/Addresses(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            return CurrentUser.IsAdmin ? base.Delete(key) : Unauthorized();
         }
 
         [EnableQuery]

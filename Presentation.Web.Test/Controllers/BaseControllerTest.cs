@@ -229,7 +229,7 @@ namespace Presentation.Web.Test.Controllers
 
         public async static void AssertEmptyResponse(HttpResponseMessage response)
         {
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Return code of get should be ok");
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "Return code of get should be NotFound");
             var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
             Assert.AreEqual(0, result.value.Count, "Nothing should be return from get request");
         }

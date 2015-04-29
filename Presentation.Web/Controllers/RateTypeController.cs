@@ -10,7 +10,7 @@ namespace OS2Indberetning.Controllers
 {
     public class RateTypesController : BaseController<RateType>
     {
-        public RateTypesController(IGenericRepository<RateType> repo) : base(repo){}
+        public RateTypesController(IGenericRepository<RateType> repo, IGenericRepository<Person> personRepo) : base(repo, personRepo){}
         
         //GET: odata/RateTypes
         [EnableQuery]
@@ -36,7 +36,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(RateType RateType)
         {
-            return base.Post(RateType);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         //PATCH: odata/RateTypes(5)

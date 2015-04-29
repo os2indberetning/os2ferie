@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -20,7 +21,7 @@ namespace OS2Indberetning.Controllers
         private readonly IGenericRepository<LicensePlate> _licensePlateRepo = new GenericRepository<LicensePlate>(new DataContext());
 
         public PersonController(IGenericRepository<Person> repo, IPersonService personService, IGenericRepository<Employment> employmentRepo, IGenericRepository<LicensePlate> licensePlateRepo)
-            : base(repo)
+            : base(repo, repo)
         {
             _person = personService;
             _employmentRepo = employmentRepo;
@@ -29,12 +30,12 @@ namespace OS2Indberetning.Controllers
 
         // GET: odata/Person
         [EnableQuery]
-        public IQueryable<Person> GetPerson(ODataQueryOptions<Person> queryOptions)
+        public IHttpActionResult GetPerson(ODataQueryOptions<Person> queryOptions)
         {
             var res = GetQueryable(queryOptions);
             _person.ScrubCprFromPersons(res);
             _person.AddFullName(res);
-            return res;
+            return Ok(res);
         }
 
         //GET: odata/Person(5)
@@ -66,7 +67,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(Person person)
         {
-            return base.Post(person);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         // PATCH: odata/Person(5)
@@ -74,13 +75,13 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Person> delta)
         {
-            return base.Patch(key, delta);
+            return CurrentUser.IsAdmin ? base.Patch(key, delta) : Unauthorized();
         }
 
         // DELETE: odata/Person(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         // GET odata/Person(5)/Employments
