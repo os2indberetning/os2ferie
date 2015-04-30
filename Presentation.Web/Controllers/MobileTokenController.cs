@@ -47,7 +47,7 @@ namespace OS2Indberetning.Controllers
             {
                 return Created(_tokenService.Create(mobileToken));
             }
-            return Unauthorized();
+            return StatusCode(HttpStatusCode.Forbidden);
         }
 
         //PATCH: odata/MobileTokens(5)

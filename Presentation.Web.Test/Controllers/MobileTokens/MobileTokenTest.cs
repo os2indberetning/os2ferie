@@ -100,11 +100,11 @@ namespace Presentation.Web.Test.Controllers.MobileTokens
             var result = await response.Content.ReadAsAsync<ODataResponse<MobileToken>>();
             Assert.AreEqual(1, result.value.Count, "There should be excatly one entity with id 3 before the patch");
 
-            var request = Server.CreateRequest(GetUriPath() + "(3)");
+            var request = Server.CreateRequest(GetUriPath() + "(2)");
             var patchResponse = await request.SendAsync("DELETE");
             Assert.AreEqual(HttpStatusCode.OK, patchResponse.StatusCode, "Delete request should return status code OK");
 
-            //After the delete the repo should not contain an entity with id 3
+            //After the delete the repo should not contain an entity with id 2
             response = await Server.CreateRequest(GetUriPath() + "(2)").GetAsync();
             BaseControllerTest<MobileToken>.AssertEmptyResponse(response);
         }

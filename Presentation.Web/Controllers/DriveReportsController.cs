@@ -66,7 +66,7 @@ namespace OS2Indberetning.Controllers
                 return Ok(result);
             }
 
-            return Unauthorized();
+            return StatusCode(HttpStatusCode.Forbidden);
         }
 
         //GET: odata/DriveReports(5)
@@ -74,14 +74,14 @@ namespace OS2Indberetning.Controllers
         {
             var res = _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(GetQueryable(key, queryOptions)));
 
-            var ra = res.AsQueryable().FirstOrDefault();
+            var report = res.AsQueryable().FirstOrDefault();
 
-            if (ra == null)
+            if (report == null)
             {
                 return NotFound();
             }
 
-            if (CurrentUser.Id.Equals(ra.PersonId))
+            if (CurrentUser.Id.Equals(report.PersonId))
             {
                 return Ok(res);
             }
@@ -89,11 +89,12 @@ namespace OS2Indberetning.Controllers
             {
                 return Ok(res);
             }
-            if (CurrentUser.Employments.Any(x => x.IsLeader && x.OrgUnitId.Equals(ra.Employment.OrgUnitId)))
+            
+            if (CurrentUser.Employments.Any(x => x.IsLeader && x.OrgUnitId.Equals(report.Employment.OrgUnitId)))
             {
                 return Ok(res);
             }
-            return Unauthorized();
+            return StatusCode(HttpStatusCode.Forbidden);
         }
 
         // PUT: odata/DriveReports(5)
@@ -106,11 +107,9 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(DriveReport driveReport)
         {
-            //try
-            //{
             if (!CurrentUser.Id.Equals(driveReport.PersonId))
             {
-                return Unauthorized();
+                return StatusCode(HttpStatusCode.Forbidden);
             }
 
             var result = _driveService.Create(driveReport);
@@ -130,12 +129,12 @@ namespace OS2Indberetning.Controllers
             
             if (leader == null)
             {
-                return Unauthorized();
+                return StatusCode(HttpStatusCode.Forbidden);
             }
 
             if (!CurrentUser.Id.Equals(leader.Id))
             {
-                return Unauthorized();
+                return StatusCode(HttpStatusCode.Forbidden);
             }
 
             if (report == null)
@@ -147,7 +146,7 @@ namespace OS2Indberetning.Controllers
             if (report.Status != ReportStatus.Pending)
             {
                 Logger.Info("Forsøg på at redigere indberetning med anden status end afventende.");
-                return Unauthorized();
+                return StatusCode(HttpStatusCode.Forbidden);
             }
 
 

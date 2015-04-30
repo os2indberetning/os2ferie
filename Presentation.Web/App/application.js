@@ -23,6 +23,7 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
                 ],
 
                 Person: ['Person', function (Person) {
+
                     return Person.get({ id: 1 }).$promise;
                 }],
 
@@ -244,7 +245,16 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
         })
         .state("approvereports", {
             url: "/approvereports",
-            templateUrl: "/App/ApproveReports/ApproveReportsView.html"
+            templateUrl: "/App/ApproveReports/ApproveReportsView.html",
+            resolve: {
+                CurrentUser: ["Person", "$location", function (Person, $location) {
+                    return Person.GetCurrentUser().$promise.then(function (data) {
+                        if (!data.IsLeader) {
+                            $location.path("driving");
+                        }
+                    });
+                }]
+            }
         })
         .state("settings", {
             url: "/settings",
@@ -252,7 +262,16 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
         })
         .state("admin", {
             url: "/admin",
-            templateUrl: "/App/Admin/AdminView.html"
+            templateUrl: "/App/Admin/AdminView.html",
+            resolve: {
+                CurrentUser: ["Person", "$location", function(Person, $location) {
+                    return Person.GetCurrentUser().$promise.then(function(data) {
+                        if (!data.IsAdmin) {
+                            $location.path("driving");
+                        }
+                    });
+                }]
+            }
         });
 }]);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -46,7 +47,8 @@ namespace Presentation.Web.Test.
         {
             return new List<KeyValuePair<Type, Type>>
             {
-                new KeyValuePair<Type, Type>(typeof(IGenericRepository<Address>),typeof(AddressRepositoryMock))
+                new KeyValuePair<Type, Type>(typeof(IGenericRepository<Address>),typeof(AddressRepositoryMock)),
+                new KeyValuePair<Type, Type>(typeof(IGenericRepository<Person>),typeof(PersonRepositoryMock)),
             };
         }
 
@@ -461,7 +463,7 @@ namespace Presentation.Web.Test.
         }
 
         [Test]
-        public async void PersonalAddressesWithPersonId2_ShouldReturn_PersonalAndStandard()
+        public async void PersonalAddressesWithPersonId2_ShouldReturn_Unauthorized()
         {
             AddressRepositoryMock.addresses = new List<Address>()
             {
@@ -522,7 +524,7 @@ namespace Presentation.Web.Test.
             ReSeed();
             var response = await Server.CreateRequest("/odata/Addresses/Service.GetPersonalAndStandard?personId=2").GetAsync();
             var result = await response.Content.ReadAsAsync<ODataResponse<Address>>();
-            Assert.AreEqual(4, result.value.Count);
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
 

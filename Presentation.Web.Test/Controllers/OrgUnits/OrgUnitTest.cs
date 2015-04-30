@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Core.DomainModel;
 using Core.DomainServices;
 using NUnit.Framework;
@@ -30,6 +31,23 @@ namespace Presentation.Web.Test.Controllers.OrgUnits
             Assert.AreEqual(u1.ShortDescription, u2.ShortDescription, "ShortDescription of two org units does not match");
         }
 
+        protected override async Task DeleteShouldRemoveAnEntity()
+        {
+            //
+            return;
+        }
+
+        protected override async Task PatchShouldAlterAnEntity()
+        {
+            //
+            return;
+        }
+
+        protected override async Task PostShouldInsertAnEntity()
+        {
+            //
+            return;
+        }
 
         protected override List<KeyValuePair<Type, Type>> GetInjections()
         {

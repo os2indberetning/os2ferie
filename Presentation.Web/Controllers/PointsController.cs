@@ -63,13 +63,13 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Point> delta)
         {
-            return base.Patch(key, delta);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         //DELETE: odata/Points(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
     }
 }

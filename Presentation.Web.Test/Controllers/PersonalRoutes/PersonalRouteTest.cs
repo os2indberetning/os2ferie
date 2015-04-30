@@ -93,7 +93,7 @@ namespace Presentation.Web.Test.Controllers.PersonalRoutes
         }
 
         [Test]
-        public override async Task PostShouldInsertAnEntity()
+        protected override async Task PostShouldInsertAnEntity()
         {
             const string route = @"{
                             'Description':'TestRoute',

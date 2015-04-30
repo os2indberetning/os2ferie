@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -47,7 +48,13 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment 1",
                 Distance = 3.4f,
                 ClosedDateTimestamp = 4444,
-                FullName = "Morten Tester [MT]"
+                Employment = new Employment()
+                {
+                    Id = 1,
+                    OrgUnitId = 1
+                },
+                FullName = "Fissirul Lehmann [FL]",
+                Status = ReportStatus.Rejected
             };
         }
 
@@ -56,10 +63,16 @@ namespace Presentation.Web.Test.Controllers.DriveReports
             return new DriveReport
             {
                 Id = 2,
-                Comment = "comment 3",
-                Distance = 3.6778f,
-                ClosedDateTimestamp = 7777,
+                Comment = "comment 2",
+                Distance = 3.5f,
+                ClosedDateTimestamp = 4455,
+                Employment = new Employment()
+                {
+                    Id = 1,
+                    OrgUnitId = 1
+                },
                 FullName = "Fissirul Lehmann [FL]",
+                Status = ReportStatus.Accepted
             };
         }
 
@@ -94,8 +107,14 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Id = 3,
                 Comment = "comment patched",
                 Distance = 3.6778f,
-                ClosedDateTimestamp = 666,
-                FullName = "Morten Tester [MT]"
+                PersonId = 1,
+                Employment = new Employment()
+                {
+                    Id = 1,
+                    OrgUnitId = 1
+                },
+                FullName = "Fissirul Lehmann [FL]",
+                Status = ReportStatus.Pending
             };
         }
 
@@ -107,6 +126,8 @@ namespace Presentation.Web.Test.Controllers.DriveReports
             Assert.AreEqual(entity1.Comment, entity2.Comment, "Comment of the two drive reports should be the same");
             Assert.AreEqual(entity1.FullName, entity2.FullName, "Full name should be the same on both reports");
         }
+
+      
 
         protected override string GetPostBodyContent()
         {
@@ -143,7 +164,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
         }
 
         [Test]
-        public override async Task PostShouldInsertAnEntity()
+        protected override async Task PostShouldInsertAnEntity()
         {
             //Is tested via drive report service
         }

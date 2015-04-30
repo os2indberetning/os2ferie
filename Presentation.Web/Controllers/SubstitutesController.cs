@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -54,7 +55,7 @@ namespace OS2Indberetning.Controllers
             {
                 return base.Post(Substitute);
             }
-            return Unauthorized();
+            return StatusCode(HttpStatusCode.Forbidden);
 
         }
 
@@ -67,7 +68,7 @@ namespace OS2Indberetning.Controllers
             {
                 return base.Patch(key, delta);
             }
-            return Unauthorized();
+            return StatusCode(HttpStatusCode.Forbidden);
         }
 
         //DELETE: odata/Substitutes(5)
@@ -77,7 +78,7 @@ namespace OS2Indberetning.Controllers
             {
                 return base.Delete(key);
             }
-            return Unauthorized();
+            return StatusCode(HttpStatusCode.Forbidden);
         }
 
         // GET: odata/Substitutes/SubstituteService.Personal

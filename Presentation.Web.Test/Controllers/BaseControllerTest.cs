@@ -118,7 +118,7 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [Test]
-        public virtual async Task GetShouldReturnThreeElements()
+        protected virtual async Task GetShouldReturnThreeElements()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath()).GetAsync();
             var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
@@ -146,7 +146,7 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [Test]
-        public async Task GetWithOdataQuery()
+        protected virtual async Task GetWithOdataQuery()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "?$orderby=Id desc").GetAsync();
             var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
@@ -169,7 +169,7 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [Test]
-        public virtual async Task PostShouldInsertAnEntity()
+        protected virtual async Task PostShouldInsertAnEntity()
         {
             //Make sure that an entity with id 4 does not exists before the test
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(4)").GetAsync();
@@ -189,7 +189,7 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [Test]
-        public virtual async Task PatchShouldAlterAnEntity()
+        protected virtual async Task PatchShouldAlterAnEntity()
         {
             //Make sure that an entity with id 3 looks as expected
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(3)").GetAsync();
@@ -211,7 +211,7 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [Test]
-        public async Task DeleteShouldRemoveAnEntity()
+        protected virtual async Task DeleteShouldRemoveAnEntity()
         {
             //Make sure that an entity with id 3 exists
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(3)").GetAsync();

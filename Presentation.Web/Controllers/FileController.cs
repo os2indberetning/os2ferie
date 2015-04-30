@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using Core.ApplicationServices;
@@ -63,7 +64,7 @@ namespace OS2Indberetning.Controllers
         {
             if (!CurrentUser.IsAdmin)
             {
-                return Unauthorized();
+                return StatusCode(HttpStatusCode.Forbidden);
             }
             try
             {

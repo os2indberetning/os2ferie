@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Interface;
@@ -13,6 +16,7 @@ using Infrastructure.DataAccess;
 using Ninject;
 using NUnit.Framework;
 using Presentation.Web.Test.Controllers.DriveReports;
+using Presentation.Web.Test.Controllers.Models;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 using NSubstitute;
 
@@ -98,6 +102,30 @@ namespace Presentation.Web.Test.Controllers.Persons
                 FirstName = "Morten",
                 LastName = "Jørgensen"
             };
+        }
+
+        [Test]
+        protected override async Task GetShouldReturnThreeElements()
+        {
+            HttpResponseMessage response = await Server.CreateRequest(GetUriPath()).GetAsync();
+            var result = await response.Content.ReadAsAsync<ODataResponse<Person>>();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Response to get request should be OK");
+            Assert.AreEqual(4, result.value.Count, "Expects the return of a get request to have three entitys");
+        }
+
+        [Test]
+        protected override async Task GetWithOdataQuery()
+        {
+            HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "?$orderby=Id desc").GetAsync();
+            var result = await response.Content.ReadAsAsync<ODataResponse<Person>>();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Response to get request should be OK");
+            Assert.AreEqual(4, result.value.Count, "Expects the return of a get request to have three entitys");
+            var entity = result.value[0];
+            AsssertEqualEntities(GetReferenceEntity3(), entity);
+            entity = result.value[1];
+            AsssertEqualEntities(GetReferenceEntity2(), entity);
+            entity = result.value[2];
+            AsssertEqualEntities(GetReferenceEntity1(), entity);
         }
 
         protected override Person GetReferenceEntity3()

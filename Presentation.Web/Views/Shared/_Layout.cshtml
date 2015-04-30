@@ -22,7 +22,7 @@
 
 
 </head>
-<body class="scrollme" ng-scrollbar rebuild-on-resize ng-init="menuCollapse = false">
+<body class="scrollme ng-cloak" ng-scrollbar rebuild-on-resize ng-init="menuCollapse = false">
     <div id="wrapper" ng-class="{mainMenuCollapse: menuCollapse == true}">
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -58,8 +58,8 @@
                 </li>
             </ul>
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-            <div ng-hide="menuCollapse">
-                <div class="navbar-collapse">
+            <div ng-hide="menuCollapse" ng-controller="MainMenuController">
+                <div class="navbar-collapse ng-cloak">
                     <ul class="nav navbar-nav side-nav">
                         <li ui-sref-active="active">
                             <a ui-sref="driving"><i class="fa fa-fw fa-bar-chart-o"></i> Indberet tjenestekørsel</a>
@@ -67,13 +67,13 @@
                         <li ui-sref-active="active">
                             <a ui-sref="myreports"><i class="fa fa-fw fa-table"></i> Mine indberetninger</a>
                         </li>
-                        <li ui-sref-active="active">
+                        <li ui-sref-active="active" class="ng-hide" ng-hide="!showApproveReports">
                             <a ui-sref="approvereports"><i class="fa fa-fw fa-edit"></i> Godkend indberetninger</a>
                         </li>
                         <li ui-sref-active="active">
                             <a ui-sref="settings"><i class="fa fa-fw fa-desktop"></i> Personlige indstillinger</a>
                         </li>
-                        <li ui-sref-active="active">
+                        <li ui-sref-active="active" class="ng-hide" ng-hide="!showAdministration">
                             <a ui-sref="admin"><i class="fa fa-fw fa-wrench"></i> Administrator</a>
                         </li>
 

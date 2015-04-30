@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.OData.Routing;
@@ -11,20 +12,21 @@ using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
 using log4net;
+using Microsoft.Owin.Security.Provider;
 using Ninject;
 
 namespace OS2Indberetning.Controllers
 {
-    
+
 
     public class AddressesController : BaseController<Address>
     {
         private static Address MapStartAddress { get; set; }
 
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        
+
         //GET: odata/Addresses
-        public AddressesController(IGenericRepository<Address> repository, IGenericRepository<Person> personRepo) : base(repository, personRepo){}
+        public AddressesController(IGenericRepository<Address> repository, IGenericRepository<Person> personRepo) : base(repository, personRepo) { }
 
         [EnableQuery]
         public IQueryable<Address> Get(ODataQueryOptions<Address> queryOptions)
@@ -49,7 +51,7 @@ namespace OS2Indberetning.Controllers
                 MapStartAddress = coordinates.GetAddressCoordinates(MapStartAddress);
             }
             return MapStartAddress;
-        } 
+        }
 
         //GET: odata/Addresses(5)
         public IQueryable<Address> Get([FromODataUri] int key, ODataQueryOptions<Address> queryOptions)
@@ -79,7 +81,15 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(Address Address)
         {
-            return base.Post(Address);
+            if (Address is Point || Address is DriveReportPoint)
+            {
+                return base.Post(Address);
+            }
+            if (CurrentUser.IsAdmin)
+            {
+                return base.Post(Address);
+            }
+            return StatusCode(HttpStatusCode.Forbidden);
         }
 
         //PATCH: odata/Addresses(5)
@@ -87,18 +97,50 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Address> delta)
         {
-            return base.Patch(key, delta);
+            var addr = Repo.AsQueryable().SingleOrDefault(x => x.Id.Equals(key));
+            if (addr == null)
+            {
+                return NotFound();
+            }
+            if (addr is Point || addr is DriveReportPoint)
+            {
+                return base.Patch(key, delta);
+            }
+            if (CurrentUser.IsAdmin)
+            {
+                return base.Patch(key, delta);
+            }
+            return StatusCode(HttpStatusCode.Forbidden);
+
         }
 
         //DELETE: odata/Addresses(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return CurrentUser.IsAdmin ? base.Delete(key) : Unauthorized();
+            var addr = Repo.AsQueryable().SingleOrDefault(x => x.Id.Equals(key));
+            if (addr == null)
+            {
+                return NotFound();
+            }
+            if (addr is Point || addr is DriveReportPoint)
+            {
+                return base.Delete(key);
+            }
+            if (CurrentUser.IsAdmin)
+            {
+                return base.Delete(key);
+            }
+            return StatusCode(HttpStatusCode.Forbidden);
         }
 
         [EnableQuery]
-        public IQueryable<Address> GetPersonalAndStandard(int personId)
+        public IHttpActionResult GetPersonalAndStandard(int personId)
         {
+            if (!CurrentUser.Id.Equals(personId) && !CurrentUser.IsAdmin)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
             var rep = Repo.AsQueryable();
             var temp = rep.Where(elem => !(elem is DriveReportPoint || elem is Point));
             var res = new List<Address>();
@@ -113,8 +155,8 @@ namespace OS2Indberetning.Controllers
                     res.Add(address);
                 }
             }
-            
-            return res.AsQueryable();
+
+            return Ok(res.AsQueryable());
         }
 
         [EnableQuery]

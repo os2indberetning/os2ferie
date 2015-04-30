@@ -1,9 +1,8 @@
 ﻿angular.module("application").controller("MyPendingReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "$timeout", function ($scope, $modal, $rootScope, Report, $timeout) {
+   "$scope", "$modal", "$rootScope", "Report", "$timeout", "Person", function ($scope, $modal, $rootScope, Report, $timeout, Person) {
 
        // Hardcoded personid == 1 until we can get current user from their system.
        var personId = 1;
-
 
        $scope.getEndOfDayStamp = function (d) {
            var m = moment(d);

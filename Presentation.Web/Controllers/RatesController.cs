@@ -42,12 +42,9 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(Rate Rate)
         {
-            if (CurrentUser.IsAdmin)
-            {
-                ratePostService.DeactivateExistingRate(Repo.AsQueryable(), Rate);
-                return base.Post(Rate);
-            }
-            return Unauthorized();
+            if (!CurrentUser.IsAdmin) return StatusCode(HttpStatusCode.Forbidden);
+            ratePostService.DeactivateExistingRate(Repo.AsQueryable(), Rate);
+            return base.Post(Rate);
         }
 
         //PATCH: odata/Rates(5)
@@ -55,7 +52,7 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Rate> delta)
         {
-            return base.Patch(key, delta);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         //DELETE: odata/Rates(5)

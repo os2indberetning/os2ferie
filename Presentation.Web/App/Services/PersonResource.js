@@ -62,5 +62,22 @@
                 return res;
             }
         },
+        "GetCurrentUser" : {
+            url: "/odata/Person/Service.GetCurrentUser?$expand=Employments",
+            method: "GET",
+            transformResponse: function (data) {
+                var res = angular.fromJson(data);
+                res.IsLeader = (function() {
+                    var returnVal = false;
+                    angular.forEach(res.Employments, function(value, key) {
+                        if (value.IsLeader === true) {
+                            returnVal = true;
+                        }
+                    });
+                    return returnVal;
+                })();
+                return res;
+            }
+        }
     });
 }]);

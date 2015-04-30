@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
@@ -38,6 +39,14 @@ namespace OS2Indberetning.Controllers
             return Ok(res);
         }
 
+        [EnableQuery]
+        public Person GetCurrentUser()
+        {
+            var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(CurrentUser.Id));
+            CurrentUser.Employments = employments.ToList();
+            return CurrentUser;
+        }
+
         //GET: odata/Person(5)
         public IQueryable<Person> GetPerson([FromODataUri] int key, ODataQueryOptions<Person> queryOptions)
         {
@@ -75,7 +84,7 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Person> delta)
         {
-            return CurrentUser.IsAdmin ? base.Patch(key, delta) : Unauthorized();
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         // DELETE: odata/Person(5)

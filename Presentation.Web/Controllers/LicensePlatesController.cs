@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -45,7 +46,7 @@ namespace OS2Indberetning.Controllers
         {
             if (!CurrentUser.Id.Equals(LicensePlate.PersonId))
             {
-                return Unauthorized();
+                return StatusCode(HttpStatusCode.Forbidden);
             }
 
 
@@ -64,7 +65,7 @@ namespace OS2Indberetning.Controllers
         {
             if (!CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).PersonId))
             {
-                return Unauthorized();
+                return StatusCode(HttpStatusCode.Forbidden);
             }
 
             var primary = new object();
@@ -83,7 +84,7 @@ namespace OS2Indberetning.Controllers
 
             if (!CurrentUser.Id.Equals(plate.PersonId))
             {
-                return Unauthorized();
+                return StatusCode(HttpStatusCode.Forbidden);
             }
 
             if (plate != null && plate.IsPrimary)
@@ -107,7 +108,7 @@ namespace OS2Indberetning.Controllers
         {
             if (!CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(plateId)).PersonId))
             {
-                return Unauthorized();
+                return StatusCode(HttpStatusCode.Forbidden);
             }
 
             if (_plateService.MakeLicensePlatePrimary(plateId))
