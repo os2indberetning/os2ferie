@@ -79,7 +79,7 @@
                             <div class="form-group">
                                 <!--Dropdown for selecting personal route-->
                                 <label for="">Vælg standardrute:</label>
-                                <select class="fill-width" kendo-drop-down-list="container.PersonalRouteDropDown" k-on-change="personalRouteDropdownChange(kendoEvent)" ng-model="DriveReport.PersonalRoute" k-data-source="Routes" k-data-text-field="'presentation'"></select>
+                                <select class="fill-width" kendo-drop-down-list="container.PersonalRouteDropDown" k-on-change="personalRouteDropdownChange(kendoEvent)" ng-model="DriveReport.PersonalRoute" k-data-source="Routes" k-data-text-field="'PresentationString'"></select>
                             </div>
                         </div>
                     </div>
@@ -126,10 +126,10 @@
                                         <label for="">Vælg adresse:</label> <label ng-bind="addressSelectionErrorMessage" class="text-danger"></label>
                                         <div ng-show="isAddressNameSet(DriveReport.Addresses[$index]) === false">
                                             <!--Dropdown for selecting standard addresses-->
-                                            <select class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'value'" k-data-value-field="'StreetName'" k-placeholder="'Brugerens Personlige adresser'"> </select>
+                                            <select class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'PresentationString'" k-data-value-field="'Id'" k-placeholder="'Brugerens Personlige adresser'"> </select>
                                         </div>
                                     </div>
-                                    <div ng-show="DriveReport.Addresses[$index].Personal == 'Vælg fast adresse'">
+                                    <div ng-show="DriveReport.Addresses[$index].Personal == addressDropDownPlaceholderText">
                                         <div class="col-lg-7">
                                             <!--Text field for adding addresses-->
                                             <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'" ng-enter="" k-placeholder="addressPlaceholderText"

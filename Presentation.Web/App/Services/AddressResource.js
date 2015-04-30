@@ -99,11 +99,14 @@
         "getMapStart": {
             method: "GET",
             url: "/odata/Addresses/Service.GetMapStart",
-            isArray: false,
+            isArray: true,
             transformResponse: function(data) {
                 var res = angular.fromJson(data);
                 if (res.error == undefined) {
-                    return res;
+                    var resArray = [];
+                    resArray.push({ name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude });
+                    resArray.push({ name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude });
+                    return resArray;
                 }
 
                 var modalInstance = $modal.open({
