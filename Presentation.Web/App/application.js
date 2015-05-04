@@ -1,7 +1,7 @@
 ﻿var application = angular.module("application", ["kendo.directives", "ui.router", "ui.bootstrap", "ui.bootstrap.tooltip", "ngResource", "template/modal/window.html", "template/modal/window.html", "template/modal/backdrop.html", "template/tabs/tab.html", "template/tabs/tabset.html", "angularMoment", "template/popover/popover.html", "kendo-ie-fix", 'angular-loading-bar'])
     .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
-    cfpLoadingBarProvider.includeSpinner = false;
-}]);
+        cfpLoadingBarProvider.includeSpinner = false;
+    }]);
 
 angular.module("application").config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
@@ -11,11 +11,17 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             url: "/",
             templateUrl: "/App/Driving/DrivingView.html",
             controller: "DrivingController",
+            resolve: {
+                ReportId: function () { return -1; },
+            }
         })
         .state("driving", {
             url: "/driving",
             templateUrl: "/App/Driving/DrivingView.html",
             controller: "DrivingController",
+            resolve: {
+                ReportId: function() { return -1; },
+            }
         })
         .state("myreports", {
             url: "/myreports",

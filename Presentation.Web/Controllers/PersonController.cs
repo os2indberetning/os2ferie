@@ -44,6 +44,7 @@ namespace OS2Indberetning.Controllers
         {
             var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(CurrentUser.Id));
             CurrentUser.Employments = employments.ToList();
+            CurrentUser.FullName = CurrentUser.FirstName + " " + CurrentUser.LastName + " [" +  CurrentUser.Initials + "]";
             return CurrentUser;
         }
 
