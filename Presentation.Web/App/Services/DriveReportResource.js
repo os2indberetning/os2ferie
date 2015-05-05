@@ -1,6 +1,9 @@
 ﻿angular.module("application").service('DriveReport', ["$resource","AddressFormatter", "PersonalAddress", function ($resource, AddressFormatter, PersonalAddress) {
     return $resource("/odata/DriveReports(:id)?:query", { id: "@id", query: "@query" }, {
-        "get": { method: "GET", isArray: false },
+        "get": {
+            method: "GET", isArray: false, transformResponse: function (res) {
+            return angular.fromJson(res).value[0];
+        } },
         "save": {
             method: "POST",
             isArray: false,

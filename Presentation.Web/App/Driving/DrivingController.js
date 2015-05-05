@@ -29,9 +29,7 @@
             $scope.DriveReport.Date = new Date();
         }
 
-
         setupForNewReport();
-
 
         $scope.AddViapoint = function () {
             var temp = $scope.DriveReport.Addresses.pop();
@@ -65,7 +63,7 @@
         var loadValuesFromReport = function (report) {
             // Select position in dropdown.
             $scope.container.PositionDropDown.select(function (item) {
-                return item.Id == report.Employment.Id;
+                return item.Id == report.EmploymentId;
             });
 
             // Select the right license plate.
@@ -102,11 +100,44 @@
             });
 
             $scope.container.KmRateDropDown.trigger("change");
+
+
+
+
+            // Load additional data if a report is being edited.
+            if (isEditingReport) {
+                $scope.DriveReport.Purpose = report.Purpose;
+                $scope.DriveReport.Date = moment.unix(report.DriveDateTimestamp)._d;
+
+                if (report.KilometerAllowance === "Read") {
+                    $scope.DriveReport.ReadDistance = report.Distance;
+                    $scope.DriveReport.UserComment = report.UserComment;
+                    if (!report.StartsAtHome && !report.EndsAtHome) {
+                        $scope.container.StartEndHomeDropDown.select(0);
+                    } else if (report.StartsAtHome && report.EndsAtHome) {
+                        $scope.container.StartEndHomeDropDown.select(3);
+                    } else if (report.StartsAtHome) {
+                        $scope.container.StartEndHomeDropDown.select(1);
+                    } else if (report.EndsAtHome) {
+                        $scope.container.StartEndHomeDropDown.select(2);
+                    }
+                    $scope.DriveReport.StartsAtHome = report.StartsAtHome;
+                    $scope.DriveReport.EndsAtHome = report.EndsAtHome;
+                } else {
+                    $scope.DriveReport.Addresses = [];
+                    angular.forEach(report.DriveReportPoints, function(point, key) {
+                        var temp = { Name: point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town, Latitude: point.Latitude, Longitude: point.Longitude };
+                        $scope.DriveReport.Addresses.push(temp);
+                    });
+                }
+            }
+            $scope.validateInput();
         }
 
 
         // Load all data
         Person.GetCurrentUser().$promise.then(function (currentUser) {
+
 
             $scope.currentUser = currentUser;
 
@@ -151,46 +182,19 @@
                 $scope.Routes = res;
             }));
 
-            OS2RouteMap.create({
-                id: 'map',
-                change: function (obj) {
-                    // Return if the change comes from AddressInputChanged
-                    if (mapChanging === true) {
-                        setMapPromise.resolve();
-                        return;
-                    }
 
-                    if ($scope.IsRoute) {
-                        setNotRoute();
-                    }
-
-                    mapChanging = true;
-                    $scope.DriveReport.Addresses = [];
-                    // Load the adresses from the map.
-                    angular.forEach(obj.Addresses, function (address, key) {
-                        var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
-                        $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
-                    });
-                    // Apply to update the view.
-                    $scope.$apply();
-                    $timeout(function () {
-                        // Wait for the view to render before setting mapChanging to false.
-                        mapChanging = false;
-                    });
-
-                }
-            });
+            loadingPromises.push(Address.getMapStart().$promise.then(function (res) {
+                $scope.mapStartAddress = res;
+                createMap();
+                setMap($scope.mapStartAddress);
+            }));
 
             if (!isEditingReport) {
-                loadingPromises.push(Address.getMapStart().$promise.then(function (res) {
-                    setMap(res);
-                }));
-
                 loadingPromises.push(DriveReport.getLatest({ id: currentUser.Id }).$promise.then(function (res) {
                     $scope.latestDriveReport = res;
                 }));
             } else {
-                loadingPromises.push(DriveReport.get({ id: ReportId }).$promise.then(function (res) {
+                loadingPromises.push(DriveReport.getWithPoints({ id: ReportId }).$promise.then(function (res) {
                     $scope.latestDriveReport = res;
                 }));
             }
@@ -255,11 +259,7 @@
                 $scope.DriveReport.Addresses.push(addr);
                 mapArray.push({ name: addr.Name, lat: addr.Latitude, lng: addr.Longitude });
             });
-            mapChanging = true;
-            var prom = setMap(mapArray);
-            prom.promise.then(function () {
-                mapChanging = false;
-            });
+            setMap(mapArray);
         }
 
         $scope.personalRouteDropdownChange = function (e) {
@@ -327,12 +327,13 @@
         }
 
         $scope.validateInput = function () {
-            // Each function returns a bool. canSubmitDriveReport is the logical and of each function call.
-            // It has to be one & instead of && as all the functions should get called. && will stop calling when the first function returns false.
-            $scope.canSubmitDriveReport = (validateReadInput() & validateAddressInput() & validatePurpose() & validateLicensePlate());
+            $timeout(function () {
+                $scope.canSubmitDriveReport = validateReadInput();
+                $scope.canSubmitDriveReport &= validateAddressInput();
+                $scope.canSubmitDriveReport &= validatePurpose();
+                $scope.canSubmitDriveReport &= validateLicensePlate();
+            });
         }
-
-
 
         $scope.addressInputChanged = function (index) {
             if (!validateAddressInput() || mapChanging) {
@@ -358,11 +359,7 @@
             });
 
             $q.all(promises).then(function (data) {
-                mapChanging = true;
-                var prom = setMap(mapArray);
-                prom.promise.then(function () {
-                    mapChanging = false;
-                });
+                setMap(mapArray);
             });
 
         }
@@ -370,10 +367,13 @@
         var setMapPromise;
         var setMap = function (mapArray) {
             setMapPromise = $q.defer();
+            mapChanging = true;
             OS2RouteMap.set(mapArray);
+            setMapPromise.promise.then(function () {
+                mapChanging = false;
+            });
             return setMapPromise;
         }
-
 
         // Wait for kendo to render.
         $scope.$on("kendoWidgetCreated", function (event, widget) {
@@ -382,17 +382,54 @@
             }
         });
 
+        var createMap = function () {
+            OS2RouteMap.create({
+                id: 'map',
+                change: function (obj) {
+                    // Return if the change comes from AddressInputChanged
+                    if (mapChanging === true) {
+                        setMapPromise.resolve();
+                        return;
+                    }
+
+                    if ($scope.IsRoute) {
+                        setNotRoute();
+                    }
+
+                    mapChanging = true;
+                    $scope.DriveReport.Addresses = [];
+                    // Load the adresses from the map.
+                    angular.forEach(obj.Addresses, function (address, key) {
+                        var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
+                        $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
+                    });
+                    // Apply to update the view.
+                    $scope.$apply();
+                    $timeout(function () {
+                        // Wait for the view to render before setting mapChanging to false.
+                        mapChanging = false;
+                    });
+
+                }
+            });
+        }
+
 
         // Is called when Kendo has rendered up to and including KilometerAllowanceDropDown and data has been loaded from backend.
         // Consider this function Main()
         // Is needed to make sure data and kendo widgets are ready for setting values from previous drivereport.
         var dataAndKendoLoaded = function () {
-
-            loadValuesFromReport($scope.latestDriveReport);
             if (isEditingReport) {
+                //
             } else {
+
                 $scope.container.driveDatePicker.open();
             }
+            // Timeout for wait for dom to render.
+            $timeout(function () {
+                loadValuesFromReport($scope.latestDriveReport);
+            });
+
         }
 
         $scope.clearClicked = function () {
@@ -413,9 +450,12 @@
         }
 
         $scope.Save = function () {
+            if (!$scope.canSubmitDriveReport) {
+                return;
+            }
             if (isEditingReport) {
                 DriveReport.delete({ id: ReportId }).$promise.then(function () {
-                    DriveReport.save($scope).$promise.then(function(res) {
+                    DriveReport.save($scope).$promise.then(function (res) {
                         $scope.latestDriveReport = res;
                         NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev redigeret");
                         $scope.clearClicked();
@@ -429,6 +469,18 @@
                 });
             }
         }
+
+        $scope.kilometerAllowanceChanged = function () {
+            mapChanging = false;
+            switch ($scope.DriveReport.KilometerAllowance) {
+                case "Read":
+                    setMap($scope.mapStartAddress);
+                    $scope.validateInput();
+                    break;
+            }
+            $scope.validateInput();
+        }
+
 
     }
 ]);

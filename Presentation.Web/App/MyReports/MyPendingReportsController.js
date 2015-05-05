@@ -204,11 +204,11 @@
        $scope.editClick = function (id) {
            var modalInstance = $modal.open({
                templateUrl: '/App/MyReports/EditReportTemplate.html',
-               controller: 'EditReportController',
+               controller: 'DrivingController',
                backdrop: "static",
                windowClass: "app-modal-window-full",
                resolve: {
-                   reportId: function () {
+                   ReportId: function () {
                        return id;
                    }
                }
