@@ -25,7 +25,7 @@ namespace DBUpdater.Test
         private IGenericRepository<PersonalAddress> _personalAddressRepoMock;
         private IAddressLaunderer _actualLaunderer;
         private IAddressCoordinates _coordinates;
-        private IDBUpdaterDataProvider _dataProvider;
+        private IDbUpdaterDataProvider _dataProvider;
 
         [SetUp]
         public void SetUp()
@@ -41,7 +41,7 @@ namespace DBUpdater.Test
             _personalAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
             _actualLaunderer = NSubstitute.Substitute.For<IAddressLaunderer>();
             _coordinates = NSubstitute.Substitute.For<IAddressCoordinates>();
-            _dataProvider = NSubstitute.Substitute.For<IDBUpdaterDataProvider>();
+            _dataProvider = NSubstitute.Substitute.For<IDbUpdaterDataProvider>();
 
             _emplRepoMock.AsQueryable().Returns(emplList.AsQueryable());
 

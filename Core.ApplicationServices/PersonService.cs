@@ -75,39 +75,6 @@ namespace Core.ApplicationServices
             return home;
         }
 
-        public virtual PersonalAddress GetWorkAddress(Person person)
-        {
-            var hasAlternative = _addressRepo.AsQueryable()
-                    .FirstOrDefault(x => x.PersonId == person.Id && x.Type == PersonalAddressType.AlternativeWork);
-
-            if (hasAlternative != null)
-            {
-                return hasAlternative;
-            }
-
-            var work = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == person.Id && x.Type == PersonalAddressType.Work);
-
-            AddCoordinatesToAddressIfNonExisting(work);
-
-            return work;
-        }
-
-        public double GetDistanceFromHomeToWork(Person p)
-        {
-            double homeWorkDistance;
-
-            if (p.WorkDistanceOverride > 0)
-            {
-                homeWorkDistance = p.WorkDistanceOverride;
-            }
-            else
-            {
-                homeWorkDistance = _route.GetRoute(new List<Address>() { GetHomeAddress(p), GetWorkAddress(p)}).Length;
-            }
-            return homeWorkDistance;
-        }
-
         private void AddCoordinatesToAddressIfNonExisting(Address a)
         {
             if (string.IsNullOrEmpty(a.Latitude) || a.Latitude.Equals("0"))

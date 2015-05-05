@@ -150,7 +150,7 @@ namespace OS2Indberetning.Controllers
                 {
                     res.Add(address);
                 }
-                else if (!(address is PersonalAddress))
+                else if (!(address is PersonalAddress) && !(address is CachedAddress) && !(address is WorkAddress))
                 {
                     res.Add(address);
                 }

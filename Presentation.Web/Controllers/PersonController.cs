@@ -44,7 +44,7 @@ namespace OS2Indberetning.Controllers
         {
             var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(CurrentUser.Id));
             CurrentUser.Employments = employments.ToList();
-            CurrentUser.FullName = CurrentUser.FirstName + " " + CurrentUser.LastName + " [" +  CurrentUser.Initials + "]";
+            CurrentUser.FullName = CurrentUser.FirstName + " " + CurrentUser.LastName + " [" + CurrentUser.Initials + "]";
             return CurrentUser;
         }
 
@@ -56,8 +56,6 @@ namespace OS2Indberetning.Controllers
                 var cprScrubbed = _person.ScrubCprFromPersons(GetQueryable(key, queryOptions));
                 _person.AddFullName(cprScrubbed);
                 var res = cprScrubbed.ToList();
-
-                res[0].DistanceFromHomeToWork = _person.GetDistanceFromHomeToWork(res[0]);
 
                 return res.AsQueryable();
             }

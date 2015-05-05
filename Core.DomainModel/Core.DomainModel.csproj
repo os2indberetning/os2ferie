@@ -73,6 +73,7 @@
     <Compile Include="Report.cs" />
     <Compile Include="Substitute.cs" />
     <Compile Include="Example\Product.cs" />
+    <Compile Include="WorkAddress.cs" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Example\Product.cs.d.ts">

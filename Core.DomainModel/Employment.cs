@@ -12,7 +12,7 @@ namespace Core.DomainModel
         public long EndDateTimestamp { get; set; }
         public int EmploymentType { get; set; }
         public int ExtraNumber { get; set; }
-
+        public double WorkDistanceOverride { get; set; }
         public int PersonId { get; set; }
         public virtual Person Person { get; set; }
         public virtual ICollection<Report> Reports { get; set; }

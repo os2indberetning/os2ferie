@@ -8,7 +8,5 @@ namespace Core.ApplicationServices.Interfaces
         IQueryable<Person> ScrubCprFromPersons(IQueryable<Person> queryable);
         void AddFullName(IQueryable<Person> persons);
         PersonalAddress GetHomeAddress(Person person);
-        PersonalAddress GetWorkAddress(Person person);
-        double GetDistanceFromHomeToWork(Person p);
     }
 }

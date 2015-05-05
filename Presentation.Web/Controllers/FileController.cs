@@ -28,7 +28,7 @@ namespace OS2Indberetning.Controllers
             base.Initialize(requestContext);
 
 #if DEBUG
-            var httpUser = @"favrskov\FL".Split('\\'); // Fissirul Lehmann - administrator
+            var httpUser = @"favrskov\kije".Split('\\'); // Fissirul Lehmann - administrator
 #else
                 string[] httpUser = User.Identity.Name.Split('\\');                
 #endif

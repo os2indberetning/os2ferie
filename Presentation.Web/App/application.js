@@ -42,7 +42,13 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
         })
         .state("settings", {
             url: "/settings",
-            templateUrl: "/App/Settings/SettingsView.html"
+            templateUrl: "/App/Settings/SettingsView.html",
+            controller: "SettingController",
+            resolve: {
+                CurrentUser: ["Person", function (Person) {
+                    return Person.GetCurrentUser().$promise;
+                }]
+            }
         })
         .state("admin", {
             url: "/admin",

@@ -51,7 +51,7 @@ namespace Core.ApplicationServices
             var person = _personRepo.AsQueryable().First(x => x.Id == report.PersonId);
 
             var homeAddress = _personService.GetHomeAddress(person);
-            var workAddress = _personService.GetWorkAddress(person);
+            var workAddress = report.Employment.OrgUnit.Address;
 
             if (report.KilometerAllowance != KilometerAllowance.Read)
             {
@@ -77,9 +77,16 @@ namespace Core.ApplicationServices
             }
 
 
+            if (report.Employment.WorkDistanceOverride > 0)
+            {
+                homeWorkDistance = _route.GetRoute(new List<Address>() {homeAddress, workAddress}).Length;
+            }
+            else
+            {
+                homeWorkDistance = report.Employment.WorkDistanceOverride;
+            }
 
-
-            homeWorkDistance = _personService.GetDistanceFromHomeToWork(person);
+            
 
             
             //Calculate distance to subtract

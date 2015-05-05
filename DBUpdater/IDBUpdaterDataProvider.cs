@@ -7,7 +7,7 @@ using DBUpdater.Models;
 
 namespace DBUpdater
 {
-    public interface IDBUpdaterDataProvider
+    public interface IDbUpdaterDataProvider
     {
         IQueryable<Employee> GetEmployeesAsQueryable();
         IQueryable<Organisation> GetOrganisationsAsQueryable();

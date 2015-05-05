@@ -186,7 +186,9 @@
             loadingPromises.push(Address.getMapStart().$promise.then(function (res) {
                 $scope.mapStartAddress = res;
                 createMap();
+
                 setMap($scope.mapStartAddress);
+                mapChanging = false;
             }));
 
             if (!isEditingReport) {
@@ -420,7 +422,7 @@
         // Is needed to make sure data and kendo widgets are ready for setting values from previous drivereport.
         var dataAndKendoLoaded = function () {
             if (isEditingReport) {
-                //
+                debugger;
             } else {
 
                 $scope.container.driveDatePicker.open();
@@ -475,7 +477,6 @@
             switch ($scope.DriveReport.KilometerAllowance) {
                 case "Read":
                     setMap($scope.mapStartAddress);
-                    $scope.validateInput();
                     break;
             }
             $scope.validateInput();

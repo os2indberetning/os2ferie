@@ -25,7 +25,7 @@ namespace DBUpdater.Test
         private IGenericRepository<PersonalAddress> _personalAddressRepoMock;
         private IAddressLaunderer _actualLaundererMock;
         private IAddressCoordinates _coordinatesMock;
-        private IDBUpdaterDataProvider _dataProviderMock;
+        private IDbUpdaterDataProvider _dataProviderMock;
 
         [SetUp]
         public void SetUp()
@@ -42,7 +42,7 @@ namespace DBUpdater.Test
             _personalAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
             _actualLaundererMock = NSubstitute.Substitute.For<IAddressLaunderer>();
             _coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
-            _dataProviderMock = NSubstitute.Substitute.For<IDBUpdaterDataProvider>();
+            _dataProviderMock = NSubstitute.Substitute.For<IDbUpdaterDataProvider>();
 
             _cachedAddressRepoMock.Insert(new CachedAddress()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>()).AndDoes(x => cachedAddressList.Add(x.Arg<CachedAddress>())).AndDoes(x => x.Arg<CachedAddress>().Id = cachedIdCount).AndDoes(x => cachedIdCount++);
 

@@ -15,12 +15,10 @@ namespace Core.DomainModel
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Mail { get; set; }
-        public double WorkDistanceOverride { get; set; }
         public bool RecieveMail { get; set; }
         public double DistanceFromHomeToBorder { get; set; }
         public string Initials { get; set; }
         public string FullName { get; set; }
-        public double DistanceFromHomeToWork { get; set; }
         public bool IsAdmin { get; set; }
 
         public ICollection<PersonalAddress> PersonalAddresses { get; set; }
