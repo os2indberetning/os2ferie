@@ -9,7 +9,6 @@
             isArray: false,
             transformRequest: function ($scope) {
 
-
                 var getKmRate = function () {
                     for (var i = 0; i < $scope.KmRate.length; i++) {
                         if ($scope.KmRate[i].Id == $scope.DriveReport.KmRate) {
@@ -46,6 +45,7 @@
                 driveReport.ClosedDateTimestamp = 0;
                 driveReport.ProcessedDateTimestamp = 0;
                 driveReport.EmploymentId = $scope.DriveReport.Position;
+                debugger;
 
                 if ($scope.DriveReport.KilometerAllowance === "Read") {
 
@@ -74,6 +74,7 @@
 
                     angular.forEach($scope.DriveReport.Addresses, function (address, key) {
 
+                        debugger;
 
                         var tempAddress = (address.Name.length != 0) ? address.Name : address.Personal;
 

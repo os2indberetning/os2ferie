@@ -225,6 +225,10 @@
     <Compile Include="Migrations\201505051125169_addedWorkDistanceOverrideToEmployment.Designer.cs">
       <DependentUpon>201505051125169_addedWorkDistanceOverrideToEmployment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505051343402_madeWorkAddressOnOrgUnitVirtual.cs" />
+    <Compile Include="Migrations\201505051343402_madeWorkAddressOnOrgUnitVirtual.Designer.cs">
+      <DependentUpon>201505051343402_madeWorkAddressOnOrgUnitVirtual.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -362,6 +366,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505051125169_addedWorkDistanceOverrideToEmployment.resx">
       <DependentUpon>201505051125169_addedWorkDistanceOverrideToEmployment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505051343402_madeWorkAddressOnOrgUnitVirtual.resx">
+      <DependentUpon>201505051343402_madeWorkAddressOnOrgUnitVirtual.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

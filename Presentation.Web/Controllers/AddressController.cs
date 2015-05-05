@@ -21,12 +21,16 @@ namespace OS2Indberetning.Controllers
 
     public class AddressesController : BaseController<Address>
     {
+        private readonly IGenericRepository<Employment> _employmentRepo;
         private static Address MapStartAddress { get; set; }
 
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         //GET: odata/Addresses
-        public AddressesController(IGenericRepository<Address> repository, IGenericRepository<Person> personRepo) : base(repository, personRepo) { }
+        public AddressesController(IGenericRepository<Address> repository, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo) : base(repository, personRepo)
+        {
+            _employmentRepo = employmentRepo;
+        }
 
         [EnableQuery]
         public IQueryable<Address> Get(ODataQueryOptions<Address> queryOptions)
@@ -155,6 +159,17 @@ namespace OS2Indberetning.Controllers
                     res.Add(address);
                 }
             }
+
+            var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(personId)).ToList();
+
+            foreach (var empl in employments)
+            {
+                var tempAddr = empl.OrgUnit.Address;
+                tempAddr.Description = empl.OrgUnit.LongDescription;
+                res.Add(tempAddr);
+            }
+
+
 
             return Ok(res.AsQueryable());
         }

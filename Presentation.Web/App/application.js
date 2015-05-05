@@ -20,12 +20,12 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             templateUrl: "/App/Driving/DrivingView.html",
             controller: "DrivingController",
             resolve: {
-                ReportId: function() { return -1; },
+                ReportId: function () { return -1; },
             }
         })
         .state("myreports", {
             url: "/myreports",
-            templateUrl: "/App/MyReports/MyReportsView.html"
+            templateUrl: "/App/MyReports/MyReportsView.html",
         })
         .state("approvereports", {
             url: "/approvereports",

@@ -22,15 +22,13 @@
                 return res;
             }
         },
-        "getWorkAddresses": {
+        "getWorkAddress": {
             method:  "GET",
             isArray: false,
             url: "/odata/Person(:personId)/Employments?$filter=Id eq :employmentId &$expand=OrgUnit($expand=Address)",
             transformResponse: function (data) {
                 var res = angular.fromJson(data).value[0].OrgUnit.Address;
-                res.PresentationString = "Arbejdsadresse : " + res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town;
-                return res;
-               
+                return res;    
             }
         }
     });
