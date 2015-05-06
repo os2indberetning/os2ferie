@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 using Core.ApplicationServices;
 using Core.DmzModel;
 using Core.DomainModel;
+using Core.DomainServices.RoutingClasses;
+using Infrastructure.AddressServices;
 using Infrastructure.DmzDataAccess;
 using Infrastructure.DataAccess;
 using Infrastructure.DmzSync.Encryption;
+
 
 namespace Infrastructure.DmzSync
 {
@@ -68,12 +71,25 @@ namespace Infrastructure.DmzSync
                         MasterContext.DriveReports.Add(dr);
 
                         // Sync Rate 
-                        Core.DomainModel.Rate tmp = MasterContext.Rates.FirstOrDefault(x => x.Id == report.RateId);
+                        Core.DomainModel.Rate tmpRate = MasterContext.Rates.FirstOrDefault(x => x.Id == report.RateId);
 
-                        if (tmp != null)
-                            dr.KmRate = tmp.KmRate;
-                        else
-                            dr.KmRate = 0.0f;
+                        dr.KmRate = 0.0f;
+                        dr.LicensePlate = null;
+
+                        if (tmpRate != null)
+                        {
+                            dr.KmRate = tmpRate.KmRate;
+
+                            if (tmpRate.Type.RequiresLicensePlate)
+                            {
+                                var licensePlate = dr.Person.LicensePlates.FirstOrDefault(x => x.IsPrimary == true);
+
+                                if (licensePlate != null)
+                                {
+                                    dr.LicensePlate = licensePlate.Plate;
+                                }
+                            }
+                        }
 
                         // Sync Date
                         long fullDate = StringToUnixTimestamp(report.Date);
@@ -86,13 +102,8 @@ namespace Infrastructure.DmzSync
                         //Reference the correct employment
                         dr.EmploymentId = report.EmploymentId;
 
-                        var licensePlate = dr.Person.LicensePlates.FirstOrDefault();
-
-                        if (licensePlate != null)
-                            dr.Licenseplate = licensePlate.ToString();
-                        else
-                            dr.Licenseplate = "No Licenseplate";
-
+                        //Handle Licenseplate
+                        
                         //Create ReimburstmentCalculator
                         ReimbursementCalculator calc = new ReimbursementCalculator();
                         dr = calc.Calculate(dr);
@@ -108,10 +119,53 @@ namespace Infrastructure.DmzSync
                                 Longitude = g.Longitude
                             };
 
-                            // What to do with time? - or now just throw aray.. assume gpscoordinatea re in the correct order
+                            // For now just throw time away.. assume gpscoordinatea re in the correct order
                             //c.Time = DateTime.ParseExact(g.TimeStamp, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
 
                             dr.DriveReportPoints.Add(drp);
+                        }
+
+                        //Link points
+                        for (var x = 0; x < dr.DriveReportPoints.Count; x++)
+                        {
+                            var currentPoint = dr.DriveReportPoints.ElementAt(i);
+
+                            if (x == dr.DriveReportPoints.Count - 1 || x == 0)
+                            {
+                                //Look up addresse
+                                var coordinateGenerator = new AddressCoordinates();
+
+                                try
+                                {
+                                    Address tmp  = coordinateGenerator.GetAddressFromCoordinates(currentPoint);
+                                    currentPoint.StreetName = tmp.StreetName;
+                                    currentPoint.StreetNumber = tmp.StreetNumber;
+                                    currentPoint.ZipCode = tmp.ZipCode;
+                                    currentPoint.Town = tmp.Town;
+                                }
+                                catch (AddressCoordinatesException ex)
+                                {
+                                    
+                                }
+
+                                //And link points
+                                if (x == 0)
+                                {
+                                    // at first element
+                                    currentPoint.NextPointId = dr.DriveReportPoints.ElementAt(x + 1).Id;
+                                }
+                                else
+                                {
+                                    // at last element   
+                                    currentPoint.PreviousPointId = dr.DriveReportPoints.ElementAt(x - 1).Id;
+                                }
+                            }
+                            else
+                            {
+                                // between first and last element
+                                currentPoint.NextPointId = dr.DriveReportPoints.ElementAt(x + 1).Id;
+                                currentPoint.PreviousPointId = dr.DriveReportPoints.ElementAt(x - 1).Id;
+                            }
                         }
 
                         i++;
@@ -154,7 +208,7 @@ namespace Infrastructure.DmzSync
                             {
                                 Core.DmzModel.Rate r = new Core.DmzModel.Rate
                                 {
-                                    TFCode = rate.TFCode,
+                                    TFCode = rate.Type,
                                     Type = rate.Type,
                                     KmRate = rate.KmRate.ToString(),
                                     Year = rate.Year.ToString()
