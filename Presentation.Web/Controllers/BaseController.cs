@@ -75,6 +75,7 @@ namespace OS2Indberetning.Controllers
         {
             _personRepo = personRepo;
             ValidationSettings.AllowedQueryOptions = AllowedQueryOptions.All;
+            ValidationSettings.MaxExpansionDepth = 4;
             Repo = repository;
             _primaryKeyProp = Repo.GetPrimaryKeyProperty();
         }

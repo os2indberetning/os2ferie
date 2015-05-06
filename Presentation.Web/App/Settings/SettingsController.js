@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("SettingController", [
-    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "CurrentUser",
-    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, CurrentUser) {
+    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope",
+    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope) {
         $scope.gridContainer = {};
         $scope.isCollapsed = true;
         $scope.mailAdvice = '';
@@ -23,14 +23,14 @@
         $scope.newTokenDescription = "";
 
 
-        var personId = CurrentUser.Id;
+        var personId = $rootScope.CurrentUser.Id;
 
         // Contains references to kendo ui grids.
         $scope.gridContainer = {};
 
         $scope.GetPerson = Person.get({ id: personId }, function (data) {
             $scope.currentPerson = data;
-            $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride.toString().replace('.', ',');
+          //  $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride.toString().replace('.', ',');
             $scope.recieveMail = data.RecieveMail;
 
             //Set choice of mail notification

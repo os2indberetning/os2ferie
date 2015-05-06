@@ -36,14 +36,16 @@ namespace OS2Indberetning.Controllers
             var res = GetQueryable(queryOptions);
             _person.ScrubCprFromPersons(res);
             _person.AddFullName(res);
+            _person.AddHomeWorkDistanceToEmployments(res);
             return Ok(res);
         }
 
-        [EnableQuery]
+        [EnableQuery(MaxExpansionDepth = 4)]
         public Person GetCurrentUser()
         {
             var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(CurrentUser.Id));
             CurrentUser.Employments = employments.ToList();
+            _person.AddHomeWorkDistanceToEmployments(CurrentUser);
             CurrentUser.FullName = CurrentUser.FirstName + " " + CurrentUser.LastName + " [" + CurrentUser.Initials + "]";
             return CurrentUser;
         }
@@ -55,6 +57,7 @@ namespace OS2Indberetning.Controllers
             {
                 var cprScrubbed = _person.ScrubCprFromPersons(GetQueryable(key, queryOptions));
                 _person.AddFullName(cprScrubbed);
+                _person.AddHomeWorkDistanceToEmployments(cprScrubbed);
                 var res = cprScrubbed.ToList();
 
                 return res.AsQueryable();
@@ -83,7 +86,7 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Person> delta)
         {
-            return StatusCode(HttpStatusCode.MethodNotAllowed);
+            return CurrentUser.IsAdmin ? base.Patch(key, delta) : StatusCode(HttpStatusCode.Forbidden);
         }
 
         // DELETE: odata/Person(5)
@@ -93,11 +96,17 @@ namespace OS2Indberetning.Controllers
         }
 
         // GET odata/Person(5)/Employments
-        public IQueryable<Employment> GetEmployments([FromODataUri] int key)
+        public IHttpActionResult GetEmployments([FromODataUri] int key)
         {
-            var result = _employmentRepo.AsQueryable().Where(x => x.PersonId == key);
+            var person = Repo.AsQueryable().FirstOrDefault(x => x.Id.Equals(key));
+            if (person == null)
+            {
+                return BadRequest("Der findes ingen person med id " + key);
+            }
+            person = _person.AddHomeWorkDistanceToEmployments(person);
 
-            return result.AsQueryable();
+
+            return Ok(person.Employments);
         }
 
         // GET: odata/Person(5)/Service.HasLicensePlate

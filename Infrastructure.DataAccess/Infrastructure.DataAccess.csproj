@@ -229,6 +229,18 @@
     <Compile Include="Migrations\201505051343402_madeWorkAddressOnOrgUnitVirtual.Designer.cs">
       <DependentUpon>201505051343402_madeWorkAddressOnOrgUnitVirtual.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505060633461_AddedHomeWorkDistanceToEmployment.cs" />
+    <Compile Include="Migrations\201505060633461_AddedHomeWorkDistanceToEmployment.Designer.cs">
+      <DependentUpon>201505060633461_AddedHomeWorkDistanceToEmployment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505060642307_addedAlternativeWorkAddressToEmployment.cs" />
+    <Compile Include="Migrations\201505060642307_addedAlternativeWorkAddressToEmployment.Designer.cs">
+      <DependentUpon>201505060642307_addedAlternativeWorkAddressToEmployment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505060654513_changedAlternativeWorkAddressOnEmploymentToWorkAddress.cs" />
+    <Compile Include="Migrations\201505060654513_changedAlternativeWorkAddressOnEmploymentToWorkAddress.Designer.cs">
+      <DependentUpon>201505060654513_changedAlternativeWorkAddressOnEmploymentToWorkAddress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -369,6 +381,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505051343402_madeWorkAddressOnOrgUnitVirtual.resx">
       <DependentUpon>201505051343402_madeWorkAddressOnOrgUnitVirtual.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505060633461_AddedHomeWorkDistanceToEmployment.resx">
+      <DependentUpon>201505060633461_AddedHomeWorkDistanceToEmployment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505060642307_addedAlternativeWorkAddressToEmployment.resx">
+      <DependentUpon>201505060642307_addedAlternativeWorkAddressToEmployment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505060654513_changedAlternativeWorkAddressOnEmploymentToWorkAddress.resx">
+      <DependentUpon>201505060654513_changedAlternativeWorkAddressOnEmploymentToWorkAddress.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

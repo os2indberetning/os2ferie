@@ -27,7 +27,7 @@
 
 </head>
 <body class="scrollme ng-cloak" ng-scrollbar rebuild-on-resize ng-init="menuCollapse = false">
-    <div id="wrapper" ng-class="{mainMenuCollapse: menuCollapse == true}">
+    <div id="wrapper" ng-class="{mainMenuCollapse: menuCollapse == true}" ng-controller="MainMenuController">
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -36,33 +36,29 @@
                     <i class="fa fa-bars"></i>
                     <label href="#">OS2Indberetning</label>
                 </div>
-                
+
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
-                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{UserName}}<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li>
-                            Fornavn Mellemnavn Efternavn
+                        <li class="margin-left-5">
+                            {{UserName}}
                         </li>
                         <li class="divider"></li>
-                        <li>
-                            Adresse
+                        <li class="margin-left-5">
+                            {{HomeAddress}}
                         </li>
                         <li class="divider"></li>
-                        <li>
-                            Email
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            Telefonnummer
+                        <li class="margin-left-5">
+                            {{UserEmail}}
                         </li>
                     </ul>
                 </li>
             </ul>
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-            <div ng-hide="menuCollapse" ng-controller="MainMenuController">
+            <div ng-hide="menuCollapse">
                 <div class="navbar-collapse ng-cloak">
                     <ul class="nav navbar-nav side-nav">
                         <li ui-sref-active="active">

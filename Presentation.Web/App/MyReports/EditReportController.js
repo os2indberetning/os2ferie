@@ -260,7 +260,7 @@
             if (widget === $scope.PositionDropDown) {
                 $scope.Employments.$promise.then(function (data) {
                     angular.forEach(data, function (employment, key) {
-                        employment.PresentationString = employment.Position + " - " + employment.OrgUnit.ShortDescription;
+                        employment.PresentationString = employment.Position + " - " + employment.OrgUnit.LongDescription;
                     });
                     $scope.PositionDropDown.dataSource.read();
                     $scope.PositionDropDown.select(function (item) {

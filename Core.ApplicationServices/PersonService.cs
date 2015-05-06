@@ -1,11 +1,13 @@
 ﻿
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Web.OData.Routing;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
+using Microsoft.Ajax.Utilities;
 using Ninject;
 
 namespace Core.ApplicationServices
@@ -14,11 +16,13 @@ namespace Core.ApplicationServices
     {
         private readonly IGenericRepository<PersonalAddress> _addressRepo;
         private readonly IRoute<RouteInformation> _route;
+        private readonly IGenericRepository<Employment> _emplRepo;
 
-        public PersonService(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route)
+        public PersonService(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route, IGenericRepository<Employment> emplRepo)
         {
             _addressRepo = addressRepo;
             _route = route;
+            _emplRepo = emplRepo;
         }
 
         public IQueryable<Person> ScrubCprFromPersons(IQueryable<Person> queryable)
@@ -53,7 +57,7 @@ namespace Core.ApplicationServices
                 person.FullName += " " + person.LastName;
 
                 person.FullName += " [" + person.Initials + "]";
-            }            
+            }
         }
 
         public virtual PersonalAddress GetHomeAddress(Person person)
@@ -73,6 +77,41 @@ namespace Core.ApplicationServices
 
 
             return home;
+        }
+
+        public Person AddHomeWorkDistanceToEmployments(Person person)
+        {
+            // Get employments for person
+            // Get alternative home address.
+            var homeAddress = person.PersonalAddresses.AsQueryable().FirstOrDefault(x => x.Type == PersonalAddressType.AlternativeHome);
+            // Get primary home address if alternative doesnt exist.
+            homeAddress = homeAddress ?? person.PersonalAddresses.AsQueryable().FirstOrDefault(x => x.Type == PersonalAddressType.Home);
+            foreach (var employment in person.Employments)
+            {
+                if (employment.WorkDistanceOverride > 0)
+                {
+                    employment.HomeWorkDistance = employment.WorkDistanceOverride;
+                }
+                else
+                {
+                    var workAddress = employment.AlternativeWorkAddress;
+                    workAddress = workAddress ?? employment.OrgUnit.Address;
+                    if (homeAddress != null && workAddress != null)
+                    {
+                        employment.HomeWorkDistance = _route.GetRoute(new List<Address>() { homeAddress, workAddress }).Length;
+                    }
+                }
+            }
+            return person;
+        }
+
+        public IQueryable<Person> AddHomeWorkDistanceToEmployments(IQueryable<Person> people)
+        {
+            foreach (var person in people.ToList())
+            {
+                AddHomeWorkDistanceToEmployments(person);
+            }
+            return people;
         }
 
         private void AddCoordinatesToAddressIfNonExisting(Address a)

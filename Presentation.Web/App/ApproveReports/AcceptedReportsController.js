@@ -40,26 +40,26 @@
            $scope.gridContainer.grid.dataSource.read();
        }
 
-       $scope.applyOrgUnitFilter = function (shortDescription) {
+       $scope.applyOrgUnitFilter = function (longDescription) {
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            var newFilters = [];
 
 
            if (oldFilters == undefined) {
                // If no filters exist, just add the filters.
-               if (shortDescription != "") {
-                   newFilters.push({ field: "Employment.OrgUnit.ShortDescription", operator: "eq", value: shortDescription });
+               if (longDescription != "") {
+                   newFilters.push({ field: "Employment.OrgUnit.LongDescription", operator: "eq", value: longDescription });
                }
            } else {
                // If filters already exist then get the old filters, that arent drivedate.
                // Then add the new drivedate filters to these.
                angular.forEach(oldFilters.filters, function (value, key) {
-                   if (value.field != "Employment.OrgUnit.ShortDescription") {
+                   if (value.field != "Employment.OrgUnit.LongDescription") {
                        newFilters.push(value);
                    }
                });
-               if (shortDescription != "") {
-                   newFilters.push({ field: "Employment.OrgUnit.ShortDescription", operator: "eq", value: shortDescription });
+               if (longDescription != "") {
+                   newFilters.push({ field: "Employment.OrgUnit.LongDescription", operator: "eq", value: longDescription });
                }
 
            }
@@ -157,7 +157,7 @@
            }
            var newFilters = [];
            angular.forEach(oldFilters.filters, function (value, key) {
-               if (value.field != "Employment.OrgUnit.ShortDescription") {
+               if (value.field != "Employment.OrgUnit.LongDescription") {
                    newFilters.push(value);
                }
            });
@@ -278,7 +278,7 @@
                    field: "FullName",
                    title: "Medarbejder"
                }, {
-                   field: "Employment.OrgUnit.ShortDescription",
+                   field: "Employment.OrgUnit.LongDescription",
                    title: "Organisationsenhed"
                }, {
                    field: "DriveDateTimestamp",
