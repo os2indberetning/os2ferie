@@ -55,44 +55,55 @@
                     </div>
                     <div class="seperator"></div>
                     <label for="">Afvigende afstand mellem hjemme- og arbejdsadresse:</label>
-                    <span class="info-popup" popover="Hvis systemet beregner en anden afstand end den du egentlig kører, kan du her indtaste en afvigende afstand mellem bopæl og arbejdsplads. HUSK! Denne afvigende afstand også er dén du skal indberette til rubrik 51 på din forskudsopgørelse ved Skat." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+
                     <div></div>
-                    <input ng-enter="setHomeWorkOverride()" ng-model="workDistanceOverride" class="k-textbox" placeholder="0" /><label>km</label>
+
                     <button type="submit" class="btn btn-primary" ng-click="setHomeWorkOverride()">Gem ændringer</button>
                 </div>
             </div>
         </div>
         <div class="row setting-area">
             <div class="col-lg-12">
-                <div class="form-group form-inline">
-                    <h3>Afvigende adresser</h3>
-                    <label for="">Afvigende hjemmeadresse:</label>
-                    <div></div>
-                    <input ng-enter="saveAlternativeHomeAddress()" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
-                           k-data-source="SmartAddress" ng-model="newAlternativeHomeAddress" class="fill-fifty" k-placeholder="'Skriv her'" />
-                    <button type="submit" class="btn btn-primary" ng-click="saveAlternativeHomeAddress()">Gem afvigende hjemmeadresse</button>
-                    <div class="seperator"></div>
-                    <label for="">Afvigende arbejdsadresse:</label>
-                    <div></div>
-                    <input ng-enter="saveAlternativeWorkAddress()" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
-                           k-data-source="SmartAddress" ng-model="newAlternativeWorkAddress" class="fill-fifty" k-placeholder="'Skriv her'" />
-                    <button type="submit" class="btn btn-primary" ng-click="saveAlternativeWorkAddress()">Gem afvigende arbejdsadresse</button>
-                </div>
-            </div>
-        </div>
-        <div class="row setting-area">
-            <div class="col-lg-12">
-                <div class="form-group form-inline">
-                    <h3>Mailadviseringer</h3>
-                    <label for="">Send mig mailadviseringer om indberetninger til godkendelse:</label>
-                    <div class="seperator"></div>
-                    <div class="btn-group">
-                        <label class="btn btn-success" ng-click="invertRecieveMail()" ng-model="mailAdvice" btn-radio="'Yes'">Ja tak</label>
-                        <label class="btn btn-danger" ng-click="invertRecieveMail()" ng-model="mailAdvice" btn-radio="'No'">Nej tak</label>
+                <h3>Afvigende adresser</h3>
+                <label for="">Hjemmeadresse:</label>
+                <div class="margin-right-15">
+                    <div class="row">
+                        <div class="col-xs-7">
+                            Afvigende adresse
+                        </div>
+
                     </div>
+                    <div class="row">
+                        <div class="col-xs-7">
+                            <input ng-enter="saveAlternativeHomeAddress()" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+                                   k-data-source="SmartAddress" ng-model="newAlternativeHomeAddress" class="fill-width" k-placeholder="'Skriv her'" />
+                        </div>
+                        <div class="col-xs-2">
+
+                        </div>
+                        <div class="col-xs-1"></div>
+                        <div class="col-xs-1">
+                            <button class="btn btn-danger">Ryd</button>
+                        </div>
+                        <div class="col-xs-1">
+                            <button ng-click="saveAlternativeHomeAddress()" class="btn btn-success">Gem</button>
+                        </div>
+
+                    </div>
+
+
+
+
+
+
                 </div>
+                <div class="seperator"></div>
+
+                <label for="">Arbejdsadresser:</label><br />
+                <div ng-include="'App/Settings/AlternativeWorkAddressTemplate.html'"></div>
             </div>
         </div>
+        
         <div class="row setting-area">
             <div class="col-lg-12">
                 <div class="form-group form-inline">
@@ -107,7 +118,7 @@
                         <div class="col-md-8">
                             <p class="margin-5"><strong>Beskrivelse</strong> (f.eks. arbejdstelefon eller telefonnummer)</p>
                         </div>
-                        
+
                     </div>
                     <div class="row margin-5" ng-repeat="token in tokens">
                         <div class="col-md-4">
@@ -163,6 +174,19 @@
                     <h3>Personlige ruter</h3>
                     <div kendo-grid="gridcontainer.personalRoutesGrid" class="scrollable" options="personalRoutes"></div>
                     <button class="btn btn-default set-margin-top-10" ng-click="openRouteAddModal()">Tilføj ny personlig rute</button>
+                </div>
+            </div>
+        </div>
+        <div class="row setting-area">
+            <div class="col-lg-12">
+                <div class="form-group form-inline">
+                    <h3>Mailadviseringer</h3>
+                    <label for="">Send mig mailadviseringer om indberetninger til godkendelse:</label>
+                    <div class="seperator"></div>
+                    <div class="btn-group">
+                        <label class="btn btn-success" ng-click="invertRecieveMail()" ng-model="mailAdvice" btn-radio="'Yes'">Ja tak</label>
+                        <label class="btn btn-danger" ng-click="invertRecieveMail()" ng-model="mailAdvice" btn-radio="'No'">Nej tak</label>
+                    </div>
                 </div>
             </div>
         </div>

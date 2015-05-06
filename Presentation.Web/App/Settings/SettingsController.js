@@ -24,6 +24,8 @@
 
 
         var personId = $rootScope.CurrentUser.Id;
+        // Used for alternative address template
+        $scope.employments = $rootScope.CurrentUser.Employments;
 
         // Contains references to kendo ui grids.
         $scope.gridContainer = {};
@@ -296,22 +298,7 @@
             }
         }
 
-        $scope.setHomeWorkOverride = function () {
-            var newPerson = new Person({
-                WorkDistanceOverride: $scope.workDistanceOverride.toString().replace(',', '.')
-            });
-
-            newPerson.$patch({ id: personId }, function (data) {
-                NotificationService.AutoFadeNotification("success", "", "Afstand mellem hjemme- og arbejdsadresse blev gemt");
-            }), function () {
-                if ($scope.mailAdvice == 'No') {
-                    $scope.mailAdvice = 'Yes';
-                } else {
-                    $scope.mailAdvice = 'No';
-                }
-                NotificationService.AutoFadeNotification("danger", "", "Afstand mellem hjemme- og arbejdsadresse blev ikke gemt");
-            };
-        };
+        
 
         $scope.loadGrids = function (id) {
             $scope.personalRoutes = {
@@ -747,5 +734,20 @@
                 });
             });
         }
+
+        $scope.openAlternativeWorkAddressModal = function () {
+
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/AlternativeWorkAddressModal.html',
+                controller: 'AlternativeWorkAddressModalController',
+                backdrop: 'static',
+            });
+
+            modalInstance.result.then(function (res) {
+
+            }, function () {
+
+            });
+        };
     }
 ]);
