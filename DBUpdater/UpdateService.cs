@@ -130,6 +130,11 @@ namespace DBUpdater
 
         public Employment CreateEmployment(Employee empl, int personId)
         {
+            if (empl.AnsaettelsesDato == null)
+            {
+                return null;
+            }
+
             var orgUnit = _orgRepo.AsQueryable().FirstOrDefault(x => x.OrgId == empl.LOSOrgId);
 
             if (orgUnit == null)
@@ -175,6 +180,11 @@ namespace DBUpdater
 
         public void SaveHomeAddress(Employee empl, int personId)
         {
+
+            if (empl.Adresse == null)
+            {
+                return;
+            }
 
             if (!_personRepo.AsQueryable().Any(x => x.Id == personId))
             {
