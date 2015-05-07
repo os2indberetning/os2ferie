@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -15,7 +16,7 @@ namespace OS2Indberetning.Controllers
         RatePostService ratePostService = new RatePostService();
 
           //GET: odata/Rates
-        public RatesController(IGenericRepository<Rate> repository) : base(repository){}
+        public RatesController(IGenericRepository<Rate> repository, IGenericRepository<Person> personRepo) : base(repository, personRepo){}
 
         [EnableQuery]
         public IQueryable<Rate> Get(ODataQueryOptions<Rate> queryOptions)
@@ -41,6 +42,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(Rate Rate)
         {
+            if (!CurrentUser.IsAdmin) return StatusCode(HttpStatusCode.Forbidden);
             ratePostService.DeactivateExistingRate(Repo.AsQueryable(), Rate);
             return base.Post(Rate);
         }
@@ -50,13 +52,13 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Rate> delta)
         {
-            return base.Patch(key, delta);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         //DELETE: odata/Rates(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
         
         // GET: odata/Rates/Service.ThisYearsRates

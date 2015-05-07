@@ -4,6 +4,7 @@
             method: "GET",
             isArray: true,
             transformResponse: function (data) {
+                debugger;
                 var res = angular.fromJson(data);
                 if (res.error == undefined) {
                     return res.value;

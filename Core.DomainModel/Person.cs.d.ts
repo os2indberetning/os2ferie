@@ -7,12 +7,10 @@
 		middleName: string;
 		lastName: string;
 		mail: string;
-		workDistanceOverride: number;
 		recieveMail: boolean;
 		distanceFromHomeToBorder: number;
 		initials: string;
 		fullName: string;
-		distanceFromHomeToWork: number;
 		isAdmin: boolean;
 		personalAddresses: any[];
 		personalRoutes: any[];

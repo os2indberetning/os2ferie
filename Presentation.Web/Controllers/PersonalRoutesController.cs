@@ -12,7 +12,8 @@ namespace OS2Indberetning.Controllers
     {
         private readonly IPersonalRouteService _routeService;
         //GET: odata/PersonalRoutes
-        public PersonalRoutesController(IGenericRepository<PersonalRoute> repository, IPersonalRouteService routeService) : base(repository)
+        public PersonalRoutesController(IGenericRepository<PersonalRoute> repository, IPersonalRouteService routeService, IGenericRepository<Person> personRepo)
+            : base(repository, personRepo)
         {
             _routeService = routeService;
         }
@@ -40,10 +41,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(PersonalRoute personalRoute)
         {
-            var res = _routeService.Create(personalRoute);
-
-            return Ok(res);
-
+            return personalRoute.PersonId.Equals(CurrentUser.Id) ? (IHttpActionResult)Ok(_routeService.Create(personalRoute)) : Unauthorized();
         }
 
         //PATCH: odata/PersonalRoutes(5)
@@ -51,13 +49,13 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<PersonalRoute> delta)
         {
-            return base.Patch(key, delta);
+            return Repo.AsQueryable().Single(x => x.Id.Equals(key)).PersonId.Equals(CurrentUser.Id) ? base.Patch(key, delta) : Unauthorized();
         }
 
         //DELETE: odata/PersonalRoutes(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            return CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).PersonId) ? base.Delete(key) : Unauthorized();
         }
     }
 }

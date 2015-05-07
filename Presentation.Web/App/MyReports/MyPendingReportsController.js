@@ -1,8 +1,8 @@
 ﻿angular.module("application").controller("MyPendingReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "$timeout", function ($scope, $modal, $rootScope, Report, $timeout) {
+   "$scope", "$modal", "$rootScope", "Report", "$timeout", "Person", function ($scope, $modal, $rootScope, Report, $timeout, Person) {
 
-       // Hardcoded personid == 1 until we can get current user from their system.
-       var personId = 1;
+       // Set personId. The value on $rootScope is set in resolve in application.js
+       var personId = $rootScope.CurrentUser.Id;
 
 
        $scope.getEndOfDayStamp = function (d) {
@@ -179,7 +179,7 @@
 
        }
 
-       
+
 
        // Event handlers
 
@@ -205,18 +205,18 @@
        $scope.editClick = function (id) {
            var modalInstance = $modal.open({
                templateUrl: '/App/MyReports/EditReportTemplate.html',
-               controller: 'EditReportController',
+               controller: 'DrivingController',
                backdrop: "static",
                windowClass: "app-modal-window-full",
                resolve: {
-                   reportId: function () {
+                   ReportId: function () {
                        return id;
                    }
                }
            });
 
            modalInstance.result.then(function (res) {
-                   $scope.gridContainer.grid.dataSource.read();
+               $scope.gridContainer.grid.dataSource.read();
            });
        }
 
@@ -286,6 +286,8 @@
                }
            });
        }
+
+
 
    }
 ]);

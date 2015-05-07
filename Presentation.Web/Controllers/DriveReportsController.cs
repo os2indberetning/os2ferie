@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 using System.Web.OData;
 using System.Web.OData.Query;
 using Core.ApplicationServices;
@@ -17,18 +18,20 @@ namespace OS2Indberetning.Controllers
     public class DriveReportsController : BaseController<DriveReport>
     {
         private readonly IDriveReportService _driveService;
+        private readonly IGenericRepository<Employment> _employmentRepo;
 
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public DriveReportsController(IGenericRepository<DriveReport> repo, IDriveReportService driveService)
-            : base(repo)
+        public DriveReportsController(IGenericRepository<DriveReport> repo, IDriveReportService driveService, IGenericRepository<Person> personRepo , IGenericRepository<Employment> employmentRepo)
+            : base(repo, personRepo)
         {
             _driveService = driveService;
+            _employmentRepo = employmentRepo;
         }
 
         // GET: odata/DriveReports
         [EnableQuery]
-        public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions, string status = "", int leaderId = 0, bool getReportsWhereSubExists = false)
+        public IHttpActionResult Get(ODataQueryOptions<DriveReport> queryOptions, string status = "", int leaderId = 0, bool getReportsWhereSubExists = false)
         {
             var queryably = GetQueryable(queryOptions);
 
@@ -43,14 +46,55 @@ namespace OS2Indberetning.Controllers
                 queryably = _driveService.FilterByLeader(queryably, leaderId, getReportsWhereSubExists);
             }
 
-            return _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(queryably));
+            var result = _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(queryably));
+
+            // Return result if CurrentUser is Admin
+            if (CurrentUser.IsAdmin)
+            {
+                return Ok(result);
+            }
+
+            // Return result if currentUser is leader and responsible for the reports in the result. 
+            if (leaderId.Equals(CurrentUser.Id))
+            {
+                return Ok(result);
+            }
+
+            // Return if result doesnt contain reports belonging to someone else than currentuser
+            if (!result.Any(rep => !rep.PersonId.Equals(CurrentUser.Id)))
+            {
+                return Ok(result);
+            }
+
+            return StatusCode(HttpStatusCode.Forbidden);
         }
 
         //GET: odata/DriveReports(5)
-        public IQueryable<DriveReport> GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
+        public IHttpActionResult GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
             var res = _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(GetQueryable(key, queryOptions)));
-            return res;
+
+            var report = res.AsQueryable().FirstOrDefault();
+
+            if (report == null)
+            {
+                return NotFound();
+            }
+
+            if (CurrentUser.Id.Equals(report.PersonId))
+            {
+                return Ok(res);
+            }
+            if (CurrentUser.IsAdmin)
+            {
+                return Ok(res);
+            }
+            
+            if (CurrentUser.Employments.Any(x => x.IsLeader && x.OrgUnitId.Equals(report.Employment.OrgUnitId)))
+            {
+                return Ok(res);
+            }
+            return StatusCode(HttpStatusCode.Forbidden);
         }
 
         // PUT: odata/DriveReports(5)
@@ -63,16 +107,14 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(DriveReport driveReport)
         {
-            //try
-            //{
+            if (!CurrentUser.Id.Equals(driveReport.PersonId))
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
             var result = _driveService.Create(driveReport);
 
             return Ok(result);
-            //}
-            //catch (Exception e)
-            //{
-            //    return BadRequest("DriveReport has some invalid parameters");
-            //}
         }
 
         // PATCH: odata/DriveReports(5)
@@ -81,10 +123,20 @@ namespace OS2Indberetning.Controllers
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
         {
 
-           
-            
-
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
+            var leader = _employmentRepo.AsQueryable().FirstOrDefault(x => x.IsLeader && x.OrgUnitId.Equals(report.Employment.OrgUnitId));
+            
+            
+            if (leader == null)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
+            if (!CurrentUser.Id.Equals(leader.Id))
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
             if (report == null)
             {
                 return NotFound();
@@ -94,7 +146,7 @@ namespace OS2Indberetning.Controllers
             if (report.Status != ReportStatus.Pending)
             {
                 Logger.Info("Forsøg på at redigere indberetning med anden status end afventende.");
-                return Unauthorized();
+                return StatusCode(HttpStatusCode.Forbidden);
             }
 
 
@@ -105,7 +157,16 @@ namespace OS2Indberetning.Controllers
         // DELETE: odata/DriveReports(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            if (CurrentUser.IsAdmin)
+            {
+                return base.Delete(key);
+            }
+            var report = Repo.AsQueryable().SingleOrDefault(x => x.Id.Equals(key));
+            if (report == null)
+            {
+                return NotFound();
+            }
+            return report.PersonId.Equals(CurrentUser.Id) ? base.Delete(key) : Unauthorized();
         }
     }
 }

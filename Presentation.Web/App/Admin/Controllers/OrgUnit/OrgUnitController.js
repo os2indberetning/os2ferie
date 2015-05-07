@@ -96,7 +96,7 @@
 
         OrgUnit.get().$promise.then(function (res) {
             angular.forEach(res.value, function (org, key) {
-                $scope.typeAheadOrgUnits.push({ Id: org.Id, ShortDescription: org.ShortDescription });
+                $scope.typeAheadOrgUnits.push({ Id: org.Id, LongDescription: org.LongDescription });
                 $scope.checkboxes[org.Id] = org.HasAccessToFourKmRule;
             });
             $scope.loadOrgUnits();
@@ -104,7 +104,7 @@
 
         $scope.orgUnitChanged = function (item) {
             var filter = [];
-            filter.push({ field: "ShortDescription", operator: "contains", value: $scope.orgUnit.chosenUnit });
+            filter.push({ field: "LongDescription", operator: "contains", value: $scope.orgUnit.chosenUnit });
             $scope.gridContainer.grid.dataSource.filter(filter);
         }
 

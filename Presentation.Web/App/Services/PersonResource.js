@@ -43,10 +43,10 @@
         "patch": { method: "PATCH" },
         "getNonAdmins": {
             url: "/odata/Person?$filter=IsAdmin eq false",
-            method: "GET", isArray: false, transformResponse: function() {
+            method: "GET", isArray: false, transformResponse: function(data) {
                 var res = angular.fromJson(data);
                 if (res.error == undefined) {
-                    return data;
+                    return res;
                 }
 
                 var modalInstance = $modal.open({
@@ -62,5 +62,22 @@
                 return res;
             }
         },
+        "GetCurrentUser" : {
+            url: "/odata/Person/Service.GetCurrentUser?$expand=Employments($expand=OrgUnit($expand=Address))",
+            method: "GET",
+            transformResponse: function (data) {
+                var res = angular.fromJson(data);
+                res.IsLeader = (function() {
+                    var returnVal = false;
+                    angular.forEach(res.Employments, function(value, key) {
+                        if (value.IsLeader === true) {
+                            returnVal = true;
+                        }
+                    });
+                    return returnVal;
+                })();
+                return res;
+            }
+        }
     });
 }]);

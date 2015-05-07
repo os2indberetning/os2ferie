@@ -365,6 +365,7 @@
     <Content Include="App\ApproveReports\View.html" />
     <Content Include="App\Directives\EnterKeypress.js" />
     <Content Include="App\Directives\RouteLoader.js" />
+    <Content Include="App\MainMenuController.js" />
     <Content Include="App\MyReports\MyAcceptedReportsController.js" />
     <Content Include="App\MyReports\MyRejectedReportsController.js" />
     <Content Include="App\MyReports\MyPendingReportsController.js" />
@@ -381,6 +382,8 @@
     <Content Include="App\Services\RouteContainerResource.js" />
     <Content Include="App\Services\SubstituteResource.js" />
     <Content Include="App\Settings\AddressAddModal.html" />
+    <Content Include="App\Settings\AlternativeAddressController.js" />
+    <Content Include="App\Settings\AlternativeWorkAddressTemplate.html" />
     <Content Include="App\Settings\ModalControllers\AddressDeleteModalController.js" />
     <Content Include="App\Settings\ModalControllers\RouteDeleteModalController.js" />
     <Content Include="App\Settings\AddressDeleteModal.html" />
@@ -657,6 +660,8 @@
     <Content Include="Content\kendo\Uniform\sprite_2x.png" />
     <Content Include="Content\kendo\Uniform\sprite_kpi.png" />
     <Content Include="Content\kendo\Uniform\sprite_kpi_2x.png" />
+    <Content Include="Content\loading-bar.css" />
+    <Content Include="Content\loading-bar.min.css" />
     <Content Include="Content\private.css" />
     <Content Include="Content\simple-sidebar.css" />
     <Content Include="Content\loading.gif" />
@@ -1159,6 +1164,8 @@
     <Content Include="Scripts\kendo\messages\kendo.messages.zh-HK.min.js" />
     <Content Include="Scripts\kendo\messages\kendo.messages.zh-TW.min.js" />
     <Content Include="Scripts\kendo\pako_deflate.min.js" />
+    <Content Include="Scripts\loading-bar.js" />
+    <Content Include="Scripts\loading-bar.min.js" />
     <Content Include="template\typeahead\typeahead-match.html" />
     <Content Include="template\typeahead\typeahead-popup.html" />
     <Content Include="App\Directives\AwsDirective.js" />

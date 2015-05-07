@@ -7,21 +7,24 @@ using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
+using Ninject;
 
 namespace Core.ApplicationServices
 {
-    
+
     public class ReimbursementCalculator : IReimbursementCalculator
     {
         private readonly IRoute<RouteInformation> _route;
         private readonly IPersonService _personService;
-        private readonly IGenericRepository<Person> _personRepo; 
+        private readonly IGenericRepository<Person> _personRepo;
+        private readonly IGenericRepository<Employment> _emplrepo;
 
-        public ReimbursementCalculator(IRoute<RouteInformation> route, IPersonService personService, IGenericRepository<Person> personRepo)
+        public ReimbursementCalculator(IRoute<RouteInformation> route, IPersonService personService, IGenericRepository<Person> personRepo, IGenericRepository<Employment> emplrepo)
         {
             _route = route;
             _personService = personService;
             _personRepo = personRepo;
+            _emplrepo = emplrepo;
         }
 
         /// <summary>
@@ -44,14 +47,16 @@ namespace Core.ApplicationServices
         /// 
         /// </summary>
         public DriveReport Calculate(DriveReport report)
-        {            
+        {
             //Check if user has manually provided a distance between home address and work address
             var homeWorkDistance = 0.0;
 
             var person = _personRepo.AsQueryable().First(x => x.Id == report.PersonId);
 
             var homeAddress = _personService.GetHomeAddress(person);
-            var workAddress = _personService.GetWorkAddress(person);
+            var wa = _emplrepo.AsQueryable().FirstOrDefault(x => x.Id.Equals(report.EmploymentId));
+            var workAddress =
+                _emplrepo.AsQueryable().FirstOrDefault(x => x.Id.Equals(report.EmploymentId)).OrgUnit.Address;
 
             if (report.KilometerAllowance != KilometerAllowance.Read)
             {
@@ -77,11 +82,16 @@ namespace Core.ApplicationServices
             }
 
 
+            homeWorkDistance = _emplrepo.AsQueryable().FirstOrDefault(x => x.Id.Equals(report.EmploymentId)).WorkDistanceOverride;
+
+            if (homeWorkDistance <= 0)
+            {
+                homeWorkDistance = _route.GetRoute(new List<Address>() { homeAddress, workAddress }).Length;
+            }
 
 
-            homeWorkDistance = _personService.GetDistanceFromHomeToWork(person);
 
-            
+
             //Calculate distance to subtract
             double toSubtract = 0;
 
@@ -122,63 +132,63 @@ namespace Core.ApplicationServices
             switch (report.KilometerAllowance)
             {
                 case KilometerAllowance.Calculated:
-                {
-                    
-                
-                    //Calculate the driven route
-                    var drivenRoute = _route.GetRoute(report.DriveReportPoints);
-
-                    double drivenDistance = drivenRoute.Length;
-
-                    //Adjust distance based on FourKmRule and if user start and/or ends at home
-                    var correctDistance = drivenDistance - toSubtract;
-
-                    //Set distance to corrected
-                    report.Distance = correctDistance;
-
-                    //Save RouteGeometry
-                    report.RouteGeometry = drivenRoute.GeoPoints;
-
-                    break;
-                }
-                case KilometerAllowance.CalculatedWithoutExtraDistance:
-                {
-                    
-                
-                    //Calculate the driven route
-                    var drivenRoute = _route.GetRoute(report.DriveReportPoints);
-
-                    report.Distance = drivenRoute.Length;
-
-                    if (report.FourKmRule)
                     {
-                        report.Distance -= 4;
+
+
+                        //Calculate the driven route
+                        var drivenRoute = _route.GetRoute(report.DriveReportPoints);
+
+                        double drivenDistance = drivenRoute.Length;
+
+                        //Adjust distance based on FourKmRule and if user start and/or ends at home
+                        var correctDistance = drivenDistance - toSubtract;
+
+                        //Set distance to corrected
+                        report.Distance = correctDistance;
+
+                        //Save RouteGeometry
+                        report.RouteGeometry = drivenRoute.GeoPoints;
+
+                        break;
+                    }
+                case KilometerAllowance.CalculatedWithoutExtraDistance:
+                    {
+
+
+                        //Calculate the driven route
+                        var drivenRoute = _route.GetRoute(report.DriveReportPoints);
+
+                        report.Distance = drivenRoute.Length;
+
+                        if (report.FourKmRule)
+                        {
+                            report.Distance -= 4;
+                        }
+
+                        //Save RouteGeometry
+                        report.RouteGeometry = drivenRoute.GeoPoints;
+
+
+                        break;
                     }
 
-                    //Save RouteGeometry
-                    report.RouteGeometry = drivenRoute.GeoPoints;
-
-
-                    break;
-                }
-
                 case KilometerAllowance.Read:
-                { 
-                    //Take distance from report
-                    var manuallyProvidedDrivenDistance = report.Distance;
+                    {
+                        //Take distance from report
+                        var manuallyProvidedDrivenDistance = report.Distance;
 
-                    report.Distance = manuallyProvidedDrivenDistance - toSubtract;
+                        report.Distance = manuallyProvidedDrivenDistance - toSubtract;
 
-                    break;
-                }
+                        break;
+                    }
                 default:
-                {
-                    throw new Exception("No calculation method provided");
-                }
+                    {
+                        throw new Exception("No calculation method provided");
+                    }
             }
 
             //Calculate the actual amount to reimburse
-            
+
             SetAmountToReimburse(report);
 
             return report;
@@ -194,6 +204,6 @@ namespace Core.ApplicationServices
             }
         }
 
-       
+
     }
 }
