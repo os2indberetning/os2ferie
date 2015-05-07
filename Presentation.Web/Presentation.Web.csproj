@@ -382,9 +382,9 @@
     <Content Include="App\Services\RouteContainerResource.js" />
     <Content Include="App\Services\SubstituteResource.js" />
     <Content Include="App\Settings\AddressAddModal.html" />
+    <Content Include="App\Settings\AlternativeAddressController.js" />
     <Content Include="App\Settings\AlternativeWorkAddressTemplate.html" />
     <Content Include="App\Settings\ModalControllers\AddressDeleteModalController.js" />
-    <Content Include="App\Settings\ModalControllers\AlternativeWorkAddressModalController.js" />
     <Content Include="App\Settings\ModalControllers\RouteDeleteModalController.js" />
     <Content Include="App\Settings\AddressDeleteModal.html" />
     <Content Include="App\Settings\RouteDeleteModal.html" />

@@ -62,7 +62,7 @@
                 </div>
             </div>
         </div>
-        <div class="row setting-area">
+        <div ng-controller="AlternativeAddressController" class="row setting-area">
             <div class="col-lg-12">
                 <h3>Afvigende adresser</h3>
                 <label for="">Hjemmeadresse:</label>
@@ -90,16 +90,10 @@
                         </div>
 
                     </div>
-
-
-
-
-
-
                 </div>
                 <div class="seperator"></div>
 
-                <label for="">Arbejdsadresser:</label><br />
+                <label>Arbejdsadresser:</label><br />
                 <div ng-include="'App/Settings/AlternativeWorkAddressTemplate.html'"></div>
             </div>
         </div>

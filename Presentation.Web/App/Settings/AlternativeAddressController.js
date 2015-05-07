@@ -1,9 +1,17 @@
-﻿angular.module("application").controller('AlternativeWorkAddressModalController', ["$scope", "$modalInstance", "SmartAdresseSource", "$rootScope", function ($scope, $modalInstance, SmartAdresseSource, $rootScope) {
+﻿angular.module("application").controller('AlternativeAddressController', ["$scope", "SmartAdresseSource", "$rootScope", function ($scope, SmartAdresseSource, $rootScope) {
 
     $scope.employments = $rootScope.CurrentUser.Employments;
     $scope.Number = Number;
     $scope.toString = toString;
     $scope.replace = String.replace;
+
+
+
+
+
+  
+
+
 
     $scope.SmartAddress = SmartAdresseSource;
 

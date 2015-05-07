@@ -9,12 +9,6 @@
         $scope.newLicensePlateDescription = "";
         $scope.workDistanceOverride = 0;
         $scope.recieveMail = false;
-        $scope.oldAlternativeHomeAddress = "";
-        $scope.oldAlternativeHomeAddressId = 0;
-        $scope.newAlternativeHomeAddress = "";
-        $scope.oldAlternativeWorkAddress = "";
-        $scope.oldAlternativeWorkAddressId = 0;
-        $scope.newAlternativeWorkAddress = "";
         $scope.routes = [];
         $scope.addresses = [];
         $scope.tokens = [];
@@ -47,45 +41,13 @@
                 $scope.licenseplates = data;
             });
 
-            $scope.loadAlternativeHomeAddress();
-            $scope.loadAlternativeWorkAddress();
 
             //NotificationService.AutoFadeNotification("success", "Success", "Person fundet");
         }, function () {
             NotificationService.AutoFadeNotification("danger", "", "Person ikke fundet");
         });
 
-        //Load alternative home address
-        $scope.loadAlternativeHomeAddress = function () {
-            Address.get({ query: "$filter=Type eq Core.DomainModel.PersonalAddressType'AlternativeHome' and PersonId eq " + $scope.currentPerson.Id }, function (data) {
-                if (data.value[0] != undefined) {
-                    $scope.oldAlternativeHomeAddressId = data.value[0].Id;
-                    $scope.oldAlternativeHomeAddress = data.value[0].StreetName + " " + data.value[0].StreetNumber + ", " + data.value[0].ZipCode + " " + data.value[0].Town;
-                    $scope.newAlternativeHomeAddress = $scope.oldAlternativeHomeAddress;
-                } else {
-                    $scope.newAlternativeHomeAddress = "";
-                    $scope.oldAlternativeHomeAddress = "";
-                }
-            }, function () {
-                // Error loading alternative home address.
-            });
-        }
-
-        //Load alternative work address
-        $scope.loadAlternativeWorkAddress = function () {
-            Address.get({ query: "$filter=Type eq Core.DomainModel.PersonalAddressType'AlternativeWork' and PersonId eq " + $scope.currentPerson.Id }, function (data) {
-                if (data.value[0] != undefined) {
-                    $scope.oldAlternativeWorkAddressId = data.value[0].Id;
-                    $scope.oldAlternativeWorkAddress = data.value[0].StreetName + " " + data.value[0].StreetNumber + ", " + data.value[0].ZipCode + " " + data.value[0].Town;
-                    $scope.newAlternativeWorkAddress = $scope.oldAlternativeWorkAddress;
-                } else {
-                    $scope.newAlternativeWorkAddress = "";
-                    $scope.oldAlternativeWorkAddress = "";
-                }
-            }, function () {
-                // Error loading alternative work address.
-            });
-        }
+       
 
         //Funtionalitet til opslag af adresser
         $scope.SmartAddress = SmartAdresseSource;
@@ -152,153 +114,6 @@
                 NotificationService.AutoFadeNotification("danger", "", "Valg om modtagelse af mails blev ikke gemt");
             };
         }
-
-        //Funktionalitet til alternativ hjemmeadresse
-        $scope.saveAlternativeHomeAddress = function () {
-            if ($scope.oldAlternativeHomeAddress == "") { // CREATE IT
-                var result = AddressFormatter.fn($scope.newAlternativeHomeAddress);
-
-                result.Id = $scope.oldAlternativeHomeAddressId;
-                result.PersonId = $scope.currentPerson.Id;
-
-                var newAlternativeHomeAddress = new Address({
-                    Id: result.Id,
-                    PersonId: result.PersonId,
-                    StreetName: result.StreetName,
-                    StreetNumber: result.StreetNumber,
-                    ZipCode: result.ZipCode,
-                    Town: result.Town,
-                    Type: "AlternativeHome",
-                    Latitude: "",
-                    Longitude: ""
-                });
-
-                newAlternativeHomeAddress.$post({}, function (data) {
-                    $scope.updatePersonalAddresses();
-                    $scope.loadAlternativeHomeAddress();
-                    NotificationService.AutoFadeNotification("success", "", "Alternativ hjemmeadresse gemt");
-
-                    // Save HomeWorkOverride as 0 when saving home address.
-                    $scope.workDistanceOverride = 0;
-                    $scope.setHomeWorkOverride();
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "", "Alternativ hjemmeadresse kunne ikke gemmes");
-                });
-
-            } else if ($scope.newAlternativeHomeAddress == "") { // DELETE IT
-                Address.delete({ id: $scope.oldAlternativeHomeAddressId }, function () {
-                    $scope.loadAlternativeHomeAddress();
-                    $scope.updatePersonalAddresses();
-                    NotificationService.AutoFadeNotification("success", "", "Alternativ hjemmeadresse slettet");
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "", "Alternativ hjemmeadresse kunne ikke slettes");
-                });
-
-            } else if ($scope.newAlternativeHomeAddress != $scope.oldAlternativeHomeAddress) { // UPDATE IT                
-                var result = AddressFormatter.fn($scope.newAlternativeHomeAddress);
-
-                result.Id = $scope.oldAlternativeHomeAddressId;
-                result.PersonId = $scope.currentPerson.Id;
-
-                var editedAlternativeHomeAddress = new Address({
-                    Id: result.Id,
-                    PersonId: result.PersonId,
-                    StreetName: result.StreetName,
-                    StreetNumber: result.StreetNumber,
-                    ZipCode: result.ZipCode,
-                    Town: result.Town,
-                    Description: result.Description,
-                    Type: "AlternativeHome"
-                });
-
-                editedAlternativeHomeAddress.$patch({ id: result.Id }, function (data) {
-                    $scope.loadAlternativeHomeAddress();
-                    $scope.updatePersonalAddresses();
-                    NotificationService.AutoFadeNotification("success", "", "Alternativ hjemmeadresse opdateret");
-
-                    // Save HomeWorkOverride as 0 when saving home address.
-                    $scope.workDistanceOverride = 0;
-                    $scope.setHomeWorkOverride();
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "", "Alternativ hjemmeadresse blev ikke opdateret");
-                });
-            }
-        }
-
-        //Funktionalitet til alternativ arbejdsadresse
-        $scope.saveAlternativeWorkAddress = function () {
-            if ($scope.oldAlternativeWorkAddress == "") { // CREATE IT
-                var result = AddressFormatter.fn($scope.newAlternativeWorkAddress);
-
-                result.Id = $scope.oldAlternativeWorkAddressId;
-                result.PersonId = $scope.currentPerson.Id;
-
-                var newAlternativeWorkAddress = new Address({
-                    Id: result.Id,
-                    PersonId: result.PersonId,
-                    StreetName: result.StreetName,
-                    StreetNumber: result.StreetNumber,
-                    ZipCode: result.ZipCode,
-                    Town: result.Town,
-                    Type: "AlternativeWork",
-                    Latitude: "",
-                    Longitude: ""
-                });
-
-                newAlternativeWorkAddress.$post({}, function (data) {
-                    $scope.loadAlternativeWorkAddress();
-                    $scope.updatePersonalAddresses();
-                    NotificationService.AutoFadeNotification("success", "", "Alternativ arbejdsadresse gemt");
-
-                    // Save HomeWorkOverride as 0 when saving work address.
-                    $scope.workDistanceOverride = 0;
-                    $scope.setHomeWorkOverride();
-
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "", "Alternativ arbejdsadresse kunne ikke gemmes");
-                });
-
-            } else if ($scope.newAlternativeWorkAddress == "") { // DELETE IT
-                Address.delete({ id: $scope.oldAlternativeWorkAddressId }, function () {
-                    $scope.loadAlternativeWorkAddress();
-                    $scope.updatePersonalAddresses();
-                    NotificationService.AutoFadeNotification("success", "", "Alternativ arbejdsadresse slettet");
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "", "Alternativ arbejdsadresse kunne ikke slettes");
-                });
-
-            } else if ($scope.newAlternativeWorkAddress != $scope.oldAlternativeWorkAddress) { // UPDATE IT
-                var result = AddressFormatter.fn($scope.newAlternativeWorkAddress);
-
-                result.Id = $scope.oldAlternativeWorkAddressId;
-                result.PersonId = $scope.currentPerson.Id;
-
-                var editedAlternativeWorkAddress = new Address({
-                    Id: result.Id,
-                    PersonId: result.PersonId,
-                    StreetName: result.StreetName,
-                    StreetNumber: result.StreetNumber,
-                    ZipCode: result.ZipCode,
-                    Town: result.Town,
-                    Description: result.Description,
-                    Type: "AlternativeWork"
-                });
-
-                editedAlternativeWorkAddress.$patch({ id: result.Id }, function (data) {
-                    $scope.loadAlternativeWorkAddress();
-                    $scope.updatePersonalAddresses();
-                    NotificationService.AutoFadeNotification("success", "", "Alternativ hjemmeadresse opdateret");
-
-                    // Save HomeWorkOverride as 0 when saving work address.
-                    $scope.workDistanceOverride = 0;
-                    $scope.setHomeWorkOverride();
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "", "Alternativ hjemmeadresse blev ikke opdateret");
-                });
-            }
-        }
-
-        
 
         $scope.loadGrids = function (id) {
             $scope.personalRoutes = {
