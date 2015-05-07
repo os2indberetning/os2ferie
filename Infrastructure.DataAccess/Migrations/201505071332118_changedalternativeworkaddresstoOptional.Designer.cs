@@ -7,13 +7,13 @@ namespace Infrastructure.DataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.9.6")]
-    public sealed partial class changedAlternativeWorkAddressOnEmploymentToWorkAddress : IMigrationMetadata
+    public sealed partial class changedalternativeworkaddresstoOptional : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(changedAlternativeWorkAddressOnEmploymentToWorkAddress));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(changedalternativeworkaddresstoOptional));
         
         string IMigrationMetadata.Id
         {
-            get { return "201505060654513_changedAlternativeWorkAddressOnEmploymentToWorkAddress"; }
+            get { return "201505071332118_changedalternativeworkaddresstoOptional"; }
         }
         
         string IMigrationMetadata.Source

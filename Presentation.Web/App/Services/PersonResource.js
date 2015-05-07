@@ -63,7 +63,7 @@
             }
         },
         "GetCurrentUser" : {
-            url: "/odata/Person/Service.GetCurrentUser?$expand=Employments($expand=OrgUnit($expand=Address))",
+            url: "/odata/Person/Service.GetCurrentUser?$expand=Employments($expand=AlternativeWorkAddress,OrgUnit($expand=Address))",
             method: "GET",
             transformResponse: function (data) {
                 var res = angular.fromJson(data);

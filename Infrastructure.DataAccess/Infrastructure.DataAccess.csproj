@@ -233,13 +233,21 @@
     <Compile Include="Migrations\201505060633461_AddedHomeWorkDistanceToEmployment.Designer.cs">
       <DependentUpon>201505060633461_AddedHomeWorkDistanceToEmployment.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201505060642307_addedAlternativeWorkAddressToEmployment.cs" />
-    <Compile Include="Migrations\201505060642307_addedAlternativeWorkAddressToEmployment.Designer.cs">
-      <DependentUpon>201505060642307_addedAlternativeWorkAddressToEmployment.cs</DependentUpon>
+    <Compile Include="Migrations\201505070847142_d.cs" />
+    <Compile Include="Migrations\201505070847142_d.Designer.cs">
+      <DependentUpon>201505070847142_d.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201505060654513_changedAlternativeWorkAddressOnEmploymentToWorkAddress.cs" />
-    <Compile Include="Migrations\201505060654513_changedAlternativeWorkAddressOnEmploymentToWorkAddress.Designer.cs">
-      <DependentUpon>201505060654513_changedAlternativeWorkAddressOnEmploymentToWorkAddress.cs</DependentUpon>
+    <Compile Include="Migrations\201505070857330_d1.cs" />
+    <Compile Include="Migrations\201505070857330_d1.Designer.cs">
+      <DependentUpon>201505070857330_d1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505071325190_changedAlternativeWorkAddressOnEmploymentToPersonalAddress.cs" />
+    <Compile Include="Migrations\201505071325190_changedAlternativeWorkAddressOnEmploymentToPersonalAddress.Designer.cs">
+      <DependentUpon>201505071325190_changedAlternativeWorkAddressOnEmploymentToPersonalAddress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505071332118_changedalternativeworkaddresstoOptional.cs" />
+    <Compile Include="Migrations\201505071332118_changedalternativeworkaddresstoOptional.Designer.cs">
+      <DependentUpon>201505071332118_changedalternativeworkaddresstoOptional.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
@@ -385,11 +393,17 @@
     <EmbeddedResource Include="Migrations\201505060633461_AddedHomeWorkDistanceToEmployment.resx">
       <DependentUpon>201505060633461_AddedHomeWorkDistanceToEmployment.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505060642307_addedAlternativeWorkAddressToEmployment.resx">
-      <DependentUpon>201505060642307_addedAlternativeWorkAddressToEmployment.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201505070847142_d.resx">
+      <DependentUpon>201505070847142_d.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505060654513_changedAlternativeWorkAddressOnEmploymentToWorkAddress.resx">
-      <DependentUpon>201505060654513_changedAlternativeWorkAddressOnEmploymentToWorkAddress.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201505070857330_d1.resx">
+      <DependentUpon>201505070857330_d1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505071325190_changedAlternativeWorkAddressOnEmploymentToPersonalAddress.resx">
+      <DependentUpon>201505071325190_changedAlternativeWorkAddressOnEmploymentToPersonalAddress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505071332118_changedalternativeworkaddresstoOptional.resx">
+      <DependentUpon>201505071332118_changedalternativeworkaddresstoOptional.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
