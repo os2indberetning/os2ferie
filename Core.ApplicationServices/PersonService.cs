@@ -62,12 +62,13 @@ namespace Core.ApplicationServices
 
         public virtual PersonalAddress GetHomeAddress(Person person)
         {
-            var hasAlternative = _addressRepo.AsQueryable()
+            var alternative = _addressRepo.AsQueryable()
                     .FirstOrDefault(x => x.PersonId == person.Id && x.Type == PersonalAddressType.AlternativeHome);
 
-            if (hasAlternative != null)
+            if (alternative != null)
             {
-                return hasAlternative;
+                AddCoordinatesToAddressIfNonExisting(alternative);
+                return alternative;
             }
 
             var home = _addressRepo.AsQueryable()
