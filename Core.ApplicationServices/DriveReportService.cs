@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web.OData;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Impl;
@@ -195,7 +196,39 @@ namespace Core.ApplicationServices
             var res = repo.ToList();
             foreach (var driveReport in res)
             {
+                var person = driveReport.Person;
+
+                //Fetch personal approver for the person (Person and Leader of the substitute is the same)
+                var personalApprover =
+                    _substituteRepository.AsQueryable()
+                        .SingleOrDefault(
+                            s =>
+                                s.PersonId != s.LeaderId && s.PersonId == person.PersonId &&
+                                s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
+                if (personalApprover != null)
+                {
+                    SetResponsibleLeaderOnReport(driveReport, personalApprover.Sub);
+                    continue;
+                }
+
+                //Find an org unit where the person is not the leader, and then find the leader of that org unit to attach to the drive report
                 var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == driveReport.Employment.OrgUnitId);
+                var leaderOfOrgUnit =
+                    _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader);
+
+                if (leaderOfOrgUnit == null || orgUnit == null)
+                {
+                    continue;
+                }
+                while (leaderOfOrgUnit.PersonId == person.Id)
+                {
+                    orgUnit = orgUnit.Parent;
+                    leaderOfOrgUnit = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader);
+                    if (leaderOfOrgUnit == null)
+                    {
+                        break;
+                    }
+                }
 
                 if (orgUnit != null)
                 {
@@ -207,33 +240,39 @@ namespace Core.ApplicationServices
                         if (sub != null)
                         {
                             // Attach sub if one exists.
-                            driveReport.ResponsibleLeader = sub.Sub;
-                            driveReport.ResponsibleLeader.FullName = sub.Sub.FirstName;
-                            if (!string.IsNullOrEmpty(sub.Sub.MiddleName))
-                            {
-                                driveReport.ResponsibleLeader.FullName += " " + sub.Sub.MiddleName;
-                            }
-                            driveReport.ResponsibleLeader.FullName += " " + sub.Sub.LastName;
-                            driveReport.ResponsibleLeader.FullName += " [" + sub.Sub.Initials + "]";
+                            SetResponsibleLeaderOnReport(driveReport, sub.Sub);
                         }
                         else
                         {
                             // Attach leader if no sub exists.
-                            driveReport.ResponsibleLeader = leaderEmpl.Person;
-
-                            driveReport.ResponsibleLeader.FullName = leaderEmpl.Person.FirstName;
-                            if (!string.IsNullOrEmpty(leaderEmpl.Person.MiddleName))
-                            {
-                                driveReport.ResponsibleLeader.FullName += " " + leaderEmpl.Person.MiddleName;
-                            }
-                            driveReport.ResponsibleLeader.FullName += " " + leaderEmpl.Person.LastName;
-                            driveReport.ResponsibleLeader.FullName += " [" + leaderEmpl.Person.Initials + "]";
+                            SetResponsibleLeaderOnReport(driveReport, leaderEmpl.Person);
                         }
                     }
                 }
+
+                //Indicate drivereports where we could not find a leader
+                SetResponsibleLeaderOnReport(driveReport, new Person()
+                {
+                    FirstName = "Var ikke i stand til at finde godkendede leder",
+                    LastName = "",
+                    Initials = "FEJL"
+                });
             }
 
             return res.AsQueryable();
+        }
+
+        private void SetResponsibleLeaderOnReport(DriveReport driveReport, Person person)
+        {
+            driveReport.ResponsibleLeader = person;
+
+            driveReport.ResponsibleLeader.FullName = person.FirstName;
+            if (!string.IsNullOrEmpty(person.MiddleName))
+            {
+                driveReport.ResponsibleLeader.FullName += " " + person.MiddleName;
+            }
+            driveReport.ResponsibleLeader.FullName += " " + person.LastName;
+            driveReport.ResponsibleLeader.FullName += " [" + person.Initials + "]";
         }
 
         public IQueryable<DriveReport> FilterByLeader(IQueryable<DriveReport> repo, int leaderId, bool getReportsWhereSubExists = false)

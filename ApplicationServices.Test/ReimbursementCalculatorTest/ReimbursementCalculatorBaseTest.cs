@@ -6,6 +6,7 @@ using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
 using Core.DomainServices.Ínterfaces;
+using Infrastructure.DataAccess;
 using NSubstitute;
 using Substitute = NSubstitute.Substitute;
 
@@ -35,19 +36,6 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
                     Town = "Aarhus"
                 });
 
-            personService.GetWorkAddress(new Person()).ReturnsForAnyArgs(info =>
-                new PersonalAddress()
-                {
-                    Description = "TestWorkAddress",
-                    Id = 2,
-                    Type = PersonalAddressType.Work,
-                    PersonId = 1,
-                    StreetName = "Katrinebjergvej",
-                    StreetNumber = "95",
-                    ZipCode = 8200,
-                    Town = "Aarhus"
-                });
-
             return personService;
         }
 
@@ -64,7 +52,6 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
                     MiddleName = "Overgaard",
                     LastName = "Jensen",
                     DistanceFromHomeToBorder = 2,
-                    WorkDistanceOverride = 20
                 }
             }.AsQueryable());
 
@@ -72,8 +59,8 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
         } 
 
         protected IReimbursementCalculator GetCalculator()
-        {
-            return new ReimbursementCalculator(new RouterMock(), GetPersonServiceMock(), GetPersonRepository());
+        { //TODO changed to make the code compile
+            return new ReimbursementCalculator(new RouterMock(), GetPersonServiceMock(), GetPersonRepository(), new GenericRepository<Employment>(new DataContext()));
         }
 
         protected DriveReport GetDriveReport()
