@@ -1,6 +1,7 @@
 ﻿angular.module("application").controller('AlternativeAddressController', ["$scope", "SmartAdresseSource", "$rootScope", "$timeout", "PersonEmployments", "AddressFormatter", "Address", "NotificationService", function ($scope, SmartAdresseSource, $rootScope, $timeout, PersonEmployments, AddressFormatter, Address, NotificationService) {
 
-    $scope.employments = $rootScope.CurrentUser.Employments;
+    $scope.employments = $rootScope.CurrentUser.Employments
+    debugger;
     $scope.Number = Number;
     $scope.toString = toString;
     $scope.replace = String.replace;
@@ -36,7 +37,6 @@
     }
 
     var handleSaveAlternativeWork = function (index) {
-        debugger;
         // Both fields empty. Clear.
         if (!isAddressSet(index) && (!isDistanceSet(index) || $scope.alternativeWorkDistances[index] == 0)) {
             $scope.clearWorkClicked(index);
@@ -52,7 +52,7 @@
                     Town: addr.Town,
                     ZipCode: addr.ZipCode,
                     PersonId: $rootScope.CurrentUser.Id,
-                    Description: "Alternativ " + $scope.employments[index].LongDescription,
+                    Description: "Afvigende " + $scope.employments[index].OrgUnit.LongDescription,
                     Longitude: "",
                     Latitude: "",
                     Type: "AlternativeWork"
@@ -73,6 +73,8 @@
                     StreetNumber: addr.StreetNumber,
                     Town: addr.Town,
                     ZipCode: addr.ZipCode,
+                    Longitude: "",
+                    Latitude: "",
                 }).$promise.then(function () {
                     NotificationService.AutoFadeNotification("success", "", "Afvigende arbejdsadresse redigeret.");
                 });
@@ -103,16 +105,12 @@
         }).$promise.then(function () {
             $scope.alternativeWorkDistances[index] = 0;
             $scope.alternativeWorkAddresses[index] = "";
-            if ($scope.employments[index].AlternativeWorkAddress != null) {
-                Address.delete({ id: $scope.employments[index].AlternativeWorkAddressId }).$promise.then(function() {
-                    $scope.employments[index].AlternativeWorkAddress = null;
-                    $scope.employments[index].AlternativeWorkAddressId = null;
-                    $scope.alternativeWorkAddresses[index] = "";
-                    NotificationService.AutoFadeNotification("success", "", "Afvigende afstand og adresse slettet.");
-                });
-            } else {
-                NotificationService.AutoFadeNotification("success", "", "Afvigende afstand og adresse slettet.");
+            if ($scope.employments[index].AlternativeWorkAddressId != null) {
+                Address.delete({ id: $scope.employments[index].AlternativeWorkAddressId });
             }
+            $scope.employments[index].AlternativeWorkAddress = null;
+            $scope.employments[index].AlternativeWorkAddressId = null;
+            NotificationService.AutoFadeNotification("success", "", "Afvigende afstand og adresse slettet.");
         });
 
 
