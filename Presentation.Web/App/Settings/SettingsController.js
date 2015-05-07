@@ -291,8 +291,6 @@
                             }
                             else if (data.Type == "Home") {
                                 return "Hjemmeadresse";
-                            } else if (data.Type == "AlternativeWork") {
-                                return "Afvigende arbejdsadresse";
                             } else if (data.Type == "AlternativeHome") {
                                 return "Afvigende hjemmeadresse";
                             } else return data.Description;
@@ -317,7 +315,7 @@
             };
         }
 
-        $scope.loadGrids(1);
+        $scope.loadGrids($rootScope.CurrentUser.Id);
 
         $scope.updatePersonalAddresses = function () {
             $scope.gridContainer.personalAddressesGrid.dataSource.transport.options.read.url = "odata/PersonalAddresses()?$filter=PersonId eq " + $scope.currentPerson.Id;

@@ -86,7 +86,8 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Person> delta)
         {
-            return CurrentUser.IsAdmin ? base.Patch(key, delta) : StatusCode(HttpStatusCode.Forbidden);
+            var person = Repo.AsQueryable().Single(x => x.Id == key);
+            return CurrentUser.IsAdmin || CurrentUser.Id == person.Id ? base.Patch(key, delta) : StatusCode(HttpStatusCode.Forbidden);
         }
 
         // DELETE: odata/Person(5)

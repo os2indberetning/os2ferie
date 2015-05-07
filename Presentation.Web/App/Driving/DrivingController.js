@@ -261,6 +261,7 @@
             } else {
                 setIsRoute(index);
             }
+            $scope.validateInput();
         }
 
         $scope.isAddressNameSet = function (address) {
