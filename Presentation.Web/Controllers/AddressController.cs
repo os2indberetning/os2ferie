@@ -27,7 +27,8 @@ namespace OS2Indberetning.Controllers
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         //GET: odata/Addresses
-        public AddressesController(IGenericRepository<Address> repository, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo) : base(repository, personRepo)
+        public AddressesController(IGenericRepository<Address> repository, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo)
+            : base(repository, personRepo)
         {
             _employmentRepo = employmentRepo;
         }
@@ -85,15 +86,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(Address Address)
         {
-            if (Address is Point || Address is DriveReportPoint)
-            {
-                return base.Post(Address);
-            }
-            if (CurrentUser.IsAdmin)
-            {
-                return base.Post(Address);
-            }
-            return StatusCode(HttpStatusCode.Forbidden);
+            return base.Post(Address);
         }
 
         //PATCH: odata/Addresses(5)
@@ -106,15 +99,7 @@ namespace OS2Indberetning.Controllers
             {
                 return NotFound();
             }
-            if (addr is Point || addr is DriveReportPoint)
-            {
-                return base.Patch(key, delta);
-            }
-            if (CurrentUser.IsAdmin)
-            {
-                return base.Patch(key, delta);
-            }
-            return StatusCode(HttpStatusCode.Forbidden);
+            return base.Patch(key, delta);
 
         }
 
@@ -126,15 +111,7 @@ namespace OS2Indberetning.Controllers
             {
                 return NotFound();
             }
-            if (addr is Point || addr is DriveReportPoint)
-            {
-                return base.Delete(key);
-            }
-            if (CurrentUser.IsAdmin)
-            {
-                return base.Delete(key);
-            }
-            return StatusCode(HttpStatusCode.Forbidden);
+            return base.Delete(key);
         }
 
         [EnableQuery]

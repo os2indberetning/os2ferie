@@ -94,8 +94,13 @@ namespace Core.ApplicationServices
                 }
                 else
                 {
-                    var workAddress = employment.AlternativeWorkAddress;
-                    workAddress = workAddress ?? employment.OrgUnit.Address;
+                    var workAddress = employment.AlternativeWorkAddress ?? new PersonalAddress()
+                    {
+                        StreetName = employment.OrgUnit.Address.StreetName,
+                        StreetNumber = employment.OrgUnit.Address.StreetNumber,
+                        ZipCode = employment.OrgUnit.Address.ZipCode,
+                        Town = employment.OrgUnit.Address.Town
+                    };
                     if (homeAddress != null && workAddress != null)
                     {
                         employment.HomeWorkDistance = _route.GetRoute(new List<Address>() { homeAddress, workAddress }).Length;

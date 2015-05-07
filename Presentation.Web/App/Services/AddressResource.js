@@ -54,7 +54,7 @@
             method: "POST",
             url: "/odata/Addresses/Service.SetCoordinatesOnAddress",
             isArray: true,
-            transformResponse: function(data) {
+            transformResponse: function (data) {
                 var res = angular.fromJson(data);
                 if (res.error == undefined) {
                     return res.value;
@@ -100,7 +100,7 @@
             method: "GET",
             url: "/odata/Addresses/Service.GetMapStart",
             isArray: true,
-            transformResponse: function(data) {
+            transformResponse: function (data) {
                 var res = angular.fromJson(data);
                 if (res.error == undefined) {
                     var resArray = [];

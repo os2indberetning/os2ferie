@@ -132,7 +132,7 @@ namespace OS2Indberetning.Controllers
 
         protected IHttpActionResult Patch(int key, Delta<T> delta)
         {
-            Validate(delta.GetEntity());
+            //Validate(delta.GetEntity());
 
             if (!ModelState.IsValid)
             {

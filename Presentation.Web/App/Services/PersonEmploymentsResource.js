@@ -22,6 +22,11 @@
                 });
                 return res;
             }
+        },
+        "patchEmployment": {
+            method: "PATCH",
+            isArray: false,
+            url: "/odata/Employments(:id)"
         }
     });
 }]);

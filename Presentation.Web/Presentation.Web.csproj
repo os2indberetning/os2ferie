@@ -262,6 +262,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MailNotificationsController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\EmploymentController.cs" />
     <Compile Include="Controllers\RateTypeController.cs" />
     <Compile Include="Controllers\RatesController.cs" />
     <Compile Include="Controllers\DriveReportsController.cs" />
