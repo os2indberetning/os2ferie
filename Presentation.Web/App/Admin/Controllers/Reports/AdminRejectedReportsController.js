@@ -1,12 +1,10 @@
 
 angular.module("application").controller("AdminRejectedReportsController",
-    ["$scope", "$timeout", "$modal",
-    function ($scope, $timeout, $modal) {
+    ["$scope", "$rootScope", "$timeout", "$modal",
+    function ($scope, $rootScope, $timeout, $modal) {
 
-
-
-       // Hardcoded personid until we can get current user from their system.
-       var personId = 1;
+        // Set personId. The value on $rootScope is set in resolve in application.js
+        var personId = $rootScope.CurrentUser.Id;
 
 
        $scope.getEndOfDayStamp = function (d) {

@@ -1,10 +1,9 @@
-﻿angular.module("application").controller("AdminPendingReportsController", [
-   "$scope", "$timeout", "$modal", function ($scope, $timeout, $modal) {
+﻿angular.module("application").controller("AdminPendingReportsController", 
+    ["$scope", "$rootScope", "$timeout", "$modal",
+    function ($scope, $rootScope, $timeout, $modal) {
 
-
-
-       // Hardcoded personid == 1 until we can get current user from their system.
-       var personId = 1;
+       // Set personId. The value on $rootScope is set in resolve in application.js
+       var personId = $rootScope.CurrentUser.Id;
 
        $scope.getEndOfDayStamp = function (d) {
            var m = moment(d);

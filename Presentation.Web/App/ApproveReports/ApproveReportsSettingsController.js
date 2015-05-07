@@ -1,12 +1,13 @@
 ﻿angular.module("application").controller("ApproveReportsSettingsController", [
-   "$scope", "OrgUnit", "Person", "$modal", function ($scope, OrgUnit, Person, $modal) {
+   "$scope", "$rootScope", "OrgUnit", "Person", "$modal", function ($scope, $rootScope, OrgUnit, Person, $modal) {
        $scope.collapseSubtitute = false;
        $scope.collapsePersonalApprover = false;
        $scope.orgUnits = [];
        $scope.persons = [];
        $scope.currentPerson = {};
 
-       var personId = 1;
+       // Set personId. The value on $rootScope is set in resolve in application.js
+       var personId = $rootScope.CurrentUser.Id;
 
        Person.get({ id: personId }, function (data) {
            $scope.currentPerson = data;
