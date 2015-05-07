@@ -1,8 +1,8 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Core.DomainModel;
+using Presentation.Web.Test.Controllers;
 
-namespace Presentation.Web.Test.Controllers.DriveReports
+namespace Presentation.Web.Test
 {
     public class OrgUnitRepositoryMock : GenericRepositoryMock<OrgUnit>
     {

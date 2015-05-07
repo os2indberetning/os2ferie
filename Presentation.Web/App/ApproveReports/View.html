@@ -6,7 +6,7 @@
         </div>
         <div class="col-xs-6 col-lg-2 margin-bottom-10">
             <label>Sorter efter organisation</label>
-            <input type="text" typeahead-on-select="orgUnitChanged($item)" ng-change="orgUnitChanged()" typeahead-editable="true" ng-model="orgUnit.chosenUnit" placeholder="Indtast beskrivelse" typeahead="orgUnit.ShortDescription for orgUnit in orgUnits | filter:$viewValue" class="form-control" />
+            <input type="text" typeahead-on-select="orgUnitChanged($item)" ng-change="orgUnitChanged()" typeahead-editable="true" ng-model="orgUnit.chosenUnit" placeholder="Indtast beskrivelse" typeahead="orgUnit.LongDescription for orgUnit in orgUnits | filter:$viewValue" class="form-control" />
         </div>
         <div class="col-xs-6 col-lg-2">
             <label>Kørselsdato fra</label>

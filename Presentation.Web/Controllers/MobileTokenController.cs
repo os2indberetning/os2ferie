@@ -12,14 +12,14 @@ namespace OS2Indberetning.Controllers
 {
     public class MobileTokenController : BaseController<MobileToken>
     {
-        private IMobileTokenService _tokenService;
+        private readonly IMobileTokenService _tokenService;
 
-        public MobileTokenController(IGenericRepository<MobileToken> repo, IMobileTokenService tokenService)
-            : base(repo)
+        public MobileTokenController(IGenericRepository<MobileToken> repo, IMobileTokenService tokenService, IGenericRepository<Person> personRepo)
+            : base(repo, personRepo)
         {
             _tokenService = tokenService;
         }
-        
+
         //GET: odata/MobileTokens
         [EnableQuery]
         public IQueryable<MobileToken> Get(ODataQueryOptions<MobileToken> queryOptions)
@@ -43,7 +43,11 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(MobileToken mobileToken)
         {
-            return Created(_tokenService.Create(mobileToken));
+            if (CurrentUser.Id.Equals(mobileToken.PersonId))
+            {
+                return Created(_tokenService.Create(mobileToken));
+            }
+            return StatusCode(HttpStatusCode.Forbidden);
         }
 
         //PATCH: odata/MobileTokens(5)
@@ -57,7 +61,7 @@ namespace OS2Indberetning.Controllers
         //DELETE: odata/MobileTokens(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            return CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).PersonId) ? base.Delete(key) : Unauthorized();
         }
     }
 }

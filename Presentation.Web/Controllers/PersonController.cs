@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -20,7 +22,7 @@ namespace OS2Indberetning.Controllers
         private readonly IGenericRepository<LicensePlate> _licensePlateRepo = new GenericRepository<LicensePlate>(new DataContext());
 
         public PersonController(IGenericRepository<Person> repo, IPersonService personService, IGenericRepository<Employment> employmentRepo, IGenericRepository<LicensePlate> licensePlateRepo)
-            : base(repo)
+            : base(repo, repo)
         {
             _person = personService;
             _employmentRepo = employmentRepo;
@@ -29,12 +31,23 @@ namespace OS2Indberetning.Controllers
 
         // GET: odata/Person
         [EnableQuery]
-        public IQueryable<Person> GetPerson(ODataQueryOptions<Person> queryOptions)
+        public IHttpActionResult GetPerson(ODataQueryOptions<Person> queryOptions)
         {
             var res = GetQueryable(queryOptions);
             _person.ScrubCprFromPersons(res);
             _person.AddFullName(res);
-            return res;
+            _person.AddHomeWorkDistanceToEmployments(res);
+            return Ok(res);
+        }
+
+        [EnableQuery(MaxExpansionDepth = 4)]
+        public Person GetCurrentUser()
+        {
+            var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(CurrentUser.Id));
+            CurrentUser.Employments = employments.ToList();
+            _person.AddHomeWorkDistanceToEmployments(CurrentUser);
+            CurrentUser.FullName = CurrentUser.FirstName + " " + CurrentUser.LastName + " [" + CurrentUser.Initials + "]";
+            return CurrentUser;
         }
 
         //GET: odata/Person(5)
@@ -44,9 +57,8 @@ namespace OS2Indberetning.Controllers
             {
                 var cprScrubbed = _person.ScrubCprFromPersons(GetQueryable(key, queryOptions));
                 _person.AddFullName(cprScrubbed);
+                _person.AddHomeWorkDistanceToEmployments(cprScrubbed);
                 var res = cprScrubbed.ToList();
-
-                res[0].DistanceFromHomeToWork = _person.GetDistanceFromHomeToWork(res[0]);
 
                 return res.AsQueryable();
             }
@@ -66,7 +78,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(Person person)
         {
-            return base.Post(person);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         // PATCH: odata/Person(5)
@@ -74,21 +86,27 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Person> delta)
         {
-            return base.Patch(key, delta);
+            return CurrentUser.IsAdmin ? base.Patch(key, delta) : StatusCode(HttpStatusCode.Forbidden);
         }
 
         // DELETE: odata/Person(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         // GET odata/Person(5)/Employments
-        public IQueryable<Employment> GetEmployments([FromODataUri] int key)
+        public IHttpActionResult GetEmployments([FromODataUri] int key)
         {
-            var result = _employmentRepo.AsQueryable().Where(x => x.PersonId == key);
+            var person = Repo.AsQueryable().FirstOrDefault(x => x.Id.Equals(key));
+            if (person == null)
+            {
+                return BadRequest("Der findes ingen person med id " + key);
+            }
+            person = _person.AddHomeWorkDistanceToEmployments(person);
 
-            return result.AsQueryable();
+
+            return Ok(person.Employments);
         }
 
         // GET: odata/Person(5)/Service.HasLicensePlate

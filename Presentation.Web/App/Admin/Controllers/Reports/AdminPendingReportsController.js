@@ -92,7 +92,7 @@
                field: "FullName",
                title: "Medarbejder"
            }, {
-               field: "Employment.OrgUnit.ShortDescription",
+               field: "Employment.OrgUnit.LongDescription",
                title: "Organisationsenhed"
            }, {
                field: "DriveDateTimestamp",

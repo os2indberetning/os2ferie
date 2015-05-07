@@ -9,7 +9,7 @@ using DBUpdater.Models;
 
 namespace DBUpdater
 {
-    public class SyddjursDataProvider : IDBUpdaterDataProvider
+    public class SyddjursDataProvider : IDbUpdaterDataProvider
     {
         public IQueryable<Employee> GetEmployeesAsQueryable()
         {

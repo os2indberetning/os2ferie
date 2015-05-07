@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -14,19 +15,19 @@ namespace OS2Indberetning.Controllers
     {
 
         //GET: odata/PersonalAddresses
-        public PersonalAddressesController(IGenericRepository<PersonalAddress> repository) : base(repository) { }
+        public PersonalAddressesController(IGenericRepository<PersonalAddress> repository, IGenericRepository<Person> personRepo) : base(repository, personRepo) { }
 
         [EnableQuery]
-        public IQueryable<PersonalAddress> Get(ODataQueryOptions<PersonalAddress> queryOptions)
+        public IHttpActionResult Get(ODataQueryOptions<PersonalAddress> queryOptions)
         {
-            var res = GetQueryable(queryOptions);
-            return res;
+            return Ok(GetQueryable(queryOptions));
         }
 
         //GET: odata/PersonalAddresses(5)
-        public IQueryable<PersonalAddress> Get([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
+        public IHttpActionResult Get([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
         {
-            return GetQueryable(key, queryOptions);
+            return Ok(GetQueryable(key, queryOptions));
+
         }
 
         //PUT: odata/PersonalAddresses(5)
@@ -39,6 +40,11 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(PersonalAddress personalAddress)
         {
+            if (!CurrentUser.Id.Equals(personalAddress.PersonId))
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
             var coordinates = NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>();
             var result = coordinates.GetAddressCoordinates(personalAddress);
             personalAddress.Latitude = result.Latitude;
@@ -51,24 +57,33 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<PersonalAddress> delta)
         {
-            return base.Patch(key, delta);
+            return CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).PersonId) || CurrentUser.IsAdmin ? base.Patch(key, delta) : Unauthorized();
         }
 
         //DELETE: odata/PersonalAddresses(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            return CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).PersonId) || CurrentUser.IsAdmin ? base.Delete(key) : Unauthorized();
         }
 
         //GET odata/PersonalAddresses(5)/GetAlternativeHome
-        public IQueryable<PersonalAddress> GetAlternativeHome([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
+        public IHttpActionResult GetAlternativeHome([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
         {
-            return GetQueryable(queryOptions).Where(x => x.PersonId == key && x.Type == PersonalAddressType.AlternativeHome);
+            if (!CurrentUser.Id.Equals(key) && !CurrentUser.IsAdmin)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+            return Ok(GetQueryable(queryOptions).Where(x => x.PersonId == key && x.Type == PersonalAddressType.AlternativeHome));
         }
 
         //GET odata/PersonalAddresses/Service.GetAlternativeHome?personId=1
-        public IQueryable<PersonalAddress> GetHome(int personId)
+        public IHttpActionResult GetHome(int personId)
         {
+            if (!CurrentUser.Id.Equals(personId) && !CurrentUser.IsAdmin)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
             var addresses =
                 Repo.AsQueryable()
                     .Where(
@@ -84,13 +99,18 @@ namespace OS2Indberetning.Controllers
                     : addresses.First(x => x.Type == PersonalAddressType.Home)
             };
 
-            return res.AsQueryable();
+            return Ok(res.AsQueryable());
         }
 
         //GET odata/PersonalAddresses(5)/GetAlternativeWork
-        public IQueryable<PersonalAddress> GetAlternativeWork([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
+        public IHttpActionResult GetAlternativeWork([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
         {
-            return GetQueryable(queryOptions).Where(x => x.PersonId == key && x.Type == PersonalAddressType.AlternativeWork);
+            if (!CurrentUser.Id.Equals(key) && !CurrentUser.IsAdmin)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
+            return Ok(GetQueryable(queryOptions).Where(x => x.PersonId == key && x.Type == PersonalAddressType.AlternativeWork));
         }
     }
 }

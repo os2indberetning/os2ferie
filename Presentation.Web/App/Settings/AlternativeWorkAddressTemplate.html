@@ -1,0 +1,32 @@
+﻿<div ng-repeat="empl in employments" class="margin-right-15" style="padding-bottom: 10px; border-bottom: 1px solid #e5e5e5;">
+    <div class="row margin-bottom-10">
+        <div class="col-xs-12">
+            <h4 class="inline">{{empl.Position + " - " + empl.OrgUnit.LongDescription}} </h4>{{"(" + empl.OrgUnit.Address.StreetName + " " + empl.OrgUnit.Address.StreetNumber + ", " + empl.OrgUnit.Address.ZipCode  + " " + empl.OrgUnit.Address.Town + " - " + Number(empl.HomeWorkDistance).toFixed(2).toString().replace(".",",") + " km)"}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-7">
+            Afvigende adresse
+        </div>
+        <div class="col-xs-4">
+            Afvigende km <span class="info-popup" popover="Hvis systemet beregner en anden afstand end den du egentlig kører, kan du her indtaste en afvigende afstand mellem bopæl og arbejdsplads. HUSK! Denne afvigende afstand også er dén du skal indberette til rubrik 51 på din forskudsopgørelse ved Skat." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-7">
+            <input type="text" class="form-control" />
+        </div>
+        <div class="col-xs-2">
+            <input type="text" class="form-control" />
+        </div>
+        <div class="col-xs-1"></div>
+        <div class="col-xs-1">
+            <button class="btn btn-danger">Ryd</button>
+        </div>
+        <div class="col-xs-1">
+            <button class="btn btn-success">Gem</button>
+        </div>
+
+    </div>
+</div>
+

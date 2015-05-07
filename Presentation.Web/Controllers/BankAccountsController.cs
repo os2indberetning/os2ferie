@@ -9,7 +9,7 @@ namespace OS2Indberetning.Controllers
 {
     public class BankAccountsController : BaseController<BankAccount>
     {
-        public BankAccountsController(IGenericRepository<BankAccount> repo) : base(repo){}
+        public BankAccountsController(IGenericRepository<BankAccount> repo, IGenericRepository<Person> personRepo) : base(repo, personRepo) { }
         
         //GET: odata/BankAccounts
         [EnableQuery]
@@ -35,7 +35,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(BankAccount BankAccount)
         {
-            return base.Post(BankAccount);
+           return CurrentUser.IsAdmin ? base.Post(BankAccount) : Unauthorized();
         }
 
         //PATCH: odata/BankAccounts(5)
@@ -43,13 +43,13 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<BankAccount> delta)
         {
-            return base.Patch(key, delta);
+            return CurrentUser.IsAdmin ? base.Patch(key, delta) : Unauthorized();
         }
 
         //DELETE: odata/BankAccounts(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            return CurrentUser.IsAdmin ? base.Delete(key) : Unauthorized();
         }
     }
 }

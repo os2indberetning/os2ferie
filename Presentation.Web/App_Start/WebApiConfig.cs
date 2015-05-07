@@ -96,6 +96,10 @@ namespace OS2Indberetning
             pType.HasKey(p => p.Id);
             //pType.Ignore(p => p.LicensePlates);
 
+            builder.EntityType<Person>().Collection
+           .Function("GetCurrentUser")
+           .ReturnsFromEntitySet<Person>("Person");
+
             builder.EntitySet<PersonalAddress>("PersonalAddresses");
 
             builder.EntityType<PersonalAddress>().Collection

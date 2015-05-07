@@ -87,7 +87,7 @@
                    field: "Person.FullName",
                    title: "Stedfortræder for"
                }, {
-                   field: "OrgUnit.ShortDescription",
+                   field: "OrgUnit.LongDescription",
                    title: "Organisationsenhed",
                }, {
                    field: "Leader.FullName",
@@ -269,7 +269,7 @@
                    field: "Person.FullName",
                    title: "Stedfortræder for"
                }, {
-                   field: "OrgUnit.ShortDescription",
+                   field: "OrgUnit.LongDescription",
                    title: "Organisationsenhed",
                }, {
                    field: "Leader.FullName",

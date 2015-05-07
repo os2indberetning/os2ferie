@@ -135,8 +135,8 @@
   <ItemGroup>
     <Compile Include="Controllers\Addresses\GetPersonalAndStandard.cs" />
     <Compile Include="Controllers\BaseControllerTest.cs" />
-    <Compile Include="Controllers\DriveReports\EmploymentRepositoryMock.cs" />
-    <Compile Include="Controllers\DriveReports\OrgUnitRepositoryMock.cs" />
+    <Compile Include="EmploymentRepositoryMock.cs" />
+    <Compile Include="OrgUnitRepositoryMock.cs" />
     <Compile Include="Controllers\DriveReports\DriveReportsRepositoryMock.cs" />
     <Compile Include="Controllers\DriveReports\DriveReportsTest.cs" />
     <Compile Include="Controllers\LicensePlates\LicensePlateRepositoryMock.cs" />
@@ -157,11 +157,11 @@
     <Compile Include="Controllers\Rates\RateTest.cs" />
     <Compile Include="Controllers\PersonalRoutes\PersonalRouteTest.cs" />
     <Compile Include="Controllers\PersonalRoutes\PersonalRouteRepositoryMock.cs" />
-    <Compile Include="Controllers\Persons\PersonRepositoryMock.cs" />
     <Compile Include="Controllers\Persons\PersonTest.cs" />
     <Compile Include="Controllers\Substitutes\SubstituteRepositoryMock.cs" />
     <Compile Include="Controllers\Substitutes\SubstituteTest.cs" />
     <Compile Include="NinjectTestInjecter.cs" />
+    <Compile Include="PersonRepositoryMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
