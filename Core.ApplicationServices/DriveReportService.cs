@@ -109,7 +109,10 @@ namespace Core.ApplicationServices
 
                 report.Distance = (double)drivenRoute.Length / 1000;
 
-
+                if (report.Distance < 0)
+                {
+                    report.Distance = 0;
+                }
             }
 
 

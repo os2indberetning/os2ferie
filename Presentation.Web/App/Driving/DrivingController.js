@@ -25,6 +25,8 @@
         $scope.SmartAddress = SmartAdresseSource;
         $scope.IsRoute = false;
 
+        // Is set to actually contain something once data has been loaded from backend.
+        $scope.validateInput = function () { };
 
         var setupForNewReport = function () {
             $scope.DriveReport = new DriveReport();
@@ -121,7 +123,7 @@
                 $scope.DriveReport.Purpose = report.Purpose;
                 $scope.DriveReport.Date = moment.unix(report.DriveDateTimestamp)._d;
 
-                if (report.KilometerAllowance === "Read") {
+                if (report.KilometerAllowance == "Read") {
                     $scope.DriveReport.ReadDistance = report.Distance.toString().replace(".",",");
                     $scope.DriveReport.UserComment = report.UserComment;
                     if (!report.StartsAtHome && !report.EndsAtHome) {
@@ -324,14 +326,7 @@
             return commRes && distRes;
         }
 
-        $scope.validateInput = function () {
-            $timeout(function () {
-                $scope.canSubmitDriveReport = validateReadInput();
-                $scope.canSubmitDriveReport &= validateAddressInput();
-                $scope.canSubmitDriveReport &= validatePurpose();
-                $scope.canSubmitDriveReport &= validateLicensePlate();
-            });
-        }
+        
 
         $scope.addressInputChanged = function (index) {
             if (!validateAddressInput() || mapChanging) {
@@ -429,6 +424,17 @@
         // Consider this function Main()
         // Is needed to make sure data and kendo widgets are ready for setting values from previous drivereport.
         var dataAndKendoLoaded = function () {
+
+            // Define validateInput now. Otherwise it gets called from drivingview.html before having loaded resources.
+            $scope.validateInput = function () {
+                $timeout(function () {
+                    $scope.canSubmitDriveReport = validateReadInput();
+                    $scope.canSubmitDriveReport &= validateAddressInput();
+                    $scope.canSubmitDriveReport &= validatePurpose();
+                    $scope.canSubmitDriveReport &= validateLicensePlate();
+                });
+            }
+
             if (!isEditingReport) {
                 $scope.container.driveDatePicker.open();
             }
@@ -443,6 +449,12 @@
         }
 
         $scope.clearClicked = function () {
+
+            if (!isEditingReport) {
+                setMap($scope.mapStartAddress);
+            }
+
+            setNotRoute();
 
             $scope.container.driveDatePicker.open();
             loadValuesFromReport($scope.latestDriveReport);
