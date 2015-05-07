@@ -27,28 +27,29 @@ namespace Core.DomainServices
 
         public Address Launder(Address inputAddress)
         {
+            var inputAddressString = inputAddress.StreetName + inputAddress.StreetNumber + inputAddress.ZipCode +
+                                     inputAddress.Town;
             var cachedAddress = _repo.AsQueryable()
-                .FirstOrDefault(
-                    addr =>
-                        addr.StreetName == inputAddress.StreetName && addr.StreetNumber == inputAddress.StreetNumber &&
-                        addr.ZipCode == inputAddress.ZipCode);
+                .FirstOrDefault(addr => addr.DirtyString.Equals(inputAddressString));
 
             if (cachedAddress != null && !cachedAddress.IsDirty)
             {
                 return cachedAddress;
             }
 
+            var newCachedAddress = false;
+
             if (cachedAddress == null)
             {
                 cachedAddress = new CachedAddress(inputAddress);
-                _repo.Insert(cachedAddress);
+                newCachedAddress = true;
             }
 
             var isDirty = false;
 
             try
             {
-                _actualLaunderer.Launder(cachedAddress);
+                cachedAddress = (CachedAddress)_actualLaunderer.Launder(cachedAddress);
             }
             catch (AddressLaunderingException e)
             {
@@ -69,8 +70,14 @@ namespace Core.DomainServices
                     cachedAddress.Longitude = "0";
                 }
             }
-
             cachedAddress.IsDirty = isDirty;
+            if ( newCachedAddress ){
+                cachedAddress = _repo.Insert(cachedAddress);
+            }
+            else
+            {
+                _repo.Update(cachedAddress);
+            }
             _repo.Save();
 
             return cachedAddress;

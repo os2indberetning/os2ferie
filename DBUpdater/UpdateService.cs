@@ -47,8 +47,15 @@ namespace DBUpdater
         {
             var result = new List<string>();
             var index = address.IndexOfAny("0123456789".ToCharArray());
-            result.Add(address.Substring(0, index - 1));
-            result.Add(address.Substring(index, address.Length - index));
+            if (index == -1)
+            {
+                result.Add(address);
+            } 
+            else 
+            {
+                result.Add(address.Substring(0, index - 1));
+                result.Add(address.Substring(index, address.Length - index));
+            }
             return result;
         }
 
@@ -56,9 +63,11 @@ namespace DBUpdater
         {
             var orgs = _dataProvider.GetOrganisationsAsQueryable().OrderBy(x => x.Level);
 
-
+            var i = 0;
             foreach (var org in orgs)
             {
+                i++;
+                Console.WriteLine("Migrating organisation " + i + " of " + orgs.Count() + ".");
                 var orgToInsert = _orgRepo.AsQueryable().FirstOrDefault(x => x.OrgId == org.LOSOrgId);
 
                 if (orgToInsert == null)
@@ -80,14 +89,19 @@ namespace DBUpdater
 
                 _orgRepo.Save();
             }
+            Console.WriteLine("Done migrating organisations.");
         }
 
         public void MigrateEmployees()
         {
             var empls = _dataProvider.GetEmployeesAsQueryable();
 
+            var i = 0;
             foreach (var employee in empls)
             {
+                i++;
+                Console.WriteLine("Migrating employee " + i + " of " + empls.Count() + ".");
+
                 var personToInsert = _personRepo.AsQueryable().FirstOrDefault(x => x.PersonId == employee.MaNr);
 
                 if (personToInsert == null)
@@ -108,7 +122,9 @@ namespace DBUpdater
 
                 CreateEmployment(employee, personToInsert.Id);
                 SaveHomeAddress(employee, personToInsert.Id);
+
             }
+            Console.WriteLine("Done migrating employees");
         }
 
 
@@ -167,26 +183,29 @@ namespace DBUpdater
 
             var launderer = new CachedAddressLaunderer(_cachedRepo, _actualLaunderer, _coordinates);
 
+            var splitStreetAddress = SplitAddressOnNumber(empl.Adresse);
+
             var addressToLaunder = new Address
             {
-                StreetName = SplitAddressOnNumber(empl.Adresse).ElementAt(0),
-                StreetNumber = SplitAddressOnNumber(empl.Adresse).ElementAt(1),
+                Description = "Hjemmeadresse",
+                StreetName = splitStreetAddress.ElementAt(0),
+                StreetNumber = splitStreetAddress.Count > 1 ? splitStreetAddress.ElementAt(1) : "1",
                 ZipCode = empl.PostNr ?? 0,
                 Town = empl.By,
             };
             addressToLaunder = launderer.Launder(addressToLaunder);
 
             var launderedAddress = new PersonalAddress()
-        {
-            PersonId = personId,
-            Type = PersonalAddressType.Home,
-            StreetName = addressToLaunder.StreetName,
-            StreetNumber = addressToLaunder.StreetNumber,
-            ZipCode = addressToLaunder.ZipCode,
-            Town = addressToLaunder.Town,
-            Latitude = addressToLaunder.Latitude ?? "",
-            Longitude = addressToLaunder.Longitude ?? "",
-        };
+            {
+                PersonId = personId,
+                Type = PersonalAddressType.Home,
+                StreetName = addressToLaunder.StreetName,
+                StreetNumber = addressToLaunder.StreetNumber,
+                ZipCode = addressToLaunder.ZipCode,
+                Town = addressToLaunder.Town,
+                Latitude = addressToLaunder.Latitude ?? "",
+                Longitude = addressToLaunder.Longitude ?? "",
+            };
 
             _personalAddressRepo.Insert(launderedAddress);
             _personalAddressRepo.Save();
@@ -196,28 +215,30 @@ namespace DBUpdater
         {
             var launderer = new CachedAddressLaunderer(_cachedRepo, _actualLaunderer, _coordinates);
 
+            var splitStreetAddress = SplitAddressOnNumber(org.Gade);
+
             var addressToLaunder = new Address
             {
-                StreetName = SplitAddressOnNumber(org.Gade).ElementAt(0),
-                StreetNumber = SplitAddressOnNumber(org.Gade).ElementAt(1),
+                StreetName = splitStreetAddress.ElementAt(0),
+                StreetNumber = splitStreetAddress.Count > 1 ? splitStreetAddress.ElementAt(1) : "1",
                 ZipCode = org.Postnr ?? 0,
                 Town = org.By,
+                Description = org.Navn
             };
 
             var temp =
                 _workAddressRepo.AsQueryable()
                     .FirstOrDefault(
-                        x =>
-                            x.StreetName.Equals(addressToLaunder.StreetName) &&
-                            x.StreetNumber.Equals(addressToLaunder.StreetNumber) &&
-                            x.ZipCode.Equals(addressToLaunder.ZipCode));
+                       x =>
+                           x.StreetName.Equals(addressToLaunder.StreetName) &&
+                           x.StreetNumber.Equals(addressToLaunder.StreetNumber) &&
+                           x.ZipCode.Equals(addressToLaunder.ZipCode));
 
             if (temp != null)
             {
                 return temp;
             }
-
-
+            
             addressToLaunder = launderer.Launder(addressToLaunder);
 
             var launderedAddress = new WorkAddress()
@@ -228,7 +249,7 @@ namespace DBUpdater
                 Town = addressToLaunder.Town,
                 Latitude = addressToLaunder.Latitude ?? "",
                 Longitude = addressToLaunder.Longitude ?? "",
-
+                Description = org.Navn
             };
 
             return launderedAddress;
