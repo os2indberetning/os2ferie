@@ -7,12 +7,12 @@ namespace Infrastructure.DataAccess.Migrations
     {
         public override void Up()
         {
-            RenameColumn(table: "Employments", name: "AlternativeWorkAddress_Id", newName: "AlternativeWorkAddressId");
+           // RenameColumn(table: "Employments", name: "AlternativeWorkAddress_Id", newName: "AlternativeWorkAddressId");
         }
         
         public override void Down()
         {
-            RenameColumn(table: "Employments", name: "AlternativeWorkAddressId", newName: "AlternativeWorkAddress_Id");
+          //  RenameColumn(table: "Employments", name: "AlternativeWorkAddressId", newName: "AlternativeWorkAddress_Id");
         }
     }
 }
