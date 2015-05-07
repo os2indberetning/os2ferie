@@ -54,14 +54,16 @@ namespace Core.ApplicationServices
             var person = _personRepo.AsQueryable().First(x => x.Id == report.PersonId);
 
             var homeAddress = _personService.GetHomeAddress(person);
-            var wa = _emplrepo.AsQueryable().FirstOrDefault(x => x.Id.Equals(report.EmploymentId));
-            var workAddress =
-                _emplrepo.AsQueryable().FirstOrDefault(x => x.Id.Equals(report.EmploymentId)).OrgUnit.Address;
+
+            var employment = _emplrepo.AsQueryable().FirstOrDefault(x => x.Id.Equals(report.EmploymentId));
+            Address workAddress = employment.OrgUnit.Address;
+            if (employment.AlternativeWorkAddress != null)
+            {
+                workAddress = employment.AlternativeWorkAddress;
+            }
 
             if (report.KilometerAllowance != KilometerAllowance.Read)
             {
-
-
                 //Check if drivereport starts at users home address.
                 if (homeAddress.StreetName == report.DriveReportPoints.First().StreetName
                     && homeAddress.StreetNumber == report.DriveReportPoints.First().StreetNumber
@@ -82,7 +84,7 @@ namespace Core.ApplicationServices
             }
 
 
-            homeWorkDistance = _emplrepo.AsQueryable().FirstOrDefault(x => x.Id.Equals(report.EmploymentId)).WorkDistanceOverride;
+            homeWorkDistance = employment.WorkDistanceOverride;
 
             if (homeWorkDistance <= 0)
             {
