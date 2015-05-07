@@ -444,6 +444,10 @@
 
         $scope.clearClicked = function () {
 
+            if (!isEditingReport) {
+                setMap($scope.mapStartAddress);
+            }
+
             $scope.container.driveDatePicker.open();
             loadValuesFromReport($scope.latestDriveReport);
             $scope.DriveReport.Addresses = [{ Name: "" }, { Name: "" }];
