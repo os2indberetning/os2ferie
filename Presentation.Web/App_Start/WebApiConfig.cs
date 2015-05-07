@@ -106,6 +106,19 @@ namespace OS2Indberetning
             .Function("GetHome")
             .ReturnsFromEntitySet<PersonalAddress>("PersonalAddresses");
 
+            builder.EntityType<PersonalAddress>().Collection
+            .Function("GetRealHome")
+            .ReturnsFromEntitySet<PersonalAddress>("PersonalAddresses");
+
+
+          
+
+            builder.EntityType<PersonalAddress>().Collection
+            .Function("GetAlternativeHome")
+            .ReturnsFromEntitySet<PersonalAddress>("PersonalAddresses");
+
+            
+
             builder.EntitySet<PersonalRoute>("PersonalRoutes");
 
             builder.EntitySet<Point>("Points");

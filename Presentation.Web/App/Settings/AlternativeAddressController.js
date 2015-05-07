@@ -1,7 +1,20 @@
-﻿angular.module("application").controller('AlternativeAddressController', ["$scope", "SmartAdresseSource", "$rootScope", "$timeout", "PersonEmployments", "AddressFormatter", "Address", "NotificationService", function ($scope, SmartAdresseSource, $rootScope, $timeout, PersonEmployments, AddressFormatter, Address, NotificationService) {
+﻿angular.module("application").controller('AlternativeAddressController', ["$scope", "SmartAdresseSource", "$rootScope", "$timeout", "PersonEmployments", "AddressFormatter", "Address", "NotificationService", "PersonalAddress", function ($scope, SmartAdresseSource, $rootScope, $timeout, PersonEmployments, AddressFormatter, Address, NotificationService, PersonalAddress) {
 
-    $scope.employments = $rootScope.CurrentUser.Employments
-    debugger;
+    $scope.employments = $rootScope.CurrentUser.Employments;
+    $scope.homeAddress = "";
+    $scope.alternativeHomeAddress = {};
+    $scope.alternativeHomeAddress.string = "";
+
+    PersonalAddress.GetRealHomeForUser({ id: $rootScope.CurrentUser.Id }).$promise.then(function (res) {
+        $scope.homeAddress = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town;
+    });
+
+    PersonalAddress.GetAlternativeHomeForUser({ id: $rootScope.CurrentUser.Id }).$promise.then(function (res) {
+        if (!(res.StreetNumber == undefined)) {
+            $scope.alternativeHomeAddress = res;
+            $scope.alternativeHomeAddress.string = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town;
+        }
+    });
     $scope.Number = Number;
     $scope.toString = toString;
     $scope.replace = String.replace;
@@ -114,6 +127,58 @@
         });
 
 
+    }
+
+    $scope.saveAlternativeHomeAddress = function () {
+        $timeout(function () {
+            handleSaveAltHome();
+        });
+    }
+
+    var handleSaveAltHome = function () {
+        if ($scope.alternativeHomeAddress.string != undefined && $scope.alternativeHomeAddress.string != null && $scope.alternativeHomeAddress.string != "") {
+            var addr = AddressFormatter.fn($scope.alternativeHomeAddress.string);
+            if ($scope.alternativeHomeAddress.Id != undefined) {
+                PersonalAddress.patch({ id: $scope.alternativeHomeAddress.Id }, {
+                    StreetName: addr.StreetName,
+                    StreetNumber: addr.StreetNumber,
+                    ZipCode: addr.ZipCode,
+                    Town: addr.Town,
+                    Latitude: "",
+                    Longitude: ""
+                }).$promise.then(function() {
+                    NotificationService.AutoFadeNotification("success", "", "Afvigende hjemmeadresse redigeret.");
+                });
+            } else {
+                PersonalAddress.post({
+                    StreetName: addr.StreetName,
+                    StreetNumber: addr.StreetNumber,
+                    ZipCode: addr.ZipCode,
+                    Town: addr.Town,
+                    Latitude: "",
+                    Longitude: "",
+                    PersonId: $rootScope.CurrentUser.Id,
+                    Type: "AlternativeHome",
+                    Description: ""
+                }).$promise.then(function(res) {
+                    $scope.alternativeHomeAddress = res;
+                    $scope.alternativeHomeAddress.string = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town;
+                    NotificationService.AutoFadeNotification("success", "", "Afvigende hjemmeadresse oprettet.");
+                });
+            }
+        } else if ($scope.alternativeHomeAddress.string == "" && $scope.alternativeHomeAddress.Id != undefined) {
+            $scope.clearHomeClicked();
+        }
+    }
+
+    $scope.clearHomeClicked = function () {
+        $scope.alternativeHomeAddress.string = "";
+        if ($scope.alternativeHomeAddress.Id != undefined) {
+            PersonalAddress.delete({ id: $scope.alternativeHomeAddress.Id }).$promise.then(function () {
+                $scope.alternativeHomeAddress = null;
+                NotificationService.AutoFadeNotification("success", "", "Afvigende hjemmeadresse slettet.");
+            });
+        }
     }
 
 

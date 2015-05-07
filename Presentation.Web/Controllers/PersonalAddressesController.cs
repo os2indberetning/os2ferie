@@ -67,13 +67,25 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET odata/PersonalAddresses(5)/GetAlternativeHome
-        public IHttpActionResult GetAlternativeHome([FromODataUri] int key, ODataQueryOptions<PersonalAddress> queryOptions)
+        public IHttpActionResult GetAlternativeHome(int personId)
         {
-            if (!CurrentUser.Id.Equals(key) && !CurrentUser.IsAdmin)
+            if (!CurrentUser.Id.Equals(personId) && !CurrentUser.IsAdmin)
             {
                 return StatusCode(HttpStatusCode.Forbidden);
             }
-            return Ok(GetQueryable(queryOptions).Where(x => x.PersonId == key && x.Type == PersonalAddressType.AlternativeHome));
+            var res = Repo.AsQueryable().FirstOrDefault(x => x.PersonId == personId && x.Type == PersonalAddressType.AlternativeHome);
+            return res == null ? (IHttpActionResult) Ok() : Ok(res);
+        }
+
+        //GET odata/PersonalAddresses(5)/GetAlternativeHome
+        public IHttpActionResult GetRealHome(int personId)
+        {
+            if (!CurrentUser.Id.Equals(personId) && !CurrentUser.IsAdmin)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+            var res = Repo.AsQueryable().FirstOrDefault(x => x.PersonId == personId && x.Type == PersonalAddressType.Home);
+            return res == null ? (IHttpActionResult)Ok() : Ok(res);
         }
 
         //GET odata/PersonalAddresses/Service.GetAlternativeHome?personId=1

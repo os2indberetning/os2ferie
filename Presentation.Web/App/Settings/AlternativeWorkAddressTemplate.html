@@ -1,7 +1,7 @@
 ﻿<div ng-repeat="empl in employments track by $index" class="margin-right-15" style="padding-bottom: 10px; border-bottom: 1px solid #e5e5e5;">
     <div class="row margin-bottom-10">
         <div class="col-xs-12">
-            <h4 class="inline">{{empl.Position + " - " + empl.OrgUnit.LongDescription}} </h4>{{"(" + empl.OrgUnit.Address.StreetName + " " + empl.OrgUnit.Address.StreetNumber + ", " + empl.OrgUnit.Address.ZipCode  + " " + empl.OrgUnit.Address.Town + " - " + Number(empl.HomeWorkDistance).toFixed(2).toString().replace(".",",") + " km)"}}
+            <h4 class="inline">{{empl.Position + " - " + empl.OrgUnit.LongDescription}} </h4>{{"(" + empl.OrgUnit.Address.StreetName + " " + empl.OrgUnit.Address.StreetNumber + ", " + empl.OrgUnit.Address.ZipCode  + " " + empl.OrgUnit.Address.Town + ")"}}
         </div>
     </div>
     <div class="row">
@@ -24,7 +24,7 @@
         </div>
         <div class="col-xs-1"></div>
         <div class="col-xs-1">
-            <button ng-click="clearWorkClicked($index)" class="btn btn-danger">Ryd</button>
+            <button ng-click="clearWorkClicked($index)" class="btn btn-danger">Nulstil</button>
         </div>
         <div class="col-xs-1">
             <button ng-click="saveAlternativeWorkAddress($index)" class="btn btn-success">Gem</button>

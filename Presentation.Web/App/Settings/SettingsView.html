@@ -54,18 +54,13 @@
                         </div>
                     </div>
                     <div class="seperator"></div>
-                    <label for="">Afvigende afstand mellem hjemme- og arbejdsadresse:</label>
-
-                    <div></div>
-
-                    <button type="submit" class="btn btn-primary" ng-click="setHomeWorkOverride()">Gem ændringer</button>
                 </div>
             </div>
         </div>
         <div ng-controller="AlternativeAddressController" class="row setting-area">
             <div class="col-lg-12">
                 <h3>Afvigende adresser</h3>
-                <label for="">Hjemmeadresse:</label>
+                <label for="">Hjemmeadresse: </label> ({{ homeAddress }})
                 <div class="margin-right-15">
                     <div class="row">
                         <div class="col-xs-7">
@@ -76,14 +71,14 @@
                     <div class="row">
                         <div class="col-xs-7">
                             <input ng-enter="saveAlternativeHomeAddress()" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
-                                   k-data-source="SmartAddress" ng-model="newAlternativeHomeAddress" class="fill-width" k-placeholder="'Skriv her'" />
+                                   k-data-source="SmartAddress" ng-model="alternativeHomeAddress.string" class="fill-width" k-placeholder="'Skriv her'" />
                         </div>
                         <div class="col-xs-2">
 
                         </div>
                         <div class="col-xs-1"></div>
                         <div class="col-xs-1">
-                            <button class="btn btn-danger">Ryd</button>
+                            <button ng-click="clearHomeClicked()" class="btn btn-danger">Nulstil</button>
                         </div>
                         <div class="col-xs-1">
                             <button ng-click="saveAlternativeHomeAddress()" class="btn btn-success">Gem</button>

@@ -155,7 +155,7 @@ namespace OS2Indberetning.Controllers
         public IQueryable<Address> GetStandard()
         {
             var rep = Repo.AsQueryable();
-            var res = rep.Where(elem => !(elem is DriveReportPoint || elem is Point)).Where(elem => !(elem is PersonalAddress));
+            var res = rep.Where(elem => !(elem is DriveReportPoint || elem is Point)).Where(elem => !(elem is PersonalAddress || elem is WorkAddress || elem is CachedAddress));
             return res.AsQueryable();
         }
     }
