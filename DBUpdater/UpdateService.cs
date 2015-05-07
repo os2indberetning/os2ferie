@@ -28,7 +28,6 @@ namespace DBUpdater
         private readonly IAddressCoordinates _coordinates;
         private readonly IDbUpdaterDataProvider _dataProvider;
         private readonly IGenericRepository<WorkAddress> _workAddressRepo;
-        private readonly IGenericRepository<Address> _addressRepo;
 
         public UpdateService(IGenericRepository<Employment> emplRepo, IGenericRepository<OrgUnit> orgRepo, IGenericRepository<Person> personRepo, IGenericRepository<CachedAddress> cachedRepo, IGenericRepository<PersonalAddress> personalAddressRepo, IAddressLaunderer actualLaunderer, IAddressCoordinates coordinates, IDbUpdaterDataProvider dataProvider, IGenericRepository<WorkAddress> workAddressRepo)
         {

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
 using DBUpdater.Models;
 using Infrastructure.AddressServices.Interfaces;
+using Infrastructure.DataAccess;
 using NSubstitute;
 using NUnit.Framework;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
@@ -26,7 +28,8 @@ namespace DBUpdater.Test
         private IAddressLaunderer _actualLaunderer;
         private IAddressCoordinates _coordinates;
         private IDbUpdaterDataProvider _dataProvider;
-
+        private IGenericRepository<WorkAddress> _workAddressRepoMock;
+        
         [SetUp]
         public void SetUp()
         {
@@ -43,12 +46,16 @@ namespace DBUpdater.Test
             _coordinates = NSubstitute.Substitute.For<IAddressCoordinates>();
             _dataProvider = NSubstitute.Substitute.For<IDbUpdaterDataProvider>();
 
+            _workAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<WorkAddress>>();
+
             _orgUnitRepoMock.AsQueryable().Returns(orgList.AsQueryable());
 
             _orgUnitRepoMock.Insert(new OrgUnit()).ReturnsForAnyArgs(x => x.Arg<OrgUnit>()).AndDoes(x => orgList.Add(x.Arg<OrgUnit>())).AndDoes(x => x.Arg<OrgUnit>().Id = orgIdCount).AndDoes(x => orgIdCount++);
 
+
+
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-                _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider);
+                _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _workAddressRepoMock);
 
         }
 
