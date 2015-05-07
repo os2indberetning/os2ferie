@@ -1,10 +1,10 @@
 ﻿angular.module("application").controller("SubstituteController", [
-    "$scope", "$modal", "NotificationService", "$timeout", "Person", "OrgUnit",
-    function ($scope, $modal, NotificationService, $timeout, Person, OrgUnit) {
+    "$scope", "$rootScope", "$modal", "NotificationService", "$timeout", "Person", "OrgUnit",
+    function ($scope, $rootScope, $modal, NotificationService, $timeout, Person, OrgUnit) {
 
         $scope.container = {};
 
-        var personId = 1;
+        var personId = $rootScope.CurrentUser.Id;
 
         $scope.orgUnits = [];
         $scope.persons = [];

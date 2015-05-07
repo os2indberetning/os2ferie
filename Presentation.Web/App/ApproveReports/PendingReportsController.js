@@ -7,8 +7,8 @@
        $scope.orgUnit = {};
        $scope.orgUnits = [];
 
-       //Hardcoded personid 
-       var personId = 1;
+       // Set personId. The value on $rootScope is set in resolve in application.js
+       var personId = $rootScope.CurrentUser.Id;
 
        OrgUnit.get().$promise.then(function (res) {
            $scope.orgUnits = res.value;

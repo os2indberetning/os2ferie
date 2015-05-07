@@ -96,30 +96,17 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
             Assert.Throws<Exception>(() => NinjectWebKernel.CreateKernel().Get<DriveReportService>().Create(testReport));
         }
-
-        [Test]
-        public void AttachResponsibleLeader_WithNoSub_ShouldAttachLeader()
-        {
-            var uut = NinjectWebKernel.CreateKernel().Get<DriveReportService>();
-
-            var report = new DriveReport()
-            {
-                Employment = new Employment()
-                {
-                    Id = 1,
-                    OrgUnitId = 1,
-                    PersonId = 1,
-                },
-                PersonId = 1,
-            };
-
-
-            var res = uut.AttachResponsibleLeader(new List<DriveReport>() { report }.AsQueryable());
-        }
-
     }
 
-    [TestFixture]
+    [TestFixture] //TODO rewrite tests, did not catch that the person was always set as responsible leader
+        /** Things to test: 
+         *      person is an employee
+         *      person is a leader (approver is leader of next level
+         *      Person is leader on two levels
+         *      Person has personal approver
+         *      persons leader has substitute
+         */
+
     public class AttachResponsibleLeaderTests
     {
         [Test]

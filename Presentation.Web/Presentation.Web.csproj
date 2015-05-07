@@ -1176,7 +1176,6 @@
     <Content Include="App\Driving\noLicensePlateModalController.js" />
     <Content Include="App\MyReports\ConfirmDeleteReportController.js" />
     <Content Include="App\MyReports\ConfirmDeleteTemplate.html" />
-    <Content Include="App\MyReports\EditReportController.js" />
     <Content Include="App\MyReports\EditReportTemplate.html" />
     <Content Include="App\MyReports\MyReportsController.js" />
     <Content Include="App\MyReports\MyReportsView.html" />

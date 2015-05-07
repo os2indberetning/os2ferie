@@ -15,6 +15,7 @@ namespace Core.DomainModel
             this.Longitude = addr.Longitude;
             this.Description = addr.Description;
             this.IsDirty = true;
+            this.DirtyString = addr.StreetName + addr.StreetNumber + addr.ZipCode + addr.Town;
         }
 
         public CachedAddress()
@@ -23,5 +24,8 @@ namespace Core.DomainModel
         }
 
         public bool IsDirty { get; set; }
+        //This is what is used to map a dirty adress to a laundered adress.
+        //The format is StreetNameStreetNumberZipCodeTown (no spaces between the variables)
+        public string DirtyString { get; set; }
     }
 }

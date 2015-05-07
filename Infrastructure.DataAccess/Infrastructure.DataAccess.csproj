@@ -249,6 +249,10 @@
     <Compile Include="Migrations\201505071332118_changedalternativeworkaddresstoOptional.Designer.cs">
       <DependentUpon>201505071332118_changedalternativeworkaddresstoOptional.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505071441089_AddedDirtyStringToCachedAddresses.cs" />
+    <Compile Include="Migrations\201505071441089_AddedDirtyStringToCachedAddresses.Designer.cs">
+      <DependentUpon>201505071441089_AddedDirtyStringToCachedAddresses.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -404,6 +408,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505071332118_changedalternativeworkaddresstoOptional.resx">
       <DependentUpon>201505071332118_changedalternativeworkaddresstoOptional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505071441089_AddedDirtyStringToCachedAddresses.resx">
+      <DependentUpon>201505071441089_AddedDirtyStringToCachedAddresses.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -82,6 +82,9 @@ namespace OS2Indberetning.Controllers
 
         protected IQueryable<T> GetQueryable(ODataQueryOptions<T> queryOptions)
         {
+            if (queryOptions.Filter != null) { 
+                return (IQueryable<T>)queryOptions.Filter.ApplyTo(Repo.AsQueryable(), new ODataQuerySettings());
+            }
             return Repo.AsQueryable();
         }
 
@@ -92,6 +95,10 @@ namespace OS2Indberetning.Controllers
             if (entity != null)
             {
                 result.Add(entity);
+            }
+            if (queryOptions.Filter != null)
+            {
+                return (IQueryable<T>) queryOptions.Filter.ApplyTo(result.AsQueryable(), new ODataQuerySettings());
             }
             return result.AsQueryable();
         }

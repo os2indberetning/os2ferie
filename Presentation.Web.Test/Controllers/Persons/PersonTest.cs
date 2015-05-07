@@ -27,7 +27,7 @@ namespace Presentation.Web.Test.Controllers.Persons
 
     class PersonServiceMock : PersonService
     {
-        public PersonServiceMock(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route) : base(addressRepo, route)
+        public PersonServiceMock(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route, IGenericRepository<Employment> emplRepo) : base(addressRepo, route, emplRepo)
         {
         }
 
@@ -42,21 +42,6 @@ namespace Presentation.Web.Test.Controllers.Persons
                     StreetName = "Jens Baggesens Vej",
                     StreetNumber = "46",
                     ZipCode = 8210,
-                    Town = "Aarhus"
-                };
-        }
-
-        public override PersonalAddress GetWorkAddress(Person person)
-        {
-            return  new PersonalAddress()
-                {
-                    Description = "TestWorkAddress",
-                    Id = 2,
-                    Type = PersonalAddressType.Work,
-                    PersonId = 1,
-                    StreetName = "Katrinebjergvej",
-                    StreetNumber = "95",
-                    ZipCode = 8200,
                     Town = "Aarhus"
                 };
         }

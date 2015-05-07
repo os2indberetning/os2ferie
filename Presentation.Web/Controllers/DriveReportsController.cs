@@ -33,20 +33,20 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IHttpActionResult Get(ODataQueryOptions<DriveReport> queryOptions, string status = "", int leaderId = 0, bool getReportsWhereSubExists = false)
         {
-            var queryably = GetQueryable(queryOptions);
+            var queryable = GetQueryable(queryOptions);
 
             ReportStatus reportStatus;
             if (ReportStatus.TryParse(status, true, out reportStatus))
             {
-                queryably = queryably.Where(dr => dr.Status == reportStatus);
+                queryable = queryable.Where(dr => dr.Status == reportStatus);
             }
 
             if (leaderId != 0)
-            {
-                queryably = _driveService.FilterByLeader(queryably, leaderId, getReportsWhereSubExists);
+              {
+                queryable = _driveService.FilterByLeader(queryable, leaderId, getReportsWhereSubExists);
             }
 
-            var result = _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(queryably));
+            var result = _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(queryable));
 
             // Return result if CurrentUser is Admin
             if (CurrentUser.IsAdmin)
