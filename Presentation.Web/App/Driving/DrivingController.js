@@ -124,7 +124,7 @@
                 $scope.DriveReport.Date = moment.unix(report.DriveDateTimestamp)._d;
 
                 if (report.KilometerAllowance == "Read") {
-                    $scope.DriveReport.ReadDistance = report.Distance.toString().replace(".",",");
+                    $scope.DriveReport.ReadDistance = report.Distance.toString().replace(".", ",");
                     $scope.DriveReport.UserComment = report.UserComment;
                     if (!report.StartsAtHome && !report.EndsAtHome) {
                         $scope.container.StartEndHomeDropDown.select(0);
@@ -326,7 +326,7 @@
             return commRes && distRes;
         }
 
-        
+
 
         $scope.addressInputChanged = function (index) {
             if (!validateAddressInput() || mapChanging) {
@@ -578,7 +578,7 @@
                 if ($scope.DriveReport.ReadDistance == undefined) {
                     $scope.DriveReport.ReadDistance = 0;
                 }
-                $scope.DrivenKMDisplay = Number($scope.DriveReport.ReadDistance.toString().replace(",","."));
+                $scope.DrivenKMDisplay = Number($scope.DriveReport.ReadDistance.toString().replace(",", "."));
             } else {
                 if ($scope.latestMapDistance == undefined) {
                     $scope.DrivenKMDisplay = 0;
@@ -586,9 +586,24 @@
                     $scope.DrivenKMDisplay = $scope.latestMapDistance;
                 }
             }
+
+            if ($scope.DriveReport.RoundTrip === true) {
+                // Double the driven km if its a roundtrip.
+                $scope.DrivenKMDisplay = Number($scope.DrivenKMDisplay) * 2;
+                // If the route starts xor ends at home -> double the transportallowance.
+                // The case where the route both ends and starts at home is already covered.
+                if (routeStartsAtHome() != routeEndsAtHome()) {
+
+                    $scope.TransportAllowance = Number($scope.TransportAllowance) * 2;
+                }
+            }
         }
 
         $scope.readDistanceChanged = function () {
+            updateDrivenKm();
+        }
+
+        $scope.roundTripChanged = function () {
             updateDrivenKm();
         }
     }
