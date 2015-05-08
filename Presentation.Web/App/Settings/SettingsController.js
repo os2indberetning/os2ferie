@@ -311,12 +311,16 @@
             };
         }
 
+        $rootScope.$on('PersonalAddressesChanged', function () {
+            // Event gets emitted from AlternativeAddressController when the user changes alternative home or work addresses.
+            $scope.updatePersonalAddresses();
+        });
+
         $scope.loadGrids($rootScope.CurrentUser.Id);
 
         $scope.updatePersonalAddresses = function () {
             $scope.gridContainer.personalAddressesGrid.dataSource.transport.options.read.url = "odata/PersonalAddresses()?$filter=PersonId eq " + $scope.currentPerson.Id;
             $scope.gridContainer.personalAddressesGrid.dataSource.read();
-
         }
 
         $scope.updatePersonalRoutes = function () {
