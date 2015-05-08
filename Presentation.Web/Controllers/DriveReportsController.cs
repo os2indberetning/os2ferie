@@ -124,8 +124,8 @@ namespace OS2Indberetning.Controllers
         {
 
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
-            var leader = _employmentRepo.AsQueryable().FirstOrDefault(x => x.IsLeader && x.OrgUnitId.Equals(report.Employment.OrgUnitId));
-            
+
+            var leader = _driveService.GetResponsibleLeaderForReport(report);
             
             if (leader == null)
             {
