@@ -145,7 +145,9 @@
                     ZipCode: addr.ZipCode,
                     Town: addr.Town,
                     Latitude: "",
-                    Longitude: ""
+                    Longitude: "",
+                    Description: "Afvigende hjemmeadresse",
+                    Type: "AlternativeHome"
                 }).$promise.then(function() {
                     NotificationService.AutoFadeNotification("success", "", "Afvigende hjemmeadresse redigeret.");
                 });
@@ -159,7 +161,7 @@
                     Longitude: "",
                     PersonId: $rootScope.CurrentUser.Id,
                     Type: "AlternativeHome",
-                    Description: ""
+                    Description: "Afvigende hjemmeadresse"
                 }).$promise.then(function(res) {
                     $scope.alternativeHomeAddress = res;
                     $scope.alternativeHomeAddress.string = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town;

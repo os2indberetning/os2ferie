@@ -216,9 +216,14 @@
                 if (value.Description != "" && value.Description != null && value.Description != undefined) {
                     value.PresentationString += value.Description + " : ";
                 }
-                if (value.Type == "Home" || value.Type == "AlternativeHome") {
+                if (value.Type == "Home") {
+                    // Store home address
                     $scope.HomeAddress = value;
                     value.PresentationString += "Hjemmeadresse : ";
+                }
+                if (value.Type == "AlternativeHome") {
+                    // Overwrite home address if user has alternative home address.
+                    $scope.HomeAddress = value;
                 }
 
                 value.PresentationString += value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;

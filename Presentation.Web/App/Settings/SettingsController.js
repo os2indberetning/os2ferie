@@ -27,7 +27,7 @@
 
         $scope.GetPerson = Person.get({ id: personId }, function (data) {
             $scope.currentPerson = data;
-          //  $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride.toString().replace('.', ',');
+            //  $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride.toString().replace('.', ',');
             $scope.recieveMail = data.RecieveMail;
 
             //Set choice of mail notification
@@ -48,7 +48,7 @@
             NotificationService.AutoFadeNotification("danger", "", "Person ikke fundet");
         });
 
-       
+
 
         //Funtionalitet til opslag af adresser
         $scope.SmartAddress = SmartAdresseSource;
@@ -216,7 +216,7 @@
                                     tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
                                 }
                             });
-                            
+
                             var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
                             return result;
                         }
@@ -287,13 +287,8 @@
                         field: "Description",
                         title: "Beskrivelse",
                         template: function (data) {
-                            if (data.Type == "Work") {
-                                return "Arbejdsadresse";
-                            }
-                            else if (data.Type == "Home") {
+                            if (data.Type == "Home") {
                                 return "Hjemmeadresse";
-                            } else if (data.Type == "AlternativeHome") {
-                                return "Afvigende hjemmeadresse";
                             } else return data.Description;
                         }
                     }, {
