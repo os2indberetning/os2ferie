@@ -484,6 +484,7 @@
                         NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev redigeret");
                         $scope.clearClicked();
                         $modalInstance.close();
+                        $scope.container.driveDatePicker.close();
                     }, function () {
                         NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under redigering af tjenestekørselsindberetningen.");
                     });
