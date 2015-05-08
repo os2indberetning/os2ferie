@@ -535,9 +535,8 @@
                 if ($scope.currentMapAddresses == undefined) {
                     return false;
                 }
-                var homeAddressString = $scope.HomeAddress.StreetName + " " + $scope.HomeAddress.StreetNumber + ", " + $scope.HomeAddress.ZipCode;
-                var res = $scope.currentMapAddresses[0].name.indexOf(homeAddressString);
-                return res > -1;
+                var endAddress = $scope.currentMapAddresses[0];
+                return areAddressesCloseToEachOther($scope.HomeAddress, endAddress);
             }
         }
 
@@ -552,10 +551,25 @@
                 if ($scope.currentMapAddresses == undefined) {
                     return false;
                 }
-                var homeAddressString = $scope.HomeAddress.StreetName + " " + $scope.HomeAddress.StreetNumber + ", " + $scope.HomeAddress.ZipCode;
-                var res = $scope.currentMapAddresses[$scope.currentMapAddresses.length - 1].name.indexOf(homeAddressString);
-                return res > -1;
+                var endAddress = $scope.currentMapAddresses[$scope.currentMapAddresses.length - 1];
+                return areAddressesCloseToEachOther($scope.HomeAddress, endAddress);
             }
+        }
+
+        //Checks that two addresses are within 100 meters, in
+        //which case we assume they are the same when regarding
+        //if a person starts or ends their route at home.
+        var areAddressesCloseToEachOther = function (address1, address2) {
+            //Longitude and latitude is called different things depending on
+            //whether we get the information from the backend or from septima
+            var long1 = (address1.Longitude === undefined) ? address1.lng : address1.Longitude;
+            var long2 = (address2.Longitude === undefined) ? address2.lng : address2.Longitude;
+            var lat1 = (address1.Latitude === undefined) ? address1.lat : address1.Latitude;
+            var lat2 = (address2.Latitude === undefined) ? address2.lat : address2.Latitude;
+
+            var longDiff = Math.abs( Number(long1) - Number(long2));
+            var latDiff = Math.abs(Number(lat1) - Number(lat2));
+            return longDiff < 0.0001 && latDiff < 0.001; //Fourth decimal is ~10 meters
         }
 
         $scope.startEndHomeChanged = function () {

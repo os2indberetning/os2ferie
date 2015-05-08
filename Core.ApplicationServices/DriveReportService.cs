@@ -195,66 +195,17 @@ namespace Core.ApplicationServices
 
         public IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> repo)
         {
-            var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             var res = repo.ToList();
             foreach (var driveReport in res)
             {
-                var person = driveReport.Person;
+                var responsibleLeader = GetResponsibleLeaderForReport(driveReport);
 
-                //Fetch personal approver for the person (Person and Leader of the substitute is the same)
-                var personalApprover =
-                    _substituteRepository.AsQueryable()
-                        .SingleOrDefault(
-                            s =>
-                                s.PersonId != s.LeaderId && s.PersonId == person.PersonId &&
-                                s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
-                if (personalApprover != null)
+                if (responsibleLeader != null)
                 {
-                    SetResponsibleLeaderOnReport(driveReport, personalApprover.Sub);
-                    continue;
-                }
+                    SetResponsibleLeaderOnReport(driveReport, responsibleLeader);
 
-                //Find an org unit where the person is not the leader, and then find the leader of that org unit to attach to the drive report
-                var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == driveReport.Employment.OrgUnitId);
-                var leaderOfOrgUnit =
-                    _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader);
-
-                if (leaderOfOrgUnit == null || orgUnit == null)
-                {
-                    continue;
                 }
-                while (leaderOfOrgUnit.PersonId == person.Id)
-                {
-                    orgUnit = orgUnit.Parent;
-                    leaderOfOrgUnit = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader);
-                    if (leaderOfOrgUnit == null)
-                    {
-                        break;
-                    }
-                }
-
-                if (orgUnit != null)
-                {
-                    var leaderEmpl = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnitId == orgUnit.Id && e.IsLeader);
-                    if (leaderEmpl != null)
-                    {
-                        var leader = leaderEmpl.Person;
-                        var sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
-                        if (sub != null)
-                        {
-                            // Attach sub if one exists.
-                            SetResponsibleLeaderOnReport(driveReport, sub.Sub);
-                        }
-                        else
-                        {
-                            // Attach leader if no sub exists.
-                            SetResponsibleLeaderOnReport(driveReport, leaderEmpl.Person);
-                        }
-                    }
-                    
-                }
-
-                if (driveReport.ResponsibleLeader == null) { 
+                else { 
                     //Indicate drivereports where we could not find a leader
                     SetResponsibleLeaderOnReport(driveReport, new Person()
                     {
@@ -266,6 +217,64 @@ namespace Core.ApplicationServices
             }
 
             return res.AsQueryable();
+        }
+
+        public Person GetResponsibleLeaderForReport(DriveReport driveReport)
+        {
+            var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
+            var person = driveReport.Person;
+
+            //Fetch personal approver for the person (Person and Leader of the substitute is the same)
+            var personalApprover =
+                _substituteRepository.AsQueryable()
+                    .SingleOrDefault(
+                        s =>
+                            s.PersonId != s.LeaderId && s.PersonId == person.PersonId &&
+                            s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
+            if (personalApprover != null)
+            {
+                return personalApprover.Sub;
+            }
+
+            //Find an org unit where the person is not the leader, and then find the leader of that org unit to attach to the drive report
+            var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == driveReport.Employment.OrgUnitId);
+            var leaderOfOrgUnit =
+                _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader);
+
+            if (leaderOfOrgUnit == null || orgUnit == null)
+            {
+                return null;
+            }
+            while (leaderOfOrgUnit.PersonId == person.Id)
+            {
+                orgUnit = orgUnit.Parent;
+                leaderOfOrgUnit = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader);
+                if (leaderOfOrgUnit == null)
+                {
+                    break;
+                }
+            }
+
+            if (orgUnit != null)
+            {
+                var leaderEmpl = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnitId == orgUnit.Id && e.IsLeader);
+                if (leaderEmpl != null)
+                {
+                    var leader = leaderEmpl.Person;
+                    var sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
+                    if (sub != null)
+                    {
+                        return sub.Sub;
+                    }
+                    else
+                    {
+                        return leaderEmpl.Person;
+                    }
+                }
+
+            }
+            return null;
         }
 
         private void SetResponsibleLeaderOnReport(DriveReport driveReport, Person person)
