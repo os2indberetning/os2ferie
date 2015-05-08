@@ -389,6 +389,7 @@
                 OS2RouteMap.create({
                     id: 'map',
                     change: function (obj) {
+                        debugger;
                         $scope.currentMapAddresses = obj.Addresses;
                         $scope.latestMapDistance = obj.distance;
                         updateDrivenKm();
