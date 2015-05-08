@@ -297,62 +297,48 @@ namespace Core.ApplicationServices
             var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
             var leaderEmpl = _employmentRepository.AsQueryable().Where(e => e.Person.Id == leaderId && e.IsLeader).ToList();
-            if (leaderEmpl.Any())
+
+            // Iterate all employments belonging to the leader.
+            foreach (var employment in leaderEmpl)
             {
-                // Iterate all employments belonging to the leader.
-                foreach (var employment in leaderEmpl)
+                // Get the orgunit of the empl.
+                var orgUnitId = employment.OrgUnit.Id;
+
+                if (getReportsWhereSubExists)
                 {
-                    // Get the orgunit of the empl.
-                    var orgUnitId = employment.OrgUnit.Id;
-
-                    if (getReportsWhereSubExists)
+                    AddReportsOfOrgAndChildOrgLeaders(repo, orgUnitId, leaderId, result);
+                }
+                else
+                {
+                    if (!(_substituteRepository.AsQueryable().Any(s => s.Person.Id == leaderId && s.StartDateTimestamp < currentTimestamp && s.EndDateTimestamp > currentTimestamp && s.OrgUnit.Id == orgUnitId)))
                     {
-                        // Get the leader of the childOrg if one exists.
-                        var childOrg = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.ParentId == orgUnitId);
-                        if (childOrg != null)
-                        {
-                            var childEmpl = _employmentRepository.AsQueryable().SingleOrDefault(e => e.IsLeader && e.OrgUnit.Id == childOrg.Id);
-                            if (childEmpl != null)
-                            {
-                                // Get and add all reports belonging to the leader of the child org.
-                                var childLeader = childEmpl.Person;
-                                var childLeaderReports = repo.AsQueryable().Where(dr => dr.Person.Id == childLeader.Id && dr.Employment.OrgUnit.Id == childOrg.Id);
-                                result.AddRange(childLeaderReports);
-                            }
-                        }
-                        result.AddRange(
-                            repo.AsQueryable()
-                                .Where(dr => dr.Employment.OrgUnit.Id == orgUnitId && dr.Person.Id != leaderId));
+                        AddReportsOfOrgAndChildOrgLeaders(repo, orgUnitId, leaderId, result);
                     }
-                    else
-                    {
-                        if (!(_substituteRepository.AsQueryable().Any(s => s.Person.Id == leaderId && s.StartDateTimestamp < currentTimestamp && s.EndDateTimestamp > currentTimestamp && s.OrgUnit.Id == orgUnitId)))
-                        {
-                            // Get the leader of the childOrg if one exists.
-                            var childOrg = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.ParentId == orgUnitId);
-                            if (childOrg != null)
-                            {
-                                var childEmpl = _employmentRepository.AsQueryable().SingleOrDefault(e => e.IsLeader && e.OrgUnit.Id == childOrg.Id);
-                                if (childEmpl != null)
-                                {
-                                    // Get and add all reports belonging to the leader of the child org.
-                                    var childLeader = childEmpl.Person;
-                                    var childLeaderReports = repo.AsQueryable().Where(dr => dr.Person.Id == childLeader.Id && dr.Employment.OrgUnit.Id == childOrg.Id);
-                                    result.AddRange(childLeaderReports);
-                                }
-                            }
-                            result.AddRange(
-                                repo.AsQueryable()
-                                    .Where(dr => dr.Employment.OrgUnit.Id == orgUnitId && dr.Person.Id != leaderId));
-                        }
-                    }
-
-
                 }
             }
 
             return result.AsQueryable();
         }
 
+        private void AddReportsOfOrgAndChildOrgLeaders(IQueryable<DriveReport> repo, int orgUnitId, int leaderId, List<DriveReport> driveReportList)
+        {
+            //The reports for the leaders of the child org units should also be approved
+            var childOrgs = _orgUnitRepository.AsQueryable().Where(o => o.ParentId == orgUnitId).ToList(); //to list to force a data reader to close
+            foreach (var childOrg in childOrgs)
+            {
+                var org = childOrg;
+                var childEmpls = _employmentRepository.AsQueryable().Where(e => e.IsLeader && e.OrgUnit.Id == org.Id).ToList();
+                foreach (var childEmpl in childEmpls)
+                {
+                    // Get and add all reports belonging to the leader of the child org.
+                    var childLeader = childEmpl.Person;
+                    var childLeaderReports = repo.AsQueryable().Where(dr => dr.Person.Id == childLeader.Id && dr.Employment.OrgUnit.Id == org.Id);
+                    driveReportList.AddRange(childLeaderReports);
+                }
+            }
+            driveReportList.AddRange(
+                repo.AsQueryable()
+                    .Where(dr => dr.Employment.OrgUnit.Id == orgUnitId && dr.Person.Id != leaderId));
+        }
     }
 }
