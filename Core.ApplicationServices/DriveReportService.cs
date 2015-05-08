@@ -251,15 +251,18 @@ namespace Core.ApplicationServices
                             SetResponsibleLeaderOnReport(driveReport, leaderEmpl.Person);
                         }
                     }
+                    
                 }
 
-                //Indicate drivereports where we could not find a leader
-                SetResponsibleLeaderOnReport(driveReport, new Person()
-                {
-                    FirstName = "Var ikke i stand til at finde godkendede leder",
-                    LastName = "",
-                    Initials = "FEJL"
-                });
+                if (driveReport.ResponsibleLeader == null) { 
+                    //Indicate drivereports where we could not find a leader
+                    SetResponsibleLeaderOnReport(driveReport, new Person()
+                    {
+                        FirstName = "Var ikke i stand til at finde godkendede leder",
+                        LastName = "",
+                        Initials = "FEJL"
+                    });
+                }
             }
 
             return res.AsQueryable();

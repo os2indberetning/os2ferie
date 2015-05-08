@@ -113,10 +113,6 @@ namespace Core.ApplicationServices
 
         public IQueryable<Person> AddHomeWorkDistanceToEmployments(IQueryable<Person> people)
         {
-            foreach (var person in people.ToList())
-            {
-                AddHomeWorkDistanceToEmployments(person);
-            }
             return people;
         }
 
