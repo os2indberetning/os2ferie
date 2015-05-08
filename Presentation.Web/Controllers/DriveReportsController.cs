@@ -48,25 +48,7 @@ namespace OS2Indberetning.Controllers
 
             var result = _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(queryable));
 
-            // Return result if CurrentUser is Admin
-            if (CurrentUser.IsAdmin)
-            {
-                return Ok(result);
-            }
-
-            // Return result if currentUser is leader and responsible for the reports in the result. 
-            if (leaderId.Equals(CurrentUser.Id))
-            {
-                return Ok(result);
-            }
-
-            // Return if result doesnt contain reports belonging to someone else than currentuser
-            if (!result.Any(rep => !rep.PersonId.Equals(CurrentUser.Id)))
-            {
-                return Ok(result);
-            }
-
-            return StatusCode(HttpStatusCode.Forbidden);
+            return Ok(result);
         }
 
         //GET: odata/DriveReports(5)
