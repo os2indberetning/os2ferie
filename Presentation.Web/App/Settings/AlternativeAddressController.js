@@ -76,6 +76,7 @@
 
                     PersonEmployments.patchEmployment({ id: $scope.employments[index].Id }, { AlternativeWorkAddressId: res.Id }).$promise.then(function () {
                         NotificationService.AutoFadeNotification("success", "", "Afvigende arbejdsadresse oprettet.");
+                        $rootScope.$emit('PersonalAddressesChanged');
                     });
                 });
             }
@@ -90,6 +91,7 @@
                     Latitude: "",
                 }).$promise.then(function () {
                     NotificationService.AutoFadeNotification("success", "", "Afvigende arbejdsadresse redigeret.");
+                    $rootScope.$emit('PersonalAddressesChanged');
                 });
             }
         }
@@ -98,13 +100,20 @@
             PersonEmployments.patchEmployment({ id: $scope.employments[index].Id },
             {
                 WorkDistanceOverride: $scope.alternativeWorkDistances[index],
-                AlternativeWorkAddress: null
+                AlternativeWorkAddress: null,
+                AlternativeWorkAddressId: null
             }).$promise.then(function () {
+                if ($scope.employments[index].AlternativeWorkAddressId != null) {
+                    Address.delete({ id: $scope.employments[index].AlternativeWorkAddressId }).$promise.then(function() {
+                        $rootScope.$emit('PersonalAddressesChanged');
+                    });
+                }
                 // Clear local model
                 $scope.employments[index].AlternativeWorkAddress = null;
                 $scope.employments[index].AlternativeWorkAddressId = null;
                 loadLocalModel();
                 NotificationService.AutoFadeNotification("success", "", "Afvigende afstand mellem hjem og arbejde gemt.");
+                $rootScope.$emit('PersonalAddressesChanged');
             });
         }
     }
@@ -119,11 +128,19 @@
             $scope.alternativeWorkDistances[index] = 0;
             $scope.alternativeWorkAddresses[index] = "";
             if ($scope.employments[index].AlternativeWorkAddressId != null) {
-                Address.delete({ id: $scope.employments[index].AlternativeWorkAddressId });
+                Address.delete({ id: $scope.employments[index].AlternativeWorkAddressId }).$promise.then(function() {
+                    $rootScope.$emit('PersonalAddressesChanged');
+                    $scope.employments[index].AlternativeWorkAddress = null;
+                    $scope.employments[index].AlternativeWorkAddressId = null;
+                    NotificationService.AutoFadeNotification("success", "", "Afvigende afstand og adresse slettet.");
+                });
+            } else {
+                $rootScope.$emit('PersonalAddressesChanged');
+                $scope.employments[index].AlternativeWorkAddress = null;
+                $scope.employments[index].AlternativeWorkAddressId = null;
+                NotificationService.AutoFadeNotification("success", "", "Afvigende afstand og adresse slettet.");
             }
-            $scope.employments[index].AlternativeWorkAddress = null;
-            $scope.employments[index].AlternativeWorkAddressId = null;
-            NotificationService.AutoFadeNotification("success", "", "Afvigende afstand og adresse slettet.");
+
         });
 
 
@@ -132,6 +149,7 @@
     $scope.saveAlternativeHomeAddress = function () {
         $timeout(function () {
             handleSaveAltHome();
+           
         });
     }
 
@@ -145,9 +163,12 @@
                     ZipCode: addr.ZipCode,
                     Town: addr.Town,
                     Latitude: "",
-                    Longitude: ""
-                }).$promise.then(function() {
+                    Longitude: "",
+                    Description: "Afvigende hjemmeadresse",
+                    Type: "AlternativeHome"
+                }).$promise.then(function () {
                     NotificationService.AutoFadeNotification("success", "", "Afvigende hjemmeadresse redigeret.");
+                    $rootScope.$emit('PersonalAddressesChanged');
                 });
             } else {
                 PersonalAddress.post({
@@ -159,11 +180,12 @@
                     Longitude: "",
                     PersonId: $rootScope.CurrentUser.Id,
                     Type: "AlternativeHome",
-                    Description: ""
-                }).$promise.then(function(res) {
+                    Description: "Afvigende hjemmeadresse"
+                }).$promise.then(function (res) {
                     $scope.alternativeHomeAddress = res;
                     $scope.alternativeHomeAddress.string = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town;
                     NotificationService.AutoFadeNotification("success", "", "Afvigende hjemmeadresse oprettet.");
+                    $rootScope.$emit('PersonalAddressesChanged');
                 });
             }
         } else if ($scope.alternativeHomeAddress.string == "" && $scope.alternativeHomeAddress.Id != undefined) {
@@ -177,7 +199,10 @@
             PersonalAddress.delete({ id: $scope.alternativeHomeAddress.Id }).$promise.then(function () {
                 $scope.alternativeHomeAddress = null;
                 NotificationService.AutoFadeNotification("success", "", "Afvigende hjemmeadresse slettet.");
+                $rootScope.$emit('PersonalAddressesChanged');
             });
+        } else {
+            NotificationService.AutoFadeNotification("success", "", "Afvigende hjemmeadresse slettet.");
         }
     }
 
