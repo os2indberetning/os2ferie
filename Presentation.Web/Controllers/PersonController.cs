@@ -97,7 +97,8 @@ namespace OS2Indberetning.Controllers
         }
 
         // GET odata/Person(5)/Employments
-        public IHttpActionResult GetEmployments([FromODataUri] int key)
+        [EnableQuery]
+        public IHttpActionResult GetEmployments([FromODataUri] int key, ODataQueryOptions<Person> queryOptions)
         {
             var person = Repo.AsQueryable().FirstOrDefault(x => x.Id.Equals(key));
             if (person == null)

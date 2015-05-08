@@ -6,6 +6,7 @@
             $scope.substituteFromDate = new Date();
             $scope.substituteToDate = new Date();
             $scope.orgUnitsDisabled = true;
+            $scope.orgUnits = [];
 
             $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
 
@@ -26,7 +27,8 @@
                     $scope.orgUnitsDisabled = true;
                     $scope.orgUnit = undefined;
                     $timeout(function () {
-                        $scope.orgUnits = OrgUnit.getWhereUserIsLeader({ id: $scope.personFor[0].Id }, function () {
+                        OrgUnit.getWhereUserIsLeader({ id: $scope.personFor[0].Id }, function (res) {
+                            $scope.orgUnits = res;
                             if ($scope.orgUnits.length > 0) {
                                 $scope.orgUnit = $scope.orgUnits[0];
                                 $scope.orgUnitsDisabled = false;
