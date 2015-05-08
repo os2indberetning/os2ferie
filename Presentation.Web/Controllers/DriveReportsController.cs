@@ -56,27 +56,7 @@ namespace OS2Indberetning.Controllers
         {
             var res = _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(GetQueryable(key, queryOptions)));
 
-            var report = res.AsQueryable().FirstOrDefault();
-
-            if (report == null)
-            {
-                return NotFound();
-            }
-
-            if (CurrentUser.Id.Equals(report.PersonId))
-            {
-                return Ok(res);
-            }
-            if (CurrentUser.IsAdmin)
-            {
-                return Ok(res);
-            }
-            
-            if (CurrentUser.Employments.Any(x => x.IsLeader && x.OrgUnitId.Equals(report.Employment.OrgUnitId)))
-            {
-                return Ok(res);
-            }
-            return StatusCode(HttpStatusCode.Forbidden);
+            return Ok(res);
         }
 
         // PUT: odata/DriveReports(5)
