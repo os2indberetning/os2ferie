@@ -48,25 +48,7 @@ namespace OS2Indberetning.Controllers
 
             var result = _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(queryable));
 
-            // Return result if CurrentUser is Admin
-            if (CurrentUser.IsAdmin)
-            {
-                return Ok(result);
-            }
-
-            // Return result if currentUser is leader and responsible for the reports in the result. 
-            if (leaderId.Equals(CurrentUser.Id))
-            {
-                return Ok(result);
-            }
-
-            // Return if result doesnt contain reports belonging to someone else than currentuser
-            if (!result.Any(rep => !rep.PersonId.Equals(CurrentUser.Id)))
-            {
-                return Ok(result);
-            }
-
-            return StatusCode(HttpStatusCode.Forbidden);
+            return Ok(result);
         }
 
         //GET: odata/DriveReports(5)
@@ -74,27 +56,7 @@ namespace OS2Indberetning.Controllers
         {
             var res = _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(GetQueryable(key, queryOptions)));
 
-            var report = res.AsQueryable().FirstOrDefault();
-
-            if (report == null)
-            {
-                return NotFound();
-            }
-
-            if (CurrentUser.Id.Equals(report.PersonId))
-            {
-                return Ok(res);
-            }
-            if (CurrentUser.IsAdmin)
-            {
-                return Ok(res);
-            }
-            
-            if (CurrentUser.Employments.Any(x => x.IsLeader && x.OrgUnitId.Equals(report.Employment.OrgUnitId)))
-            {
-                return Ok(res);
-            }
-            return StatusCode(HttpStatusCode.Forbidden);
+            return Ok(res);
         }
 
         // PUT: odata/DriveReports(5)
@@ -124,8 +86,8 @@ namespace OS2Indberetning.Controllers
         {
 
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
-            var leader = _employmentRepo.AsQueryable().FirstOrDefault(x => x.IsLeader && x.OrgUnitId.Equals(report.Employment.OrgUnitId));
-            
+
+            var leader = _driveService.GetResponsibleLeaderForReport(report);
             
             if (leader == null)
             {
