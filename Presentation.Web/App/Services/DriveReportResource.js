@@ -48,7 +48,10 @@
 
                 if ($scope.DriveReport.KilometerAllowance === "Read") {
 
-                    driveReport.Distance = Number($scope.DriveReport.ReadDistance.toString().replace(",","."));
+                    driveReport.Distance = Number($scope.DriveReport.ReadDistance.toString().replace(",", "."));
+                    if (Number(driveReport.Distance) < 0) {
+                        driveReport.Distance = 0;
+                    }
                     driveReport.UserComment = $scope.DriveReport.UserComment;
 
                     if ($scope.DriveReport.StartOrEndedAtHome === 'Started') {
@@ -166,6 +169,10 @@
                 if ($scope.DriveReport.KilometerAllowance === "Read") {
 
                     driveReport.Distance = Number($scope.DriveReport.ReadDistance.toString().replace(",", "."));
+                    if (Number(driveReport.Distance) < 0) {
+                        driveReport.Distance = 0;
+                    }
+                   
                     driveReport.UserComment = $scope.DriveReport.UserComment;
 
                     if ($scope.DriveReport.StartOrEndedAtHome === 'Started') {

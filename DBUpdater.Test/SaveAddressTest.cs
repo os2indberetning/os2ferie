@@ -26,6 +26,7 @@ namespace DBUpdater.Test
         private IAddressLaunderer _actualLaundererMock;
         private IAddressCoordinates _coordinatesMock;
         private IDbUpdaterDataProvider _dataProviderMock;
+        private IGenericRepository<WorkAddress> _workAddressRepoMock;
 
         [SetUp]
         public void SetUp()
@@ -43,7 +44,7 @@ namespace DBUpdater.Test
             _actualLaundererMock = NSubstitute.Substitute.For<IAddressLaunderer>();
             _coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
             _dataProviderMock = NSubstitute.Substitute.For<IDbUpdaterDataProvider>();
-
+            _workAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<WorkAddress>>();
             _cachedAddressRepoMock.Insert(new CachedAddress()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>()).AndDoes(x => cachedAddressList.Add(x.Arg<CachedAddress>())).AndDoes(x => x.Arg<CachedAddress>().Id = cachedIdCount).AndDoes(x => cachedIdCount++);
 
             _cachedAddressRepoMock.AsQueryable().Returns(cachedAddressList.AsQueryable());
@@ -62,7 +63,7 @@ namespace DBUpdater.Test
             }.AsQueryable());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-                _personalAddressRepoMock, _actualLaundererMock, _coordinatesMock, _dataProviderMock);
+                _personalAddressRepoMock, _actualLaundererMock, _coordinatesMock, _dataProviderMock, _workAddressRepoMock);
 
         }
 

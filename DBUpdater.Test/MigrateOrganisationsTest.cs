@@ -29,7 +29,7 @@ namespace DBUpdater.Test
         private IAddressCoordinates _coordinates;
         private IDbUpdaterDataProvider _dataProvider;
         private IGenericRepository<WorkAddress> _workAddressRepoMock;
-        
+
         [SetUp]
         public void SetUp()
         {
