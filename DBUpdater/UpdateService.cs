@@ -108,14 +108,15 @@ namespace DBUpdater
                     personToInsert = _personRepo.Insert(new Person());
                 }
 
-                personToInsert.CprNumber = employee.CPR;
+                personToInsert.CprNumber = employee.CPR ?? "ikke opgivet";
                 personToInsert.RecieveMail = false;
-                personToInsert.FirstName = employee.Fornavn;
-                personToInsert.LastName = employee.Efternavn;
+                personToInsert.FirstName = employee.Fornavn ?? "ikke opgivet";
+                personToInsert.LastName = employee.Efternavn ?? "ikke opgivet";
                 personToInsert.IsAdmin = false;
                 personToInsert.Initials = employee.ADBrugerNavn ?? " ";
                 personToInsert.Mail = employee.Email ?? "";
                 personToInsert.PersonId = employee.MaNr ?? default(int);
+
 
                 _personRepo.Save();
 
@@ -200,7 +201,7 @@ namespace DBUpdater
                 StreetName = splitStreetAddress.ElementAt(0),
                 StreetNumber = splitStreetAddress.Count > 1 ? splitStreetAddress.ElementAt(1) : "1",
                 ZipCode = empl.PostNr ?? 0,
-                Town = empl.By,
+                Town = empl.By ?? "",
             };
             addressToLaunder = launderer.Launder(addressToLaunder);
 
@@ -223,6 +224,11 @@ namespace DBUpdater
         public WorkAddress GetWorkAddress(Organisation org)
         {
             var launderer = new CachedAddressLaunderer(_cachedRepo, _actualLaunderer, _coordinates);
+
+            if (org.Gade == null)
+            {
+                return null;
+            }
 
             var splitStreetAddress = SplitAddressOnNumber(org.Gade);
 

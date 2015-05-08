@@ -15,10 +15,11 @@ namespace DBUpdater
         {
             var result = new List<Employee>();
 
-            using (var sqlConnection1 = new SqlConnection("data source=706sofd01.intern.syddjurs.dk;initial catalog=MDM;persist security info=True;user id=sofdeindberetning;password=soa2ieCh>e"))
+            using (var sqlConnection1 = new SqlConnection("Data Source=FVRSQL02; Initial Catalog=MDM;Integrated Security=SSPI; Persist Security Info=True; MultipleActiveResultSets=True;  Application Name=EntityFramework"))
             {
                 var cmd = new SqlCommand
                 {
+                   // CommandText = "SELECT * FROM information_schema.tables",
                     CommandText = "SELECT * FROM eindberetning.medarbejder",
                     CommandType = CommandType.Text,
                     Connection = sqlConnection1
@@ -40,7 +41,7 @@ namespace DBUpdater
                         ADBrugerNavn = SafeGetString(reader, 5),
                         Adresse = SafeGetString(reader, 6),
                         Stednavn = SafeGetString(reader, 7),
-                        PostNr = int.Parse(SafeGetString(reader, 8)),
+                        PostNr =  SafeGetString(reader, 8) == null ? 0 : int.Parse(SafeGetString(reader, 8)),
                         By = SafeGetString(reader, 9),
                         Land = SafeGetString(reader, 10),
                         Email = SafeGetString(reader, 11),
@@ -61,7 +62,7 @@ namespace DBUpdater
         public IQueryable<Organisation> GetOrganisationsAsQueryable()
         {
             var result = new List<Organisation>();
-            using (var sqlConnection1 = new SqlConnection("data source=706sofd01.intern.syddjurs.dk;initial catalog=MDM;persist security info=True;user id=sofdeindberetning;password=soa2ieCh>e"))
+            using (var sqlConnection1 = new SqlConnection("Data Source=FVRSQL02; Initial Catalog=MDM;Integrated Security=SSPI; Persist Security Info=True; MultipleActiveResultSets=True;  Application Name=EntityFramework"))
             {
                 var cmd = new SqlCommand
                 {

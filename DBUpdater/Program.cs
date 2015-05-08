@@ -30,7 +30,7 @@ namespace DBUpdater
                 NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>(), new SyddjursDataProvider(),
                 NinjectWebKernel.CreateKernel().Get<IGenericRepository<WorkAddress>>());
 
-            //service.MigrateOrganisations();
+        //    service.MigrateOrganisations();
             service.MigrateEmployees();
         }
 
