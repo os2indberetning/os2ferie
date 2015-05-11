@@ -15,7 +15,7 @@ namespace OS2Indberetning.Controllers
     {
         private ISubstituteService _sub;
 
-          //GET: odata/Substitutes
+        //GET: odata/Substitutes
         public SubstitutesController(IGenericRepository<Substitute> repository, ISubstituteService sub, IGenericRepository<Person> personRepo)
             : base(repository, personRepo)
         {
@@ -53,6 +53,11 @@ namespace OS2Indberetning.Controllers
         {
             if (CurrentUser.IsAdmin || CurrentUser.Id.Equals(Substitute.LeaderId))
             {
+                Substitute.StartDateTimestamp = _sub.GetStartOfDayTimestamp(Substitute.StartDateTimestamp);
+                if (Substitute.EndDateTimestamp != 9999999999)
+                {
+                    Substitute.EndDateTimestamp = _sub.GetEndOfDayTimestamp(Substitute.EndDateTimestamp);
+                }
                 return base.Post(Substitute);
             }
             return StatusCode(HttpStatusCode.Forbidden);
@@ -66,6 +71,23 @@ namespace OS2Indberetning.Controllers
         {
             if (CurrentUser.IsAdmin || CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).LeaderId))
             {
+                var startStamp = new object();
+                if (delta.TryGetPropertyValue("StartDateTimestamp", out startStamp))
+                {
+                    var startOfDayStamp = _sub.GetStartOfDayTimestamp((long) startStamp);
+                    delta.TrySetPropertyValue("StartDateTimestamp", startOfDayStamp);
+                }
+
+                var endStamp = new object();
+                if (delta.TryGetPropertyValue("EndDateTimestamp", out endStamp))
+                {
+                    if ((long) endStamp != 9999999999)
+                    {
+                        var endOfDayStamp = _sub.GetEndOfDayTimestamp((long) endStamp);
+                        delta.TrySetPropertyValue("EndDateTimestamp", endOfDayStamp);
+                    }
+                }
+
                 return base.Patch(key, delta);
             }
             return StatusCode(HttpStatusCode.Forbidden);

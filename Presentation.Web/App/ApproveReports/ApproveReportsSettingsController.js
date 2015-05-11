@@ -98,9 +98,10 @@
                    title: "Fra",
                    template: function (data) {
                        var m = moment.unix(data.StartDateTimestamp);
+                       debugger;
                        return m._d.getDate() + "/" +
-                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                           m._d.getFullYear();
+                             (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                              m._d.getFullYear();
                    }
                }, {
                    title: "Til",
@@ -109,6 +110,7 @@
                        if (data.EndDateTimestamp == 9999999999) {
                            return "På ubestemt tid";
                        }
+                       debugger;
                        var m = moment.unix(data.EndDateTimestamp);
                        return m._d.getDate() + "/" +
                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
@@ -484,7 +486,7 @@
 
            $('#mySubstitutesGrid').data('kendoGrid').dataSource.read();
            $("#mySubstitutesGrid").data('kendoGrid').refresh();
-           
+
        }
    }
 ]);

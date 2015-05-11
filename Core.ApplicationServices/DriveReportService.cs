@@ -189,7 +189,7 @@ namespace Core.ApplicationServices
                             "Din indberetning er blevet afvist med kommentaren: \n \n" + comment);
                     }
                 }
-                
+
             }
         }
 
@@ -205,7 +205,8 @@ namespace Core.ApplicationServices
                     SetResponsibleLeaderOnReport(driveReport, responsibleLeader);
 
                 }
-                else { 
+                else
+                {
                     //Indicate drivereports where we could not find a leader
                     SetResponsibleLeaderOnReport(driveReport, new Person()
                     {
@@ -230,7 +231,7 @@ namespace Core.ApplicationServices
                 _substituteRepository.AsQueryable()
                     .SingleOrDefault(
                         s =>
-                            s.PersonId != s.LeaderId && s.PersonId == person.PersonId &&
+                            s.PersonId != s.LeaderId && s.PersonId == person.Id &&
                             s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
             if (personalApprover != null)
             {
@@ -315,6 +316,22 @@ namespace Core.ApplicationServices
                         AddReportsOfOrgAndChildOrgLeaders(repo, orgUnitId, leaderId, result);
                     }
                 }
+            }
+
+            if (!getReportsWhereSubExists)
+            {
+                var finalResult = new List<DriveReport>();
+
+                // Remove all reports with personal approver.
+                foreach (var driveReport in result)
+                {
+                    var responsibleLeader = GetResponsibleLeaderForReport(driveReport);
+                    if (responsibleLeader.Id.Equals(leaderId))
+                    {
+                        finalResult.Add(driveReport);
+                    } 
+                }
+                return finalResult.AsQueryable();
             }
 
             return result.AsQueryable();

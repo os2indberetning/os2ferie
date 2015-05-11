@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Core.ApplicationServices;
@@ -136,6 +137,31 @@ namespace ApplicationServices.Test.SubstituteServiceTest
             Assert.AreEqual("", repo[1].Sub.CprNumber);
 
             Assert.AreEqual("", repo[1].Person.CprNumber);
+        }
+
+        [Test]
+        public void GetStartOfDayTimestamp_shouldreturn_correctvalue()
+        {
+            var res = _uut.GetStartOfDayTimestamp(1431341025);
+            var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            dateTime = dateTime.AddSeconds(res).ToLocalTime();
+            Assert.AreEqual(11, dateTime.Day);
+            Assert.AreEqual(0, dateTime.Hour);
+            Assert.AreEqual(0, dateTime.Minute);
+            Assert.AreEqual(0, dateTime.Second);
+
+        }
+
+        [Test]
+        public void GetEndOfDayTimestamp_shouldreturn_correctvalue()
+        {
+            var res = _uut.GetEndOfDayTimestamp(1431304249);
+            var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            dateTime = dateTime.AddSeconds(res).ToLocalTime();
+            Assert.AreEqual(11, dateTime.Day);
+            Assert.AreEqual(23, dateTime.Hour);
+            Assert.AreEqual(59, dateTime.Minute);
+            Assert.AreEqual(59, dateTime.Second);
         }
     }
 }
