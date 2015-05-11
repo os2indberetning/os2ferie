@@ -16,9 +16,13 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             resolve: {
                 ReportId: function () { return -1; },
                 CurrentUser: ["$rootScope", "Person", function ($rootScope, Person) {
-                    return Person.GetCurrentUser().$promise.then(function (res) {
-                        $rootScope.CurrentUser = res;
-                    });
+                    if ($rootScope.CurrentUser == undefined) {
+                        return Person.GetCurrentUser().$promise.then(function (res) {
+                            $rootScope.CurrentUser = res;
+                        });
+                    } else {
+                        return $rootScope.CurrentUser;
+                    }
                 }],
                 $modalInstance: function () { return -1; }
 
@@ -31,9 +35,14 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             resolve: {
                 ReportId: function () { return -1; },
                 CurrentUser: ["$rootScope", "Person", function ($rootScope, Person) {
-                    return Person.GetCurrentUser().$promise.then(function (res) {
-                        $rootScope.CurrentUser = res;
-                    });
+                    if ($rootScope.CurrentUser == undefined) {
+                        return Person.GetCurrentUser().$promise.then(function (res) {
+                            $rootScope.CurrentUser = res;
+                        });
+                    } else {
+                        return $rootScope.CurrentUser;
+                    }
+
                 }],
                 $modalInstance: function () { return -1; }
             }
@@ -43,9 +52,13 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             templateUrl: "/App/MyReports/MyReportsView.html",
             resolve: {
                 CurrentUser: ["$rootScope", "Person", function ($rootScope, Person) {
-                    return Person.GetCurrentUser().$promise.then(function (res) {
-                        $rootScope.CurrentUser = res;
-                    });
+                    if ($rootScope.CurrentUser == undefined) {
+                        return Person.GetCurrentUser().$promise.then(function (res) {
+                            $rootScope.CurrentUser = res;
+                        });
+                    } else {
+                        return $rootScope.CurrentUser;
+                    }
                 }]
             }
         })
@@ -54,12 +67,20 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             templateUrl: "/App/ApproveReports/ApproveReportsView.html",
             resolve: {
                 CurrentUser: ["Person", "$location", "$rootScope", function (Person, $location, $rootScope) {
-                    return Person.GetCurrentUser().$promise.then(function (data) {
-                        $rootScope.CurrentUser = data;
-                        if (!data.IsLeader) {
+                    if ($rootScope.CurrentUser == undefined) {
+                        return Person.GetCurrentUser().$promise.then(function(data) {
+                            $rootScope.CurrentUser = data;
+                            if (!data.IsLeader) {
+                                $location.path("driving");
+                            }
+                        });
+                    } else {
+                        if (!$rootScope.CurrentUser.IsLeader) {
                             $location.path("driving");
                         }
-                    });
+                        return $rootScope.CurrentUser;
+                    }
+
                 }]
             }
         })
@@ -69,9 +90,13 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             controller: "SettingController",
             resolve: {
                 CurrentUser: ["$rootScope", "Person", function ($rootScope, Person) {
-                    return Person.GetCurrentUser().$promise.then(function (res) {
-                        $rootScope.CurrentUser = res;
-                    });
+                    if ($rootScope.CurrentUser == undefined) {
+                        return Person.GetCurrentUser().$promise.then(function (res) {
+                            $rootScope.CurrentUser = res;
+                        });
+                    } else {
+                        return $rootScope.CurrentUser;
+                    }
                 }]
             }
         })
@@ -80,12 +105,19 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             templateUrl: "/App/Admin/AdminView.html",
             resolve: {
                 CurrentUser: ["Person", "$location", "$rootScope", function (Person, $location, $rootScope) {
-                    return Person.GetCurrentUser().$promise.then(function (data) {
-                        $rootScope.CurrentUser = data;
-                        if (!data.IsAdmin) {
+                    if ($rootScope.CurrentUser == undefined) {
+                        return Person.GetCurrentUser().$promise.then(function (data) {
+                            $rootScope.CurrentUser = data;
+                            if (!data.IsAdmin) {
+                                $location.path("driving");
+                            }
+                        });
+                    } else {
+                        if (!$rootScope.CurrentUser.IsAdmin) {
                             $location.path("driving");
                         }
-                    });
+                        return $rootScope.CurrentUser;
+                    }
                 }]
             }
         });

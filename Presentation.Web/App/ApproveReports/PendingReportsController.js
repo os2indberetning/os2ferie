@@ -422,7 +422,11 @@
            });
 
            modalInstance.result.then(function () {
-               Report.patch({ id: id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix() }, function () {
+               Report.patch({ id: id }, {
+                   "Status": "Accepted",
+                   "ClosedDateTimestamp": moment().unix(),
+                   "ApprovedById": $rootScope.CurrentUser.Id,
+           }, function () {
                    $scope.gridContainer.grid.dataSource.read();
                });
            });
@@ -446,7 +450,12 @@
 
                modalInstance.result.then(function (accountNumber) {
                    angular.forEach(checkedReports, function (value, key) {
-                       Report.patch({ id: value }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix(), "AccountNumber": accountNumber }, function () {
+                       Report.patch({ id: value }, {
+                           "Status": "Accepted",
+                           "ClosedDateTimestamp": moment().unix(),
+                           "AccountNumber": accountNumber,
+                           "ApprovedById": $rootScope.CurrentUser.Id,
+                       }, function () {
                            $scope.gridContainer.grid.dataSource.read();
                        });
                    });
@@ -474,7 +483,11 @@
                modalInstance.result.then(function () {
                    debugger;
                    angular.forEach(checkedReports, function (value, key) {
-                       Report.patch({ id: value }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix() }, function () {
+                       Report.patch({ id: value }, {
+                           "Status": "Accepted",
+                           "ClosedDateTimestamp": moment().unix(),
+                           "ApprovedById": $rootScope.CurrentUser.Id,
+                       }, function () {
                            $scope.gridContainer.grid.dataSource.read();
                        });
                    });
@@ -531,7 +544,12 @@
            });
 
            modalInstance.result.then(function (res) {
-               Report.patch({ id: id }, { "Status": "Rejected", "ClosedDateTimestamp": moment().unix(), "Comment": res.Comment }, function () {
+               Report.patch({ id: id }, {
+                   "Status": "Rejected",
+                   "ClosedDateTimestamp": moment().unix(),
+                   "Comment": res.Comment,
+                   "ApprovedById": $rootScope.CurrentUser.Id,
+               }, function () {
                    $scope.gridContainer.grid.dataSource.read();
 
                });
