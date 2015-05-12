@@ -15,7 +15,7 @@ namespace DBUpdater
         {
             var result = new List<Employee>();
 
-            using (var sqlConnection1 = new SqlConnection("Data Source=FVRSQL02; Initial Catalog=MDM;Integrated Security=SSPI; Persist Security Info=True; MultipleActiveResultSets=True;  Application Name=EntityFramework"))
+            using (var sqlConnection1 = new SqlConnection("data source=706sofd01.intern.syddjurs.dk;initial catalog=MDM;persist security info=True;user id=sofdeindberetning;password=soa2ieCh>e"))
             {
                 var cmd = new SqlCommand
                 {
@@ -62,7 +62,7 @@ namespace DBUpdater
         public IQueryable<Organisation> GetOrganisationsAsQueryable()
         {
             var result = new List<Organisation>();
-            using (var sqlConnection1 = new SqlConnection("Data Source=FVRSQL02; Initial Catalog=MDM;Integrated Security=SSPI; Persist Security Info=True; MultipleActiveResultSets=True;  Application Name=EntityFramework"))
+            using (var sqlConnection1 = new SqlConnection("data source=706sofd01.intern.syddjurs.dk;initial catalog=MDM;persist security info=True;user id=sofdeindberetning;password=soa2ieCh>e"))
             {
                 var cmd = new SqlCommand
                 {

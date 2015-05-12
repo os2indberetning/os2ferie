@@ -12,6 +12,7 @@
 		initials: string;
 		fullName: string;
 		isAdmin: boolean;
+		isSubstitute: boolean;
 		personalAddresses: any[];
 		personalRoutes: any[];
 		licensePlates: any[];

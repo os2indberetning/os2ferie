@@ -64,6 +64,18 @@ namespace OS2Indberetning
             .ReturnsFromEntitySet<Address>("Addresses");
 
             builder.EntityType<Address>().Collection
+            .Function("GetCachedAddresses")
+            .ReturnsFromEntitySet<Address>("Addresses");
+
+             builder.EntityType<Address>().Collection
+            .Action("AttemptCleanCachedAddress")
+            .ReturnsFromEntitySet<Address>("Addresses");
+
+            
+
+            
+
+            builder.EntityType<Address>().Collection
                 .Function("GetMapStart")
                 .ReturnsFromEntitySet<Address>("Addresses");
 

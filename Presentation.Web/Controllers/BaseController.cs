@@ -40,7 +40,7 @@ namespace OS2Indberetning.Controllers
             //string[] httpUser = @"favrskov\hbr".Split('\\'); //Henrik Brix - leder i it afdelingen
             //string[] httpUser = @"favrskov\bcj".Split('\\'); //Bo Cassøe 
             //string[] httpUser = @"favrskov\sgor".Split('\\'); // Søren Gormsen - medarbejder i it afdelingen
-            string[] httpUser = @"favrskov\kije".Split('\\'); // Fissirul Lehmann - administrator
+            string[] httpUser = @"favrskov\hshu".Split('\\'); // Fissirul Lehmann - administrator
             //string[] httpUser = @"favrskov\lacl".Split('\\'); // Lars Clement
             //string[] httpUser = @"favrskov\fpou".Split('\\'); // Flemming Poulsen
             //string[] httpUser = @"favrskov\tol".Split('\\'); // Tonny Olsen

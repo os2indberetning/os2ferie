@@ -27,8 +27,7 @@ namespace Core.DomainServices
 
         public Address Launder(Address inputAddress)
         {
-            var inputAddressString = inputAddress.StreetName + inputAddress.StreetNumber + inputAddress.ZipCode +
-                                     inputAddress.Town;
+            var inputAddressString = inputAddress.StreetName + " " + inputAddress.StreetNumber + ", " + inputAddress.ZipCode + " " + inputAddress.Town;
             var cachedAddress = _repo.AsQueryable()
                 .FirstOrDefault(addr => addr.DirtyString.Equals(inputAddressString));
 
@@ -60,7 +59,7 @@ namespace Core.DomainServices
             {
                 try
                 {
-                    _coordinates.GetAddressCoordinates(cachedAddress);
+                    _coordinates.GetAddressCoordinates(cachedAddress, true);
                 }
                 catch (AddressCoordinatesException e)
                 {

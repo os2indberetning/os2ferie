@@ -186,7 +186,8 @@ namespace DBUpdater
                 return;
             }
 
-            if (!_personRepo.AsQueryable().Any(x => x.Id == personId))
+            var person = _personRepo.AsQueryable().FirstOrDefault(x => x.Id == personId);
+            if (person == null)
             {
                 throw new Exception("Person does not exist.");
             }
@@ -197,7 +198,7 @@ namespace DBUpdater
 
             var addressToLaunder = new Address
             {
-                Description = "Hjemmeadresse",
+                Description = person.FirstName + " " + person.LastName + " [" + person.Initials + "]",
                 StreetName = splitStreetAddress.ElementAt(0),
                 StreetNumber = splitStreetAddress.Count > 1 ? splitStreetAddress.ElementAt(1) : "1",
                 ZipCode = empl.PostNr ?? 0,

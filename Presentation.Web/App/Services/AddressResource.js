@@ -121,6 +121,14 @@
                 });
                 return res;
             }
+        },
+        "AttemptCleanCachedAddress": {
+            method: "POST",
+            url: "/odata/Addresses/Service.AttemptCleanCachedAddress"
+        },
+        "GetAutoCompleteDataForCachedAddress": {
+            method: "GET",
+            url: "/odata/Addresses/Service.GetCachedAddresses?$select=Description,DirtyString"
         }
     });
 }]);

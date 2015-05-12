@@ -39,8 +39,11 @@
                         }
                     },
                     pageSize: 20,
+                    serverPaging: true,
+                    serverFiltering: true,
                 },
                 sortable: true,
+
                 pageable: {
                     messages: {
                         display: "{0} - {1} af {2} organisationsenheder", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
@@ -104,7 +107,7 @@
 
         $scope.orgUnitChanged = function (item) {
             var filter = [];
-            filter.push({ field: "LongDescription", operator: "contains", value: $scope.orgUnit.chosenUnit });
+            filter.push({ field: "LongDescription", operator: "startswith", value: $scope.orgUnit.chosenUnit });
             $scope.gridContainer.grid.dataSource.filter(filter);
         }
 

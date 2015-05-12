@@ -290,6 +290,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App\Admin\Controllers\AddressLaundry\AddressLaundryController.js" />
     <Content Include="App\Admin\Controllers\Administration\AdministrationController.js" />
     <Content Include="App\Admin\Controllers\Administration\Modal\GenerateFileModalController.js" />
     <Content Include="App\Admin\Controllers\Administration\Modal\RemoveAdminModalController.js" />
@@ -303,6 +304,7 @@
     <Content Include="App\Admin\Controllers\Reports\AdminRejectedReportsController.js" />
     <Content Include="App\Admin\Controllers\Reports\Modal\ShowRouteModalController.js" />
     <Content Include="App\Admin\Controllers\Substitutes\Modals\AdminNewSubstituteModalInstanceController.js" />
+    <Content Include="App\Admin\HTML\AddressLaundry\AddressLaundryView.html" />
     <Content Include="App\Admin\HTML\Reports\Modal\ShowRouteModalTemplate.html" />
     <Content Include="App\Admin\Controllers\Substitutes\SubstituteController.js" />
     <Content Include="App\Admin\HTML\Administration\Modal\ConfirmGenerateFileModalTemplate.html" />

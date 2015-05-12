@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.OData.Routing;
 using System.Web.OData;
 using System.Web.OData.Query;
 using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
+using Infrastructure.AddressServices.Interfaces;
 using log4net;
-using Microsoft.Owin.Security.Provider;
 using Ninject;
+using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
 
 namespace OS2Indberetning.Controllers
 {
@@ -22,15 +21,21 @@ namespace OS2Indberetning.Controllers
     public class AddressesController : BaseController<Address>
     {
         private readonly IGenericRepository<Employment> _employmentRepo;
+        private readonly IAddressLaunderer _launderer;
+        private readonly IAddressCoordinates _coordinates;
+        private readonly IGenericRepository<CachedAddress> _cachedAddressRepo;
         private static Address MapStartAddress { get; set; }
 
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         //GET: odata/Addresses
-        public AddressesController(IGenericRepository<Address> repository, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo)
+        public AddressesController(IGenericRepository<Address> repository, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo, IAddressLaunderer launderer, IAddressCoordinates coordinates, IGenericRepository<CachedAddress> cachedAddressRepo)
             : base(repository, personRepo)
         {
             _employmentRepo = employmentRepo;
+            _launderer = launderer;
+            _coordinates = coordinates;
+            _cachedAddressRepo = cachedAddressRepo;
         }
 
         [EnableQuery]
@@ -152,11 +157,51 @@ namespace OS2Indberetning.Controllers
         }
 
         [EnableQuery]
+        public IHttpActionResult GetCachedAddresses(bool includeCleanAddresses = false)
+        {
+            if (CurrentUser.IsAdmin)
+            {
+                var repo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<CachedAddress>>();
+                if (!includeCleanAddresses)
+                {
+                    var res = repo.AsQueryable().Where(x => x.IsDirty);
+                    return Ok(res);
+                }
+                return Ok(repo.AsQueryable());
+            }
+            return StatusCode(HttpStatusCode.Forbidden);
+        }
+
+        [EnableQuery]
         public IQueryable<Address> GetStandard()
         {
             var rep = Repo.AsQueryable();
             var res = rep.Where(elem => !(elem is DriveReportPoint || elem is Point)).Where(elem => !(elem is PersonalAddress || elem is WorkAddress || elem is CachedAddress));
             return res.AsQueryable();
+        }
+
+        [EnableQuery]
+        public IHttpActionResult AttemptCleanCachedAddress(Address input)
+        {
+            try
+            {
+                var cleanAddress = _launderer.Launder(input);
+                cleanAddress = _coordinates.GetAddressCoordinates(cleanAddress, true);
+                var cachedAddr = _cachedAddressRepo.AsQueryable().Single(x => x.Id.Equals(input.Id));
+                cachedAddr.Latitude = cleanAddress.Latitude;
+                cachedAddr.Longitude = cleanAddress.Longitude;
+                cachedAddr.StreetName = cleanAddress.StreetName;
+                cachedAddr.StreetNumber = cleanAddress.StreetNumber;
+                cachedAddr.ZipCode = cleanAddress.ZipCode;
+                cachedAddr.Town = cleanAddress.Town;
+                cachedAddr.IsDirty = false;
+                _cachedAddressRepo.Save();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(HttpStatusCode.BadRequest);
+            }
         }
     }
 }
