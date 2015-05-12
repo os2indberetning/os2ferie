@@ -261,6 +261,10 @@
     <Compile Include="Migrations\201505120749466_addedIsSubstituteToPerson.Designer.cs">
       <DependentUpon>201505120749466_addedIsSubstituteToPerson.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505121307576_AddedAddressIdToOrgUnut.cs" />
+    <Compile Include="Migrations\201505121307576_AddedAddressIdToOrgUnut.Designer.cs">
+      <DependentUpon>201505121307576_AddedAddressIdToOrgUnut.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -425,6 +429,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505120749466_addedIsSubstituteToPerson.resx">
       <DependentUpon>201505120749466_addedIsSubstituteToPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505121307576_AddedAddressIdToOrgUnut.resx">
+      <DependentUpon>201505121307576_AddedAddressIdToOrgUnut.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

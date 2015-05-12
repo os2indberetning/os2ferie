@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -9,13 +10,17 @@ using DBUpdater.Models;
 
 namespace DBUpdater
 {
-    public class SyddjursDataProvider : IDbUpdaterDataProvider
+    public class DataProvider : IDbUpdaterDataProvider
     {
+        private readonly string _connectionString = ConfigurationManager.ConnectionStrings["DBUpdaterConnection"].ConnectionString;
+
         public IQueryable<Employee> GetEmployeesAsQueryable()
         {
             var result = new List<Employee>();
 
-            using (var sqlConnection1 = new SqlConnection("data source=706sofd01.intern.syddjurs.dk;initial catalog=MDM;persist security info=True;user id=sofdeindberetning;password=soa2ieCh>e"))
+           
+
+            using (var sqlConnection1 = new SqlConnection(_connectionString))
             {
                 var cmd = new SqlCommand
                 {
@@ -62,7 +67,7 @@ namespace DBUpdater
         public IQueryable<Organisation> GetOrganisationsAsQueryable()
         {
             var result = new List<Organisation>();
-            using (var sqlConnection1 = new SqlConnection("data source=706sofd01.intern.syddjurs.dk;initial catalog=MDM;persist security info=True;user id=sofdeindberetning;password=soa2ieCh>e"))
+            using (var sqlConnection1 = new SqlConnection(_connectionString))
             {
                 var cmd = new SqlCommand
                 {
@@ -95,7 +100,7 @@ namespace DBUpdater
             return result.AsQueryable();
         }
 
-        public DateTime? SafeGetDate(SqlDataReader reader, int colIndex)
+        private DateTime? SafeGetDate(SqlDataReader reader, int colIndex)
         {
             if (!reader.IsDBNull(colIndex))
             {
@@ -104,7 +109,7 @@ namespace DBUpdater
             return null;
         }
 
-        public string SafeGetString(SqlDataReader reader, int colIndex)
+        private string SafeGetString(SqlDataReader reader, int colIndex)
         {
             if (!reader.IsDBNull(colIndex))
             {
@@ -113,7 +118,7 @@ namespace DBUpdater
             return null;
         }
 
-        public int? SafeGetInt16(SqlDataReader reader, int colIndex)
+        private int? SafeGetInt16(SqlDataReader reader, int colIndex)
         {
             if (!reader.IsDBNull(colIndex))
             {
@@ -122,7 +127,7 @@ namespace DBUpdater
             return null;
         }
 
-        public int? SafeGetInt32(SqlDataReader reader, int colIndex)
+        private int? SafeGetInt32(SqlDataReader reader, int colIndex)
         {
             if (!reader.IsDBNull(colIndex))
             {
@@ -131,7 +136,7 @@ namespace DBUpdater
             return null;
         }
 
-        public long? SafeGetInt64(SqlDataReader reader, int colIndex)
+        private long? SafeGetInt64(SqlDataReader reader, int colIndex)
         {
             if (!reader.IsDBNull(colIndex))
             {

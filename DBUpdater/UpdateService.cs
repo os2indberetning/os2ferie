@@ -49,8 +49,8 @@ namespace DBUpdater
             if (index == -1)
             {
                 result.Add(address);
-            } 
-            else 
+            }
+            else
             {
                 result.Add(address.Substring(0, index - 1));
                 result.Add(address.Substring(index, address.Length - index));
@@ -79,7 +79,17 @@ namespace DBUpdater
                 orgToInsert.ShortDescription = org.KortNavn;
                 orgToInsert.HasAccessToFourKmRule = false;
                 orgToInsert.OrgId = org.LOSOrgId;
-                orgToInsert.Address = GetWorkAddress(org);
+
+                var workAddress = GetWorkAddress(org);
+                orgToInsert.Address = workAddress;
+
+                if(workAddress.Id != 0)
+                {
+                    orgToInsert.Address = null;
+                    orgToInsert.AddressId = workAddress.Id;
+                }
+
+
 
                 if (orgToInsert.Level > 0)
                 {
@@ -99,31 +109,40 @@ namespace DBUpdater
             foreach (var employee in empls)
             {
                 i++;
-                Console.WriteLine("Migrating employee " + i + " of " + empls.Count() + ".");
+                Console.WriteLine("Migrating person " + i + " of " + empls.Count() + ".");
 
                 var personToInsert = _personRepo.AsQueryable().FirstOrDefault(x => x.PersonId == employee.MaNr);
 
                 if (personToInsert == null)
                 {
                     personToInsert = _personRepo.Insert(new Person());
+                    personToInsert.IsAdmin = false;
+                    personToInsert.RecieveMail = true;
                 }
 
                 personToInsert.CprNumber = employee.CPR ?? "ikke opgivet";
-                personToInsert.RecieveMail = false;
                 personToInsert.FirstName = employee.Fornavn ?? "ikke opgivet";
                 personToInsert.LastName = employee.Efternavn ?? "ikke opgivet";
-                personToInsert.IsAdmin = false;
                 personToInsert.Initials = employee.ADBrugerNavn ?? " ";
                 personToInsert.Mail = employee.Email ?? "";
                 personToInsert.PersonId = employee.MaNr ?? default(int);
 
+            }
+            _personRepo.Save();
 
-                _personRepo.Save();
+            i = 0;
+            foreach (var employee in empls)
+            {
+                i++;
+                Console.WriteLine("Adding employment and address to person " + i + " of " + empls.Count());
+                var personToInsert = _personRepo.AsQueryable().First(x => x.PersonId == employee.MaNr);
 
                 CreateEmployment(employee, personToInsert.Id);
                 SaveHomeAddress(employee, personToInsert.Id);
-
             }
+            _emplRepo.Save();
+            _personalAddressRepo.Save();
+
             Console.WriteLine("Done migrating employees");
         }
 
@@ -172,7 +191,6 @@ namespace DBUpdater
                 employment.EndDateTimestamp = 0;
             }
 
-            _emplRepo.Save();
             return employment;
 
 
@@ -218,8 +236,17 @@ namespace DBUpdater
                 Longitude = addressToLaunder.Longitude ?? "",
             };
 
-            _personalAddressRepo.Insert(launderedAddress);
-            _personalAddressRepo.Save();
+            var homeAddr = _personalAddressRepo.AsQueryable().FirstOrDefault(x => x.PersonId.Equals(personId) &&
+                x.StreetName.Equals(launderedAddress.StreetName) &&
+                x.StreetNumber.Equals(launderedAddress.StreetNumber) &&
+                x.ZipCode.Equals(launderedAddress.ZipCode) &&
+                x.Type == PersonalAddressType.Home);
+
+            if (homeAddr == null)
+            {
+                _personalAddressRepo.Insert(launderedAddress);
+            }
+            // If home address is not null, then the homeaddress already exists in the database -> do nothing.
         }
 
         public WorkAddress GetWorkAddress(Organisation org)
@@ -242,19 +269,6 @@ namespace DBUpdater
                 Description = org.Navn
             };
 
-            var temp =
-                _workAddressRepo.AsQueryable()
-                    .FirstOrDefault(
-                       x =>
-                           x.StreetName.Equals(addressToLaunder.StreetName) &&
-                           x.StreetNumber.Equals(addressToLaunder.StreetNumber) &&
-                           x.ZipCode.Equals(addressToLaunder.ZipCode));
-
-            if (temp != null)
-            {
-                return temp;
-            }
-            
             addressToLaunder = launderer.Launder(addressToLaunder);
 
             var launderedAddress = new WorkAddress()
@@ -267,6 +281,13 @@ namespace DBUpdater
                 Longitude = addressToLaunder.Longitude ?? "",
                 Description = org.Navn
             };
+
+            var existingOrg = _orgRepo.AsQueryable().FirstOrDefault(x => x.OrgId.Equals(org.LOSOrgId));
+
+            if (existingOrg != null)
+            {
+                launderedAddress.Id = existingOrg.AddressId;
+            }
 
             return launderedAddress;
         }

@@ -27,7 +27,7 @@ namespace DBUpdater
                 NinjectWebKernel.CreateKernel().Get<IGenericRepository<CachedAddress>>(),
                 NinjectWebKernel.CreateKernel().Get<IGenericRepository<PersonalAddress>>(),
                 NinjectWebKernel.CreateKernel().Get<IAddressLaunderer>(),
-                NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>(), new SyddjursDataProvider(),
+                NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>(), new DataProvider(),
                 NinjectWebKernel.CreateKernel().Get<IGenericRepository<WorkAddress>>());
 
             service.MigrateOrganisations();
