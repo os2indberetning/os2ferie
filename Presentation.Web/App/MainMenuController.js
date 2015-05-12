@@ -6,7 +6,7 @@ angular.module("application").controller("MainMenuController", [
                $scope.HomeAddress = addr.StreetName + " " + addr.StreetNumber + ", " + addr.ZipCode + " " + addr.Town;
            });
            $scope.showAdministration = res.IsAdmin;
-           $scope.showApproveReports = res.IsLeader;
+           $scope.showApproveReports = res.IsLeader || res.IsSubstitute;
            $scope.UserName = res.FullName;
            $scope.UserEmail = res.Mail;
        });

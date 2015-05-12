@@ -20,6 +20,7 @@ namespace Core.DomainModel
         public string Initials { get; set; }
         public string FullName { get; set; }
         public bool IsAdmin { get; set; }
+        public bool IsSubstitute { get; set; }
 
         public virtual ICollection<PersonalAddress> PersonalAddresses { get; set; }
         public virtual ICollection<PersonalRoute> PersonalRoutes { get; set; }

@@ -299,6 +299,14 @@ namespace Core.ApplicationServices
 
             var leaderEmpl = _employmentRepository.AsQueryable().Where(e => e.Person.Id == leaderId && e.IsLeader).ToList();
 
+            var subq = _substituteRepository.AsQueryable().Where(sub => sub.Sub.Id.Equals(leaderId)).ToList();
+
+            foreach (var sub in subq)
+            {
+                var subEmpls = _employmentRepository.AsQueryable().Where(x => x.OrgUnitId.Equals(sub.OrgUnitId) && x.IsLeader).ToList();
+                leaderEmpl.AddRange(subEmpls);
+            }
+
             // Iterate all employments belonging to the leader.
             foreach (var employment in leaderEmpl)
             {

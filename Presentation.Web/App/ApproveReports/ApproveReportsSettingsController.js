@@ -8,6 +8,7 @@
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
+       $scope.showSubstituteSettings = $rootScope.CurrentUser.IsLeader;
 
        Person.get({ id: personId }, function (data) {
            $scope.currentPerson = data;
@@ -98,7 +99,6 @@
                    title: "Fra",
                    template: function (data) {
                        var m = moment.unix(data.StartDateTimestamp);
-                       debugger;
                        return m._d.getDate() + "/" +
                              (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                               m._d.getFullYear();
@@ -110,7 +110,6 @@
                        if (data.EndDateTimestamp == 9999999999) {
                            return "På ubestemt tid";
                        }
-                       debugger;
                        var m = moment.unix(data.EndDateTimestamp);
                        return m._d.getDate() + "/" +
                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.

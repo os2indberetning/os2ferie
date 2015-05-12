@@ -78,6 +78,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Person>().Property(p => p.Initials).IsRequired();
             modelBuilder.Entity<Person>().Property(t => t.CprNumber).IsFixedLength().HasMaxLength(10);
             modelBuilder.Entity<Person>().Ignore(t => t.FullName);
+            modelBuilder.Entity<Person>().Ignore(t => t.IsSubstitute);
 
         }
 

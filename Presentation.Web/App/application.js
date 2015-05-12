@@ -70,12 +70,12 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
                     if ($rootScope.CurrentUser == undefined) {
                         return Person.GetCurrentUser().$promise.then(function(data) {
                             $rootScope.CurrentUser = data;
-                            if (!data.IsLeader) {
+                            if (!data.IsLeader && !data.IsSubstitute) {
                                 $location.path("driving");
                             }
                         });
                     } else {
-                        if (!$rootScope.CurrentUser.IsLeader) {
+                        if (!$rootScope.CurrentUser.IsLeader && !$rootScope.CurrentUser.IsSubstitute) {
                             $location.path("driving");
                         }
                         return $rootScope.CurrentUser;

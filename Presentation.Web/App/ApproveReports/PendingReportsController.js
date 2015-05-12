@@ -481,7 +481,6 @@
                });
 
                modalInstance.result.then(function () {
-                   debugger;
                    angular.forEach(checkedReports, function (value, key) {
                        Report.patch({ id: value }, {
                            "Status": "Accepted",

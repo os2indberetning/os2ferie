@@ -20,13 +20,15 @@ namespace OS2Indberetning.Controllers
         private IPersonService _person;
         private readonly IGenericRepository<Employment> _employmentRepo = new GenericRepository<Employment>(new DataContext());
         private readonly IGenericRepository<LicensePlate> _licensePlateRepo = new GenericRepository<LicensePlate>(new DataContext());
+        private readonly IGenericRepository<Substitute> _substituteRepo;
 
-        public PersonController(IGenericRepository<Person> repo, IPersonService personService, IGenericRepository<Employment> employmentRepo, IGenericRepository<LicensePlate> licensePlateRepo)
+        public PersonController(IGenericRepository<Person> repo, IPersonService personService, IGenericRepository<Employment> employmentRepo, IGenericRepository<LicensePlate> licensePlateRepo, IGenericRepository<Substitute> substituteRepo)
             : base(repo, repo)
         {
             _person = personService;
             _employmentRepo = employmentRepo;
             _licensePlateRepo = licensePlateRepo;
+            _substituteRepo = substituteRepo;
         }
 
         // GET: odata/Person
@@ -46,7 +48,9 @@ namespace OS2Indberetning.Controllers
             var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(CurrentUser.Id));
             CurrentUser.Employments = employments.ToList();
             _person.AddHomeWorkDistanceToEmployments(CurrentUser);
+            CurrentUser.CprNumber = "";
             CurrentUser.FullName = CurrentUser.FirstName + " " + CurrentUser.LastName + " [" + CurrentUser.Initials + "]";
+            CurrentUser.IsSubstitute = _substituteRepo.AsQueryable().Any(x => x.SubId.Equals(CurrentUser.Id));
             return CurrentUser;
         }
 
