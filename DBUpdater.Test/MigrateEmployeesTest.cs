@@ -62,6 +62,16 @@ namespace DBUpdater.Test
 
             _cachedAddressRepoMock.Insert(new CachedAddress()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>()).AndDoes(x => cachedAddressList.Add(x.Arg<CachedAddress>())).AndDoes(x => x.Arg<CachedAddress>().Id = cachedIdCount).AndDoes(x => cachedIdCount++);
 
+            cachedAddressList.Add(new CachedAddress()
+            {
+                Id = 999,
+                StreetName = "Katrinebjergvej",
+                StreetNumber = "93B",
+                ZipCode = 8200,
+                Town = "Aarhus N",
+                DirtyString = "Katrinebjergvej 93B, 8200 Aarhus N"
+            });
+
             _cachedAddressRepoMock.AsQueryable().Returns(cachedAddressList.AsQueryable());
 
             _personalAddressRepoMock.Insert(new PersonalAddress()).ReturnsForAnyArgs(x => x.Arg<PersonalAddress>()).AndDoes(x => personalAddressList.Add(x.Arg<PersonalAddress>())).AndDoes(x => x.Arg<PersonalAddress>().Id = personalIdCount).AndDoes(x => personalIdCount++);

@@ -36,7 +36,8 @@ namespace DomainServices.Test
                     StreetNumber = "44",
                     ZipCode = 8210,
                     Town = "Aarhus V",
-                    IsDirty = true
+                    IsDirty = true,
+                    DirtyString = "Jens Baggesens Vej 44, 8210 Aarhus V"
                 },
                 new CachedAddress()
                 {
@@ -44,12 +45,15 @@ namespace DomainServices.Test
                     StreetNumber = "93b",
                     ZipCode = 8200,
                     Town = "Aarhus N",
-                    IsDirty = false
+                    IsDirty = false,
+                    DirtyString = "Katrinebjergvej 93b, 8200 Aarhus N"
                 }
             }.AsQueryable());
 
             laundryMock = NSubstitute.Substitute.For<IAddressLaunderer>();
             laundryMock.WhenForAnyArgs(x => x.Launder(new Address())).DoNotCallBase();
+
+
 
             uut = new CachedAddressLaunderer(repoMock, laundryMock, coordinatesMock);    
         }

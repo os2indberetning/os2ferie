@@ -20,6 +20,17 @@ namespace Presentation.Web.Test.Controllers.LicensePlates
     public class LicensePlateTest
     {
 
+
+
+
+
+
+        // =============================   DISCLAIMER =======================================
+        // These tests only work if the actual people table contains the AD user set in basecontroller, and the personId on the license plate test data is the
+        // Same as the id of that AD person.
+
+
+
         public TestServer Server { get; set; }
 
         [SetUp]
@@ -216,7 +227,7 @@ namespace Presentation.Web.Test.Controllers.LicensePlates
         {
             return @"{
                         'Id' : 4,
-                        'PersonId' : 1,
+                        'PersonId' : 2308,
                         'Plate' : '666',
                         'Description' : 'Posted Description',
                         'IsPrimary'   : 'false'
@@ -227,7 +238,7 @@ namespace Presentation.Web.Test.Controllers.LicensePlates
         {
             return @"{
                         'Id' : 5,
-                        'PersonId': 1,
+                        'PersonId': 2308,
                         'Plate' : '666',
                         'Description' : 'Posted Description',
                         'IsPrimary'   : 'false'

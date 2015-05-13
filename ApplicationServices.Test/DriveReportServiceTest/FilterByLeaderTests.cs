@@ -60,12 +60,14 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             {
                 Person = leader1,
                 OrgUnit = org1,
+                OrgUnitId = 1,
                 IsLeader = true
             };
 
             leaderEmpl2 = new Employment()
             {
                 Person = leader2,
+                OrgUnitId = 2,
                 OrgUnit = org2,
                 IsLeader = true
             };
@@ -77,6 +79,13 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             var driveRepoMock = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
             var orgRepoMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
+            var subRepoMock = NSubstitute.Substitute.For<IGenericRepository<Substitute>>();
+
+            subRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Substitute>()
+            {
+
+            }.AsQueryable());
+
 
             driveRepoMock.AsQueryable().ReturnsForAnyArgs(new List<DriveReport>()
             {
@@ -103,7 +112,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
             var uut = new DriveReportService(new MailSender(), driveRepoMock,
                 NSubstitute.Substitute.For<IReimbursementCalculator>(), orgRepoMock, emplRepoMock,
-               NSubstitute.Substitute.For<IGenericRepository<Substitute>>());
+              subRepoMock);
 
             var res = uut.FilterByLeader(driveRepoMock.AsQueryable(), 1, true);
             Assert.AreEqual(1, res.Count());
@@ -115,6 +124,13 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             var driveRepoMock = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
             var orgRepoMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
+
+            var subRepoMock = NSubstitute.Substitute.For<IGenericRepository<Substitute>>();
+
+            subRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Substitute>()
+            {
+
+            }.AsQueryable());
 
             driveRepoMock.AsQueryable().ReturnsForAnyArgs(new List<DriveReport>()
             {
@@ -169,7 +185,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
             var uut = new DriveReportService(new MailSender(), driveRepoMock,
                 NSubstitute.Substitute.For<IReimbursementCalculator>(), orgRepoMock, emplRepoMock,
-               NSubstitute.Substitute.For<IGenericRepository<Substitute>>());
+               subRepoMock);
 
             var res = uut.FilterByLeader(driveRepoMock.AsQueryable(), 1, true);
             Assert.AreEqual(5, res.Count());
@@ -181,6 +197,13 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             var driveRepoMock = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
             var orgRepoMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
+            var subRepoMock = NSubstitute.Substitute.For<IGenericRepository<Substitute>>();
+
+            subRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Substitute>()
+            {
+
+            }.AsQueryable());
+
 
             var org1Person = new Person()
             {
@@ -252,7 +275,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
             var uut = new DriveReportService(new MailSender(), driveRepoMock,
                 NSubstitute.Substitute.For<IReimbursementCalculator>(), orgRepoMock, emplRepoMock,
-               NSubstitute.Substitute.For<IGenericRepository<Substitute>>());
+               subRepoMock);
 
             var res = uut.FilterByLeader(driveRepoMock.AsQueryable(), 1, true);
             Assert.AreEqual(4, res.Count());
@@ -264,6 +287,13 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             var driveRepoMock = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
             var orgRepoMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
+            var subRepoMock = NSubstitute.Substitute.For<IGenericRepository<Substitute>>();
+
+            subRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Substitute>()
+            {
+
+            }.AsQueryable());
+
 
             driveRepoMock.AsQueryable().ReturnsForAnyArgs(new List<DriveReport>()
             {
@@ -319,7 +349,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
             var uut = new DriveReportService(new MailSender(), driveRepoMock,
                 NSubstitute.Substitute.For<IReimbursementCalculator>(), orgRepoMock, emplRepoMock,
-               NSubstitute.Substitute.For<IGenericRepository<Substitute>>());
+               subRepoMock);
 
             var res = uut.FilterByLeader(driveRepoMock.AsQueryable(), 1, true);
             Assert.AreEqual(0, res.Count());
@@ -331,6 +361,12 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             var driveRepoMock = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
             var orgRepoMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
+            var subRepoMock = NSubstitute.Substitute.For<IGenericRepository<Substitute>>();
+
+            subRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Substitute>()
+            {
+
+            }.AsQueryable());
 
             var notRelatedOrg = new OrgUnit()
             {
@@ -400,7 +436,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
             var uut = new DriveReportService(new MailSender(), driveRepoMock,
                 NSubstitute.Substitute.For<IReimbursementCalculator>(), orgRepoMock, emplRepoMock,
-               NSubstitute.Substitute.For<IGenericRepository<Substitute>>());
+               subRepoMock);
 
             var res = uut.FilterByLeader(driveRepoMock.AsQueryable(), 1, true);
             Assert.AreEqual(0, res.Count());
@@ -412,6 +448,12 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             var driveRepoMock = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
             var orgRepoMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
+            var subRepoMock = NSubstitute.Substitute.For<IGenericRepository<Substitute>>();
+
+            subRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Substitute>()
+            {
+
+            }.AsQueryable());
 
             var notRelatedOrg1 = new OrgUnit()
             {
@@ -502,7 +544,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
             var uut = new DriveReportService(new MailSender(), driveRepoMock,
                 NSubstitute.Substitute.For<IReimbursementCalculator>(), orgRepoMock, emplRepoMock,
-               NSubstitute.Substitute.For<IGenericRepository<Substitute>>());
+               subRepoMock);
 
             var res = uut.FilterByLeader(driveRepoMock.AsQueryable(), 1, true);
             Assert.AreEqual(0, res.Count());
@@ -514,6 +556,13 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             var driveRepoMock = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
             var orgRepoMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
+            var subRepoMock = NSubstitute.Substitute.For<IGenericRepository<Substitute>>();
+
+            subRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Substitute>()
+            {
+
+            }.AsQueryable());
+
 
             var notRelatedOrg1 = new OrgUnit()
             {
@@ -583,7 +632,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
             var uut = new DriveReportService(new MailSender(), driveRepoMock,
                 NSubstitute.Substitute.For<IReimbursementCalculator>(), orgRepoMock, emplRepoMock,
-               NSubstitute.Substitute.For<IGenericRepository<Substitute>>());
+               subRepoMock);
 
             var res = uut.FilterByLeader(driveRepoMock.AsQueryable(), 1, true);
             Assert.AreEqual(0, res.Count());
@@ -708,6 +757,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             {
                 Person = leader1,
                 OrgUnit = leader1Org2,
+                OrgUnitId = 66,
                 IsLeader = true
             };
 
@@ -891,6 +941,13 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             var driveRepoMock = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
             var orgRepoMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
+            var subRepoMock = NSubstitute.Substitute.For<IGenericRepository<Substitute>>();
+
+            subRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Substitute>()
+            {
+
+            }.AsQueryable());
+
 
             var nonLeaderChildPerson = new Person()
             {
@@ -960,7 +1017,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
             var uut = new DriveReportService(new MailSender(), driveRepoMock,
                 NSubstitute.Substitute.For<IReimbursementCalculator>(), orgRepoMock, emplRepoMock,
-               NSubstitute.Substitute.For<IGenericRepository<Substitute>>());
+               subRepoMock);
 
             var res = uut.FilterByLeader(driveRepoMock.AsQueryable(), 1, true);
             Assert.AreEqual(0, res.Count());
@@ -1057,81 +1114,120 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             var orgRepoMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
 
-            var nonLeaderChildPerson = new Person()
-            {
-                Id = 77,
-                FirstName = "Jacob",
-                LastName = "Jensen",
-                Initials = "JJ",
-            };
-
             var subRepoMock = NSubstitute.Substitute.For<IGenericRepository<Substitute>>();
             subRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Substitute>().AsQueryable());
 
-            var nonLeaderChildEmpl = new Employment()
+            var childLeader = new Person()
             {
-                OrgUnit = org2,
-                Person = nonLeaderChildPerson,
-                IsLeader = false
+                Id = 2,
+                FullName = "Child Leader [CL]",
+                FirstName = "Child",
+                LastName = "Leader",
+                Initials = "CL",
             };
+
+            var childEmployee = new Person()
+            {
+                Id = 3,
+                FullName = "Child Employee [CE]",
+                FirstName = "Child",
+                LastName = "Employee",
+                Initials = "CE"
+            };
+
+            var leader = new Person()
+            {
+                Id = 1,
+                FullName = "Jacob Jensen [JJ]",
+                FirstName = "Jacob",
+                LastName = "Jensen",
+                Initials = "JJ"
+            };
+
+            var leaderOrg = new OrgUnit()
+            {
+                Id = 1
+            };
+            
+            var childOrg = new OrgUnit()
+            {
+                Id = 2,
+                ParentId = 1,
+                Parent = leaderOrg,
+            };
+
+
+
+            var childLeaderEmpl = new Employment()
+            {
+                Person = childLeader,
+                PersonId = 2,
+                OrgUnit = childOrg,
+                OrgUnitId = 2,
+                IsLeader = true,
+            };
+
+            var childEmployeeEmpl = new Employment()
+            {
+                Person = childEmployee,
+                PersonId = 3,
+                OrgUnit = childOrg,
+                OrgUnitId = 2,
+                IsLeader = false,
+            };
+
+            var leaderEmpl = new Employment()
+            {
+                Person = leader,
+                PersonId = 1,
+                OrgUnit = leaderOrg,
+                OrgUnitId = 1,
+                IsLeader = true,
+            };
+
+            emplRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
+            {
+                childLeaderEmpl,
+                childEmployeeEmpl,
+                leaderEmpl
+            }.AsQueryable());
+
+            orgRepoMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
+            {
+                leaderOrg,
+                childOrg,
+            }.AsQueryable());
+
+
 
             driveRepoMock.AsQueryable().ReturnsForAnyArgs(new List<DriveReport>()
             {
                 new DriveReport()
                 {
-                    Id = 1,
-                    Person = nonLeaderChildPerson,
-                    Comment = "TestComment",
-                    Employment = nonLeaderChildEmpl,
+                    Person = leader,
+                    Employment = leaderEmpl,
+                    PersonId = 1,
                 },
                 new DriveReport()
                 {
-                    Id = 1,
-                    Person = nonLeaderChildPerson,
-                    Comment = "TestComment2",
-                    Employment = nonLeaderChildEmpl,
+                    Person = childLeader,
+                    Employment = childLeaderEmpl,
+                    PersonId = 2
                 },
                 new DriveReport()
                 {
-                    Id = 1,
-                    Person = leader2,
-                    Comment = "TestComment3",
-                    Employment = leaderEmpl2,
-                },
-                new DriveReport()
-                {
-                    Id = 1,
-                    Person = leader2,
-                    Comment = "TestComment4",
-                    Employment = leaderEmpl2,
-                },
-                new DriveReport()
-                {
-                    Id = 1,
-                    Person = leader1,
-                    Comment = "TestComment5",
-                    Employment = leaderEmpl1,
+                    Person = childEmployee,
+                    Employment = childEmployeeEmpl,
+                    PersonId = 3
                 }
             }.AsQueryable());
 
-            orgRepoMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
-            {
-                org1,org2
-                
-            }.AsQueryable());
-
-            emplRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
-            {
-                leaderEmpl1,leaderEmpl2, nonLeaderChildEmpl
-                
-            }.AsQueryable());
-
             var uut = new DriveReportService(new MailSender(), driveRepoMock,
-                NSubstitute.Substitute.For<IReimbursementCalculator>(), orgRepoMock, emplRepoMock,
-               subRepoMock);
+               NSubstitute.Substitute.For<IReimbursementCalculator>(), orgRepoMock, emplRepoMock,
+              subRepoMock);
 
             var res = uut.FilterByLeader(driveRepoMock.AsQueryable(), 1);
-            Assert.AreEqual(2, res.Count());
+            Assert.AreEqual(1, res.Count());
         }
     }
 }

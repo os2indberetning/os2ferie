@@ -238,7 +238,7 @@ namespace Presentation.Web.Test.
         [Test]
         public async void MixedStandardAndPersonal_WithIncorrectId_ShouldReturn_StandardAndCorrect()
         {
-            AddressRepositoryMock.addresses = new List<Address>()
+            AddressRepositoryMock.addresses = new List<Address>
             {
                 new Address()
                 {
@@ -265,7 +265,7 @@ namespace Presentation.Web.Test.
                 new PersonalAddress()
                 {
                     StreetName = "TestStreet",
-                    StreetNumber = "3",
+                    StreetNumber = "4",
                     ZipCode = 8210,
                     Town = "Aarhus V",
                     PersonId = 2
@@ -307,7 +307,7 @@ namespace Presentation.Web.Test.
                 new DriveReportPoint()
                 {
                     StreetName = "TestStreet",
-                    StreetNumber = "3",
+                    StreetNumber = "4",
                     ZipCode = 8210,
                     Town = "Aarhus V",
                 }
@@ -387,14 +387,14 @@ namespace Presentation.Web.Test.
                 new Address()
                 {
                     StreetName = "TestStreet",
-                    StreetNumber = "3",
+                    StreetNumber = "4",
                     ZipCode = 8210,
                     Town = "Aarhus V",
                 },
                 new PersonalAddress()
                 {
                     StreetName = "TestStreet",
-                    StreetNumber = "3",
+                    StreetNumber = "5",
                     ZipCode = 8210,
                     Town = "Aarhus V",
                     PersonId = 1

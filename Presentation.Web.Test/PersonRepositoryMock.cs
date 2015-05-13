@@ -45,6 +45,15 @@ namespace Presentation.Web.Test
                     LastName = "Foo",
                     IsAdmin = true,
                     Initials = "MF"
+                },
+                new Person
+                {
+                    Id = 2308,
+                    CprNumber = "123456781234",
+                    FirstName = "Test",
+                    LastName = "Foo",
+                    IsAdmin = true,
+                    Initials = "hshu"
                 }
             };
         }

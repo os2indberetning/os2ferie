@@ -11,6 +11,7 @@
 
         var isEditingReport = ReportId > 0;
         $scope.container = {};
+        $scope.container.datePickerMaxDate = new Date();
         $scope.isEditingReport = isEditingReport;
         var kendoPromise = $q.defer();
         var loadingPromises = [kendoPromise.promise];

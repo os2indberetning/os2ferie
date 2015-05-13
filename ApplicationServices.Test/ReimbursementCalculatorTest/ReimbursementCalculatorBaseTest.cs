@@ -56,11 +56,20 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
             }.AsQueryable());
 
             return repo;
+        }
+
+        protected IGenericRepository<Employment> GetEmplRepository(List<Employment> mockData)
+        {
+            var repo = Substitute.For<IGenericRepository<Employment>>();
+
+            repo.AsQueryable().Returns(info => mockData.AsQueryable());
+
+            return repo;
         } 
 
-        protected IReimbursementCalculator GetCalculator()
+        protected IReimbursementCalculator GetCalculator(List<Employment> emplMockData)
         { //TODO changed to make the code compile
-            return new ReimbursementCalculator(new RouterMock(), GetPersonServiceMock(), GetPersonRepository(), new GenericRepository<Employment>(new DataContext()));
+            return new ReimbursementCalculator(new RouterMock(), GetPersonServiceMock(), GetPersonRepository(), GetEmplRepository(emplMockData));
         }
 
         protected DriveReport GetDriveReport()
