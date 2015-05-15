@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("AcceptedReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService",
-   function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "BankAccount",
+   function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, BankAccount) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
@@ -165,11 +165,6 @@
            });
            $scope.gridContainer.grid.dataSource.filter(newFilters);
        }
-
-
-
-
-
 
        $scope.getCurrentPageSums = function () {
            var pageNumber = $scope.gridContainer.grid.dataSource.page();
@@ -390,16 +385,21 @@
                    field: "AccountNumber",
                    template: function (data) {
                        if (data.AccountNumber != null && data.AccountNumber != 0 && data.AccountNumber != undefined) {
-                           return "<div kendo-tooltip k-content=\"'" + data.AccountNumber + "'\">Ja</div>";
+                           var returnVal = "";
+                           angular.forEach($scope.bankAccounts, function (value, key) {
+                               if (value.Number == data.AccountNumber) {
+                                   returnVal = "<div kendo-tooltip k-content=\"'" + value.Description + " - " + value.Number + "'\">Ja</div>";
+                               }
+                           });
+                           return returnVal;
+                       } else {
+                           return "Nej";
                        }
-                       return "Nej";
                    }
                }
                ],
            };
        }
-
-
 
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
@@ -414,8 +414,6 @@
 
        }
 
-      
-
        // Event handlers
 
        $scope.clearName = function () {
@@ -429,7 +427,6 @@
            $scope.removeOrgUnitFilter();
        }
 
-
        $scope.showRouteModal = function (routeId) {
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
@@ -442,20 +439,6 @@
                }
            });
        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
        var initialLoad = 2;
        $scope.dateChanged = function () {
@@ -479,10 +462,6 @@
            $scope.gridContainer.grid.dataSource.read();
        }
 
-
-
-
-
        // Init
 
 
@@ -497,8 +476,14 @@
            format: "dd/MM/yyyy",
        };
 
+       // Load bankaccounts then load grid.
+       // The grid needs the bankaccounts to be ready to show description and accountnumber
+       // when a Alternative Bankaccount is used.
+       BankAccount.get().$promise.then(function (res) {
+           $scope.bankAccounts = res.value;
+           $scope.loadReports();
+       });
 
-       $scope.loadReports();
 
        $scope.personChanged = function (item) {
            $scope.applyPersonFilter($scope.person.chosenPerson);

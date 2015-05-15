@@ -81,7 +81,8 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
                         return $rootScope.CurrentUser;
                     }
 
-                }]
+                }],
+                
             }
         })
         .state("settings", {
