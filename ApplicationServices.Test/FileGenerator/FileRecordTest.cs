@@ -11,12 +11,12 @@ namespace ApplicationServices.Test.FileGenerator
          * These tests assume the dummy data in App.config. 
          * This is what is assumed is in the settings.
         
-            <add key="KMDFilePath" value="/sti/til/kmd/mappe"/>
-            <add key="KMDFileName" value="kmdFilNavn"/>
-            <add key="KMDHeader" value="første linje i kmd fil"/>
-            <add key="KMDStaticNr" value="1111"/>
-            <add key="CommuneNr" value="2222"/>
-            <add key="KMDReservedNr" value="3333"/>
+            <add key="PROTECTED_KMDFilePath" value="/sti/til/kmd/mappe"/>
+            <add key="PROTECTED_KMDFileName" value="kmdFilNavn"/>
+            <add key="PROTECTED_KMDHeader" value="første linje i kmd fil"/>
+            <add key="PROTECTED_KMDStaticNr" value="1111"/>
+            <add key="PROTECTED_CommuneNr" value="2222"/>
+            <add key="PROTECTED_KMDReservedNr" value="3333"/>
           
          */
 

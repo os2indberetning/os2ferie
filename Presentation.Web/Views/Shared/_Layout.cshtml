@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" initial-scale=1 />
     <title>@ViewBag.Title</title>
-    
+
     <link href="~/Content/loading-bar.min.css" rel="stylesheet" media="all" />
 
 
@@ -26,7 +26,7 @@
 
 
 </head>
-<body class="scrollme ng-cloak" ng-scrollbar rebuild-on-resize ng-init="menuCollapse = false">
+<body class="scrollme ng-cloak" ng-cloak="ng-cloak" ng-scrollbar rebuild-on-resize ng-init="menuCollapse = false">
     <div id="wrapper" ng-class="{mainMenuCollapse: menuCollapse == true}" ng-controller="MainMenuController">
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -39,24 +39,11 @@
 
             </div>
             <!-- Top Menu Items -->
-            <ul class="nav navbar-right top-nav">
-                <li class="dropdown">
-                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{UserName}}<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li class="margin-left-5">
-                            {{UserName}}
-                        </li>
-                        <li class="divider"></li>
-                        <li class="margin-left-5">
-                            {{HomeAddress}}
-                        </li>
-                        <li class="divider"></li>
-                        <li class="margin-left-5">
-                            {{UserEmail}}
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+            <div class="pull-right margin-top-15 margin-right-10">
+                <span style="color: #FFF"><a href="{{helpLink.text}}">Information og vejledning</a> -
+                    {{UserName}}
+                </span>
+            </div>
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div ng-hide="menuCollapse">
                 <div class="navbar-collapse ng-cloak">
@@ -119,7 +106,7 @@
             $(this).tab('show');
         }));
     </script>
-    
+
     <script src="~/Scripts/loading-bar.min.js"></script>
 
 

@@ -17,7 +17,7 @@ namespace Core.DomainServices.RoutingClasses
         {
             get
             {
-                var apiKey = ConfigurationManager.AppSettings["SEPTIMA_API_KEY"];
+                var apiKey = ConfigurationManager.AppSettings["PROTECTED_SEPTIMA_API_KEY"];
                 return "http://service.adressevask.dk/" + apiKey + "/json?json=";
             }
         }
@@ -42,7 +42,7 @@ namespace Core.DomainServices.RoutingClasses
         {
             get
             {
-                var apiKey = ConfigurationManager.AppSettings["SEPTIMA_API_KEY"];
+                var apiKey = ConfigurationManager.AppSettings["PROTECTED_SEPTIMA_API_KEY"];
                 return "http://new-routing.septima.dk/" + apiKey + "/car/viaroute?";
             }
         }

@@ -27,8 +27,8 @@ namespace Core.ApplicationServices.MailerService.Impl
             foreach (var mailAddress in mailAddresses)
             {
                 _mailSender.SendMail(mailAddress,
-                    ConfigurationManager.AppSettings["MAIL_SUBJECT"],
-                     ConfigurationManager.AppSettings["MAIL_BODY"]);
+                    ConfigurationManager.AppSettings["PROTECTED_MAIL_SUBJECT"],
+                     ConfigurationManager.AppSettings["PROTECTED_MAIL_BODY"]);
             }
 
         }

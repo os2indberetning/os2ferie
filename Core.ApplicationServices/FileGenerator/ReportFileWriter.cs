@@ -8,7 +8,7 @@ namespace Core.ApplicationServices.FileGenerator
 {
     public class ReportFileWriter : IReportFileWriter
     {
-        private readonly string _filePathName = GetSetting("KMDFilePath") + @"\" + GetSetting("KMDFileName");
+        private readonly string _filePathName = GetSetting("PROTECTED_KMDFilePath") + @"\" + GetSetting("PROTECTED_KMDFileName");
 
         public void WriteRecordsToFile(ICollection<FileRecord> recordList)
         {
@@ -47,7 +47,7 @@ namespace Core.ApplicationServices.FileGenerator
         {
             using (var writer = new StreamWriter(_filePathName))
             {
-                writer.WriteLine(GetSetting("KMDHeader"));
+                writer.WriteLine(GetSetting("PROTECTED_KMDHeader"));
                 writer.Close();
             }
         }

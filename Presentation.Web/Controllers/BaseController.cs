@@ -51,7 +51,7 @@ namespace OS2Indberetning.Controllers
                 string[] httpUser = User.Identity.Name.Split('\\');                
 #endif
 
-            if (httpUser.Length == 2 && String.Equals(httpUser[0], ConfigurationManager.AppSettings["AD_DOMAIN"], StringComparison.CurrentCultureIgnoreCase))
+            if (httpUser.Length == 2 && String.Equals(httpUser[0], ConfigurationManager.AppSettings["PROTECTED_AD_DOMAIN"], StringComparison.CurrentCultureIgnoreCase))
             {
                 var initials = httpUser[1].ToLower();
                 // DEBUG ON PRODUCTION. Set petsoe = lky

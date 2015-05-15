@@ -1,5 +1,10 @@
 angular.module("application").controller("MainMenuController", [
-   "$scope", "Person", "PersonalAddress", function ($scope, Person, PersonalAddress) {
+   "$scope", "Person", "PersonalAddress", "HelpText", function ($scope, Person, PersonalAddress, HelpText) {
+
+
+        HelpText.get({ id: "InformationHelpLink" }).$promise.then(function(res) {
+            $scope.helpLink = res;
+        });
 
        Person.GetCurrentUser().$promise.then(function (res) {
            PersonalAddress.GetHomeForUser({ id: res.Id }).$promise.then(function (addr) {
