@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.ApplicationServices;
+using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using DBUpdater.Models;
@@ -21,14 +22,15 @@ namespace DBUpdater
     {
         static void Main(string[] args)
         {
-            var service = new UpdateService(NinjectWebKernel.CreateKernel().Get<IGenericRepository<Employment>>(),
-                NinjectWebKernel.CreateKernel().Get<IGenericRepository<OrgUnit>>(),
-                NinjectWebKernel.CreateKernel().Get<IGenericRepository<Person>>(),
-                NinjectWebKernel.CreateKernel().Get<IGenericRepository<CachedAddress>>(),
-                NinjectWebKernel.CreateKernel().Get<IGenericRepository<PersonalAddress>>(),
-                NinjectWebKernel.CreateKernel().Get<IAddressLaunderer>(),
-                NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>(), new DataProvider(),
-                NinjectWebKernel.CreateKernel().Get<IGenericRepository<WorkAddress>>());
+            var ninjectKernel = NinjectWebKernel.CreateKernel();
+            var service = new UpdateService(ninjectKernel.Get<IGenericRepository<Employment>>(),
+                ninjectKernel.Get<IGenericRepository<OrgUnit>>(),
+                ninjectKernel.Get<IGenericRepository<Person>>(),
+                ninjectKernel.Get<IGenericRepository<CachedAddress>>(),
+                ninjectKernel.Get<IGenericRepository<PersonalAddress>>(),
+                ninjectKernel.Get<IAddressLaunderer>(),
+                ninjectKernel.Get<IAddressCoordinates>(), new DataProvider(),
+                ninjectKernel.Get<IMailSender>());
 
             service.MigrateOrganisations();
             service.MigrateEmployees();

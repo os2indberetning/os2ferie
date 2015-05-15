@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using DBUpdater.Models;
@@ -27,6 +28,7 @@ namespace DBUpdater.Test
         private IAddressCoordinates _coordinatesMock;
         private IDbUpdaterDataProvider _dataProviderMock;
         private IGenericRepository<WorkAddress> _workAddressRepoMock;
+        private IMailSender _mailSenderMock;
 
         [SetUp]
         public void SetUp()
@@ -51,6 +53,7 @@ namespace DBUpdater.Test
             _coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
             _dataProviderMock = NSubstitute.Substitute.For<IDbUpdaterDataProvider>();
             _workAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<WorkAddress>>();
+            _mailSenderMock = NSubstitute.Substitute.For<IMailSender>();
 
             _personRepoMock.AsQueryable().Returns(personList.AsQueryable());
 
@@ -81,7 +84,7 @@ namespace DBUpdater.Test
             _actualLaundererMock.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-                _personalAddressRepoMock, _actualLaundererMock, _coordinatesMock, _dataProviderMock, _workAddressRepoMock);
+                _personalAddressRepoMock, _actualLaundererMock, _coordinatesMock, _dataProviderMock, _mailSenderMock);
 
             _orgUnitRepoMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
             {

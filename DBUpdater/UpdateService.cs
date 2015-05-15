@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using DBUpdater.Models;
@@ -27,9 +28,9 @@ namespace DBUpdater
         private readonly IAddressLaunderer _actualLaunderer;
         private readonly IAddressCoordinates _coordinates;
         private readonly IDbUpdaterDataProvider _dataProvider;
-        private readonly IGenericRepository<WorkAddress> _workAddressRepo;
+        private readonly IMailSender _mailSender;
 
-        public UpdateService(IGenericRepository<Employment> emplRepo, IGenericRepository<OrgUnit> orgRepo, IGenericRepository<Person> personRepo, IGenericRepository<CachedAddress> cachedRepo, IGenericRepository<PersonalAddress> personalAddressRepo, IAddressLaunderer actualLaunderer, IAddressCoordinates coordinates, IDbUpdaterDataProvider dataProvider, IGenericRepository<WorkAddress> workAddressRepo)
+        public UpdateService(IGenericRepository<Employment> emplRepo, IGenericRepository<OrgUnit> orgRepo, IGenericRepository<Person> personRepo, IGenericRepository<CachedAddress> cachedRepo, IGenericRepository<PersonalAddress> personalAddressRepo, IAddressLaunderer actualLaunderer, IAddressCoordinates coordinates, IDbUpdaterDataProvider dataProvider, IMailSender mailSender)
         {
             _emplRepo = emplRepo;
             _orgRepo = orgRepo;
@@ -39,7 +40,7 @@ namespace DBUpdater
             _actualLaunderer = actualLaunderer;
             _coordinates = coordinates;
             _dataProvider = dataProvider;
-            _workAddressRepo = workAddressRepo;
+            _mailSender = mailSender;
         }
 
         public List<String> SplitAddressOnNumber(string address)
@@ -144,6 +145,14 @@ namespace DBUpdater
             _personalAddressRepo.Save();
 
             Console.WriteLine("Done migrating employees");
+            var dirtyAddressCount = _cachedRepo.AsQueryable().Count(x => x.IsDirty);
+            if ( dirtyAddressCount > 0)
+            {
+                foreach (var admin in _personRepo.AsQueryable().Where(x => x.IsAdmin))
+                {
+                    _mailSender.SendMail(admin.Mail, "Der er adresser der mangler at blive vasket", "Der mangler at blive vasket " + dirtyAddressCount + "adresser");    
+                }
+            }
         }
 
 
