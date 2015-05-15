@@ -163,6 +163,18 @@ angular.module("application").controller("MyAcceptedReportsController", [
                                  m._d.getFullYear();
                       },
                   }, {
+                      field: "ProcessedDateTimestamp",
+                      title: "Afsendt til løn",
+                      template: function (data) {
+                          if (data.ProcessedDateTimestamp != 0 && data.ProcessedDateTimestamp != null && data.ProcessedDateTimestamp != undefined) {
+                              var m = moment.unix(data.ProcessedDateTimestamp);
+                              return m._d.getDate() + "/" +
+                                  (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                  m._d.getFullYear();
+                          }
+                          return "";
+                      }
+                  }, {
                       field: "ApprovedBy.FullName",
                       title: "Godkendt af"
                   }

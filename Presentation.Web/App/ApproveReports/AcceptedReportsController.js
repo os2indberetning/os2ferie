@@ -375,7 +375,7 @@
                    },
                }, {
                    field: "ProcessedDateTimestamp",
-                   title: "Overført til udbetaling",
+                   title: "Afsendt til løn",
                    template: function (data) {
                        if (data.ProcessedDateTimestamp != 0 && data.ProcessedDateTimestamp != null && data.ProcessedDateTimestamp != undefined) {
                            var m = moment.unix(data.ProcessedDateTimestamp);
