@@ -127,18 +127,6 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [Test]
-        public async Task GetWithKeyShouldReturnCorrectElement()
-        {
-            ReSeed();
-            HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(2)").GetAsync();
-            var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Response to get request should be OK");
-            Assert.AreEqual(1, result.value.Count, "Expects the return of a get request with key is to have one entity");
-            var entity = result.value[0];
-            AsssertEqualEntities(GetReferenceEntity2(), entity);
-        }
-
-        [Test]
         public async Task GetWithInvalidKeyShouldReturnNoEntity()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(5)").GetAsync();

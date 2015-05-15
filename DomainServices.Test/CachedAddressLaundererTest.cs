@@ -52,7 +52,7 @@ namespace DomainServices.Test
 
             laundryMock = NSubstitute.Substitute.For<IAddressLaunderer>();
             laundryMock.WhenForAnyArgs(x => x.Launder(new Address())).DoNotCallBase();
-
+            laundryMock.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
 
             uut = new CachedAddressLaunderer(repoMock, laundryMock, coordinatesMock);    

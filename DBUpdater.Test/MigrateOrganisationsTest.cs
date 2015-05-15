@@ -37,6 +37,9 @@ namespace DBUpdater.Test
 
             var orgIdCount = 0;
 
+            var cachedAddressList = new List<CachedAddress>();
+            var cachedIdCount = 0;
+
             _emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
             _orgUnitRepoMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
             _personRepoMock = NSubstitute.Substitute.For<IGenericRepository<Person>>();
@@ -52,7 +55,11 @@ namespace DBUpdater.Test
 
             _orgUnitRepoMock.Insert(new OrgUnit()).ReturnsForAnyArgs(x => x.Arg<OrgUnit>()).AndDoes(x => orgList.Add(x.Arg<OrgUnit>())).AndDoes(x => x.Arg<OrgUnit>().Id = orgIdCount).AndDoes(x => orgIdCount++);
 
+            _cachedAddressRepoMock.Insert(new CachedAddress()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>()).AndDoes(x => cachedAddressList.Add(x.Arg<CachedAddress>())).AndDoes(x => x.Arg<CachedAddress>().Id = cachedIdCount).AndDoes(x => cachedIdCount++);
 
+            _cachedAddressRepoMock.AsQueryable().Returns(cachedAddressList.AsQueryable());
+
+            _actualLaunderer.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
                 _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _workAddressRepoMock);

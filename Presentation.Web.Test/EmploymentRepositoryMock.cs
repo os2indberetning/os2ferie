@@ -6,10 +6,14 @@ namespace Presentation.Web.Test
 {
     public class EmploymentRepositoryMock : GenericRepositoryMock<Employment>
     {
-        private readonly Employment employment = new Employment()
+        public static Employment employment = new Employment()
         {
             Id = 1,
             OrgUnitId = 1,
+            OrgUnit = new OrgUnit()
+            {
+                Id = 1,
+            },
             Person = new Person
             {
                 Id = 1,
