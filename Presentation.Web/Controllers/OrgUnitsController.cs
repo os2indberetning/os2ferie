@@ -44,7 +44,7 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<OrgUnit> delta)
         {
-            return StatusCode(HttpStatusCode.MethodNotAllowed);
+            return CurrentUser.IsAdmin ? base.Patch(key, delta) : StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         //DELETE: odata/OrgUnits(5)

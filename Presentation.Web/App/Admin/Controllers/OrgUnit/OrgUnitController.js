@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("OrgUnitController", [
-    "$scope", "OrgUnit", function ($scope, OrgUnit) {
+    "$scope", "OrgUnit", "NotificationService", function ($scope, OrgUnit, NotificationService) {
         $scope.gridContainer = {};
 
         $scope.checkboxes = [];
@@ -88,12 +88,24 @@
         }
 
         $scope.rowChecked = function (id) {
+
+            var org = "";
+            for (var i = 0; i < $scope.typeAheadOrgUnits.length; i++) {
+                if ($scope.typeAheadOrgUnits[i].Id == id) {
+                    org = $scope.typeAheadOrgUnits[i].LongDescription;
+                }
+            }
+
             if ($scope.checkboxes[id]) {
                 // Checkbox has been checked.
-                OrgUnit.patch({ id: id }, { "HasAccessToFourKmRule": true });
+                OrgUnit.patch({ id: id }, { "HasAccessToFourKmRule": true }).$promise.then(function() {
+                    NotificationService.AutoFadeNotification("success", "", "Adgang til 4 km-regel givet til " + org);
+                });
             } else if(!$scope.checkboxes[id]) {
                 // Checkbox has been unchecked.
-                OrgUnit.patch({ id: id }, { "HasAccessToFourKmRule": false });
+                OrgUnit.patch({ id: id }, { "HasAccessToFourKmRule": false }).$promise.then(function() {
+                    NotificationService.AutoFadeNotification("success", "", "Adgang til 4 km-regel fjernet fra " + org);
+                });
             }
         }
 
@@ -116,13 +128,6 @@
             $scope.gridContainer.grid.dataSource.filter({});
 
         }
-       
-        $scope.gridContainer.gridPageSize = 20;
-       
-
-        $scope.pageSizeChanged = function () {
-            $scope.gridContainer.grid.dataSource.pageSize(Number($scope.gridContainer.gridPageSize));
-        }
-       
+      
     }
 ]);

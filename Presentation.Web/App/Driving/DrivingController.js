@@ -524,6 +524,7 @@
             angular.forEach($scope.currentUser.Employments, function (empl, key) {
                 if (empl.Id == $scope.DriveReport.Position) {
                     $scope.WorkAddress = empl.OrgUnit.Address;
+                    $scope.hasAccessToFourKmRule = empl.OrgUnit.HasAccessToFourKmRule;
                 }
             });
             updateDrivenKm();
