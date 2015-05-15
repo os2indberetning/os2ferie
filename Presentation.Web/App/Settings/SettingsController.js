@@ -56,10 +56,6 @@
 
         //Gem ny nummerplade
         $scope.saveNewLicensePlate = function () {
-            if ($scope.newLicensePlateDescription == "") {
-                NotificationService.AutoFadeNotification("danger", "", "Nummerplade skal have en beskrivelse");
-                return;
-            }
 
             var plateWithoutSpaces = $scope.newLicensePlate.replace(/ /g, "");
             if (plateWithoutSpaces.length < 2 || plateWithoutSpaces.length > 7) {

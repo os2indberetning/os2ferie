@@ -169,7 +169,11 @@
         loadingPromises.push(LicensePlate.get({ id: currentUser.Id }).$promise.then(function (res) {
             if (res.length > 0) {
                 angular.forEach(res, function (value, key) {
-                    value.PresentationString = value.Plate + " - " + value.Description;
+                    if (value.Description != "") {
+                        value.PresentationString = value.Plate + " - " + value.Description;
+                    } else {
+                        value.PresentationString = value.Plate;
+                    }
                 });
                 $scope.LicensePlates = res;
             } else {
