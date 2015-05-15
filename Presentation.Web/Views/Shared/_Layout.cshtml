@@ -22,9 +22,10 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link href="../../Content/private.css" rel="stylesheet" />
-
-
-
+    
+    <link rel="icon"
+          type="image/png"
+          href="~/Content/favicon.ico">
 </head>
 <body class="scrollme ng-cloak" ng-cloak="ng-cloak" ng-scrollbar rebuild-on-resize ng-init="menuCollapse = false">
     <div id="wrapper" ng-class="{mainMenuCollapse: menuCollapse == true}" ng-controller="MainMenuController">
@@ -34,9 +35,10 @@
             <div class="navbar-header">
                 <div class="navbar-brand" ng-click="menuCollapse = !menuCollapse">
                     <i class="fa fa-bars"></i>
-                    <label href="#">OS2Indberetning</label>
-                </div>
+                    <label href="#">OS2Indberetning</label> 
 
+                </div>
+                <img class="pull-right margin-top-5" src="../../Content/logo.png" alt="" />
             </div>
             <!-- Top Menu Items -->
             <div class="pull-right margin-top-15 margin-right-10">

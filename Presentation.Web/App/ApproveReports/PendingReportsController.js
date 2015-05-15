@@ -338,9 +338,11 @@
                sortable: false,
                field: "Id",
                template: function (data) {
-                   debugger;
+                   if (data.ResponsibleLeader.Id == data.PersonId) {
+                       return "Indberetning skal godkendes af din leder eller opsat personlig godkender.";
+                   }
                    if (data.ResponsibleLeader.Id == $rootScope.CurrentUser.Id) {
-                       return "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> <div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'></input></div>";
+                       return "<a ng-click=approveClick(" + data.Id + ")>Godkend</a> | <a ng-click=rejectClick(" + data.Id + ")>Afvis</a> <div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[" + data.Id + "]' ng-change='rowChecked(" + data.Id + ")'></input></div>";
                    } else {
                        return data.ResponsibleLeader.FullName + " er udpeget som godkender.";
                    }

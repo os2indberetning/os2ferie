@@ -361,9 +361,12 @@ namespace Core.ApplicationServices
                     driveReportList.AddRange(childLeaderReports);
                 }
             }
+
+
+
             driveReportList.AddRange(
                 repo.AsQueryable()
-                    .Where(dr => dr.Employment.OrgUnit.Id == orgUnitId && dr.Person.Id != leaderId));
+                    .Where(dr => dr.Employment.OrgUnit.Id == orgUnitId && !dr.Employment.IsLeader));
         }
     }
 }

@@ -100,8 +100,13 @@ namespace OS2Indberetning.Controllers
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
 
             var leader = _driveService.GetResponsibleLeaderForReport(report);
-            
+
             if (leader == null)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
+            if (leader.Id == CurrentUser.Id)
             {
                 return StatusCode(HttpStatusCode.Forbidden);
             }
