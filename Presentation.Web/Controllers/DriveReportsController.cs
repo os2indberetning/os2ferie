@@ -38,7 +38,19 @@ namespace OS2Indberetning.Controllers
             ReportStatus reportStatus;
             if (ReportStatus.TryParse(status, true, out reportStatus))
             {
-                queryable = queryable.Where(dr => dr.Status == reportStatus);
+                if (reportStatus == ReportStatus.Accepted)
+                {
+                    // If accepted reports are requested, then return accepted and invoiced. 
+                    // Invoiced reports are accepted reports that have been processed for payment.
+                    // So they are still accepted reports.
+                    queryable =
+                        queryable.Where(dr => dr.Status == ReportStatus.Accepted || dr.Status == ReportStatus.Invoiced);
+                }
+                else
+                {
+                    queryable = queryable.Where(dr => dr.Status == reportStatus);
+                }
+                
             }
 
             if (leaderId != 0)

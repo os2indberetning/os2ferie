@@ -13,50 +13,17 @@ using Ninject;
 
 namespace OS2Indberetning.Controllers
 {
-    public class FileController : ApiController
+    public class FileController : BaseController<DriveReport>
     {
         private readonly IGenericRepository<DriveReport> _repo;
 
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        protected Person CurrentUser;
 
-        private IGenericRepository<Person> _personRepo;
 
-        protected override void Initialize(HttpControllerContext requestContext)
-        {
-            base.Initialize(requestContext);
-
-#if DEBUG
-            var httpUser = @"favrskov\kije".Split('\\'); // Fissirul Lehmann - administrator
-#else
-                string[] httpUser = User.Identity.Name.Split('\\');                
-#endif
-
-            if (httpUser.Length == 2 && String.Equals(httpUser[0], ConfigurationManager.AppSettings["AD_DOMAIN"], StringComparison.CurrentCultureIgnoreCase))
-            {
-                var initials = httpUser[1].ToLower();
-                // DEBUG ON PRODUCTION. Set petsoe = lky
-                if (initials == "petsoe" || initials == "itmind") { initials = "FL"; }
-                // END DEBUG
-                CurrentUser = _personRepo.AsQueryable().FirstOrDefault(p => p.Initials.ToLower().Equals(initials));
-                if (CurrentUser == null)
-                {
-                    Logger.Error("AD-bruger ikke fundet i databasen (" + User.Identity.Name + ")");
-                    throw new UnauthorizedAccessException("AD-bruger ikke fundet i databasen.");
-                }
-            }
-            else
-            {
-                Logger.Info("Gyldig domænebruger ikke fundet (" + User.Identity.Name + ")");
-                throw new UnauthorizedAccessException("Gyldig domænebruger ikke fundet.");
-            }
-        }
-
-        public FileController(IGenericRepository<DriveReport> repo)
+        public FileController(IGenericRepository<DriveReport> repo, IGenericRepository<Person> personRepo) : base(repo, personRepo)
         {
             _repo = repo;
-            _personRepo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<Person>>();
         }
 
         //GET: Generate KMD File
