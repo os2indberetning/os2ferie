@@ -16,17 +16,45 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
         /// </summary>
         [Test]
         public void Calculate_ReportMethodIsRead_WithoutFourKmRule()
-        {           
+        {
             var report = GetDriveReport();
             report.FourKmRule = false;
             report.StartsAtHome = false;
+            report.Employment = new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            };
             report.EndsAtHome = false;
             report.Distance = 42;
             report.KilometerAllowance = KilometerAllowance.Read;
 
             var distance = report.Distance;
 
-            var calculator = GetCalculator();
+            var calculator = GetCalculator(new List<Employment>()
+            {
+                new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            }
+            });
 
             var result = calculator.Calculate(report);
 
@@ -39,6 +67,19 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
         {
             var report = GetDriveReport();
             report.FourKmRule = true;
+            report.Employment = new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            };
             report.StartsAtHome = false;
             report.EndsAtHome = false;
             report.Distance = 42;
@@ -46,12 +87,27 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
 
             var distance = report.Distance;
 
-            var calculator = GetCalculator();
+            var calculator = GetCalculator(new List<Employment>()
+            {
+                new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            }
+            });
 
             var result = calculator.Calculate(report);
 
             Assert.That(distance - 4, Is.EqualTo(result.Distance));
-            Assert.AreEqual((distance - 4) * report.KmRate / 100,result.AmountToReimburse,0.001);
+            Assert.AreEqual((distance - 4) * report.KmRate / 100, result.AmountToReimburse, 0.001);
         }
 
         /// <summary>
@@ -62,6 +118,19 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
         {
             var report = GetDriveReport();
             report.FourKmRule = false;
+            report.Employment = new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            };
             report.StartsAtHome = false;
             report.EndsAtHome = false;
             report.Distance = 42;
@@ -69,11 +138,26 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
 
             var distance = report.Distance;
 
-            var calculator = GetCalculator();
+            var calculator = GetCalculator(new List<Employment>()
+            {
+                new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            }
+            });
 
             var result = calculator.Calculate(report);
 
-            Assert.That((distance) * report.KmRate/100, Is.EqualTo(result.AmountToReimburse));
+            Assert.That((distance) * report.KmRate / 100, Is.EqualTo(result.AmountToReimburse));
         }
 
         [Test]
@@ -81,6 +165,19 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
         {
             var report = GetDriveReport();
             report.FourKmRule = true;
+            report.Employment = new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            };
             report.StartsAtHome = false;
             report.EndsAtHome = false;
             report.Distance = 42;
@@ -88,11 +185,26 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
 
             var distance = report.Distance;
 
-            var calculator = GetCalculator();
+            var calculator = GetCalculator(new List<Employment>()
+            {
+                new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            }
+            });
 
             var result = calculator.Calculate(report);
 
-            Assert.AreEqual((distance - 4) * report.KmRate/100, (result.AmountToReimburse),0.001);
+            Assert.AreEqual((distance - 4) * report.KmRate / 100, (result.AmountToReimburse), 0.001);
         }
 
         /// <summary>
@@ -103,6 +215,19 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
         {
             var report = GetDriveReport();
             report.FourKmRule = false;
+            report.Employment = new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            };
             report.StartsAtHome = true;
             report.EndsAtHome = true;
             report.Distance = 42;
@@ -110,18 +235,46 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
 
             var distance = report.Distance;
 
-            var calculator = GetCalculator();
+            var calculator = GetCalculator(new List<Employment>()
+            {
+                new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            }
+            });
 
             var result = calculator.Calculate(report);
 
-            Assert.That(distance * report.KmRate/100, Is.EqualTo(result.AmountToReimburse));
+            Assert.That(distance * report.KmRate / 100, Is.EqualTo(result.AmountToReimburse));
         }
-        
+
         [Test]
         public void Calculate_ReportMethodIsCalculatedWithoutAllowance_WithFourKmRule()
         {
             var report = GetDriveReport();
             report.FourKmRule = true;
+            report.Employment = new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            };
             report.StartsAtHome = true;
             report.EndsAtHome = true;
             report.Distance = 42;
@@ -129,11 +282,26 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
 
             var distance = report.Distance;
 
-            var calculator = GetCalculator();
+            var calculator = GetCalculator(new List<Employment>()
+            {
+                new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            }
+            });
 
             var result = calculator.Calculate(report);
 
-            Assert.AreEqual(((distance - 4) * report.KmRate/100), result.AmountToReimburse,0.001);
+            Assert.AreEqual(((distance - 4) * report.KmRate / 100), result.AmountToReimburse, 0.001);
         }
     }
 }

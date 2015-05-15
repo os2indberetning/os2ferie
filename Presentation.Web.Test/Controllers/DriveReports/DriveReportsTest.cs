@@ -169,79 +169,6 @@ namespace Presentation.Web.Test.Controllers.DriveReports
             //Is tested via drive report service
         }
 
-        
-        [Test]
-        public async void DriveReport_PatchWithStatus_Rejected_ShouldSendMail()
-        {
-            const string bodyContent = @"{
-                        'Status' : 'Rejected',
-                        'Comment': 'TestComment'
-                    }";
-
-            Assert.AreEqual(false, MailSenderMock.SendHasBeenCalled);
-
-            var request = Server.CreateRequest(GetUriPath() + "(3)")
-                                .And(r => r.Content = new StringContent(bodyContent))
-                                .And(r => r.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json"));
-            var patchResponse = await request.SendAsync("PATCH");
-
-            Assert.AreEqual(true, MailSenderMock.SendHasBeenCalled);
-        }
-
-        [Test]
-        public async void DriveReport_PatchWithStatus_Rejected_ShouldSendMailToCorrectRecipient()
-        {
-            const string bodyContent = @"{
-                        'Status' : 'Rejected',
-                        'Comment': 'TestComment'
-                    }";
-
-            Assert.AreEqual(false, MailSenderMock.SendHasBeenCalled);
-
-            var request = Server.CreateRequest(GetUriPath() + "(3)")
-                                .And(r => r.Content = new StringContent(bodyContent))
-                                .And(r => r.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json"));
-            var patchResponse = await request.SendAsync("PATCH");
-
-            Assert.AreEqual("testMail@asd.dk", MailSenderMock.To);
-        }
-
-        [Test]
-        public async void DriveReport_PatchWithStatus_Rejected_ShouldSendMailWithCorrectSubject()
-        {
-            const string bodyContent = @"{
-                        'Status' : 'Rejected',
-                        'Comment': 'TestComment'
-                    }";
-
-            Assert.AreEqual(false, MailSenderMock.SendHasBeenCalled);
-
-            var request = Server.CreateRequest(GetUriPath() + "(3)")
-                                .And(r => r.Content = new StringContent(bodyContent))
-                                .And(r => r.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json"));
-            var patchResponse = await request.SendAsync("PATCH");
-
-            Assert.AreEqual("Afvist indberetning", MailSenderMock.Subject);
-        }
-
-        [Test]
-        public async void DriveReport_PatchWithStatus_Rejected_ShouldSendMailWithCorrectBody()
-        {
-            const string bodyContent = @"{
-                        'Status' : 'Rejected',
-                        'Comment': 'TestComment'
-                    }";
-
-            Assert.AreEqual(false, MailSenderMock.SendHasBeenCalled);
-
-            var request = Server.CreateRequest(GetUriPath() + "(3)")
-                                .And(r => r.Content = new StringContent(bodyContent))
-                                .And(r => r.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json"));
-            var patchResponse = await request.SendAsync("PATCH");
-
-            Assert.AreEqual("Din indberetning er blevet afvist med kommentaren: \n \n" + "TestComment", MailSenderMock.Body);
-        }
-
         [Test]
         public async void DriveReport_PatchWithStatus_Accepted_ShouldNotSendMail()
         {
@@ -276,39 +203,6 @@ namespace Presentation.Web.Test.Controllers.DriveReports
             var patchResponse = await request.SendAsync("PATCH");
 
             Assert.AreEqual(false, MailSenderMock.SendHasBeenCalled);
-        }
-
-        [Test]
-        public async void GetWithStatus_Pending_ShouldReturn_OneReport()
-        {
-            var request =
-                Server.CreateRequest(GetUriPath() + "?status=Pending");
-
-            var response = await request.SendAsync(("GET"));
-            var result = await response.Content.ReadAsAsync<ODataResponse<DriveReport>>();
-            Assert.AreEqual(1,result.value.Count);
-        }
-
-        [Test]
-        public async void GetWithStatus_Accepted_ShouldReturn_OneReport()
-        {
-            var request =
-                Server.CreateRequest(GetUriPath() + "?status=Accepted");
-
-            var response = await request.SendAsync(("GET"));
-            var result = await response.Content.ReadAsAsync<ODataResponse<DriveReport>>();
-            Assert.AreEqual(1, result.value.Count);
-        }
-
-        [Test]
-        public async void GetWithStatus_Rejected_ShouldReturn_OneReport()
-        {
-            var request =
-                Server.CreateRequest(GetUriPath() + "?status=Rejected");
-
-            var response = await request.SendAsync(("GET"));
-            var result = await response.Content.ReadAsAsync<ODataResponse<DriveReport>>();
-            Assert.AreEqual(1, result.value.Count);
         }
     }
 

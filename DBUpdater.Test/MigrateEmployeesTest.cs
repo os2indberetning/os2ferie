@@ -62,12 +62,23 @@ namespace DBUpdater.Test
 
             _cachedAddressRepoMock.Insert(new CachedAddress()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>()).AndDoes(x => cachedAddressList.Add(x.Arg<CachedAddress>())).AndDoes(x => x.Arg<CachedAddress>().Id = cachedIdCount).AndDoes(x => cachedIdCount++);
 
+            cachedAddressList.Add(new CachedAddress()
+            {
+                Id = 999,
+                StreetName = "Katrinebjergvej",
+                StreetNumber = "93B",
+                ZipCode = 8200,
+                Town = "Aarhus N",
+                DirtyString = "Katrinebjergvej 93B, 8200 Aarhus N"
+            });
+
             _cachedAddressRepoMock.AsQueryable().Returns(cachedAddressList.AsQueryable());
 
             _personalAddressRepoMock.Insert(new PersonalAddress()).ReturnsForAnyArgs(x => x.Arg<PersonalAddress>()).AndDoes(x => personalAddressList.Add(x.Arg<PersonalAddress>())).AndDoes(x => x.Arg<PersonalAddress>().Id = personalIdCount).AndDoes(x => personalIdCount++);
 
             _personalAddressRepoMock.AsQueryable().Returns(personalAddressList.AsQueryable());
 
+            _actualLaunderer.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
                 _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _workAddressRepoMock);
@@ -157,7 +168,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals("Test@mail.dk"));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
-            Assert.That(res.ElementAt(0).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
             Assert.That(empl.ElementAt(0).StartDateTimestamp.Equals(1430179200));
@@ -175,7 +186,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(1).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(1).Mail.Equals("Test@mail.dk"));
             Assert.That(res.ElementAt(1).PersonId.Equals(2));
-            Assert.That(res.ElementAt(1).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(1).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(1).OrgUnitId.Equals(2));
             Assert.That(empl.ElementAt(1).StartDateTimestamp.Equals(1430179200));
@@ -248,7 +259,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals("Test@mail.dk"));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
-            Assert.That(res.ElementAt(0).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
             Assert.That(empl.ElementAt(0).StartDateTimestamp.Equals(1430179200));
@@ -266,7 +277,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(1).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(1).Mail.Equals("Test@mail.dk"));
             Assert.That(res.ElementAt(1).PersonId.Equals(2));
-            Assert.That(res.ElementAt(1).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(1).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(1).OrgUnitId.Equals(1));
             Assert.That(empl.ElementAt(1).StartDateTimestamp.Equals(1430179200));
@@ -283,7 +294,8 @@ namespace DBUpdater.Test
         {
             _personRepoMock.Insert(new Person()
             {
-                PersonId = 1
+                PersonId = 1,
+                RecieveMail = true,
             });
 
             _personRepoMock.ClearReceivedCalls();
@@ -325,7 +337,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals("Test@mail.dk"));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
-            Assert.That(res.ElementAt(0).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
             Assert.That(empl.ElementAt(0).StartDateTimestamp.Equals(1430179200));
@@ -396,7 +408,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals("Test@mail.dk"));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
-            Assert.That(res.ElementAt(0).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
             Assert.That(empl.ElementAt(0).StartDateTimestamp.Equals(1430179200));
@@ -414,7 +426,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(1).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(1).Mail.Equals("Test@mail.dk"));
             Assert.That(res.ElementAt(1).PersonId.Equals(2));
-            Assert.That(res.ElementAt(1).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(1).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(1).OrgUnitId.Equals(1));
             Assert.That(empl.ElementAt(1).StartDateTimestamp.Equals(1430179200));
@@ -483,7 +495,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals(""));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
-            Assert.That(res.ElementAt(0).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
             Assert.That(empl.ElementAt(0).StartDateTimestamp.Equals(1430179200));
@@ -501,7 +513,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(1).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(1).Mail.Equals(""));
             Assert.That(res.ElementAt(1).PersonId.Equals(2));
-            Assert.That(res.ElementAt(1).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(1).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(1).OrgUnitId.Equals(1));
             Assert.That(empl.ElementAt(1).StartDateTimestamp.Equals(1430179200));
@@ -568,7 +580,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals(""));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
-            Assert.That(res.ElementAt(0).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
             Assert.That(empl.ElementAt(0).StartDateTimestamp.Equals(1430179200));
@@ -586,7 +598,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(1).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(1).Mail.Equals(""));
             Assert.That(res.ElementAt(1).PersonId.Equals(2));
-            Assert.That(res.ElementAt(1).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(1).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(1).OrgUnitId.Equals(1));
             Assert.That(empl.ElementAt(1).StartDateTimestamp.Equals(1430179200));
@@ -650,7 +662,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals(""));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
-            Assert.That(res.ElementAt(0).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
             Assert.That(empl.ElementAt(0).StartDateTimestamp.Equals(1430179200));
@@ -668,7 +680,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(1).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(1).Mail.Equals(""));
             Assert.That(res.ElementAt(1).PersonId.Equals(2));
-            Assert.That(res.ElementAt(1).RecieveMail.Equals(false));
+            Assert.That(res.ElementAt(1).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(1).OrgUnitId.Equals(1));
             Assert.That(empl.ElementAt(1).StartDateTimestamp.Equals(1430179200));

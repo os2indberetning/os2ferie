@@ -31,6 +31,12 @@ namespace DBUpdater.Test
         [SetUp]
         public void SetUp()
         {
+            var personList = new List<Person>();
+            var emplList = new List<Employment>();
+
+            var emplIdCount = 0;
+            var personIdCount = 0;
+
             var cachedAddressList = new List<CachedAddress>();
             var cachedIdCount = 0;
             var personalAddressList = new List<PersonalAddress>();
@@ -45,7 +51,26 @@ namespace DBUpdater.Test
             _coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
             _dataProviderMock = NSubstitute.Substitute.For<IDbUpdaterDataProvider>();
             _workAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<WorkAddress>>();
+
+            _personRepoMock.AsQueryable().Returns(personList.AsQueryable());
+
+            _personRepoMock.Insert(new Person()).ReturnsForAnyArgs(x => x.Arg<Person>()).AndDoes(x => personList.Add(x.Arg<Person>())).AndDoes(x => x.Arg<Person>().Id = personIdCount).AndDoes(x => personIdCount++);
+
+            _emplRepoMock.AsQueryable().Returns(emplList.AsQueryable());
+
+            _emplRepoMock.Insert(new Employment()).ReturnsForAnyArgs(x => x.Arg<Employment>()).AndDoes(x => emplList.Add(x.Arg<Employment>())).AndDoes(x => x.Arg<Employment>().Id = emplIdCount).AndDoes(x => emplIdCount++);
+
             _cachedAddressRepoMock.Insert(new CachedAddress()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>()).AndDoes(x => cachedAddressList.Add(x.Arg<CachedAddress>())).AndDoes(x => x.Arg<CachedAddress>().Id = cachedIdCount).AndDoes(x => cachedIdCount++);
+
+            cachedAddressList.Add(new CachedAddress()
+            {
+                Id = 999,
+                StreetName = "Katrinebjergvej",
+                StreetNumber = "93B",
+                ZipCode = 8200,
+                Town = "Aarhus N",
+                DirtyString = "Katrinebjergvej 93B, 8200 Aarhus N",
+            });
 
             _cachedAddressRepoMock.AsQueryable().Returns(cachedAddressList.AsQueryable());
 
@@ -53,18 +78,39 @@ namespace DBUpdater.Test
 
             _personalAddressRepoMock.AsQueryable().Returns(personalAddressList.AsQueryable());
 
-            _personRepoMock.AsQueryable().Returns(new List<Person>()
-            {
-                new Person()
-                {
-                    Id = 1,
-                    PersonId = 1,
-                }
-            }.AsQueryable());
+            _actualLaundererMock.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
                 _personalAddressRepoMock, _actualLaundererMock, _coordinatesMock, _dataProviderMock, _workAddressRepoMock);
 
+            _orgUnitRepoMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
+            {
+                new OrgUnit()
+                {
+                    Id = 1,
+                    OrgId = 1,
+                    ShortDescription = "ITM",
+                    LongDescription = "IT Minds, Aarhus",
+                    Level = 0,
+                    HasAccessToFourKmRule = false,
+                },
+                new OrgUnit()
+                {
+                    Id = 2,
+                    OrgId = 2,
+                    ShortDescription = "ITMB",
+                    LongDescription = "IT Minds, Aarhus child",
+                    Level = 1,
+                    ParentId = 1,
+                    HasAccessToFourKmRule = false,
+                }
+            }.AsQueryable());
+
+            personList.Add(new Person()
+            {
+                Id = 1,
+                PersonId = 1,
+            });
         }
 
         [Test]
