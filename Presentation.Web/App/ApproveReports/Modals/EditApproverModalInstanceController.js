@@ -21,6 +21,7 @@
                     $scope.infinitePeriod = true;
                 }
 
+
                 $scope.substitute = data.value[0]; // Should change the service
 
                 $scope.target = $scope.substitute.Person;
@@ -45,7 +46,6 @@
                 var sub = new Substitute({
                     StartDateTimestamp: Math.floor($scope.approverFromDate.getTime() / 1000),
                     EndDateTimestamp: Math.floor($scope.approverToDate.getTime() / 1000),
-                    LeaderId: leader.Id,
                     SubId: $scope.approver.Id,
                     OrgUnitId: $scope.orgUnit.Id,
                     PersonId: $scope.target.Id
@@ -56,7 +56,7 @@
                 }
 
                 sub.$patch({ id: substituteId }, function (data) {
-                    NotificationService.AutoFadeNotification("success", "", "Godkender blev oprettet");
+                    NotificationService.AutoFadeNotification("success", "", "Godkender blev redigeret");
                     $modalInstance.close();
                 }, function () {
                     NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette stedfortræder");

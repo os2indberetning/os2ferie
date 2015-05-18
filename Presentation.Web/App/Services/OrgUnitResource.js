@@ -5,8 +5,9 @@
         "getWhereUserIsLeader": {
             method: "GET",
             isArray: true,
-            url: "/odata/Person(:id)/Employments?$expand=OrgUnit &$select=OrgUnit &$filter=IsLeader eq true",
+            url: "/odata/Person(:id)/Employments?$expand=OrgUnit&$filter=IsLeader eq true&$select=OrgUnit",
             transformResponse: function (data) {
+                debugger;
                 var res = [];
                 angular.forEach(angular.fromJson(data).value, function (value, key) {
                     res.push(value.OrgUnit);

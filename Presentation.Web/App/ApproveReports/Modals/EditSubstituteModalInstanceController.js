@@ -1,9 +1,8 @@
 ﻿angular.module('application').controller('EditSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId) {
+    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "substituteId", function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, substituteId) {
 
 
         $scope.persons = persons;
-        $scope.orgUnits = orgUnits;
 
         $scope.person = [];
 
@@ -17,10 +16,13 @@
         });
 
         $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
-
             if (data.value[0].EndDateTimestamp == 9999999999) {
                 $scope.infinitePeriod = true;
             }
+
+            OrgUnit.getWhereUserIsLeader({ id: data.value[0].PersonId }).$promise.then(function(res) {
+                $scope.orgUnits = res;
+            });
 
             $scope.substitute = data.value[0]; // This is bad, but can't change the service
 
@@ -28,9 +30,6 @@
             $scope.person[0] = $scope.substitute.Sub;
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000);
             $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000);
-
-            $scope.orgUnit = $.grep($scope.orgUnits, function (e) { return e.Id == $scope.substitute.OrgUnitId; })[0];
-
         });
 
 
@@ -47,9 +46,8 @@
             var sub = new Substitute({
                 StartDateTimestamp: Math.floor($scope.substituteFromDate.getTime() / 1000),
                 EndDateTimestamp: Math.floor($scope.substituteToDate.getTime() / 1000),
-                LeaderId: leader.Id,
                 SubId: $scope.person[0].Id,
-                OrgUnitId: $scope.orgUnit.Id
+                OrgUnitId: $scope.orgUnit
             });
 
             if ($scope.infinitePeriod) {
