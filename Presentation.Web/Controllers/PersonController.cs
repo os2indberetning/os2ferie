@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using System.Web.Mvc;
 using System.Web.OData;
 using System.Web.OData.Query;
 using Core.ApplicationServices;
@@ -42,7 +43,10 @@ namespace OS2Indberetning.Controllers
             return Ok(res);
         }
 
+        
         [EnableQuery(MaxExpansionDepth = 4)]
+        // Disable caching.
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public Person GetCurrentUser()
         {
             var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(CurrentUser.Id));
@@ -87,7 +91,7 @@ namespace OS2Indberetning.Controllers
 
         // PATCH: odata/Person(5)
         [EnableQuery]
-        [AcceptVerbs("PATCH", "MERGE")]
+        [System.Web.Http.AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Person> delta)
         {
             var person = Repo.AsQueryable().Single(x => x.Id == key);
@@ -117,7 +121,7 @@ namespace OS2Indberetning.Controllers
 
         // GET: odata/Person(5)/Service.HasLicensePlate
         [EnableQuery]
-        [HttpGet]
+        [System.Web.Http.HttpGet]
         public IHttpActionResult HasLicensePlate([FromODataUri] int key, ODataActionParameters parameters)
         {
             return Ok(_licensePlateRepo.AsQueryable().Any(x => x.PersonId == key));

@@ -391,41 +391,43 @@
 
         var createMap = function () {
             $timeout(function () {
-                OS2RouteMap.create({
-                    id: 'map',
-                    change: function (obj) {
-                        $scope.currentMapAddresses = obj.Addresses;
-                        $scope.latestMapDistance = obj.distance;
-                        updateDrivenKm();
+                if (angular.element('#map').length) {
+                    OS2RouteMap.create({
+                        id: 'map',
+                        change: function(obj) {
+                            $scope.currentMapAddresses = obj.Addresses;
+                            $scope.latestMapDistance = obj.distance;
+                            updateDrivenKm();
 
-                        // Return if the change comes from AddressInputChanged
-                        if (mapChanging === true) {
-                            setMapPromise.resolve();
-                            return;
+                            // Return if the change comes from AddressInputChanged
+                            if (mapChanging === true) {
+                                setMapPromise.resolve();
+                                return;
+                            }
+
+                            if ($scope.IsRoute) {
+                                setNotRoute();
+                            }
+
+                            mapChanging = true;
+                            $scope.DriveReport.Addresses = [];
+                            // Load the adresses from the map.
+                            angular.forEach(obj.Addresses, function(address, key) {
+                                var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
+                                $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
+                            });
+                            // Apply to update the view.
+                            $scope.$apply();
+                            $timeout(function() {
+                                // Wait for the view to render before setting mapChanging to false.
+
+                                mapChanging = false;
+                            });
+
                         }
-
-                        if ($scope.IsRoute) {
-                            setNotRoute();
-                        }
-
-                        mapChanging = true;
-                        $scope.DriveReport.Addresses = [];
-                        // Load the adresses from the map.
-                        angular.forEach(obj.Addresses, function (address, key) {
-                            var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
-                            $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
-                        });
-                        // Apply to update the view.
-                        $scope.$apply();
-                        $timeout(function () {
-                            // Wait for the view to render before setting mapChanging to false.
-
-                            mapChanging = false;
-                        });
-
-                    }
-                });
-                OS2RouteMap.set($scope.mapStartAddress);
+                    });
+                    OS2RouteMap.set($scope.mapStartAddress);
+                }
             });
         }
 
@@ -578,7 +580,7 @@
             var lat1 = (address1.Latitude === undefined) ? address1.lat : address1.Latitude;
             var lat2 = (address2.Latitude === undefined) ? address2.lat : address2.Latitude;
 
-            var longDiff = Math.abs( Number(long1) - Number(long2));
+            var longDiff = Math.abs(Number(long1) - Number(long2));
             var latDiff = Math.abs(Number(lat1) - Number(lat2));
             return longDiff < 0.0001 && latDiff < 0.001; //Fourth decimal is ~10 meters
         }

@@ -9,10 +9,10 @@
 
 <div class="row">
 
-    <div class="col-lg-6">
+    <div class="col-sm-12 col-md-6">
         <form novalidate class="driving-report-form">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-sm-12">
                     <div class="form-group form-inline">
                         <label for="date">Dato for tjenestekørsel: </label>
                         <input culture="'da-DK'" kendo-date-picker="container.driveDatePicker" k-max="container.datePickerMaxDate" k-format="'dd/MM/yyyy'" k-ng-model="DriveReport.Date" k-options="DateOptions" />
@@ -37,20 +37,20 @@
                 </div>
             </div>
             <div class="row m-b-l">
-                <div class="col-lg-4">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label for="">Nummerplade:</label>
                         <select ng-disabled="!showLicensePlate" class="fill-width" kendo-drop-down-list="container.LicensePlateDropDown" ng-model="DriveReport.LicensePlate" id="" k-data-source="LicensePlates" k-data-text-field="'PresentationString'" k-data-value-field="'Plate'" k-placeholder="'Brugerens nummerplade(r)'"></select>
                         <label class="text-danger" ng-bind="licensePlateErrorMessage"></label>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-sm-3">
                     <div class="form-group">
                         <label for="">Transportmiddel:</label>
                         <select class="fill-width" kendo-drop-down-list="container.KmRateDropDown" ng-change="transportChanged()" ng-model="DriveReport.KmRate" k-data-source="KmRate" k-data-text-field="'Type.Description'" k-data-value-field="'Id'" k-placeholder="'Vælg transportmiddel'"></select>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-sm-5">
                     <div class="form-group">
                         <label for="">Kilometeropgørelse:</label>
                         <select kendo-drop-down-list="container.KilometerAllowanceDropDown" k-options="KilometerAllowanceOptions" ng-change="kilometerAllowanceChanged()" class="fill-width" id="KilometerAllowance" ng-model="DriveReport.KilometerAllowance">
@@ -122,7 +122,7 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-lg-7">
+                            <div class="col-sm-7">
                                 <label for="">Vælg adresse:</label> <label ng-bind="addressSelectionErrorMessage" class="text-danger"></label>
                                 <div ng-show="isAddressNameSet(DriveReport.Addresses[$index]) === false">
                                     <!--Dropdown for selecting standard addresses-->
@@ -130,18 +130,18 @@
                                 </div>
 
                             </div>
-                            <div class="col-lg-1" ng-if="$middle">
+                            <div class="col-sm-1" ng-if="$middle">
                                 <!--Remove button for via points-->
                                 <button class="k-button k-button-no-shadow" ng-enter="" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
                             </div>
                             <div ng-show="DriveReport.Addresses[$index].Personal == addressDropDownPlaceholderText">
-                                <div class="col-lg-7">
+                                <div class="col-sm-7">
                                     <!--Text field for adding addresses-->
                                     <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'" ng-enter="" k-placeholder="addressPlaceholderText"
                                            k-data-source="SmartAddress" ng-blur="addressInputChanged($index)" ng-model="DriveReport.Addresses[$index].Name" class="fill-width no-max-width" />
                                 </div>
 
-                                <div class="col-lg-4">
+                                <div class="col-sm-4">
                                     <!-- checkbox indicating if a address should be saved-->
                                     <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" ng-enter="" /><label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
                                 </div>
@@ -186,17 +186,17 @@
 
             </div>
 
-            <div class="row">
-                <div class="col-lg-6">
+            <div class="row margin-bottom-5">
+                <div class="col-sm-6">
                     <button type="button" ng-enter="" ng-click="clearClicked()" class="btn btn-danger">Nulstil</button>
                 </div>
-                <div class="col-lg-6 pull-right text-right">
+                <div class="col-sm-6 pull-right text-right">
                     <button type="button" ng-enter="" class="btn btn-primary" ng-disabled="!canSubmitDriveReport" ng-click="Save()">Indberet</button>
                 </div>
             </div>
         </form>
     </div>
-    <div class="col-lg-6">
+    <div class="col-sm-12 col-md-6">
 
         <div class="row">
             <div class="col-lg-12" style="height:500px">
@@ -204,26 +204,26 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-sm-6">
                 <p class="text-primary">Kørte kilometer</p>
             </div>
-            <div class="col-lg-6 text-right">
+            <div class="col-sm-6 text-right">
                 {{Number(DrivenKMDisplay).toFixed(2).toString().replace(".",",")}} km
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-sm-6">
                 <p class="text-primary">Merkørselsfradrag</p>
             </div>
-            <div class="col-lg-6 text-right">
+            <div class="col-sm-6 text-right">
                 {{Number(TransportAllowance).toFixed(2).toString().replace(".",",")}} km
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-sm-6">
                 <p class="text-primary">Kilometer til indberetning</p>
             </div>
-            <div class="col-lg-6 text-right">
+            <div class="col-sm-6 text-right">
                 <div ng-if="Number(DrivenKMDisplay > Number(TransportAllowance))">
                     {{ Number(Number(DrivenKMDisplay).toFixed(2) - Number(TransportAllowance).toFixed(2)).toFixed(2).toString().replace(".",",")  }} km
                 </div>

@@ -101,25 +101,30 @@ namespace OS2Indberetning.Controllers
 
             var leader = _driveService.GetResponsibleLeaderForReport(report);
 
+            if (report == null)
+            {
+                return NotFound();
+            }
+
             if (leader == null)
             {
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
-            if (leader.Id == CurrentUser.Id)
+
+            // Cannot approve own reports.
+            if (report.PersonId == CurrentUser.Id)
             {
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
+            // Cannot approve reports where you are not responsible leader
             if (!CurrentUser.Id.Equals(leader.Id))
             {
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
-            if (report == null)
-            {
-                return NotFound();
-            }
+
             // Return Unauthorized if the status is not pending when trying to patch.
             // User should not be allowed to change a Report which has been accepted or rejected.
             if (report.Status != ReportStatus.Pending)

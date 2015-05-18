@@ -21,30 +21,30 @@
                     <div collapse="isCollapsed">
                         <div class="well well-lg">
                             <div class="row margin-5">
-                                <div class="col-md-3">
-                                    <p class="margin-5"><strong>Beskrivelse</strong></p>
-                                </div>
-                                <div class="col-md-3">
+                                <div class="col-sm-3">
                                     <p class="margin-5"><strong>Nummerplade</strong></p>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-sm-3">
+                                    <p class="margin-5"><strong>Beskrivelse</strong></p>
+                                </div>
+                                <div class="col-sm-1">
                                     <p class="margin-5"><strong>Primær</strong></p>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-sm-1">
                                     <span class="info-popup pull-right margin-5" popover="Den primære nummerplade bruges ved mobil-indberetninger." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                                 </div>
                             </div>
                             <div class="row margin-5" ng-repeat="plate in licenseplates">
-                                <div class="col-md-3">
+                                <div class="col-sm-3">
                                     <p class="margin-5">{{plate.Description}}</p>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-sm-3">
                                     <p class="margin-5">{{ plate.Plate}}</p>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-sm-1">
                                     <p class="margin-5" ng-if="plate.IsPrimary"><i class="fa fa-check"></i></p>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-sm-3">
                                     <button ng-disabled="plate.IsPrimary" class="btn btn-primary pull-right" ng-click="makeLicensePlatePrimary(plate)">Gør primær</button>
                                 </div>
                                 <div class="col-md-1">
@@ -68,21 +68,25 @@
                         </div>
 
                     </div>
+                    
                     <div class="row">
                         <div class="col-xs-7">
+
                             <input ng-enter="saveAlternativeHomeAddress()" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
-                                   k-data-source="SmartAddress" ng-model="alternativeHomeAddress.string" class="fill-width" k-placeholder="'Skriv her'" />
-                        </div>
-                        <div class="col-xs-2">
+                                   k-data-source="SmartAddress" ng-model="alternativeWorkAddresses[$index]" class="fill-width" k-placeholder="'Skriv her'" />
 
                         </div>
-                        <div class="col-xs-1"></div>
-                        <div class="col-xs-1">
-                            <button ng-click="clearHomeClicked()" class="btn btn-danger">Nulstil</button>
+                        <div class="col-xs-2">
+                          
                         </div>
-                        <div class="col-xs-1">
+                        <div class="col-xs-1 pull-right margin-right-20">
                             <button ng-click="saveAlternativeHomeAddress()" class="btn btn-success">Gem</button>
                         </div>
+
+                        <div class="col-xs-1 pull-right margin-right-5">
+                            <button ng-click="clearHomeClicked()" class="btn btn-danger">Nulstil</button>
+                        </div>
+
 
                     </div>
                 </div>
@@ -101,10 +105,10 @@
                     <label for="">Se eller opret tokens til din mobiltelefon</label>
                     <span class="info-popup" popover="Der er også mulighed for at indberette befordring via en app. Mobiltoken bruges til at forbinde din mobile enhed med eIndberetning. Du kan høre mere om app’en ved din leder." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                     <div class="row margin-5">
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
                             <p class="margin-5"><strong>Token</strong></p>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-sm-8">
                             <p class="margin-5"><strong>Beskrivelse</strong> (f.eks. arbejdstelefon eller telefonnummer)</p>
                         </div>
 
@@ -123,8 +127,8 @@
 
                     <div collapse="tokenIsCollapsed">
                         <div class="row margin-5">
-                            <div class="col-md-4"></div>
-                            <div class="col-md-4 margin-bottom-10">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4 margin-bottom-10">
                                 <input ng-enter="saveToken()" ng-model="newTokenDescription" class="form-control fill-width" placeholder="Beskrivelse" />
                             </div>
                             <div class="col-md-2 pull-right">

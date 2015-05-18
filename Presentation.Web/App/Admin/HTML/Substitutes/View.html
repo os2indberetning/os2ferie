@@ -23,7 +23,7 @@
                         <label>Til:</label>
                     </div>
                     <div class="col-xs-3 col-lg-2">
-                        <label>På ubestemt tid:</label>
+                        <label for="subInfinitePeriod">På ubestemt tid:</label>
                     </div>
                 </div>
                 <div class="row">
@@ -34,7 +34,7 @@
                         <input kendo-datepicker ng-disabled="container.subInfinitePeriod" culture="'da-DK'" k-options="dateOptions" ng-model="container.substituteToDateString" k-ng-model="container.substituteToDate" ng-change="dateChanged('substitute')" />
                     </div>
                     <div class="col-xs-2 col-lg-2">
-                        <input type="checkbox" ng-model="container.subInfinitePeriod" ng-change="dateChanged('substitute')" />
+                        <input type="checkbox" id="subInfinitePeriod" ng-model="container.subInfinitePeriod" ng-change="dateChanged('substitute')" />
                     </div>
                     <div class="col-xs-2 col-lg-2">
                         <button class="btn btn-danger" ng-click="clearClicked('substitute')">Nulstil søgning</button>
@@ -58,7 +58,7 @@
                         <label>Til:</label>
                     </div>
                     <div class="col-xs-3 col-lg-2">
-                        <label>På ubestemt tid:</label>
+                        <label for="appInfinitePeriod">På ubestemt tid:</label>
                     </div>
 
                 </div>
@@ -70,7 +70,7 @@
                         <input ng-disabled="container.appInfinitePeriod" kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="container.approverToDateString" k-ng-model="container.approverToDate" ng-change="dateChanged('approver')" />
                     </div>
                     <div class="col-xs-2 col-lg-2">
-                        <input type="checkbox" ng-model="container.appInfinitePeriod" ng-change="dateChanged('approver')" />
+                        <input id="appInfinitePeriod" type="checkbox" ng-model="container.appInfinitePeriod" ng-change="dateChanged('approver')" />
                     </div>
                     <div class="col-xs-2 col-lg-2">
                         <button class="btn btn-danger" ng-click="clearClicked('approver')">Nulstil søgning</button>

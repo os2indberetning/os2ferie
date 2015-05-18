@@ -15,11 +15,11 @@
             </div>
 
 
-            <div class="col-md-12 margin-5">
-                <div class="col-md-4">
+            <div class="col-sm-12 margin-5">
+                <div class="col-sm-4">
                     <label>Type</label>
                 </div>
-                <div class="col-md-8">
+                <div class="col-sm-8">
                     <select kendo-drop-down-list ng-model="container.newAccountType" ng-change="accountTypeChanged()" class="fill-width">
                         <option value="0">Omkostningssted</option>
                         <option value="1">PSP-element</option>
@@ -27,28 +27,28 @@
                 </div>
             </div>
 
-            <div class="col-md-12 margin-5">
-                <div class="col-md-4">
+            <div class="col-sm-12 margin-5">
+                <div class="col-sm-4">
                     <label>Kontonummer</label>
                 </div>
-                <div class="col-md-8">
+                <div class="col-sm-8">
                     <input ng-enter="addNewAccountClick()" ng-show="container.newAccountType == '0'" kendo-masked-text-box options="maskOptions" class="form-control" ng-model="container.newAccountAccountNumber" />
                 </div>
-                <div class="col-md-8">
+                <div class="col-sm-8">
                     <input ng-enter="addNewAccountClick()" ng-show="container.newAccountType == '1'" kendo-masked-text-box options="PSPMaskOptions" class="form-control" ng-model="container.newAccountAccountNumber" />
                 </div>
             </div>
 
-            <div class="col-md-12 margin-5">
-                <div class="col-md-4">
+            <div class="col-sm-12 margin-5">
+                <div class="col-sm-4">
                     <label>Beskrivelse</label>
                 </div>
-                <div class="col-md-8">
+                <div class="col-sm-8">
                     <textarea ng-enter="addNewAccountClick()" type="text" class="form-control min-height-100 max-width-100p" ng-model="container.newAccountDescription"></textarea>
                 </div>
             </div>
-            <div class="col-md-12 margin-5">
-                <div class="col-md-3 pull-right">
+            <div class="col-sm-12 margin-5">
+                <div class="col-sm-3 pull-right">
                     <button class="btn btn-primary fill-width" ng-click="addNewAccountClick()">Opret</button>
                 </div>
 
