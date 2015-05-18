@@ -7,6 +7,7 @@ namespace Core.DomainServices.RoutingClasses
     {
         private const string _coordinateToAddressUrl = @"http://dawa.aws.dk/adgangsadresser/reverse?";
         private const string _coordinatesURL = @"http://dawa.aws.dk/adresser?";
+        private const string _launderingUrl = @"http://dawa.aws.dk/adgangsadresser?";
 
 
 
@@ -15,11 +16,8 @@ namespace Core.DomainServices.RoutingClasses
         /// </summary>
         public static string LaunderingUrl
         {
-            get
-            {
-                var apiKey = ConfigurationManager.AppSettings["PROTECTED_SEPTIMA_API_KEY"];
-                return "http://service.adressevask.dk/" + apiKey + "/json?json=";
-            }
+            get { return _launderingUrl; }
+
         }
 
         /// <summary>
@@ -42,7 +40,7 @@ namespace Core.DomainServices.RoutingClasses
         {
             get
             {
-                var apiKey = ConfigurationManager.AppSettings["PROTECTED_SEPTIMA_API_KEY"];
+                var apiKey = ConfigurationManager.AppSettings["SEPTIMA_API_KEY"];
                 return "http://new-routing.septima.dk/" + apiKey + "/car/viaroute?";
             }
         }

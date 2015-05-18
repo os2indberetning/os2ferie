@@ -3,35 +3,14 @@ using Newtonsoft.Json.Linq;
 
 namespace Core.DomainServices.RoutingClasses
 {
-    #region ADDRESS LAUNDERING
 
-    public class LaunderedAddress
-    {
-        public string streetbuildingidentifier { get; set; }
-        public string postcode { get; set; }
-        public string streetname { get; set; }
-    }
-
-    public class RootLaunderedObject
-    {
-        public string input { get; set; }
-        public string validatedescription { get; set; }
-        public int validateresult { get; set; }
-        public LaunderedAddress laundered_address { get; set; }
-    }
-
-    #endregion
-
-    #region ADDRESS TO COORDINATES
+    #region ADDRESS TO COORDINATES //Also used by address laundering after switch away from septima
 
     public class Adgangsadresse
     {
-        public int status { get; set; }
         public Vejstykke vejstykke { get; set; }
         public string husnr { get; set; }
-        public object supplerendebynavn { get; set; }
         public Postnummer postnummer { get; set; }
-        public Kommune kommune { get; set; }
         public Adgangspunkt adgangspunkt { get; set; }
     }
 
@@ -39,14 +18,14 @@ namespace Core.DomainServices.RoutingClasses
     {
         public Adgangspunkt(JToken token)
         {
-            koordinater = new List<double>();
+            koordinater = new List<string>();
 
-            foreach (double point in token["koordinater"])
+            foreach (string point in token["koordinater"])
             {
                 koordinater.Add(point);
             }
         }
-        public List<double> koordinater { get; set; }
+        public List<string> koordinater { get; set; }
         public string __invalid_name__nøjagtighed { get; set; }
         public int kilde { get; set; }
         public string tekniskstandard { get; set; }
@@ -77,13 +56,6 @@ namespace Core.DomainServices.RoutingClasses
         }
         public string href { get; set; }
         public string nr { get; set; }
-        public string navn { get; set; }
-    }
-
-    public class Kommune
-    {
-        public string href { get; set; }
-        public string kode { get; set; }
         public string navn { get; set; }
     }
 

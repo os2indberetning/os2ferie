@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Core.ApplicationServices;
+using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using DBUpdater.Models;
@@ -28,7 +29,7 @@ namespace DBUpdater.Test
         private IAddressLaunderer _actualLaunderer;
         private IAddressCoordinates _coordinates;
         private IDbUpdaterDataProvider _dataProvider;
-        private IGenericRepository<WorkAddress> _workAddressRepoMock;
+        private IMailSender _mailSender;
 
         [SetUp]
         public void SetUp()
@@ -48,8 +49,7 @@ namespace DBUpdater.Test
             _actualLaunderer = NSubstitute.Substitute.For<IAddressLaunderer>();
             _coordinates = NSubstitute.Substitute.For<IAddressCoordinates>();
             _dataProvider = NSubstitute.Substitute.For<IDbUpdaterDataProvider>();
-
-            _workAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<WorkAddress>>();
+            _mailSender = NSubstitute.Substitute.For<IMailSender>();
 
             _orgUnitRepoMock.AsQueryable().Returns(orgList.AsQueryable());
 
@@ -62,7 +62,7 @@ namespace DBUpdater.Test
             _actualLaunderer.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-                _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _workAddressRepoMock);
+                _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSender);
 
         }
 

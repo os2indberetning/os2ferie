@@ -21,19 +21,6 @@ namespace Infrastructure.AddressServices.Tests
             Assert.AreEqual(address, result);
         }
 
-        [Test]
-        public void LaunderAddress_SplittetStreetName_BadStreetName()
-        {
-            //Arrange
-            Address address = new Address { StreetName = "Nü Adelgaje", StreetNumber = "10", ZipCode = 1104 };
-            Address correctAddress = new Address { StreetName = "Ny Adelgade", StreetNumber = "10", ZipCode = 1104 };
-            AddressLaundering uut = new AddressLaundering();
-            //Act
-            Address result = uut.LaunderAddress(address);
-            //Assert
-            Assert.AreEqual(address, result);
-        }
-
         #endregion
 
         #region Exception tests

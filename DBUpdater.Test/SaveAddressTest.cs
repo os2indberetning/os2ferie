@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using DBUpdater.Models;
@@ -27,6 +28,7 @@ namespace DBUpdater.Test
         private IAddressCoordinates _coordinatesMock;
         private IDbUpdaterDataProvider _dataProviderMock;
         private IGenericRepository<WorkAddress> _workAddressRepoMock;
+        private IMailSender _mailSenderMock;
 
         [SetUp]
         public void SetUp()
@@ -51,6 +53,7 @@ namespace DBUpdater.Test
             _coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
             _dataProviderMock = NSubstitute.Substitute.For<IDbUpdaterDataProvider>();
             _workAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<WorkAddress>>();
+            _mailSenderMock = NSubstitute.Substitute.For<IMailSender>();
 
             _personRepoMock.AsQueryable().Returns(personList.AsQueryable());
 
@@ -81,7 +84,7 @@ namespace DBUpdater.Test
             _actualLaundererMock.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-                _personalAddressRepoMock, _actualLaundererMock, _coordinatesMock, _dataProviderMock, _workAddressRepoMock);
+                _personalAddressRepoMock, _actualLaundererMock, _coordinatesMock, _dataProviderMock, _mailSenderMock);
 
             _orgUnitRepoMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
             {
@@ -192,12 +195,12 @@ namespace DBUpdater.Test
 
             _uut.SaveHomeAddress(empl, 1);
 
-            var res =_cachedAddressRepoMock.AsQueryable();
-            Assert.That(res.ElementAt(0).StreetName.Equals("Jens Baggesens Vej"));
-            Assert.That(res.ElementAt(0).StreetNumber.Equals("44"));
-            Assert.That(res.ElementAt(0).ZipCode.Equals(8210));
-            Assert.That(res.ElementAt(0).Town.Equals("Aarhus V"));
-            Assert.That(res.ElementAt(0).IsDirty.Equals(false));
+            var res = _cachedAddressRepoMock.AsQueryable().First(a => a.StreetName.Equals("Jens Baggesens Vej"));
+            Assert.That(res.StreetName.Equals("Jens Baggesens Vej"));
+            Assert.That(res.StreetNumber.Equals("44"));
+            Assert.That(res.ZipCode.Equals(8210));
+            Assert.That(res.Town.Equals("Aarhus V"));
+            Assert.That(res.IsDirty.Equals(false));
 
         }
 
@@ -216,26 +219,27 @@ namespace DBUpdater.Test
                 PostNr = 8210,
                 By = "Aarhus V"
             };
-
+            
             _cachedAddressRepoMock.Insert(new CachedAddress()
             {
                 IsDirty = false,
                 StreetName = "Jens Baggesens Vej",
                 StreetNumber = "44",
                 ZipCode = 8210,
-                Town = "Aarhus V"
+                Town = "Aarhus V",
+                DirtyString = "Jens Baggesens Vej 44, 8210 Aarhus V"
             });
 
             _uut.SaveHomeAddress(empl, 1);
 
             _actualLaundererMock.DidNotReceiveWithAnyArgs().Launder(new Address());
 
-            var res = _cachedAddressRepoMock.AsQueryable();
-            Assert.That(res.ElementAt(0).StreetName.Equals("Jens Baggesens Vej"));
-            Assert.That(res.ElementAt(0).StreetNumber.Equals("44"));
-            Assert.That(res.ElementAt(0).ZipCode.Equals(8210));
-            Assert.That(res.ElementAt(0).Town.Equals("Aarhus V"));
-            Assert.That(res.ElementAt(0).IsDirty.Equals(false));
+            var res = _cachedAddressRepoMock.AsQueryable().First(a => a.StreetName.Equals("Jens Baggesens Vej"));
+            Assert.That(res.StreetName.Equals("Jens Baggesens Vej"));
+            Assert.That(res.StreetNumber.Equals("44"));
+            Assert.That(res.ZipCode.Equals(8210));
+            Assert.That(res.Town.Equals("Aarhus V"));
+            Assert.That(res.IsDirty.Equals(false));
 
         }
 
@@ -261,17 +265,18 @@ namespace DBUpdater.Test
                 StreetName = "Jens Baggesens Vej",
                 StreetNumber = "44",
                 ZipCode = 8210,
-                Town = "Aarhus V"
+                Town = "Aarhus V",
+                DirtyString = "Jens Baggesens Vej 44, 8210 Aarhus V"
             });
 
             _uut.SaveHomeAddress(empl, 1);
 
-            var res = _cachedAddressRepoMock.AsQueryable();
-            Assert.That(res.ElementAt(0).StreetName.Equals("Jens Baggesens Vej"));
-            Assert.That(res.ElementAt(0).StreetNumber.Equals("44"));
-            Assert.That(res.ElementAt(0).ZipCode.Equals(8210));
-            Assert.That(res.ElementAt(0).Town.Equals("Aarhus V"));
-            Assert.That(res.ElementAt(0).IsDirty.Equals(false));
+            var res = _cachedAddressRepoMock.AsQueryable().First(a => a.StreetName.Equals("Jens Baggesens Vej"));
+            Assert.That(res.StreetName.Equals("Jens Baggesens Vej"));
+            Assert.That(res.StreetNumber.Equals("44"));
+            Assert.That(res.ZipCode.Equals(8210));
+            Assert.That(res.Town.Equals("Aarhus V"));
+            Assert.That(res.IsDirty.Equals(false));
 
         }
 

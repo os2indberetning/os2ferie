@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using DBUpdater.Models;
@@ -27,6 +28,7 @@ namespace DBUpdater.Test
         private IAddressCoordinates _coordinates;
         private IDbUpdaterDataProvider _dataProvider;
         private IGenericRepository<WorkAddress> _workAddressRepoMock;
+        private IMailSender _mailSenderMock;
 
         [SetUp]
         public void SetUp()
@@ -51,6 +53,7 @@ namespace DBUpdater.Test
             _coordinates = NSubstitute.Substitute.For<IAddressCoordinates>();
             _dataProvider = NSubstitute.Substitute.For<IDbUpdaterDataProvider>();
             _workAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<WorkAddress>>();
+            _mailSenderMock = NSubstitute.Substitute.For<IMailSender>();
 
             _personRepoMock.AsQueryable().Returns(personList.AsQueryable());
 
@@ -69,7 +72,8 @@ namespace DBUpdater.Test
                 StreetNumber = "93B",
                 ZipCode = 8200,
                 Town = "Aarhus N",
-                DirtyString = "Katrinebjergvej 93B, 8200 Aarhus N"
+                DirtyString = "Katrinebjergvej 93B, 8200 Aarhus N",
+                IsDirty = false
             });
 
             _cachedAddressRepoMock.AsQueryable().Returns(cachedAddressList.AsQueryable());
@@ -81,7 +85,7 @@ namespace DBUpdater.Test
             _actualLaunderer.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-                _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _workAddressRepoMock);
+                _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSenderMock);
 
             _orgUnitRepoMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
             {
@@ -690,6 +694,52 @@ namespace DBUpdater.Test
             Assert.That(empl.ElementAt(1).IsLeader.Equals(true));
             Assert.That(empl.ElementAt(1).PersonId.Equals(res.ElementAt(1).Id));
             Assert.That(empl.ElementAt(1).Position.Equals(""));
+        }
+
+        [Test]
+        public void DirtyAddressesShouldResultInEmailsBeingSent()
+        {
+            _personRepoMock.Insert(new Person()
+            {
+                IsAdmin = true,
+                Mail = "foo@bar.com"
+            });
+
+            _cachedAddressRepoMock.Insert(new CachedAddress()
+            {
+                IsDirty = true,
+                DirtyString = "AB 123, 9999 xyz",
+                StreetName = "AB",
+                StreetNumber = "123",
+                ZipCode = 9999,
+                Town = "xyz"
+            });
+            
+            _uut.MigrateEmployees();
+            _mailSenderMock.ReceivedWithAnyArgs().SendMail("", "", "");
+        }
+
+        [Test]
+        public void NoDirtyAddressesShouldNotResultInEmailsBeingSent()
+        {
+            _personRepoMock.Insert(new Person()
+            {
+                IsAdmin = true,
+                Mail = "foo@bar.com"
+            });
+
+            _cachedAddressRepoMock.Insert(new CachedAddress()
+            {
+                IsDirty = false,
+                DirtyString = "AB 123, 9999 xyz",
+                StreetName = "AB",
+                StreetNumber = "123",
+                ZipCode = 9999,
+                Town = "xyz"
+            });
+
+            _uut.MigrateEmployees();
+            _mailSenderMock.DidNotReceiveWithAnyArgs().SendMail("", "", "");
         }
 
     }
