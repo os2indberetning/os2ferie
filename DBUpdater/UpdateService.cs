@@ -112,8 +112,8 @@ namespace DBUpdater
                 i++;
                 Console.WriteLine("Migrating person " + i + " of " + empls.Count() + ".");
 
-                var personToInsert = _personRepo.AsQueryable().FirstOrDefault(x => x.PersonId == employee.MaNr);
-
+                var personToInsert = _personRepo.AsQueryable().FirstOrDefault(x => x.CprNumber == employee.CPR);
+                
                 if (personToInsert == null)
                 {
                     personToInsert = _personRepo.Insert(new Person());
@@ -128,21 +128,21 @@ namespace DBUpdater
                 personToInsert.Mail = employee.Email ?? "";
                 personToInsert.PersonId = employee.MaNr ?? default(int);
 
+                _personRepo.Save(); 
             }
-            _personRepo.Save();
 
             i = 0;
             foreach (var employee in empls)
             {
                 i++;
                 Console.WriteLine("Adding employment and address to person " + i + " of " + empls.Count());
-                var personToInsert = _personRepo.AsQueryable().First(x => x.PersonId == employee.MaNr);
+                var personToInsert = _personRepo.AsQueryable().First(x => x.CprNumber == employee.CPR);
 
                 CreateEmployment(employee, personToInsert.Id);
-                SaveHomeAddress(employee, personToInsert.Id);
+                UpdateHomeAddress(employee, personToInsert.Id); 
+                _personalAddressRepo.Save();
             }
             _emplRepo.Save();
-            _personalAddressRepo.Save();
 
             Console.WriteLine("Done migrating employees");
             var dirtyAddressCount = _cachedRepo.AsQueryable().Count(x => x.IsDirty);
@@ -175,11 +175,15 @@ namespace DBUpdater
                 throw new Exception("Person does not exist.");
             }
 
-            var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.OrgUnitId == orgUnit.Id && x.PersonId == personId);
-
+            var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.OrgUnitId == orgUnit.Id 
+                                                                            && x.PersonId == personId
+                                                                            && x.Position.Equals(empl.Stillingsbetegnelse));
+            //It is ok that we do not save after inserting untill
+            //we are done as we loop over employments from the view, and 
+            //two view employments will not share an employment in the db. 
             if (employment == null)
             {
-                employment = _emplRepo.Insert(new Employment());
+                employment = _emplRepo.Insert(new Employment()); 
             }
 
             employment.OrgUnitId = orgUnit.Id;
@@ -205,9 +209,8 @@ namespace DBUpdater
 
         }
 
-        public void SaveHomeAddress(Employee empl, int personId)
+        public void UpdateHomeAddress(Employee empl, int personId)
         {
-
             if (empl.Adresse == null)
             {
                 return;
@@ -246,16 +249,19 @@ namespace DBUpdater
             };
 
             var homeAddr = _personalAddressRepo.AsQueryable().FirstOrDefault(x => x.PersonId.Equals(personId) &&
-                x.StreetName.Equals(launderedAddress.StreetName) &&
-                x.StreetNumber.Equals(launderedAddress.StreetNumber) &&
-                x.ZipCode.Equals(launderedAddress.ZipCode) &&
                 x.Type == PersonalAddressType.Home);
 
             if (homeAddr == null)
             {
                 _personalAddressRepo.Insert(launderedAddress);
             }
-            // If home address is not null, then the homeaddress already exists in the database -> do nothing.
+            else
+            {
+                homeAddr.StreetName = launderedAddress.StreetName;
+                homeAddr.StreetNumber = launderedAddress.StreetNumber;
+                homeAddr.ZipCode = launderedAddress.ZipCode;
+                homeAddr.Town = addressToLaunder.Town;
+            }
         }
 
         public WorkAddress GetWorkAddress(Organisation org)
