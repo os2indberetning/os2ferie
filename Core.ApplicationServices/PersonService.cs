@@ -16,11 +16,13 @@ namespace Core.ApplicationServices
     {
         private readonly IGenericRepository<PersonalAddress> _addressRepo;
         private readonly IRoute<RouteInformation> _route;
+        private readonly IAddressCoordinates _coordinates;
 
-        public PersonService(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route)
+        public PersonService(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route, IAddressCoordinates coordinates)
         {
             _addressRepo = addressRepo;
             _route = route;
+            _coordinates = coordinates;
         }
 
         public IQueryable<Person> ScrubCprFromPersons(IQueryable<Person> queryable)
@@ -92,8 +94,7 @@ namespace Core.ApplicationServices
         {
             if (string.IsNullOrEmpty(a.Latitude) || a.Latitude.Equals("0"))
             {
-                var coordinates = NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>();
-                var result = coordinates.GetAddressCoordinates(a);
+                var result = _coordinates.GetAddressCoordinates(a);
                 a.Latitude = result.Latitude;
                 a.Longitude = result.Longitude;
                 _addressRepo.Save();
