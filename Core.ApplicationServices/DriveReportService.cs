@@ -47,41 +47,6 @@ namespace Core.ApplicationServices
             _driveReportRepository = driveReportRepository;
         }
 
-        public void AddFullName(DriveReport driveReport)
-        {
-            if (driveReport == null)
-            {
-                return;
-            }
-            driveReport.FullName = driveReport.Person.FirstName;
-
-            if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
-            {
-                driveReport.FullName += " " + driveReport.Person.MiddleName;
-            }
-
-            driveReport.FullName += " " + driveReport.Person.LastName;
-            driveReport.FullName += " [" + driveReport.Person.Initials + "]";
-        }
-
-        public IQueryable<DriveReport> AddApprovedByFullName(IQueryable<DriveReport> repo)
-        {
-            foreach (var driveReport in repo.Where(driveReport => driveReport.ApprovedBy != null))
-            {
-                driveReport.ApprovedBy.FullName = driveReport.ApprovedBy.FirstName;
-
-                if (!string.IsNullOrEmpty(driveReport.ApprovedBy.MiddleName))
-                {
-                    driveReport.ApprovedBy.FullName += " " + driveReport.ApprovedBy.MiddleName;
-                }
-
-                driveReport.ApprovedBy.FullName += " " + driveReport.ApprovedBy.LastName;
-
-                driveReport.ApprovedBy.FullName += " [" + driveReport.ApprovedBy.Initials + "]";
-            }
-            return repo;
-        }
-
         public DriveReport Create(DriveReport report)
         {
             if (report.PersonId == 0)
@@ -241,54 +206,40 @@ namespace Core.ApplicationServices
             //Find an org unit where the person is not the leader, and then find the leader of that org unit to attach to the drive report
             var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == driveReport.Employment.OrgUnitId);
             var leaderOfOrgUnit =
-                _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader);
+                _employmentRepository.AsQueryable().FirstOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader);
 
-            if (leaderOfOrgUnit == null || orgUnit == null)
+            if (orgUnit == null)
             {
                 return null;
             }
-            while (leaderOfOrgUnit.PersonId == person.Id)
+
+
+
+            while ((leaderOfOrgUnit == null && orgUnit.Level > 0) || (leaderOfOrgUnit != null && leaderOfOrgUnit.PersonId == person.Id))
             {
+                leaderOfOrgUnit =  _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.ParentId && e.IsLeader);;
                 orgUnit = orgUnit.Parent;
-                leaderOfOrgUnit = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader);
-                if (leaderOfOrgUnit == null)
-                {
-                    break;
-                }
             }
 
-            if (orgUnit != null)
+
+            if (orgUnit == null)
             {
-                var leaderEmpl = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnitId == orgUnit.Id && e.IsLeader);
-                if (leaderEmpl != null)
-                {
-                    var leader = leaderEmpl.Person;
-                    var sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
-                    if (sub != null)
-                    {
-                        return sub.Sub;
-                    }
-                    else
-                    {
-                        return leaderEmpl.Person;
-                    }
-                }
-
+                return null;
             }
-            return null;
+            if (leaderOfOrgUnit == null)
+            {
+                return null;
+            }
+
+            var leader = leaderOfOrgUnit.Person;
+            var sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
+            
+            return sub != null ? sub.Sub : leaderOfOrgUnit.Person;
         }
 
         private void SetResponsibleLeaderOnReport(DriveReport driveReport, Person person)
         {
             driveReport.ResponsibleLeader = person;
-
-            driveReport.ResponsibleLeader.FullName = person.FirstName;
-            if (!string.IsNullOrEmpty(person.MiddleName))
-            {
-                driveReport.ResponsibleLeader.FullName += " " + person.MiddleName;
-            }
-            driveReport.ResponsibleLeader.FullName += " " + person.LastName;
-            driveReport.ResponsibleLeader.FullName += " [" + person.Initials + "]";
         }
 
         public IQueryable<DriveReport> FilterByLeader(IQueryable<DriveReport> repo, int leaderId, bool getReportsWhereSubExists = false)
@@ -297,34 +248,38 @@ namespace Core.ApplicationServices
 
             var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
-            var leaderEmpl = _employmentRepository.AsQueryable().Where(e => e.Person.Id == leaderId && e.IsLeader).ToList();
+            var leaderOrgs = _employmentRepository.AsQueryable().Where(e => e.Person.Id == leaderId && e.IsLeader).Select(e => e.OrgUnit).ToList();
+                                                                                                       
+            var subOrgs = _substituteRepository.AsQueryable().Where(sub => sub.Sub.Id.Equals(leaderId) && sub.PersonId.Equals(sub.LeaderId)).Select(s => s.OrgUnit).ToList();
 
-            var subq = _substituteRepository.AsQueryable().Where(sub => sub.Sub.Id.Equals(leaderId)).ToList();
+            leaderOrgs.AddRange(subOrgs);
 
-            foreach (var sub in subq)
-            {
-                var subEmpls = _employmentRepository.AsQueryable().Where(x => x.OrgUnitId.Equals(sub.OrgUnitId) && x.IsLeader).ToList();
-                leaderEmpl.AddRange(subEmpls);
-            }
-
-            // Iterate all employments belonging to the leader.
-            foreach (var employment in leaderEmpl)
+            // Iterate all orgs belonging to the leader or sub.
+            foreach (var org in leaderOrgs)
             {
                 // Get the orgunit of the empl.
-                var orgUnitId = employment.OrgUnit.Id;
+                var orgUnitId = org.Id;
 
                 if (getReportsWhereSubExists)
                 {
-                    AddReportsOfOrgAndChildOrgLeaders(repo, orgUnitId, leaderId, result);
+                    AddReportsOfOrgAndChildOrgLeaders(repo, orgUnitId, result);
                 }
                 else
                 {
                     if (!(_substituteRepository.AsQueryable().Any(s => s.Person.Id == leaderId && s.StartDateTimestamp < currentTimestamp && s.EndDateTimestamp > currentTimestamp && s.OrgUnit.Id == orgUnitId)))
                     {
-                        AddReportsOfOrgAndChildOrgLeaders(repo, orgUnitId, leaderId, result);
+                        AddReportsOfOrgAndChildOrgLeaders(repo, orgUnitId, result);
                     }
                 }
             }
+
+            var personalApproverFor = _substituteRepository.AsQueryable().Where(s => s.Sub.Id == leaderId && !s.PersonId.Equals(s.LeaderId)).ToList();
+            foreach (var substitute in personalApproverFor)
+            {
+                var sub = substitute;
+                result.AddRange(repo.AsQueryable().Where(report => report.PersonId.Equals(sub.PersonId)).ToList());
+            }
+            result = result.Distinct().ToList();
 
             if (!getReportsWhereSubExists)
             {
@@ -345,7 +300,7 @@ namespace Core.ApplicationServices
             return result.AsQueryable();
         }
 
-        private void AddReportsOfOrgAndChildOrgLeaders(IQueryable<DriveReport> repo, int orgUnitId, int leaderId, List<DriveReport> driveReportList)
+        private void AddReportsOfOrgAndChildOrgLeaders(IQueryable<DriveReport> repo, int orgUnitId, List<DriveReport> driveReportList)
         {
             //The reports for the leaders of the child org units should also be approved
             var childOrgs = _orgUnitRepository.AsQueryable().Where(o => o.ParentId == orgUnitId).ToList(); //to list to force a data reader to close
@@ -353,6 +308,10 @@ namespace Core.ApplicationServices
             {
                 var org = childOrg;
                 var childEmpls = _employmentRepository.AsQueryable().Where(e => e.IsLeader && e.OrgUnit.Id == org.Id).ToList();
+                if (!childEmpls.Any())
+                {
+                    AddReportsOfOrgAndChildOrgLeaders(repo, org.Id, driveReportList);
+                }
                 foreach (var childEmpl in childEmpls)
                 {
                     // Get and add all reports belonging to the leader of the child org.

@@ -121,6 +121,8 @@
     <Compile Include="MailerServiceTest\GetLeadersWithPendingReportsEmails.cs" />
     <Compile Include="MailerServiceTest\SendMails.cs" />
     <Compile Include="MobileTokenServiceTest\MobileTokenServiceTest.cs" />
+    <Compile Include="OrgUnitServiceTest\GetChildOrgsWithoutLeaderTests.cs" />
+    <Compile Include="OrgUnitServiceTest\GetWhereUserIsResponsibleTests.cs" />
     <Compile Include="PersonService\PersonServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatePostServiceTest\RatePostServiceTest.cs" />

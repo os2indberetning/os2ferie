@@ -11,59 +11,13 @@ namespace Core.ApplicationServices
     {
         public void ScrubCprFromPersons(IQueryable<Substitute> subs)
         {
-            foreach (var sub in subs)
+            foreach (var sub in subs.ToList())
             {
                 sub.Sub.CprNumber = "";
                 sub.Leader.CprNumber = "";
-
-
                 sub.Person.CprNumber = "";
 
             }
-        }
-
-        public void AddFullName(IQueryable<Substitute> substitutes)
-        {
-            var subs = substitutes.ToList();
-
-            foreach (var sub in subs)
-            {
-                sub.Sub.FullName = sub.Sub.FirstName;
-
-                if (!string.IsNullOrEmpty(sub.Sub.MiddleName))
-                {
-                    sub.Sub.FullName += " " + sub.Sub.MiddleName;
-                }
-
-                sub.Sub.FullName += " " + sub.Sub.LastName;
-
-                sub.Sub.FullName += " [" + sub.Sub.Initials + "]";
-
-
-                sub.Leader.FullName = sub.Leader.FirstName;
-
-                if (!string.IsNullOrEmpty(sub.Leader.MiddleName))
-                {
-                    sub.Leader.FullName += " " + sub.Leader.MiddleName;
-                }
-
-                sub.Leader.FullName += " " + sub.Leader.LastName;
-                sub.Leader.FullName += " [" + sub.Leader.Initials + "]";
-
-
-                sub.Person.FullName = sub.Person.FirstName;
-
-                if (!string.IsNullOrEmpty(sub.Person.MiddleName))
-                {
-                    sub.Person.FullName += " " + sub.Person.MiddleName;
-                }
-
-                sub.Person.FullName += " " + sub.Person.LastName;
-                sub.Person.FullName += " [" + sub.Person.Initials + "]";
-
-            }
-
-            substitutes = subs.AsQueryable();
         }
 
         public long GetStartOfDayTimestamp(long timestamp)

@@ -23,7 +23,6 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                     Person = new Person()
                     {
                         FirstName = "Jacob",
-                        MiddleName = "Overgaard",
                         LastName = "Jensen",
                         Initials = "JOJ"
                     }

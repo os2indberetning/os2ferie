@@ -36,17 +36,7 @@ namespace OS2Indberetning.Controllers
             base.Initialize(requestContext);
 
 #if DEBUG
-            //string[] httpUser = @"favrskov\afj".Split('\\'); //Asbjørn Friis Jensen - leder i job og økonomi
-            //string[] httpUser = @"favrskov\hbr".Split('\\'); //Henrik Brix - leder i it afdelingen
-            //string[] httpUser = @"favrskov\bcj".Split('\\'); //Bo Cassøe 
-            //string[] httpUser = @"favrskov\sgor".Split('\\'); // Søren Gormsen - medarbejder i it afdelingen
             string[] httpUser = @"syddjursnet\hshu".Split('\\'); // Fissirul Lehmann - administrator
-            //string[] httpUser = @"favrskov\lacl".Split('\\'); // Lars Clement
-            //string[] httpUser = @"favrskov\fpou".Split('\\'); // Flemming Poulsen
-            //string[] httpUser = @"favrskov\tol".Split('\\'); // Tonny Olsen
-            //string[] httpUser = @"favrskov\jalj".Split('\\'); // Jakob
-            //string[] httpUser = @"favrskov\dobo".Split('\\'); // Dorte Frank Bojsen
-            //string[] httpUser = @"favrskov\dras".Split('\\'); // Dorthe Anita Rasmussen
 #else
                 string[] httpUser = User.Identity.Name.Split('\\');                
 #endif

@@ -69,6 +69,7 @@ namespace Core.ApplicationServices
             kernel.Bind<ILicensePlateService>().To<LicensePlateService>();
             kernel.Bind<IPersonalRouteService>().To<PersonalRouteService>();
             kernel.Bind<IAddressLaunderer>().To<AddressLaundering>();
+            kernel.Bind<IOrgUnitService>().To<OrgUnitService>();
         }        
     }
 }

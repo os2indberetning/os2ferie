@@ -38,8 +38,6 @@ namespace OS2Indberetning.Controllers
         {
             var res = GetQueryable(queryOptions);
             _person.ScrubCprFromPersons(res);
-            _person.AddFullName(res);
-            _person.AddHomeWorkDistanceToEmployments(res);
             return Ok(res);
         }
 
@@ -64,10 +62,7 @@ namespace OS2Indberetning.Controllers
             try
             {
                 var cprScrubbed = _person.ScrubCprFromPersons(GetQueryable(key, queryOptions));
-                _person.AddFullName(cprScrubbed);
-                _person.AddHomeWorkDistanceToEmployments(cprScrubbed);
                 var res = cprScrubbed.ToList();
-
                 return res.AsQueryable();
             }
             catch (RouteInformationException e)

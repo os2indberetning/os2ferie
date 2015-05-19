@@ -5,14 +5,9 @@
         "getWhereUserIsLeader": {
             method: "GET",
             isArray: true,
-            url: "/odata/Person(:id)/Employments?$expand=OrgUnit&$filter=IsLeader eq true&$select=OrgUnit",
+            url: "/odata/OrgUnits/Service.GetWhereUserIsResponsible?personId=:id",
             transformResponse: function (data) {
-                debugger;
-                var res = [];
-                angular.forEach(angular.fromJson(data).value, function (value, key) {
-                    res.push(value.OrgUnit);
-                });
-                return res;
+                return angular.fromJson(data).value;
             }
         }
     });

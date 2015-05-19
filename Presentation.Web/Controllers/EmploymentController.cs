@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Data.Entity;
+using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.OData;
@@ -16,14 +17,23 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<Employment> Get(ODataQueryOptions<Employment> queryOptions)
         {
-            var res =  GetQueryable(queryOptions);
+            var res =  GetQueryable(queryOptions).Include("Person");
+            foreach (var employment in res)
+            {
+                employment.Person.CprNumber = "";
+            }
             return res;
         }
 
         //GET: odata/Employments(5)
         public IQueryable<Employment> Get([FromODataUri] int key, ODataQueryOptions<Employment> queryOptions)
         {
-            return GetQueryable(key, queryOptions);
+            var res = GetQueryable(key, queryOptions).Include("Person");
+            foreach (var employment in res)
+            {
+                employment.Person.CprNumber = "";
+            }
+            return res;
         }
 
         //PUT: odata/Employments(5)

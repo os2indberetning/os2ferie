@@ -265,6 +265,14 @@
     <Compile Include="Migrations\201505121307576_AddedAddressIdToOrgUnut.Designer.cs">
       <DependentUpon>201505121307576_AddedAddressIdToOrgUnut.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505191054334_MadeFullNameARequiredFieldInPersonTable.cs" />
+    <Compile Include="Migrations\201505191054334_MadeFullNameARequiredFieldInPersonTable.Designer.cs">
+      <DependentUpon>201505191054334_MadeFullNameARequiredFieldInPersonTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505191109180_RemovedMiddleNameFromPerson.cs" />
+    <Compile Include="Migrations\201505191109180_RemovedMiddleNameFromPerson.Designer.cs">
+      <DependentUpon>201505191109180_RemovedMiddleNameFromPerson.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -432,6 +440,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505121307576_AddedAddressIdToOrgUnut.resx">
       <DependentUpon>201505121307576_AddedAddressIdToOrgUnut.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505191054334_MadeFullNameARequiredFieldInPersonTable.resx">
+      <DependentUpon>201505191054334_MadeFullNameARequiredFieldInPersonTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505191109180_RemovedMiddleNameFromPerson.resx">
+      <DependentUpon>201505191109180_RemovedMiddleNameFromPerson.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

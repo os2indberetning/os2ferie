@@ -3,15 +3,22 @@ using System.Net;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
+using Microsoft.Ajax.Utilities;
 
 namespace OS2Indberetning.Controllers
 {
     public class OrgUnitsController : BaseController<OrgUnit>
     {
-        public OrgUnitsController(IGenericRepository<OrgUnit> repo, IGenericRepository<Person> personRepo) : base(repo, personRepo){}
-        
+        private readonly IOrgUnitService _orgService;
+
+        public OrgUnitsController(IGenericRepository<OrgUnit> repo, IGenericRepository<Person> personRepo, IOrgUnitService orgService) : base(repo, personRepo)
+        {
+            _orgService = orgService;
+        }
+
         //GET: odata/OrgUnits
         [EnableQuery]
         public IQueryable<OrgUnit> Get(ODataQueryOptions<OrgUnit> queryOptions)
@@ -24,6 +31,13 @@ namespace OS2Indberetning.Controllers
         public IQueryable<OrgUnit> Get([FromODataUri] int key, ODataQueryOptions<OrgUnit> queryOptions)
         {
             return GetQueryable(key, queryOptions);
+        }
+
+        //GET: odata/OrgUnits
+        [EnableQuery]
+        public IHttpActionResult GetWhereUserIsResponsible(int personId)
+        {
+           return Ok(_orgService.GetWhereUserIsResponsible(personId));
         }
 
         //PUT: odata/OrgUnits(5)

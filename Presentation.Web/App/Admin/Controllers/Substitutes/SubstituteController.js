@@ -413,14 +413,11 @@
                 backdrop: 'static',
                 size: 'lg',
                 resolve: {
-                    persons: function () {
-                        return $scope.persons;
-                    },
-                    orgUnits: function () {
-                        return $scope.orgUnits;
-                    },
                     leader: function () {
                         return $scope.currentPerson;
+                    },
+                    persons: function() {
+                        return $scope.persons;
                     }
                 }
             });

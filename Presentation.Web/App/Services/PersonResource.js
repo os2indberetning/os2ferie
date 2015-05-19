@@ -78,6 +78,19 @@
                 })();
                 return res;
             }
+        },
+        "GetLeaders" : {
+            url: "/odata/Employments?$filter=IsLeader eq true&$expand=Person&$select=Person",
+            method: "GET",
+            isArray: true,
+            transformResponse: function (data) {
+                var result = [];
+                var leaders = angular.fromJson(data).value;
+                angular.forEach(leaders, function (leader, key) {
+                    result.push(leader.Person);
+                });
+                return result;
+            }
         }
     });
 }]);

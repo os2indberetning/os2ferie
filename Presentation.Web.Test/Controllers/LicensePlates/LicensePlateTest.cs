@@ -227,7 +227,7 @@ namespace Presentation.Web.Test.Controllers.LicensePlates
         {
             return @"{
                         'Id' : 4,
-                        'PersonId' : 2308,
+                        'PersonId' : 2302,
                         'Plate' : '666',
                         'Description' : 'Posted Description',
                         'IsPrimary'   : 'false'
@@ -238,7 +238,7 @@ namespace Presentation.Web.Test.Controllers.LicensePlates
         {
             return @"{
                         'Id' : 5,
-                        'PersonId': 2308,
+                        'PersonId': 2302,
                         'Plate' : '666',
                         'Description' : 'Posted Description',
                         'IsPrimary'   : 'false'

@@ -27,7 +27,7 @@ namespace Presentation.Web.Test.Controllers.Persons
 
     class PersonServiceMock : PersonService
     {
-        public PersonServiceMock(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route, IGenericRepository<Employment> emplRepo) : base(addressRepo, route, emplRepo)
+        public PersonServiceMock(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route, IGenericRepository<Employment> emplRepo) : base(addressRepo, route)
         {
         }
 

@@ -1,25 +1,18 @@
 ﻿angular.module('application').controller('AdminNewSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "$timeout",
-        function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, $timeout) {
+    ["$scope", "$modalInstance", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "$timeout", "persons",
+        function ($scope, $modalInstance, OrgUnit, leader, Substitute, Person, NotificationService, $timeout, persons) {
 
             $scope.persons = persons;
+
+            Person.GetLeaders().$promise.then(function (res) {
+                $scope.leaders = res;
+            });
+
             $scope.substituteFromDate = new Date();
             $scope.substituteToDate = new Date();
             $scope.orgUnitsDisabled = true;
             $scope.orgUnits = [];
 
-            $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
-
-            // Remove leader from array
-            angular.forEach($scope.persons, function (value, key) {
-                if (value.Id == leader.Id) {
-                    $scope.personsWithoutLeader.splice(key, 1);
-                }
-            });
-
-            $scope.orgUnitSelected = function (id) {
-                //console.log(id);
-            }
 
 
             $scope.personForOptions = {

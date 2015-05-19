@@ -34,7 +34,6 @@ namespace ApplicationServices.Test.PersonService
             {
                 Id = 3,
                 FirstName = "Jacob",
-                MiddleName = "Overgaard",
                 LastName = "Jensen",
                 CprNumber = "456456456",
                 Initials = "JOJ"
@@ -53,26 +52,6 @@ namespace ApplicationServices.Test.PersonService
             {
                 Assert.AreEqual("", person.CprNumber, "Person should not have a CPR number before scrubbing");
             }
-        }
-
-        [Test]
-        public void AddFullName_WithMiddleName_ShouldAddCorrectFullName()
-        {
-            NinjectWebKernel.CreateKernel().Get<IPersonService>().AddFullName(persons);
-            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", persons.Single(p => p.Id == 3).FullName);
-        }
-
-        [Test]
-        public void AddFullName_WithoutMiddleName_ShouldAddCorrectFullName()
-        {
-            NinjectWebKernel.CreateKernel().Get<IPersonService>().AddFullName(persons);
-            Assert.AreEqual("Morten Rasmussen [MR]", persons.Single(p => p.Id == 1).FullName);
-        }
-
-        [Test]
-        public void AddFullName_WithPersonsNull_ShouldNotThrowException()
-        {
-            Assert.DoesNotThrow(() => NinjectWebKernel.CreateKernel().Get<IPersonService>().AddFullName(null));
         }
     }
 }

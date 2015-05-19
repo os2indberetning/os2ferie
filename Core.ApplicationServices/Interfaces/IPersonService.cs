@@ -6,9 +6,7 @@ namespace Core.ApplicationServices.Interfaces
     public interface IPersonService
     {
         IQueryable<Person> ScrubCprFromPersons(IQueryable<Person> queryable);
-        void AddFullName(IQueryable<Person> persons);
         PersonalAddress GetHomeAddress(Person person);
-        IQueryable<Person> AddHomeWorkDistanceToEmployments(IQueryable<Person> people);
         Person AddHomeWorkDistanceToEmployments(Person person);
     }
 }

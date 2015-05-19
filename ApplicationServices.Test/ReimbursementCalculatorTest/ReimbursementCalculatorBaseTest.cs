@@ -49,7 +49,6 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
                 {
                     Id = 1,
                     FirstName = "Jacob",
-                    MiddleName = "Overgaard",
                     LastName = "Jensen",
                     DistanceFromHomeToBorder = 2,
                 }

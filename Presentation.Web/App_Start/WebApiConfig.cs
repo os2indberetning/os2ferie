@@ -67,13 +67,13 @@ namespace OS2Indberetning
             .Function("GetCachedAddresses")
             .ReturnsFromEntitySet<Address>("Addresses");
 
-             builder.EntityType<Address>().Collection
-            .Action("AttemptCleanCachedAddress")
-            .ReturnsFromEntitySet<Address>("Addresses");
+            builder.EntityType<Address>().Collection
+           .Action("AttemptCleanCachedAddress")
+           .ReturnsFromEntitySet<Address>("Addresses");
 
-            
 
-            
+
+
 
             builder.EntityType<Address>().Collection
                 .Function("GetMapStart")
@@ -108,6 +108,7 @@ namespace OS2Indberetning
             pType.HasKey(p => p.Id);
             //pType.Ignore(p => p.LicensePlates);
 
+
             builder.EntityType<Person>().Collection
            .Function("GetCurrentUser")
            .ReturnsFromEntitySet<Person>("Person");
@@ -123,13 +124,16 @@ namespace OS2Indberetning
             .ReturnsFromEntitySet<PersonalAddress>("PersonalAddresses");
 
 
-          
+
 
             builder.EntityType<PersonalAddress>().Collection
             .Function("GetAlternativeHome")
             .ReturnsFromEntitySet<PersonalAddress>("PersonalAddresses");
 
-            
+            builder.EntityType<OrgUnit>().Collection
+            .Function("GetWhereUserIsResponsible")
+            .ReturnsFromEntitySet<OrgUnit>("OrgUnits");
+
 
             builder.EntitySet<PersonalRoute>("PersonalRoutes");
 

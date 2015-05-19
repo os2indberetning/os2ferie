@@ -17,10 +17,6 @@
             }
         });
 
-        $scope.orgUnitSelected = function (id) {
-            console.log(id);
-        }
-
         $scope.saveNewSubstitute = function () {
             if ($scope.person == undefined) {
                 NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en person");

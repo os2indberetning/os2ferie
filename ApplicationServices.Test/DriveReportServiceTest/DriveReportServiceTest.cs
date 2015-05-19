@@ -56,37 +56,6 @@ namespace ApplicationServices.Test.DriveReportServiceTest
         }
 
         [Test]
-        public void AddFullName_CalledWithDriveReport_WithMiddleName_PopulatesFullNameCorrect()
-        {
-            var driveReports = GetDriveReportAsQueryable();
-            var report = driveReports.First();
-            Assert.Null(report.FullName, "Before the service is run the full name should be null");
-
-            var service = NinjectWebKernel.CreateKernel().Get<DriveReportService>();
-            service.AddFullName(report);
-            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", report.FullName,
-                "Service should add full name to the drive report");
-        }
-
-        [Test]
-        public void AddFullName_CalledWithDriveReport_WithOutMiddleName_PopulatesFullNameCorrect()
-        {
-            var driveReports = GetDriveReportAsQueryable();
-            var report = driveReports.Last();
-            Assert.Null(report.FullName, "Before the service is run the full name should be null");
-
-            var service = NinjectWebKernel.CreateKernel().Get<DriveReportService>();
-            service.AddFullName(report);
-            Assert.AreEqual("Morten Rasmussen [MR]", report.FullName, "Service should add full name to the drive report");
-        }
-
-        [Test]
-        public void AddFullName_CalledWithDriveReportNull_ShouldNotThrowException()
-        {
-            Assert.DoesNotThrow(() => NinjectWebKernel.CreateKernel().Get<DriveReportService>().AddFullName((DriveReport)null));
-        }
-
-        [Test]
         public void Create_WithPersonID0_ShouldThrowException()
         {
             var testReport = new DriveReport()
@@ -118,6 +87,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 FirstName = "Test",
                 LastName = "Testesen",
                 Initials = "TT",
+                FullName = "Test Testesen [TT]"
             };
 
             var orgUnit = new OrgUnit()
@@ -192,6 +162,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 FirstName = "Test",
                 LastName = "Testesen",
                 Initials = "TT",
+                FullName = "Test Testesen [TT]"
             };
 
             var orgUnit = new OrgUnit()
@@ -221,7 +192,8 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                     Id = 3,
                     FirstName = "En",
                     LastName = "Substitute",
-                    Initials = "ES"
+                    Initials = "ES",
+                    FullName = "En Substitute [ES]"
                 },
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(-1))).TotalSeconds,
@@ -275,6 +247,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 FirstName = "Test",
                 LastName = "Testesen",
                 Initials = "TT",
+                FullName = "Test Testesen [TT]"
             };
 
             var orgUnit = new OrgUnit()
@@ -303,7 +276,8 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 {
                     FirstName = "En",
                     LastName = "Substitute",
-                    Initials = "ES"
+                    Initials = "ES",
+                    FullName = "En Substitute [ES]"
                 },
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(-1))).TotalSeconds,
@@ -373,6 +347,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 FirstName = "Test",
                 LastName = "Testesen",
                 Initials = "TT",
+                FullName = "Test Testesen [TT]"
             };
 
             var orgUnit = new OrgUnit()
@@ -400,7 +375,8 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 {
                     FirstName = "En",
                     LastName = "Substitute",
-                    Initials = "ES"
+                    Initials = "ES",
+                    FullName = "En Substitute [ES]"
                 },
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(-1))).TotalSeconds,
@@ -471,6 +447,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 FirstName = "Test",
                 LastName = "Testesen",
                 Initials = "TT",
+                FullName = "Test Testesen [TT]"
             };
 
             var person2 = new Person()
@@ -479,6 +456,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 FirstName = "Test",
                 LastName = "Tester",
                 Initials = "TT",
+                FullName = "Test Tester [TT]"
             };
 
             var orgUnit = new OrgUnit()
@@ -521,7 +499,8 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 {
                     FirstName = "En",
                     LastName = "Substitute",
-                    Initials = "ES"
+                    Initials = "ES",
+                    FullName = "En Substitute [ES]"
                 },
                 StartDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(1))).TotalSeconds,
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(-1))).TotalSeconds,

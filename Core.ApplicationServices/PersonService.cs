@@ -16,13 +16,11 @@ namespace Core.ApplicationServices
     {
         private readonly IGenericRepository<PersonalAddress> _addressRepo;
         private readonly IRoute<RouteInformation> _route;
-        private readonly IGenericRepository<Employment> _emplRepo;
 
-        public PersonService(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route, IGenericRepository<Employment> emplRepo)
+        public PersonService(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route)
         {
             _addressRepo = addressRepo;
             _route = route;
-            _emplRepo = emplRepo;
         }
 
         public IQueryable<Person> ScrubCprFromPersons(IQueryable<Person> queryable)
@@ -37,27 +35,6 @@ namespace Core.ApplicationServices
 
 
             return set.AsQueryable();
-        }
-
-        public void AddFullName(IQueryable<Person> persons)
-        {
-            if (persons == null)
-            {
-                return;
-            }
-            foreach (var person in persons)
-            {
-                person.FullName = person.FirstName;
-
-                if (!string.IsNullOrEmpty(person.MiddleName))
-                {
-                    person.FullName += " " + person.MiddleName;
-                }
-
-                person.FullName += " " + person.LastName;
-
-                person.FullName += " [" + person.Initials + "]";
-            }
         }
 
         public virtual PersonalAddress GetHomeAddress(Person person)
@@ -109,11 +86,6 @@ namespace Core.ApplicationServices
                 }
             }
             return person;
-        }
-
-        public IQueryable<Person> AddHomeWorkDistanceToEmployments(IQueryable<Person> people)
-        {
-            return people;
         }
 
         private void AddCoordinatesToAddressIfNonExisting(Address a)

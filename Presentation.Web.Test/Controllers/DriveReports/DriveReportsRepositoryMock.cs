@@ -71,13 +71,13 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                     Comment = "comment 3",
                     Distance = 3.6778f,
                     Person = _person1,
-                    PersonId = 1,
+                    PersonId = 2302,
                     Employment = new Employment()
                     {
                         Id = 1,
                         OrgUnitId = 1
                     },
-                    FullName = "Fissirul Lehmann [FL]",
+                    FullName = "Heidi Søndergaard Huber [hshu]",
                     Status = ReportStatus.Pending
                 },
             };

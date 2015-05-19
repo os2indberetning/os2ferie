@@ -12,7 +12,6 @@ namespace Core.DomainModel
         public string CprNumber { get; set; }
         public int PersonId { get; set; }
         public string FirstName { get; set; }
-        public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Mail { get; set; }
         public bool RecieveMail { get; set; }

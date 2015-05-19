@@ -28,7 +28,6 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                     {
                         CprNumber = "123123",
                         FirstName = "Jacob",
-                        MiddleName = "Overgaard",
                         LastName = "Jensen",
                         Initials = "JOJ"
                     },
@@ -55,7 +54,6 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                     {
                         CprNumber = "123123",
                         FirstName = "Jacob",
-                        MiddleName = "Overgaard",
                         LastName = "Jensen",
                         Initials = "JOJ"
                     },
@@ -70,42 +68,12 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                         {
                             CprNumber = "123123",
                             FirstName = "Jacob",
-                            MiddleName = "Overgaard",
                             LastName = "Jensen",
                             Initials = "JOJ"
                         },
                 }
             };
 
-        }
-
-        [Test]
-        public void AddFullName_ShouldAddFullName_ToLeaderSubAndPersons()
-        {
-            // Precondition
-            Assert.AreEqual(null, repo[0].Leader.FullName);
-            Assert.AreEqual(null, repo[0].Sub.FullName);
-
-            Assert.AreEqual(null, repo[0].Person.FullName);
-
-
-            Assert.AreEqual(null, repo[1].Leader.FullName);
-            Assert.AreEqual(null, repo[1].Sub.FullName);
-            Assert.AreEqual(null, repo[1].Person.FullName);
-
-
-            // Act
-            _uut.AddFullName(repo.AsQueryable());
-
-
-            // Postcondition
-            Assert.AreEqual("Morten Rasmussen [MR]", repo[0].Leader.FullName);
-            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", repo[0].Sub.FullName);
-            Assert.AreEqual("Morten Rasmussen [MR]", repo[0].Person.FullName);
-
-            Assert.AreEqual("Morten Rasmussen [MR]", repo[1].Leader.FullName);
-            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", repo[1].Sub.FullName);
-            Assert.AreEqual("Jacob Overgaard Jensen [JOJ]", repo[1].Person.FullName);
         }
 
         [Test]
