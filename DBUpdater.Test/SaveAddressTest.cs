@@ -132,7 +132,7 @@ namespace DBUpdater.Test
                 By = "Aarhus V"
             };
 
-            Assert.Throws<Exception>(() => _uut.SaveHomeAddress(empl, 10));
+            Assert.Throws<Exception>(() => _uut.UpdateHomeAddress(empl, 10));
         }
 
         [Test]
@@ -151,7 +151,7 @@ namespace DBUpdater.Test
                 By = "Aarhus V"
             };
 
-            _uut.SaveHomeAddress(empl,1);
+            _uut.UpdateHomeAddress(empl,1);
 
             _actualLaundererMock.ReceivedWithAnyArgs().Launder(new Address());
         }
@@ -172,7 +172,7 @@ namespace DBUpdater.Test
                 By = "Aarhus V"
             };
 
-            _uut.SaveHomeAddress(empl, 1);
+            _uut.UpdateHomeAddress(empl, 1);
 
             _coordinatesMock.ReceivedWithAnyArgs().GetAddressCoordinates(new Address());
         }
@@ -193,7 +193,7 @@ namespace DBUpdater.Test
                 By = "Aarhus V"
             };
 
-            _uut.SaveHomeAddress(empl, 1);
+            _uut.UpdateHomeAddress(empl, 1);
 
             var res = _cachedAddressRepoMock.AsQueryable().First(a => a.StreetName.Equals("Jens Baggesens Vej"));
             Assert.That(res.StreetName.Equals("Jens Baggesens Vej"));
@@ -230,7 +230,7 @@ namespace DBUpdater.Test
                 DirtyString = "Jens Baggesens Vej 44, 8210 Aarhus V"
             });
 
-            _uut.SaveHomeAddress(empl, 1);
+            _uut.UpdateHomeAddress(empl, 1);
 
             _actualLaundererMock.DidNotReceiveWithAnyArgs().Launder(new Address());
 
@@ -269,7 +269,7 @@ namespace DBUpdater.Test
                 DirtyString = "Jens Baggesens Vej 44, 8210 Aarhus V"
             });
 
-            _uut.SaveHomeAddress(empl, 1);
+            _uut.UpdateHomeAddress(empl, 1);
 
             var res = _cachedAddressRepoMock.AsQueryable().First(a => a.StreetName.Equals("Jens Baggesens Vej"));
             Assert.That(res.StreetName.Equals("Jens Baggesens Vej"));
@@ -296,7 +296,7 @@ namespace DBUpdater.Test
                 By = "Aarhus V"
             };
 
-            _uut.SaveHomeAddress(empl, 1);
+            _uut.UpdateHomeAddress(empl, 1);
 
             var res = _personalAddressRepoMock.AsQueryable();
             Assert.That(res.ElementAt(0).StreetName.Equals("Jens Baggesens Vej"));

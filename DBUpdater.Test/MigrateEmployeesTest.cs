@@ -122,7 +122,7 @@ namespace DBUpdater.Test
                     Adresse = "Jens Baggesens Vej 44",
                     AnsaettelsesDato = new DateTime(2015,4,28),
                     By = "Aarhus V",
-                    CPR = "123456781234",
+                    CPR = "123456784321",
                     Fornavn = "Jacob Overgaard",
                     Efternavn = "Jensen",
                     Email = "Test@mail.dk",
@@ -168,7 +168,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).Initials.Equals("joj"));
             Assert.That(res.ElementAt(0).FirstName.Equals("Jacob Overgaard"));
             Assert.That(res.ElementAt(0).LastName.Equals("Jensen"));
-            Assert.That(res.ElementAt(0).CprNumber.Equals("123456781234"));
+            Assert.That(res.ElementAt(0).CprNumber.Equals("123456784321"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals("Test@mail.dk"));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
@@ -213,7 +213,7 @@ namespace DBUpdater.Test
                     Adresse = "Jens Baggesens Vej 44",
                     AnsaettelsesDato = new DateTime(2015,4,28),
                     By = "Aarhus V",
-                    CPR = "123456781234",
+                    CPR = "123456784321",
                     Fornavn = "Jacob Overgaard",
                     Efternavn = "Jensen",
                     Email = "Test@mail.dk",
@@ -259,7 +259,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).Initials.Equals("joj"));
             Assert.That(res.ElementAt(0).FirstName.Equals("Jacob Overgaard"));
             Assert.That(res.ElementAt(0).LastName.Equals("Jensen"));
-            Assert.That(res.ElementAt(0).CprNumber.Equals("123456781234"));
+            Assert.That(res.ElementAt(0).CprNumber.Equals("123456784321"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals("Test@mail.dk"));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
@@ -300,6 +300,7 @@ namespace DBUpdater.Test
             {
                 PersonId = 1,
                 RecieveMail = true,
+                CprNumber = "123456781234"
             });
 
             _personRepoMock.ClearReceivedCalls();
@@ -363,7 +364,7 @@ namespace DBUpdater.Test
                     Adresse = "Jens Baggesens Vej 44",
                     AnsaettelsesDato = new DateTime(2015,4,28),
                     By = "Aarhus V",
-                    CPR = "123456781234",
+                    CPR = "123456784321",
                     Fornavn = "Jacob Overgaard",
                     Efternavn = "Jensen",
                     Email = "Test@mail.dk",
@@ -408,7 +409,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).Initials.Equals(" "));
             Assert.That(res.ElementAt(0).FirstName.Equals("Jacob Overgaard"));
             Assert.That(res.ElementAt(0).LastName.Equals("Jensen"));
-            Assert.That(res.ElementAt(0).CprNumber.Equals("123456781234"));
+            Assert.That(res.ElementAt(0).CprNumber.Equals("123456784321"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals("Test@mail.dk"));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
@@ -452,7 +453,7 @@ namespace DBUpdater.Test
                     Adresse = "Jens Baggesens Vej 44",
                     AnsaettelsesDato = new DateTime(2015,4,28),
                     By = "Aarhus V",
-                    CPR = "123456781234",
+                    CPR = "123456784321",
                     Fornavn = "Jacob Overgaard",
                     Efternavn = "Jensen",
                     Land = "DK",
@@ -495,7 +496,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).Initials.Equals(" "));
             Assert.That(res.ElementAt(0).FirstName.Equals("Jacob Overgaard"));
             Assert.That(res.ElementAt(0).LastName.Equals("Jensen"));
-            Assert.That(res.ElementAt(0).CprNumber.Equals("123456781234"));
+            Assert.That(res.ElementAt(0).CprNumber.Equals("123456784321"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals(""));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
@@ -539,7 +540,7 @@ namespace DBUpdater.Test
                     Adresse = "Jens Baggesens Vej 44",
                     AnsaettelsesDato = new DateTime(2015,4,28),
                     By = "Aarhus V",
-                    CPR = "123456781234",
+                    CPR = "123456784321",
                     Fornavn = "Jacob Overgaard",
                     Efternavn = "Jensen",
                     Land = "DK",
@@ -580,7 +581,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).Initials.Equals(" "));
             Assert.That(res.ElementAt(0).FirstName.Equals("Jacob Overgaard"));
             Assert.That(res.ElementAt(0).LastName.Equals("Jensen"));
-            Assert.That(res.ElementAt(0).CprNumber.Equals("123456781234"));
+            Assert.That(res.ElementAt(0).CprNumber.Equals("123456784321"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals(""));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
@@ -624,7 +625,7 @@ namespace DBUpdater.Test
                     Adresse = "Jens Baggesens Vej 44",
                     AnsaettelsesDato = new DateTime(2015,4,28),
                     By = "Aarhus V",
-                    CPR = "123456781234",
+                    CPR = "123456784321",
                     Fornavn = "Jacob Overgaard",
                     Efternavn = "Jensen",
                     Land = "DK",
@@ -662,7 +663,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).Initials.Equals(" "));
             Assert.That(res.ElementAt(0).FirstName.Equals("Jacob Overgaard"));
             Assert.That(res.ElementAt(0).LastName.Equals("Jensen"));
-            Assert.That(res.ElementAt(0).CprNumber.Equals("123456781234"));
+            Assert.That(res.ElementAt(0).CprNumber.Equals("123456784321"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals(""));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
