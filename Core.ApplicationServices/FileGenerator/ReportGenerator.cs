@@ -66,21 +66,24 @@ namespace Core.ApplicationServices.FileGenerator
             var fileRecords = new List<FileRecord>();
             foreach (var cpr in usersToReimburse.Keys)
             {
-                var driveReports = usersToReimburse[cpr].OrderBy(x => x.TFCode).ThenBy(x => x.DriveDateTimestamp);
+                var driveReports = usersToReimburse[cpr].OrderBy(x => x.EmploymentId).OrderBy(x => x.TFCode).ThenBy(x => x.DriveDateTimestamp);
                 DriveReport currentDriveReport = null;
-                var currentTFCode = "";
+                var currentTfCode = "";
                 var currentMonth = -1;
                 foreach (var driveReport in driveReports)
                 {
                     var driveDate = TimestampToDate(driveReport.DriveDateTimestamp);
-                    if ( ! driveReport.TFCode.Equals(currentTFCode) || driveDate.Month != currentMonth)
+                    if ( ! driveReport.TFCode.Equals(currentTfCode) //We make one file record for each employment and each tf code
+                            || driveDate.Month != currentMonth 
+                            || currentDriveReport == null 
+                            || ! driveReport.EmploymentId.Equals(currentDriveReport.EmploymentId) )
                     {
                         if (currentDriveReport != null)
                         {
                             fileRecords.Add(new FileRecord(currentDriveReport, cpr));
                         }
                         currentMonth = driveDate.Month;
-                        currentTFCode = driveReport.TFCode;
+                        currentTfCode = driveReport.TFCode;
                         currentDriveReport = new DriveReport
                         {
                             TFCode = driveReport.TFCode,
@@ -103,17 +106,17 @@ namespace Core.ApplicationServices.FileGenerator
 
         private DateTime TimestampToDate(long timestamp)
         {
-            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(timestamp).ToLocalTime();
             return dtDateTime;
         }
 
         private long TimetsmpOfLastDayInMonth(DateTime date)
         {
-            var Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
             var lastDay = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
-            return (long)(lastDay - Epoch).TotalSeconds;
+            return (long)(lastDay - epoch).TotalSeconds;
         }
     }
 }

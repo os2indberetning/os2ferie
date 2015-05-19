@@ -11,8 +11,8 @@ namespace Core.ApplicationServices.FileGenerator
         public DateTime Date { get; set; }
         public double ReimbursementDistance { get; set; }
         public string TFCode { get; set; }
-        public int EmploymentId { get; set; }
-        public int EmploymentTypeId { get; set; }
+        public int EmploymentType { get; set; }
+        public int ExtraNumber { get; set; }
 
         public FileRecord(DriveReport report, string ownerCpr)
         {
@@ -22,8 +22,8 @@ namespace Core.ApplicationServices.FileGenerator
 
             CprNr = ownerCpr;
             Date = reportDate;
-            EmploymentId = report.Employment.EmploymentId;
-            EmploymentTypeId = report.Employment.EmploymentType;
+            EmploymentType = report.Employment.EmploymentType;
+            ExtraNumber = report.Employment.ExtraNumber;
             ReimbursementDistance = report.Distance;
             TFCode = report.TFCode;
         }
@@ -38,9 +38,9 @@ namespace Core.ApplicationServices.FileGenerator
 
             builder.Append(getSetting("KMDStaticNr"));               //KMD statisk identifier
             builder.Append(getSetting("CommuneNr"));                 //Syddjurs' KommuneNr.
-            builder.Append(EmploymentId);                        //Ansættelsesform (0,1,3)
+            builder.Append(EmploymentType);                        //Ansættelsesform (0,1,3)
             builder.Append(CprNr);                              //CPR Nr.
-            builder.Append(EmploymentTypeId);                    //Ekstra ciffer (0,1,2,3 nn)
+            builder.Append(ExtraNumber);                    //Ekstra ciffer (0,1,2,3 nn)
             builder.Append(TFCode);                              //TF Kode
             builder.Append(DistanceStringBuilder(distance.ToString())); //Kørte Km
             builder.Append(getSetting("KMDReservedNr"));             //KMD reserverede pladser
