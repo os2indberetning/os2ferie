@@ -165,8 +165,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AppTests\controllers\ApproveReports\RejectedReportsController.js" />
-    <Content Include="AppTests\controllers\ApproveReports\AcceptedReportsController.js" />
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
@@ -198,24 +196,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Gruntfile.js" />
-    <Content Include="ProtractorTests\MyReports\httpBackEndMocks.js" />
-    <Content Include="ProtractorTests\MyReports\myReports_page.js" />
-    <Content Include="ProtractorTests\MyReports\myReports_specs.js" />
-    <Content Include="ProtractorTests\protractor.conf.js" />
-    <Content Include="Sandbox\conf.js" />
-    <Content Include="Sandbox\test.js" />
     <Content Include="connections.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="app.config" />
-    <None Include="packages.json" />
     <None Include="CustomSettings.config" />
-    <None Include="run-casper-tests.bat" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="AppTests\controllers\ApproveReports\PendingReportsController.js" />
-    <Content Include="karma.conf.js" />
   </ItemGroup>
   <ItemGroup />
   <Choose>
