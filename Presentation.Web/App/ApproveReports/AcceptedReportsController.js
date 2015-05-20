@@ -479,7 +479,6 @@
        // when a Alternative Bankaccount is used.
        BankAccount.get().$promise.then(function (res) {
            $scope.bankAccounts = res.value;
-           $scope.refreshGrid();
        });
 
 

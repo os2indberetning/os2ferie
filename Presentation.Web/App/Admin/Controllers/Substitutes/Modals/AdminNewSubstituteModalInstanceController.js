@@ -66,7 +66,7 @@
                     NotificationService.AutoFadeNotification("success", "", "Stedfortræder blev oprettet");
                     $modalInstance.close();
                 }, function () {
-                    NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette stedfortræder");
+                    NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette stedfortræder (Du kan ikke oprette 2 stedfortrædere for samme organisation i samme periode)");
                 });
             };
 

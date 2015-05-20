@@ -46,7 +46,7 @@
                 NotificationService.AutoFadeNotification("success", "", "Godkender blev oprettet");
                 $modalInstance.close();
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette godkender");
+                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette godkender (Du kan ikke oprette 2 godkendere for samme person i samme periode)");
             });
         };
 

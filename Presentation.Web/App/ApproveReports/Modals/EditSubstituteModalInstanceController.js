@@ -6,15 +6,6 @@
 
         $scope.person = [];
 
-        $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
-
-        // Remove leader from array
-        angular.forEach($scope.persons, function (value, key) {
-            if (value.Id == leader.Id) {
-                $scope.personsWithoutLeader.splice(key, 1);
-            }
-        });
-
         $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
             if (data.value[0].EndDateTimestamp == 9999999999) {
                 $scope.infinitePeriod = true;
