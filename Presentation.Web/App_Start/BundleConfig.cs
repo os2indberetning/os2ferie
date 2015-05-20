@@ -11,6 +11,8 @@ namespace OS2Indberetning
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            BundleTable.EnableOptimizations = true;
+
             bundles.Add(new ScriptBundle("~/bundles/libraries")
                 //.Include("~/Scripts/jquery-{version}.js")
 
@@ -47,7 +49,6 @@ namespace OS2Indberetning
 
             //bundles.Add(new ScriptBundle("~/bundles/angular").IncludeDirectory("~/App", "*.js", true));
             
-            bundles.Add(new ScriptBundle("~/bundles/jasminespec").IncludeDirectory("~/App", "*.spec.js", true));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").IncludeDirectoryWithExclusion("~/App", "*.js", true, "*.spec.js"));            
         }

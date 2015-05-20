@@ -379,3 +379,5 @@ a {
 .mainMenuCollapse {
     padding-left: 0 !important;
 }
+
+ .k-ff { overflow: inherit !important;}

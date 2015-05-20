@@ -15,5 +15,6 @@ namespace Core.ApplicationServices.Interfaces
         IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> driveReport);
         IQueryable<DriveReport> FilterByLeader(IQueryable<DriveReport> repo, int leaderId, bool getReportsWhereSubExists = false);
         Person GetResponsibleLeaderForReport(DriveReport driveReport);
+        bool Validate(DriveReport report);
     }
 }

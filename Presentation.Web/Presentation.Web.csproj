@@ -1313,9 +1313,6 @@
     <Content Include="Content\Themes\SbAdmin\font-awesome\scss\_stacked.scss" />
     <Content Include="Content\Themes\SbAdmin\font-awesome\scss\_variables.scss" />
     <Content Include="Scripts\angular-moment.min.js.map" />
-    <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js.map">
-      <DependentUpon>ui-bootstrap-tpls.min.js</DependentUpon>
-    </Content>
     <Content Include="Content\Config\mapwidget.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <BrowseToURL>~/Content/Config/mapwidget.json</BrowseToURL>
@@ -1345,6 +1342,7 @@
     <Content Include="connections.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\Syddjurs.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />

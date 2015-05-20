@@ -15,12 +15,12 @@
     <div class="row">
         <div class="col-xs-7">
 
-            <input ng-enter="saveAlternativeWorkAddress($index)" ng-change="alternativeWorkDistances[$index] = ''" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+            <input ng-change="alternativeWorkDistances[$index] = ''" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
                    k-data-source="SmartAddress" ng-model="alternativeWorkAddresses[$index]" class="fill-width" k-placeholder="'Skriv her'" />
 
         </div>
         <div class="col-xs-2">
-            <input ng-enter="saveAlternativeWorkAddress($index)" ng-model="alternativeWorkDistances[$index]" ng-change="alternativeWorkAddresses[$index] = ''" type="text" class="form-control" />
+            <input ng-model="alternativeWorkDistances[$index]" ng-change="alternativeWorkAddresses[$index] = ''" type="text" class="form-control" />
         </div>
         <div class="col-xs-1 pull-right margin-right-20">
             <button ng-click="saveAlternativeWorkAddress($index)" class="btn btn-success">Gem</button>

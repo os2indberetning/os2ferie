@@ -122,7 +122,7 @@ namespace Core.ApplicationServices
             return report;
         }
 
-        private bool Validate(DriveReport report)
+        public bool Validate(DriveReport report)
         {
             if (report.KilometerAllowance == KilometerAllowance.Read && report.Distance <= 0)
             {

@@ -25,36 +25,6 @@ namespace ApplicationServices.Test.DriveReportServiceTest
     [TestFixture]
     public class DriveReportServiceTest : DriveReportMock
     {
-        protected TestServer Server;
-
-        [SetUp]
-        public void SetUp()
-        {
-            Server = TestServer.Create(app =>
-            {
-                var config = new HttpConfiguration();
-                WebApiConfig.Register(config);
-                config.DependencyResolver =
-                    new NinjectDependencyResolver(NinjectTestInjector.CreateKernel(GetInjections()));
-                app.UseWebApi(config);
-            });
-            //Bit of a hack to make sure that the repository is seeded
-            //before each test, but at the same time that it does not 
-            //seed each time it is loaded which forgets state if it is
-            //queried multiple times during a single test
-        }
-
-        private List<KeyValuePair<Type, Type>> GetInjections()
-        {
-
-            return new List<KeyValuePair<Type, Type>>
-            {
-                new KeyValuePair<Type, Type>(typeof (IGenericRepository<DriveReport>),typeof (DriveReportsRepositoryMock)),
-                new KeyValuePair<Type, Type>(typeof (IGenericRepository<Employment>),typeof (EmploymentRepositoryMock)),
-                new KeyValuePair<Type, Type>(typeof (IGenericRepository<OrgUnit>),typeof (OrgUnitRepositoryMock)),
-            };
-        }
-
         [Test]
         public void Create_WithPersonID0_ShouldThrowException()
         {
@@ -78,6 +48,20 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
     public class AttachResponsibleLeaderTests
     {
+        private IGenericRepository<Employment> _emplMock;
+        private IGenericRepository<OrgUnit> _orgUnitMock;
+        private IGenericRepository<Core.DomainModel.Substitute> _subMock;
+        private IDriveReportService _uut;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _emplMock = Substitute.For<IGenericRepository<Employment>>();
+            _orgUnitMock = Substitute.For<IGenericRepository<OrgUnit>>();
+            _subMock = Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
+            _uut = new DriveReportService(Substitute.For<IMailSender>(), Substitute.For<IGenericRepository<DriveReport>>(), Substitute.For<IReimbursementCalculator>(), _orgUnitMock, _emplMock, _subMock);
+        }
+
         [Test]
         public void AttachResponsibleLeader_WithNoSub_ShouldAttachLeader()
         {
@@ -114,28 +98,20 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(1))).TotalSeconds,
             };
 
-            var emplMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
-            emplMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
+            _emplMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
             {
              empl   
             }.AsQueryable());
 
-            var orgUnitMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
-            orgUnitMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
+            _orgUnitMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
             {
                 orgUnit
             }.AsQueryable());
 
-            var subMock = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
-            subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>()
+            _subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>()
             {
                 substitute
             }.AsQueryable());
-
-            var uut = new DriveReportService(NSubstitute.Substitute.For<IMailSender>(),
-                NSubstitute.Substitute.For<IGenericRepository<DriveReport>>(),
-                NSubstitute.Substitute.For<IReimbursementCalculator>(), orgUnitMock, emplMock,
-               subMock);
 
             var report = new List<DriveReport>()
             {
@@ -149,7 +125,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             };
 
 
-            var res = uut.AttachResponsibleLeader(report.AsQueryable());
+            var res = _uut.AttachResponsibleLeader(report.AsQueryable());
             Assert.AreEqual("Test Testesen [TT]", res.ElementAt(0).ResponsibleLeader.FullName);
         }
 
@@ -179,7 +155,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 IsLeader = true
             };
 
-            
+
 
             var substitute = new Core.DomainModel.Substitute()
             {
@@ -199,28 +175,20 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(-1))).TotalSeconds,
             };
 
-            var emplMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
-            emplMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
+            _emplMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
             {
              empl   
             }.AsQueryable());
 
-            var orgUnitMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
-            orgUnitMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
+            _orgUnitMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
             {
                 orgUnit
             }.AsQueryable());
 
-            var subMock = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
-            subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>()
+            _subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>()
             {
                 substitute
             }.AsQueryable());
-
-            var uut = new DriveReportService(NSubstitute.Substitute.For<IMailSender>(),
-                NSubstitute.Substitute.For<IGenericRepository<DriveReport>>(),
-                NSubstitute.Substitute.For<IReimbursementCalculator>(), orgUnitMock, emplMock,
-               subMock);
 
             var report = new List<DriveReport>()
             {
@@ -234,7 +202,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             };
 
 
-            var res = uut.AttachResponsibleLeader(report.AsQueryable());
+            var res = _uut.AttachResponsibleLeader(report.AsQueryable());
             Assert.AreEqual("En Substitute [ES]", res.ElementAt(0).ResponsibleLeader.FullName);
         }
 
@@ -283,28 +251,20 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(-1))).TotalSeconds,
             };
 
-            var emplMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
-            emplMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
+            _emplMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
             {
              empl   
             }.AsQueryable());
 
-            var orgUnitMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
-            orgUnitMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
+            _orgUnitMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
             {
                 orgUnit
             }.AsQueryable());
 
-            var subMock = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
-            subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>()
+            _subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>()
             {
                 substitute
             }.AsQueryable());
-
-            var uut = new DriveReportService(NSubstitute.Substitute.For<IMailSender>(),
-                NSubstitute.Substitute.For<IGenericRepository<DriveReport>>(),
-                NSubstitute.Substitute.For<IReimbursementCalculator>(), orgUnitMock, emplMock,
-               subMock);
 
             var report = new List<DriveReport>()
             {
@@ -332,7 +292,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             };
 
 
-            var res = uut.AttachResponsibleLeader(report.AsQueryable());
+            var res = _uut.AttachResponsibleLeader(report.AsQueryable());
             Assert.AreEqual("En Substitute [ES]", res.ElementAt(0).ResponsibleLeader.FullName);
             Assert.AreEqual("En Substitute [ES]", res.ElementAt(1).ResponsibleLeader.FullName);
             Assert.AreEqual("En Substitute [ES]", res.ElementAt(2).ResponsibleLeader.FullName);
@@ -382,28 +342,20 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(-1))).TotalSeconds,
             };
 
-            var emplMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
-            emplMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
+            _emplMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
             {
              empl   
             }.AsQueryable());
 
-            var orgUnitMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
-            orgUnitMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
+            _orgUnitMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
             {
                 orgUnit
             }.AsQueryable());
 
-            var subMock = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
-            subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>()
+            _subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>()
             {
                 substitute
             }.AsQueryable());
-
-            var uut = new DriveReportService(NSubstitute.Substitute.For<IMailSender>(),
-                NSubstitute.Substitute.For<IGenericRepository<DriveReport>>(),
-                NSubstitute.Substitute.For<IReimbursementCalculator>(), orgUnitMock, emplMock,
-               subMock);
 
             var report = new List<DriveReport>()
             {
@@ -431,7 +383,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             };
 
 
-            var res = uut.AttachResponsibleLeader(report.AsQueryable());
+            var res = _uut.AttachResponsibleLeader(report.AsQueryable());
             Assert.AreEqual("Test Testesen [TT]", res.ElementAt(0).ResponsibleLeader.FullName);
             Assert.AreEqual("Test Testesen [TT]", res.ElementAt(1).ResponsibleLeader.FullName);
             Assert.AreEqual("Test Testesen [TT]", res.ElementAt(2).ResponsibleLeader.FullName);
@@ -487,7 +439,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 IsLeader = true
             };
 
-            
+
 
             var substitute = new Core.DomainModel.Substitute()
             {
@@ -506,28 +458,24 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(-1))).TotalSeconds,
             };
 
-            var emplMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
-            emplMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
+            _emplMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
             {
              empl,empl2
             }.AsQueryable());
 
-            var orgUnitMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
-            orgUnitMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
+
+            _orgUnitMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
             {
                 orgUnit,orgUnit2
             }.AsQueryable());
 
-            var subMock = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
-            subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>()
+
+            _subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>()
             {
                 substitute
             }.AsQueryable());
 
-            var uut = new DriveReportService(NSubstitute.Substitute.For<IMailSender>(),
-                NSubstitute.Substitute.For<IGenericRepository<DriveReport>>(),
-                NSubstitute.Substitute.For<IReimbursementCalculator>(), orgUnitMock, emplMock,
-               subMock);
+
 
             var report = new List<DriveReport>()
             {
@@ -555,10 +503,83 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             };
 
 
-            var res = uut.AttachResponsibleLeader(report.AsQueryable());
+            var res = _uut.AttachResponsibleLeader(report.AsQueryable());
             Assert.AreEqual("En Substitute [ES]", res.ElementAt(0).ResponsibleLeader.FullName);
             Assert.AreEqual("En Substitute [ES]", res.ElementAt(1).ResponsibleLeader.FullName);
             Assert.AreEqual("Test Tester [TT]", res.ElementAt(2).ResponsibleLeader.FullName);
+        }
+
+        [Test]
+        public void ReportWithRead_AndDistanceZero_ShouldReturn_False()
+        {
+            var report = new DriveReport
+            {
+                KilometerAllowance = KilometerAllowance.Read,
+                Distance = 0
+            };
+
+            var res = _uut.Validate(report);
+            Assert.IsFalse(res);
+        }
+
+        [Test]
+        public void ReportWithCalculated_AndOnePoint_ShouldReturn_False()
+        {
+            var report = new DriveReport
+            {
+                KilometerAllowance = KilometerAllowance.Calculated,
+                DriveReportPoints = new List<DriveReportPoint>
+                {
+                    new DriveReportPoint()
+                }
+            };
+
+            var res = _uut.Validate(report);
+            Assert.IsFalse(res);
+        }
+
+        [Test]
+        public void ReportWithNoPurpose_ShouldReturn_False()
+        {
+            var report = new DriveReport
+            {
+               KilometerAllowance = KilometerAllowance.Read,
+               Distance = 10
+            };
+
+            var res = _uut.Validate(report);
+            Assert.IsFalse(res);
+        }
+
+        [Test]
+        public void ReportWith_PurposeReadCorrectDistance_ShouldReturn_True()
+        {
+            var report = new DriveReport
+            {
+                KilometerAllowance = KilometerAllowance.Read,
+                Distance = 10,
+                Purpose = "Test"
+            };
+
+            var res = _uut.Validate(report);
+            Assert.IsTrue(res);
+        }
+
+        [Test]
+        public void ReportWith_PurposeCalculatedTwoPoints_ShouldReturn_True()
+        {
+            var report = new DriveReport
+            {
+                KilometerAllowance = KilometerAllowance.Calculated,
+                DriveReportPoints = new List<DriveReportPoint>
+                {
+                    
+                },
+                Purpose = "Test"
+            };
+
+            var res = _uut.Validate(report);
+            Assert.IsTrue(res);
         }
     }
 }
