@@ -19,12 +19,12 @@ namespace OS2Indberetning
                 .Include("~/Scripts/angular.js")
                 .Include("~/Scripts/angular-ui-router.js")
                 .Include("~/Scripts/angular-ui/ui-bootstrap-tpls.js")
-                .Include("~/Scripts/angular-ui/ui-bootstrap.js")
+                //.Include("~/Scripts/angular-ui/ui-bootstrap.js")
                 .Include("~/Scripts/moment.js")
                 .Include("~/Scripts/moment-locale-da.js")
                 .Include("~/Scripts/moment-timezone-with-data.js")
                 .Include("~/Scripts/angular-moment.js")
-                .Include("~/Scripts/angular-resource.min.js")
+                .Include("~/Scripts/angular-resource.js")
                 .Include("~/Scripts/kendo-ie-fix.js")
 );
 
@@ -41,8 +41,7 @@ namespace OS2Indberetning
                       "~/Content/bootstrap.min.css",
                       "~/Content/Themes/SbAdmin/css/bootstrap.min.css",
                       "~/Content/Themes/SbAdmin/css/sb-admin.css",
-                      //"~/Content/Themes/SbAdmin/css/plugins/morris.css",
-                      "~/Content/Themes/SbAdmin/font-awesome/css/font-awesome.min.css",
+                      "~/Content/Themes/SbAdmin/font-awesome/css/font-awesome.css",
                       "~/Content/site.css",
                       "~/Content/timeline.css",
                       "~/Content/custom.css"));
