@@ -118,24 +118,12 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [Test]
-        public virtual async Task GetShouldReturnThreeElements()
+        protected virtual async Task GetShouldReturnThreeElements()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath()).GetAsync();
             var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Response to get request should be OK");
             Assert.AreEqual(3, result.value.Count, "Expects the return of a get request to have three entitys");
-        }
-
-        [Test]
-        public async Task GetWithKeyShouldReturnCorrectElement()
-        {
-            ReSeed();
-            HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(2)").GetAsync();
-            var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Response to get request should be OK");
-            Assert.AreEqual(1, result.value.Count, "Expects the return of a get request with key is to have one entity");
-            var entity = result.value[0];
-            AsssertEqualEntities(GetReferenceEntity2(), entity);
         }
 
         [Test]
@@ -146,7 +134,7 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [Test]
-        public async Task GetWithOdataQuery()
+        protected virtual async Task GetWithOdataQuery()
         {
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "?$orderby=Id desc").GetAsync();
             var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
@@ -169,7 +157,7 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [Test]
-        public virtual async Task PostShouldInsertAnEntity()
+        protected virtual async Task PostShouldInsertAnEntity()
         {
             //Make sure that an entity with id 4 does not exists before the test
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(4)").GetAsync();
@@ -189,7 +177,7 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [Test]
-        public virtual async Task PatchShouldAlterAnEntity()
+        protected virtual async Task PatchShouldAlterAnEntity()
         {
             //Make sure that an entity with id 3 looks as expected
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(3)").GetAsync();
@@ -211,7 +199,7 @@ namespace Presentation.Web.Test.Controllers
         }
 
         [Test]
-        public async Task DeleteShouldRemoveAnEntity()
+        protected virtual async Task DeleteShouldRemoveAnEntity()
         {
             //Make sure that an entity with id 3 exists
             HttpResponseMessage response = await Server.CreateRequest(GetUriPath() + "(3)").GetAsync();
@@ -229,7 +217,7 @@ namespace Presentation.Web.Test.Controllers
 
         public async static void AssertEmptyResponse(HttpResponseMessage response)
         {
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "Return code of get should be ok");
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode, "Return code of get should be NotFound");
             var result = await response.Content.ReadAsAsync<ODataResponse<T>>();
             Assert.AreEqual(0, result.value.Count, "Nothing should be return from get request");
         }

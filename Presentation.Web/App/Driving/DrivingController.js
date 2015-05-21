@@ -1,309 +1,51 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "SmartAdresseSource", "DriveReport", "PersonalAddress", "AddressFormatter", "PersonalAddressType", "Person", "PersonEmployments", "Rate", "LicensePlate", "NotificationService", "$modal", "$state", "Address", "Route", "$q", function ($scope, SmartAdresseSource, DriveReport, PersonalAddress, AddressFormatter, PersonalAddressType, Person, PersonEmployments, Rate, LicensePlate, NotificationService, $modal, $state, Address, Route, $q) {
+    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance",
+    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance) {
 
 
+        // Setup functions in scope.
+        $scope.Number = Number;
+        $scope.toString = toString;
+        $scope.replace = String.replace;
+
+        var isEditingReport = ReportId > 0;
         $scope.container = {};
+        $scope.container.datePickerMaxDate = new Date();
+        $scope.isEditingReport = isEditingReport;
+        var kendoPromise = $q.defer();
+        var loadingPromises = [kendoPromise.promise];
 
-        // Hardcoded personId
-        var personId = 1;
-
-        // Is filled with the default address for the map widget.
-        var mapStartAddress = [];
-
-        // Magic variable. Is checked when calling generateMapWidget to make sure it is only called when we manually change the gui. IE. not by changes on the map.
-        // When the map is changes by the map, the variable is set to the number of address points and is decremented by one for each time a gui element changes
-        // which it does once for each address.
-        // Simply put: if the var is <= 0 then the map will be drawn.
-        $scope.guiChangedByMap = 0;
-
-        $scope.DriveReport = new DriveReport();
         $scope.canSubmitDriveReport = true;
-        $scope.Routes = [];
+
+        var mapChanging = false;
+
+
+        $scope.container.addressFieldOptions = {
+            select: function () {
+                $timeout(function() {
+                    $scope.addressInputChanged();
+                });
+            }
+        }
+
+        $scope.addressPlaceholderText = "Eller indtast adresse her";
+        $scope.addressDropDownPlaceholderText = "Vælg fast adresse";
+        $scope.SmartAddress = SmartAdresseSource;
         $scope.IsRoute = false;
 
-        $scope.personalRouteDropdownChange = function (e) {
-            var index = e.sender.selectedIndex;
+        // Is set to actually contain something once data has been loaded from backend.
+        $scope.validateInput = function () { };
 
-            if (index == 0) {
-                $scope.IsRoute = false;
-                $scope.DriveReport.Addresses = [];
-
-                $scope.DriveReport.Addresses.push({ Name: "", Save: false });
-                $scope.DriveReport.Addresses.push({ Name: "", Save: false });
-                return;
-            }
-
-            $scope.IsRoute = true;
-
-            var route = $scope.Routes[index - 1];
-
-            var lastIndex = route.Points.length - 1;
-
+        var setupForNewReport = function () {
+            $scope.DriveReport = new DriveReport();
             $scope.DriveReport.Addresses = [];
-
-            angular.forEach($scope.Routes[index - 1].Points, function (value, key) {
-                $scope.DriveReport.Addresses.push({ Name: value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town, Save: false });
-            });
-
-            $scope.validateInput();
+            $scope.DriveReport.Addresses.push({ Name: "", Personal: "" });
+            $scope.DriveReport.Addresses.push({ Name: "", Personal: "" });
+            // Set the datepicker date to today.
+            $scope.DriveReport.Date = new Date();
         }
 
-
-        $scope.getDefaultMapAddresses = function () {
-            return mapStartAddress;
-        }
-
-        $scope.Person = Person.get({ id: personId }, function () {
-            // Show the persons distance from home to work.
-            $scope.TransportAllowance = $scope.Person.DistanceFromHomeToWork.toFixed(2).toString().replace('.', ',');
-
-            Address.GetPersonalAndStandard({ personId: personId }, function (data) {
-                var temp = [{ value: "Vælg fast adresse" }];
-                angular.forEach(data, function (value, key) {
-                    var street = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
-                    var presentation = (function () {
-                        if (value.Description != "" && value.Description != undefined) {
-                            return value.Description + " : " + street;
-                        }
-                        return street;
-                    })();
-                    temp.push({ value: presentation, StreetName: street });
-                });
-
-                $scope.PersonalAddresses = temp;
-            });
-
-            Route.get({ query: "&filter=PersonId eq " + personId }, function (data) {
-
-                var temp = [{ addressOne: "", addressTwo: "", viaPointCounr: "", presentation: "" }];
-
-                angular.forEach(data.value, function (value, key) {
-                    var one = value.Points[0].StreetName + " " + value.Points[0].StreetNumber + ", " + value.Points[0].ZipCode + " " + value.Points[0].Town;
-                    var two = value.Points[value.Points.length - 1].StreetName + " " + value.Points[value.Points.length - 1].StreetNumber + ", " + value.Points[value.Points.length - 1].ZipCode + " " + value.Points[value.Points.length - 1].Town;
-                    var count = value.Points.length - 2;
-                    temp.push({ addressOne: one, addressTwo: two, viaPointCount: count, presentation: value.Description + ": " + one + " -> " + two + " | Antal viapunkter: " + count, routeId: value.Id });
-                    $scope.Routes.push(value);
-                });
-
-                $scope.PersonalRoutes = temp;
-            });
-        });
-
-        $scope.FourKmRule = {}
-        $scope.FourKmRule.Using = false;
-
-        $scope.DriveReport.Addresses = [];
-
-        $scope.DriveReport.Addresses.push({ Name: "", Personal: "", Save: false });
-        $scope.DriveReport.Addresses.push({ Name: "", Personal: "", Save: false });
-
-        $scope.SmartAddress = SmartAdresseSource;
-
-        $scope.DriveReport.Date = new Date();
-
-        $scope.DateOptions = {
-            start: "month"
-        };
-
-        $scope.DrivenKilometers = 0;
-        $scope.TransportAllowance = 0;
-        $scope.RemainingKilometers = 0;
-        $scope.PayoutAmount = 0;
-
-        var getKmRate = function () {
-            for (var i = 0; i < $scope.KmRate.length; i++) {
-                if ($scope.KmRate[i].Id == $scope.DriveReport.KmRate) {
-                    return $scope.KmRate[i];
-                }
-            }
-        }
-
-        $scope.transportChanged = function () {
-            $scope.lastSelectedTransport = $scope.KmRateDropDown.select();
-            $scope.showLicensePlate = true;
-            angular.forEach($scope.KmRate, function (rate, key) {
-                if ($scope.DriveReport.KmRate == rate.Id) {
-                    $scope.showLicensePlate = rate.Type.RequiresLicensePlate;
-                }
-            });
-
-        }
-
-        $scope.validateInput = function () {
-            $scope.canSubmitDriveReport = true;
-            $scope.purposeErrorMessage = "";
-            $scope.readDistanceErrorMessage = "";
-            $scope.addressSelectionErrorMessage = "";
-            $scope.userCommentErrorMessage = "";
-            if ($scope.DriveReport.KilometerAllowance === "Read") {
-                if ($scope.DriveReport.Purpose == "" || $scope.DriveReport.Purpose == undefined) {
-                    $scope.canSubmitDriveReport = false;
-                    $scope.purposeErrorMessage = "* Du skal angive et formål.";
-                }
-                if ($scope.DriveReport.ReadDistance === "" || $scope.DriveReport.ReadDistance == undefined) {
-                    $scope.canSubmitDriveReport = false;
-                    $scope.readDistanceErrorMessage = "* Du skal angive en afstand.";
-                }
-                if ($scope.DriveReport.UserComment === "" || $scope.DriveReport.UserComment == undefined) {
-                    $scope.canSubmitDriveReport = false;
-                    $scope.userCommentErrorMessage = "* Du skal angive en kommentar";
-                }
-            } else {
-                angular.forEach($scope.DriveReport.Addresses, function (address, key) {
-                    if (address.Name == "" && address.Personal == "Vælg fast adresse") {
-                        $scope.canSubmitDriveReport = false;
-                        $scope.addressSelectionErrorMessage = "* Du skal udfylde alle adressefelter.";
-                    }
-                });
-                if ($scope.DriveReport.Purpose == "" || $scope.DriveReport.Purpose == undefined) {
-                    $scope.canSubmitDriveReport = false;
-                    $scope.purposeErrorMessage = "* Du skal angive et formål.";
-                }
-            }
-            if ($scope.guiChangedByMap <= 0) {
-                $scope.generateMapWidget();
-            }
-            $scope.guiChangedByMap--;
-
-
-        }
-
-
-
-        $scope.Save = function () {
-
-
-
-
-            $scope.validateInput();
-
-            if (!$scope.canSubmitDriveReport) {
-                return;
-            }
-
-            $scope.canSubmitDriveReport = false;
-
-            var driveReport = new DriveReport();
-
-            // Prepare all data to  be uploaded
-            driveReport.Purpose = $scope.DriveReport.Purpose;
-            driveReport.DriveDateTimestamp = Math.floor($scope.DriveReport.Date.getTime() / 1000);
-            driveReport.KmRate = parseFloat(getKmRate().KmRate);
-            driveReport.TFCode = getKmRate().Type.TFCode;
-
-            driveReport.KilometerAllowance = $scope.DriveReport.KilometerAllowance;
-            driveReport.Distance = 0;
-            driveReport.AmountToReimburse = 0;
-
-            if ($scope.showLicensePlate) {
-                driveReport.LicensePlate = $scope.DriveReport.LicensePlate;
-            } else {
-                driveReport.LicensePlate = "0000000";
-            }
-
-
-            driveReport.PersonId = $scope.Person.Id;
-            driveReport.FullName = $scope.Person.FullName;
-            debugger;
-            driveReport.Status = "Pending";
-            driveReport.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
-            driveReport.EditedDateTimestamp = driveReport.CreatedDateTimestamp;
-            driveReport.Comment = "";
-            driveReport.ClosedDateTimestamp = 0;
-            driveReport.ProcessedDateTimestamp = 0;
-            driveReport.EmploymentId = $scope.DriveReport.Position;
-
-            if ($scope.DriveReport.KilometerAllowance === "Read") {
-
-                driveReport.Distance = Number($scope.DriveReport.ReadDistance) * 1000;
-                driveReport.UserComment = $scope.DriveReport.UserComment;
-
-                if ($scope.DriveReport.StartOrEndedAtHome === 'Started') {
-                    driveReport.StartsAtHome = true;
-                    driveReport.EndsAtHome = false;
-                } else if ($scope.DriveReport.StartOrEndedAtHome === 'Ended') {
-                    driveReport.StartsAtHome = false;
-                    driveReport.EndsAtHome = true;
-                } else if ($scope.DriveReport.StartOrEndedAtHome === 'Both') {
-                    driveReport.StartsAtHome = true;
-                    driveReport.EndsAtHome = true;
-                } else {
-                    driveReport.StartsAtHome = false;
-                    driveReport.EndsAtHome = false;
-                }
-            } else {
-
-                driveReport.StartsAtHome = false;
-                driveReport.EndsAtHome = false;
-
-                driveReport.DriveReportPoints = [];
-
-                angular.forEach($scope.DriveReport.Addresses, function (address, key) {
-
-
-                    var tempAddress = (address.Name.length != 0) ? address.Name : address.Personal;
-
-                    var currentAddress = new PersonalAddress(AddressFormatter.fn(tempAddress));
-
-                    driveReport.DriveReportPoints.push({
-                        StreetName: currentAddress.StreetName,
-                        StreetNumber: currentAddress.StreetNumber,
-                        ZipCode: currentAddress.ZipCode,
-                        Town: currentAddress.Town,
-                        Description: "",
-                        Latitude: "",
-                        Longitude: ""
-                    });
-
-                });
-
-                if (typeof $scope.DriveReport.RoundTrip !== "undefined" && $scope.DriveReport.RoundTrip === true) {
-                    for (var i = driveReport.DriveReportPoints.length - 1; i > 0; --i) {
-                        driveReport.DriveReportPoints.push(driveReport.DriveReportPoints[i]);
-                    }
-                }
-
-                // go through addresses and see which is going to be saved
-                angular.forEach($scope.DriveReport.Addresses, function (address, key) {
-
-                    if (address.Save) {
-                        var personalAddress = new PersonalAddress(AddressFormatter.fn(address.Name));
-
-                        personalAddress.PersonId = $scope.Person.Id;
-                        personalAddress.Type = PersonalAddressType.Standard;
-                        personalAddress.Longitude = "";
-                        personalAddress.Latitude = "";
-                        personalAddress.Description = "";
-
-                        delete personalAddress.Id;
-
-                        personalAddress.$save();
-                    }
-                });
-            }
-
-            if (typeof $scope.DriveReport.FourKmRule !== "undefined" && $scope.DriveReport.FourKmRule.Using === true) {
-                driveReport.FourKmRule = true;
-            } else {
-                driveReport.FourKmRule = false;
-            }
-
-            driveReport.$save(function (response) {
-                // success
-
-                latestDriveReport = response;
-
-                $scope.TransportAllowance = 0;
-                $scope.RemainingKilometers = 0;
-                $scope.PayoutAmount = response.AmountToReimburse.toFixed(2).toString().replace('.', ',');
-                NotificationService.AutoFadeNotification("success", "Success", "Din tjenestekørselsindberetning blev gemt");
-                $scope.clearClicked();
-
-            }, function (response) {
-                // failure
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Din tjenestekørselsindberetning blev ikke gemt");
-            });
-        };
+        setupForNewReport();
 
         $scope.AddViapoint = function () {
             var temp = $scope.DriveReport.Addresses.pop();
@@ -316,317 +58,595 @@
             $scope.addressInputChanged(index);
         };
 
-        $scope.openNoLicensePlateModal = function () {
-
-            var modalInstance = $modal.open({
-                templateUrl: '/App/Driving/noLicensePlateModal.html',
-                controller: 'noLicensePlateModalController',
-                //size: size,
-                backdrop: 'static',
-                resolve: {
-
+        var getKmRate = function () {
+            for (var i = 0; i < $scope.KmRate.length; i++) {
+                if ($scope.KmRate[i].Id == $scope.DriveReport.KmRate) {
+                    return $scope.KmRate[i];
                 }
-            });
-
-            modalInstance.result.then(function () {
-                $state.go("settings");
-            }, function () {
-
-            });
+            }
         };
 
-
-
-        $scope.clearClicked = function () {
-            // Make the datepicker pop open when clear is clicked.
-            openDatePicker = true;
-
-
-
-            $scope.DriveReport.Purpose = "";
-
-
-            
-
-            $scope.container.PersonalRouteDropDown.select(0);
-            $scope.container.PersonalRouteDropDown.trigger("change");
-            $scope.container.PersonalAddressDropDown.select(0);
-            $scope.container.PersonalAddressDropDown.trigger("change");
-            $scope.DriveReport.FourKmRule = {};
-            $scope.DriveReport.FourKmRule.Using = false;
-            $scope.DriveReport.FourKmRule.Value = "";
-            $scope.DriveReport.RoundTrip = false;
-            $scope.DriveReport.ReadDistance = "";
-            $scope.DriveReport.UserComment = "";
-
-
-
-
-            // Set mapChangedByGui to true.
-            // If you dont do this, then the change function will be called and the address fields will be filled with the default addresses.
-            $scope.mapChangedByGui = true;
-
-            OS2RouteMap.set($scope.getDefaultMapAddresses());
-
-            
-
-        }
-
-        $scope.loadValuesFromLatestDriveReport = function () {
-
-
-            latestDriveReport.$promise.then(function (res) {
-                $scope.PositionDropDown.select(function (item) {
-                    return item.Id === res.Employment.Id;
-                });
-
-                $scope.LicensePlateDropDown.select(function (item) {
-                    return item.Plate == res.LicensePlate;
-                });
-
-                $scope.KmRateDropDown.select(function (item) {
-                    return item.Type.TFCode == res.TFCode;
-                });
-
-                $scope.container.kilometerAllowanceDropDown.select(function (item) {
-                    return item.value == res.KilometerAllowance;
-                });
-
-                $scope.kilometerAllowanceChanged();
-
-            });
-        }
-
-        $scope.kilometerAllowanceChanged = function() {
-            $scope.DriveReport.KilometerAllowance = $scope.container.kilometerAllowanceDropDown._selectedValue;
-            if ($scope.DriveReport.KilometerAllowance != "Read") {
-                $scope.DriveReport.UserComment = "";
-                $scope.DriveReport.ReadDistance = 0;
-            }
-        }
-
-        var openDatePicker = true;
-        // Open the datepicker when the page finishes loading
-        $scope.$on("kendoRendered", function (event) {
-            if (openDatePicker) {
-                $scope.driveDatePicker.open();
-                openDatePicker = false;
-
-                $scope.loadValuesFromLatestDriveReport();
-
-            }
-
-            $scope.KmRate.$promise.then(function () {
-                $scope.KmRateDropDown.dataSource.read();
-                $scope.KmRateDropDown.select($scope.lastSelectedTransport);
-            });
-
-            $scope.Employments.$promise.then(function () {
-                $scope.PositionDropDown.dataSource.read();
-
-            });
-
-            $scope.LicensePlates.$promise.then(function (data) {
-                $scope.LicensePlateDropDown.dataSource.read();
-                $scope.canSubmitDriveReport = data.length > 0;
-            });
-
-
-            $scope.validateInput();
-
-        });
-
-        $scope.Employments = PersonEmployments.get({ id: personId });
-
-        $scope.LicensePlates = LicensePlate.get({ id: personId });
-
-        $scope.KmRate = Rate.ThisYearsRates();
-
-        var latestDriveReport = DriveReport.getLatest({ id: personId });
-
-
-        $scope.generateMapWidget = function () {
-
-            var setCheckArrayIndexAndPopulateMap = function (key, checkArray) {
-                checkArray[key] = true;
-                if (checkArray.every(function (element, index, array) {
-                                    return element;
-                })) {
-                    $scope.populateMap();
-                }
-            }
-
-
-            var checkArray = [];
-            angular.forEach($scope.DriveReport.Addresses, function (value, key) {
-                checkArray[key] = false;
-            });
-
-            angular.forEach($scope.DriveReport.Addresses, function (address, key) {
-                checkArray[key] = false;
-
-                if ((address.Name == "" || address.Name == undefined) && (address.Personal == "" || address.Personal == "Vælg fast adresse" || address.Personal == undefined)) {
-                    // Data is not valid.
-                    return;
-                } else if (address.Name != "") {
-                    var format = AddressFormatter.fn(address.Name);
-
-                    if (format != undefined) {
-                        if (address.Latitude == undefined) {
-                            Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }, function (res) {
-                                address.Latitude = res[0].Latitude;
-                                address.Longitude = res[0].Longitude;
-
-                                setCheckArrayIndexAndPopulateMap(key, checkArray);
-
-
-                            });
-                        } else {
-                            setCheckArrayIndexAndPopulateMap(key, checkArray);
-                        }
-                    }
-                } else {
-                    var format = AddressFormatter.fn(address.Personal);
-                    if (format != undefined) {
-                        if (address.Latitude == undefined) {
-                            Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }, function (res) {
-                                address.Latitude = res[0].Latitude;
-                                address.Longitude = res[0].Longitude;
-
-                                setCheckArrayIndexAndPopulateMap(key, checkArray);
-
-                            });
-                        } else {
-                            setCheckArrayIndexAndPopulateMap(key, checkArray);
-                        }
-                    }
-                }
-
-
-
-            });
-        }
-
-        $scope.populateMap = function () {
-            var mapArray = [];
-
-            angular.forEach($scope.DriveReport.Addresses, function (address, key) {
-                var name = (function () {
-                    if (address.Name == "") {
-                        return address.Personal;
-                    }
-                    return address.Name;
-                })();
-
-                mapArray.push({ name: name, lat: address.Latitude, lng: address.Longitude });
-            });
-
-            $scope.mapChangedByGui = true;
-            OS2RouteMap.set(mapArray);
-
-        }
-
-        var routeMapChanged = function (obj) {
-
-            updateDrivenKilometerFields(obj);
-
-            if (!$scope.mapChangedByGui) {
-                // Clear personal route dropdown.
-                $scope.isRoute = false;
-                $scope.container.PersonalRouteDropDown.select(0);
-                $scope.container.PersonalRouteDropDown.trigger("change");
-
-                // Empty the addresses in the current driveReport
-                $scope.DriveReport.Addresses = [];
-                // Iterate all selected addresses on the map and push them to the drivereport
-                angular.forEach(obj.Addresses, function (address, key) {
-                    var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
-                    $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
-                });
-                $scope.guiChangedByMap = obj.Addresses.length;
-
-
-
-                // apply to notify angular and have it run ng-repeat, filling in the addreses in the view.
-                $scope.$apply();
-            }
-            $scope.mapChangedByGui = false;
-
-        }
-
         $scope.shaveExtraCommasOffAddressString = function (address) {
-            var res = address.replace(/,/, "###");
+            var res = address.toString().replace(/,/, "###");
             res = res.replace(/,/g, "");
             res = res.replace(/###/, ",");
             return res;
         }
 
+        var getCurrentUserEmployment = function (employmentId) {
+            var res;
+            angular.forEach($scope.currentUser.Employments, function (empl, key) {
+                if (empl.Id == employmentId) {
+                    res = empl;
+                }
+            });
+            return res;
+        }
 
-        $scope.addressInputChanged = function (index) {
-            if ($scope.guiChangedByMap <= 0) {
-                $scope.DriveReport.Addresses[index].Latitude = undefined;
-                $scope.DriveReport.Addresses[index].Longitude = undefined;
+
+        var loadValuesFromReport = function (report) {
+            // Select position in dropdown.
+            $scope.container.PositionDropDown.select(function (item) {
+                return item.Id == report.EmploymentId;
+            });
+
+            // Select the right license plate.
+            $scope.container.LicensePlateDropDown.select(function (item) {
+                return item.Plate == report.LicensePlate;
+            });
+            $scope.container.LicensePlateDropDown.trigger("change");
+
+            // Select kilometer allowance.
+            switch (report.KilometerAllowance) {
+                case "Calculated":
+                    $scope.container.KilometerAllowanceDropDown.select(0);
+                    break;
+                case "Read":
+                    $scope.container.KilometerAllowanceDropDown.select(1);
+                    break;
+                case "CalculatedWithoutExtraDistance":
+                    $scope.container.KilometerAllowanceDropDown.select(2);
+                    break;
+            }
+
+            $scope.DriveReport.KilometerAllowance = $scope.container.KilometerAllowanceDropDown._selectedValue;
+
+            // Select KmRate
+
+            $scope.container.KmRateDropDown.select(function (item) {
+                return item.Type.TFCode == report.TFCode;
+            });
+
+            angular.forEach($scope.KmRate, function (rate, key) {
+                if (rate.Type.TFCode == report.TFCode) {
+                    $scope.showLicensePlate = rate.Type.RequiresLicensePlate;
+                }
+            });
+
+            $scope.container.KmRateDropDown.trigger("change");
+
+
+            // Load additional data if a report is being edited.
+            if (isEditingReport) {
+                $scope.DriveReport.Purpose = report.Purpose;
+                $scope.DriveReport.FourKmRule = {};
+                $scope.DriveReport.FourKmRule.Using = report.FourKmRule;
+                $scope.DriveReport.Date = moment.unix(report.DriveDateTimestamp)._d;
+
+                if (report.KilometerAllowance == "Read") {
+                    $scope.DriveReport.ReadDistance = report.Distance.toString().replace(".", ",");
+                    $scope.DriveReport.UserComment = report.UserComment;
+                    if (!report.StartsAtHome && !report.EndsAtHome) {
+                        $scope.container.StartEndHomeDropDown.select(0);
+                    } else if (report.StartsAtHome && report.EndsAtHome) {
+                        $scope.container.StartEndHomeDropDown.select(3);
+                    } else if (report.StartsAtHome) {
+                        $scope.container.StartEndHomeDropDown.select(1);
+                    } else if (report.EndsAtHome) {
+                        $scope.container.StartEndHomeDropDown.select(2);
+                    }
+                    $scope.DriveReport.StartsAtHome = report.StartsAtHome;
+                    $scope.DriveReport.EndsAtHome = report.EndsAtHome;
+                } else {
+                    $scope.DriveReport.Addresses = [];
+                    angular.forEach(report.DriveReportPoints, function (point, key) {
+                        var temp = { Name: point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town, Latitude: point.Latitude, Longitude: point.Longitude };
+                        $scope.DriveReport.Addresses.push(temp);
+                    });
+                }
             }
             $scope.validateInput();
         }
 
-        Address.getMapStart(function(res) {
-            mapStartAddress = [
-                { name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude },
-                { name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude }
-            ];
+        // Load all data
+        $scope.currentUser = $rootScope.CurrentUser;
+        var currentUser = $scope.currentUser;
 
-            OS2RouteMap.create({
-                id: 'map',
-                change: routeMapChanged
+
+        // Load user's positions.
+        angular.forEach(currentUser.Employments, function (value, key) {
+            value.PresentationString = value.Position + " - " + value.OrgUnit.LongDescription;
+        });
+        $scope.Employments = currentUser.Employments;
+
+        // Load this year's rates.
+        loadingPromises.push(Rate.ThisYearsRates().$promise.then(function (res) {
+            $scope.KmRate = res;
+        }));
+
+        // Load user's license plates.
+        loadingPromises.push(LicensePlate.get({ id: currentUser.Id }).$promise.then(function (res) {
+            if (res.length > 0) {
+                angular.forEach(res, function (value, key) {
+                    if (value.Description != "") {
+                        value.PresentationString = value.Plate + " - " + value.Description;
+                    } else {
+                        value.PresentationString = value.Plate;
+                    }
+                });
+                $scope.LicensePlates = res;
+            } else {
+                $scope.LicensePlates = [{ PresentationString: "Ingen nummerplader", Plate: "0000000" }];
+            }
+
+        }));
+
+        // Load user's personal routes
+        loadingPromises.push(PersonalRoute.getForUser({ id: currentUser.Id }).$promise.then(function (res) {
+            angular.forEach(res, function (value, key) {
+                value.PresentationString = "";
+                if (value.Description != "") {
+                    value.PresentationString += value.Description + " : ";
+                }
+                value.PresentationString += value.Points[0].StreetName + " " + value.Points[0].StreetNumber + ", " + value.Points[0].ZipCode + " " + value.Points[0].Town + " -> ";
+                value.PresentationString += value.Points[value.Points.length - 1].StreetName + " " + value.Points[value.Points.length - 1].StreetNumber + ", " + value.Points[value.Points.length - 1].ZipCode + " " + value.Points[value.Points.length - 1].Town;
+                value.PresentationString += " Antal viapunkter: " + Number(value.Points.length - 2);
             });
+            res.unshift({ PresentationString: "Vælg personlig rute" });
+            $scope.Routes = res;
+        }));
 
-            OS2RouteMap.set($scope.getDefaultMapAddresses());
+        // Load map start address
+        loadingPromises.push(Address.getMapStart().$promise.then(function (res) {
+            $scope.mapStartAddress = res;
+        }));
+
+        if (!isEditingReport) {
+            // Load latest drive report
+            loadingPromises.push(DriveReport.getLatest({ id: currentUser.Id }).$promise.then(function (res) {
+                $scope.latestDriveReport = res;
+            }));
+        } else {
+            // Load report to be edited.
+            loadingPromises.push(DriveReport.getWithPoints({ id: ReportId }).$promise.then(function (res) {
+                $scope.latestDriveReport = res;
+            }));
+        }
+
+        // Load personal and standard addresses.
+        loadingPromises.push(Address.GetPersonalAndStandard({ personId: currentUser.Id }).$promise.then(function (res) {
+            angular.forEach(res, function (value, key) {
+                value.PresentationString = "";
+                if (value.Description != "" && value.Description != null && value.Description != undefined) {
+                    value.PresentationString += value.Description + " : ";
+                }
+                if (value.Type == "Home") {
+                    // Store home address
+                    $scope.HomeAddress = value;
+                    value.PresentationString += "Hjemmeadresse : ";
+                }
+                if (value.Type == "AlternativeHome") {
+                    // Overwrite home address if user has alternative home address.
+                    $scope.HomeAddress = value;
+                }
+
+                value.PresentationString += value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
+                value.address = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
+            });
+            res.unshift({ PresentationString: $scope.addressDropDownPlaceholderText });
+            $scope.PersonalAddresses = res;
+        }));
+
+
+        $q.all(loadingPromises).then(function (res) {
+            dataAndKendoLoaded();
         });
 
-        
+        var setNotRoute = function () {
+            $scope.container.PersonalRouteDropDown.select(0);
+            $scope.IsRoute = false;
+            $scope.DriveReport.Addresses = [{ Name: "" }, { Name: "" }];
+        }
+
+        var setIsRoute = function (index) {
+            $scope.IsRoute = true;
+            var route = $scope.Routes[index];
+            $scope.DriveReport.Addresses = [];
+            var mapArray = [];
+            angular.forEach(route.Points, function (address, key) {
+                var addr = {
+                    Name: address.StreetName + " " + address.StreetNumber + ", " + address.ZipCode + " " + address.Town,
+                    Latitude: address.Latitude,
+                    Longitude: address.Longitude
+                };
+                $scope.DriveReport.Addresses.push(addr);
+                mapArray.push({ name: addr.Name, lat: addr.Latitude, lng: addr.Longitude });
+            });
+            setMap(mapArray);
+        }
+
+        $scope.personalRouteDropdownChange = function (e) {
+            var index = e.sender.selectedIndex;
+            if (index == 0) {
+                setNotRoute();
+            } else {
+                setIsRoute(index);
+            }
+            $scope.validateInput();
+        }
+
+        $scope.isAddressNameSet = function (address) {
+            return !(address.Name == "" || address.Name == $scope.addressPlaceholderText || address.Name == undefined);
+        }
+
+        $scope.isAddressPersonalSet = function (address) {
+            return !(address.Personal == "" || address.Personal == $scope.addressDropDownPlaceholderText || address.Personal == undefined);
+        }
+
+        var validateAddressInput = function () {
+            if ($scope.DriveReport.KilometerAllowance == "Read") {
+                return true;
+            }
+            var res = true;
+            $scope.addressSelectionErrorMessage = "";
+            angular.forEach($scope.DriveReport.Addresses, function (address, key) {
+                if (!$scope.isAddressNameSet(address) && !$scope.isAddressPersonalSet(address)) {
+                    res = false;
+                    $scope.addressSelectionErrorMessage = "*  Du skal udfylde alle adressefelter.";
+                }
+            });
+            return res;
+
+        }
+
+        var validatePurpose = function () {
+            $scope.purposeErrorMessage = "";
+            if ($scope.DriveReport.Purpose == undefined || $scope.DriveReport.Purpose == "") {
+                $scope.purposeErrorMessage = "* Du skal angive et formål.";
+                return false;
+            }
+            return true;
+        }
+
+        var validateLicensePlate = function () {
+            $scope.licensePlateErrorMessage = "";
+            if (getKmRate($scope.DriveReport.KmRate).Type.RequiresLicensePlate && $scope.LicensePlates[0].PresentationString == "Ingen nummerplader") {
+                $scope.licensePlateErrorMessage = "* Det valgte transportmiddel kræver en nummerplade.";
+                return false;
+            }
+            return true;
+        }
+
+        var validateReadInput = function () {
+            $scope.readDistanceErrorMessage = "";
+            $scope.userCommentErrorMessage = "";
+            var distRes = true;
+            var commRes = true;
+            if ($scope.DriveReport.KilometerAllowance == "Read") {
+                if ($scope.DriveReport.ReadDistance <= 0 || $scope.DriveReport.ReadDistance == undefined) {
+                    $scope.readDistanceErrorMessage = "* Du skal indtaste en kørt afstand.";
+                    distRes = false;
+                }
+                if ($scope.DriveReport.UserComment == undefined || $scope.DriveReport.UserComment == "") {
+                    $scope.userCommentErrorMessage = "* Du skal angive en kommentar.";
+                    commRes = false;
+                }
+            }
+            return commRes && distRes;
+        }
+
+
+
+        $scope.addressInputChanged = function (index) {
+            if (!validateAddressInput() || mapChanging) {
+                return;
+            }
+
+            $scope.validateInput();
+            var promises = [];
+            var mapArray = [];
+
+            angular.forEach($scope.DriveReport.Addresses, function (addr, key) {
+                if (!$scope.isAddressNameSet(addr) && addr.Personal != $scope.addressDropDownPlaceholderText) {
+                    var format = AddressFormatter.fn(addr.Personal);
+                    promises.push(Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }).$promise.then(function (res) {
+                        addr.Latitude = res[0].Latitude;
+                        addr.Longitude = res[0].Longitude;
+                        mapArray[key] = { name: addr.Name, lat: addr.Latitude, lng: addr.Longitude };
+                    }));
+                } else if ($scope.isAddressNameSet(addr)) {
+                    var format = AddressFormatter.fn(addr.Name);
+                    promises.push(Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }).$promise.then(function (res) {
+                        addr.Latitude = res[0].Latitude;
+                        addr.Longitude = res[0].Longitude;
+                        mapArray[key] = { name: addr.Name, lat: addr.Latitude, lng: addr.Longitude };
+                    }));
+                }
+            });
+
+            $q.all(promises).then(function (data) {
+                setMap(mapArray);
+            });
+        }
+
+        var setMap = function (mapArray) {
+            $timeout(function () {
+                setMapPromise = $q.defer();
+                mapChanging = true;
+                OS2RouteMap.set(mapArray);
+
+                setMapPromise.promise.then(function () {
+                    mapChanging = false;
+                });
+            });
+        }
+
+        // Wait for kendo to render.
+        $scope.$on("kendoWidgetCreated", function (event, widget) {
+            if (widget === $scope.container.KilometerAllowanceDropDown) {
+                kendoPromise.resolve();
+            }
+        });
+
+        var createMap = function () {
+            $timeout(function () {
+                if (angular.element('#map').length) {
+                    OS2RouteMap.create({
+                        id: 'map',
+                        change: function(obj) {
+                            $scope.currentMapAddresses = obj.Addresses;
+                            $scope.latestMapDistance = obj.distance;
+                            updateDrivenKm();
+
+                            // Return if the change comes from AddressInputChanged
+                            if (mapChanging === true) {
+                                setMapPromise.resolve();
+                                return;
+                            }
+
+                            if ($scope.IsRoute) {
+                                setNotRoute();
+                            }
+
+                            mapChanging = true;
+                            $scope.DriveReport.Addresses = [];
+                            // Load the adresses from the map.
+                            angular.forEach(obj.Addresses, function(address, key) {
+                                var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
+                                $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
+                            });
+                            // Apply to update the view.
+                            $scope.$apply();
+                            $timeout(function() {
+                                // Wait for the view to render before setting mapChanging to false.
+
+                                mapChanging = false;
+                            });
+
+                        }
+                    });
+                    OS2RouteMap.set($scope.mapStartAddress);
+                }
+            });
+        }
+
+
+        // Is called when Kendo has rendered up to and including KilometerAllowanceDropDown and data has been loaded from backend.
+        // Consider this function Main()
+        // Is needed to make sure data and kendo widgets are ready for setting values from previous drivereport.
+        var dataAndKendoLoaded = function () {
+
+            // Define validateInput now. Otherwise it gets called from drivingview.html before having loaded resources.
+            $scope.validateInput = function () {
+                $timeout(function () {
+                    $scope.canSubmitDriveReport = validateReadInput();
+                    $scope.canSubmitDriveReport &= validateAddressInput();
+                    $scope.canSubmitDriveReport &= validatePurpose();
+                    $scope.canSubmitDriveReport &= validateLicensePlate();
+                });
+            }
+
+            if (!isEditingReport) {
+                $scope.container.driveDatePicker.open();
+            }
+
+            // Timeout for wait for dom to render.
+            $timeout(function () {
+                createMap();
+                loadValuesFromReport($scope.latestDriveReport);
+                updateDrivenKm();
+            });
+
+        }
+
+        $scope.clearClicked = function () {
+
+            if (!isEditingReport) {
+                setMap($scope.mapStartAddress);
+            }
+
+            setNotRoute();
+
+            $scope.container.driveDatePicker.open();
+            loadValuesFromReport($scope.latestDriveReport);
+            $scope.DriveReport.Addresses = [{ Name: "" }, { Name: "" }];
+            $scope.DriveReport.ReadDistance = 0;
+            $scope.DriveReport.UserComment = "";
+            $scope.DriveReport.Purpose = "";
+            $scope.validateInput();
+            updateDrivenKm();
+        }
+
+        $scope.transportChanged = function (res) {
+            $q.all(loadingPromises).then(function () {
+                $scope.validateInput();
+                $scope.showLicensePlate = getKmRate($scope.DriveReport.KmRate).Type.RequiresLicensePlate;
+            });
+        }
+
+        $scope.Save = function () {
+            if (!$scope.canSubmitDriveReport) {
+                return;
+            }
+            $scope.canSubmitDriveReport = false;
+            if (isEditingReport) {
+                DriveReport.delete({ id: ReportId }).$promise.then(function () {
+                    DriveReport.edit($scope).$promise.then(function (res) {
+                        $scope.latestDriveReport = res;
+                        NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev redigeret");
+                        $scope.clearClicked();
+                        $modalInstance.close();
+                        $scope.container.driveDatePicker.close();
+                    }, function () {
+                        NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under redigering af tjenestekørselsindberetningen.");
+                    });
+                });
+            } else {
+                DriveReport.create($scope).$promise.then(function (res) {
+                    $scope.latestDriveReport = res;
+                    NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev gemt");
+                    $scope.clearClicked();
+                }, function () {
+                    NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under oprettelsen af tjenestekørselsindberetningen.");
+                });
+            }
+        }
+
+        $scope.kilometerAllowanceChanged = function () {
+            updateDrivenKm();
+            switch ($scope.DriveReport.KilometerAllowance) {
+                case "Read":
+                    setMap($scope.mapStartAddress);
+                    break;
+                default:
+                    $scope.addressInputChanged();
+                    break;
+            }
+            $scope.validateInput();
+
+        }
 
         $scope.employmentChanged = function () {
-            // Clear the checkbox and the value field before checking.
-            $scope.DriveReport.FourKmRule = {};
-            $scope.DriveReport.FourKmRule.Using = false;
-            $scope.DriveReport.FourKmRule.Value = "";
-
-            // Is there a better way to do this?
-            // My guess is this might take a long time if there are a lot of org units. 
-            angular.forEach($scope.Employments, function (empl, key) {
-                // Show checkbox and value field, if the chosen orgunit allows it. 
+            angular.forEach($scope.currentUser.Employments, function (empl, key) {
                 if (empl.Id == $scope.DriveReport.Position) {
+                    $scope.WorkAddress = empl.OrgUnit.Address;
                     $scope.hasAccessToFourKmRule = empl.OrgUnit.HasAccessToFourKmRule;
                 }
             });
+            updateDrivenKm();
+            $scope.validateInput();
+        }
+
+        var routeStartsAtHome = function () {
+            if ($scope.DriveReport.KilometerAllowance == "Read") {
+                var index = $scope.container.StartEndHomeDropDown.selectedIndex;
+                if (index == 1 || index == 3) {
+                    return true;
+                }
+                return false;
+            } else {
+                if ($scope.currentMapAddresses == undefined) {
+                    return false;
+                }
+                var endAddress = $scope.currentMapAddresses[0];
+                return areAddressesCloseToEachOther($scope.HomeAddress, endAddress);
+            }
+        }
+
+        var routeEndsAtHome = function () {
+            if ($scope.DriveReport.KilometerAllowance == "Read") {
+                var index = $scope.container.StartEndHomeDropDown.selectedIndex;
+                if (index == 2 || index == 3) {
+                    return true;
+                }
+                return false;
+            } else {
+                if ($scope.currentMapAddresses == undefined) {
+                    return false;
+                }
+                var endAddress = $scope.currentMapAddresses[$scope.currentMapAddresses.length - 1];
+                return areAddressesCloseToEachOther($scope.HomeAddress, endAddress);
+            }
+        }
+
+        //Checks that two addresses are within 100 meters, in
+        //which case we assume they are the same when regarding
+        //if a person starts or ends their route at home.
+        var areAddressesCloseToEachOther = function (address1, address2) {
+            //Longitude and latitude is called different things depending on
+            //whether we get the information from the backend or from septima
+            var long1 = (address1.Longitude === undefined) ? address1.lng : address1.Longitude;
+            var long2 = (address2.Longitude === undefined) ? address2.lng : address2.Longitude;
+            var lat1 = (address1.Latitude === undefined) ? address1.lat : address1.Latitude;
+            var lat2 = (address2.Latitude === undefined) ? address2.lat : address2.Latitude;
+
+            var longDiff = Math.abs(Number(long1) - Number(long2));
+            var latDiff = Math.abs(Number(lat1) - Number(lat2));
+            return longDiff < 0.0001 && latDiff < 0.001; //Fourth decimal is ~10 meters
+        }
+
+        $scope.startEndHomeChanged = function () {
+            updateDrivenKm();
+        }
+
+        var updateDrivenKm = function () {
+            if ($scope.DriveReport.KilometerAllowance != "CalculatedWithoutExtraDistance") {
+                if (routeStartsAtHome() && routeEndsAtHome()) {
+                    $scope.TransportAllowance = Number(getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance) * 2;
+                } else if (routeStartsAtHome() || routeEndsAtHome()) {
+                    $scope.TransportAllowance = getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance;
+                } else {
+                    $scope.TransportAllowance = 0;
+                }
+            } else {
+                $scope.TransportAllowance = 0;
+            }
+
+            if ($scope.DriveReport.KilometerAllowance == "Read") {
+                if ($scope.DriveReport.ReadDistance == undefined) {
+                    $scope.DriveReport.ReadDistance = 0;
+                }
+                $scope.DrivenKMDisplay = Number($scope.DriveReport.ReadDistance.toString().replace(",", "."));
+            } else {
+                if ($scope.latestMapDistance == undefined) {
+                    $scope.DrivenKMDisplay = 0;
+                } else {
+                    $scope.DrivenKMDisplay = $scope.latestMapDistance;
+                }
+            }
+
+            if ($scope.DriveReport.RoundTrip === true) {
+                // Double the driven km if its a roundtrip.
+                $scope.DrivenKMDisplay = Number($scope.DrivenKMDisplay) * 2;
+                // If the route starts xor ends at home -> double the transportallowance.
+                // The case where the route both ends and starts at home is already covered.
+                if (routeStartsAtHome() != routeEndsAtHome()) {
+
+                    $scope.TransportAllowance = Number($scope.TransportAllowance) * 2;
+                }
+            }
         }
 
         $scope.readDistanceChanged = function () {
-            updateDrivenKilometerFields();
+            updateDrivenKm();
         }
 
-        var updateDrivenKilometerFields = function (obj) {
-            if ($scope.DriveReport.KilometerAllowance === "Read") {
-                $scope.DrivenKilometers = $scope.DriveReport.ReadDistance;
+        $scope.roundTripChanged = function () {
+            updateDrivenKm();
+        }
 
-                var drivenKm = Number($scope.DriveReport.ReadDistance.toString().replace(',', '.'));
-
-                var remKm = Number(drivenKm - $scope.Person.DistanceFromHomeToWork);
-
-                $scope.RemainingKilometers = remKm.toFixed(2).toString().replace('.', ',');
-                if (remKm < 0) {
-                    $scope.RemainingKilometers = 0;
-                }
-            } else {
-                var remKm = Number(obj.distance - $scope.Person.DistanceFromHomeToWork);
-                $scope.RemainingKilometers = remKm.toFixed(2).toString().replace('.', ',');
-                if (remKm < 0) {
-                    $scope.RemainingKilometers = 0;
-                }
-                $scope.DrivenKilometers = obj.distance.toFixed(2).toString().replace('.', ',');
-            }
-            $scope.$apply();
+        $scope.closeModalWindow = function() {
+            $modalInstance.dismiss();
         }
     }
 ]);

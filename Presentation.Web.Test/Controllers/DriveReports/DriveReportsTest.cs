@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -32,7 +33,10 @@ namespace Presentation.Web.Test.Controllers.DriveReports
             return new List<KeyValuePair<Type, Type>>
             {
                 new KeyValuePair<Type, Type>(typeof (IGenericRepository<DriveReport>),typeof (DriveReportsRepositoryMock)),
-                    new KeyValuePair<Type, Type>(typeof (IMailSender), typeof (MailSenderMock))
+                    new KeyValuePair<Type, Type>(typeof (IMailSender), typeof (MailSenderMock)),
+                    new KeyValuePair<Type, Type>(typeof (IGenericRepository<Person>), typeof (PersonRepositoryMock)),
+                    new KeyValuePair<Type, Type>(typeof (IGenericRepository<Employment>), typeof (EmploymentRepositoryMock)),
+                    new KeyValuePair<Type, Type>(typeof (IGenericRepository<OrgUnit>), typeof (OrgUnitRepositoryMock)),
             };
         }
 
@@ -44,7 +48,13 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment 1",
                 Distance = 3.4f,
                 ClosedDateTimestamp = 4444,
-                FullName = "Morten Tester [MT]"
+                Employment = new Employment()
+                {
+                    Id = 1,
+                    OrgUnitId = 1
+                },
+                FullName = "Fissirul Lehmann [FL]",
+                Status = ReportStatus.Rejected
             };
         }
 
@@ -56,7 +66,13 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment 2",
                 Distance = 3.5f,
                 ClosedDateTimestamp = 4455,
-                FullName = "Morten Tester [MT]"
+                Employment = new Employment()
+                {
+                    Id = 1,
+                    OrgUnitId = 1
+                },
+                FullName = "Fissirul Lehmann [FL]",
+                Status = ReportStatus.Accepted
             };
         }
 
@@ -68,7 +84,7 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Comment = "comment 3",
                 Distance = 3.6778f,
                 ClosedDateTimestamp = 7777,
-                FullName = "Morten Tester [MT]",
+                FullName = "Fissirul Lehmann [FL]",
             };
         }
 
@@ -91,8 +107,14 @@ namespace Presentation.Web.Test.Controllers.DriveReports
                 Id = 3,
                 Comment = "comment patched",
                 Distance = 3.6778f,
-                ClosedDateTimestamp = 666,
-                FullName = "Morten Tester [MT]"
+                PersonId = 1,
+                Employment = new Employment()
+                {
+                    Id = 1,
+                    OrgUnitId = 1
+                },
+                FullName = "Fissirul Lehmann [FL]",
+                Status = ReportStatus.Pending
             };
         }
 
@@ -104,6 +126,8 @@ namespace Presentation.Web.Test.Controllers.DriveReports
             Assert.AreEqual(entity1.Comment, entity2.Comment, "Comment of the two drive reports should be the same");
             Assert.AreEqual(entity1.FullName, entity2.FullName, "Full name should be the same on both reports");
         }
+
+      
 
         protected override string GetPostBodyContent()
         {
@@ -140,82 +164,9 @@ namespace Presentation.Web.Test.Controllers.DriveReports
         }
 
         [Test]
-        public override async Task PostShouldInsertAnEntity()
+        protected override async Task PostShouldInsertAnEntity()
         {
             //Is tested via drive report service
-        }
-
-        
-        [Test]
-        public async void DriveReport_PatchWithStatus_Rejected_ShouldSendMail()
-        {
-            const string bodyContent = @"{
-                        'Status' : 'Rejected',
-                        'Comment': 'TestComment'
-                    }";
-
-            Assert.AreEqual(false, MailSenderMock.SendHasBeenCalled);
-
-            var request = Server.CreateRequest(GetUriPath() + "(3)")
-                                .And(r => r.Content = new StringContent(bodyContent))
-                                .And(r => r.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json"));
-            var patchResponse = await request.SendAsync("PATCH");
-
-            Assert.AreEqual(true, MailSenderMock.SendHasBeenCalled);
-        }
-
-        [Test]
-        public async void DriveReport_PatchWithStatus_Rejected_ShouldSendMailToCorrectRecipient()
-        {
-            const string bodyContent = @"{
-                        'Status' : 'Rejected',
-                        'Comment': 'TestComment'
-                    }";
-
-            Assert.AreEqual(false, MailSenderMock.SendHasBeenCalled);
-
-            var request = Server.CreateRequest(GetUriPath() + "(3)")
-                                .And(r => r.Content = new StringContent(bodyContent))
-                                .And(r => r.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json"));
-            var patchResponse = await request.SendAsync("PATCH");
-
-            Assert.AreEqual("testMail@asd.dk", MailSenderMock.To);
-        }
-
-        [Test]
-        public async void DriveReport_PatchWithStatus_Rejected_ShouldSendMailWithCorrectSubject()
-        {
-            const string bodyContent = @"{
-                        'Status' : 'Rejected',
-                        'Comment': 'TestComment'
-                    }";
-
-            Assert.AreEqual(false, MailSenderMock.SendHasBeenCalled);
-
-            var request = Server.CreateRequest(GetUriPath() + "(3)")
-                                .And(r => r.Content = new StringContent(bodyContent))
-                                .And(r => r.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json"));
-            var patchResponse = await request.SendAsync("PATCH");
-
-            Assert.AreEqual("Afvist indberetning", MailSenderMock.Subject);
-        }
-
-        [Test]
-        public async void DriveReport_PatchWithStatus_Rejected_ShouldSendMailWithCorrectBody()
-        {
-            const string bodyContent = @"{
-                        'Status' : 'Rejected',
-                        'Comment': 'TestComment'
-                    }";
-
-            Assert.AreEqual(false, MailSenderMock.SendHasBeenCalled);
-
-            var request = Server.CreateRequest(GetUriPath() + "(3)")
-                                .And(r => r.Content = new StringContent(bodyContent))
-                                .And(r => r.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json"));
-            var patchResponse = await request.SendAsync("PATCH");
-
-            Assert.AreEqual("Din indberetning er blevet afvist med kommentaren: \n \n" + "TestComment", MailSenderMock.Body);
         }
 
         [Test]
@@ -252,39 +203,6 @@ namespace Presentation.Web.Test.Controllers.DriveReports
             var patchResponse = await request.SendAsync("PATCH");
 
             Assert.AreEqual(false, MailSenderMock.SendHasBeenCalled);
-        }
-
-        [Test]
-        public async void GetWithStatus_Pending_ShouldReturn_OneReport()
-        {
-            var request =
-                Server.CreateRequest(GetUriPath() + "?status=Pending");
-
-            var response = await request.SendAsync(("GET"));
-            var result = await response.Content.ReadAsAsync<ODataResponse<DriveReport>>();
-            Assert.AreEqual(1,result.value.Count);
-        }
-
-        [Test]
-        public async void GetWithStatus_Accepted_ShouldReturn_OneReport()
-        {
-            var request =
-                Server.CreateRequest(GetUriPath() + "?status=Accepted");
-
-            var response = await request.SendAsync(("GET"));
-            var result = await response.Content.ReadAsAsync<ODataResponse<DriveReport>>();
-            Assert.AreEqual(1, result.value.Count);
-        }
-
-        [Test]
-        public async void GetWithStatus_Rejected_ShouldReturn_OneReport()
-        {
-            var request =
-                Server.CreateRequest(GetUriPath() + "?status=Rejected");
-
-            var response = await request.SendAsync(("GET"));
-            var result = await response.Content.ReadAsAsync<ODataResponse<DriveReport>>();
-            Assert.AreEqual(1, result.value.Count);
         }
     }
 

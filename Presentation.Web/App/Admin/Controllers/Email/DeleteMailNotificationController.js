@@ -1,14 +1,15 @@
 ﻿angular.module("application").controller("DeleteMailNotificationController", [
-    "$scope", "$modalInstance", "itemId", "NotificationService", "StandardAddress", function($scope, $modalInstance, itemId, NotificationService, StandardAddress) {
+    "$scope", "$modalInstance", "itemId", "NotificationService",
+    function ($scope, $modalInstance, itemId, NotificationService) {
 
-        $scope.confirmDelete = function () {
+     $scope.confirmDelete = function () {
             $modalInstance.close($scope.itemId);
-            NotificationService.AutoFadeNotification("success", "Slet", "Adviseringen blev slettet.");
+            NotificationService.AutoFadeNotification("success", "", "Adviseringen blev slettet.");
         }
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
-            NotificationService.AutoFadeNotification("warning", "Slet", "Sletning af adviseringen blev annulleret.");
+            NotificationService.AutoFadeNotification("warning", "", "Sletning af adviseringen blev annulleret.");
         }
     }
 ]);

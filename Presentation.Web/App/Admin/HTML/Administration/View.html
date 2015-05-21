@@ -1,8 +1,5 @@
 ﻿<div class="panel panel-default">
 
-    <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-users"></i> Administration</h3>
-    </div>
 
 
 
@@ -13,19 +10,18 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-9"></div>
-            <div class="col-md-2">
-                <input type="text" kendo-auto-complete k-ng-model="person.chosenAdmin" placeholder="'Indtast medarbejder'" k-data-source="nonAdmins" k-data-value-field="'Id'" k-data-text-field="'FullName'" class="form-control" />
-            </div>
-            <div class="col-md-1">
+            <div class="col-xs-2 col-lg-1 pull-right">
                 <button class="btn btn-primary pull-right" ng-click="addAdminClicked()">Opret admin</button>
             </div>
+            <div class="col-xs-4 col-lg-2 pull-right">
+                <input ng-enter="addAdminClicked()" type="text" kendo-auto-complete k-ng-model="person.chosenAdmin" placeholder="'Indtast medarbejder'" k-data-source="nonAdmins" k-data-value-field="'Id'" k-data-text-field="'FullName'" class="form-control" />
+            </div>
+            
         </div>
-        <div kendo-grid="gridContainer.grid" class="margin-top-10" options="admins"></div>
-
-        <div class="row margin-top-20">
-            <div class="col-md-12">
-                <button class="btn btn-danger fill-width" ng-click="generateKMDFileClicked()">Generer fil til KMD</button>
+            <div kendo-grid="gridContainer.grid" class="margin-top-10 scrollable" options="admins"></div>
+        <div class="row">
+            <div class="col-xs-12">
+                <button class="btn btn-danger fill-width margin-top-20" ng-click="generateKMDFileClicked()">Generer fil til KMD</button>
             </div>
         </div>
     </div>

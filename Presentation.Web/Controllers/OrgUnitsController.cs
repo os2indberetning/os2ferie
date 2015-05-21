@@ -1,16 +1,24 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
+using Microsoft.Ajax.Utilities;
 
 namespace OS2Indberetning.Controllers
 {
     public class OrgUnitsController : BaseController<OrgUnit>
     {
-        public OrgUnitsController(IGenericRepository<OrgUnit> repo) : base(repo){}
-        
+        private readonly IOrgUnitService _orgService;
+
+        public OrgUnitsController(IGenericRepository<OrgUnit> repo, IGenericRepository<Person> personRepo, IOrgUnitService orgService) : base(repo, personRepo)
+        {
+            _orgService = orgService;
+        }
+
         //GET: odata/OrgUnits
         [EnableQuery]
         public IQueryable<OrgUnit> Get(ODataQueryOptions<OrgUnit> queryOptions)
@@ -25,6 +33,13 @@ namespace OS2Indberetning.Controllers
             return GetQueryable(key, queryOptions);
         }
 
+        //GET: odata/OrgUnits
+        [EnableQuery]
+        public IHttpActionResult GetWhereUserIsResponsible(int personId)
+        {
+           return Ok(_orgService.GetWhereUserIsResponsible(personId));
+        }
+
         //PUT: odata/OrgUnits(5)
         public new IHttpActionResult Put([FromODataUri] int key, Delta<OrgUnit> delta)
         {
@@ -35,7 +50,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(OrgUnit orgUnit)
         {
-            return base.Post(orgUnit);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         //PATCH: odata/OrgUnits(5)
@@ -43,13 +58,13 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<OrgUnit> delta)
         {
-            return base.Patch(key, delta);
+            return CurrentUser.IsAdmin ? base.Patch(key, delta) : StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         //DELETE: odata/OrgUnits(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
     }
 }

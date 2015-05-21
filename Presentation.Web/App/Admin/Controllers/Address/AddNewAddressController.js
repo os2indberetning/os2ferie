@@ -1,5 +1,6 @@
 ﻿angular.module("application").controller("AddNewAddressController", [
-    "$scope", "$modalInstance", "NotificationService", "StandardAddress", "AddressFormatter", "SmartAdresseSource", function ($scope, $modalInstance, NotificationService, AddressFormatter, SmartAdresseSource) {
+    "$scope", "$modalInstance", "NotificationService", "StandardAddress", "AddressFormatter", "SmartAdresseSource",
+    function ($scope, $modalInstance, NotificationService, StandardAddress , AddressFormatter, SmartAdresseSource) {
 
         $scope.SmartAddress = {
             type: "json",
@@ -8,39 +9,37 @@
             crossDomain: true,
             transport: {
                 read: {
-                    url: function (item) {
-                        return 'https://smartadresse.dk/service/locations/3/detect/json/' + item.filter.filters[0].value + '%200';
+                    url: function(item) {
+                        var req = 'http://dawa.aws.dk/adgangsadresser/autocomplete?q=' + item.filter.filters[0].value;
+                        return req;
                     },
                     dataType: "jsonp",
                     data: {
-                        apikey: 'FCF3FC50-C9F6-4D89-9D7E-6E3706C1A0BD',
-                        limit: 15,                   // REST limit
-                        crs: 'EPSG:25832',           // REST projection
-                        nogeo: 'true',                 // REST nogeo
-                        noadrspec: 'true'             // REST noadrspec
+
                     }
                 }
             },
             schema: {
-                data: function (data) {
-                    return data.data; // <-- The result is just the data, it doesn't need to be unpacked.
+                data: function(data) {
+                    return data; // <-- The result is just the data, it doesn't need to be unpacked.
                 }
             },
-        }
+        };
+         
 
       
 
         $scope.confirmSave = function () {
             var result = {};
-            result.address = $scope.address;
+            result.address = $scope.Address.Name;
             result.description = $scope.description;
             $modalInstance.close(result);
-            NotificationService.AutoFadeNotification("success", "Opret", "Adressen blev oprettet.");
+            NotificationService.AutoFadeNotification("success", "", "Adressen blev oprettet.");
         }
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
-            NotificationService.AutoFadeNotification("warning", "Opret", "Oprettelse af adressen blev annulleret.");
+            NotificationService.AutoFadeNotification("warning", "", "Oprettelse af adressen blev annulleret.");
         }
     }
 ]);

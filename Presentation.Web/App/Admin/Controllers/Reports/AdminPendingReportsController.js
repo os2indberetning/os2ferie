@@ -1,8 +1,9 @@
-﻿angular.module("application").controller("AdminPendingReportsController", [
-   "$scope", "$timeout", "$modal", function ($scope, $timeout, $modal) {
+﻿angular.module("application").controller("AdminPendingReportsController", 
+    ["$scope", "$rootScope", "$timeout", "$modal",
+    function ($scope, $rootScope, $timeout, $modal) {
 
-       // Hardcoded personid == 1 until we can get current user from their system.
-       var personId = 1;
+       // Set personId. The value on $rootScope is set in resolve in application.js
+       var personId = $rootScope.CurrentUser.Id;
 
        $scope.getEndOfDayStamp = function (d) {
            var m = moment(d);
@@ -90,7 +91,7 @@
                field: "FullName",
                title: "Medarbejder"
            }, {
-               field: "Employment.OrgUnit.ShortDescription",
+               field: "Employment.OrgUnit.LongDescription",
                title: "Organisationsenhed"
            }, {
                field: "DriveDateTimestamp",
@@ -138,14 +139,14 @@
                template: function (data) {
                    return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
                },
-               footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+               footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
            }, {
                field: "AmountToReimburse",
                title: "Beløb",
                template: function (data) {
                    return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
                },
-               footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+               footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
            }, {
                field: "KilometerAllowance",
                title: "Merkørsel",
@@ -276,6 +277,10 @@
            $scope.loadInitialDates();
        }
 
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
+
 
        // Load up the grid.
        $scope.loadReports();
@@ -291,6 +296,10 @@
        $scope.dateOptions = {
            format: "dd/MM/yyyy",
        };
+
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
 
 

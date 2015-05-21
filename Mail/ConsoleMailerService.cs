@@ -9,6 +9,7 @@ using Core.ApplicationServices;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
+using log4net;
 using Ninject;
 
 namespace Mail
@@ -18,10 +19,14 @@ namespace Mail
         private IMailService _mailService;
         private IGenericRepository<MailNotificationSchedule> _repo;
 
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public ConsoleMailerService(IMailService mailService, IGenericRepository<MailNotificationSchedule> repo)
         {
             _mailService = mailService;
             _repo = repo;
+            log4net.Config.XmlConfigurator.Configure();
+            Logger.Info("MailService startet.");
         }
 
         public void RunMailService()
@@ -33,6 +38,7 @@ namespace Mail
             if (notifications.Any())
             {
                 Console.WriteLine("Forsøger at sende emails.");
+                Logger.Info("Forsøger at sende emails.");
                 foreach (var notification in notifications.ToList())
                 {
                     if (notification.Repeat)
@@ -54,6 +60,8 @@ namespace Mail
             else
             {
                 Console.WriteLine("Ingen email-adviseringer fundet! Programmet lukker om 3 sekunder.");
+                Console.WriteLine(Environment.CurrentDirectory);
+                Logger.Info("No mail notifications found.");
                 Thread.Sleep(3000);
             }
         }
@@ -72,13 +80,16 @@ namespace Mail
                 catch (System.Net.Mail.SmtpException)
                 {
                     Console.WriteLine("Kunne ikke oprette forbindelse til SMTP-Serveren. Forsøger igen...");
+                    Logger.Info("Kunne ikke oprette forbindelse til SMTP-Serveren. Forsøger igen...");
                     AttemptSendMails(service, timesToAttempt - 1);
                 }
             }
             else
             {
                 Console.WriteLine("Alle forsøg fejlede. Programmet lukker om 3 sekunder.");
+                Logger.Info("Alle forsøg fejlede. Programmet lukker om 3 sekunder.");
                 Thread.Sleep(3000);
+                
             }
         }
 

@@ -2,9 +2,24 @@
 angular.module("application").controller("MyRejectedReportsController", [
    "$scope", "$modal", "$rootScope", "Report", "$timeout", function ($scope, $modal, $rootScope, Report, $timeout) {
 
-       // Hardcoded personid until we can get current user from their system.
-       var personId = 1;
+       // Set personId. The value on $rootScope is set in resolve in application.js
+       var personId = $rootScope.CurrentUser.Id;
 
+       $scope.getEndOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.endOf('day').unix();
+       }
+
+       $scope.getStartOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.startOf('day').unix();
+       }
+
+       // dates for kendo filter.
+       var fromDateFilter = new Date();
+       fromDateFilter.setDate(fromDateFilter.getDate() - 30);
+       fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
+       var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
        $scope.loadReports = function () {
            $scope.Reports = {
@@ -43,7 +58,7 @@ angular.module("application").controller("MyRejectedReportsController", [
                    pageSize: 20,
                    serverPaging: false,
                    serverSorting: true,
-                   filter: { field: "PersonId", operator: "eq", value: personId },
+                   filter: [{ field: "PersonId", operator: "eq", value: personId }, { field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }],
                    sort: { field: "DriveDateTimestamp", dir: "desc" },
                    aggregate: [
                    { field: "Distance", aggregate: "sum" },
@@ -123,14 +138,14 @@ angular.module("application").controller("MyRejectedReportsController", [
                       template: function (data) {
                           return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
                       },
-                      footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+                      footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
                   }, {
                       field: "AmountToReimburse",
                       title: "Beløb",
                       template: function (data) {
                           return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
                       },
-                      footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+                      footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
                   }, {
                       field: "CreationDate",
                       template: function (data) {
@@ -172,15 +187,7 @@ angular.module("application").controller("MyRejectedReportsController", [
            $scope.dateContainer.fromDate = from;
        }
 
-       $scope.getEndOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.endOf('day').unix();
-       }
-
-       $scope.getStartOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.startOf('day').unix();
-       }
+      
 
        // Event handlers
 
@@ -218,8 +225,14 @@ angular.module("application").controller("MyRejectedReportsController", [
            $scope.gridContainer.grid.dataSource.filter(newFilters);
        }
 
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
+
        // Load up the grids.
        $scope.loadReports();
+
+
 
 
        // Contains references to kendo ui grids.

@@ -1,421 +1,123 @@
 ﻿angular.module("application").controller('RouteEditModalInstanceController', [
-    "$scope", "Route", "Point", "NotificationService", "$modalInstance", "routeId", "personId", "AddressFormatter", function ($scope, Route, Point, NotificationService, $modalInstance, routeId, personId, AddressFormatter) {
-    $scope.newStartPoint = "";
-    $scope.newEndPoint = "";
-    $scope.oldStartPointId = 0;
-    $scope.oldEndPointId = 0;
-    $scope.oldStartPoint = "";
-    $scope.oldEndPoint = "";
-    $scope.oldRouteDescription = "";
-    $scope.newRouteDescription = "";
-    $scope.viaPoints = [];
-    $scope.viaPointModels = [];
-    $scope.updatedViaPointModels = [];
+    "$scope", "Route", "Point", "NotificationService", "$modalInstance", "routeId", "personId", "AddressFormatter", "SmartAdresseSource", function ($scope, Route, Point, NotificationService, $modalInstance, routeId, personId, AddressFormatter, SmartAdresseSource) {
 
-    //Properties for creating new route
-    $scope.newRouteId = 0;
-    $scope.newRouteStartPointId = 0;
-    $scope.newRouteEndPointId = 0;
 
-    $scope.getRouteInformation = function () {
-        if (routeId == undefined) {
-            return;
-        }
+        //Contains addresses as strings ex. "Road 1, 8220 Aarhus"
+        $scope.viaPointModels = [];
 
-        Route.get({ query: "$filter=Id eq " + routeId }, function (data) {
-            $scope.oldRouteDescription = data.value[0].Description;
-            $scope.newRouteDescription = $scope.oldRouteDescription;
-        }, function () {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke hente ruteinformation");
-        });
+        $scope.isSaveDisabled = false;
 
-        $scope.routePoints = Point.get({ query: "$filter=PersonalRouteId eq " + routeId }, function (data) {
-            angular.forEach(data.value, function (value, key) {
-                if (value.NextPointId == null) {
-                    $scope.oldEndPointId = value.Id;
-                    $scope.oldEndPoint = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
-                    $scope.newEndPoint = $scope.oldEndPoint;
-                }
-                if (value.PreviousPointId == null) {
-                    $scope.oldStartPointId = value.Id;
-                    $scope.oldStartPoint = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
-                    $scope.newStartPoint = $scope.oldStartPoint;
-                }
-                if (value.PreviousPointId != null && value.NextPointId != null) {
-                    $scope.viaPoints.push(value);
-                    $scope.viaPointModels.push(value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town);
-                    $scope.updatedViaPointModels.push(value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town);
-                }
-            });
-        }, function () {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke hente ruteinformation");
-        });
-    }
 
-    $scope.getRouteInformation();
+        if (routeId != undefined) {
+            Route.getSingle({ id: routeId }, function (res) {
+                $scope.newRouteDescription = res.Description;
 
-    $scope.addNewViaPoint = function () {
-        $scope.viaPoints.push({
-            StreetName: "",
-            StreetNumber: "",
-            ZipCode: 0,
-            Town: ""
-        });
-        $scope.viaPointModels.push("");
-        $scope.updatedViaPointModels.push("");
-    }
+                $scope.newStartPoint = res.Points[0].StreetName + " " + res.Points[0].StreetNumber + ", " + res.Points[0].ZipCode + " " + res.Points[0].Town;
+                $scope.newEndPoint = res.Points[res.Points.length - 1].StreetName + " " + res.Points[res.Points.length - 1].StreetNumber + ", " + res.Points[res.Points.length - 1].ZipCode + " " + res.Points[res.Points.length - 1].Town;
 
-    $scope.removeViaPoint = function (index, viaPoint) {
-        var obj = viaPoint;
-        var next = {};
-        var previous = {};
-
-        if (obj.Id > 0) {
-            Point.get({ query: "$filter=Id eq " + obj.NextPointId }, function (data) {
-                next = data.value[0];
-                console.log(next);
-
-                next.PreviousPointId = obj.NextPointId;
-
-                var editedNext = new Point({
-                    PreviousPointId: obj.NextPointId,
-                    PersonalRouteId: routeId
-                });
-
-                editedNext.$patch({ id: next.Id }, function () {
-                    Point.get({ query: "$filter=Id eq " + obj.PreviousPointId }, function (data) {
-                        previous = data.value[0];
-
-                        previous.NextPointId = obj.PreviousPointId;
-
-                        var editedPrevious = new Point({
-                            NextPointId: obj.PreviousPointId,
-                            PersonalRouteId: routeId
-                        });
-
-                        editedPrevious.$patch({ id: previous.Id }, function () {
-                            Point.delete({ id: next.Id }, function () {
-                                NotificationService.AutoFadeNotification("success", "Success", "Viapunkt fjernet");
-                            });
-                        }, function () {
-
-                        });
-                    }, function () {
-
-                    });
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke fjerne viapunkt");
-                });
-            });
-        }
-
-        $scope.viaPoints.splice(obj, 1);
-        $scope.viaPointModels.splice(index, 1);
-        $scope.updatedViaPointModels.splice(index, 1);
-    }
-
-    $scope.saveViaPoints = function () {
-        angular.forEach($scope.viaPoints, function (value, key) {
-            if ($scope.viaPointModels[key] != $scope.updatedViaPointModels[key] && $scope.viaPointModels[key] == "") { // NEW VIAPOINT = CREATE IT
-                var newViaPointAddress = AddressFormatter.fn($scope.updatedViaPointModels[key]);
-
-                var newViaPoint = new Point({
-                    StreetName: newViaPointAddress.StreetName,
-                    StreetNumber: newViaPointAddress.StreetNumber,
-                    ZipCode: parseInt(newViaPointAddress.ZipCode),
-                    Town: newViaPointAddress.Town,
-                    NextPointId: 0,
-                    PreviousPointId: 0,
-                    PersonalRouteId: routeId,
-                    Latitude: "",
-                    Longitude: ""
-                });
-
-                if (routeId == undefined) {
-                    newViaPoint.PersonalRouteId = $scope.newRouteId;
-                }
-
-                var queryOne = "";
-                var queryTwo = "";
-
-                if (key == 0) { //First viapoint, get start address as previous point id
-                    if ($scope.oldStartPointId != 0) {
-                        queryOne = $scope.oldStartPointId;
-                    } else {
-                        queryOne = $scope.newRouteStartPointId;
+                angular.forEach(res.Points, function (viaPoint, key) {
+                    if (key != 0 && key != res.Points.length - 1) {
+                        // If its not the first or last element -> Its a via point
+                        var pointModel = viaPoint.StreetName + " " + viaPoint.StreetNumber + ", " + viaPoint.ZipCode + " " + viaPoint.Town;
+                        $scope.viaPointModels.push(pointModel);
                     }
-                } else if ($scope.viaPoints.length > 1 && key != 0) { // Else take previous array item and set previous id to that
-                    queryOne = $scope.viaPoints[key - 1].Id;
-                }
-
-                if ($scope.viaPoints.length == 1 || key == $scope.viaPoints.length - 1) { //Only one viapoint, set next point id to end address
-                    if ($scope.oldStartPointId != 0) {
-                        queryTwo = $scope.oldEndPointId;
-                    } else {
-                        queryTwo = $scope.newRouteEndPointId;
-                    }
-                } else if (key > 0 || key < $scope.viaPoints.length - 1) {
-                    queryTwo = $scope.viaPoints[key + 1].Id;
-                }
-
-                Point.get({ query: "$filter=Id eq " + queryOne }, function (data1) {
-                    newViaPoint.PreviousPointId = data1.value[0].Id;
-
-                    Point.get({ query: "$filter=Id eq " + queryTwo }, function (data2) {
-                        newViaPoint.NextPointId = data2.value[0].Id;
-
-                        var id = routeId;
-
-                        if (routeId == undefined) {
-                            id = $scope.newRouteId;
-                        }
-
-                        newViaPoint.$post(function (data3) {
-                            var previous = new Point({
-                                NextPointId: data3.Id,
-                                PersonalRouteId: id
-                            });
-
-                            var next = new Point({
-                                PreviousPointId: data3.Id,
-                                PersonalRouteId: id
-                            });
-
-                            previous.$patch({ id: data3.PreviousPointId }, function () {
-                                next.$patch({ id: data3.NextPointId }, function () {
-                                    NotificationService.AutoFadeNotification("success", "Success", "Viapunkt oprettet");
-                                    $modalInstance.close('');
-                                });
-                            });
-
-                        });
-                    });
                 });
-            } else if ($scope.viaPointModels[key] != $scope.updatedViaPointModels[key] && $scope.viaPointModels[key] != "") { // EXISTING VIAPOINT = UPDATE IT
-                var formatedAddress = AddressFormatter.fn($scope.updatedViaPointModels[key]);
+            });
+        }
 
-                var existingViaPoint = new Point({
-                    StreetName: formatedAddress.StreetName,
-                    StreetNumber: formatedAddress.StreetNumber,
-                    ZipCode: parseInt(formatedAddress.ZipCode),
-                    Town: formatedAddress.Town,
-                    PersonalRouteId: routeId
+        $scope.saveRoute = function () {
+            $scope.isSaveDisabled = true;
+            if (routeId != undefined) {
+                // routeId is defined -> User is editing existing route ->  Delete it, and then post the edited route as a new route.
+                Route.delete({ id: routeId }, function () {
+                    handleSaveRoute();
                 });
-
-                existingViaPoint.$patch({ id: $scope.viaPoints[key].Id }, function () {
-                    NotificationService.AutoFadeNotification("success", "Success", "Viapunkt opdateret");
-                    $modalInstance.close('');
-                });
+            } else {
+                // routeId is undefined -> User is making a new route.
+                handleSaveRoute();
             }
-        });
-    }
 
-    $scope.saveRoute = function () {
-        if ($scope.newEndPoint == "" || $scope.newStartPoint == "") {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Startadresse og/eller slutadresse må ikke være tom");
-            return;
         }
 
-        if ($scope.newRouteDescription == "") {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Beskrivelse må ikke være tom");
-            return;
-        }
-
-        $scope.handleRouteOnSave();
-
-        
-    }
-
-    $scope.handleRouteOnSave = function () {
-        $scope.handleDescriptionOnSave();
-    }
-
-    //Handle description  
-    $scope.handleDescriptionOnSave = function () {
-        if ($scope.newRouteDescription != $scope.oldRouteDescription && $scope.oldRouteDescription != "") {
-
-            var route = new Route({
-                Description: $scope.newRouteDescription,
-                PersonId: personId
-            });
-
-            route.$patch({ id: routeId }, function () {
-                $scope.handleStartPointOnSave();
-                NotificationService.AutoFadeNotification("success", "Success", "Rutebeskrivelse opdateret");
-                $modalInstance.close('');
-            }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Rutebeskrivelse blev ikke opdateret");
-            });
-        } else if ($scope.newRouteDescription != $scope.oldRouteDescription && $scope.oldRouteDescription == "") {
-            var newRoute = new Route({
-                Description: $scope.newRouteDescription,
-                PersonId: personId
-            });
-
-            newRoute.$post(function (data) {
-                $scope.newRouteId = data.Id;
-                $scope.handleStartPointOnSave();
-                NotificationService.AutoFadeNotification("success", "Success", "Ny rute oprettet");
-                $modalInstance.close('');
-            }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette ny rute");
+        var handleSaveRoute = function () {
+            // Validate start and end point
+            if ($scope.newStartPoint == undefined || $scope.newStartPoint == "" || $scope.newEndPoint == undefined || $scope.newEndPoint == "") {
+                NotificationService.AutoFadeNotification("danger", "", "Start- og slutadresse skal udfyldes.");
+                $scope.isSaveDisabled = false;
                 return;
-            });
-        } else {
-            $scope.handleStartPointOnSave();            
-        }
-    }
+            }
 
-    //Handle start address
-    $scope.handleStartPointOnSave = function () {
-        if ($scope.newStartPoint != $scope.oldStartPoint && $scope.oldStartPoint != "") { //IF EXISTING
-
-            var result1 = AddressFormatter.fn($scope.newStartPoint);
-
-            result1.Id = $scope.oldStartPointId;
-            result1.PersonId = personId;
-
-            var startPoint = new Point({
-                Id: result1.Id,
-                PersonalRouteId: routeId,
-                StreetName: result1.StreetName,
-                StreetNumber: result1.StreetNumber,
-                ZipCode: parseInt(result1.ZipCode),
-                Town: result1.Town
-            });
-
-            startPoint.$patch({ id: result1.Id }, function (data) {
-                $scope.handleEndpointOnSave();
-                NotificationService.AutoFadeNotification("success", "Success", "Startadresse opdateret");
-                $modalInstance.close('');
-            }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Startadresse blev ikke opdateret");
-            });
-
-        } else if ($scope.newStartPoint != $scope.oldStartPoint && $scope.oldStartPoint == "") { //IF NEW
-            var result3 = AddressFormatter.fn($scope.newStartPoint);
-
-            var newStartPoint = new Point({
-                PersonalRouteId: $scope.newRouteId,
-                StreetName: result3.StreetName,
-                StreetNumber: result3.StreetNumber,
-                ZipCode: parseInt(result3.ZipCode),
-                Town: result3.Town,
-                Latitude: "",
-                Longitude: ""
-            });
-
-            newStartPoint.$post(function (data) {
-                $scope.newRouteStartPointId = data.Id;
-                $scope.handleEndpointOnSave();
-                NotificationService.AutoFadeNotification("success", "Success", "Startadresse til ny rute oprettet");
-                $modalInstance.close('');
-            }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Startadresse blev ikke opdateret");
+            // Validate description
+            if ($scope.newRouteDescription == "" || $scope.newRouteDescription == undefined) {
+                NotificationService.AutoFadeNotification("danger", "", "Beskrivelse må ikke være tom.");
+                $scope.isSaveDisabled = false;
                 return;
+            }
+
+            var points = [];
+
+            var startAddress = AddressFormatter.fn($scope.newStartPoint);
+
+            points.push({
+                "StreetName": startAddress.StreetName,
+                "StreetNumber": startAddress.StreetNumber,
+                "ZipCode": startAddress.ZipCode,
+                "Town": startAddress.Town,
+                "Latitude": "",
+                "Longitude": "",
+                "Description": ""
             });
+            angular.forEach($scope.viaPointModels, function (address, key) {
+                var point = AddressFormatter.fn(address);
 
-        } else { // IF NO CHANGES
-            $scope.handleEndpointOnSave();
-        }
-    }
-
-    //Handle end address
-    $scope.handleEndpointOnSave = function () {
-        if ($scope.newEndPoint != $scope.oldEndPoint && $scope.oldEndPoint != "") { // IF EXISTING
-
-            var result2 = AddressFormatter.fn($scope.newEndPoint);
-
-            result2.Id = $scope.oldEndPointId;
-            result2.PersonId = personId;
-
-            var endPoint = new Point({
-                Id: result2.Id,
-                PersonalRouteId: routeId,
-                StreetName: result2.StreetName,
-                StreetNumber: result2.StreetNumber,
-                ZipCode: parseInt(result2.ZipCode),
-                Town: result2.Town
-            });
-
-            endPoint.$patch({ id: result2.Id }, function () {
-                NotificationService.AutoFadeNotification("success", "Success", "Slutadresse opdateret");
-                $modalInstance.close('');
-            }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Slutadresse blev ikke opdateret");
-            });
-        } else if ($scope.newEndPoint != $scope.oldEndPoint && $scope.oldEndPoint == "") { // IF NEW
-            var result4 = AddressFormatter.fn($scope.newEndPoint);
-
-            var newEndPoint = new Point({
-                PersonalRouteId: $scope.newRouteId,
-                StreetName: result4.StreetName,
-                StreetNumber: result4.StreetNumber,
-                ZipCode: parseInt(result4.ZipCode),
-                Town: result4.Town,
-                PreviousPointId: parseInt($scope.newRouteStartPointId),
-                Latitude: "",
-                Longitude: ""
-            });
-
-            newEndPoint.$post(function (data1) {
-                $scope.newRouteEndPointId = data1.Id;
-
-                //PATCH START ADDRESS FOR NEW ROUTE
-                Point.get({ query: "$filter=Id eq " + $scope.newRouteStartPointId }, function (data2) {
-                    var patchedStartPoint = new Point({
-                        NextPointId: data1.Id,
-                        PersonalRouteId: data1.PersonalRouteId
-                    });
-
-                    patchedStartPoint.$patch({ id: data2.value[0].Id }, function() {
-                        //Handle via points
-                        $scope.saveViaPoints();
-                    });
+                points.push({
+                    "StreetName": point.StreetName,
+                    "StreetNumber": point.StreetNumber,
+                    "ZipCode": point.ZipCode,
+                    "Town": point.Town,
+                    "Latitude": "",
+                    "Longitude": "",
+                    "Description": ""
                 });
-
-                NotificationService.AutoFadeNotification("success", "Success", "Slutadresse til ny rute oprettet");
-                $modalInstance.close('');
-            }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Slutadresse blev ikke opdateret");
-                return;
             });
 
-        } else { // IF NO CHANGES
-            $scope.saveViaPoints();
-        }
-    }
+            var endAddress = AddressFormatter.fn($scope.newEndPoint);
 
-    $scope.closeRouteEditModal = function () {
-        $modalInstance.close({
+            points.push({
+                "StreetName": endAddress.StreetName,
+                "StreetNumber": endAddress.StreetNumber,
+                "ZipCode": endAddress.ZipCode,
+                "Town": endAddress.Town,
+                "Latitude": "",
+                "Longitude": "",
+                "Description": ""
+            });
 
-        });
-    };
-
-    $scope.SmartAddress = {
-        type: "json",
-        minLength: 3,
-        serverFiltering: true,
-        crossDomain: true,
-        transport: {
-            read: {
-                url: function (item) {
-                    return 'https://smartadresse.dk/service/locations/3/detect/json/' + item.filter.filters[0].value + '%200';
-                },
-                dataType: "jsonp",
-                data: {
-                    apikey: 'FCF3FC50-C9F6-4D89-9D7E-6E3706C1A0BD',
-                    limit: 15,                   // REST limit
-                    crs: 'EPSG:25832',           // REST projection
-                    nogeo: 'true',                 // REST nogeo
-                    noadrspec: 'true'             // REST noadrspec
+            Route.post({
+                "Description": $scope.newRouteDescription,
+                "PersonId": personId,
+                "Points": points
+            }, function () {
+                if (routeId != undefined) {
+                    NotificationService.AutoFadeNotification("success", "", "Personlig rute blev redigeret.");
+                } else {
+                    NotificationService.AutoFadeNotification("success", "", "Personlig rute blev oprettet.");
                 }
-            }
-        },
-        schema: {
-            data: function (data) {
-                return data.data; // <-- The result is just the data, it doesn't need to be unpacked.
-            }
-        },
-    }
-}]);
+                $modalInstance.close();
+            });
+        }
+
+        $scope.removeViaPoint = function ($index) {
+           $scope.viaPointModels.splice($index, 1);
+        }
+
+        $scope.addNewViaPoint = function () {
+            $scope.viaPointModels.push("");
+        }
+
+        $scope.closeRouteEditModal = function () {
+            $modalInstance.dismiss();
+        };
+
+        $scope.SmartAddress = SmartAdresseSource;
+    }]);

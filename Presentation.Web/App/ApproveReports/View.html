@@ -1,43 +1,39 @@
-﻿<div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-2">
-        <label>Kørselsdato fra</label>
-    </div>
-    <div class="col-md-2">
-        <label>Kørselsdato til</label>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        <input type="text" typeahead-on-select="personChanged()" ng-change="personChanged()" typeahead-editable="true" ng-model="person.chosenPerson" placeholder="Indtast navn" typeahead="person.FullName for person in people | filter:$viewValue" class="form-control" />
-    </div>
-    <div class="col-md-2">
-        <input type="text" typeahead-on-select="orgUnitChanged($item)" ng-change="orgUnitChanged()" typeahead-editable="true" ng-model="orgUnit.chosenUnit" placeholder="Indtast beskrivelse" typeahead="orgUnit.ShortDescription for orgUnit in orgUnits | filter:$viewValue" class="form-control" />
-    </div>
-    <div class="col-md-2">
-        <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.toDateString" k-ng-model="dateContainer.fromDate" ng-change="dateChanged()" />
-    </div>
-    <div class="col-md-2">
-        <input kendo-datepicker culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.fromDateString" k-ng-model="dateContainer.toDate" ng-change="dateChanged()" />
-    </div>
+﻿<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-6 col-lg-2 margin-bottom-10">
+            <label>Sorter efter medarbejder</label>
+            <input type="text" typeahead-on-select="personChanged()" ng-change="personChanged()" typeahead-editable="true" ng-model="person.chosenPerson" placeholder="Indtast navn" typeahead="person.FullName for person in people | filter:$viewValue" class="form-control" />
+        </div>
+        <div class="col-xs-6 col-lg-2 margin-bottom-10">
+            <label>Sorter efter organisation</label>
+            <input type="text" typeahead-on-select="orgUnitChanged($item)" ng-change="orgUnitChanged()" typeahead-editable="true" ng-model="orgUnit.chosenUnit" placeholder="Indtast beskrivelse" typeahead="orgUnit.LongDescription for orgUnit in orgUnits | filter:$viewValue" class="form-control" />
+        </div>
+        <div class="col-xs-6 col-lg-2">
+            <label>Kørselsdato fra</label>
+            <div class="fill-width">
+                <input kendo-datepicker class="fill-width" culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.fromDateString" k-ng-model="dateContainer.fromDate" ng-change="dateChanged()" />
+            </div>
+        </div>
+        <div class="col-xs-6 col-lg-2">
+            <label>Kørselsdato til</label>
+            <div class="fill-width">
+                <input kendo-datepicker class="fill-width" culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.toDateString" k-ng-model="dateContainer.toDate" ng-change="dateChanged()" />
+            </div>
+        </div>
+        <div class="col-xs-6 col-lg-1 pull-right margin-top-15">
+            <button class="btn btn-danger pull-right" ng-click="clearClicked()">Nulstil søgning</button>
+        </div>
 
-    <div class="col-md-1">
-        <button class="btn btn-danger" ng-click="clearClicked()">Nulstil</button>
+        <div class="col-xs-6 col-lg-2 margin-top-15">
+            <label for="showSubsCheckBox">Vis også for <br /> stedfortrædere <br/> og godkendere</label>
+            <input id="showSubsCheckBox" ng-change="showSubsChanged()" type="checkbox" ng-model="checkboxes.showSubbed" />
+        </div>
+
+        <div class="col-xs-12 col-lg-1 margin-top-15 pull-right">
+            <span class="info-popup pull-right margin-5" popover="Du kan klikke på kolonnetitlerne for at sortere tabellen." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+        </div>
     </div>
     
-    <div class="col-md-2">
-        <label for="showSubsCheckBox">Inkludér rapporter <br/> for stedfortræder</label>
-        <input id="showSubsCheckBox" ng-change="showSubsChanged()" type="checkbox" ng-model="checkboxes.showSubbed"/>
-    </div>
-
-    <div class="col-md-1">
-        <span class="info-popup pull-right margin-5" popover="Du kan klikke på kolonnetitlerne for at sortere tabellen." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
-    </div>
-
-
-
-
+    <div kendo-grid="gridContainer.grid" class="margin-top-10 scrollable" options="reports"></div>
 </div>
-<div>
-    <div kendo-grid="gridContainer.grid" class="margin-top-10" options="reports"></div>
-</div>
+

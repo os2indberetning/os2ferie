@@ -8,7 +8,7 @@
                 <label>Vælg stedfortræder:</label>
             </div>
             <div class="col-md-6">
-                <input type="text" typeahead-editable="false" ng-model="person[0]" placeholder="Indtast navn" typeahead="person as person.FullName for person in personsWithoutLeader | filter:$viewValue" class="form-control fill-width " />
+                <input type="text" typeahead-editable="false" ng-model="person[0]" placeholder="Indtast navn" typeahead="person as person.FullName for person in persons | filter:$viewValue" class="form-control fill-width " />
             </div>
         </div>
         
@@ -19,7 +19,7 @@
                 <label>Organisation:</label>
             </div>
             <div class="col-md-6">
-                <select class="form-control fill-width" kendo-drop-down-list="PositionDropDown" k-ng-model="orgUnit" k-data-text-field="'ShortDescription'" id=" " k-data-source="orgUnits" k-data-value-field="'Id'"></select>
+                <select class="form-control fill-width" kendo-drop-down-list="PositionDropDown" k-ng-model="orgUnit" k-data-text-field="'LongDescription'" id=" " k-data-source="orgUnits" k-data-value-field="'Id'"></select>
             </div>
         </div>
 
@@ -49,7 +49,7 @@
 
         <div class="row">
             <div class="col-md-6">
-                <label>Tidsubegrænset:</label>
+                <label>På ubestemt tid:</label>
             </div>
             <div class="col-md-6">
                 <input class="pull-right" type="checkbox" ng-model="infinitePeriod" />

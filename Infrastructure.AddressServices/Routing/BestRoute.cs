@@ -4,6 +4,8 @@ using System.Linq;
 using Core.DomainServices.RoutingClasses;
 using Core.DomainServices.Ínterfaces;
 using Infrastructure.AddressServices.Interfaces;
+using log4net;
+using log4net.Repository.Hierarchy;
 using Address = Core.DomainModel.Address;
 using Core.DomainModel;
 using Core.DomainServices;
@@ -12,6 +14,10 @@ namespace Infrastructure.AddressServices.Routing
 {
     public class BestRoute : IRoute<RouteInformation>
     {
+
+
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
         /// Returns the shortest route within the time limit. (Duration <= 300s , Length difference > 3000m)
         /// </summary>
@@ -84,21 +90,29 @@ namespace Infrastructure.AddressServices.Routing
                 });
             }
 
-            List<RouteInformation> routes = septimaService.GetRoute(routeCoordinates).OrderBy(x => x.Duration).ToList();
-
-            RouteInformation bestRoute = routes[0];
-
-            foreach (var route in routes)
+            try
             {
-                bool betterRoute = (route.Duration - bestRoute.Duration <= 300) && (bestRoute.Length - route.Length > 3000);
-                if (betterRoute)
-                {
-                    bestRoute = route;
-                }
-            }
+                List<RouteInformation> routes =
+                    septimaService.GetRoute(routeCoordinates).OrderBy(x => x.Duration).ToList();
+                RouteInformation bestRoute = routes[0];
 
-            bestRoute.Length /= 1000;
-            return bestRoute;
+                foreach (var route in routes)
+                {
+                    bool betterRoute = (route.Duration - bestRoute.Duration <= 300) && (bestRoute.Length - route.Length > 3000);
+                    if (betterRoute)
+                    {
+                        bestRoute = route;
+                    }
+                }
+
+                bestRoute.Length /= 1000;
+                return bestRoute;
+            }
+            catch (AddressCoordinatesException e)
+            {
+                Logger.Error("Exception when getting route information", e);
+            }
+            return null;
         }
     }
 }

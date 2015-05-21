@@ -8,8 +8,7 @@ namespace Core.DomainModel
         Pending,
         Accepted,
         Rejected,
-        Invoiced,
-        Reported
+        Invoiced
     }
 
     public class Report

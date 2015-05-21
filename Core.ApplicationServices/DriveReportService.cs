@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web.OData;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Impl;
@@ -14,6 +15,7 @@ using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
+using log4net;
 using Ninject;
 using OS2Indberetning;
 
@@ -31,10 +33,12 @@ namespace Core.ApplicationServices
         private readonly IGenericRepository<Substitute> _substituteRepository;
         private readonly IMailSender _mailSender;
 
-        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository)
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IAddressCoordinates coordinates, IRoute<RouteInformation> route)
         {
-            _route = new BestRoute();
-            _coordinates = new AddressCoordinates();
+            _route = route;
+            _coordinates = coordinates;
             _calculator = calculator;
             _orgUnitRepository = orgUnitRepository;
             _employmentRepository = employmentRepository;
@@ -43,50 +47,17 @@ namespace Core.ApplicationServices
             _driveReportRepository = driveReportRepository;
         }
 
-        public void AddFullName(DriveReport driveReport)
-        {
-            if (driveReport == null)
-            {
-                return;
-            }
-            driveReport.FullName = driveReport.Person.FirstName;
-
-            if (!string.IsNullOrEmpty(driveReport.Person.MiddleName))
-            {
-                driveReport.FullName += " " + driveReport.Person.MiddleName;
-            }
-
-            driveReport.FullName += " " + driveReport.Person.LastName;
-            driveReport.FullName += " [" + driveReport.Person.Initials + "]";
-        }
-
-        public IQueryable<DriveReport> AddApprovedByFullName(IQueryable<DriveReport> repo)
-        {
-            foreach (var driveReport in repo.Where(driveReport => driveReport.ApprovedBy != null))
-            {
-                driveReport.ApprovedBy.FullName = driveReport.ApprovedBy.FirstName;
-
-                if (!string.IsNullOrEmpty(driveReport.ApprovedBy.MiddleName))
-                {
-                    driveReport.ApprovedBy.FullName += " " + driveReport.ApprovedBy.MiddleName;
-                }
-
-                driveReport.ApprovedBy.FullName += " " + driveReport.ApprovedBy.LastName;
-
-                driveReport.ApprovedBy.FullName += " [" + driveReport.ApprovedBy.Initials + "]";
-            }
-            return repo;
-        }
-
         public DriveReport Create(DriveReport report)
         {
             if (report.PersonId == 0)
             {
+                Logger.Info("Forsøg på at oprette indberetning uden person angivet.");
                 throw new Exception("No person provided");
             }
 
             if (!Validate(report))
             {
+                Logger.Info("Forsøg på at oprette indberetning med ugyldige parametre.");
                 throw new Exception("DriveReport has some invalid parameters");
             }
 
@@ -103,7 +74,10 @@ namespace Core.ApplicationServices
 
                 report.Distance = (double)drivenRoute.Length / 1000;
 
-
+                if (report.Distance < 0)
+                {
+                    report.Distance = 0;
+                }
             }
 
 
@@ -148,7 +122,7 @@ namespace Core.ApplicationServices
             return report;
         }
 
-        private bool Validate(DriveReport report)
+        public bool Validate(DriveReport report)
         {
             if (report.KilometerAllowance == KilometerAllowance.Read && report.Distance <= 0)
             {
@@ -168,63 +142,113 @@ namespace Core.ApplicationServices
         public void SendMailIfRejectedReport(int key, Delta<DriveReport> delta)
         {
             var status = new object();
-            if (delta.TryGetPropertyValue("Status", out status) && status.ToString().Equals("Rejected"))
+            if (delta.TryGetPropertyValue("Status", out status))
             {
-                var recipient = _driveReportRepository.AsQueryable().First(r => r.Id == key).Person.Mail;
-                var comment = new object();
-                if (delta.TryGetPropertyValue("Comment", out comment))
+                if (status.ToString().Equals("Rejected"))
                 {
-                    _mailSender.SendMail(recipient, "Afvist indberetning",
-                        "Din indberetning er blevet afvist med kommentaren: \n \n" + comment);
+                    var report = _driveReportRepository.AsQueryable().FirstOrDefault(r => r.Id == key);
+                    var recipient = "";
+                    if (report != null && !String.IsNullOrEmpty(report.Person.Mail))
+                    {
+                        recipient = report.Person.Mail;
+                    } else
+                    {
+                        Logger.Info("Forsøg på at sende mail om afvist indberetning til " + report.Person.FullName + ", men der findes ingen emailadresse.");
+                        throw new Exception("Forsøg på at sende mail til person uden emailaddresse");
+                    }
+                    var comment = new object();
+                    if (delta.TryGetPropertyValue("Comment", out comment))
+                    {
+                        _mailSender.SendMail(recipient, "Afvist indberetning",
+                            "Din indberetning er blevet afvist med kommentaren: \n \n" + comment);
+                    }
                 }
+
             }
         }
 
         public IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> repo)
         {
-            var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             var res = repo.ToList();
             foreach (var driveReport in res)
             {
-                var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == driveReport.Employment.OrgUnitId);
+                var responsibleLeader = GetResponsibleLeaderForReport(driveReport);
 
-                if (orgUnit != null)
+                if (responsibleLeader != null)
                 {
-                    var leaderEmpl = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnitId == orgUnit.Id && e.IsLeader);
-                    if (leaderEmpl != null)
-                    {
-                        var leader = leaderEmpl.Person;
-                        var sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
-                        if (sub != null)
-                        {
-                            // Attach sub if one exists.
-                            driveReport.ResponsibleLeader = sub.Sub;
-                            driveReport.ResponsibleLeader.FullName = sub.Sub.FirstName;
-                            if (!string.IsNullOrEmpty(sub.Sub.MiddleName))
-                            {
-                                driveReport.ResponsibleLeader.FullName += " " + sub.Sub.MiddleName;
-                            }
-                            driveReport.ResponsibleLeader.FullName += " " + sub.Sub.LastName;
-                            driveReport.ResponsibleLeader.FullName += " [" + sub.Sub.Initials + "]";
-                        }
-                        else
-                        {
-                            // Attach leader if no sub exists.
-                            driveReport.ResponsibleLeader = leaderEmpl.Person;
+                    SetResponsibleLeaderOnReport(driveReport, responsibleLeader);
 
-                            driveReport.ResponsibleLeader.FullName = leaderEmpl.Person.FirstName;
-                            if (!string.IsNullOrEmpty(leaderEmpl.Person.MiddleName))
-                            {
-                                driveReport.ResponsibleLeader.FullName += " " + leaderEmpl.Person.MiddleName;
-                            }
-                            driveReport.ResponsibleLeader.FullName += " " + leaderEmpl.Person.LastName;
-                            driveReport.ResponsibleLeader.FullName += " [" + leaderEmpl.Person.Initials + "]";
-                        }
-                    }
+                }
+                else
+                {
+                    //Indicate drivereports where we could not find a leader
+                    SetResponsibleLeaderOnReport(driveReport, new Person()
+                    {
+                        FirstName = "Var ikke i stand til at finde godkendende leder",
+                        LastName = "",
+                        Initials = "FEJL"
+                    });
                 }
             }
 
             return res.AsQueryable();
+        }
+
+        public Person GetResponsibleLeaderForReport(DriveReport driveReport)
+        {
+            var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
+            var person = driveReport.Person;
+
+            //Fetch personal approver for the person (Person and Leader of the substitute is the same)
+            var personalApprover =
+                _substituteRepository.AsQueryable()
+                    .SingleOrDefault(
+                        s =>
+                            s.PersonId != s.LeaderId && s.PersonId == person.Id &&
+                            s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
+            if (personalApprover != null)
+            {
+                return personalApprover.Sub;
+            }
+
+            //Find an org unit where the person is not the leader, and then find the leader of that org unit to attach to the drive report
+            var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == driveReport.Employment.OrgUnitId);
+            var leaderOfOrgUnit =
+                _employmentRepository.AsQueryable().FirstOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader);
+
+            if (orgUnit == null)
+            {
+                return null;
+            }
+
+
+
+            while ((leaderOfOrgUnit == null && orgUnit.Level > 0) || (leaderOfOrgUnit != null && leaderOfOrgUnit.PersonId == person.Id))
+            {
+                leaderOfOrgUnit = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.ParentId && e.IsLeader); ;
+                orgUnit = orgUnit.Parent;
+            }
+
+
+            if (orgUnit == null)
+            {
+                return null;
+            }
+            if (leaderOfOrgUnit == null)
+            {
+                return null;
+            }
+
+            var leader = leaderOfOrgUnit.Person;
+            var sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.PersonId.Equals(s.LeaderId));
+
+            return sub != null ? sub.Sub : leaderOfOrgUnit.Person;
+        }
+
+        private void SetResponsibleLeaderOnReport(DriveReport driveReport, Person person)
+        {
+            driveReport.ResponsibleLeader = person;
         }
 
         public IQueryable<DriveReport> FilterByLeader(IQueryable<DriveReport> repo, int leaderId, bool getReportsWhereSubExists = false)
@@ -233,63 +257,84 @@ namespace Core.ApplicationServices
 
             var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
-            var leaderEmpl = _employmentRepository.AsQueryable().Where(e => e.Person.Id == leaderId && e.IsLeader).ToList();
-            if (leaderEmpl.Any())
+            var leaderOrgs = _employmentRepository.AsQueryable().Where(e => e.Person.Id == leaderId && e.IsLeader).Select(e => e.OrgUnit).ToList();
+
+            var subOrgs = _substituteRepository.AsQueryable().Where(sub => sub.Sub.Id.Equals(leaderId) && sub.PersonId.Equals(sub.LeaderId)).Select(s => s.OrgUnit).ToList();
+
+            leaderOrgs.AddRange(subOrgs);
+
+            // Iterate all orgs belonging to the leader or sub.
+            foreach (var org in leaderOrgs)
             {
-                // Iterate all employments belonging to the leader.
-                foreach (var employment in leaderEmpl)
+                // Get the orgunit of the empl.
+                var orgUnitId = org.Id;
+
+                if (getReportsWhereSubExists)
                 {
-                    // Get the orgunit of the empl.
-                    var orgUnitId = employment.OrgUnit.Id;
-
-                    if (getReportsWhereSubExists)
-                    {
-                        // Get the leader of the childOrg if one exists.
-                        var childOrg = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.ParentId == orgUnitId);
-                        if (childOrg != null)
-                        {
-                            var childEmpl = _employmentRepository.AsQueryable().SingleOrDefault(e => e.IsLeader && e.OrgUnit.Id == childOrg.Id);
-                            if (childEmpl != null)
-                            {
-                                // Get and add all reports belonging to the leader of the child org.
-                                var childLeader = childEmpl.Person;
-                                var childLeaderReports = repo.AsQueryable().Where(dr => dr.Person.Id == childLeader.Id && dr.Employment.OrgUnit.Id == childOrg.Id);
-                                result.AddRange(childLeaderReports);
-                            }
-                        }
-                        result.AddRange(
-                            repo.AsQueryable()
-                                .Where(dr => dr.Employment.OrgUnit.Id == orgUnitId && dr.Person.Id != leaderId));
-                    }
-                    else
-                    {
-                        if (!(_substituteRepository.AsQueryable().Any(s => s.Person.Id == leaderId && s.StartDateTimestamp < currentTimestamp && s.EndDateTimestamp > currentTimestamp && s.OrgUnit.Id == orgUnitId)))
-                        {
-                            // Get the leader of the childOrg if one exists.
-                            var childOrg = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.ParentId == orgUnitId);
-                            if (childOrg != null)
-                            {
-                                var childEmpl = _employmentRepository.AsQueryable().SingleOrDefault(e => e.IsLeader && e.OrgUnit.Id == childOrg.Id);
-                                if (childEmpl != null)
-                                {
-                                    // Get and add all reports belonging to the leader of the child org.
-                                    var childLeader = childEmpl.Person;
-                                    var childLeaderReports = repo.AsQueryable().Where(dr => dr.Person.Id == childLeader.Id && dr.Employment.OrgUnit.Id == childOrg.Id);
-                                    result.AddRange(childLeaderReports);
-                                }
-                            }
-                            result.AddRange(
-                                repo.AsQueryable()
-                                    .Where(dr => dr.Employment.OrgUnit.Id == orgUnitId && dr.Person.Id != leaderId));
-                        }
-                    }
-
-
+                    AddReportsOfOrgAndChildOrgLeaders(repo, orgUnitId, result);
                 }
+                else
+                {
+                    if (!(_substituteRepository.AsQueryable().Any(s => s.Person.Id == leaderId && s.StartDateTimestamp < currentTimestamp && s.EndDateTimestamp > currentTimestamp && s.OrgUnit.Id == orgUnitId)))
+                    {
+                        AddReportsOfOrgAndChildOrgLeaders(repo, orgUnitId, result);
+                    }
+                }
+            }
+
+            var personalApproverFor = _substituteRepository.AsQueryable().Where(s => s.Sub.Id == leaderId && !s.PersonId.Equals(s.LeaderId)).ToList();
+            foreach (var substitute in personalApproverFor)
+            {
+                var sub = substitute;
+                result.AddRange(repo.AsQueryable().Where(report => report.PersonId.Equals(sub.PersonId)).ToList());
+            }
+            result = result.Distinct().ToList();
+
+            if (!getReportsWhereSubExists)
+            {
+                var finalResult = new List<DriveReport>();
+
+                // Remove all reports with personal approver.
+                foreach (var driveReport in result)
+                {
+                    var responsibleLeader = GetResponsibleLeaderForReport(driveReport);
+                    if (responsibleLeader.Id.Equals(leaderId))
+                    {
+                        finalResult.Add(driveReport);
+                    }
+                }
+                return finalResult.AsQueryable();
             }
 
             return result.AsQueryable();
         }
 
+        private void AddReportsOfOrgAndChildOrgLeaders(IQueryable<DriveReport> repo, int orgUnitId, List<DriveReport> driveReportList)
+        {
+            //The reports for the leaders of the child org units should also be approved
+            var childOrgs = _orgUnitRepository.AsQueryable().Where(o => o.ParentId == orgUnitId).ToList(); //to list to force a data reader to close
+            foreach (var childOrg in childOrgs)
+            {
+                var org = childOrg;
+                var childEmpls = _employmentRepository.AsQueryable().Where(e => e.IsLeader && e.OrgUnit.Id == org.Id).ToList();
+                if (!childEmpls.Any())
+                {
+                    AddReportsOfOrgAndChildOrgLeaders(repo, org.Id, driveReportList);
+                }
+                foreach (var childEmpl in childEmpls)
+                {
+                    // Get and add all reports belonging to the leader of the child org.
+                    var childLeader = childEmpl.Person;
+                    var childLeaderReports = repo.AsQueryable().Where(dr => dr.Person.Id == childLeader.Id && dr.Employment.OrgUnit.Id == org.Id);
+                    driveReportList.AddRange(childLeaderReports);
+                }
+            }
+
+
+
+            driveReportList.AddRange(
+                repo.AsQueryable()
+                    .Where(dr => dr.Employment.OrgUnit.Id == orgUnitId && !dr.Employment.IsLeader));
+        }
     }
 }

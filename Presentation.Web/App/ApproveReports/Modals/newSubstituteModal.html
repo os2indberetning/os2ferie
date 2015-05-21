@@ -17,10 +17,10 @@
         
         <div class="row">
             <div class="col-md-6">
-                <label>Organisation:</label>
+                <label>Organisationsenhed:</label>
             </div>
             <div class="col-md-6">
-                <select class="fill-width pull-right" kendo-drop-down-list="PositionDropDown" k-ng-model="orgUnit" k-data-text-field="'ShortDescription'" id=" " k-data-source="orgUnits" k-data-value-field="'Id'"></select>
+                <select class="fill-width pull-right" kendo-drop-down-list="PositionDropDown" k-ng-model="orgUnit" k-data-text-field="'LongDescription'" id=" " k-data-source="orgUnits" k-data-value-field="'Id'"></select>
             </div>
         </div>  
         
@@ -50,7 +50,7 @@
 
         <div class="row">
             <div class="col-md-6">
-                <label>Tidsubegrænset:</label>
+                <label>På ubestemt tid:</label>
             </div>
             <div class="col-md-6">
                 <input class="pull-right" type="checkbox" ng-model="infinitePeriod" />

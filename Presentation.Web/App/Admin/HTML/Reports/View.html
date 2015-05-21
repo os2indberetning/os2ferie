@@ -1,55 +1,53 @@
-﻿<div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">
-            Alle indberetninger
-        </h1>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-12">
+﻿<div class="panel panel-default">
 
 
 
-        <tabset justified="true">
-            <tab heading="Afventer godkendelse" ng-controller="AdminPendingReportsController">
-                <div class="panel panel-default">
 
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-file-text-o fa-fw"></i> Afventende</h3>
-                    </div>
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-lg-12">
 
 
 
-                    <div class="panel-body">
-                        <div ng-include="'App/Admin/HTML/Reports/InnerView.html'"></div>
-                    </div>
-                </div>
-            </tab>
+                <tabset justified="false">
+                    <tab heading="Afventer godkendelse" ng-controller="AdminPendingReportsController" ng-click="refreshGrid()">
+                        <div class="panel panel-default">
 
-            <tab heading="Godkendte" ng-controller="AdminAcceptedReportsController">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-file-text-o fa-fw"></i> Godkendte</h3>
-                    </div>
 
-                    <div class="panel-body">
-                        <div ng-include="'App/Admin/HTML/Reports/InnerView.html'"></div>
-                    </div>
-                </div>
-            </tab>
+                            <div class="panel-body">
+                                <h2>Afventer godkendelse</h2>
+                                <div ng-include="'App/Admin/HTML/Reports/InnerView.html'"></div>
+                            </div>
+                        </div>
+                    </tab>
 
-            <tab heading="Afviste" ng-controller="AdminRejectedReportsController">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-file-text-o fa-fw"></i> Afviste</h3>
-                    </div>
+                    <tab heading="Godkendte" ng-controller="AdminAcceptedReportsController" ng-click="refreshGrid()">
+                        <div class="panel panel-default">
 
-                    <div class="panel-body">
-                        <div ng-include="'App/Admin/HTML/Reports/InnerView.html'"></div>
-                    </div>
-                </div>
-            </tab>
-        </tabset>
+                            <div class="panel-body">
+                                <div class="col-xs-12">
+                                    <h2>Godkendte</h2>
+                                </div>
+                                <div ng-include="'App/Admin/HTML/Reports/InnerView.html'"></div>
+                            </div>
+                        </div>
+                    </tab>
+
+                    <tab heading="Afviste" ng-controller="AdminRejectedReportsController" ng-click="refreshGrid()">
+                        <div class="panel panel-default">
+
+
+                            <div class="panel-body">
+                                <div class="col-xs-12">
+                                    <h2>Afviste</h2>
+                                </div>
+                                <div ng-include="'App/Admin/HTML/Reports/InnerView.html'"></div>
+                            </div>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
     </div>
 </div>

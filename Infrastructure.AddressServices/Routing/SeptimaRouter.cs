@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Core.DomainServices.RoutingClasses;
+using log4net;
 using Newtonsoft.Json.Linq;
 
 namespace Infrastructure.AddressServices.Routing
@@ -11,6 +12,8 @@ namespace Infrastructure.AddressServices.Routing
 	public class SeptimaRouter
 	{
 		#region Public methods
+
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 		/// <summary>
 		/// Get routes and alternative routes for the given set of coordinates.
@@ -26,14 +29,19 @@ namespace Infrastructure.AddressServices.Routing
 
 			if (result == null)
 			{
-				throw new RouteInformationException("No route returned.");
+				var e =  new RouteInformationException("No route returned.");
+                Logger.Error("Exception when getting route information", e);
+                throw e;
 			}
 
 			if (result.status != 0)
 			{
-				throw new RouteInformationException("No route found.");
+                var e = new RouteInformationException("No route found.");;
+                Logger.Error("Exception when getting route information", e);
+			    throw e;
 			}
-			var route = new RouteInformation();
+
+            var route = new RouteInformation();
 
 			route.Length = result.route_summary.total_distance;
 			route.Duration = result.route_summary.total_time;
@@ -78,12 +86,16 @@ namespace Infrastructure.AddressServices.Routing
 			}
 			catch (InvalidOperationException e)
 			{
-				throw new RouteInformationException("Mutltiple coordinates with type Origin and/or Destination.", e);
+                var up = new RouteInformationException("Mutltiple coordinates with type Origin and/or Destination.", e);
+                Logger.Error("Multiple coordinates with type origin and/or destination", up);
+                throw up;
 			}
 
 			if (origin == null || destination == null)
 			{
-				throw new RouteInformationException("Coordinate of type Origin and/or Destination missing.");
+                var up = new RouteInformationException("Coordinate of type Origin and/or Destination missing.");
+                Logger.Error("Coordinate of type Origin and/or destination missing.", up);
+                throw up;
 			}
 
 			if( !((origin.Latitude.Length - origin.Latitude.IndexOf(".") + 1) <= 5) )
@@ -118,7 +130,9 @@ namespace Infrastructure.AddressServices.Routing
 			}
 			catch (WebException e)
 			{
-				throw new RouteInformationException("Server error, coordinates invalid.", e);
+                var up = new RouteInformationException("Server error", e);
+			    Logger.Error("Server error", up);
+			    throw up;
 			}
 
 			if (responseStream == null) return null;

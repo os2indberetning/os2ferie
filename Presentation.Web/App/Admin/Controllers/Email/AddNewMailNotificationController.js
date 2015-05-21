@@ -1,5 +1,7 @@
 ﻿angular.module("application").controller("AddNewMailNotificationController", [
-    "$scope", "$modalInstance", "NotificationService", "StandardAddress", "AddressFormatter", "SmartAdresseSource", function ($scope, $modalInstance, NotificationService, AddressFormatter, SmartAdresseSource) {
+    "$scope", "$modalInstance", "NotificationService", "StandardAddress", "AddressFormatter", "SmartAdresseSource",
+    function ($scope, $modalInstance, NotificationService, StandardAddress, AddressFormatter, SmartAdresseSource) {
+
 
         $scope.repeatMonthly = "";
 
@@ -35,14 +37,14 @@
 
             if (!error) {
                 $modalInstance.close(result);
-                NotificationService.AutoFadeNotification("success", "Opret", "Email-adviseringen blev oprettet.");
+                NotificationService.AutoFadeNotification("success", "", "Email-adviseringen blev oprettet.");
             }
-            
+
         }
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
-            NotificationService.AutoFadeNotification("warning", "Opret", "Oprettelse af email adviseringen blev annulleret.");
+            NotificationService.AutoFadeNotification("warning", "", "Oprettelse af email adviseringen blev annulleret.");
         }
     }
 ]);

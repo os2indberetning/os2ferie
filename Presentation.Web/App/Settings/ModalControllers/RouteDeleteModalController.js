@@ -1,9 +1,10 @@
 ﻿angular.module("application").controller('RouteDeleteModalInstanceController', [
-    "$scope", "Route", "Point", "NotificationService", "$modalInstance", "routeId", "personId", "AddressFormatter", function ($scope, Route, Point, NotificationService, $modalInstance, routeId, personId, AddressFormatter) {
+    "$scope", "Route", "Point", "NotificationService" +
+    "", "$modalInstance", "routeId", "personId", "AddressFormatter", function ($scope, Route, Point, NotificationService, $modalInstance, routeId, personId, AddressFormatter) {
   
         $scope.confirmDelete = function () {
             Route.delete({ id: routeId }, function() {
-                NotificationService.AutoFadeNotification("success", "Success", "Rute slettet");
+                NotificationService.AutoFadeNotification("success", "", "Rute slettet");
                 $modalInstance.close('');
             });
         }

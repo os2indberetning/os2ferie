@@ -1,9 +1,29 @@
 ﻿angular.module("application").controller("RejectedReportsController", [
    "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService) {
 
-       var personId = 1;
+       // Set personId. The value on $rootScope is set in resolve in application.js
+       var personId = $rootScope.CurrentUser.Id;
 
        var allReports = [];
+
+
+       $scope.getEndOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.endOf('day').unix();
+       }
+
+       $scope.getStartOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.startOf('day').unix();
+       }
+
+
+
+       // dates for kendo filter.
+       var fromDateFilter = new Date();
+       fromDateFilter.setDate(fromDateFilter.getDate() - 30);
+       fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
+       var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
        $scope.checkboxes = {};
        $scope.checkboxes.showSubbed = false;
@@ -21,30 +41,30 @@
 
 
        $scope.showSubsChanged = function () {
-           $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/DriveReports?leaderId=" + personId + "&status=Rejected" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints",
+           $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/DriveReports?leaderId=" + personId + "&status=Rejected" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints";
            $scope.gridContainer.grid.dataSource.read();
        }
 
-       $scope.applyOrgUnitFilter = function (shortDescription) {
+       $scope.applyOrgUnitFilter = function (longDescription) {
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            var newFilters = [];
 
 
            if (oldFilters == undefined) {
                // If no filters exist, just add the filters.
-               if (shortDescription != "") {
-                   newFilters.push({ field: "Employment.OrgUnit.ShortDescription", operator: "eq", value: shortDescription });
+               if (longDescription != "") {
+                   newFilters.push({ field: "Employment.OrgUnit.LongDescription", operator: "eq", value: longDescription });
                }
            } else {
                // If filters already exist then get the old filters, that arent drivedate.
                // Then add the new drivedate filters to these.
                angular.forEach(oldFilters.filters, function (value, key) {
-                   if (value.field != "Employment.OrgUnit.ShortDescription") {
+                   if (value.field != "Employment.OrgUnit.LongDescription") {
                        newFilters.push(value);
                    }
                });
-               if (shortDescription != "") {
-                   newFilters.push({ field: "Employment.OrgUnit.ShortDescription", operator: "eq", value: shortDescription });
+               if (longDescription != "") {
+                   newFilters.push({ field: "Employment.OrgUnit.LongDescription", operator: "eq", value: longDescription });
                }
 
            }
@@ -142,7 +162,7 @@
            }
            var newFilters = [];
            angular.forEach(oldFilters.filters, function (value, key) {
-               if (value.field != "Employment.OrgUnit.ShortDescription") {
+               if (value.field != "Employment.OrgUnit.LongDescription") {
                    newFilters.push(value);
                }
            });
@@ -169,6 +189,7 @@
                    serverPaging: true,
                    serverSorting: true,
                    serverFiltering: true,
+                   filter: [{ field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }],
                    sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
                    aggregate: [
                         { field: "Distance", aggregate: "sum" },
@@ -202,7 +223,7 @@
                    field: "FullName",
                    title: "Medarbejder"
                }, {
-                   field: "Employment.OrgUnit.ShortDescription",
+                   field: "Employment.OrgUnit.LongDescription",
                    title: "Organisationsenhed"
                }, {
                    field: "DriveDateTimestamp",
@@ -245,14 +266,14 @@
                    template: function (data) {
                        return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
                    },
-                   footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
                }, {
                    field: "AmountToReimburse",
                    title: "Beløb",
                    template: function (data) {
                        return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
                    },
-                   footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
                }, {
                    field: "KilometerAllowance",
                    title: "Merkørsel",
@@ -340,15 +361,7 @@
            $scope.allPagesDistanceSum = resDistance.toFixed(2).toString().replace('.', ',');
        }
 
-       $scope.getEndOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.endOf('day').unix();
-       }
-
-       $scope.getStartOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.startOf('day').unix();
-       }
+      
 
        // Event handlers
 
@@ -398,7 +411,9 @@
            });
        }
 
-
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
 
        // Init

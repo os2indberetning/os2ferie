@@ -1,12 +1,14 @@
 ﻿angular.module("application").controller("ApproveReportsSettingsController", [
-   "$scope", "OrgUnit", "Person", "$modal", function ($scope, OrgUnit, Person, $modal) {
+   "$scope", "$rootScope", "OrgUnit", "Person", "$modal", function ($scope, $rootScope, OrgUnit, Person, $modal) {
        $scope.collapseSubtitute = false;
        $scope.collapsePersonalApprover = false;
        $scope.orgUnits = [];
        $scope.persons = [];
        $scope.currentPerson = {};
 
-       var personId = 1;
+       // Set personId. The value on $rootScope is set in resolve in application.js
+       var personId = $rootScope.CurrentUser.Id;
+       $scope.showSubstituteSettings = $rootScope.CurrentUser.IsLeader;
 
        Person.get({ id: personId }, function (data) {
            $scope.currentPerson = data;
@@ -87,7 +89,7 @@
                    field: "Person.FullName",
                    title: "Stedfortræder for"
                }, {
-                   field: "OrgUnit.ShortDescription",
+                   field: "OrgUnit.LongDescription",
                    title: "Organisationsenhed",
                }, {
                    field: "Leader.FullName",
@@ -98,15 +100,15 @@
                    template: function (data) {
                        var m = moment.unix(data.StartDateTimestamp);
                        return m._d.getDate() + "/" +
-                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                           m._d.getFullYear();
+                             (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                              m._d.getFullYear();
                    }
                }, {
                    title: "Til",
                    field: "EndDateTimestamp",
                    template: function (data) {
                        if (data.EndDateTimestamp == 9999999999) {
-                           return "Tidsubegrænset";
+                           return "På ubestemt tid";
                        }
                        var m = moment.unix(data.EndDateTimestamp);
                        return m._d.getDate() + "/" +
@@ -195,7 +197,7 @@
                    title: "Til",
                    template: function (data) {
                        if (data.EndDateTimestamp == 9999999999) {
-                           return "Tidsubegrænset";
+                           return "På ubestemt tid";
                        }
                        var m = moment.unix(data.EndDateTimestamp);
                        return m._d.getDate() + "/" +
@@ -269,7 +271,7 @@
                    field: "Person.FullName",
                    title: "Stedfortræder for"
                }, {
-                   field: "OrgUnit.ShortDescription",
+                   field: "OrgUnit.LongDescription",
                    title: "Organisationsenhed",
                }, {
                    field: "Leader.FullName",
@@ -288,7 +290,7 @@
                    field: "EndDateTimestamp",
                    template: function (data) {
                        if (data.EndDateTimestamp == 9999999999) {
-                           return "Tidsubegrænset";
+                           return "På ubestemt tid";
                        }
                        var m = moment.unix(data.EndDateTimestamp);
                        return m._d.getDate() + "/" +
@@ -480,6 +482,10 @@
 
            $('#personalApproverGrid').data('kendoGrid').dataSource.read();
            $("#personalApproverGrid").data('kendoGrid').refresh();
+
+           $('#mySubstitutesGrid').data('kendoGrid').dataSource.read();
+           $("#mySubstitutesGrid").data('kendoGrid').refresh();
+
        }
    }
 ]);

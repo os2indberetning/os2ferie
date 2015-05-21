@@ -4,16 +4,14 @@
 		cprNumber: string;
 		personId: number;
 		firstName: string;
-		middleName: string;
 		lastName: string;
 		mail: string;
-		workDistanceOverride: number;
 		recieveMail: boolean;
 		distanceFromHomeToBorder: number;
 		initials: string;
 		fullName: string;
-		distanceFromHomeToWork: number;
 		isAdmin: boolean;
+		isSubstitute: boolean;
 		personalAddresses: any[];
 		personalRoutes: any[];
 		licensePlates: any[];

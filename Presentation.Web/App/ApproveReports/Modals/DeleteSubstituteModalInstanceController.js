@@ -1,5 +1,6 @@
 ﻿angular.module('application').controller('ConfirmDeleteSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId) {
+    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId",
+        function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId) {
 
         $scope.persons = persons;
         $scope.orgUnits = orgUnits;
@@ -11,7 +12,7 @@
             console.log($scope.substitute);
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000).toLocaleDateString();
             if ($scope.substitute.EndDateTimestamp == 9999999999) {
-                $scope.substituteToDate = "tidsubegrænset";
+                $scope.substituteToDate = "På ubestemt tid";
             } else {
                 $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000).toLocaleDateString();
             }
@@ -27,10 +28,10 @@
             var sub = new Substitute();
 
             sub.$delete({ id: $scope.substitute.Id }, function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Stedfortræderen er blev slettet gemt");
+                NotificationService.AutoFadeNotification("success", "", "Stedfortræderen er blev slettet gemt");
                 $modalInstance.close();
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke slette stedfortræder");
+                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke slette stedfortræder");
             });
         };
 

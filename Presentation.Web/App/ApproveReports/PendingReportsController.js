@@ -7,8 +7,8 @@
        $scope.orgUnit = {};
        $scope.orgUnits = [];
 
-       //Hardcoded personid 
-       var personId = 1;
+       // Set personId. The value on $rootScope is set in resolve in application.js
+       var personId = $rootScope.CurrentUser.Id;
 
        OrgUnit.get().$promise.then(function (res) {
            $scope.orgUnits = res.value;
@@ -18,6 +18,21 @@
            $scope.applyOrgUnitFilter($scope.orgUnit.chosenUnit);
        }
 
+       $scope.getEndOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.endOf('day').unix();
+       }
+
+       $scope.getStartOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.startOf('day').unix();
+       }
+
+       // dates for kendo filter.
+       var fromDateFilter = new Date();
+       fromDateFilter.setDate(fromDateFilter.getDate() - 30);
+       fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
+       var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
        $scope.checkAllBox = {};
 
@@ -46,30 +61,30 @@
        };
 
        $scope.showSubsChanged = function () {
-           $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/DriveReports?leaderId=" + personId + "&status=Pending" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints",
+           $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/DriveReports?leaderId=" + personId + "&status=Pending" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints, ResponsibleLeader";
            $scope.gridContainer.grid.dataSource.read();
        }
 
-       $scope.applyOrgUnitFilter = function (shortDescription) {
+       $scope.applyOrgUnitFilter = function (longDescription) {
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            var newFilters = [];
 
 
            if (oldFilters == undefined) {
                // If no filters exist, just add the filters.
-               if (shortDescription != "") {
-                   newFilters.push({ field: "Employment.OrgUnit.ShortDescription", operator: "eq", value: shortDescription });
+               if (longDescription != "") {
+                   newFilters.push({ field: "Employment.OrgUnit.LongDescription", operator: "eq", value: longDescription });
                }
            } else {
                // If filters already exist then get the old filters, that arent ShortDescription.
                // Then add the new drivedate filters to these.
                angular.forEach(oldFilters.filters, function (value, key) {
-                   if (value.field != "Employment.OrgUnit.ShortDescription") {
+                   if (value.field != "Employment.OrgUnit.LongDescription") {
                        newFilters.push(value);
                    }
                });
-               if (shortDescription != "") {
-                   newFilters.push({ field: "Employment.OrgUnit.ShortDescription", operator: "eq", value: shortDescription });
+               if (longDescription != "") {
+                   newFilters.push({ field: "Employment.OrgUnit.LongDescription", operator: "eq", value: longDescription });
                }
 
            }
@@ -167,7 +182,7 @@
            }
            var newFilters = [];
            angular.forEach(oldFilters.filters, function (value, key) {
-               if (value.field != "Employment.OrgUnit.ShortDescription") {
+               if (value.field != "Employment.OrgUnit.LongDescription") {
                    newFilters.push(value);
                }
            });
@@ -180,7 +195,7 @@
                type: "odata-v4",
                transport: {
                    read: {
-                       url: "/odata/DriveReports?leaderId=" + personId + "&status=Pending" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints",
+                       url: "/odata/DriveReports?leaderId=" + personId + "&status=Pending" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints, ResponsibleLeader",
                    },
 
                },
@@ -195,6 +210,7 @@
                serverAggregates: false,
                serverSorting: true,
                serverFiltering: true,
+               filter: [{ field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }],
                sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
                aggregate: [
                    { field: "Distance", aggregate: "sum" },
@@ -235,7 +251,7 @@
                field: "FullName",
                title: "Medarbejder"
            }, {
-               field: "Employment.OrgUnit.ShortDescription",
+               field: "Employment.OrgUnit.LongDescription",
                title: "Organisationsenhed"
            }, {
                field: "DriveDateTimestamp",
@@ -283,14 +299,14 @@
                template: function(data) {
                    return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
                },
-               footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+               footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
            }, {
                field: "AmountToReimburse",
                title: "Beløb",
                template: function(data) {
                    return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
                },
-               footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+               footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
            }, {
                field: "KilometerAllowance",
                title: "Merkørsel",
@@ -321,8 +337,18 @@
            }, {
                sortable: false,
                field: "Id",
-               template: "<a ng-click=approveClick(${Id})>Godkend</a> | <a ng-click=rejectClick(${Id})>Afvis</a> <div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[${Id}]' ng-change='rowChecked(${Id})'></input></div>",
-               headerTemplate: "Muligheder <div class='col-md-1 pull-right'><input ng-change='checkAllBoxesOnPage()' type='checkbox' ng-model='checkAllBox.isChecked'></input></div>",
+               template: function (data) {
+                   if (data.ResponsibleLeader.Id == data.PersonId) {
+                       return "Indberetning skal godkendes af din leder eller opsat personlig godkender.";
+                   }
+                   if (data.ResponsibleLeader.Id == $rootScope.CurrentUser.Id) {
+                       return "<a ng-click=approveClick(" + data.Id + ")>Godkend</a> | <a ng-click=rejectClick(" + data.Id + ")>Afvis</a> <div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[" + data.Id + "]' ng-change='rowChecked(" + data.Id + ")'></input></div>";
+                   } else {
+                       return data.ResponsibleLeader.FullName + " er udpeget som godkender.";
+                   }
+                   
+               },
+               headerTemplate: "Muligheder <div class='col-sm-1 pull-right'><input ng-change='checkAllBoxesOnPage()' type='checkbox' ng-model='checkAllBox.isChecked'></input></div>",
                footerTemplate: "<div class='pull-right fill-width' kendo-toolbar k-options='approveSelectedToolbar'></div>"
            }
            ],
@@ -375,15 +401,7 @@
 
 
 
-       $scope.getEndOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.endOf('day').unix();
-       }
-
-       $scope.getStartOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.startOf('day').unix();
-       }
+      
 
        // Event handlers
 
@@ -414,7 +432,11 @@
            });
 
            modalInstance.result.then(function () {
-               Report.patch({ id: id }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix() }, function () {
+               Report.patch({ id: id }, {
+                   "Status": "Accepted",
+                   "ClosedDateTimestamp": moment().unix(),
+                   "ApprovedById": $rootScope.CurrentUser.Id,
+           }, function () {
                    $scope.gridContainer.grid.dataSource.read();
                });
            });
@@ -422,7 +444,7 @@
 
        function approveSelectedWithAccountClick() {
            if (checkedReports.length == 0) {
-               NotificationService.AutoFadeNotification("danger", "Fejl", "Ingen indberetninger er markerede!");
+               NotificationService.AutoFadeNotification("danger", "", "Ingen indberetninger er markerede!");
            } else {
                var modalInstance = $modal.open({
                    templateUrl: '/App/ApproveReports/Modals/ConfirmApproveSelectedWithAccountTemplate.html',
@@ -438,7 +460,12 @@
 
                modalInstance.result.then(function (accountNumber) {
                    angular.forEach(checkedReports, function (value, key) {
-                       Report.patch({ id: value }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix(), "AccountNumber": accountNumber }, function () {
+                       Report.patch({ id: value }, {
+                           "Status": "Accepted",
+                           "ClosedDateTimestamp": moment().unix(),
+                           "AccountNumber": accountNumber,
+                           "ApprovedById": $rootScope.CurrentUser.Id,
+                       }, function () {
                            $scope.gridContainer.grid.dataSource.read();
                        });
                    });
@@ -449,7 +476,7 @@
 
        function approveSelectedClick() {
            if (checkedReports.length == 0) {
-               NotificationService.AutoFadeNotification("danger", "Fejl", "Ingen indberetninger er markerede!");
+               NotificationService.AutoFadeNotification("danger", "", "Ingen indberetninger er markerede!");
            } else {
                var modalInstance = $modal.open({
                    templateUrl: '/App/ApproveReports/Modals/ConfirmApproveSelectedTemplate.html',
@@ -464,9 +491,12 @@
                });
 
                modalInstance.result.then(function () {
-                   debugger;
                    angular.forEach(checkedReports, function (value, key) {
-                       Report.patch({ id: value }, { "Status": "Accepted", "ClosedDateTimestamp": moment().unix() }, function () {
+                       Report.patch({ id: value }, {
+                           "Status": "Accepted",
+                           "ClosedDateTimestamp": moment().unix(),
+                           "ApprovedById": $rootScope.CurrentUser.Id,
+                       }, function () {
                            $scope.gridContainer.grid.dataSource.read();
                        });
                    });
@@ -523,7 +553,12 @@
            });
 
            modalInstance.result.then(function (res) {
-               Report.patch({ id: id }, { "Status": "Rejected", "ClosedDateTimestamp": moment().unix(), "Comment": res.Comment }, function () {
+               Report.patch({ id: id }, {
+                   "Status": "Rejected",
+                   "ClosedDateTimestamp": moment().unix(),
+                   "Comment": res.Comment,
+                   "ApprovedById": $rootScope.CurrentUser.Id,
+               }, function () {
                    $scope.gridContainer.grid.dataSource.read();
 
                });
@@ -550,7 +585,9 @@
        }
 
 
-
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
 
 
@@ -574,7 +611,6 @@
 
        $scope.personChanged = function (item) {
            $scope.applyPersonFilter($scope.person.chosenPerson);
-
        }
 
        $scope.person.chosenPerson = "";

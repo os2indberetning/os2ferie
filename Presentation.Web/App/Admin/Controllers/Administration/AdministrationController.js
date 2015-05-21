@@ -1,5 +1,6 @@
 ﻿angular.module("application").controller("AdministrationController", [
-   "$scope", "Person", "$modal", "NotificationService", "File", function ($scope, Person, $modal, NotificationService, File) {
+   "$scope", "Person", "$modal", "NotificationService", "File",
+   function ($scope, Person, $modal, NotificationService, File) {
 
        Person.getNonAdmins(function (res) {
            $scope.nonAdmins = res.value;
@@ -92,13 +93,13 @@
 
            modalInstance.result.then(function (resPerson) {
                Person.patch({ id: resPerson.Id }, { "IsAdmin": false }, function () {
-                   NotificationService.AutoFadeNotification("success", "Godkendt", resPerson.FullName + " blev slettet som administrator.");
+                   NotificationService.AutoFadeNotification("success", "", resPerson.FullName + " blev slettet som administrator.");
                    $scope.gridContainer.grid.dataSource.read();
                    Person.getNonAdmins(function (res) {
                        $scope.nonAdmins = res.value;
                    });
                }, function () {
-                   NotificationService.AutoFadeNotification("danger", "Fejl", resPerson.FullName + " blev ikke slettet som administrator.");
+                   NotificationService.AutoFadeNotification("danger", "", resPerson.FullName + " blev ikke slettet som administrator.");
                });
            });
        }
@@ -122,14 +123,14 @@
 
            modalInstance.result.then(function (person) {
                Person.patch({ id: person.Id }, { "IsAdmin": true }, function () {
-                   NotificationService.AutoFadeNotification("success", "Godkendt", person.FullName + " blev gjort til administrator.");
+                   NotificationService.AutoFadeNotification("success", "", person.FullName + " blev gjort til administrator.");
                    $scope.gridContainer.grid.dataSource.read();
                    Person.getNonAdmins(function (res) {
                        $scope.nonAdmins = res.value;
                    });
                    $scope.person.chosenAdmin = "";
                }, function () {
-                   NotificationService.AutoFadeNotification("danger", "Fejl", person.FullName + " blev ikke gjort til administrator.");
+                   NotificationService.AutoFadeNotification("danger", "", person.FullName + " blev ikke gjort til administrator.");
                });
            });
        }
@@ -144,9 +145,9 @@
 
            modalInstance.result.then(function (person) {
                File.generateKMDFile(function () {
-                   NotificationService.AutoFadeNotification("success", "Genereret", "Fil til KMD blev genereret.");
+                   NotificationService.AutoFadeNotification("success", "", "Fil til KMD blev genereret.");
                }, function () {
-                   NotificationService.AutoFadeNotification("danger", "Fejl", "Fil til KMD blev ikke genereret.");
+                   NotificationService.AutoFadeNotification("danger", "", "Fil til KMD blev ikke genereret.");
                });
            });
        }

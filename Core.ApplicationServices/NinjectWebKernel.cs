@@ -9,11 +9,14 @@ using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices;
+using Infrastructure.AddressServices.Interfaces;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 using Ninject;
 using Ninject.Web.Common;
 using OS2Indberetning;
+using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
+
 namespace Core.ApplicationServices
 {
     public static class NinjectWebKernel 
@@ -64,7 +67,9 @@ namespace Core.ApplicationServices
             kernel.Bind<IRoute<RouteInformation>>().To<BestRoute>();
             kernel.Bind<IReimbursementCalculator>().To<ReimbursementCalculator>();
             kernel.Bind<ILicensePlateService>().To<LicensePlateService>();
-
+            kernel.Bind<IPersonalRouteService>().To<PersonalRouteService>();
+            kernel.Bind<IAddressLaunderer>().To<AddressLaundering>();
+            kernel.Bind<IOrgUnitService>().To<OrgUnitService>();
         }        
     }
 }

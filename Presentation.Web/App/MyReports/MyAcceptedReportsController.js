@@ -1,8 +1,24 @@
 angular.module("application").controller("MyAcceptedReportsController", [
    "$scope", "$modal", "$rootScope", "Report", "$timeout", function ($scope, $modal, $rootScope, Report, $timeout) {
 
-       // Hardcoded personid until we can get current user from their system.
-       var personId = 1;
+       // Set personId. The value on $rootScope is set in resolve in application.js
+       var personId = $rootScope.CurrentUser.Id;
+
+       $scope.getEndOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.endOf('day').unix();
+       }
+
+       $scope.getStartOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.startOf('day').unix();
+       }
+
+       // dates for kendo filter.
+       var fromDateFilter = new Date();
+       fromDateFilter.setDate(fromDateFilter.getDate() - 30);
+       fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
+       var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
        $scope.loadReports = function () {
            $scope.Reports = {
@@ -40,7 +56,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
                    serverAggregates: false,
                    serverSorting: true,
                    serverFiltering: true,
-                   filter: [{ field: "PersonId", operator: "eq", value: personId }],
+                   filter: [{ field: "PersonId", operator: "eq", value: personId }, { field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }],
                    sort: { field: "DriveDateTimestamp", dir: "desc" },
                    aggregate: [
                    { field: "Distance", aggregate: "sum" },
@@ -120,14 +136,14 @@ angular.module("application").controller("MyAcceptedReportsController", [
                       template: function (data) {
                           return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
                       },
-                      footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+                      footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
                   }, {
                       field: "AmountToReimburse",
                       title: "Beløb",
                       template: function (data) {
                           return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
                       },
-                      footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+                      footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
                   }, {
                       field: "CreationDate",
                       template: function (data) {
@@ -146,6 +162,18 @@ angular.module("application").controller("MyAcceptedReportsController", [
                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                  m._d.getFullYear();
                       },
+                  }, {
+                      field: "ProcessedDateTimestamp",
+                      title: "Afsendt til løn",
+                      template: function (data) {
+                          if (data.ProcessedDateTimestamp != 0 && data.ProcessedDateTimestamp != null && data.ProcessedDateTimestamp != undefined) {
+                              var m = moment.unix(data.ProcessedDateTimestamp);
+                              return m._d.getDate() + "/" +
+                                  (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                  m._d.getFullYear();
+                          }
+                          return "";
+                      }
                   }, {
                       field: "ApprovedBy.FullName",
                       title: "Godkendt af"
@@ -172,15 +200,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
            $scope.dateContainer.fromDate = from;
        }
 
-       $scope.getEndOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.endOf('day').unix();
-       }
-
-       $scope.getStartOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.startOf('day').unix();
-       }
+      
 
 
        var initialLoad = 2;
@@ -201,6 +221,10 @@ angular.module("application").controller("MyAcceptedReportsController", [
                }
                initialLoad--;
            }, 0);
+       }
+
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
        }
 
 

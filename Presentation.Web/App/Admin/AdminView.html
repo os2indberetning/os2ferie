@@ -1,42 +1,48 @@
-﻿<div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">
-            Administration
-        </h1>
-        <tabset class="nav nav-pills" justified="true">
+﻿
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Administrator
+            </h1>
+            <tabset class="nav nav-pills" justified="false">
 
-            <tab heading="Standardadresser" ng-controller="StandardAddressController">
-                <div ng-include='"App/Admin/HTML/Address/View.html"'></div>
-            </tab>
+                <tab heading="Standardadresser" ng-controller="StandardAddressController">
+                    <div ng-include='"App/Admin/HTML/Address/View.html"'></div>
+                </tab>
 
-            <tab heading="Emailadviseringer" ng-controller="EmailNotificationController">
-                <div ng-include='"App/Admin/HTML/Email/View.html"'></div>
-            </tab>
+                <tab heading="Emailadviseringer" ng-controller="EmailNotificationController">
+                    <div ng-include='"App/Admin/HTML/Email/View.html"'></div>
+                </tab>
 
-            <tab heading="Takster" ng-controller="RateController">
-                <div ng-include='"App/Admin/HTML/Rate/View.html"'></div>
-            </tab>
+                <tab heading="Takster" ng-controller="RateController">
+                    <div ng-include='"App/Admin/HTML/Rate/View.html"'></div>
+                </tab>
 
-            <tab heading="Afvigende kontering" ng-controller="AccountController">
-                <div ng-include='"App/Admin/HTML/Account/View.html"'></div>
-            </tab>
-            
-            <tab heading="Organisationsenheder" ng-controller="OrgUnitController">
-                <div ng-include='"App/Admin/HTML/OrgUnit/View.html"'></div>
-            </tab>
-            
-            <tab heading="Administration" ng-controller="AdministrationController">
-                <div ng-include='"App/Admin/HTML/Administration/View.html"'></div>
-            </tab>
-            
-            <tab heading="Indberetninger" ng-controller="AdminPendingReportsController">
-                <div ng-include='"App/Admin/HTML/Reports/View.html"'></div>
-            </tab>
-            
-            <tab heading="Stedfortrædere/Godkendere" ng-controller="SubstituteController">
-                <div ng-include='"App/Admin/HTML/Substitutes/View.html"'></div>
-            </tab>
+                <tab heading="Afvigende kontering" ng-controller="AccountController">
+                    <div ng-include='"App/Admin/HTML/Account/View.html"'></div>
+                </tab>
+                <tab heading="Opsæt 4 km-regel" ng-controller="OrgUnitController">
+                    <div ng-include='"App/Admin/HTML/OrgUnit/View.html"'></div>
+                </tab>
 
-        </tabset>
+                <tab heading="Administration" ng-controller="AdministrationController">
+                    <div ng-include='"App/Admin/HTML/Administration/View.html"'></div>
+                </tab>
+
+                <tab heading="Indberetninger" ng-controller="AdminPendingReportsController">
+                    <div ng-include='"App/Admin/HTML/Reports/View.html"'></div>
+                </tab>
+
+                <tab heading="Stedfortrædere/Godkendere" ng-controller="SubstituteController" ng-click="refreshGrids()">
+                    <div ng-include='"App/Admin/HTML/Substitutes/View.html"'></div>
+                </tab>
+
+                <tab heading="Adressevask" ng-controller="AddressLaundryController">
+                    <div ng-include="'App/Admin/HTML/AddressLaundry/AddressLaundryView.html'"></div>
+                </tab>
+
+            </tabset>
+        </div>
     </div>
 </div>

@@ -13,7 +13,7 @@
 
        $scope.noClicked = function () {
            $modalInstance.dismiss('cancel');
-           NotificationService.AutoFadeNotification("warning", "Annuller", "Godkendelsen af indberetningen blev annulleret.");
+           NotificationService.AutoFadeNotification("warning", "", "Godkendelsen af indberetningen blev annulleret.");
        }
 
        $scope.yesClicked = function () {
@@ -23,7 +23,7 @@
                $scope.result.AccountNumber = $scope.selectedAccount.Number;
                $scope.result.Id = itemId;
                $modalInstance.close($scope.result);
-               NotificationService.AutoFadeNotification("success", "Godkendt", "Indberetningen blev godkendt med kontering " + $scope.selectedAccount.Description + " - " + $scope.selectedAccount.Number);
+               NotificationService.AutoFadeNotification("success", "", "Indberetningen blev godkendt med kontering " + $scope.selectedAccount.Description + " - " + $scope.selectedAccount.Number);
            }
        }
 
@@ -32,7 +32,7 @@
                $scope.errorMessage = "* Du skal vælge en konto";
            } else {
                $modalInstance.close($scope.selectedAccount.Number);
-               NotificationService.AutoFadeNotification("success", "Godkendt", "Indberetningerne blev godkendt med kontering " + $scope.selectedAccount.Description + " - " + $scope.selectedAccount.Number);
+               NotificationService.AutoFadeNotification("success", "", "Indberetningerne blev godkendt med kontering " + $scope.selectedAccount.Description + " - " + $scope.selectedAccount.Number);
            }
        }
 
@@ -41,7 +41,7 @@
                $scope.errorMessage = "* Du skal vælge en konto";
            } else {
                $modalInstance.close($scope.selectedAccount.Number);
-               NotificationService.AutoFadeNotification("success", "Godkendt", "Indberetningerne blev godkendt med kontering " + $scope.selectedAccount.Description + " - " + $scope.selectedAccount.Number);
+               NotificationService.AutoFadeNotification("success", "", "Indberetningerne blev godkendt med kontering " + $scope.selectedAccount.Description + " - " + $scope.selectedAccount.Number);
            }
        }
 

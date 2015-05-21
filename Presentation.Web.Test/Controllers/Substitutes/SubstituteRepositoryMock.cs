@@ -10,7 +10,6 @@ namespace Presentation.Web.Test.Controllers.Substitutes
         public static Person p1 = new Person()
         {
             FirstName = "Jacob",
-            MiddleName = "Overgaard",
             LastName = "Jensen",
             CprNumber = "123",
             Mail = "jacob@test.dk",

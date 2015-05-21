@@ -1,14 +1,8 @@
 ﻿angular.module("application").controller("RateController", [
-    "$scope", "$modal", "Rate", "NotificationService", "RateType", function ($scope, $modal, Rate, NotificationService, RateType) {
-
+    "$scope", "$modal", "Rate", "NotificationService", "RateType",
+    function ($scope, $modal, Rate, NotificationService, RateType) {
 
         $scope.container = {};
-
-        $scope.container.gridPageSize = 20;
-
-        $scope.pageSizeChanged = function () {
-            $scope.container.rateGrid.dataSource.pageSize(Number($scope.container.gridPageSize));
-        }
 
         $scope.loadRates = function () {
             $scope.rates = {
@@ -82,14 +76,9 @@
             };
         }
 
-    
-
-        
-
         $scope.updateRatesGrid = function () {
             $scope.container.rateGrid.dataSource.read();
         }
-
 
         $scope.$on("kendoWidgetCreated", function (event, widget) {
             if (widget === $scope.container.rateDropDown) {
@@ -103,11 +92,7 @@
             }
         });
 
-      
         $scope.loadRates();
-
-
-     
 
         $scope.addNewRateClick = function() {
             $scope.newRateYearError = "";
@@ -133,7 +118,7 @@
                     $scope.updateRatesGrid();
                     $scope.container.newRateYear = "";
                     $scope.container.newRateRate = "";
-                    NotificationService.AutoFadeNotification("success", "Opret", "Ny takst oprettet!");
+                    NotificationService.AutoFadeNotification("success", "", "Ny takst oprettet!");
                 });
             }
 

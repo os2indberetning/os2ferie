@@ -1,10 +1,12 @@
 ﻿angular.module('application').controller('NewSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService) {
+    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService) {
+       
         $scope.persons = persons;
         $scope.substituteFromDate = new Date();
         $scope.substituteToDate = new Date();
-        $scope.orgUnits = orgUnits;
-        $scope.orgUnit = $scope.orgUnits[0];
+        $scope.orgUnits = $scope.orgUnits = OrgUnit.getWhereUserIsLeader({ id: leader.Id }, function() {
+            $scope.orgUnit = $scope.orgUnits[0];
+        });
         
         $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
 
@@ -15,13 +17,9 @@
             }
         });
 
-        $scope.orgUnitSelected = function (id) {
-            console.log(id);
-        }
-
         $scope.saveNewSubstitute = function () {
             if ($scope.person == undefined) {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Du skal vælge en person");
+                NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en person");
                 return;
             }
 
@@ -39,10 +37,10 @@
             }
 
             sub.$post(function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Stedfortræder blev oprettet");
+                NotificationService.AutoFadeNotification("success", "", "Stedfortræder blev oprettet");
                 $modalInstance.close();
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette stedfortræder");
+                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette stedfortræder");
             });
         };
 

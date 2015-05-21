@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -35,6 +36,8 @@ namespace Presentation.Web.Test.
                 app.UseWebApi(config);
             });
             ReSeed();
+
+            EmploymentRepositoryMock.employment = new Employment();
         }
 
         public void ReSeed()
@@ -46,7 +49,10 @@ namespace Presentation.Web.Test.
         {
             return new List<KeyValuePair<Type, Type>>
             {
-                new KeyValuePair<Type, Type>(typeof(IGenericRepository<Address>),typeof(AddressRepositoryMock))
+                new KeyValuePair<Type, Type>(typeof(IGenericRepository<Address>),typeof(AddressRepositoryMock)),
+                new KeyValuePair<Type, Type>(typeof(IGenericRepository<Person>),typeof(PersonRepositoryMock)),
+                new KeyValuePair<Type, Type>(typeof(IGenericRepository<Employment>),typeof(EmploymentRepositoryMock)),
+
             };
         }
 
@@ -236,7 +242,7 @@ namespace Presentation.Web.Test.
         [Test]
         public async void MixedStandardAndPersonal_WithIncorrectId_ShouldReturn_StandardAndCorrect()
         {
-            AddressRepositoryMock.addresses = new List<Address>()
+            AddressRepositoryMock.addresses = new List<Address>
             {
                 new Address()
                 {
@@ -263,7 +269,7 @@ namespace Presentation.Web.Test.
                 new PersonalAddress()
                 {
                     StreetName = "TestStreet",
-                    StreetNumber = "3",
+                    StreetNumber = "4",
                     ZipCode = 8210,
                     Town = "Aarhus V",
                     PersonId = 2
@@ -305,7 +311,7 @@ namespace Presentation.Web.Test.
                 new DriveReportPoint()
                 {
                     StreetName = "TestStreet",
-                    StreetNumber = "3",
+                    StreetNumber = "4",
                     ZipCode = 8210,
                     Town = "Aarhus V",
                 }
@@ -359,6 +365,8 @@ namespace Presentation.Web.Test.
         [Test]
         public async void MixedPointAndDriveReportPointAndStandardAndPersonal_ShouldReturn_StandardAndPersonal()
         {
+
+
             AddressRepositoryMock.addresses = new List<Address>()
             {
                 new Point()
@@ -385,14 +393,14 @@ namespace Presentation.Web.Test.
                 new Address()
                 {
                     StreetName = "TestStreet",
-                    StreetNumber = "3",
+                    StreetNumber = "4",
                     ZipCode = 8210,
                     Town = "Aarhus V",
                 },
                 new PersonalAddress()
                 {
                     StreetName = "TestStreet",
-                    StreetNumber = "3",
+                    StreetNumber = "5",
                     ZipCode = 8210,
                     Town = "Aarhus V",
                     PersonId = 1
@@ -459,72 +467,6 @@ namespace Presentation.Web.Test.
             var result = await response.Content.ReadAsAsync<ODataResponse<Address>>();
             Assert.AreEqual(2, result.value.Count);
         }
-
-        [Test]
-        public async void PersonalAddressesWithPersonId2_ShouldReturn_PersonalAndStandard()
-        {
-            AddressRepositoryMock.addresses = new List<Address>()
-            {
-                new PersonalAddress()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                    PersonId = 1
-                },
-                new PersonalAddress()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                    PersonId = 2
-                },
-                new PersonalAddress()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                    PersonId = 2
-                },
-                new PersonalAddress()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                    PersonId = 2
-                },
-                new Address()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                },
-                new Point()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                },
-                new DriveReportPoint()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                },
-            };
-            ReSeed();
-            var response = await Server.CreateRequest("/odata/Addresses/Service.GetPersonalAndStandard?personId=2").GetAsync();
-            var result = await response.Content.ReadAsAsync<ODataResponse<Address>>();
-            Assert.AreEqual(4, result.value.Count);
-        }
-
 
     }
 }

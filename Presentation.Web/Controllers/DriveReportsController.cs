@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 using System.Web.OData;
 using System.Web.OData.Query;
 using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
+using log4net;
 using Ninject;
 
 namespace OS2Indberetning.Controllers
@@ -14,38 +18,57 @@ namespace OS2Indberetning.Controllers
     public class DriveReportsController : BaseController<DriveReport>
     {
         private readonly IDriveReportService _driveService;
+        private readonly IGenericRepository<Employment> _employmentRepo;
 
-        public DriveReportsController(IGenericRepository<DriveReport> repo, IDriveReportService driveService)
-            : base(repo)
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        public DriveReportsController(IGenericRepository<DriveReport> repo, IDriveReportService driveService, IGenericRepository<Person> personRepo , IGenericRepository<Employment> employmentRepo)
+            : base(repo, personRepo)
         {
             _driveService = driveService;
+            _employmentRepo = employmentRepo;
         }
 
         // GET: odata/DriveReports
         [EnableQuery]
-        public IQueryable<DriveReport> Get(ODataQueryOptions<DriveReport> queryOptions, string status = "", int leaderId = 0, bool getReportsWhereSubExists = false)
+        public IHttpActionResult Get(ODataQueryOptions<DriveReport> queryOptions, string status = "", int leaderId = 0, bool getReportsWhereSubExists = false)
         {
-            var queryably = GetQueryable(queryOptions);
+            var queryable = GetQueryable(queryOptions);
+
+            if (leaderId != 0)
+              {
+                queryable = _driveService.FilterByLeader(queryable, leaderId, getReportsWhereSubExists);
+            }
 
             ReportStatus reportStatus;
             if (ReportStatus.TryParse(status, true, out reportStatus))
             {
-                queryably = queryably.Where(dr => dr.Status == reportStatus);
+                if (reportStatus == ReportStatus.Accepted)
+                {
+                    // If accepted reports are requested, then return accepted and invoiced. 
+                    // Invoiced reports are accepted reports that have been processed for payment.
+                    // So they are still accepted reports.
+                    queryable =
+                        queryable.Where(dr => dr.Status == ReportStatus.Accepted || dr.Status == ReportStatus.Invoiced);
+                }
+                else
+                {
+                    queryable = queryable.Where(dr => dr.Status == reportStatus);
+                }
+
             }
 
-            if (leaderId != 0)
-            {
-                queryably = _driveService.FilterByLeader(queryably, leaderId, getReportsWhereSubExists);
-            }
+            var result = _driveService.AttachResponsibleLeader(queryable);
 
-            return _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(queryably));
+            return Ok(result);
         }
 
         //GET: odata/DriveReports(5)
-        public IQueryable<DriveReport> GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
+        public IHttpActionResult GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
-            var res = _driveService.AddApprovedByFullName(_driveService.AttachResponsibleLeader(GetQueryable(key, queryOptions)));
-            return res;
+            var res = _driveService.AttachResponsibleLeader(GetQueryable(key, queryOptions));
+
+            return Ok(res);
         }
 
         // PUT: odata/DriveReports(5)
@@ -58,16 +81,14 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public new IHttpActionResult Post(DriveReport driveReport)
         {
-            //try
-            //{
+            if (!CurrentUser.Id.Equals(driveReport.PersonId))
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
             var result = _driveService.Create(driveReport);
 
             return Ok(result);
-            //}
-            //catch (Exception e)
-            //{
-            //    return BadRequest("DriveReport has some invalid parameters");
-            //}
         }
 
         // PATCH: odata/DriveReports(5)
@@ -75,16 +96,41 @@ namespace OS2Indberetning.Controllers
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
         {
+
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
+
+            var leader = _driveService.GetResponsibleLeaderForReport(report);
+
             if (report == null)
             {
                 return NotFound();
             }
+
+            if (leader == null)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
+
+            // Cannot approve own reports.
+            if (report.PersonId == CurrentUser.Id)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
+            // Cannot approve reports where you are not responsible leader
+            if (!CurrentUser.Id.Equals(leader.Id))
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
+
             // Return Unauthorized if the status is not pending when trying to patch.
             // User should not be allowed to change a Report which has been accepted or rejected.
             if (report.Status != ReportStatus.Pending)
             {
-                return Unauthorized();
+                Logger.Info("Forsøg på at redigere indberetning med anden status end afventende.");
+                return StatusCode(HttpStatusCode.Forbidden);
             }
 
 
@@ -95,7 +141,16 @@ namespace OS2Indberetning.Controllers
         // DELETE: odata/DriveReports(5)
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return base.Delete(key);
+            if (CurrentUser.IsAdmin)
+            {
+                return base.Delete(key);
+            }
+            var report = Repo.AsQueryable().SingleOrDefault(x => x.Id.Equals(key));
+            if (report == null)
+            {
+                return NotFound();
+            }
+            return report.PersonId.Equals(CurrentUser.Id) ? base.Delete(key) : Unauthorized();
         }
     }
 }

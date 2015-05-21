@@ -1,5 +1,6 @@
 ﻿angular.module("application").controller("SettingController", [
-    "$scope", "$modal", "Person", "LicensePlate", "Personalroute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token) {
+    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope",
+    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope) {
         $scope.gridContainer = {};
         $scope.isCollapsed = true;
         $scope.mailAdvice = '';
@@ -8,12 +9,6 @@
         $scope.newLicensePlateDescription = "";
         $scope.workDistanceOverride = 0;
         $scope.recieveMail = false;
-        $scope.oldAlternativeHomeAddress = "";
-        $scope.oldAlternativeHomeAddressId = 0;
-        $scope.newAlternativeHomeAddress = "";
-        $scope.oldAlternativeWorkAddress = "";
-        $scope.oldAlternativeWorkAddressId = 0;
-        $scope.newAlternativeWorkAddress = "";
         $scope.routes = [];
         $scope.addresses = [];
         $scope.tokens = [];
@@ -21,15 +16,18 @@
         $scope.tokenIsCollapsed = true;
         $scope.newTokenDescription = "";
 
-        // Hardcoded personId
-        var personId = 1;
+
+        var personId = $rootScope.CurrentUser.Id;
+        $scope.showMailNotification = $rootScope.CurrentUser.IsLeader;
+        // Used for alternative address template
+        $scope.employments = $rootScope.CurrentUser.Employments;
 
         // Contains references to kendo ui grids.
         $scope.gridContainer = {};
 
         $scope.GetPerson = Person.get({ id: personId }, function (data) {
             $scope.currentPerson = data;
-            $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride.toString().replace('.',',');
+            //  $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride.toString().replace('.', ',');
             $scope.recieveMail = data.RecieveMail;
 
             //Set choice of mail notification
@@ -44,112 +42,29 @@
                 $scope.licenseplates = data;
             });
 
-            $scope.loadAlternativeHomeAddress();
-            $scope.loadAlternativeWorkAddress();
 
             //NotificationService.AutoFadeNotification("success", "Success", "Person fundet");
         }, function () {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Person ikke fundet");
+            NotificationService.AutoFadeNotification("danger", "", "Person ikke fundet");
         });
 
-        //Load alternative home address
-        $scope.loadAlternativeHomeAddress = function () {
-            Address.get({ query: "$filter=Type eq Core.DomainModel.PersonalAddressType'AlternativeHome' and PersonId eq " + $scope.currentPerson.Id }, function (data) {
-                if (data.value[0] != undefined) {
-                    $scope.oldAlternativeHomeAddressId = data.value[0].Id;
-                    $scope.oldAlternativeHomeAddress = data.value[0].StreetName + " " + data.value[0].StreetNumber + ", " + data.value[0].ZipCode + " " + data.value[0].Town;
-                    $scope.newAlternativeHomeAddress = $scope.oldAlternativeHomeAddress;
-                } else {
-                    $scope.newAlternativeHomeAddress = "";
-                    $scope.oldAlternativeHomeAddress = "";
-                }
-            }, function () {
-                // Error loading alternative home address.
-            });
-        }
 
-        //Load alternative work address
-        $scope.loadAlternativeWorkAddress = function () {
-            Address.get({ query: "$filter=Type eq Core.DomainModel.PersonalAddressType'AlternativeWork' and PersonId eq " + $scope.currentPerson.Id }, function (data) {
-                if (data.value[0] != undefined) {
-                    $scope.oldAlternativeWorkAddressId = data.value[0].Id;
-                    $scope.oldAlternativeWorkAddress = data.value[0].StreetName + " " + data.value[0].StreetNumber + ", " + data.value[0].ZipCode + " " + data.value[0].Town;
-                    $scope.newAlternativeWorkAddress = $scope.oldAlternativeWorkAddress;
-                } else {
-                    $scope.newAlternativeWorkAddress = "";
-                    $scope.oldAlternativeWorkAddress = "";
-                }
-            }, function () {
-                // Error loading alternative work address.
-            });
-        }
 
         //Funtionalitet til opslag af adresser
-        $scope.SmartAddress = {
-            type: "json",
-            minLength: 3,
-            serverFiltering: true,
-            crossDomain: true,
-            transport: {
-                read: {
-                    url: function (item) {
-                        return 'https://smartadresse.dk/service/locations/3/detect/json/' + item.filter.filters[0].value + '%200';
-                    },
-                    dataType: "jsonp",
-                    data: {
-                        apikey: 'FCF3FC50-C9F6-4D89-9D7E-6E3706C1A0BD',
-                        limit: 15,                   // REST limit
-                        crs: 'EPSG:25832',           // REST projection
-                        nogeo: 'true',                 // REST nogeo
-                        noadrspec: 'true'             // REST noadrspec
-                    }
-                }
-            },
-            schema: {
-                data: function (data) {
-                    return data.data; // <-- The result is just the data, it doesn't need to be unpacked.
-                }
-            },
-        }
+        $scope.SmartAddress = SmartAdresseSource;
+
 
         //Gem ny nummerplade
         $scope.saveNewLicensePlate = function () {
-            var plate = "";
 
-            var array = $scope.newLicensePlate.split('');
-
-            if ($scope.newLicensePlateDescription == "") {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade skal have en beskrivelse");
+            var plateWithoutSpaces = $scope.newLicensePlate.replace(/ /g, "");
+            if (plateWithoutSpaces.length < 2 || plateWithoutSpaces.length > 7) {
+                NotificationService.AutoFadeNotification("danger", "", "Nummerpladens længde skal være mellem 2 og 7 tegn (Mellemrum tæller ikke med)");
                 return;
             }
-
-            if (array.length < 7 || array.length > 9) {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade er ikke i korrekt format. Eksempel: AB 12 345");
-                return;
-            }
-
-            var first = array[0];
-            var second = array[1];
-
-            array[0] = first.toUpperCase();
-            array[1] = second.toUpperCase();
-
-            var cleanArray = [];
-            if (array.length >= 7 || array.length <= 9) {
-                for (var i = 0; i < array.length; i++) {
-                    if (array[i] != ' ') {
-                        cleanArray[i] = array[i];
-                    }
-                }
-            }
-
-            cleanArray.splice(2, 0, ' ');
-            cleanArray.splice(5, 0, ' ');
-
-            plate = cleanArray.join("");
 
             var newPlate = new LicensePlate({
-                Plate: plate,
+                Plate: $scope.newLicensePlate,
                 Description: $scope.newLicensePlateDescription,
                 PersonId: personId
             });
@@ -162,25 +77,22 @@
                 $scope.newLicensePlate = "";
                 $scope.newLicensePlateDescription = "";
 
-                NotificationService.AutoFadeNotification("success", "Success", "Ny nummerplade blev gemt");
+                NotificationService.AutoFadeNotification("success", "", "Ny nummerplade blev gemt");
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade blev ikke gemt");
+                NotificationService.AutoFadeNotification("danger", "", "Nummerplade blev ikke gemt");
             });
         };
 
         //Slet eksisterende nummerplade
         $scope.deleteLicensePlate = function (plate) {
-            var objIndex = $scope.licenseplates.indexOf(plate);
-            $scope.licenseplates.splice(objIndex, 1);
-
-            LicensePlate.delete({ id: plate.Id }, function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Nummerplade blev slettet");
-            }), function () {
-                $scope.licenseplates.push(plate);
-                $scope.licenseplates.sort(function (a, b) {
-                    return a.Id > b.Id;
+            LicensePlate.delete({ id: plate.Id }, function () {
+                NotificationService.AutoFadeNotification("success", "", "Nummerplade blev slettet");
+                //Load licenseplates again
+                LicensePlate.get({ id: personId }, function (data) {
+                    $scope.licenseplates = data;
                 });
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Nummerplade blev ikke slettet");
+            }), function () {
+                NotificationService.AutoFadeNotification("danger", "", "Nummerplade blev ikke slettet");
             };
         }
 
@@ -193,168 +105,12 @@
             });
 
             newPerson.$patch({ id: personId }, function () {
-                NotificationService.AutoFadeNotification("success", "Success", "Valg om modtagelse af mails blev gemt");
+                NotificationService.AutoFadeNotification("success", "", "Valg om modtagelse af mails blev gemt");
             }), function () {
                 $scope.recieveMail = !$scope.recieveMail;
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Valg om modtagelse af mails blev ikke gemt");
+                NotificationService.AutoFadeNotification("danger", "", "Valg om modtagelse af mails blev ikke gemt");
             };
         }
-
-        //Funktionalitet til alternativ hjemmeadresse
-        $scope.saveAlternativeHomeAddress = function () {
-            if ($scope.oldAlternativeHomeAddress == "") { // CREATE IT
-                var result = AddressFormatter.fn($scope.newAlternativeHomeAddress);
-
-                result.Id = $scope.oldAlternativeHomeAddressId;
-                result.PersonId = $scope.currentPerson.Id;
-
-                var newAlternativeHomeAddress = new Address({
-                    Id: result.Id,
-                    PersonId: result.PersonId,
-                    StreetName: result.StreetName,
-                    StreetNumber: result.StreetNumber,
-                    ZipCode: result.ZipCode,
-                    Town: result.Town,
-                    Type: "AlternativeHome",
-                    Latitude: "",
-                    Longitude: ""
-                });
-
-                newAlternativeHomeAddress.$post({}, function (data) {
-                    $scope.loadAlternativeHomeAddress();
-                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse gemt");
-
-                    // Save HomeWorkOverride as 0 when saving home address.
-                    $scope.workDistanceOverride = 0;
-                    $scope.setHomeWorkOverride();
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse kunne ikke gemmes");
-                });
-
-            } else if ($scope.newAlternativeHomeAddress == "") { // DELETE IT
-                Address.delete({ id: $scope.oldAlternativeHomeAddressId }, function () {
-                    $scope.loadAlternativeHomeAddress();
-                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse slettet");
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse kunne ikke slettes");
-                });
-
-            } else if ($scope.newAlternativeHomeAddress != $scope.oldAlternativeHomeAddress) { // UPDATE IT                
-                var result = AddressFormatter.fn($scope.newAlternativeHomeAddress);
-
-                result.Id = $scope.oldAlternativeHomeAddressId;
-                result.PersonId = $scope.currentPerson.Id;
-
-                var editedAlternativeHomeAddress = new Address({
-                    Id: result.Id,
-                    PersonId: result.PersonId,
-                    StreetName: result.StreetName,
-                    StreetNumber: result.StreetNumber,
-                    ZipCode: result.ZipCode,
-                    Town: result.Town,
-                    Description: result.Description,
-                    Type: "AlternativeHome"
-                });
-
-                editedAlternativeHomeAddress.$patch({ id: result.Id }, function (data) {
-                    $scope.loadAlternativeHomeAddress();
-                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse opdateret");
-
-                    // Save HomeWorkOverride as 0 when saving home address.
-                    $scope.workDistanceOverride = 0;
-                    $scope.setHomeWorkOverride();
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse blev ikke opdateret");
-                });
-            }
-        }
-
-        //Funktionalitet til alternativ arbejdsadresse
-        $scope.saveAlternativeWorkAddress = function () {
-            if ($scope.oldAlternativeWorkAddress == "") { // CREATE IT
-                var result = AddressFormatter.fn($scope.newAlternativeWorkAddress);
-
-                result.Id = $scope.oldAlternativeWorkAddressId;
-                result.PersonId = $scope.currentPerson.Id;
-
-                var newAlternativeWorkAddress = new Address({
-                    Id: result.Id,
-                    PersonId: result.PersonId,
-                    StreetName: result.StreetName,
-                    StreetNumber: result.StreetNumber,
-                    ZipCode: result.ZipCode,
-                    Town: result.Town,
-                    Type: "AlternativeWork",
-                    Latitude: "",
-                    Longitude: ""
-                });
-
-                newAlternativeWorkAddress.$post({}, function (data) {
-                    $scope.loadAlternativeWorkAddress();
-                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ arbejdsadresse gemt");
-
-                    // Save HomeWorkOverride as 0 when saving work address.
-                    $scope.workDistanceOverride = 0;
-                    $scope.setHomeWorkOverride();
-
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ arbejdsadresse kunne ikke gemmes");
-                });
-
-            } else if ($scope.newAlternativeWorkAddress == "") { // DELETE IT
-                Address.delete({ id: $scope.oldAlternativeWorkAddressId }, function () {
-                    $scope.loadAlternativeWorkAddress();
-                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ arbejdsadresse slettet");
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ arbejdsadresse kunne ikke slettes");
-                });
-
-            } else if ($scope.newAlternativeWorkAddress != $scope.oldAlternativeWorkAddress) { // UPDATE IT
-                var result = AddressFormatter.fn($scope.newAlternativeWorkAddress);
-
-                result.Id = $scope.oldAlternativeWorkAddressId;
-                result.PersonId = $scope.currentPerson.Id;
-
-                var editedAlternativeWorkAddress = new Address({
-                    Id: result.Id,
-                    PersonId: result.PersonId,
-                    StreetName: result.StreetName,
-                    StreetNumber: result.StreetNumber,
-                    ZipCode: result.ZipCode,
-                    Town: result.Town,
-                    Description: result.Description,
-                    Type: "AlternativeWork"
-                });
-
-                editedAlternativeWorkAddress.$patch({ id: result.Id }, function (data) {
-                    $scope.loadAlternativeWorkAddress();
-                    NotificationService.AutoFadeNotification("success", "Success", "Alternativ hjemmeadresse opdateret");
-
-                    // Save HomeWorkOverride as 0 when saving work address.
-                    $scope.workDistanceOverride = 0;
-                    $scope.setHomeWorkOverride();
-                }, function () {
-                    NotificationService.AutoFadeNotification("danger", "Fejl", "Alternativ hjemmeadresse blev ikke opdateret");
-                });
-            }
-        }
-
-        $scope.setHomeWorkOverride = function () {
-            var newPerson = new Person({
-                WorkDistanceOverride: $scope.workDistanceOverride.toString().replace(',', '.')
-        });
-
-            newPerson.$patch({ id: personId }, function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Afstand mellem hjemme- og arbejdsadresse blev gemt");
-            }), function () {
-                if ($scope.mailAdvice == 'No') {
-                    $scope.mailAdvice = 'Yes';
-                } else {
-                    $scope.mailAdvice = 'No';
-                }
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Afstand mellem hjemme- og arbejdsadresse blev ikke gemt");
-            };
-        };
 
         $scope.loadGrids = function (id) {
             $scope.personalRoutes = {
@@ -435,7 +191,7 @@
                             var temp = [];
 
                             angular.forEach(data.Points, function (value, key) {
-                                if (value.NextPointId == undefined) {
+                                if (value.NextPointId == null) {
                                     this.push(value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town);
                                 }
 
@@ -444,6 +200,22 @@
                             return temp;
                         },
                         title: "Til"
+                    }, {
+                        title: "Via",
+                        field: "Points",
+                        width: 50,
+                        template: function (data) {
+                            var tooltipContent = "";
+                            var gridContent = data.Points.length - 2;
+                            angular.forEach(data.Points, function (point, key) {
+                                if (key != 0 && key != data.Points.length - 1) {
+                                    tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
+                                }
+                            });
+
+                            var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
+                            return result;
+                        }
                     },
                     {
                         field: "Id",
@@ -458,14 +230,14 @@
                     type: "odata",
                     transport: {
                         read: {
-                            beforeSend: function(req) {
+                            beforeSend: function (req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
-                            url: "odata/PersonalAddresses()?$filter=PersonId eq " + personId + " and (Type eq Core.DomainModel.PersonalAddressType'Standard' or Type eq Core.DomainModel.PersonalAddressType'Home' or Type eq Core.DomainModel.PersonalAddressType'Work')",
+                            url: "odata/PersonalAddresses()?$filter=PersonId eq " + personId,
                             dataType: "json",
                             cache: false
                         },
-                        parameterMap: function(options, type) {
+                        parameterMap: function (options, type) {
                             var d = kendo.data.transports.odata.parameterMap(options);
 
                             delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
@@ -510,11 +282,8 @@
                     {
                         field: "Description",
                         title: "Beskrivelse",
-                        template: function(data) {
-                            if (data.Type == "Work") {
-                                return "Arbejdsadresse";
-                            }
-                            else if (data.Type == "Home") {
+                        template: function (data) {
+                            if (data.Type == "Home") {
                                 return "Hjemmeadresse";
                             } else return data.Description;
                         }
@@ -527,8 +296,8 @@
                     }, {
                         field: "Id",
                         title: "Muligheder",
-                        template: function(data) {
-                            if (!(data.Type == "Home" || data.Type == "Work")) {
+                        template: function (data) {
+                            if (data.Type == "Standard") {
                                 return "<a ng-click='openAddressEditModal(" + data.Id + ")'>Rediger</a> | <a ng-click='openAddressDeleteModal(" + data.Id + ")'>Slet</a>";
                             }
                             return "";
@@ -538,12 +307,16 @@
             };
         }
 
-        $scope.loadGrids(1);
+        $rootScope.$on('PersonalAddressesChanged', function () {
+            // Event gets emitted from AlternativeAddressController when the user changes alternative home or work addresses.
+            $scope.updatePersonalAddresses();
+        });
+
+        $scope.loadGrids($rootScope.CurrentUser.Id);
 
         $scope.updatePersonalAddresses = function () {
             $scope.gridContainer.personalAddressesGrid.dataSource.transport.options.read.url = "odata/PersonalAddresses()?$filter=PersonId eq " + $scope.currentPerson.Id;
             $scope.gridContainer.personalAddressesGrid.dataSource.read();
-
         }
 
         $scope.updatePersonalRoutes = function () {
@@ -700,7 +473,7 @@
         Token.get({ id: personId }, function (data) {
             $scope.tokens = data.value;
         }, function () {
-            NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke hente tokens");
+            NotificationService.AutoFadeNotification("danger", "", "Kunne ikke hente tokens");
         });
 
         $scope.deleteToken = function (token) {
@@ -708,10 +481,10 @@
             $scope.tokens.splice(objIndex, 1);
 
             Token.delete({ id: token.Id }, function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Token blev slettet");
+                NotificationService.AutoFadeNotification("success", "", "Token blev slettet");
             }, function () {
                 $scope.tokens.push(token);
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Token blev ikke slettet");
+                NotificationService.AutoFadeNotification("danger", "", "Token blev ikke slettet");
             });
         }
 
@@ -724,11 +497,11 @@
 
             newToken.$save(function (data) {
                 $scope.tokens.push(data);
-                NotificationService.AutoFadeNotification("success", "Success", "Ny token oprettet");
+                NotificationService.AutoFadeNotification("success", "", "Ny token oprettet");
                 $scope.newTokenDescription = "";
                 $scope.tokenIsCollapsed = !$scope.tokenIsCollapsed;
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette ny token");
+                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette ny token");
             });
         }
 
@@ -762,13 +535,28 @@
             });
         };
 
-        $scope.makeLicensePlatePrimary = function(plate) {
-            LicensePlate.patch({ id: plate.Id }, { IsPrimary: true }, function() {
+        $scope.makeLicensePlatePrimary = function (plate) {
+            LicensePlate.patch({ id: plate.Id }, { IsPrimary: true }, function () {
                 //Load licenseplates when finished request.
                 LicensePlate.get({ id: personId }, function (data) {
                     $scope.licenseplates = data;
                 });
             });
         }
+
+        $scope.openAlternativeWorkAddressModal = function () {
+
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/AlternativeWorkAddressModal.html',
+                controller: 'AlternativeWorkAddressModalController',
+                backdrop: 'static',
+            });
+
+            modalInstance.result.then(function (res) {
+
+            }, function () {
+
+            });
+        };
     }
 ]);

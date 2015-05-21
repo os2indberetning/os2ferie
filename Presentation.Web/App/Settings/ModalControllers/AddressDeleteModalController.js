@@ -3,7 +3,7 @@
 
         $scope.confirmDelete = function () {
             Address.delete({ id: addressId }, function () {
-                NotificationService.AutoFadeNotification("success", "Success", "Adresse slettet");
+                NotificationService.AutoFadeNotification("success", "", "Adresse slettet");
                 $modalInstance.close('');
             });
         }

@@ -1,26 +1,26 @@
 ﻿<div class="panel panel-default">
 
-    <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-sitemap"></i> Organisationsenheder</h3>
-    </div>
+
 
 
 
     <div class="panel-body">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="inline pull-left">Organisationsenheder</h2>
+                <h2 class="inline pull-left">Opsæt 4 km-regel</h2>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-9"></div>
-            <div class="col-md-2">
-                <input type="text" kendo-auto-complete ng-change="orgUnitChanged($item)" ng-model="orgUnit.chosenUnit" placeholder="'Indtast beskrivelse'" k-data-source="typeAheadOrgUnits" k-data-value-field="'ShortDescription'" k-data-text-field="'ShortDescription'" class="form-control" />
+            <div class="col-xs-3 col-lg-1 pull-right">
+                <button class="btn btn-danger pull-right" ng-click="clearClicked()">Nulstil søgning</button>
             </div>
-            <div class="col-md-1">
-                <button class="btn btn-danger pull-right" ng-click="clearClicked()">Nulstil</button>
+
+            <div class="col-xs-4 col-lg-2 pull-right">
+                <input type="text" ng-enter="test()" kendo-auto-complete ng-change="orgUnitChanged($item)" ng-model="orgUnit.chosenUnit" placeholder="'Indtast beskrivelse'" k-data-source="typeAheadOrgUnits" k-data-value-field="'LongDescription'" k-data-text-field="'LongDescription'" class="form-control" />
             </div>
+
+
         </div>
-        <div kendo-grid="gridContainer.grid" class="margin-top-10" options="OrgUnits"></div>
+        <div kendo-grid="gridContainer.grid" class="margin-top-10 scrollable" options="OrgUnits"></div>
     </div>
 </div>

@@ -1,5 +1,6 @@
 ﻿angular.module("application").controller("RemoveAdminModalController", [
-   "$scope", "Id", "FullName", "$modalInstance", function ($scope, Id, FullName, $modalInstance) {
+   "$scope", "Id", "FullName", "$modalInstance",
+   function ($scope, Id, FullName, $modalInstance) {
 
        $scope.name = FullName;
 

@@ -1,0 +1,79 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Opret ny stedfortræder</h3>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Vælg stedfortræder:</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control pull-right fill-width" kendo-auto-complete k-data-source="persons" k-ng-model="person" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+            </div>
+        </div>
+        
+
+        <div class="seperator"></div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <label>Stedfortræder for:</label>
+            </div>
+            <div class="col-md-6">
+                <input options="personForOptions" class="form-control pull-right fill-width" kendo-auto-complete k-data-source="leaders" k-ng-model="personFor" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+            </div>
+        </div>
+
+
+        <div class="seperator"></div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <label>Organisationsenhed:</label>
+            </div>
+            <div class="col-md-6">
+                <select ng-disabled="orgUnitsDisabled" class="fill-width pull-right" kendo-drop-down-list="PositionDropDown" k-ng-model="orgUnit" k-data-text-field="'LongDescription'" id=" " k-data-source="orgUnits" k-data-value-field="'Id'"></select>
+            </div>
+        </div>  
+        
+        <div class="seperator"></div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label>Fra:</label>
+            </div>
+            <div class="col-md-6">
+                <input class="fill-width pull-right" k-format="'dd/MM/yyyy'" kendo-datepicker k-options="dateOptions" k-ng-model="substituteFromDate" />
+            </div>
+        </div>
+
+        <div class="seperator"></div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label>Til:</label>
+            </div>
+            <div class="col-md-6">
+                <input ng-disabled="infinitePeriod" class="fill-width pull-right" k-format="'dd/MM/yyyy'" kendo-datepicker k-options="dateOptions" k-ng-model="substituteToDate" />
+            </div>
+        </div>
+      
+        <div class="seperator"></div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label>På ubestemt tid:</label>
+            </div>
+            <div class="col-md-6">
+                <input class="pull-right" type="checkbox" ng-model="infinitePeriod" />
+            </div>
+        </div>  
+     
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="saveNewSubstitute()">Gem</button>
+    <button class="btn btn-warning" ng-click="cancelNewSubstitute()">Annuller</button>
+</div>
+
+

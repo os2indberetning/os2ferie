@@ -1,11 +1,13 @@
 ﻿
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Web.OData.Routing;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
+using Microsoft.Ajax.Utilities;
 using Ninject;
 
 namespace Core.ApplicationServices
@@ -14,11 +16,13 @@ namespace Core.ApplicationServices
     {
         private readonly IGenericRepository<PersonalAddress> _addressRepo;
         private readonly IRoute<RouteInformation> _route;
+        private readonly IAddressCoordinates _coordinates;
 
-        public PersonService(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route)
+        public PersonService(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route, IAddressCoordinates coordinates)
         {
             _addressRepo = addressRepo;
             _route = route;
+            _coordinates = coordinates;
         }
 
         public IQueryable<Person> ScrubCprFromPersons(IQueryable<Person> queryable)
@@ -35,35 +39,15 @@ namespace Core.ApplicationServices
             return set.AsQueryable();
         }
 
-        public void AddFullName(IQueryable<Person> persons)
-        {
-            if (persons == null)
-            {
-                return;
-            }
-            foreach (var person in persons)
-            {
-                person.FullName = person.FirstName;
-
-                if (!string.IsNullOrEmpty(person.MiddleName))
-                {
-                    person.FullName += " " + person.MiddleName;
-                }
-
-                person.FullName += " " + person.LastName;
-
-                person.FullName += " [" + person.Initials + "]";
-            }            
-        }
-
         public virtual PersonalAddress GetHomeAddress(Person person)
         {
-            var hasAlternative = _addressRepo.AsQueryable()
+            var alternative = _addressRepo.AsQueryable()
                     .FirstOrDefault(x => x.PersonId == person.Id && x.Type == PersonalAddressType.AlternativeHome);
 
-            if (hasAlternative != null)
+            if (alternative != null)
             {
-                return hasAlternative;
+                AddCoordinatesToAddressIfNonExisting(alternative);
+                return alternative;
             }
 
             var home = _addressRepo.AsQueryable()
@@ -75,45 +59,42 @@ namespace Core.ApplicationServices
             return home;
         }
 
-        public virtual PersonalAddress GetWorkAddress(Person person)
+        public Person AddHomeWorkDistanceToEmployments(Person person)
         {
-            var hasAlternative = _addressRepo.AsQueryable()
-                    .FirstOrDefault(x => x.PersonId == person.Id && x.Type == PersonalAddressType.AlternativeWork);
-
-            if (hasAlternative != null)
+            // Get employments for person
+            // Get alternative home address.
+            var homeAddress = person.PersonalAddresses.AsQueryable().FirstOrDefault(x => x.Type == PersonalAddressType.AlternativeHome);
+            // Get primary home address if alternative doesnt exist.
+            homeAddress = homeAddress ?? person.PersonalAddresses.AsQueryable().FirstOrDefault(x => x.Type == PersonalAddressType.Home);
+            foreach (var employment in person.Employments)
             {
-                return hasAlternative;
+                if (employment.WorkDistanceOverride > 0)
+                {
+                    employment.HomeWorkDistance = employment.WorkDistanceOverride;
+                }
+                else
+                {
+                    var workAddress = employment.AlternativeWorkAddress ?? new PersonalAddress()
+                    {
+                        StreetName = employment.OrgUnit.Address.StreetName,
+                        StreetNumber = employment.OrgUnit.Address.StreetNumber,
+                        ZipCode = employment.OrgUnit.Address.ZipCode,
+                        Town = employment.OrgUnit.Address.Town
+                    };
+                    if (homeAddress != null && workAddress != null)
+                    {
+                        employment.HomeWorkDistance = _route.GetRoute(new List<Address>() { homeAddress, workAddress }).Length;
+                    }
+                }
             }
-
-            var work = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == person.Id && x.Type == PersonalAddressType.Work);
-
-            AddCoordinatesToAddressIfNonExisting(work);
-
-            return work;
-        }
-
-        public double GetDistanceFromHomeToWork(Person p)
-        {
-            double homeWorkDistance;
-
-            if (p.WorkDistanceOverride > 0)
-            {
-                homeWorkDistance = p.WorkDistanceOverride;
-            }
-            else
-            {
-                homeWorkDistance = _route.GetRoute(new List<Address>() { GetHomeAddress(p), GetWorkAddress(p)}).Length;
-            }
-            return homeWorkDistance;
+            return person;
         }
 
         private void AddCoordinatesToAddressIfNonExisting(Address a)
         {
             if (string.IsNullOrEmpty(a.Latitude) || a.Latitude.Equals("0"))
             {
-                var coordinates = NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>();
-                var result = coordinates.GetAddressCoordinates(a);
+                var result = _coordinates.GetAddressCoordinates(a);
                 a.Latitude = result.Latitude;
                 a.Longitude = result.Longitude;
                 _addressRepo.Save();

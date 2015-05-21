@@ -24,7 +24,7 @@ namespace Core.ApplicationServices
 
             while (exists)
             {
-                if (_repo.AsQueryable().Any(x => x.Token == randomToken))
+                if (_repo.AsQueryable().Any(x => x.Token.Equals(randomToken)))
                 {
                     randomToken = GenerateToken();
                 }

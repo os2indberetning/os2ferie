@@ -1,4 +1,4 @@
-﻿angular.module("application").service('Address', ["$resource", function ($resource) {
+﻿angular.module("application").service('Address', ["$resource", "$modal", function ($resource, $modal) {
     return $resource("/odata/PersonalAddresses(:id)?:query", { id: "@id", query: "@query" }, {
         "get": { method: "GET", isArray: false },
         "patch": { method: "PATCH", isArray: false },
@@ -9,7 +9,22 @@
             url: "/odata/PersonalAddresses(:id)/AlternativeHome?:query",
             isArray: true,
             transformResponse: function (data) {
-                return angular.fromJson(data).value;
+                var res = angular.fromJson(data);
+                if (res.error == undefined) {
+                    return res.value;
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    controller: "ServiceErrorController",
+                    backdrop: "static",
+                    resolve: {
+                        errorMsg: function () {
+                            return res.error.innererror.message;
+                        }
+                    }
+                });
+                return res;
             }
         },
         "getAlternativeWork": {
@@ -17,15 +32,45 @@
             url: "/odata/PersonalAddresses(:id)/AlternativeWork?:query",
             isArray: true,
             transformResponse: function (data) {
-                return angular.fromJson(data).value;
+                var res = angular.fromJson(data);
+                if (res.error == undefined) {
+                    return res.value;
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    controller: "ServiceErrorController",
+                    backdrop: "static",
+                    resolve: {
+                        errorMsg: function () {
+                            return res.error.innererror.message;
+                        }
+                    }
+                });
+                return res;
             }
         },
         "setCoordinatesOnAddress": {
             method: "POST",
             url: "/odata/Addresses/Service.SetCoordinatesOnAddress",
             isArray: true,
-            transformResponse: function(data) {
-                return angular.fromJson(data).value;
+            transformResponse: function (data) {
+                var res = angular.fromJson(data);
+                if (res.error == undefined) {
+                    return res.value;
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    controller: "ServiceErrorController",
+                    backdrop: "static",
+                    resolve: {
+                        errorMsg: function () {
+                            return res.error.innererror.message;
+                        }
+                    }
+                });
+                return res;
             }
         },
         "GetPersonalAndStandard": {
@@ -33,13 +78,57 @@
             url: "/odata/Addresses/Service.GetPersonalAndStandard?personId=:personId",
             isArray: true,
             transformResponse: function (data) {
-                return angular.fromJson(data).value;
+                var res = angular.fromJson(data);
+                if (res.error == undefined) {
+                    return res.value;
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    controller: "ServiceErrorController",
+                    backdrop: "static",
+                    resolve: {
+                        errorMsg: function () {
+                            return res.error.innererror.message;
+                        }
+                    }
+                });
+                return res;
             }
         },
         "getMapStart": {
             method: "GET",
             url: "/odata/Addresses/Service.GetMapStart",
-            isArray: false
+            isArray: true,
+            transformResponse: function (data) {
+                var res = angular.fromJson(data);
+                if (res.error == undefined) {
+                    var resArray = [];
+                    resArray.push({ name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude });
+                    resArray.push({ name: res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town, lat: res.Latitude, lng: res.Longitude });
+                    return resArray;
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    controller: "ServiceErrorController",
+                    backdrop: "static",
+                    resolve: {
+                        errorMsg: function () {
+                            return res.error.innererror.message;
+                        }
+                    }
+                });
+                return res;
+            }
+        },
+        "AttemptCleanCachedAddress": {
+            method: "POST",
+            url: "/odata/Addresses/Service.AttemptCleanCachedAddress"
+        },
+        "GetAutoCompleteDataForCachedAddress": {
+            method: "GET",
+            url: "/odata/Addresses/Service.GetCachedAddresses?$select=Description,DirtyString"
         }
     });
 }]);

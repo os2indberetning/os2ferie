@@ -1,11 +1,25 @@
 ﻿angular.module("application").controller("MyPendingReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "$timeout", function ($scope, $modal, $rootScope, Report, $timeout) {
+   "$scope", "$modal", "$rootScope", "Report", "$timeout", "Person", function ($scope, $modal, $rootScope, Report, $timeout, Person) {
 
-       // Hardcoded personid == 1 until we can get current user from their system.
-       var personId = 1;
+       // Set personId. The value on $rootScope is set in resolve in application.js
+       var personId = $rootScope.CurrentUser.Id;
 
-       // Helper Methods
 
+       $scope.getEndOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.endOf('day').unix();
+       }
+
+       $scope.getStartOfDayStamp = function (d) {
+           var m = moment(d);
+           return m.startOf('day').unix();
+       }
+
+       // dates for kendo filter.
+       var fromDateFilter = new Date();
+       fromDateFilter.setDate(fromDateFilter.getDate() - 30);
+       fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
+       var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
        $scope.loadReports = function () {
            $scope.Reports = {
@@ -43,7 +57,7 @@
                    serverAggregates: false,
                    serverSorting: true,
                    serverFiltering: true,
-                   filter: [{field: "PersonId", operator: "eq", value: personId}],
+                   filter: [{ field: "PersonId", operator: "eq", value: personId }, { field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }],
                    sort: { field: "DriveDateTimestamp", dir: "desc" },
                    aggregate: [
                    { field: "Distance", aggregate: "sum" },
@@ -123,14 +137,14 @@
                        template: function (data) {
                            return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
                        },
-                       footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+                       footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
                    }, {
                        field: "AmountToReimburse",
                        title: "Beløb",
                        template: function (data) {
                            return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
                        },
-                       footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+                       footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
                    }, {
                        field: "CreationDate",
                        template: function (data) {
@@ -165,15 +179,7 @@
 
        }
 
-       $scope.getEndOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.endOf('day').unix();
-       }
 
-       $scope.getStartOfDayStamp = function (d) {
-           var m = moment(d);
-           return m.startOf('day').unix();
-       }
 
        // Event handlers
 
@@ -181,6 +187,7 @@
            var modalInstance = $modal.open({
                templateUrl: '/App/MyReports/ConfirmDeleteTemplate.html',
                controller: 'ConfirmDeleteReportController',
+               backdrop: "static",
                resolve: {
                    itemId: function () {
                        return id;
@@ -196,27 +203,20 @@
        }
 
        $scope.editClick = function (id) {
-           // Create a new scope to inject into EditReportController
-           var scope = $rootScope.$new();
-
-           // Get the report from the server
-           Report.get({ id: id }, function (data) {
-               // Set values in the scope.
-               scope.purpose = data[0].purpose;
-               scope.driveDate = moment.unix(data[0].driveDateTimestamp).format("DD/MM/YYYY");
-           });
-
-
-
            var modalInstance = $modal.open({
-               scope: scope,
-               templateUrl: '/App/MyReports/EditReportModal.html',
-               controller: 'EditReportController',
-               windowClass: 'full',
+               templateUrl: '/App/MyReports/EditReportTemplate.html',
+               controller: 'DrivingController',
+               backdrop: "static",
+               windowClass: "app-modal-window-full",
+               resolve: {
+                   ReportId: function () {
+                       return id;
+                   }
+               }
            });
 
-           modalInstance.result.then(function (itemId) {
-
+           modalInstance.result.then(function (res) {
+               $scope.gridContainer.grid.dataSource.read();
            });
        }
 
@@ -261,6 +261,9 @@
            format: "dd/MM/yyyy",
        };
 
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
 
        $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
@@ -283,6 +286,8 @@
                }
            });
        }
+
+
 
    }
 ]);

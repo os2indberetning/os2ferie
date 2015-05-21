@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using Core.DomainServices.RoutingClasses;
+using Infrastructure.AddressServices.Interfaces;
 using Newtonsoft.Json.Linq;
 using Core.DomainModel;
 
 namespace Infrastructure.AddressServices
 {
-    public class AddressLaundering
+    public class AddressLaundering : IAddressLaunderer
     {
         #region Public methods
 
@@ -21,29 +23,19 @@ namespace Infrastructure.AddressServices
         public Address LaunderAddress(Address address)
         {
             var request = CreateRequest(address.StreetName, address.StreetNumber, address.ZipCode.ToString());
-
             var laundered = ExecuteAndRead(request);
-
-            if (!laundered.Any())
+            
+            if ( laundered == null)
             {
                 throw new AddressLaunderingException("The laundering process did not return any elements.", 0);
             }
 
-            foreach (var result in laundered)
-            {
-
-                if (result.validateresult <= 1000 && result.validateresult >= 100)
-                {
-                    address.StreetName = result.laundered_address.streetname;
-                    address.StreetNumber = result.laundered_address.streetbuildingidentifier;
-
-                    return address;
-                }
-                if(result.validateresult < 0)
-                {
-                    throw new AddressLaunderingException(result.validatedescription, result.validateresult);
-                }
-            }
+            address.StreetName = laundered.vejstykke.navn;
+            address.StreetNumber = laundered.husnr;
+            address.ZipCode = Convert.ToInt32(laundered.postnummer.nr);
+            address.Town = laundered.postnummer.navn;
+            address.Longitude = laundered.adgangspunkt.koordinater[0];
+            address.Latitude = laundered.adgangspunkt.koordinater[1];
 
             return address;
         }
@@ -61,12 +53,16 @@ namespace Infrastructure.AddressServices
         /// <returns></returns>
         private HttpWebRequest CreateRequest(string street, string streetNr, string zipCode)
         {
-            var query = string.Format("[\"{0} {1}, {2}\"]", street, streetNr, zipCode);
+            street = char.ToUpper(street[0]) + street.Substring(1);
+            streetNr = streetNr.Split(',')[0];
+            streetNr = streetNr.ToUpper();
+            streetNr = streetNr.Replace(" ", "");
+            var query = string.Format("vejnavn={0}&husnr={1}&postnr={2}", street, streetNr, zipCode);
 
             return (HttpWebRequest)WebRequest.Create(UrlDefinitions.LaunderingUrl + query);
         }
 
-        private List<RootLaunderedObject> ExecuteAndRead(HttpWebRequest request)
+        private Adgangsadresse ExecuteAndRead(HttpWebRequest request)
         {
             var responseString = "";
 
@@ -89,57 +85,38 @@ namespace Infrastructure.AddressServices
             return ParseJson(responseString);
         }
 
-        private List<RootLaunderedObject> ParseJson(string response)
+        private Adgangsadresse ParseJson(string response)
         {
-            List<RootLaunderedObject> laundered = new List<RootLaunderedObject>();
-            JObject jObject = JObject.Parse(response);
+            JArray jObject = JArray.Parse(response);
 
-            if (jObject == null)
+            if (jObject.Count != 1)
             {
-                return laundered;
+                return null;
             }
 
-            JToken jLaunder = jObject["results"];
+            JToken jsonAddress = jObject[0];
 
-            if (jLaunder == null)
-            {
-                return laundered;
-            }
+            var accessAddress = new Adgangsadresse();
 
-            foreach (var jToken in jLaunder.ToArray())
-            {
-                if (jToken == null)
-                {
-                    continue;
-                }
 
-                var jLaundered = jToken["laundered"];
+            accessAddress.vejstykke = new Vejstykke(jsonAddress["vejstykke"]);
+            accessAddress.postnummer = new Postnummer(jsonAddress["postnummer"]);
+            accessAddress.husnr = (string)jsonAddress["husnr"];
+            accessAddress.adgangspunkt = new Adgangspunkt(jsonAddress["adgangspunkt"]);
 
-                if (jLaundered == null)
-                {
-                    continue;
-                }
-
-                var launderedAddress = new RootLaunderedObject
-                {
-                    input = (string)jLaundered["input"],
-                    validateresult = (int)jLaundered["validateresult"],
-                    validatedescription = (string)jLaundered["validatedescription"],
-                    laundered_address = new LaunderedAddress()
-                };
-
-                var jAddress = jLaundered["laundered_address"];
-
-                launderedAddress.laundered_address.streetbuildingidentifier = (string)jAddress["streetbuildingidentifier"];
-                launderedAddress.laundered_address.streetname = (string)jAddress["streetname"];
-                launderedAddress.laundered_address.postcode = (string) jAddress["postcode"];
-
-                laundered.Add(launderedAddress);
-            }
-
-            return laundered;
+            return accessAddress;
         }
 
         #endregion
+
+        public Address Launder(Address inputAddress)
+        {
+            return LaunderAddress(inputAddress);
+        }
+
+        public Address Launder(string inputAddress)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

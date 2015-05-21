@@ -1,5 +1,6 @@
 ﻿angular.module('application').controller('NewApproverModalInstanceController',
     ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService) {
+
         $scope.persons = persons;
         $scope.approverFromDate = new Date();
         $scope.approverToDate = new Date();
@@ -17,12 +18,12 @@
 
         $scope.saveNewApprover = function () {
             if ($scope.approver == undefined) {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Du skal vælge en godkender");
+                NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en godkender");
                 return;
             }
 
             if ($scope.target == undefined) {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Du skal vælge en ansat");
+                NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en ansat");
                 return;
             }
             
@@ -42,10 +43,10 @@
             }
 
             sub.$post(function (data) {
-                NotificationService.AutoFadeNotification("success", "Success", "Godkender blev oprettet");
+                NotificationService.AutoFadeNotification("success", "", "Godkender blev oprettet");
                 $modalInstance.close();
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "Fejl", "Kunne ikke oprette godkender");
+                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette godkender (Du kan ikke oprette 2 godkendere for samme person i samme periode)");
             });
         };
 

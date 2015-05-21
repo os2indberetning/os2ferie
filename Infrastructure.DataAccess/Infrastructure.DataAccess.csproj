@@ -33,24 +33,24 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.0.2\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.0.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MySql.Data.6.9.5\lib\net45\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=6.9.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.6\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MySql.Data.Entity.6.9.5\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.Entity.6.9.6\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -205,6 +205,74 @@
     <Compile Include="Migrations\201504070851025_AddedRouteGeometryToDriveReport.Designer.cs">
       <DependentUpon>201504070851025_AddedRouteGeometryToDriveReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504220645399_UnknownChanges.cs" />
+    <Compile Include="Migrations\201504220645399_UnknownChanges.Designer.cs">
+      <DependentUpon>201504220645399_UnknownChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504220905137_AddedCachedAddress.cs" />
+    <Compile Include="Migrations\201504220905137_AddedCachedAddress.Designer.cs">
+      <DependentUpon>201504220905137_AddedCachedAddress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504220917054_EditedCachedAddress.cs" />
+    <Compile Include="Migrations\201504220917054_EditedCachedAddress.Designer.cs">
+      <DependentUpon>201504220917054_EditedCachedAddress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505051059450_addedWorkAddressToOrgUnit.cs" />
+    <Compile Include="Migrations\201505051059450_addedWorkAddressToOrgUnit.Designer.cs">
+      <DependentUpon>201505051059450_addedWorkAddressToOrgUnit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505051125169_addedWorkDistanceOverrideToEmployment.cs" />
+    <Compile Include="Migrations\201505051125169_addedWorkDistanceOverrideToEmployment.Designer.cs">
+      <DependentUpon>201505051125169_addedWorkDistanceOverrideToEmployment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505051343402_madeWorkAddressOnOrgUnitVirtual.cs" />
+    <Compile Include="Migrations\201505051343402_madeWorkAddressOnOrgUnitVirtual.Designer.cs">
+      <DependentUpon>201505051343402_madeWorkAddressOnOrgUnitVirtual.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505060633461_AddedHomeWorkDistanceToEmployment.cs" />
+    <Compile Include="Migrations\201505060633461_AddedHomeWorkDistanceToEmployment.Designer.cs">
+      <DependentUpon>201505060633461_AddedHomeWorkDistanceToEmployment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505070847142_d.cs" />
+    <Compile Include="Migrations\201505070847142_d.Designer.cs">
+      <DependentUpon>201505070847142_d.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505070857330_d1.cs" />
+    <Compile Include="Migrations\201505070857330_d1.Designer.cs">
+      <DependentUpon>201505070857330_d1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505071325190_changedAlternativeWorkAddressOnEmploymentToPersonalAddress.cs" />
+    <Compile Include="Migrations\201505071325190_changedAlternativeWorkAddressOnEmploymentToPersonalAddress.Designer.cs">
+      <DependentUpon>201505071325190_changedAlternativeWorkAddressOnEmploymentToPersonalAddress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505071332118_changedalternativeworkaddresstoOptional.cs" />
+    <Compile Include="Migrations\201505071332118_changedalternativeworkaddresstoOptional.Designer.cs">
+      <DependentUpon>201505071332118_changedalternativeworkaddresstoOptional.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505071441089_AddedDirtyStringToCachedAddresses.cs" />
+    <Compile Include="Migrations\201505071441089_AddedDirtyStringToCachedAddresses.Designer.cs">
+      <DependentUpon>201505071441089_AddedDirtyStringToCachedAddresses.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505071538038_dunno123.cs" />
+    <Compile Include="Migrations\201505071538038_dunno123.Designer.cs">
+      <DependentUpon>201505071538038_dunno123.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505120749466_addedIsSubstituteToPerson.cs" />
+    <Compile Include="Migrations\201505120749466_addedIsSubstituteToPerson.Designer.cs">
+      <DependentUpon>201505120749466_addedIsSubstituteToPerson.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505121307576_AddedAddressIdToOrgUnut.cs" />
+    <Compile Include="Migrations\201505121307576_AddedAddressIdToOrgUnut.Designer.cs">
+      <DependentUpon>201505121307576_AddedAddressIdToOrgUnut.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505191054334_MadeFullNameARequiredFieldInPersonTable.cs" />
+    <Compile Include="Migrations\201505191054334_MadeFullNameARequiredFieldInPersonTable.Designer.cs">
+      <DependentUpon>201505191054334_MadeFullNameARequiredFieldInPersonTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505191109180_RemovedMiddleNameFromPerson.cs" />
+    <Compile Include="Migrations\201505191109180_RemovedMiddleNameFromPerson.Designer.cs">
+      <DependentUpon>201505191109180_RemovedMiddleNameFromPerson.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -213,6 +281,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="connections.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -327,6 +398,57 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504070851025_AddedRouteGeometryToDriveReport.resx">
       <DependentUpon>201504070851025_AddedRouteGeometryToDriveReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504220645399_UnknownChanges.resx">
+      <DependentUpon>201504220645399_UnknownChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504220905137_AddedCachedAddress.resx">
+      <DependentUpon>201504220905137_AddedCachedAddress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504220917054_EditedCachedAddress.resx">
+      <DependentUpon>201504220917054_EditedCachedAddress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505051059450_addedWorkAddressToOrgUnit.resx">
+      <DependentUpon>201505051059450_addedWorkAddressToOrgUnit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505051125169_addedWorkDistanceOverrideToEmployment.resx">
+      <DependentUpon>201505051125169_addedWorkDistanceOverrideToEmployment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505051343402_madeWorkAddressOnOrgUnitVirtual.resx">
+      <DependentUpon>201505051343402_madeWorkAddressOnOrgUnitVirtual.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505060633461_AddedHomeWorkDistanceToEmployment.resx">
+      <DependentUpon>201505060633461_AddedHomeWorkDistanceToEmployment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505070847142_d.resx">
+      <DependentUpon>201505070847142_d.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505070857330_d1.resx">
+      <DependentUpon>201505070857330_d1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505071325190_changedAlternativeWorkAddressOnEmploymentToPersonalAddress.resx">
+      <DependentUpon>201505071325190_changedAlternativeWorkAddressOnEmploymentToPersonalAddress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505071332118_changedalternativeworkaddresstoOptional.resx">
+      <DependentUpon>201505071332118_changedalternativeworkaddresstoOptional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505071441089_AddedDirtyStringToCachedAddresses.resx">
+      <DependentUpon>201505071441089_AddedDirtyStringToCachedAddresses.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505071538038_dunno123.resx">
+      <DependentUpon>201505071538038_dunno123.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505120749466_addedIsSubstituteToPerson.resx">
+      <DependentUpon>201505120749466_addedIsSubstituteToPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505121307576_AddedAddressIdToOrgUnut.resx">
+      <DependentUpon>201505121307576_AddedAddressIdToOrgUnut.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505191054334_MadeFullNameARequiredFieldInPersonTable.resx">
+      <DependentUpon>201505191054334_MadeFullNameARequiredFieldInPersonTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505191109180_RemovedMiddleNameFromPerson.resx">
+      <DependentUpon>201505191109180_RemovedMiddleNameFromPerson.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

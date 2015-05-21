@@ -11,12 +11,12 @@ namespace ApplicationServices.Test.FileGenerator
          * These tests assume the dummy data in App.config. 
          * This is what is assumed is in the settings.
         
-            <add key="KMDFilePath" value="/sti/til/kmd/mappe"/>
-            <add key="KMDFileName" value="kmdFilNavn"/>
-            <add key="KMDHeader" value="første linje i kmd fil"/>
-            <add key="KMDStaticNr" value="1111"/>
-            <add key="CommuneNr" value="2222"/>
-            <add key="KMDReservedNr" value="3333"/>
+            <add key="PROTECTED_KMDFilePath" value="/sti/til/kmd/mappe"/>
+            <add key="PROTECTED_KMDFileName" value="kmdFilNavn"/>
+            <add key="PROTECTED_KMDHeader" value="første linje i kmd fil"/>
+            <add key="PROTECTED_KMDStaticNr" value="1111"/>
+            <add key="PROTECTED_CommuneNr" value="2222"/>
+            <add key="PROTECTED_KMDReservedNr" value="3333"/>
           
          */
 
@@ -36,14 +36,6 @@ namespace ApplicationServices.Test.FileGenerator
         };
 
         private const string cpr = "1234567890";
-
-        [Test]
-        public void FileRecordStringsShouldHaveALengthOf54()
-        {
-            var record = new FileRecord(_report, cpr);
-            var recordString = record.ToString();
-            Assert.AreEqual(54, recordString.Length, "Length of each record string should be 54 chars");
-        }
 
         [Test]
         public void DistanceWithoutDecimalsShouldHave00Appended()

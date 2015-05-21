@@ -10,8 +10,8 @@ body,
 .navbar-inverse .navbar-nav>.active>a, 
 .navbar-inverse .navbar-nav>.active>a:focus,
 .navbar-inverse .navbar-nav>.active>a:hover,
-.nav-tabs.nav-justified > .active > a,
- .nav-tabs.nav-justified > .active > a:focus,
- .nav-tabs.nav-justified > .active > a:hover {
+.nav-tabs.nav > .active > a,
+ .nav-tabs.nav > .active > a:focus,
+ .nav-tabs.nav > .active > a:hover {
     background-color: #6B2D52 !important;
 }

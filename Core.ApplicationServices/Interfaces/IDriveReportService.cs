@@ -10,11 +10,11 @@ namespace Core.ApplicationServices.Interfaces
 {
     public interface IDriveReportService
     {
-        void AddFullName(DriveReport driveReport);
         DriveReport Create(DriveReport report);
         void SendMailIfRejectedReport(int key, Delta<DriveReport> delta);
         IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> driveReport);
         IQueryable<DriveReport> FilterByLeader(IQueryable<DriveReport> repo, int leaderId, bool getReportsWhereSubExists = false);
-        IQueryable<DriveReport> AddApprovedByFullName(IQueryable<DriveReport> repo);
+        Person GetResponsibleLeaderForReport(DriveReport driveReport);
+        bool Validate(DriveReport report);
     }
 }

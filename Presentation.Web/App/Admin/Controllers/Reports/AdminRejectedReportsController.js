@@ -1,9 +1,10 @@
 
-angular.module("application").controller("AdminRejectedReportsController", [
-   "$scope", "$timeout", "$modal", function ($scope, $timeout, $modal) {
+angular.module("application").controller("AdminRejectedReportsController",
+    ["$scope", "$rootScope", "$timeout", "$modal",
+    function ($scope, $rootScope, $timeout, $modal) {
 
-       // Hardcoded personid until we can get current user from their system.
-       var personId = 1;
+        // Set personId. The value on $rootScope is set in resolve in application.js
+        var personId = $rootScope.CurrentUser.Id;
 
 
        $scope.getEndOfDayStamp = function (d) {
@@ -90,7 +91,7 @@ angular.module("application").controller("AdminRejectedReportsController", [
                    field: "FullName",
                    title: "Medarbejder"
                }, {
-                   field: "Employment.OrgUnit.ShortDescription",
+                   field: "Employment.OrgUnit.LongDescription",
                    title: "Organisationsenhed"
                }, {
                    field: "DriveDateTimestamp",
@@ -133,14 +134,14 @@ angular.module("application").controller("AdminRejectedReportsController", [
                    template: function (data) {
                        return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
                    },
-                   footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
                }, {
                    field: "AmountToReimburse",
                    title: "Beløb",
                    template: function (data) {
                        return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
                    },
-                   footerTemplate: "Siden: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
                }, {
                    field: "KilometerAllowance",
                    title: "Merkørsel",
@@ -214,9 +215,11 @@ angular.module("application").controller("AdminRejectedReportsController", [
            });
        }
 
-       // Event handlers
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
-
+    
        var initialLoad = 2;
        $scope.dateChanged = function () {
            // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
@@ -251,6 +254,10 @@ angular.module("application").controller("AdminRejectedReportsController", [
 
        // Load up the grids.
        $scope.loadReports();
+
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
 
 
        // Contains references to kendo ui grids.

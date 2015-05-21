@@ -8,7 +8,7 @@
                 'resource': 'addressaccess',
                 'select' : function(data) {
 
-                    scope.model = data.presentationString;
+                    scope.model = data.tekst;
                 }
             };
 

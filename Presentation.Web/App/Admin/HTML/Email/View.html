@@ -1,9 +1,7 @@
 ﻿
 <div class="panel panel-default">
 
-    <div class="panel-heading">
-        <h3 class="panel-title"><i class="fa fa-envelope-o fa-fw"></i> Emailadviseringer</h3>
-    </div>
+
 
 
     <div class="panel-body">
@@ -11,11 +9,13 @@
         <div class="row">
             <div class="col-md-12">
                 <h2 class="pull-left">Emailadviseringer</h2>
+                <span class="info-popup pull-left margin-top-28 margin-left-5" popover="{{EmailHelpText.text}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
             </div>
+            
 
 
         </div>
-        <div kendo-grid="gridContainer.notificationGrid" class="margin-top-10" options="notifications"></div>
-        <button class="btn btn-primary col-md-2 margin-top-20 pull-right" ng-click="addNewClick()"><i class="fa fa-plus"></i> Opret</button>
+            <div kendo-grid="gridContainer.notificationGrid" class="margin-top-10 scrollable" options="notifications"></div>
+        <button class="btn btn-primary col-md-2 margin-top-20 pull-right" ng-click="addNewClick()">Opret</button>
     </div>
 </div>
