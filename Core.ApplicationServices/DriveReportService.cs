@@ -184,7 +184,7 @@ namespace Core.ApplicationServices
                     //Indicate drivereports where we could not find a leader
                     SetResponsibleLeaderOnReport(driveReport, new Person()
                     {
-                        FirstName = "Var ikke i stand til at finde godkendede leder",
+                        FirstName = "Var ikke i stand til at finde godkendende leder",
                         LastName = "",
                         Initials = "FEJL"
                     });

@@ -82,7 +82,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
         }
 
         [Test]
-        public void test()
+        public void NoSubs_NoLeaderInReportOrg_ShouldReturn_ClosestParentOrgLeader()
         {
             _subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>().AsQueryable());
 
@@ -166,7 +166,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
         }
 
         [Test]
-        public void test2()
+        public void SubstituteForLeader_ShouldReturnSubstitute()
         {
             var yesterdayStamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(1))).TotalSeconds;
             var tomorrowStamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(-1))).TotalSeconds;
@@ -184,13 +184,13 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                     OrgUnitId = 2,
                     Person = new Person()
                     {
-                        Id = 1,
+                        Id = 2,
                     },
-                    PersonId = 1,
-                    LeaderId = 1,
+                    PersonId = 2,
+                    LeaderId = 2,
                     Leader = new Person()
                     {
-                        Id = 1
+                        Id = 2
                     },
                     Sub = new Person()
                     {
@@ -278,6 +278,252 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
             var res = _uut.GetResponsibleLeaderForReport(report);
             Assert.AreEqual("Heidi Huber", res.FullName);
+        }
+
+        [Test]
+        public void PersonalApproverForReportOwner_ShouldReturnPersonalApprover()
+        {
+            var yesterdayStamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(1))).TotalSeconds;
+            var tomorrowStamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(-1))).TotalSeconds;
+
+            _subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>()
+            {
+                new Core.DomainModel.Substitute()
+                {
+                    StartDateTimestamp = yesterdayStamp,
+                    EndDateTimestamp = tomorrowStamp,
+                    Person = new Person()
+                    {
+                        Id = 1,
+                    },
+                    PersonId = 1,
+                    LeaderId = 2,
+                    Leader = new Person()
+                    {
+                        Id = 2
+                    },
+                    Sub = new Person()
+                    {
+                        Id = 3,
+                        FullName = "Heidi Huber Approves"
+                    },
+                    SubId = 3
+                }
+            }.AsQueryable());
+
+            var report = new DriveReport()
+            {
+                PersonId = 1,
+                Person = new Person()
+                {
+                    Id = 1,
+                },
+                EmploymentId = 1,
+                Employment = new Employment()
+                {
+                    OrgUnit = new OrgUnit()
+                    {
+                        Id = 2
+                    },
+                    OrgUnitId = 2
+
+                }
+            };
+
+            _orgUnitMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
+            {
+                new OrgUnit()
+                {
+                    Id = 1,
+                    Level = 0
+                },
+                new OrgUnit()
+                {
+                    Id = 2,
+                    Level = 1,
+                    ParentId = 1,
+                    Parent = new OrgUnit()
+                    {
+                        Id = 1,
+                        Level = 0
+                    }
+                }
+            }.AsQueryable());
+
+            _emplMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
+            {
+                new Employment()
+                {
+                    PersonId = 1,
+                    Person = new Person()
+                    {
+                        Id = 1,
+                        FullName = "Jon Badstue"
+                    },
+                    Id = 1,
+                    IsLeader = false,
+                    OrgUnit = new OrgUnit()
+                    {
+                        Id = 2,
+                    },
+                    OrgUnitId = 2
+                },
+                new Employment()
+                {
+                    PersonId = 2,
+                    Person = new Person()
+                    {
+                        Id = 2,
+                        FullName = "Eva Due",
+                    },
+                    Id = 12,
+                    IsLeader = true,
+                    OrgUnit = new OrgUnit()
+                    {
+                        Id = 1,
+                    },
+                    OrgUnitId = 1
+                },
+            }.AsQueryable());
+
+            var res = _uut.GetResponsibleLeaderForReport(report);
+            Assert.AreEqual("Heidi Huber Approves", res.FullName);
+        }
+
+        [Test]
+        public void PersonalApproverForReportOwner_AndSubstituteForLeader_ShouldReturnPersonalApprover()
+        {
+            var yesterdayStamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(1))).TotalSeconds;
+            var tomorrowStamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(-1))).TotalSeconds;
+
+            _subMock.AsQueryable().ReturnsForAnyArgs(new List<Core.DomainModel.Substitute>()
+            {
+                new Core.DomainModel.Substitute()
+                {
+                    StartDateTimestamp = yesterdayStamp,
+                    EndDateTimestamp = tomorrowStamp,
+                    Person = new Person()
+                    {
+                        Id = 1,
+                    },
+                    PersonId = 1,
+                    LeaderId = 2,
+                    Leader = new Person()
+                    {
+                        Id = 2
+                    },
+                    Sub = new Person()
+                    {
+                        Id = 3,
+                        FullName = "Heidi Huber Approves"
+                    },
+                    SubId = 3
+                },
+                new Core.DomainModel.Substitute()
+                {
+                    StartDateTimestamp = yesterdayStamp,
+                    EndDateTimestamp = tomorrowStamp,
+                    OrgUnit = new OrgUnit()
+                    {
+                        Id = 2,
+                    },
+                    OrgUnitId = 2,
+                    Person = new Person()
+                    {
+                        Id = 2,
+                    },
+                    PersonId = 2,
+                    LeaderId = 2,
+                    Leader = new Person()
+                    {
+                        Id = 2
+                    },
+                    Sub = new Person()
+                    {
+                        Id = 3,
+                        FullName = "Heidi Huber"
+                    },
+                    SubId = 3
+                }
+            }.AsQueryable());
+
+            var report = new DriveReport()
+            {
+                PersonId = 1,
+                Person = new Person()
+                {
+                    Id = 1,
+                },
+                EmploymentId = 1,
+                Employment = new Employment()
+                {
+                    OrgUnit = new OrgUnit()
+                    {
+                        Id = 2
+                    },
+                    OrgUnitId = 2
+
+                }
+            };
+
+            _orgUnitMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
+            {
+                new OrgUnit()
+                {
+                    Id = 1,
+                    Level = 0
+                },
+                new OrgUnit()
+                {
+                    Id = 2,
+                    Level = 1,
+                    ParentId = 1,
+                    Parent = new OrgUnit()
+                    {
+                        Id = 1,
+                        Level = 0
+                    }
+                }
+            }.AsQueryable());
+
+            _emplMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>()
+            {
+                new Employment()
+                {
+                    PersonId = 1,
+                    Person = new Person()
+                    {
+                        Id = 1,
+                        FullName = "Jon Badstue"
+                    },
+                    Id = 1,
+                    IsLeader = false,
+                    OrgUnit = new OrgUnit()
+                    {
+                        Id = 2,
+                    },
+                    OrgUnitId = 2
+                },
+                new Employment()
+                {
+                    PersonId = 2,
+                    Person = new Person()
+                    {
+                        Id = 2,
+                        FullName = "Eva Due",
+                    },
+                    Id = 12,
+                    IsLeader = true,
+                    OrgUnit = new OrgUnit()
+                    {
+                        Id = 1,
+                    },
+                    OrgUnitId = 1
+                },
+            }.AsQueryable());
+
+            var res = _uut.GetResponsibleLeaderForReport(report);
+            Assert.AreEqual("Heidi Huber Approves", res.FullName);
         }
 
 
