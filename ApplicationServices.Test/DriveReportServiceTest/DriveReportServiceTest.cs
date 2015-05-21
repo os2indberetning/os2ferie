@@ -4,11 +4,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using System.Web.OData;
 using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
+using Core.DomainServices.RoutingClasses;
 using Microsoft.Owin.Testing;
 using Ninject;
 using NUnit.Framework;
@@ -22,21 +24,6 @@ using Substitute = NSubstitute.Substitute;
 
 namespace ApplicationServices.Test.DriveReportServiceTest
 {
-    [TestFixture]
-    public class DriveReportServiceTest : DriveReportMock
-    {
-        [Test]
-        public void Create_WithPersonID0_ShouldThrowException()
-        {
-            var testReport = new DriveReport()
-            {
-                PersonId = 0
-            };
-
-            Assert.Throws<Exception>(() => NinjectWebKernel.CreateKernel().Get<DriveReportService>().Create(testReport));
-        }
-    }
-
     [TestFixture] //TODO rewrite tests, did not catch that the person was always set as responsible leader
     /** Things to test: 
      *      person is an employee
@@ -46,20 +33,52 @@ namespace ApplicationServices.Test.DriveReportServiceTest
      *      persons leader has substitute
      */
 
-    public class AttachResponsibleLeaderTests
+    public class DriveReportServiceTests
     {
         private IGenericRepository<Employment> _emplMock;
         private IGenericRepository<OrgUnit> _orgUnitMock;
         private IGenericRepository<Core.DomainModel.Substitute> _subMock;
         private IDriveReportService _uut;
+        private IReimbursementCalculator _calculatorMock;
+        private IGenericRepository<DriveReport> _reportRepoMock;
+        private IRoute<RouteInformation> _routeMock;
+        private IAddressCoordinates _coordinatesMock;
+        private IMailSender _mailMock;
+        private List<DriveReport> repoList;
 
         [SetUp]
         public void SetUp()
         {
+            var idCounter = 0;
+
+            repoList = new List<DriveReport>();
             _emplMock = Substitute.For<IGenericRepository<Employment>>();
+            _calculatorMock = Substitute.For<IReimbursementCalculator>();
             _orgUnitMock = Substitute.For<IGenericRepository<OrgUnit>>();
+            _routeMock = Substitute.For<IRoute<RouteInformation>>();
+            _coordinatesMock = Substitute.For<IAddressCoordinates>();
             _subMock = Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
-            _uut = new DriveReportService(Substitute.For<IMailSender>(), Substitute.For<IGenericRepository<DriveReport>>(), Substitute.For<IReimbursementCalculator>(), _orgUnitMock, _emplMock, _subMock);
+            _mailMock = Substitute.For<IMailSender>();
+            _reportRepoMock = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
+
+            _reportRepoMock.Insert(new DriveReport()).ReturnsForAnyArgs(x => x.Arg<DriveReport>()).AndDoes(x => repoList.Add(x.Arg<DriveReport>())).AndDoes(x => x.Arg<DriveReport>().Id = idCounter).AndDoes(x => idCounter++);
+            _reportRepoMock.AsQueryable().ReturnsForAnyArgs(repoList.AsQueryable());
+
+            _calculatorMock.Calculate(new DriveReport()).ReturnsForAnyArgs(x => x.Arg<DriveReport>());
+
+            _coordinatesMock.GetAddressCoordinates(new Address()).ReturnsForAnyArgs(new DriveReportPoint()
+            {
+                Latitude = "1",
+                Longitude = "2",
+            });
+
+            _routeMock.GetRoute(new List<Address>()).ReturnsForAnyArgs(new RouteInformation()
+            {
+                Length = 2000
+            });
+
+            _uut = new DriveReportService(_mailMock, _reportRepoMock, _calculatorMock, _orgUnitMock, _emplMock, _subMock, _coordinatesMock, _routeMock);
+
         }
 
         [Test]
@@ -573,7 +592,8 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 KilometerAllowance = KilometerAllowance.Calculated,
                 DriveReportPoints = new List<DriveReportPoint>
                 {
-                    
+                    new DriveReportPoint(),
+                    new DriveReportPoint(),
                 },
                 Purpose = "Test"
             };
@@ -581,5 +601,152 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             var res = _uut.Validate(report);
             Assert.IsTrue(res);
         }
+
+
+        [Test]
+        public void ReportWith_CalculatedDistance7_ShouldReturn_False()
+        {
+            var report = new DriveReport
+            {
+                KilometerAllowance = KilometerAllowance.Calculated,
+                Distance = 7,
+                DriveReportPoints = new List<DriveReportPoint>(),
+                Purpose = "Test"
+            };
+
+            var res = _uut.Validate(report);
+            Assert.IsFalse(res);
+        }
+
+
+        [Test]
+        public void Create_InvalidReport_ShouldThrowException()
+        {
+            var report = new DriveReport
+            {
+                KilometerAllowance = KilometerAllowance.Calculated,
+                Distance = 7,
+                Purpose = "Test"
+            };
+            Assert.Throws<Exception>(() => _uut.Create(report));
+        }
+
+        [Test]
+        public void Create_InvalidReadReport_ShouldThrowException()
+        {
+            var report = new DriveReport
+            {
+                KilometerAllowance = KilometerAllowance.Read,
+                Purpose = "Test"
+            };
+            Assert.Throws<Exception>(() => _uut.Create(report));
+        }
+
+        [Test]
+        public void Create_ValidReadReport_ShouldCallCalculate()
+        {
+            var report = new DriveReport
+            {
+                KilometerAllowance = KilometerAllowance.Read,
+                Distance = 12,
+                Purpose = "Test",
+                PersonId = 1
+            };
+            _uut.Create(report);
+            _calculatorMock.ReceivedWithAnyArgs().Calculate(report);
+        }
+
+        [Test]
+        public void Create_ValidCalculatedReport_ShouldCallAddressCoordinates()
+        {
+            var report = new DriveReport
+            {
+                KilometerAllowance = KilometerAllowance.Calculated,
+                DriveReportPoints = new List<DriveReportPoint>
+                {
+                    new DriveReportPoint(),
+                    new DriveReportPoint()
+                },
+                PersonId = 1,
+                Purpose = "Test"
+                    
+            };
+            _uut.Create(report);
+            _coordinatesMock.ReceivedWithAnyArgs().GetAddressCoordinates(new DriveReportPoint());
+        }
+
+        [Test]
+        public void Create_ValidCalculatedReport_DistanceLessThanZero_ShouldSetDistanceToZero()
+        {
+            _routeMock.GetRoute(new List<Address>()).ReturnsForAnyArgs(new RouteInformation()
+            {
+                Length = -10
+            });
+
+            var report = new DriveReport
+            {
+                KilometerAllowance = KilometerAllowance.Calculated,
+                DriveReportPoints = new List<DriveReportPoint>
+                {
+                    new DriveReportPoint(),
+                    new DriveReportPoint(),
+                    new DriveReportPoint()
+                },
+                PersonId = 1,
+                Purpose = "Test"
+
+            };
+            var res = _uut.Create(report);
+            Assert.AreEqual(0,res.Distance);
+        }
+
+        [Test]
+        public void RejectedReport_shouldCall_SendMail_WithCorrectParameters()
+        {
+
+            var delta = new Delta<DriveReport>(typeof(DriveReport));
+            delta.TrySetPropertyValue("Status", ReportStatus.Rejected);
+            delta.TrySetPropertyValue("Comment", "Afvist, du");
+
+            repoList.Add(new DriveReport
+            {
+                Id = 1,
+                Status = ReportStatus.Pending,
+                Person = new Person
+                {
+                    Mail = "test@mail.dk",
+                    FullName = "TestPerson"
+                }
+            });
+
+            _uut.SendMailIfRejectedReport(1, delta);
+            _mailMock.Received().SendMail("test@mail.dk","Afvist indberetning","Din indberetning er blevet afvist med kommentaren: \n \n" + "Afvist, du");
+        }
+
+        [Test]
+        public void RejectedReport_PersonWithNoMail_ShouldThrowException()
+        {
+
+            var delta = new Delta<DriveReport>(typeof(DriveReport));
+            delta.TrySetPropertyValue("Status", ReportStatus.Rejected);
+            delta.TrySetPropertyValue("Comment", "Afvist, du");
+
+            repoList.Add(new DriveReport
+            {
+                Id = 1,
+                Status = ReportStatus.Pending,
+                Person = new Person
+                {
+                    Mail = "",
+                    FullName = "TestPerson"
+                }
+            });
+
+            Assert.Throws<Exception>(() => _uut.SendMailIfRejectedReport(1, delta));
+        }
+
+
+
+       
     }
 }

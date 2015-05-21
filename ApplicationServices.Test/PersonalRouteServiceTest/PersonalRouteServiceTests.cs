@@ -31,6 +31,7 @@ namespace ApplicationServices.Test.PersonalRouteServiceTest
                 Longitude = "1"
             });
 
+
             _routeRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalRoute>>();
             _routeRepoMock.Insert(new PersonalRoute()).ReturnsForAnyArgs(x => x.Arg<PersonalRoute>()).AndDoes(x => routeList.Add(x.Arg<PersonalRoute>())).AndDoes(x => x.Arg<PersonalRoute>().Id = _idCounter).AndDoes(x => _idCounter++);
             _routeRepoMock.AsQueryable().ReturnsForAnyArgs(routeList.AsQueryable());
