@@ -10,6 +10,21 @@
         $scope.persons = [];
         $scope.currentPerson = {};
 
+        $scope.getEndOfDayStamp = function (d) {
+            var m = moment(d);
+            return m.endOf('day').unix();
+        }
+
+        $scope.getStartOfDayStamp = function (d) {
+            var m = moment(d);
+            return m.startOf('day').unix();
+        }
+
+        // dates for kendo filter.
+        var fromDateFilter = new Date();
+        fromDateFilter.setDate(fromDateFilter.getDate() - 30);
+        fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
+        var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
         Person.get({ id: personId }, function (data) {
             $scope.currentPerson = data;
@@ -61,6 +76,10 @@
             serverFiltering: true,
             sortable: true,
             scrollable: false,
+            filter: [
+                    { field: "StartDateTimestamp", operator: "lte", value: toDateFilter },
+                    { field: "EndDateTimestamp", operator: "gte", value: fromDateFilter }
+            ],
             pageable: {
                 messages: {
                     display: "{0} - {1} af {2} stedfortrædere", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
@@ -124,19 +143,19 @@
             if (type == "substitute") {
                 $scope.container.substituteGrid.dataSource.filter([]);
                 var subFilters = [];
-                subFilters.push({ field: "StartDateTimestamp", operator: "gte", value: fromDateStamp });
+                subFilters.push({ field: "StartDateTimestamp", operator: "lte", value: toDateStamp });
 
                 if (!$scope.container.subInfinitePeriod) {
-                    subFilters.push({ field: "EndDateTimestamp", operator: "lte", value: toDateStamp });
+                    subFilters.push({ field: "EndDateTimestamp", operator: "gte", value: fromDateStamp });
                 }
                 $scope.container.substituteGrid.dataSource.filter(subFilters);
             } else if (type == "approver") {
                 $scope.container.approverGrid.dataSource.filter([]);
                 var appFilters = [];
-                appFilters.push({ field: "StartDateTimestamp", operator: "gte", value: fromDateStamp });
+                appFilters.push({ field: "StartDateTimestamp", operator: "lte", value: toDateStamp });
 
                 if (!$scope.container.appInfinitePeriod) {
-                    appFilters.push({ field: "EndDateTimestamp", operator: "lte", value: toDateStamp });
+                    appFilters.push({ field: "EndDateTimestamp", operator: "gte", value: fromDateStamp });
                 }
                 $scope.container.approverGrid.dataSource.filter(appFilters);
             }
@@ -348,17 +367,6 @@
             }
         }
 
-        $scope.getEndOfDayStamp = function (d) {
-            var m = moment(d);
-            return m.endOf('day').unix();
-        }
-
-        $scope.getStartOfDayStamp = function (d) {
-            var m = moment(d);
-            return m.startOf('day').unix();
-        }
-
-
         // Format for datepickers.
         $scope.dateOptions = {
             format: "dd/MM/yyyy",
@@ -416,7 +424,7 @@
                     leader: function () {
                         return $scope.currentPerson;
                     },
-                    persons: function() {
+                    persons: function () {
                         return $scope.persons;
                     }
                 }

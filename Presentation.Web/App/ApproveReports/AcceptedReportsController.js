@@ -387,7 +387,7 @@
                        var returnVal = "";
                        angular.forEach($scope.bankAccounts, function (value, key) {
                            if (value.Number == data.AccountNumber) {
-                               returnVal = "<div kendo-tooltip k-content=\"'" + value.Description + " - " + value.Number + "'\">Ja</div>";
+                               returnVal = "Ja " + "<div class='inline' kendo-tooltip k-content=\"'" + value.Description + " - " + value.Number + "'\"> <i class='fa fa-comment-o'></i></div>";
                            }
                        });
                        return returnVal;
@@ -474,9 +474,6 @@
            format: "dd/MM/yyyy",
        };
 
-       // Load bankaccounts then load grid.
-       // The grid needs the bankaccounts to be ready to show description and accountnumber
-       // when a Alternative Bankaccount is used.
        BankAccount.get().$promise.then(function (res) {
            $scope.bankAccounts = res.value;
        });

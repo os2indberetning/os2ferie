@@ -3,7 +3,6 @@
     function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance) {
 
 
-
         // Setup functions in scope.
         $scope.Number = Number;
         $scope.toString = toString;
@@ -20,6 +19,14 @@
 
         var mapChanging = false;
 
+
+        $scope.container.addressFieldOptions = {
+            select: function () {
+                $timeout(function() {
+                    $scope.addressInputChanged();
+                });
+            }
+        }
 
         $scope.addressPlaceholderText = "Eller indtast adresse her";
         $scope.addressDropDownPlaceholderText = "Vælg fast adresse";
@@ -122,6 +129,8 @@
             // Load additional data if a report is being edited.
             if (isEditingReport) {
                 $scope.DriveReport.Purpose = report.Purpose;
+                $scope.DriveReport.FourKmRule = {};
+                $scope.DriveReport.FourKmRule.Using = report.FourKmRule;
                 $scope.DriveReport.Date = moment.unix(report.DriveDateTimestamp)._d;
 
                 if (report.KilometerAllowance == "Read") {
@@ -489,6 +498,7 @@
             if (!$scope.canSubmitDriveReport) {
                 return;
             }
+            $scope.canSubmitDriveReport = false;
             if (isEditingReport) {
                 DriveReport.delete({ id: ReportId }).$promise.then(function () {
                     DriveReport.edit($scope).$promise.then(function (res) {
@@ -633,6 +643,10 @@
 
         $scope.roundTripChanged = function () {
             updateDrivenKm();
+        }
+
+        $scope.closeModalWindow = function() {
+            $modalInstance.dismiss();
         }
     }
 ]);

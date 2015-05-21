@@ -9,11 +9,7 @@
     <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
            k-data-source="SmartAddress" ng-model="newStartPoint" class="fill-width" k-placeholder="'Skriv her'" />
     <div class="seperator"></div>
-    <label>Adresse 2</label>
-    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
-           k-data-source="SmartAddress" ng-model="newEndPoint" class="fill-width" k-placeholder="'Skriv her'" />
-    <div class="seperator"></div>
-    <label>Viapunkter</label>
+    <label ng-if="viaPointModels.length > 0">Viapunkter</label>
     <div ng-repeat="viapoint in viaPointModels track by $index">
         <label>Viapunkt nr: {{$index + 1}}</label>
         <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
@@ -21,6 +17,12 @@
         <button class="btn btn-danger pull-right" ng-click="removeViaPoint($index)">Slet</button>
         <div class="seperator"></div>
     </div>
+    <div class="seperator"></div>
+    <label>Adresse 2</label>
+    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+           k-data-source="SmartAddress" ng-model="newEndPoint" class="fill-width" k-placeholder="'Skriv her'" />
+    <div class="seperator"></div>
+
     <button class="btn" ng-click="addNewViaPoint()"><i class="fa fa-plus"></i> Viapunkt</button>
 </div>
 <div class="modal-footer">
