@@ -9,7 +9,8 @@ namespace Infrastructure.DmzDataAccess
 
     public partial class DmzContext : DbContext
     {
-        public DmzContext() : base("DmzModel")
+        public DmzContext()
+            : base("DMZConnection")
         {
         }
 

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
@@ -7,6 +8,7 @@ using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
+using log4net.Repository.Hierarchy;
 using Microsoft.Ajax.Utilities;
 using Ninject;
 
@@ -51,10 +53,11 @@ namespace Core.ApplicationServices
             }
 
             var home = _addressRepo.AsQueryable()
-                    .First(x => x.PersonId == person.Id && x.Type == PersonalAddressType.Home);
+                    .FirstOrDefault(x => x.PersonId == person.Id && x.Type == PersonalAddressType.Home);
 
-            AddCoordinatesToAddressIfNonExisting(home);
-
+            if (home != null) { 
+                AddCoordinatesToAddressIfNonExisting(home);
+            }
 
             return home;
         }
@@ -92,13 +95,19 @@ namespace Core.ApplicationServices
 
         private void AddCoordinatesToAddressIfNonExisting(Address a)
         {
-            if (string.IsNullOrEmpty(a.Latitude) || a.Latitude.Equals("0"))
+            try
             {
-                var result = _coordinates.GetAddressCoordinates(a);
-                a.Latitude = result.Latitude;
-                a.Longitude = result.Longitude;
-                _addressRepo.Save();
-
+                if (string.IsNullOrEmpty(a.Latitude) || a.Latitude.Equals("0"))
+                {
+                    var result = _coordinates.GetAddressCoordinates(a);
+                    a.Latitude = result.Latitude;
+                    a.Longitude = result.Longitude;
+                    _addressRepo.Save();
+                }
+            }
+            catch (AddressCoordinatesException ade)
+            {
+                
             }
         }
     }

@@ -33,7 +33,7 @@ angular.module("application").controller("MyRejectedReportsController", [
 
 
 
-                           url: "/odata/DriveReports?status=Rejected &$expand=DriveReportPoints,ApprovedBy",
+                           url: "/odata/DriveReports?status=Rejected &$expand=DriveReportPoints,ApprovedBy($select=FullName)",
                            dataType: "json",
                            cache: false
                        },
@@ -96,13 +96,6 @@ angular.module("application").controller("MyRejectedReportsController", [
                       title: "Kørselsdato"
                   }, {
                       field: "Purpose",
-                      template: function (data) {
-                          if (data.Comment != "") {
-                              return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"transparent-background pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
-                          }
-                          return data.Purpose;
-
-                      },
                       title: "Formål"
                   }, {
                       title: "Rute",
@@ -163,12 +156,15 @@ angular.module("application").controller("MyRejectedReportsController", [
                           var date = m._d.getDate() + "/" +
                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                  m._d.getFullYear();
-                          return date + "<div kendo-tooltip k-content=\"'" + data.Comment + "'\"><i class='fa fa-comment-o'></i></div>";
+                          return date;
 
                       },
                   }, {
                       field: "ApprovedBy.FullName",
-                      title: "Afvist af"
+                      title: "Afvist af",
+                      template: function(data) {
+                          return data.ApprovedBy.FullName + "<div kendo-tooltip k-content=\"'" + data.Comment + "'\"><i class='fa fa-comment-o'></i></div>";
+                      }
                   }
                ],
                scrollable: false
