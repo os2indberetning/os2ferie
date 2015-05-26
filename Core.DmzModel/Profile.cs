@@ -22,6 +22,10 @@ namespace Core.DmzModel
 
         public string LastName { get; set; }
 
+        public string Initials { get; set; }
+
+        public string FullName { get; set; }
+
         public string HomeLatitude { get; set; }
 
         public string HomeLongitude { get; set; }

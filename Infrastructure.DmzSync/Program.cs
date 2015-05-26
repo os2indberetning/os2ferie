@@ -16,6 +16,8 @@ using Infrastructure.DataAccess;
 using Infrastructure.DmzSync.Encryption;
 using Infrastructure.DmzSync.Services.Impl;
 using Ninject;
+using DriveReport = Core.DmzModel.DriveReport;
+using Rate = Core.DomainModel.Rate;
 
 
 namespace Infrastructure.DmzSync
@@ -24,6 +26,8 @@ namespace Infrastructure.DmzSync
     {
         static void Main(string[] args)
         {
+            // hacks because of error with Entity Framework.
+            // This forces the dmzconnection to use MySql.
             new DataContext();
 
             var personSync = new PersonSyncService(new GenericDmzRepository<Profile>(new DmzContext()),
@@ -32,15 +36,24 @@ namespace Infrastructure.DmzSync
 
             var tokenSync = new TokenSyncService(new GenericDmzRepository<Token>(new DmzContext()),
                 new GenericRepository<MobileToken>(new DataContext()));
-            
+
+            var driveSync = new DriveReportSyncService(new GenericDmzRepository<DriveReport>(new DmzContext()),
+               new GenericRepository<Core.DomainModel.DriveReport>(new DataContext()),new GenericRepository<Rate>(new DataContext()),new GenericRepository<LicensePlate>(new DataContext()), NinjectWebKernel.CreateKernel().Get<IDriveReportService>());
+
             Console.WriteLine("TokenSyncFromDmz");
             tokenSync.SyncFromDmz();
-            
+
+            Console.WriteLine("DriveReportsSyncFromDmz");
+            driveSync.SyncFromDmz();
+
             Console.WriteLine("TokenClearDmz");
             tokenSync.ClearDmz();
             
             Console.WriteLine("PersonClearDmz");
             personSync.ClearDmz();
+
+            Console.WriteLine("DriveReportClearDmz");
+            driveSync.ClearDmz();
 
             Console.WriteLine("PersonSyncToDmz");
             personSync.SyncToDmz();

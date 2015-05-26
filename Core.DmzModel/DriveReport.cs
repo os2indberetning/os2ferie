@@ -1,6 +1,6 @@
 namespace Core.DmzModel
 {
-    public partial class DriveReport
+    public class DriveReport
     {
         public int Id { get; set; }
 

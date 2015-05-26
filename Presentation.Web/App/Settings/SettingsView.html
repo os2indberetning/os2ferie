@@ -12,12 +12,12 @@
                 <div class="form-group form-inline">
                     <h3>Diverse</h3>
 
-                    <label for="">Registreringsnummer på egen eller ægtefælles bil:</label>
+                    <label for="">Registreringsnummer på egen eller ægtefælles bil</label>
                     <div></div>
                     <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlate" kendo-auto-complete k-placeholder="'AB 12 345'" />
                     <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlateDescription" kendo-auto-complete k-placeholder="'Beskrivelse'" />
                     <button type="submit" class="btn btn-primary" ng-click="saveNewLicensePlate()">Tilføj</button>
-                    <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed"><span ng-if="isCollapsed">Vis nummerplader</span> <span ng-if="!isCollapsed">Skjul nummerplader</span></button>
+                    <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed"><span ng-if="isCollapsed">Anvendte registreringsnumre</span> <span ng-if="!isCollapsed">Skjul anvendte registreringsnumre</span></button>
                     <div collapse="isCollapsed">
                         <div class="well well-lg">
                             <div class="row margin-5">

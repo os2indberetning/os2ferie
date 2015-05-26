@@ -107,7 +107,7 @@
             }
         }
 
-        OrgUnit.get().$promise.then(function (res) {
+        OrgUnit.get({ query: "$select=Id,LongDescription,HasAccessToFourKmRule" }).$promise.then(function (res) {
             angular.forEach(res.value, function (org, key) {
                 $scope.typeAheadOrgUnits.push({ Id: org.Id, LongDescription: org.LongDescription });
                 $scope.checkboxes[org.Id] = org.HasAccessToFourKmRule;

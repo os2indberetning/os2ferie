@@ -61,6 +61,8 @@ namespace Infrastructure.DmzSync.Services.Impl
                     LastName = person.LastName,
                     HomeLatitude = homeAddress !=  null ? homeAddress.Latitude : "0",
                     HomeLongitude = homeAddress != null ? homeAddress.Longitude : "0",
+                    Initials = person.Initials,
+                    FullName = person.FullName,
                 });
             }
              _dmzProfileRepo.Save();
@@ -100,17 +102,19 @@ namespace Infrastructure.DmzSync.Services.Impl
             _dmzProfileRepo.Save();
         }
 
-
-                        
-
-                
-
-
-
         public void ClearDmz()
         {
-            foreach (var profile in _dmzProfileRepo.AsQueryable())
+            var i = 0;
+            var personList = _dmzProfileRepo.AsQueryable().ToList();
+            var max = personList.Count;
+
+            foreach (var profile in personList)
             {
+                i++;
+                if (i % 10 == 0)
+                {
+                    Console.WriteLine("Clearing person " + i + " of " + max);
+                }
                 _dmzProfileRepo.Delete(profile);
             }
             _dmzProfileRepo.Save();

@@ -30,18 +30,13 @@ namespace Infrastructure.DmzSync.Services.Impl
             var tokens = _dmzTokenRepo.AsQueryable().ToList();
             var max = tokens.Count;
 
-            var temp = _dmzTokenRepo.AsQueryable();
             foreach (var token in tokens)
             {
                 i++;
                 Console.WriteLine("Syncing token " + i + " of " + max + " from DMZ.");
-                _masterTokenRepo.Patch(new MobileToken
-                {
-                    Id = token.Id,
-                    Status = (MobileTokenStatus)token.Status,
-                });
+                _masterTokenRepo.AsQueryable().First(x => x.Guid.Equals(new Guid(token.GuId))).Status = (MobileTokenStatus) token.Status;
+                _masterTokenRepo.Save();
             }
-            _masterTokenRepo.Save();
         }
 
 
@@ -70,7 +65,8 @@ namespace Infrastructure.DmzSync.Services.Impl
 
         public void ClearDmz()
         {
-            foreach (var token in _dmzTokenRepo.AsQueryable())
+            var list = _dmzTokenRepo.AsQueryable().ToList();
+            foreach (var token in list)
             {
                   _dmzTokenRepo.Delete(token);
             }
