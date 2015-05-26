@@ -7,6 +7,10 @@
         $scope.orgUnit = {};
         $scope.people = [];
 
+        $scope.autoCompleteOptions = {
+            filter: "contains"
+        };
+
         $scope.OrgUnits = {
             dataSource: {
                 type: "odata-v4",

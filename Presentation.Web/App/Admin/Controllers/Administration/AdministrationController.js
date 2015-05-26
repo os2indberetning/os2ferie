@@ -6,6 +6,11 @@
            $scope.nonAdmins = res.value;
        });
 
+
+       $scope.autoCompleteOptions = {
+           filter: "contains"
+       };
+
        $scope.gridContainer = {};
        $scope.person = {};
 

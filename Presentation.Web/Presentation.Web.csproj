@@ -306,7 +306,6 @@
     <Content Include="App\Admin\Controllers\Substitutes\Modals\AdminNewSubstituteModalInstanceController.js" />
     <Content Include="App\Admin\HTML\AddressLaundry\AddressLaundryView.html" />
     <Content Include="App\Admin\HTML\Reports\Modal\ShowRouteModalTemplate.html" />
-    <Content Include="App\Admin\Controllers\Substitutes\SubstituteController.js" />
     <Content Include="App\Admin\HTML\Administration\Modal\ConfirmGenerateFileModalTemplate.html" />
     <Content Include="App\Admin\HTML\Administration\Modal\RemoveAdminModalTemplate.html" />
     <Content Include="App\Admin\HTML\Administration\Modal\AddAdminModalTemplate.html" />
@@ -392,6 +391,7 @@
     <Content Include="App\Settings\AddressDeleteModal.html" />
     <Content Include="App\Settings\RouteDeleteModal.html" />
     <Content Include="App\Settings\RouteAddModal.html" />
+    <Content Include="App\Settings\Substitutes\SubstituteController.js" />
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\kendo\Black\editor.png" />
     <Content Include="Content\kendo\Black\imagebrowser.png" />
@@ -2292,7 +2292,6 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App\Admin\AdminController.js" />
     <Content Include="App\ApproveReports\ApproveReportsController.js" />
     <Content Include="App\Services\PersonResource.js" />
     <TypeScriptCompile Include="Scripts\typings\angular-ui\angular-ui-router.d.ts" />

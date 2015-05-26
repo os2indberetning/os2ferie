@@ -4,6 +4,11 @@
 
             $scope.persons = persons;
 
+
+            $scope.autoCompleteOptions = {
+                filter: "contains"
+            };
+
             Person.GetLeaders().$promise.then(function (res) {
                 $scope.leaders = res;
             });
