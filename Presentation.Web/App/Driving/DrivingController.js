@@ -2,8 +2,7 @@
     "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "HelpText",
     function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, HelpText) {
 
-
-        HelpText.get({ id: "ReadReportCommentHelp" }).$promise.then(function(res) {
+        HelpText.get({ id: "ReadReportCommentHelp" }).$promise.then(function (res) {
             $scope.ReadReportCommentHelp = res.text;
         });
 
@@ -30,7 +29,7 @@
 
         $scope.container.addressFieldOptions = {
             select: function () {
-                $timeout(function() {
+                $timeout(function () {
                     $scope.addressInputChanged();
                 });
             }
@@ -93,6 +92,9 @@
 
 
         var loadValuesFromReport = function (report) {
+            $scope.DriveReport.FourKmRule = {};
+            $scope.DriveReport.FourKmRule.Value = $rootScope.CurrentUser.DistanceFromHomeToBorder.toString().replace(".",",");
+
             // Select position in dropdown.
             $scope.container.PositionDropDown.select(function (item) {
                 return item.Id == report.EmploymentId;
@@ -137,7 +139,6 @@
             // Load additional data if a report is being edited.
             if (isEditingReport) {
                 $scope.DriveReport.Purpose = report.Purpose;
-                $scope.DriveReport.FourKmRule = {};
                 $scope.DriveReport.FourKmRule.Using = report.FourKmRule;
                 $scope.DriveReport.Date = moment.unix(report.DriveDateTimestamp)._d;
 
@@ -326,6 +327,15 @@
             return true;
         }
 
+        var validateFourKmRule = function () {
+            $scope.fourKmRuleValueErrorMessage = "";
+            if ($scope.DriveReport.FourKmRule.Using === true && ($scope.DriveReport.FourKmRule.Value == "" || $scope.DriveReport.FourKmRule.Value == undefined)) {
+                $scope.fourKmRuleValueErrorMessage = "* Du skal udfylde en 4 km-regel værdi.";
+                return false;
+            }
+            return true;
+        }
+
         var validateLicensePlate = function () {
             $scope.licensePlateErrorMessage = "";
             if (getKmRate($scope.DriveReport.KmRate).Type.RequiresLicensePlate && $scope.LicensePlates[0].PresentationString == "Ingen nummerplader") {
@@ -411,7 +421,7 @@
                 if (angular.element('#map').length) {
                     OS2RouteMap.create({
                         id: 'map',
-                        change: function(obj) {
+                        change: function (obj) {
                             $scope.currentMapAddresses = obj.Addresses;
                             $scope.latestMapDistance = obj.distance;
                             updateDrivenKm();
@@ -429,13 +439,13 @@
                             mapChanging = true;
                             $scope.DriveReport.Addresses = [];
                             // Load the adresses from the map.
-                            angular.forEach(obj.Addresses, function(address, key) {
+                            angular.forEach(obj.Addresses, function (address, key) {
                                 var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
                                 $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
                             });
                             // Apply to update the view.
                             $scope.$apply();
-                            $timeout(function() {
+                            $timeout(function () {
                                 // Wait for the view to render before setting mapChanging to false.
 
                                 mapChanging = false;
@@ -461,6 +471,7 @@
                     $scope.canSubmitDriveReport &= validateAddressInput();
                     $scope.canSubmitDriveReport &= validatePurpose();
                     $scope.canSubmitDriveReport &= validateLicensePlate();
+                    $scope.canSubmitDriveReport &= validateFourKmRule();
                 });
             }
 
@@ -502,10 +513,7 @@
             });
         }
 
-        $scope.Save = function () {
-            if (!$scope.canSubmitDriveReport) {
-                return;
-            }
+        var handleSave = function () {
             $scope.canSubmitDriveReport = false;
             if (isEditingReport) {
                 DriveReport.delete({ id: ReportId }).$promise.then(function () {
@@ -529,6 +537,23 @@
                 });
             }
         }
+
+        $scope.Save = function () {
+            if (!$scope.canSubmitDriveReport) {
+                return;
+            }
+
+            if ($rootScope.CurrentUser.DistanceFromHomeToBorder != $scope.DriveReport.FourKmRule.Value && $scope.DriveReport.FourKmRule.Value != "" && $scope.DriveReport.FourKmRule.Value != undefined) {
+                $rootScope.CurrentUser.DistanceFromHomeToBorder = $scope.DriveReport.FourKmRule.Value
+                Person.patch({ id: $rootScope.CurrentUser.Id }, { DistanceFromHomeToBorder: $scope.DriveReport.FourKmRule.Value.toString().replace(",", ".") }).$promise.then(function () {
+                    handleSave();
+                });
+            } else {
+                handleSave();
+            }
+        }
+
+        
 
         $scope.kilometerAllowanceChanged = function () {
             updateDrivenKm();
@@ -653,7 +678,7 @@
             updateDrivenKm();
         }
 
-        $scope.closeModalWindow = function() {
+        $scope.closeModalWindow = function () {
             $modalInstance.dismiss();
         }
     }

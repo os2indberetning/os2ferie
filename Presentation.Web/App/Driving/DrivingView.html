@@ -165,26 +165,22 @@
 
                 </div>
             </div>
-            <div class="row m-b-l">
-                <div ng-show="hasAccessToFourKmRule">
-
-                    <div class="col-lg-6 m-b-l">
-                        <input type="checkbox" class="k-checkbox" id="FourKmRule" ng-model="DriveReport.FourKmRule.Using" /><label for="FourKmRule" class="k-checkbox-label">Jeg bruger 4 Km reglen</label>
+            <div class="row">
+                <div class="col-sm-6 margin-bottom-30" style="margin-left: -15px">
+                    <div ng-show="hasAccessToFourKmRule" class="col-sm-12 margin-bottom-10">
+                        <input type="checkbox" class="k-checkbox" id="FourKmRule" ng-model="DriveReport.FourKmRule.Using" ng-change="validateInput()" /><label for="FourKmRule" class="k-checkbox-label">Jeg bruger 4 Km-reglen</label>
                         <span popover="4 km reglen kan kun bruges af medarbejdere ansat i hjemmeplejen. Forhør dig ved din leder, hvis du er i tvivl." popover-trigger="mouseenter" class="info-popup"><i class="fa fa-question"></i></span>
                     </div>
-
-                    <div class="col-lg-6 m-b-l" ng-show="DriveReport.FourKmRule.Using">
-                        <div class="col-lg-12">
-                            <input type="text" ng-model="DriveReport.FourKmRule.Value" id="FourKmRuleValue" name="FourKmRuleValue" class="k-textbox" placeholder="4 km-regel værdi" />
-                        </div>
+                    <div class="col-lg-12 margin-bottom-10">
+                        <input type="checkbox" class="k-checkbox" id="returnTrip" ng-change="roundTripChanged()" ng-model="DriveReport.RoundTrip" /><label for="returnTrip" class="k-checkbox-label">Tur + retur</label>
                     </div>
-
                 </div>
-                <div class="col-lg-12">
-                    <input type="checkbox" class="k-checkbox" id="returnTrip" ng-change="roundTripChanged()" ng-model="DriveReport.RoundTrip" /><label for="returnTrip" class="k-checkbox-label">Tur + retur</label>
-                </div>
-
-
+                <div ng-show="DriveReport.FourKmRule.Using" class="col-sm-6">
+                    <div class="col-lg-12">
+                        <input ng-change="validateInput()" type="text" ng-enter="" ng-model="DriveReport.FourKmRule.Value" id="FourKmRuleValue" name="FourKmRuleValue" class="k-textbox" placeholder="4 km-regel værdi" /> km
+                        <label ng-bind="fourKmRuleValueErrorMessage" class="text-danger"></label>
+                    </div>
+                </div>            
             </div>
 
             <div class="row margin-bottom-5">
