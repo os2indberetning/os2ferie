@@ -22,18 +22,21 @@ namespace DmzSync.Test
         private ISyncService _uut;
         private IGenericRepository<MobileToken> _masterRepoMock; 
         private IGenericRepository<Token> _dmzRepoMock;
-        private List<Token> _dmzTokenList = new List<Token>();
-        private List<MobileToken> _masterTokenList = new List<MobileToken>();
+        private List<Token> _dmzTokenList;
+        private List<MobileToken> _masterTokenList;
 
         [SetUp]
         public void SetUp()
         {
+            _dmzTokenList = new List<Token>();
+            _masterTokenList = new List<MobileToken>();
+
             _dmzRepoMock = NSubstitute.Substitute.For<IGenericRepository<Token>>();
             _masterRepoMock = NSubstitute.Substitute.For<IGenericRepository<MobileToken>>();
 
             _dmzTokenList.Add(new Token()
             {
-                Id = 1,
+                Id = 7,
                 GuId = new Guid().ToString(),
                 Status = 1,
                 ProfileId = 1,
@@ -41,7 +44,7 @@ namespace DmzSync.Test
             });
             _dmzTokenList.Add(new Token()
             {
-                Id = 2,
+                Id = 8,
                 GuId = new Guid().ToString(),
                 Status = 1,
                 ProfileId = 3,
@@ -49,7 +52,7 @@ namespace DmzSync.Test
             });
             _dmzTokenList.Add(new Token()
             {
-                Id = 4,
+                Id = 9,
                 GuId = new Guid().ToString(),
                 Status = 1,
                 ProfileId = 3,
@@ -110,9 +113,10 @@ namespace DmzSync.Test
         [Test]
         public void SyncToDmz_ShouldCreateTokensInDmz()
         {
-            _dmzTokenList.Clear();
+            _uut.ClearDmz();
             _uut.SyncToDmz();
-            Assert.AreEqual(3, _dmzRepoMock.AsQueryable().Count());
+            var res = _dmzRepoMock.AsQueryable();
+            Assert.AreEqual(3, res.Count());
         }
     }
 }

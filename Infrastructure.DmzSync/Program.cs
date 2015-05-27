@@ -38,7 +38,7 @@ namespace Infrastructure.DmzSync
                 new GenericRepository<MobileToken>(new DataContext()));
 
             var driveSync = new DriveReportSyncService(new GenericDmzRepository<DriveReport>(new DmzContext()),
-               new GenericRepository<Core.DomainModel.DriveReport>(new DataContext()),new GenericRepository<Rate>(new DataContext()),new GenericRepository<LicensePlate>(new DataContext()), NinjectWebKernel.CreateKernel().Get<IDriveReportService>());
+               new GenericRepository<Core.DomainModel.DriveReport>(new DataContext()),new GenericRepository<Rate>(new DataContext()),new GenericRepository<LicensePlate>(new DataContext()), NinjectWebKernel.CreateKernel().Get<IDriveReportService>(), NinjectWebKernel.CreateKernel().Get<IRoute<RouteInformation>>(), NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>());
 
             Console.WriteLine("TokenSyncFromDmz");
             tokenSync.SyncFromDmz();

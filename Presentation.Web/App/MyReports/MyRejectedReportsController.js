@@ -118,7 +118,7 @@ angular.module("application").controller("MyRejectedReportsController", [
                               return result;
                           } else {
                               if (data.IsFromApp) {
-                                  return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
+                                  return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
                               } else {
                                   return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
                               }

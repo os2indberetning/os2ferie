@@ -8,6 +8,7 @@ using Core.ApplicationServices.Interfaces;
 using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
+using Core.DomainServices.RoutingClasses;
 using Infrastructure.DataAccess;
 using Infrastructure.DmzDataAccess;
 using Infrastructure.DmzSync.Encryption;
@@ -25,14 +26,18 @@ namespace Infrastructure.DmzSync.Services.Impl
         private readonly IGenericRepository<Rate> _rateRepo;
         private readonly IGenericRepository<LicensePlate> _licensePlateRepo;
         private readonly IDriveReportService _driveService;
+        private readonly IRoute<RouteInformation> _routeService;
+        private readonly IAddressCoordinates _coordinates;
 
-        public DriveReportSyncService(IGenericRepository<Core.DmzModel.DriveReport> dmzDriveReportRepo, IGenericRepository<Core.DomainModel.DriveReport> masterDriveReportRepo, IGenericRepository<Core.DomainModel.Rate> rateRepo, IGenericRepository<LicensePlate> licensePlateRepo, IDriveReportService driveService)
+        public DriveReportSyncService(IGenericRepository<Core.DmzModel.DriveReport> dmzDriveReportRepo, IGenericRepository<Core.DomainModel.DriveReport> masterDriveReportRepo, IGenericRepository<Core.DomainModel.Rate> rateRepo, IGenericRepository<LicensePlate> licensePlateRepo, IDriveReportService driveService, IRoute<RouteInformation> routeService, IAddressCoordinates coordinates)
         {
             _dmzDriveReportRepo = dmzDriveReportRepo;
             _masterDriveReportRepo = masterDriveReportRepo;
             _rateRepo = rateRepo;
             _licensePlateRepo = licensePlateRepo;
             _driveService = driveService;
+            _routeService = routeService;
+            _coordinates = coordinates;
         }
 
         public void SyncFromDmz()
@@ -49,18 +54,29 @@ namespace Infrastructure.DmzSync.Services.Impl
                 var points = new List<DriveReportPoint>();
                 foreach (var gpsCoord in report.Route.GPSCoordinates)
                 {
+                    var address = _coordinates.GetAddressFromCoordinates(new Address()
+                    {
+                        Latitude = gpsCoord.Latitude,
+                        Longitude = gpsCoord.Longitude
+                    });
+
                     points.Add(new DriveReportPoint
                     {
                         Latitude = gpsCoord.Latitude,
                         Longitude = gpsCoord.Longitude,
+                        StreetName = address.StreetName,
+                        StreetNumber = address.StreetNumber,
+                        ZipCode = address.ZipCode,
+                        Town = address.Town
                     });
                 }
-
                
                 var newReport = new Core.DomainModel.DriveReport
                 {
+                    
                     IsFromApp = true,
-                    KilometerAllowance = KilometerAllowance.Calculated,
+                    Distance = report.Route.TotalDistance,
+                    KilometerAllowance = KilometerAllowance.Read,
                     // Date might not be correct. Depends which culture is delivered from app. 
                     // https://msdn.microsoft.com/en-us/library/cc165448.aspx
                     DriveDateTimestamp = (Int32)(Convert.ToDateTime(report.Date).Subtract(new DateTime(1970, 1, 1)).TotalSeconds),
@@ -73,11 +89,18 @@ namespace Infrastructure.DmzSync.Services.Impl
                     KmRate = rate.KmRate,
                     TFCode = rate.Type.TFCode,
                     UserComment = report.ManualEntryRemark,
-                    DriveReportPoints = points,
                     Status = ReportStatus.Pending,
                     FullName = report.Profile.FullName,
                     LicensePlate = _licensePlateRepo.AsQueryable().First(x => x.PersonId.Equals(report.ProfileId) && x.IsPrimary).Plate,
+                    Comment = "",
                 };
+
+                var route = _routeService.GetRoute(points);
+                if (route != null)
+                {
+                    newReport.RouteGeometry = route.GeoPoints;
+                }
+
                 _driveService.Create(newReport);
             }
         }
