@@ -9,7 +9,7 @@
             Afvigende adresse
         </div>
         <div class="col-xs-4">
-            Afvigende km <span class="info-popup" popover-append-to-body='true' popover="Hvis systemet beregner en anden afstand end den du egentlig kører, kan du her indtaste en afvigende afstand mellem bopæl og arbejdsplads. HUSK! Denne afvigende afstand også er dén du skal indberette til rubrik 51 på din forskudsopgørelse ved Skat." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+            Afvigende km <span class="info-popup" popover-append-to-body='true' ng-show="alternativeWorkAddressHelpText.length > 0" popover="{{alternativeWorkAddressHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
         </div>
     </div>
     <div class="row">

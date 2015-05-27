@@ -24,7 +24,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <label for="purpose">Formål med tjenestekørsel </label>
-                            <span popover="{{PurposeHelpText}}" popover-trigger="mouseenter" class="info-popup"><i class="fa fa-question"></i></span>
+                            <span ng-show="PurposeHelpText.length > 0" popover="{{PurposeHelpText}}" popover-trigger="mouseenter" class="info-popup"><i class="fa fa-question"></i></span>
 
                         </div>
                     </div>
@@ -169,7 +169,7 @@
                 <div class="col-sm-6 margin-bottom-30" style="margin-left: -15px">
                     <div ng-show="hasAccessToFourKmRule" class="col-sm-12 margin-bottom-10">
                         <input type="checkbox" class="k-checkbox" id="FourKmRule" ng-model="DriveReport.FourKmRule.Using" ng-change="validateInput()" /><label for="FourKmRule" class="k-checkbox-label">Jeg bruger 4 Km-reglen</label>
-                        <span popover="4 km reglen kan kun bruges af medarbejdere ansat i hjemmeplejen. Forhør dig ved din leder, hvis du er i tvivl." popover-trigger="mouseenter" class="info-popup"><i class="fa fa-question"></i></span>
+                        <span ng-show="fourKmRuleHelpText.length > 0" popover="{{fourKmRuleHelpText}}" popover-trigger="mouseenter" class="info-popup"><i class="fa fa-question"></i></span>
                     </div>
                     <div class="col-lg-12 margin-bottom-10">
                         <input type="checkbox" class="k-checkbox" id="returnTrip" ng-change="roundTripChanged()" ng-model="DriveReport.RoundTrip" /><label for="returnTrip" class="k-checkbox-label">Tur + retur</label>

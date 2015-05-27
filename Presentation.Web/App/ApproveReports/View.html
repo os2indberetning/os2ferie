@@ -30,7 +30,7 @@
         </div>
 
         <div class="col-xs-2 col-lg-1 margin-top-15 pull-left">
-            <span class="info-popup pull-left margin-5" popover-append-to-body='true' popover="Du kan klikke på kolonnetitlerne for at sortere tabellen." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+            <span ng-show="tableSortHelp.length > 0" class="info-popup pull-left margin-5" popover-append-to-body='true' popover="{{tableSortHelp}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
         </div>
     </div>
     

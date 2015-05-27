@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("SettingController", [
-    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope",
-    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope) {
+    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope", "HelpText",
+    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope, HelpText) {
         $scope.gridContainer = {};
         $scope.isCollapsed = true;
         $scope.mailAdvice = '';
@@ -16,6 +16,15 @@
         $scope.tokenIsCollapsed = true;
         $scope.newTokenDescription = "";
 
+        HelpText.get({ id: "MobileTokenHelpText" }).$promise.then(function (res) {
+            $scope.mobileTokenHelpText = res.text;
+        });
+
+        HelpText.get({ id: "PrimaryLicensePlateHelpText" }).$promise.then(function (res) {
+            $scope.primaryLicensePlateHelpText = res.text;
+        });
+
+        
 
         var personId = $rootScope.CurrentUser.Id;
         $scope.showMailNotification = $rootScope.CurrentUser.IsLeader;

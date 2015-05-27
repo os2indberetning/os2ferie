@@ -1,4 +1,4 @@
-﻿angular.module("application").controller('AlternativeAddressController', ["$scope", "SmartAdresseSource", "$rootScope", "$timeout", "PersonEmployments", "AddressFormatter", "Address", "NotificationService", "PersonalAddress", function ($scope, SmartAdresseSource, $rootScope, $timeout, PersonEmployments, AddressFormatter, Address, NotificationService, PersonalAddress) {
+﻿angular.module("application").controller('AlternativeAddressController', ["$scope", "SmartAdresseSource", "$rootScope", "$timeout", "PersonEmployments", "AddressFormatter", "Address", "NotificationService", "PersonalAddress", "HelpText", function ($scope, SmartAdresseSource, $rootScope, $timeout, PersonEmployments, AddressFormatter, Address, NotificationService, PersonalAddress, HelpText) {
 
     $scope.employments = $rootScope.CurrentUser.Employments;
     $scope.homeAddress = "";
@@ -8,6 +8,12 @@
     PersonalAddress.GetRealHomeForUser({ id: $rootScope.CurrentUser.Id }).$promise.then(function (res) {
         $scope.homeAddress = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town;
     });
+
+    HelpText.get({ id: "AlternativeWorkAddressHelpText" }).$promise.then(function (res) {
+        $scope.alternativeWorkAddressHelpText = res.text;
+    });
+
+    
 
     PersonalAddress.GetAlternativeHomeForUser({ id: $rootScope.CurrentUser.Id }).$promise.then(function (res) {
         if (!(res.StreetNumber == undefined)) {

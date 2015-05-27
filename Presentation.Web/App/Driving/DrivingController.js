@@ -10,6 +10,10 @@
             $scope.PurposeHelpText = res.text;
         });
 
+        HelpText.get({ id: "FourKmRuleHelpText" }).$promise.then(function (res) {
+            $scope.fourKmRuleHelpText = res.text;
+        });
+
         // Setup functions in scope.
         $scope.Number = Number;
         $scope.toString = toString;

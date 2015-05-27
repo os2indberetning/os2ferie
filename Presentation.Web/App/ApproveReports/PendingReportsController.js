@@ -1,11 +1,15 @@
 ﻿angular.module("application").controller("PendingReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "HelpText", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, HelpText) {
 
        // Load people for auto-complete textbox
        $scope.people = [];
        $scope.person = {};
        $scope.orgUnit = {};
        $scope.orgUnits = [];
+
+       HelpText.get({ id: "TableSortHelp" }).$promise.then(function(res) {
+           $scope.tableSortHelp = res.text;
+       });
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;

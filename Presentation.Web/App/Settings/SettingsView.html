@@ -31,7 +31,7 @@
                                     <p class="margin-5"><strong>Primær</strong></p>
                                 </div>
                                 <div class="col-sm-1">
-                                    <span class="info-popup pull-right margin-5" popover="Den primære nummerplade bruges ved mobil-indberetninger." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+                                    <span class="info-popup pull-right margin-5" ng-show="primaryLicensePlateHelpText.length > 0" popover="{{primaryLicensePlateHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                                 </div>
                             </div>
                             <div class="row margin-5" ng-repeat="plate in licenseplates">
@@ -103,7 +103,7 @@
                     <h3>Mobiltokens til app</h3>
 
                     <label for="">Se eller opret tokens til din mobiltelefon</label>
-                    <span class="info-popup" popover="Der er også mulighed for at indberette befordring via en app. Mobiltoken bruges til at forbinde din mobile enhed med eIndberetning. Du kan høre mere om app’en ved din leder." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+                    <span class="info-popup" ng-show="mobileTokenHelpText.length > 0" popover="{{mobileTokenHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                     <div class="row margin-5">
                         <div class="col-sm-4">
                             <p class="margin-5"><strong>Token</strong></p>
