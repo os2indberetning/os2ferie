@@ -10,7 +10,7 @@ Tilpasning og opsætning af løsning gøres igennem konfigurationsfiler som ligg
 
 ##### Mailopsætning
 Nedenfor beskrives de oplysninger der skal indtastes til opsætning af SMTP-server.
-Serveren bruges til at sende mails til ledere, der har afventende indrapporteringer til godkendelse.
+Serveren bruges til at sende mails til brugere, når en af deres indberetninger bliver afvist.
 
 ###### PROTECTED_SMTP_PASSWORD
 Udfyldes med password til SMTP-server
@@ -28,10 +28,10 @@ Udfyldes med port til SMTP-server
 Udfyldes med den mail der skal stå som afsender
 
 ###### PROTECTED_MAIL_SUBJECT
-Udfyldes med emnet på mails om afventende indrapporteringer til ledere
+Udfyldes med emnet på mails om afventende indberetninger til ledere
 
 ###### PROTECTED_MAIL_BODY
-Udfyldes med indholdet af mails om afventende indrapporteringer
+Udfyldes med indholdet af mails om afventende indberetninger
 
 ##### KMD-opsætning
 Nedenfor beskrives de oplysninger der skal indtastes i forbindelse med generering af fil til KMD ind01 snitflade.
@@ -122,4 +122,135 @@ Hjælpeteksten vises under Indberet tjenestekørsel, når man har valgt aflæst 
 ###### PROTECTED_SEPTIMA_API_KEY
 Udfyldes med api-nøgle til Septimas ruteberegner.
 
+#### connections.config
+Udfyldes med oplysninger om OS2Indberetnings databasen.
 
+###### Data Source
+Udfyldes med adressen på databaseserveren.
+
+###### Initial Catalog
+Udfyldes med navnet på databasen.
+
+###### uid
+Udfyldes med brugernavn til login på databasen.
+
+###### pwd
+Udfyldes med adgangskode til databasen
+
+#### favicon.ico
+Erstattes med kommunelogo til visning på fane i browser.
+
+#### logo.png
+Erstattes med kommunelogo til visning på hjemmesiden øverst til højre.
+
+### DBUpdater
+Dette projekt bruges til at migrere oplysninger om medarbejdere og organisationer fra kommunen til OS2Indberetning.
+
+#### connections.config
+
+##### DefaultConnection
+Bruges til at oprette forbindelse til OS2Indberetningsdatabasen.
+
+###### Data Source
+Udfyldes med adressen på databaseserveren.
+
+###### Initial Catalog
+Udfyldes med navnet på databasen.
+
+###### uid
+Udfyldes med brugernavn til login på databasen.
+
+###### pwd
+Udfyldes med adgangskode til databasen
+
+##### DBUpdaterConnection
+Bruges til at oprette forbindelse til kommunedatabasen.
+
+###### Data Source
+Udfyldes med adressen på databaseserveren.
+
+###### Initial Catalog
+Udfyldes med navnet på databasen.
+
+###### uid
+Udfyldes med brugernavn til login på databasen.
+
+###### pwd
+Udfyldes med adgangskode til databasen
+
+### Mail
+Dette projekt bruges til at sende planlagte mailadviseringer til ledere, der har afventende indberetninger til godkendelse.
+
+#### connections.config
+Udfyldes med oplysninger om OS2Indberetnings databasen.
+
+###### Data Source
+Udfyldes med adressen på databaseserveren.
+
+###### Initial Catalog
+Udfyldes med navnet på databasen.
+
+###### uid
+Udfyldes med brugernavn til login på databasen.
+
+###### pwd
+Udfyldes med adgangskode til databasen
+
+#### CustomSettings.config
+Nedenfor beskrives de oplysninger der skal bruges til at sende mails til ledere, der har afventende indberetninger til godkendelse.
+
+###### PROTECTED_SMTP_PASSWORD
+Udfyldes med password til SMTP-server
+
+###### PROTECTED_SMTP_HOST
+udfyldes med adresse til SMTP-server
+
+###### PROTECTED_SMTP_USER
+udfyldes med brugernavn til SMTP-server
+
+###### PROTECTED_SMTP_HOST_PORT
+Udfyldes med port til SMTP-server
+
+###### PROTECTED_MAIL_FROM_ADDRESS
+Udfyldes med den mail der skal stå som afsender
+
+###### PROTECTED_MAIL_SUBJECT
+Udfyldes med emnet på mails om afventende indberetninger til ledere
+
+###### PROTECTED_MAIL_BODY
+Udfyldes med indholdet af mails om afventende indberetninger
+
+### Infrastructure.DmzSync
+Dette projekt bruges til at synkronisere indberetninger fra mobilapp til OS2Indberetnings databasen.
+
+#### connections.config
+
+##### DefaultConnection
+Bruges til at oprette forbindelse til OS2Indberetningsdatabasen.
+
+###### Data Source
+Udfyldes med adressen på databaseserveren.
+
+###### Initial Catalog
+Udfyldes med navnet på databasen.
+
+###### uid
+Udfyldes med brugernavn til login på databasen.
+
+###### pwd
+Udfyldes med adgangskode til databasen
+
+##### DMZConnection
+Bruges til at oprette forbindelse til DMZ-databasen.
+
+###### Data Source
+Udfyldes med adressen på databaseserveren.
+
+###### Initial Catalog
+Udfyldes med navnet på databasen.
+
+###### uid
+Udfyldes med brugernavn til login på databasen.
+
+###### pwd
+Udfyldes med adgangskode til databasen
