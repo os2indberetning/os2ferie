@@ -666,7 +666,7 @@
     <Content Include="Content\kendo\Uniform\sprite_kpi_2x.png" />
     <Content Include="Content\loading-bar.css" />
     <Content Include="Content\loading-bar.min.css" />
-    <Content Include="Content\logo.png" />
+    <Content Include="logo.png" />
     <Content Include="Content\private.css" />
     <Content Include="Content\simple-sidebar.css" />
     <Content Include="Content\Themes\SbAdmin\css\bootstrap-rtl.css" />
