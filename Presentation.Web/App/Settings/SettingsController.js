@@ -568,16 +568,26 @@
             });
         };
 
-        // Alert user if there are unsaved changes when navigating away.
-        $scope.$on('$stateChangeStart', function (event) {
+        var handleDiscardChanges = function (event) {
             if ($scope.newTokenDescription != "" ||
-                $scope.newLicensePlate != "" ||
-                $scope.newLicensePlateDescription != "") {
+               $scope.newLicensePlate != "" ||
+               $scope.newLicensePlateDescription != "") {
                 var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
                 if (!answer) {
                     event.preventDefault();
                 }
             }
+            return "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+        }
+
+        // Alert user if there are unsaved changes when navigating away.
+        $scope.$on('$stateChangeStart', function (event) {
+            handleDiscardChanges(event);
         });
+
+        // Alert user if there are unsaved changes when refreshing.
+        window.onbeforeunload = function (e) {
+            return handleDiscardChanges(e);
+        };
     }
 ]);

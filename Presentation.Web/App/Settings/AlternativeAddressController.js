@@ -233,15 +233,14 @@
         }
     }
 
-    // Alert user if there are unsaved changes when navigating away.
-    $scope.$on('$stateChangeStart', function (event) {
+    var handleDiscardChanges = function(event) {
         var showConfirm = false;
         if ($scope.alternativeHomeAddress != undefined) {
             if (homeAddressIsDirty === true && $scope.alternativeHomeAddress.string != $scope.alternativeHomeAddress.StreetName + " " + $scope.alternativeHomeAddress.StreetNumber + ", " + $scope.alternativeHomeAddress.ZipCode + " " + $scope.alternativeHomeAddress.Town) {
                 showConfirm = true;
             }
         }
-        angular.forEach(workAddressDirty, function(value, key) {
+        angular.forEach(workAddressDirty, function (value, key) {
             if (value == true) {
                 showConfirm = true;
             }
@@ -252,7 +251,17 @@
                 event.preventDefault();
             }
         }
+        return "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+    }
+
+    // Alert user if there are unsaved changes when navigating away.
+    $scope.$on('$stateChangeStart', function (event) {
+        handleDiscardChanges(event);
     });
+
+    window.onbeforeunload = function (e) {
+        return handleDiscardChanges(e);
+    };
 
     $scope.SmartAddress = SmartAdresseSource;
 

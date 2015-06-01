@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "HelpText",
-    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, HelpText) {
+    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "HelpText", "$window",
+    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, HelpText, $window) {
 
         HelpText.get({ id: "ReadReportCommentHelp" }).$promise.then(function (res) {
             $scope.ReadReportCommentHelp = res.text;
@@ -695,17 +695,27 @@
             $modalInstance.dismiss();
         }
 
-        // Alert the user when navigating away from the page if there are unsaved changes.
-        $scope.$on('$stateChangeStart', function (event) {
+
+        var handleDiscardChanges = function(event) {
             if (isFormDirty === true ||
-                ($scope.DriveReport.Purpose != $scope.latestDriveReport.Purpuse && $scope.DriveReport.Purpose != "") ||
-                ($scope.DriveReport.ReadDistance != $scope.latestDriveReport.ReadDistance && $scope.DriveReport.ReadDistance != "") ||
-                ($scope.DriveReport.UserComment != undefined && $scope.DriveReport.UserComment != $scope.latestDriveReport.UserComment && $scope.DriveReport.UserComment != "")) {
+               ($scope.DriveReport.Purpose != $scope.latestDriveReport.Purpuse && $scope.DriveReport.Purpose != "") ||
+               ($scope.DriveReport.ReadDistance != $scope.latestDriveReport.ReadDistance && $scope.DriveReport.ReadDistance != "") ||
+               ($scope.DriveReport.UserComment != undefined && $scope.DriveReport.UserComment != $scope.latestDriveReport.UserComment && $scope.DriveReport.UserComment != "")) {
                 var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
                 if (!answer) {
                     event.preventDefault();
                 }
             }
+            return "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+        }
+
+        // Alert the user when navigating away from the page if there are unsaved changes.
+        $scope.$on('$stateChangeStart', function (event) {
+            handleDiscardChanges(event);
         });
+
+        window.onbeforeunload = function (e) {
+            return handleDiscardChanges(e);
+        };
     }
 ]);
