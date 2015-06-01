@@ -5,6 +5,9 @@
     $scope.alternativeHomeAddress = {};
     $scope.alternativeHomeAddress.string = "";
 
+    var homeAddressIsDirty = true;
+    var workAddressDirty = [];
+
     PersonalAddress.GetRealHomeForUser({ id: $rootScope.CurrentUser.Id }).$promise.then(function (res) {
         $scope.homeAddress = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town;
     });
@@ -36,6 +39,16 @@
                 $scope.alternativeWorkDistances[key] = empl.WorkDistanceOverride;
             }
         });
+    }
+
+    $scope.alternativeWorkDistanceChanged = function($index) {
+        $scope.alternativeWorkAddresses[$index] = '';
+        workAddressDirty[$index] = true;
+    }
+
+    $scope.alternativeWorkAddressChanged = function($index) {
+        $scope.alternativeWorkDistances[$index] = '';
+        workAddressDirty[$index] = true;
     }
 
     loadLocalModel();
@@ -76,6 +89,7 @@
                     Latitude: "",
                     Type: "AlternativeWork"
                 }).$promise.then(function (res) {
+                    workAddressDirty[index] = false;
                     $scope.employments[index].AlternativeWorkAddress = res;
                     $scope.employments[index].AlternativeWorkAddressId = res.Id;
                     loadLocalModel();
@@ -96,6 +110,7 @@
                     Longitude: "",
                     Latitude: "",
                 }).$promise.then(function () {
+                    workAddressDirty[index] = false;
                     NotificationService.AutoFadeNotification("success", "", "Afvigende arbejdsadresse redigeret.");
                     $rootScope.$emit('PersonalAddressesChanged');
                 });
@@ -109,6 +124,7 @@
                 AlternativeWorkAddress: null,
                 AlternativeWorkAddressId: null
             }).$promise.then(function () {
+                workAddressDirty[index] = false;
                 if ($scope.employments[index].AlternativeWorkAddressId != null) {
                     Address.delete({ id: $scope.employments[index].AlternativeWorkAddressId }).$promise.then(function() {
                         $rootScope.$emit('PersonalAddressesChanged');
@@ -117,6 +133,8 @@
                 // Clear local model
                 $scope.employments[index].AlternativeWorkAddress = null;
                 $scope.employments[index].AlternativeWorkAddressId = null;
+                $scope.employments[index].WorkDistanceOverride = $scope.alternativeWorkDistances[index];
+                
                 loadLocalModel();
                 NotificationService.AutoFadeNotification("success", "", "Afvigende afstand mellem hjem og arbejde gemt.");
                 $rootScope.$emit('PersonalAddressesChanged');
@@ -131,6 +149,7 @@
             AlternativeWorkAddress: null,
             AlternativeWorkAddressId: null,
         }).$promise.then(function () {
+            workAddressDirty[index] = false;
             $scope.alternativeWorkDistances[index] = 0;
             $scope.alternativeWorkAddresses[index] = "";
             if ($scope.employments[index].AlternativeWorkAddressId != null) {
@@ -174,6 +193,7 @@
                     Type: "AlternativeHome"
                 }).$promise.then(function () {
                     NotificationService.AutoFadeNotification("success", "", "Afvigende hjemmeadresse redigeret.");
+                    homeAddressIsDirty = false;
                     $rootScope.$emit('PersonalAddressesChanged');
                 });
             } else {
@@ -191,6 +211,7 @@
                     $scope.alternativeHomeAddress = res;
                     $scope.alternativeHomeAddress.string = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town;
                     NotificationService.AutoFadeNotification("success", "", "Afvigende hjemmeadresse oprettet.");
+                    homeAddressIsDirty = false;
                     $rootScope.$emit('PersonalAddressesChanged');
                 });
             }
@@ -212,6 +233,26 @@
         }
     }
 
+    // Alert user if there are unsaved changes when navigating away.
+    $scope.$on('$stateChangeStart', function (event) {
+        var showConfirm = false;
+        if ($scope.alternativeHomeAddress != undefined) {
+            if (homeAddressIsDirty === true && $scope.alternativeHomeAddress.string != $scope.alternativeHomeAddress.StreetName + " " + $scope.alternativeHomeAddress.StreetNumber + ", " + $scope.alternativeHomeAddress.ZipCode + " " + $scope.alternativeHomeAddress.Town) {
+                showConfirm = true;
+            }
+        }
+        angular.forEach(workAddressDirty, function(value, key) {
+            if (value == true) {
+                showConfirm = true;
+            }
+        });
+        if (showConfirm) {
+            var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
+            if (!answer) {
+                event.preventDefault();
+            }
+        }
+    });
 
     $scope.SmartAddress = SmartAdresseSource;
 

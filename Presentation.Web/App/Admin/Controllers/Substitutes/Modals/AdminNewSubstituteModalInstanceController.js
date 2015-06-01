@@ -4,7 +4,6 @@
 
             $scope.persons = persons;
 
-
             $scope.autoCompleteOptions = {
                 filter: "contains"
             };
@@ -21,6 +20,7 @@
 
 
             $scope.personForOptions = {
+                filter: "contains",
                 select: function (item) {
                     $scope.orgUnitsDisabled = true;
                     $scope.orgUnit = undefined;

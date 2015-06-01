@@ -24,7 +24,7 @@
             $scope.primaryLicensePlateHelpText = res.text;
         });
 
-        
+
 
         var personId = $rootScope.CurrentUser.Id;
         $scope.showMailNotification = $rootScope.CurrentUser.IsLeader;
@@ -567,5 +567,17 @@
 
             });
         };
+
+        // Alert user if there are unsaved changes when navigating away.
+        $scope.$on('$stateChangeStart', function (event) {
+            if ($scope.newTokenDescription != "" ||
+                $scope.newLicensePlate != "" ||
+                $scope.newLicensePlateDescription != "") {
+                var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
+                if (!answer) {
+                    event.preventDefault();
+                }
+            }
+        });
     }
 ]);

@@ -19,6 +19,9 @@
         $scope.toString = toString;
         $scope.replace = String.replace;
 
+
+        var isFormDirty = false;
+
         var isEditingReport = ReportId > 0;
         $scope.container = {};
         $scope.container.datePickerMaxDate = new Date();
@@ -97,7 +100,7 @@
 
         var loadValuesFromReport = function (report) {
             $scope.DriveReport.FourKmRule = {};
-            $scope.DriveReport.FourKmRule.Value = $rootScope.CurrentUser.DistanceFromHomeToBorder.toString().replace(".",",");
+            $scope.DriveReport.FourKmRule.Value = $rootScope.CurrentUser.DistanceFromHomeToBorder.toString().replace(".", ",");
 
             // Select position in dropdown.
             $scope.container.PositionDropDown.select(function (item) {
@@ -286,6 +289,7 @@
                 mapArray.push({ name: addr.Name, lat: addr.Latitude, lng: addr.Longitude });
             });
             setMap(mapArray);
+            isFormDirty = true;
         }
 
         $scope.personalRouteDropdownChange = function (e) {
@@ -374,6 +378,8 @@
                 return;
             }
 
+
+
             $scope.validateInput();
             var promises = [];
             var mapArray = [];
@@ -398,6 +404,7 @@
 
             $q.all(promises).then(function (data) {
                 setMap(mapArray);
+                isFormDirty = true;
             });
         }
 
@@ -494,6 +501,8 @@
 
         $scope.clearClicked = function () {
 
+            isFormDirty = false;
+
             if (!isEditingReport) {
                 setMap($scope.mapStartAddress);
             }
@@ -557,7 +566,7 @@
             }
         }
 
-        
+
 
         $scope.kilometerAllowanceChanged = function () {
             updateDrivenKm();
@@ -685,5 +694,18 @@
         $scope.closeModalWindow = function () {
             $modalInstance.dismiss();
         }
+
+        // Alert the user when navigating away from the page if there are unsaved changes.
+        $scope.$on('$stateChangeStart', function (event) {
+            if (isFormDirty === true ||
+                ($scope.DriveReport.Purpose != $scope.latestDriveReport.Purpuse && $scope.DriveReport.Purpose != "") ||
+                ($scope.DriveReport.ReadDistance != $scope.latestDriveReport.ReadDistance && $scope.DriveReport.ReadDistance != "") ||
+                ($scope.DriveReport.UserComment != undefined && $scope.DriveReport.UserComment != $scope.latestDriveReport.UserComment && $scope.DriveReport.UserComment != "")) {
+                var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
+                if (!answer) {
+                    event.preventDefault();
+                }
+            }
+        });
     }
 ]);
