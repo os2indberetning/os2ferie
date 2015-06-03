@@ -21,6 +21,9 @@ namespace Core.ApplicationServices.MailerService.Impl
             _mailSender = mailSender;
         }
 
+        /// <summary>
+        /// Sends an email to all leaders with pending reports to be approved.
+        /// </summary>
         public void SendMails()
         {
             var mailAddresses = GetLeadersWithPendingReportsMails();
@@ -33,6 +36,10 @@ namespace Core.ApplicationServices.MailerService.Impl
 
         }
 
+        /// <summary>
+        /// Gets the email address of all leaders that have pending reports to be approved.
+        /// </summary>
+        /// <returns>List of email addresses.</returns>
         public IEnumerable<string> GetLeadersWithPendingReportsMails()
         {
             var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;

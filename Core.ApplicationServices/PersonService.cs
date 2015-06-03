@@ -27,6 +27,11 @@ namespace Core.ApplicationServices
             _coordinates = coordinates;
         }
 
+        /// <summary>
+        /// Removes CPR-number from all People in queryable.
+        /// </summary>
+        /// <param name="queryable"></param>
+        /// <returns>List of People with CPR-number removed.</returns>
         public IQueryable<Person> ScrubCprFromPersons(IQueryable<Person> queryable)
         {
             var set = queryable.ToList();
@@ -41,6 +46,12 @@ namespace Core.ApplicationServices
             return set.AsQueryable();
         }
 
+        /// <summary>
+        /// Returns AlternativeHome Address for person if one exists.
+        /// Otherwise the real home address is returned.
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
         public virtual PersonalAddress GetHomeAddress(Person person)
         {
             var alternative = _addressRepo.AsQueryable()
@@ -62,6 +73,11 @@ namespace Core.ApplicationServices
             return home;
         }
 
+        /// <summary>
+        /// Calculates and sets HomeWorkDistance to each employment belonging to person.
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
         public Person AddHomeWorkDistanceToEmployments(Person person)
         {
             // Get employments for person
@@ -93,6 +109,10 @@ namespace Core.ApplicationServices
             return person;
         }
 
+        /// <summary>
+        /// Performs a coordinate lookup if Address a does not have coordinates.
+        /// </summary>
+        /// <param name="a"></param>
         private void AddCoordinatesToAddressIfNonExisting(Address a)
         {
             try

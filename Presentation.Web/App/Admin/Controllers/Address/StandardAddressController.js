@@ -3,7 +3,10 @@
 
         $scope.gridContainer = {};
 
-       $scope.loadAddresses = function () {
+        $scope.loadAddresses = function () {
+            /// <summary>
+            /// Loads existing standard addresses from backend.
+            /// </summary>
            $scope.addresses = {
                dataSource: {
                    type: "odata",
@@ -79,11 +82,18 @@
            };
        }
 
-       $scope.updateAddressGrid = function () {
+        $scope.updateAddressGrid = function () {
+            /// <summary>
+            /// Refreshes standard address grid.
+            /// </summary>
            $scope.gridContainer.addressGrid.dataSource.read();
        }
 
-       $scope.editClick = function (id) {
+        $scope.editClick = function (id) {
+            /// <summary>
+            /// Opens standard address edit modal.
+            /// </summary>
+            /// <param name="id">Id of address to be edited.</param>
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Address/EditAddressTemplate.html',
                controller: 'EditAddressController',
@@ -109,7 +119,11 @@
            });
        }
 
-       $scope.deleteClick = function (id) {
+        $scope.deleteClick = function (id) {
+            /// <summary>
+            /// Opens delete StandardAddress modal
+            /// </summary>
+            /// <param name="id">Id of address to be deleted.</param>
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Address/ConfirmDeleteAddressTemplate.html',
                controller: 'DeleteAddressController',
@@ -128,7 +142,10 @@
            });
        }
 
-       $scope.addNewClick = function () {
+        $scope.addNewClick = function () {
+            /// <summary>
+            /// Opens add new Standard Address modal
+            /// </summary>
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Address/AddNewAddressTemplate.html',
                controller: 'AddNewAddressController',

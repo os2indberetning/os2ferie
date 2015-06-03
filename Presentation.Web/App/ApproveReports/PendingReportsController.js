@@ -65,11 +65,18 @@
        };
 
        $scope.showSubsChanged = function () {
+           /// <summary>
+           /// Applies filter according to getReportsWhereSubExists
+           /// </summary>
            $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/DriveReports?leaderId=" + personId + "&status=Pending" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints, ResponsibleLeader";
            $scope.gridContainer.grid.dataSource.read();
        }
 
        $scope.applyOrgUnitFilter = function (longDescription) {
+           /// <summary>
+           /// Applies orgunit filter
+           /// </summary>
+           /// <param name="longDescription">LongDescription of OrgUnit to filter by</param>
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            var newFilters = [];
 
@@ -96,6 +103,11 @@
        }
 
        $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
+           /// <summary>
+           /// Applies date filter
+           /// </summary>
+           /// <param name="fromDateStamp"></param>
+           /// <param name="toDateStamp"></param>
 
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            var newFilters = [];
@@ -120,6 +132,10 @@
        }
 
        $scope.applyPersonFilter = function (fullName) {
+           /// <summary>
+           /// Applies person filter.
+           /// </summary>
+           /// <param name="fullName"></param>
 
 
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
@@ -148,6 +164,9 @@
        }
 
        $scope.removePersonFilter = function () {
+           /// <summary>
+           /// Removes person filter.
+           /// </summary>
            $scope.person.chosenPerson = "";
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            if (oldFilters == undefined) {
@@ -164,6 +183,9 @@
        }
 
        $scope.removeDateFilter = function () {
+           /// <summary>
+           /// Removes date filter.
+           /// </summary>
            $scope.loadInitialDates();
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            if (oldFilters == undefined) {
@@ -179,6 +201,9 @@
        }
 
        $scope.removeOrgUnitFilter = function () {
+           /// <summary>
+           /// Removes OrgUnit filter.
+           /// </summary>
            $scope.orgUnit.chosenUnit = "";
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            if (oldFilters == undefined) {
@@ -359,6 +384,9 @@
        };
 
        $scope.checkAllBoxesOnPage = function () {
+           /// <summary>
+           /// Checks all reports on the current page.
+           /// </summary>
            if ($scope.checkAllBox.isChecked) {
                checkedReports = [];
                angular.forEach(allReports, function (value, key) {
@@ -377,6 +405,10 @@
        }
 
        $scope.rowChecked = function (id) {
+           /// <summary>
+           /// Adds id of the report in the checkedrow to checkedReports.
+           /// </summary>
+           /// <param name="id"></param>
            if ($scope.checkboxes[id]) {
                // Is run if the checkbox has been checked.
                checkedReports.push(id);
@@ -390,6 +422,9 @@
 
 
        $scope.loadInitialDates = function () {
+           /// <summary>
+           /// Loads initial date filters.
+           /// </summary>
            // Set initial values for kendo datepickers.
 
            initialLoad = 2;
@@ -416,6 +451,9 @@
        }
 
        $scope.clearClicked = function () {
+           /// <summary>
+           /// Clears filters.
+           /// </summary>
            $scope.loadInitialDates();
            $scope.removeDateFilter();
            $scope.removePersonFilter();
@@ -423,6 +461,10 @@
        }
 
        $scope.approveClick = function (id) {
+           /// <summary>
+           /// Opens approve report modal.
+           /// </summary>
+           /// <param name="id"></param>
            var modalInstance = $modal.open({
                templateUrl: '/App/ApproveReports/Modals/ConfirmApproveTemplate.html',
                controller: 'AcceptController',
@@ -447,6 +489,9 @@
        }
 
        function approveSelectedWithAccountClick() {
+           /// <summary>
+           /// Opens approve selected reports with different account modal.
+           /// </summary>
            if (checkedReports.length == 0) {
                NotificationService.AutoFadeNotification("danger", "", "Ingen indberetninger er markerede!");
            } else {
@@ -479,6 +524,9 @@
        }
 
        function approveSelectedClick() {
+           /// <summary>
+           /// Opens approve selected reports modal.
+           /// </summary>
            if (checkedReports.length == 0) {
                NotificationService.AutoFadeNotification("danger", "", "Ingen indberetninger er markerede!");
            } else {
@@ -510,6 +558,10 @@
        }
 
        $scope.showRouteModal = function (routeId) {
+           /// <summary>
+           /// Opens show route modal.
+           /// </summary>
+           /// <param name="routeId"></param>
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
                controller: 'ShowRouteModalController',
@@ -545,6 +597,10 @@
        //}
 
        $scope.rejectClick = function (id) {
+           /// <summary>
+           /// Opens reject report modal.
+           /// </summary>
+           /// <param name="id"></param>
            var modalInstance = $modal.open({
                templateUrl: '/App/ApproveReports/Modals/ConfirmRejectTemplate.html',
                controller: 'RejectController',

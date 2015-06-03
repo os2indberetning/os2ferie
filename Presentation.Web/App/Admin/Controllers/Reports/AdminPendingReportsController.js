@@ -25,6 +25,9 @@
 
 
        $scope.loadReports = function () {
+           /// <summary>
+           /// Loads pending reports from backend to kendo grid datasource
+           /// </summary>
            $scope.Reports = {
                dataSource: {
                    type: "odata-v4",
@@ -184,6 +187,9 @@
 
 
        $scope.loadInitialDates = function () {
+           /// <summary>
+           /// Loads initial date filters.
+           /// </summary>
            // Set initial values for kendo datepickers.
            var from = new Date();
            from.setDate(from.getDate() - 30);
@@ -194,7 +200,11 @@
        }
 
       
-       $scope.showRouteModal = function(routeId) {
+       $scope.showRouteModal = function (routeId) {
+           /// <summary>
+           /// Opens show route modal
+           /// </summary>
+           /// <param name="routeId"></param>
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
                controller: 'ShowRouteModalController',
@@ -210,6 +220,7 @@
        // Event handlers
 
        $scope.deleteClick = function (id) {
+
            var modalInstance = $modal.open({
                templateUrl: '/App/MyReports/ConfirmDeleteTemplate.html',
                controller: 'ConfirmDeleteReportController',
@@ -273,11 +284,17 @@
        }
 
        $scope.clearClicked = function () {
+           /// <summary>
+           /// Clears selected filters.
+           /// </summary>
            $scope.gridContainer.grid.dataSource.filter([{ field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }]);
            $scope.loadInitialDates();
        }
 
        $scope.refreshGrid = function () {
+           /// <summary>
+           /// Refreshes kendo grid datasource.
+           /// </summary>
            $scope.gridContainer.grid.dataSource.read();
        }
 
@@ -297,13 +314,12 @@
            format: "dd/MM/yyyy",
        };
 
-       $scope.refreshGrid = function () {
-           $scope.gridContainer.grid.dataSource.read();
-       }
-
-
-
        $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
+           /// <summary>
+           /// Applies date filters.
+           /// </summary>
+           /// <param name="fromDateStamp"></param>
+           /// <param name="toDateStamp"></param>*
            var newFilters = [];
            newFilters.push({ field: "DriveDateTimestamp", operator: "gte", value: fromDateStamp });
            newFilters.push({ field: "DriveDateTimestamp", operator: "lte", value: toDateStamp });

@@ -38,6 +38,9 @@
             }
 
             $scope.saveNewSubstitute = function () {
+                /// <summary>
+                /// Post new substitute to backend if fields are filled correctly.
+                /// </summary>
                 if ($scope.person == undefined) {
                     NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en stedfortræder");
                     return;

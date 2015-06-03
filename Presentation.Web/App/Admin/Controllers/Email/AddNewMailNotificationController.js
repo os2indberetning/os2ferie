@@ -12,6 +12,9 @@
         $scope.notificationDate = new Date();
 
         $scope.confirmSave = function () {
+            /// <summary>
+            /// Saves new MailNotification if fields are properly filled.
+            /// </summary>
             var error = false;
 
             $scope.repeatErrorMessage = "";
@@ -43,6 +46,9 @@
         }
 
         $scope.cancel = function () {
+            /// <summary>
+            /// Cancels creation of new MailNotification.
+            /// </summary>
             $modalInstance.dismiss('cancel');
             NotificationService.AutoFadeNotification("warning", "", "Oprettelse af email adviseringen blev annulleret.");
         }

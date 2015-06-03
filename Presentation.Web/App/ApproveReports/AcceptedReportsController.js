@@ -38,15 +38,26 @@
        });
 
        $scope.orgUnitChanged = function (item) {
+           /// <summary>
+           /// Applies OrgUnit filter.
+           /// </summary>
+           /// <param name="item"></param>
            $scope.applyOrgUnitFilter($scope.orgUnit.chosenUnit);
        }
 
        $scope.showSubsChanged = function () {
+           /// <summary>
+           /// Updates datasource accoridng to getReportsWhereSubExists
+           /// </summary>
            $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/DriveReports?leaderId=" + personId + "&status=Accepted" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints";
            $scope.gridContainer.grid.dataSource.read();
        }
 
        $scope.applyOrgUnitFilter = function (longDescription) {
+           /// <summary>
+           /// Applies OrgUnit filter.
+           /// </summary>
+           /// <param name="longDescription"></param>
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            var newFilters = [];
 
@@ -73,6 +84,11 @@
        }
 
        $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
+           /// <summary>
+           /// Applies date filters.
+           /// </summary>
+           /// <param name="fromDateStamp"></param>
+           /// <param name="toDateStamp"></param>
 
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            var newFilters = [];
@@ -97,6 +113,10 @@
        }
 
        $scope.applyPersonFilter = function (fullName) {
+           /// <summary>
+           /// Applies person filter
+           /// </summary>
+           /// <param name="fullName">Name of person to filter</param>
 
 
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
@@ -125,6 +145,9 @@
        }
 
        $scope.removePersonFilter = function () {
+           /// <summary>
+           /// Removes person filter.
+           /// </summary>
            $scope.person.chosenPerson = "";
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            if (oldFilters == undefined) {
@@ -141,6 +164,9 @@
        }
 
        $scope.removeDateFilter = function () {
+           /// <summary>
+           /// Removes date filter.
+           /// </summary>
            $scope.loadInitialDates();
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            if (oldFilters == undefined) {
@@ -156,6 +182,9 @@
        }
 
        $scope.removeOrgUnitFilter = function () {
+           /// <summary>
+           /// Removes OrgUnit filter
+           /// </summary>
            $scope.orgUnit.chosenUnit = "";
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            if (oldFilters == undefined) {
@@ -171,6 +200,9 @@
        }
 
        $scope.getCurrentPageSums = function () {
+           /// <summary>
+           /// Sets sum of amount and distance on current page in scope variables.
+           /// </summary>
            var pageNumber = $scope.gridContainer.grid.dataSource.page();
            var pageSize = $scope.gridContainer.grid.dataSource.pageSize();
            var first = pageSize * (pageNumber - 1);
@@ -404,6 +436,9 @@
        };
 
        $scope.loadInitialDates = function () {
+           /// <summary>
+           /// Loads initial date filters.
+           /// </summary>
            // Set initial values for kendo datepickers.
 
            initialLoad = 2;
@@ -423,6 +458,9 @@
        }
 
        $scope.clearClicked = function () {
+           /// <summary>
+           /// Clears filters.
+           /// </summary>
            $scope.loadInitialDates();
            $scope.removeDateFilter();
            $scope.removePersonFilter();
@@ -430,6 +468,10 @@
        }
 
        $scope.showRouteModal = function (routeId) {
+           /// <summary>
+           /// Opens show route modal.
+           /// </summary>
+           /// <param name="routeId"></param>
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
                controller: 'ShowRouteModalController',
@@ -461,6 +503,9 @@
        }
 
        $scope.refreshGrid = function () {
+           /// <summary>
+           /// Refreshes kendo grid datasource.
+           /// </summary>
            $scope.gridContainer.grid.dataSource.read();
        }
 

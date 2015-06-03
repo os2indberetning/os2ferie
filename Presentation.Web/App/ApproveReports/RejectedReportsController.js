@@ -39,16 +39,27 @@
        });
 
        $scope.orgUnitChanged = function (item) {
+           /// <summary>
+           /// Applies OrgUnit filter
+           /// </summary>
+           /// <param name="item"></param>
            $scope.applyOrgUnitFilter($scope.orgUnit.chosenUnit);
        }
 
 
        $scope.showSubsChanged = function () {
+           /// <summary>
+           /// Updates kendo grid datasource according to getReportsWhereSubExists
+           /// </summary>
            $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/DriveReports?leaderId=" + personId + "&status=Rejected" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints";
            $scope.gridContainer.grid.dataSource.read();
        }
 
        $scope.applyOrgUnitFilter = function (longDescription) {
+           /// <summary>
+           /// Applies OrgUnit filter.
+           /// </summary>
+           /// <param name="longDescription"></param>
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            var newFilters = [];
 
@@ -75,6 +86,11 @@
        }
 
        $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
+           /// <summary>
+           /// Applies date filter.
+           /// </summary>
+           /// <param name="fromDateStamp"></param>
+           /// <param name="toDateStamp"></param>
 
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            var newFilters = [];
@@ -99,6 +115,10 @@
        }
 
        $scope.applyPersonFilter = function (fullName) {
+           /// <summary>
+           /// Applies person filter.
+           /// </summary>
+           /// <param name="fullName"></param>
 
 
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
@@ -127,6 +147,9 @@
        }
 
        $scope.removePersonFilter = function () {
+           /// <summary>
+           /// Removes person filter.
+           /// </summary>
            $scope.person.chosenPerson = "";
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            if (oldFilters == undefined) {
@@ -143,6 +166,9 @@
        }
 
        $scope.removeDateFilter = function () {
+           /// <summary>
+           /// Removes date filter.
+           /// </summary>
            $scope.loadInitialDates();
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            if (oldFilters == undefined) {
@@ -158,6 +184,9 @@
        }
 
        $scope.removeOrgUnitFilter = function () {
+           /// <summary>
+           /// Removes OrgUnit filter.
+           /// </summary>
            $scope.orgUnit.chosenUnit = "";
            var oldFilters = $scope.gridContainer.grid.dataSource.filter();
            if (oldFilters == undefined) {
@@ -173,6 +202,9 @@
        }
 
        $scope.loadReports = function () {
+           /// <summary>
+           /// Loads rejected reports from backend to kendo grid datasource.
+           /// </summary>
            $scope.reports = {
                dataSource: {
                    type: "odata-v4",
@@ -368,9 +400,9 @@
 
        // Event handlers
 
-       $scope.pageSizeChanged = function () {
-           $scope.gridContainer.grid.dataSource.pageSize(Number($scope.gridContainer.gridPageSize));
-       }
+       //$scope.pageSizeChanged = function () {
+       //    $scope.gridContainer.grid.dataSource.pageSize(Number($scope.gridContainer.gridPageSize));
+       //}
 
        $scope.clearName = function () {
            $scope.chosenPerson = "";

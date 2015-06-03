@@ -51,6 +51,9 @@
         $scope.validateInput = function () { };
 
         var setupForNewReport = function () {
+            /// <summary>
+            /// Initializes fields for new report.
+            /// </summary>
             $scope.DriveReport = new DriveReport();
             $scope.DriveReport.Addresses = [];
             $scope.DriveReport.Addresses.push({ Name: "", Personal: "" });
@@ -62,12 +65,20 @@
         setupForNewReport();
 
         $scope.AddViapoint = function () {
+            /// <summary>
+            /// Adds via point
+            /// </summary>
             var temp = $scope.DriveReport.Addresses.pop();
             $scope.DriveReport.Addresses.push({ Name: "", Personal: "", Save: false });
             $scope.DriveReport.Addresses.push(temp);
         };
 
         $scope.Remove = function (array, index) {
+            /// <summary>
+            /// Removes via point
+            /// </summary>
+            /// <param name="array"></param>
+            /// <param name="index"></param>
             array.splice(index, 1);
             $scope.addressInputChanged(index);
         };
@@ -81,6 +92,12 @@
         };
 
         $scope.shaveExtraCommasOffAddressString = function (address) {
+            /// <summary>
+            /// Removes commas from Address string from Septima.
+            /// Septima addresses are in the format                 "StreetName StreetNumber, ZipCode, Town"
+            /// Addresses used in the app need to be in the format  "StreetName StreetNumber, Zipcode Town"
+            /// </summary>
+            /// <param name="address"></param>
             var res = address.toString().replace(/,/, "###");
             res = res.replace(/,/g, "");
             res = res.replace(/###/, ",");
@@ -88,6 +105,10 @@
         }
 
         var getCurrentUserEmployment = function (employmentId) {
+            /// <summary>
+            /// Gets employment for current user.
+            /// </summary>
+            /// <param name="employmentId"></param>
             var res;
             angular.forEach($scope.currentUser.Employments, function (empl, key) {
                 if (empl.Id == employmentId) {
@@ -99,6 +120,10 @@
 
 
         var loadValuesFromReport = function (report) {
+            /// <summary>
+            /// Loads values from user's latest report and sets fields in the view.
+            /// </summary>
+            /// <param name="report"></param>
             $scope.DriveReport.FourKmRule = {};
             $scope.DriveReport.FourKmRule.Value = $rootScope.CurrentUser.DistanceFromHomeToBorder.toString().replace(".", ",");
 
@@ -269,12 +294,19 @@
         });
 
         var setNotRoute = function () {
+            /// <summary>
+            /// Sets fields for report to be not a personal route.
+            /// </summary>
             $scope.container.PersonalRouteDropDown.select(0);
             $scope.IsRoute = false;
             $scope.DriveReport.Addresses = [{ Name: "" }, { Name: "" }];
         }
 
         var setIsRoute = function (index) {
+            /// <summary>
+            /// Sets field for report to be a personal route.
+            /// </summary>
+            /// <param name="index"></param>
             $scope.IsRoute = true;
             var route = $scope.Routes[index];
             $scope.DriveReport.Addresses = [];
@@ -293,6 +325,10 @@
         }
 
         $scope.personalRouteDropdownChange = function (e) {
+            /// <summary>
+            /// Event handler for personal route dropdown.
+            /// </summary>
+            /// <param name="e"></param>
             var index = e.sender.selectedIndex;
             if (index == 0) {
                 setNotRoute();
@@ -327,6 +363,9 @@
         }
 
         var validatePurpose = function () {
+            /// <summary>
+            /// Validates purposes and sets error message in view accordingly.
+            /// </summary>
             $scope.purposeErrorMessage = "";
             if ($scope.DriveReport.Purpose == undefined || $scope.DriveReport.Purpose == "") {
                 $scope.purposeErrorMessage = "* Du skal angive et formål.";
@@ -336,6 +375,9 @@
         }
 
         var validateFourKmRule = function () {
+            /// <summary>
+            /// Validates fourkmrule and sets error message in view accordingly.
+            /// </summary>
             $scope.fourKmRuleValueErrorMessage = "";
             if ($scope.DriveReport.FourKmRule.Using === true && ($scope.DriveReport.FourKmRule.Value == "" || $scope.DriveReport.FourKmRule.Value == undefined)) {
                 $scope.fourKmRuleValueErrorMessage = "* Du skal udfylde en 4 km-regel værdi.";
@@ -345,6 +387,9 @@
         }
 
         var validateLicensePlate = function () {
+            /// <summary>
+            /// Validates license plate and sets error message in view accordingly.
+            /// </summary>
             $scope.licensePlateErrorMessage = "";
             if (getKmRate($scope.DriveReport.KmRate).Type.RequiresLicensePlate && $scope.LicensePlates[0].PresentationString == "Ingen nummerplader") {
                 $scope.licensePlateErrorMessage = "* Det valgte transportmiddel kræver en nummerplade.";
@@ -354,6 +399,9 @@
         }
 
         var validateReadInput = function () {
+            /// <summary>
+            /// Validates Read Report driven distance and sets eror message in view accordingly.
+            /// </summary>
             $scope.readDistanceErrorMessage = "";
             $scope.userCommentErrorMessage = "";
             var distRes = true;
@@ -374,6 +422,10 @@
 
 
         $scope.addressInputChanged = function (index) {
+            /// <summary>
+            /// Resolves address coordinates and updates map.
+            /// </summary>
+            /// <param name="index"></param>
             if (!validateAddressInput() || mapChanging) {
                 return;
             }
@@ -409,6 +461,10 @@
         }
 
         var setMap = function (mapArray) {
+            /// <summary>
+            /// Updates the map widget in the view.
+            /// </summary>
+            /// <param name="mapArray"></param>
             $timeout(function () {
                 setMapPromise = $q.defer();
                 mapChanging = true;
@@ -428,6 +484,9 @@
         });
 
         var createMap = function () {
+            /// <summary>
+            /// Creates the map widget in the view.
+            /// </summary>
             $timeout(function () {
                 if (angular.element('#map').length) {
                     OS2RouteMap.create({
@@ -470,10 +529,13 @@
         }
 
 
-        // Is called when Kendo has rendered up to and including KilometerAllowanceDropDown and data has been loaded from backend.
-        // Consider this function Main()
-        // Is needed to make sure data and kendo widgets are ready for setting values from previous drivereport.
+
         var dataAndKendoLoaded = function () {
+            /// <summary>
+            ///  Is called when Kendo has rendered up to and including KilometerAllowanceDropDown and data has been loaded from backend.
+            /// Consider this function Main()
+            /// Is needed to make sure data and kendo widgets are ready for setting values from previous drivereport.
+            /// </summary>
 
             // Define validateInput now. Otherwise it gets called from drivingview.html before having loaded resources.
             $scope.validateInput = function () {
@@ -500,6 +562,9 @@
         }
 
         $scope.clearClicked = function () {
+            /// <summary>
+            /// Clears user input
+            /// </summary>
 
             isFormDirty = false;
 
@@ -527,6 +592,9 @@
         }
 
         var handleSave = function () {
+            /// <summary>
+            /// Handles saving of drivereport.
+            /// </summary>
             $scope.canSubmitDriveReport = false;
             if (isEditingReport) {
                 DriveReport.delete({ id: ReportId }).$promise.then(function () {
@@ -594,6 +662,9 @@
         }
 
         var routeStartsAtHome = function () {
+            /// <summary>
+            /// returns true if route starts at home
+            /// </summary>
             if ($scope.DriveReport.KilometerAllowance == "Read") {
                 var index = $scope.container.StartEndHomeDropDown.selectedIndex;
                 if (index == 1 || index == 3) {
@@ -610,6 +681,9 @@
         }
 
         var routeEndsAtHome = function () {
+            /// <summary>
+            /// Returns true if route ends at home.
+            /// </summary>
             if ($scope.DriveReport.KilometerAllowance == "Read") {
                 var index = $scope.container.StartEndHomeDropDown.selectedIndex;
                 if (index == 2 || index == 3) {
@@ -646,6 +720,9 @@
         }
 
         var updateDrivenKm = function () {
+            /// <summary>
+            /// Updates drivenkm fields under map widget.
+            /// </summary>
             if ($scope.DriveReport.KilometerAllowance != "CalculatedWithoutExtraDistance") {
                 if (routeStartsAtHome() && routeEndsAtHome()) {
                     $scope.TransportAllowance = Number(getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance) * 2;
@@ -696,7 +773,11 @@
         }
 
 
-        var handleDiscardChanges = function(event) {
+        var handleDiscardChanges = function (event) {
+            /// <summary>
+            /// Prompts the user when he/she attempts to leave a page with unsaved changes.
+            /// </summary>
+            /// <param name="event"></param>
             if (isFormDirty === true ||
                ($scope.DriveReport.Purpose != $scope.latestDriveReport.Purpuse && $scope.DriveReport.Purpose != "") ||
                ($scope.DriveReport.ReadDistance != $scope.latestDriveReport.ReadDistance && $scope.DriveReport.ReadDistance != "") ||

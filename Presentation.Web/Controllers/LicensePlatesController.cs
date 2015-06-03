@@ -21,6 +21,11 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: odata/LicensePlates
+        /// <summary>
+        /// ODATA GET API endpoint for license plates.
+        /// </summary>
+        /// <param name="queryOptions"></param>
+        /// <returns></returns>
         [EnableQuery]
         public IQueryable<LicensePlate> Get(ODataQueryOptions<LicensePlate> queryOptions)
         {
@@ -29,18 +34,36 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: odata/LicensePlates(5)
+        /// <summary>
+        /// GET API endpoint for a single license plate
+        /// </summary>
+        /// <param name="key">Returns the licenseplate identified by key</param>
+        /// <param name="queryOptions"></param>
+        /// <returns></returns>
         public IQueryable<LicensePlate> Get([FromODataUri] int key, ODataQueryOptions<LicensePlate> queryOptions)
         {
             return GetQueryable(key, queryOptions);
         }
 
         //PUT: odata/LicensePlates(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         public new IHttpActionResult Put([FromODataUri] int key, Delta<LicensePlate> delta)
         {
             return base.Put(key, delta);
         }
 
         //POST: odata/LicensePlates
+        /// <summary>
+        /// POST API endpoint for license plates.
+        /// Returns forbidden if the user associated with the license plate is not the current user.
+        /// </summary>
+        /// <param name="LicensePlate">License plate to be posted.</param>
+        /// <returns></returns>
         [EnableQuery]
         public new IHttpActionResult Post(LicensePlate LicensePlate)
         {
@@ -59,6 +82,13 @@ namespace OS2Indberetning.Controllers
         }
 
         //PATCH: odata/LicensePlates(5)
+        /// <summary>
+        /// PATCH API endpoint for license plates.
+        /// Returns forbidden if the user associated with the license plate is not the current user.
+        /// </summary>
+        /// <param name="key">Patches the license plate identified by key</param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<LicensePlate> delta)
@@ -77,6 +107,13 @@ namespace OS2Indberetning.Controllers
         }
 
         //DELETE: odata/LicensePlates(5)
+        /// <summary>
+        /// DELETE API endpoint for license plates.
+        /// Returns forbidden if the user associated with the license plate is not the current user.
+        /// If the plate to be deleted is currently the primary license plate, a new randomly picked license plate will be made primary.
+        /// </summary>
+        /// <param name="key">Deletes the license plate identified by key</param>
+        /// <returns></returns>
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
             // Get the plate to be deleted
@@ -104,6 +141,11 @@ namespace OS2Indberetning.Controllers
             return base.Delete(key);
         }
 
+        /// <summary>
+        /// Makes the license plate identified by plateId the primary license plate.
+        /// </summary>
+        /// <param name="plateId"></param>
+        /// <returns></returns>
         public IHttpActionResult MakePrimary(int plateId)
         {
             if (!CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(plateId)).PersonId))

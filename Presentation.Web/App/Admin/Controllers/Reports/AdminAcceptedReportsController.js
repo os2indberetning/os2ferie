@@ -26,6 +26,9 @@ angular.module("application").controller("AdminAcceptedReportsController",
         var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
         $scope.loadReports = function () {
+            /// <summary>
+            /// Loads existing accepted reports from backend to kendo grid datasource.
+            /// </summary>
             $scope.Reports = {
                 dataSource: {
                     type: "odata",
@@ -223,11 +226,17 @@ angular.module("application").controller("AdminAcceptedReportsController",
         }
 
         $scope.clearClicked = function () {
+            /// <summary>
+            /// Clears filters.
+            /// </summary>
             $scope.gridContainer.grid.dataSource.filter([{ field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }]);
             $scope.loadInitialDates();
         }
 
         $scope.loadInitialDates = function () {
+            /// <summary>
+            /// Sets initial filter dates.
+            /// </summary>
             // Set initial values for kendo datepickers.
 
             initialLoad = 2;
@@ -240,6 +249,10 @@ angular.module("application").controller("AdminAcceptedReportsController",
         }
 
         $scope.showRouteModal = function (routeId) {
+            /// <summary>
+            /// Opens show route modal, which shows the driven route for a report.
+            /// </summary>
+            /// <param name="routeId">Id of the route to display</param>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
                 controller: 'ShowRouteModalController',
@@ -255,6 +268,9 @@ angular.module("application").controller("AdminAcceptedReportsController",
 
         var initialLoad = 2;
         $scope.dateChanged = function () {
+            /// <summary>
+            /// Update filter according to date.
+            /// </summary>
             // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
             $timeout(function () {
 
@@ -276,6 +292,9 @@ angular.module("application").controller("AdminAcceptedReportsController",
 
 
         $scope.refreshGrid = function () {
+            /// <summary>
+            /// Refreshes kendo grid datasource.
+            /// </summary>
             $scope.gridContainer.grid.dataSource.read();
         }
 
@@ -300,6 +319,11 @@ angular.module("application").controller("AdminAcceptedReportsController",
         }
 
         $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
+            /// <summary>
+            /// Applies date filter to grid.
+            /// </summary>
+            /// <param name="fromDateStamp"></param>
+            /// <param name="toDateStamp"></param>
             var newFilters = [];
             newFilters.push({ field: "DriveDateTimestamp", operator: "gte", value: fromDateStamp });
             newFilters.push({ field: "DriveDateTimestamp", operator: "lte", value: toDateStamp });

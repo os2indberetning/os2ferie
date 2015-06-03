@@ -25,6 +25,9 @@ angular.module("application").controller("MyAcceptedReportsController", [
        var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
        $scope.loadReports = function () {
+           /// <summary>
+           /// Loads current user's accepted reports from backend to kendo grid datasource.
+           /// </summary>
            $scope.Reports = {
                dataSource: {
                    type: "odata",
@@ -188,11 +191,17 @@ angular.module("application").controller("MyAcceptedReportsController", [
        }
 
        $scope.clearClicked = function () {
+           /// <summary>
+           /// Clears filters.
+           /// </summary>
            $scope.gridContainer.grid.dataSource.filter([{ field: "PersonId", operator: "eq", value: personId }]);
            $scope.loadInitialDates();
        }
 
        $scope.loadInitialDates = function () {
+           /// <summary>
+           /// Loads initial date filters.
+           /// </summary>
            // Set initial values for kendo datepickers.
 
            initialLoad = 2;
@@ -228,6 +237,9 @@ angular.module("application").controller("MyAcceptedReportsController", [
        }
 
        $scope.refreshGrid = function () {
+           /// <summary>
+           /// Refreshes kendo grid datasource.
+           /// </summary>
            $scope.gridContainer.grid.dataSource.read();
        }
 
@@ -251,6 +263,11 @@ angular.module("application").controller("MyAcceptedReportsController", [
        };
 
        $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
+           /// <summary>
+           /// Applies date filters.
+           /// </summary>
+           /// <param name="fromDateStamp"></param>
+           /// <param name="toDateStamp"></param>
            var newFilters = [];
            newFilters.push({ field: "PersonId", operator: "eq", value: personId });
            newFilters.push({ field: "DriveDateTimestamp", operator: "gte", value: fromDateStamp });
@@ -259,6 +276,10 @@ angular.module("application").controller("MyAcceptedReportsController", [
        }
 
        $scope.showRouteModal = function (routeId) {
+           /// <summary>
+           /// Opens show route modal.
+           /// </summary>
+           /// <param name="routeId"></param>
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
                controller: 'ShowRouteModalController',

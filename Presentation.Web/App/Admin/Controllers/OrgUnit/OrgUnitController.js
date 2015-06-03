@@ -90,7 +90,11 @@
         };
 
         $scope.rowChecked = function (id) {
-
+            /// <summary>
+            /// Is called when the user checks an orgunit in the grid.
+            /// Patches HasAccessToFourKmRule on the backend.
+            /// </summary>
+            /// <param name="id"></param>
             var org = "";
             for (var i = 0; i < $scope.typeAheadOrgUnits.length; i++) {
                 if ($scope.typeAheadOrgUnits[i].Id == id) {
@@ -119,12 +123,19 @@
         });
 
         $scope.orgUnitChanged = function (item) {
+            /// <summary>
+            /// Filters grid content
+            /// </summary>
+            /// <param name="item"></param>
             var filter = [];
             filter.push({ field: "LongDescription", operator: "startswith", value: $scope.orgUnit.chosenUnit });
             $scope.gridContainer.grid.dataSource.filter(filter);
         }
 
         $scope.clearClicked = function () {
+            /// <summary>
+            /// Clears filters.
+            /// </summary>
             $scope.orgUnit.chosenUnit = "";
             $scope.gridContainer.grid.dataSource.filter({});
 

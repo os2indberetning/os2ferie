@@ -31,6 +31,9 @@
     $scope.alternativeWorkDistances = [];
 
     var loadLocalModel = function () {
+        /// <summary>
+        /// Fills local model variables with data.
+        /// </summary>
         angular.forEach($scope.employments, function (empl, key) {
             if (empl.AlternativeWorkAddress != null) {
                 var addr = empl.AlternativeWorkAddress;
@@ -41,12 +44,20 @@
         });
     }
 
-    $scope.alternativeWorkDistanceChanged = function($index) {
+    $scope.alternativeWorkDistanceChanged = function ($index) {
+        /// <summary>
+        /// Clears alternative work address when changing alternative work distance.
+        /// </summary>
+        /// <param name="$index"></param>
         $scope.alternativeWorkAddresses[$index] = '';
         workAddressDirty[$index] = true;
     }
 
-    $scope.alternativeWorkAddressChanged = function($index) {
+    $scope.alternativeWorkAddressChanged = function ($index) {
+        /// <summary>
+        /// Clears alternative work distance when changing alternative work address.
+        /// </summary>
+        /// <param name="$index"></param>
         $scope.alternativeWorkDistances[$index] = '';
         workAddressDirty[$index] = true;
     }
@@ -69,6 +80,10 @@
     }
 
     var handleSaveAlternativeWork = function (index) {
+        /// <summary>
+        /// Handles saving alternative work address.
+        /// </summary>
+        /// <param name="index"></param>
         // Both fields empty. Clear.
         if (!isAddressSet(index) && (!isDistanceSet(index) || $scope.alternativeWorkDistances[index] == 0)) {
             $scope.clearWorkClicked(index);
@@ -144,6 +159,10 @@
 
 
     $scope.clearWorkClicked = function (index) {
+        /// <summary>
+        /// Clears alternative work address.
+        /// </summary>
+        /// <param name="index"></param>
         PersonEmployments.patchEmployment({ id: $scope.employments[index].Id }, {
             WorkDistanceOverride: 0,
             AlternativeWorkAddress: null,
@@ -179,6 +198,9 @@
     }
 
     var handleSaveAltHome = function () {
+        /// <summary>
+        /// Handles saving alternative home address.
+        /// </summary>
         if ($scope.alternativeHomeAddress.string != undefined && $scope.alternativeHomeAddress.string != null && $scope.alternativeHomeAddress.string != "") {
             var addr = AddressFormatter.fn($scope.alternativeHomeAddress.string);
             if ($scope.alternativeHomeAddress.Id != undefined) {
@@ -221,6 +243,9 @@
     }
 
     $scope.clearHomeClicked = function () {
+        /// <summary>
+        /// Clears alternative home address.
+        /// </summary>
         $scope.alternativeHomeAddress.string = "";
         if ($scope.alternativeHomeAddress.Id != undefined) {
             PersonalAddress.delete({ id: $scope.alternativeHomeAddress.Id }).$promise.then(function () {
@@ -233,7 +258,11 @@
         }
     }
 
-    var handleDiscardChanges = function(event) {
+    var handleDiscardChanges = function (event) {
+        /// <summary>
+        /// Prompts user when attempting to leave a page with unsaved changes.
+        /// </summary>
+        /// <param name="event"></param>
         var showConfirm = false;
         if ($scope.alternativeHomeAddress != undefined) {
             if (homeAddressIsDirty === true && $scope.alternativeHomeAddress.string != $scope.alternativeHomeAddress.StreetName + " " + $scope.alternativeHomeAddress.StreetNumber + ", " + $scope.alternativeHomeAddress.ZipCode + " " + $scope.alternativeHomeAddress.Town) {

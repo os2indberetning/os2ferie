@@ -28,6 +28,9 @@ namespace Infrastructure.DmzSync.Services.Impl
             _personService = personService;
         }
 
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
         public void SyncFromDmz()
         {
             // We are not interested in migrating profiles from DMZ to os2.
@@ -35,7 +38,9 @@ namespace Infrastructure.DmzSync.Services.Impl
         }
 
 
-
+        /// <summary>
+        /// Syncs all People from OS2 database to DMZ database.
+        /// </summary>
         public void SyncToDmz()
         {
             var i = 0;
@@ -70,6 +75,9 @@ namespace Infrastructure.DmzSync.Services.Impl
 
         }
 
+        /// <summary>
+        /// Syncs employments for all People in OS2 database to DMZ database.
+        /// </summary>
         private void SyncEmployments()
         {
             var i = 0;
@@ -102,6 +110,9 @@ namespace Infrastructure.DmzSync.Services.Impl
             _dmzProfileRepo.Save();
         }
 
+        /// <summary>
+        /// Clears DMZ database of all people.
+        /// </summary>
         public void ClearDmz()
         {
             var i = 0;

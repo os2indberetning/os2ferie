@@ -33,6 +33,11 @@ namespace OS2Indberetning.Controllers
         }
 
         // GET: odata/Person
+        /// <summary>
+        /// GET API endpoint for Person
+        /// </summary>
+        /// <param name="queryOptions"></param>
+        /// <returns>People</returns>
         [EnableQuery]
         public IHttpActionResult GetPerson(ODataQueryOptions<Person> queryOptions)
         {
@@ -42,6 +47,12 @@ namespace OS2Indberetning.Controllers
         }
 
         
+        /// <summary>
+        /// GET API endpoint for CurrentUser.
+        /// Sets HomeWorkDistance on each of the users employments.
+        /// Strips CPR-number off.
+        /// </summary>
+        /// <returns>The user currently logged in.</returns>
         [EnableQuery(MaxExpansionDepth = 4)]
         // Disable caching.
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
@@ -58,6 +69,13 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: odata/Person(5)
+        /// <summary>
+        /// GET API endpoint for a single person
+        /// Strips CPR-number off.
+        /// </summary>
+        /// <param name="key">Returns the person identified by key</param>
+        /// <param name="queryOptions"></param>
+        /// <returns>A single Person</returns>
         public IQueryable<Person> GetPerson([FromODataUri] int key, ODataQueryOptions<Person> queryOptions)
         {
             try
@@ -73,12 +91,23 @@ namespace OS2Indberetning.Controllers
         }
 
         // PUT: odata/Person(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         public new IHttpActionResult Put([FromODataUri] int key, Delta<Person> delta)
         {
             return base.Put(key, delta);
         }
 
         // POST: odata/Person
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
         [EnableQuery]
         public new IHttpActionResult Post(Person person)
         {
@@ -86,6 +115,13 @@ namespace OS2Indberetning.Controllers
         }
 
         // PATCH: odata/Person(5)
+        /// <summary>
+        /// PATCH API endpoint for person.
+        /// Returns forbidden if the person identified by key is not the current user or if the current user is not an admin.
+        /// </summary>
+        /// <param name="key">Patches the Person identified by key</param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         [EnableQuery]
         [System.Web.Http.AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Person> delta)
@@ -95,12 +131,23 @@ namespace OS2Indberetning.Controllers
         }
 
         // DELETE: odata/Person(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
             return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         // GET odata/Person(5)/Employments
+        /// <summary>
+        /// Returns employments belonging to the user identified by key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="queryOptions"></param>
+        /// <returns>Employments</returns>
         [EnableQuery]
         public IHttpActionResult GetEmployments([FromODataUri] int key, ODataQueryOptions<Person> queryOptions)
         {
@@ -116,6 +163,12 @@ namespace OS2Indberetning.Controllers
         }
 
         // GET: odata/Person(5)/Service.HasLicensePlate
+        /// <summary>
+        /// Returns whether or not the user identified by key has a license plate.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         [EnableQuery]
         [System.Web.Http.HttpGet]
         public IHttpActionResult HasLicensePlate([FromODataUri] int key, ODataActionParameters parameters)

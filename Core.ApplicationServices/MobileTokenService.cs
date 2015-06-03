@@ -15,6 +15,11 @@ namespace Core.ApplicationServices
             _repo = repo;
         }
 
+        /// <summary>
+        /// Creates a MobileToken and inserts it into the database.
+        /// </summary>
+        /// <param name="token">MobileToken to be created.</param>
+        /// <returns>The created MobileToken.</returns>
         public MobileToken Create(MobileToken token)
         {
             var randomToken = GenerateToken();
@@ -55,6 +60,11 @@ namespace Core.ApplicationServices
             return createdToken;
         }
 
+        /// <summary>
+        /// Deletes the MobileToken
+        /// </summary>
+        /// <param name="token">MobileToken to be deleted.</param>
+        /// <returns>True if successfull, otherwise false.</returns>
         public bool Delete(MobileToken token)
         {
             var id = token.Id;
@@ -71,6 +81,11 @@ namespace Core.ApplicationServices
             return true;
         }
 
+        /// <summary>
+        /// Gets all MobileTokens with status other than Deleted belonging to the user identified by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>MobileTokens</returns>
         public IQueryable<MobileToken> GetByPersonId(int id)
         {
             var result = _repo.AsQueryable().Where(x => x.PersonId == id && x.Status != MobileTokenStatus.Deleted);
@@ -91,6 +106,10 @@ namespace Core.ApplicationServices
             return result;
         }
 
+        /// <summary>
+        /// Generates a mobile token.
+        /// </summary>
+        /// <returns>A string representing the generated MobileToken</returns>
         private string GenerateToken()
         {
             var token = "";
