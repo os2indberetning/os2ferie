@@ -623,15 +623,17 @@
             /// Prompts user when attempting to leave page with unsaved changes.
             /// </summary>
             /// <param name="event"></param>
+            var returnVal = undefined;
             if ($scope.newTokenDescription != "" ||
                $scope.newLicensePlate != "" ||
                $scope.newLicensePlateDescription != "") {
+                returnVal = "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
                 var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
-                if (!answer) {
+                if (!answer) {   
                     event.preventDefault();
                 }
             }
-            return "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+            return returnVal;
         }
 
         // Alert user if there are unsaved changes when navigating away.
@@ -643,5 +645,9 @@
         window.onbeforeunload = function (e) {
             return handleDiscardChanges(e);
         };
+
+        $scope.$on('$destroy', function () {
+            window.onbeforeunload = undefined;
+        });
     }
 ]);

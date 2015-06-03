@@ -5,7 +5,7 @@
     $scope.alternativeHomeAddress = {};
     $scope.alternativeHomeAddress.string = "";
 
-    var homeAddressIsDirty = true;
+    var homeAddressIsDirty = false;
     var workAddressDirty = [];
 
     PersonalAddress.GetRealHomeForUser({ id: $rootScope.CurrentUser.Id }).$promise.then(function (res) {
@@ -263,6 +263,7 @@
         /// Prompts user when attempting to leave a page with unsaved changes.
         /// </summary>
         /// <param name="event"></param>
+        var returnVal = undefined;
         var showConfirm = false;
         if ($scope.alternativeHomeAddress != undefined) {
             if (homeAddressIsDirty === true && $scope.alternativeHomeAddress.string != $scope.alternativeHomeAddress.StreetName + " " + $scope.alternativeHomeAddress.StreetNumber + ", " + $scope.alternativeHomeAddress.ZipCode + " " + $scope.alternativeHomeAddress.Town) {
@@ -277,10 +278,16 @@
         if (showConfirm) {
             var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
             if (!answer) {
+                returnVal = "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
                 event.preventDefault();
             }
         }
-        return "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+        return returnVal;
+
+    }
+
+    $scope.homeAddressChanged = function() {
+        homeAddressIsDirty = true;
     }
 
     // Alert user if there are unsaved changes when navigating away.
@@ -291,6 +298,10 @@
     window.onbeforeunload = function (e) {
         return handleDiscardChanges(e);
     };
+
+    $scope.$on('$destroy', function () {
+        window.onbeforeunload = undefined;
+    });
 
     $scope.SmartAddress = SmartAdresseSource;
 

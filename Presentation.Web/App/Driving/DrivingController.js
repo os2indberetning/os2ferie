@@ -359,7 +359,13 @@
                 }
             });
             return res;
+        }
 
+        var validateDate = function () {
+            if ($scope.DriveReport.Date == null || $scope.DriveReport.Date == undefined) {
+                return false;
+            }
+            return true;
         }
 
         var validatePurpose = function () {
@@ -545,6 +551,7 @@
                     $scope.canSubmitDriveReport &= validatePurpose();
                     $scope.canSubmitDriveReport &= validateLicensePlate();
                     $scope.canSubmitDriveReport &= validateFourKmRule();
+                    $scope.canSubmitDriveReport &= validateDate();
                 });
             }
 
@@ -611,7 +618,7 @@
             } else {
                 DriveReport.create($scope).$promise.then(function (res) {
                     $scope.latestDriveReport = res;
-                    NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev gemt");
+                    NotificationService.AutoFadeNotification("success", "", "Din indberetning er sendt til godkendelse.");
                     $scope.clearClicked();
                 }, function () {
                     NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under oprettelsen af tjenestekørselsindberetningen.");
@@ -778,16 +785,18 @@
             /// Prompts the user when he/she attempts to leave a page with unsaved changes.
             /// </summary>
             /// <param name="event"></param>
+            var returnVal = undefined;
             if (isFormDirty === true ||
-               ($scope.DriveReport.Purpose != $scope.latestDriveReport.Purpuse && $scope.DriveReport.Purpose != "") ||
-               ($scope.DriveReport.ReadDistance != $scope.latestDriveReport.ReadDistance && $scope.DriveReport.ReadDistance != "") ||
+               ($scope.DriveReport.Purpose != $scope.latestDriveReport.Purpose && $scope.DriveReport.Purpose != "") ||
+               ($scope.DriveReport.ReadDistance != $scope.latestDriveReport.Distance.toString().replace(".", ",") && $scope.DriveReport.ReadDistance != "") ||
                ($scope.DriveReport.UserComment != undefined && $scope.DriveReport.UserComment != $scope.latestDriveReport.UserComment && $scope.DriveReport.UserComment != "")) {
                 var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
                 if (!answer) {
+                    returnVal = "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
                     event.preventDefault();
                 }
             }
-            return "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+            return returnVal;
         }
 
         // Alert the user when navigating away from the page if there are unsaved changes.
@@ -798,5 +807,9 @@
         window.onbeforeunload = function (e) {
             return handleDiscardChanges(e);
         };
+
+        $scope.$on('$destroy', function () {
+            window.onbeforeunload = undefined;
+        });
     }
 ]);

@@ -15,7 +15,7 @@
                 <div class="col-sm-12">
                     <div class="form-group form-inline">
                         <label for="date">Dato for tjenestekørsel </label>
-                        <input culture="'da-DK'" kendo-date-picker="container.driveDatePicker" k-max="container.datePickerMaxDate" k-format="'dd/MM/yyyy'" k-ng-model="DriveReport.Date" k-options="DateOptions" />
+                        <input culture="'da-DK'" kendo-date-picker="container.driveDatePicker" k-max="container.datePickerMaxDate" k-format="'dd/MM/yyyy'" ng-model="notUsed" k-ng-model="DriveReport.Date" ng-change="validateInput()" k-options="DateOptions" />
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <input type="text" class="no-max-width fill-width k-textbox" placeholder="Skriv formålet med din tjenestekørsel" ng-model="DriveReport.Purpose" id="purpose" ng-blur="validateInput()" />
-                    <label ng-bind="purposeErrorMessage" class="text-danger"></label>
+                    <label ng-if="purposeErrorMessage.length > 0" ng-bind="purposeErrorMessage" class="text-danger"></label>
                 </div>
             </div>
             <div class="row m-b-l">
@@ -45,7 +45,7 @@
                     <div class="form-group">
                         <label for="">Nummerplade</label>
                         <select ng-disabled="!showLicensePlate" class="fill-width" kendo-drop-down-list="container.LicensePlateDropDown" ng-model="DriveReport.LicensePlate" id="" k-data-source="LicensePlates" k-data-text-field="'PresentationString'" k-data-value-field="'Plate'" k-placeholder="'Brugerens nummerplade(r)'"></select>
-                        <label class="text-danger" ng-bind="licensePlateErrorMessage"></label>
+                        <label class="text-danger" ng-if="licensePlateErrorMessage.length > 0" ng-bind="licensePlateErrorMessage"></label>
                     </div>
                 </div>
                 <div class="col-sm-3">
@@ -108,26 +108,27 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
-                            <label ng-bind="readDistanceErrorMessage" class="text-danger"></label>
+                            <label ng-if="readDistanceErrorMessage.length > 0" ng-bind="readDistanceErrorMessage" class="text-danger"></label>
                         </div>
                         <div class="col-lg-6">
-                            <label ng-bind="userCommentErrorMessage" class="text-danger"></label>
+                            <label ng-if="userCommentErrorMessage.length > 0" ng-bind="userCommentErrorMessage" class="text-danger"></label>
                         </div>
                     </div>
 
                 </div>
                 <div ng-switch-default>
+                    <label ng-if="addressSelectionErrorMessage.length > 0" ng-bind="addressSelectionErrorMessage" class="text-danger"></label>
                     <div ng-show="!IsRoute" ng-repeat="Address in DriveReport.Addresses">
                         <div class="row">
                             <div class="col-lg-12">
-                                <label for="" ng-if="$first">Fra</label>
-                                <label for="" ng-if="$last && !$first">Til</label>
-                                <label for="" ng-if="!first && $index == 1 && !$last">Via</label>
+                                <label for="" ng-if="$first">Fra (Vælg addresse)</label>
+                                <label for="" ng-if="$last && !$first">Til (Vælg addresse)</label>
+                                <label for="" ng-if="!first && $index == 1 && !$last">Via (Vælg addresse)</label>
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-sm-7">
-                                <label for="">Vælg adresse</label> <label ng-bind="addressSelectionErrorMessage" class="text-danger"></label>
+
                                 <div ng-show="isAddressNameSet(DriveReport.Addresses[$index]) === false">
                                     <!--Dropdown for selecting standard addresses-->
                                     <select class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'PresentationString'" k-data-value-field="'address'" k-placeholder="'Brugerens Personlige adresser'"> </select>
@@ -178,7 +179,7 @@
                 <div ng-show="DriveReport.FourKmRule.Using" class="col-sm-6">
                     <div class="col-lg-12">
                         <input ng-change="validateInput()" type="text" ng-enter="" ng-model="DriveReport.FourKmRule.Value" id="FourKmRuleValue" name="FourKmRuleValue" class="k-textbox" placeholder="4 km-regel værdi" /> km
-                        <label ng-bind="fourKmRuleValueErrorMessage" class="text-danger"></label>
+                        <label ng-if="fourKmRuleValueErrorMessage.length > 0" ng-bind="fourKmRuleValueErrorMessage" class="text-danger"></label>
                     </div>
                 </div>            
             </div>
