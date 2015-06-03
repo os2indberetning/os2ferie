@@ -9,18 +9,18 @@
             Afvigende adresse
         </div>
         <div class="col-xs-4">
-            Afvigende km <span class="info-popup" popover="Hvis systemet beregner en anden afstand end den du egentlig kører, kan du her indtaste en afvigende afstand mellem bopæl og arbejdsplads. HUSK! Denne afvigende afstand også er dén du skal indberette til rubrik 51 på din forskudsopgørelse ved Skat." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+            Afvigende km <span class="info-popup" popover-append-to-body='true' ng-show="alternativeWorkAddressHelpText.length > 0" popover="{{alternativeWorkAddressHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-7">
 
-            <input ng-enter="saveAlternativeWorkAddress($index)" ng-change="alternativeWorkDistances[$index] = ''" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+            <input ng-change="alternativeWorkAddressChanged($index)" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
                    k-data-source="SmartAddress" ng-model="alternativeWorkAddresses[$index]" class="fill-width" k-placeholder="'Skriv her'" />
 
         </div>
         <div class="col-xs-2">
-            <input ng-enter="saveAlternativeWorkAddress($index)" ng-model="alternativeWorkDistances[$index]" ng-change="alternativeWorkAddresses[$index] = ''" type="text" class="form-control" />
+            <input ng-model="alternativeWorkDistances[$index]" ng-change="alternativeWorkDistanceChanged($index)" type="text" class="form-control" />
         </div>
         <div class="col-xs-1 pull-right margin-right-20">
             <button ng-click="saveAlternativeWorkAddress($index)" class="btn btn-success">Gem</button>

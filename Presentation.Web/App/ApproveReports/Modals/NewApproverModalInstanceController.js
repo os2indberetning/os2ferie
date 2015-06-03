@@ -7,6 +7,10 @@
         $scope.orgUnits = orgUnits;
         $scope.orgUnit = $scope.orgUnits[0];
 
+        $scope.autoCompleteOptions = {
+            filter: "contains"
+        };
+
         $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
 
         // Remove leader from array
@@ -46,7 +50,7 @@
                 NotificationService.AutoFadeNotification("success", "", "Godkender blev oprettet");
                 $modalInstance.close();
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette godkender");
+                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette godkender (Du kan ikke oprette 2 godkendere for samme person i samme periode)");
             });
         };
 

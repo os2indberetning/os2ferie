@@ -1,11 +1,15 @@
 ﻿angular.module("application").controller("PendingReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "HelpText", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, HelpText) {
 
        // Load people for auto-complete textbox
        $scope.people = [];
        $scope.person = {};
        $scope.orgUnit = {};
        $scope.orgUnits = [];
+
+       HelpText.get({ id: "TableSortHelp" }).$promise.then(function(res) {
+           $scope.tableSortHelp = res.text;
+       });
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
@@ -286,7 +290,7 @@
                        return result;
                    } else {
                        if (data.IsFromApp) {
-                           return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
+                           return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
                        } else {
                            return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
                        }
@@ -348,7 +352,7 @@
                    }
                    
                },
-               headerTemplate: "Muligheder <div class='col-md-1 pull-right'><input ng-change='checkAllBoxesOnPage()' type='checkbox' ng-model='checkAllBox.isChecked'></input></div>",
+               headerTemplate: "Muligheder <div class='col-sm-1 pull-right'><input ng-change='checkAllBoxesOnPage()' type='checkbox' ng-model='checkAllBox.isChecked'></input></div>",
                footerTemplate: "<div class='pull-right fill-width' kendo-toolbar k-options='approveSelectedToolbar'></div>"
            }
            ],

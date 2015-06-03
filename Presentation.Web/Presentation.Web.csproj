@@ -306,7 +306,6 @@
     <Content Include="App\Admin\Controllers\Substitutes\Modals\AdminNewSubstituteModalInstanceController.js" />
     <Content Include="App\Admin\HTML\AddressLaundry\AddressLaundryView.html" />
     <Content Include="App\Admin\HTML\Reports\Modal\ShowRouteModalTemplate.html" />
-    <Content Include="App\Admin\Controllers\Substitutes\SubstituteController.js" />
     <Content Include="App\Admin\HTML\Administration\Modal\ConfirmGenerateFileModalTemplate.html" />
     <Content Include="App\Admin\HTML\Administration\Modal\RemoveAdminModalTemplate.html" />
     <Content Include="App\Admin\HTML\Administration\Modal\AddAdminModalTemplate.html" />
@@ -368,6 +367,8 @@
     <Content Include="App\ApproveReports\View.html" />
     <Content Include="App\Directives\EnterKeypress.js" />
     <Content Include="App\Directives\RouteLoader.js" />
+    <Content Include="App\Driving\ConfirmDiscardChangesController.js" />
+    <Content Include="App\Driving\ConfirmDiscardChangesTemplate.html" />
     <Content Include="App\MainMenuController.js" />
     <Content Include="App\MyReports\MyAcceptedReportsController.js" />
     <Content Include="App\MyReports\MyRejectedReportsController.js" />
@@ -392,6 +393,8 @@
     <Content Include="App\Settings\AddressDeleteModal.html" />
     <Content Include="App\Settings\RouteDeleteModal.html" />
     <Content Include="App\Settings\RouteAddModal.html" />
+    <Content Include="App\Settings\Substitutes\SubstituteController.js" />
+    <Content Include="Content\favicon.ico" />
     <Content Include="Content\kendo\Black\editor.png" />
     <Content Include="Content\kendo\Black\imagebrowser.png" />
     <Content Include="Content\kendo\Black\indeterminate.gif" />
@@ -665,7 +668,7 @@
     <Content Include="Content\kendo\Uniform\sprite_kpi_2x.png" />
     <Content Include="Content\loading-bar.css" />
     <Content Include="Content\loading-bar.min.css" />
-    <Content Include="Content\logo.png" />
+    <Content Include="logo.png" />
     <Content Include="Content\private.css" />
     <Content Include="Content\simple-sidebar.css" />
     <Content Include="Content\Themes\SbAdmin\css\bootstrap-rtl.css" />
@@ -675,6 +678,9 @@
     <Content Include="Content\Themes\SbAdmin\css\plugins\morris.css" />
     <Content Include="Content\Themes\SbAdmin\css\sb-admin-rtl.css" />
     <Content Include="Content\Themes\SbAdmin\css\sb-admin.css" />
+    <Content Include="fonts\fontawesome-webfont.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\kendo-ie-fix.js" />
     <Content Include="Scripts\kendo\angular.min.js" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.af-ZA.min.js" />
@@ -1217,7 +1223,9 @@
     <Content Include="Content\Themes\SbAdmin\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\timeline.css" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Global.asax" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
@@ -1313,9 +1321,6 @@
     <Content Include="Content\Themes\SbAdmin\font-awesome\scss\_stacked.scss" />
     <Content Include="Content\Themes\SbAdmin\font-awesome\scss\_variables.scss" />
     <Content Include="Scripts\angular-moment.min.js.map" />
-    <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js.map">
-      <DependentUpon>ui-bootstrap-tpls.min.js</DependentUpon>
-    </Content>
     <Content Include="Content\Config\mapwidget.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <BrowseToURL>~/Content/Config/mapwidget.json</BrowseToURL>
@@ -1345,6 +1350,25 @@
     <Content Include="connections.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="fonts\fontawesome-webfont.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fonts\fontawesome-webfont.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fonts\fontawesome-webfont.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fonts\fontawesome-webfont.woff2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fonts\FontAwesome.otf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Properties\PublishProfiles\Syddjurs.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
@@ -2258,13 +2282,18 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App\Admin\AdminController.js" />
     <Content Include="App\ApproveReports\ApproveReportsController.js" />
     <Content Include="App\Services\PersonResource.js" />
     <TypeScriptCompile Include="Scripts\typings\angular-ui\angular-ui-router.d.ts" />
@@ -2321,11 +2350,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1983</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:1983/</IISUrl>
+          <IISUrl>http://localhost:3312/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

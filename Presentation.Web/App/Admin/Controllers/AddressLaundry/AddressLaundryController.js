@@ -7,6 +7,10 @@
            $scope.autoCompleteDataSource = res.value;
        });
 
+       $scope.autoCompleteOptions = {
+           filter: "contains"
+       };
+
        $scope.addressLocalCopy = [];
 
        $scope.loadDirtyAddresses = function () {

@@ -4,6 +4,10 @@
 
             $scope.persons = persons;
 
+            $scope.autoCompleteOptions = {
+                filter: "contains"
+            };
+
             Person.GetLeaders().$promise.then(function (res) {
                 $scope.leaders = res;
             });
@@ -16,6 +20,7 @@
 
 
             $scope.personForOptions = {
+                filter: "contains",
                 select: function (item) {
                     $scope.orgUnitsDisabled = true;
                     $scope.orgUnit = undefined;
@@ -66,7 +71,7 @@
                     NotificationService.AutoFadeNotification("success", "", "Stedfortræder blev oprettet");
                     $modalInstance.close();
                 }, function () {
-                    NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette stedfortræder");
+                    NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette stedfortræder (Du kan ikke oprette 2 stedfortrædere for samme organisation i samme periode)");
                 });
             };
 

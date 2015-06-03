@@ -1,9 +1,12 @@
 ﻿angular.module("application").controller("MyPendingReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "$timeout", "Person", function ($scope, $modal, $rootScope, Report, $timeout, Person) {
+   "$scope", "$modal", "$rootScope", "Report", "$timeout", "Person", "HelpText", function ($scope, $modal, $rootScope, Report, $timeout, Person, HelpText) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
 
+       HelpText.get({ id: "TableSortHelp" }).$promise.then(function (res) {
+           $scope.tableSortHelp = res.text;
+       });
 
        $scope.getEndOfDayStamp = function (d) {
            var m = moment(d);
@@ -124,7 +127,7 @@
                                return result;
                            } else {
                                if (data.IsFromApp) {
-                                   return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
+                                   return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
                                } else {
                                    return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
                                }

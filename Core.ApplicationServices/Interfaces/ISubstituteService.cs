@@ -12,5 +12,6 @@ namespace Core.ApplicationServices.Interfaces
         void ScrubCprFromPersons(IQueryable<Substitute> subs);
         long GetEndOfDayTimestamp(long timestamp);
         long GetStartOfDayTimestamp(long timestamp);
+        bool CheckIfNewSubIsAllowed(Substitute newSub);
     }
 }

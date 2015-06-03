@@ -1,11 +1,14 @@
 ﻿angular.module("application").controller("RejectedReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "HelpText", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, HelpText) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
 
        var allReports = [];
 
+       HelpText.get({ id: "TableSortHelp" }).$promise.then(function (res) {
+           $scope.tableSortHelp = res.text;
+       });
 
        $scope.getEndOfDayStamp = function (d) {
            var m = moment(d);

@@ -14,7 +14,7 @@
                 <button class="btn btn-primary pull-right" ng-click="addAdminClicked()">Opret admin</button>
             </div>
             <div class="col-xs-4 col-lg-2 pull-right">
-                <input ng-enter="addAdminClicked()" type="text" kendo-auto-complete k-ng-model="person.chosenAdmin" placeholder="'Indtast medarbejder'" k-data-source="nonAdmins" k-data-value-field="'Id'" k-data-text-field="'FullName'" class="form-control" />
+                <input ng-enter="addAdminClicked()" type="text" kendo-auto-complete k-options="autoCompleteOptions" k-ng-model="person.chosenAdmin" placeholder="'Indtast medarbejder'" k-data-source="nonAdmins" k-data-value-field="'Id'" k-data-text-field="'FullName'" class="form-control" />
             </div>
             
         </div>

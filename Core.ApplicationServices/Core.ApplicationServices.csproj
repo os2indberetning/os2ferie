@@ -161,6 +161,10 @@
       <Project>{9914DB94-E465-4751-939C-8121C30AC945}</Project>
       <Name>Infrastructure.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Infrastructure.DmzDataAccess\Infrastructure.DmzDataAccess.csproj">
+      <Project>{90a44adf-5bcf-47b6-8dd7-f4e069f3942e}</Project>
+      <Name>Infrastructure.DmzDataAccess</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

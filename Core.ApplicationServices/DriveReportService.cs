@@ -35,10 +35,10 @@ namespace Core.ApplicationServices
 
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository)
+        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IAddressCoordinates coordinates, IRoute<RouteInformation> route)
         {
-            _route = new BestRoute();
-            _coordinates = new AddressCoordinates();
+            _route = route;
+            _coordinates = coordinates;
             _calculator = calculator;
             _orgUnitRepository = orgUnitRepository;
             _employmentRepository = employmentRepository;
@@ -122,7 +122,7 @@ namespace Core.ApplicationServices
             return report;
         }
 
-        private bool Validate(DriveReport report)
+        public bool Validate(DriveReport report)
         {
             if (report.KilometerAllowance == KilometerAllowance.Read && report.Distance <= 0)
             {
@@ -146,7 +146,16 @@ namespace Core.ApplicationServices
             {
                 if (status.ToString().Equals("Rejected"))
                 {
-                    var recipient = _driveReportRepository.AsQueryable().First(r => r.Id == key).Person.Mail;
+                    var report = _driveReportRepository.AsQueryable().FirstOrDefault(r => r.Id == key);
+                    var recipient = "";
+                    if (report != null && !String.IsNullOrEmpty(report.Person.Mail))
+                    {
+                        recipient = report.Person.Mail;
+                    } else
+                    {
+                        Logger.Info("Forsøg på at sende mail om afvist indberetning til " + report.Person.FullName + ", men der findes ingen emailadresse.");
+                        throw new Exception("Forsøg på at sende mail til person uden emailaddresse");
+                    }
                     var comment = new object();
                     if (delta.TryGetPropertyValue("Comment", out comment))
                     {
@@ -175,7 +184,7 @@ namespace Core.ApplicationServices
                     //Indicate drivereports where we could not find a leader
                     SetResponsibleLeaderOnReport(driveReport, new Person()
                     {
-                        FirstName = "Var ikke i stand til at finde godkendede leder",
+                        FirstName = "Var ikke i stand til at finde godkendende leder",
                         LastName = "",
                         Initials = "FEJL"
                     });
@@ -217,7 +226,7 @@ namespace Core.ApplicationServices
 
             while ((leaderOfOrgUnit == null && orgUnit.Level > 0) || (leaderOfOrgUnit != null && leaderOfOrgUnit.PersonId == person.Id))
             {
-                leaderOfOrgUnit =  _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.ParentId && e.IsLeader);;
+                leaderOfOrgUnit = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.ParentId && e.IsLeader); ;
                 orgUnit = orgUnit.Parent;
             }
 
@@ -232,8 +241,8 @@ namespace Core.ApplicationServices
             }
 
             var leader = leaderOfOrgUnit.Person;
-            var sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
-            
+            var sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.PersonId.Equals(s.LeaderId));
+
             return sub != null ? sub.Sub : leaderOfOrgUnit.Person;
         }
 
@@ -249,7 +258,7 @@ namespace Core.ApplicationServices
             var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
             var leaderOrgs = _employmentRepository.AsQueryable().Where(e => e.Person.Id == leaderId && e.IsLeader).Select(e => e.OrgUnit).ToList();
-                                                                                                       
+
             var subOrgs = _substituteRepository.AsQueryable().Where(sub => sub.Sub.Id.Equals(leaderId) && sub.PersonId.Equals(sub.LeaderId)).Select(s => s.OrgUnit).ToList();
 
             leaderOrgs.AddRange(subOrgs);
@@ -292,7 +301,7 @@ namespace Core.ApplicationServices
                     if (responsibleLeader.Id.Equals(leaderId))
                     {
                         finalResult.Add(driveReport);
-                    } 
+                    }
                 }
                 return finalResult.AsQueryable();
             }

@@ -2,7 +2,9 @@
     "$scope", "$modal", "EmailNotification", "HelpText", function ($scope, $modal, EmailNotification, HelpText) {
 
 
-        $scope.EmailHelpText = HelpText.get({ id: "EmailHelpText" });
+        HelpText.get({ id: "EmailHelpText" }).$promise.then(function(res) {
+            $scope.EmailHelpText = res.text;
+        });
 
         $scope.gridContainer = {};
 

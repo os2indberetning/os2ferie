@@ -6,15 +6,6 @@
 
         $scope.person = [];
 
-        $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
-
-        // Remove leader from array
-        angular.forEach($scope.persons, function (value, key) {
-            if (value.Id == leader.Id) {
-                $scope.personsWithoutLeader.splice(key, 1);
-            }
-        });
-
         $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
             if (data.value[0].EndDateTimestamp == 9999999999) {
                 $scope.infinitePeriod = true;
@@ -58,7 +49,7 @@
                 NotificationService.AutoFadeNotification("success", "", "Stedfortræder blev gemt");
                 $modalInstance.close();
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke gemme stedfortræder");
+                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke gemme stedfortræder (Du kan ikke oprette 2 stedfortrædere for samme organisation i samme periode)");
             });
         };
 

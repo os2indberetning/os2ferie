@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.DomainModel;
 using Core.DomainServices;
+using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices;
 using Infrastructure.AddressServices.Interfaces;
 using NSubstitute;
@@ -17,18 +18,18 @@ namespace DomainServices.Test
     [TestFixture]
     public class CachedAddressLaundererTest
     {
-        private CachedAddressLaunderer uut;
-        private IAddressLaunderer laundryMock;
-        private IGenericRepository<CachedAddress> repoMock;
-        private IAddressCoordinates coordinatesMock;
+        private CachedAddressLaunderer _uut;
+        private IAddressLaunderer _laundryMock;
+        private IGenericRepository<CachedAddress> _repoMock;
+        private IAddressCoordinates _coordinatesMock;
         
         [SetUp]
         public void SetUp()
         {
 
-            coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
-            repoMock = NSubstitute.Substitute.For<IGenericRepository<CachedAddress>>();
-            repoMock.AsQueryable().ReturnsForAnyArgs(new List<CachedAddress>()
+            _coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
+            _repoMock = NSubstitute.Substitute.For<IGenericRepository<CachedAddress>>();
+            _repoMock.AsQueryable().ReturnsForAnyArgs(new List<CachedAddress>()
             {
                 new CachedAddress()
                 {
@@ -50,17 +51,19 @@ namespace DomainServices.Test
                 }
             }.AsQueryable());
 
-            laundryMock = NSubstitute.Substitute.For<IAddressLaunderer>();
-            laundryMock.WhenForAnyArgs(x => x.Launder(new Address())).DoNotCallBase();
-            laundryMock.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
+            _laundryMock = NSubstitute.Substitute.For<IAddressLaunderer>();
+            _laundryMock.WhenForAnyArgs(x => x.Launder(new Address())).DoNotCallBase();
 
 
-            uut = new CachedAddressLaunderer(repoMock, laundryMock, coordinatesMock);    
+
+            _uut = new CachedAddressLaunderer(_repoMock, _laundryMock, _coordinatesMock);    
         }
 
         [Test]
         public void CleanAddress_Clean_ShouldNotBeCalled()
         {
+
+            _laundryMock.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
             var testAddr = new Address()
             {
                 StreetName = "Katrinebjergvej",
@@ -69,14 +72,16 @@ namespace DomainServices.Test
                 Town = "Aarhus N",
             };
 
-            uut.Launder(testAddr);
+            _uut.Launder(testAddr);
 
-            laundryMock.DidNotReceiveWithAnyArgs().Launder(new Address());
+            _laundryMock.DidNotReceiveWithAnyArgs().Launder(new Address());
         }
 
         [Test]
         public void DirtyAddress_CleanShouldBeCalled()
         {
+
+            _laundryMock.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
             var testAddr = new Address()
             {
                 StreetName = "Jens Baggesens Vej",
@@ -85,14 +90,16 @@ namespace DomainServices.Test
                 Town = "Aarhus V",
             };
 
-            uut.Launder(testAddr);
+            _uut.Launder(testAddr);
 
-            laundryMock.ReceivedWithAnyArgs().Launder(new Address());
+            _laundryMock.ReceivedWithAnyArgs().Launder(new Address());
         }
 
         [Test]
         public void NonExistingAddress_Clean_ShouldBeCalled()
         {
+
+            _laundryMock.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
             var testAddr = new Address()
             {
                 StreetName = "Risdalsvej",
@@ -101,10 +108,12 @@ namespace DomainServices.Test
                 Town = "Viby J",
             };
 
-            uut.Launder(testAddr);
+            _uut.Launder(testAddr);
 
-            repoMock.ReceivedWithAnyArgs().Insert(new CachedAddress());
-            laundryMock.ReceivedWithAnyArgs().Launder(new Address());
+            _repoMock.ReceivedWithAnyArgs().Insert(new CachedAddress());
+            _laundryMock.ReceivedWithAnyArgs().Launder(new Address());
         }
+
+    
     }
 }

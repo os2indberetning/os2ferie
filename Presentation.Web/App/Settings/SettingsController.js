@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("SettingController", [
-    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope",
-    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope) {
+    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope", "HelpText",
+    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope, HelpText) {
         $scope.gridContainer = {};
         $scope.isCollapsed = true;
         $scope.mailAdvice = '';
@@ -15,6 +15,15 @@
         $scope.isCollapsed = true;
         $scope.tokenIsCollapsed = true;
         $scope.newTokenDescription = "";
+
+        HelpText.get({ id: "MobileTokenHelpText" }).$promise.then(function (res) {
+            $scope.mobileTokenHelpText = res.text;
+        });
+
+        HelpText.get({ id: "PrimaryLicensePlateHelpText" }).$promise.then(function (res) {
+            $scope.primaryLicensePlateHelpText = res.text;
+        });
+
 
 
         var personId = $rootScope.CurrentUser.Id;
@@ -557,6 +566,28 @@
             }, function () {
 
             });
+        };
+
+        var handleDiscardChanges = function (event) {
+            if ($scope.newTokenDescription != "" ||
+               $scope.newLicensePlate != "" ||
+               $scope.newLicensePlateDescription != "") {
+                var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
+                if (!answer) {
+                    event.preventDefault();
+                }
+            }
+            return "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+        }
+
+        // Alert user if there are unsaved changes when navigating away.
+        $scope.$on('$stateChangeStart', function (event) {
+            handleDiscardChanges(event);
+        });
+
+        // Alert user if there are unsaved changes when refreshing.
+        window.onbeforeunload = function (e) {
+            return handleDiscardChanges(e);
         };
     }
 ]);
