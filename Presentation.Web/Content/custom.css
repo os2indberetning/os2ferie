@@ -310,6 +310,10 @@ a {
     margin-bottom: 5px;
 }
 
+.opaque {
+    opacity: 0.5;
+}
+
 .k-toolbar {
         border: none;
         margin: 0;

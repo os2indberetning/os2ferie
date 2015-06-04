@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("SettingController", [
-    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope", "HelpText",
-    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope, HelpText) {
+    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope", "HelpText", "$timeout",
+    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope, HelpText, $timeout) {
         $scope.gridContainer = {};
         $scope.isCollapsed = true;
         $scope.mailAdvice = '';
@@ -115,18 +115,23 @@
             /// <summary>
             /// Inverts choice of mail notification.
             /// </summary>
-            $scope.recieveMail = !$scope.recieveMail;
 
-            var newPerson = new Person({
-                RecieveMail: $scope.recieveMail
+            $timeout(function() {
+                $scope.recieveMail = $scope.mailAdvice == "Yes";
+
+                var newPerson = new Person({
+                    RecieveMail: $scope.recieveMail
+                });
+
+                newPerson.$patch({ id: personId }, function () {
+                    NotificationService.AutoFadeNotification("success", "", "Valg om modtagelse af mails blev gemt");
+                }), function () {
+                    $scope.recieveMail = !$scope.recieveMail;
+                    NotificationService.AutoFadeNotification("danger", "", "Valg om modtagelse af mails blev ikke gemt");
+                };
             });
 
-            newPerson.$patch({ id: personId }, function () {
-                NotificationService.AutoFadeNotification("success", "", "Valg om modtagelse af mails blev gemt");
-            }), function () {
-                $scope.recieveMail = !$scope.recieveMail;
-                NotificationService.AutoFadeNotification("danger", "", "Valg om modtagelse af mails blev ikke gemt");
-            };
+           
         }
 
         $scope.loadGrids = function (id) {
