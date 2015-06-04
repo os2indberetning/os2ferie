@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
 using Core.ApplicationServices;
+using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using Microsoft.Ajax.Utilities;
@@ -20,6 +21,11 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: odata/OrgUnits
+        /// <summary>
+        /// GET API endpoint for OrgUnits
+        /// </summary>
+        /// <param name="queryOptions"></param>
+        /// <returns>OrgUnits</returns>
         [EnableQuery]
         public IQueryable<OrgUnit> Get(ODataQueryOptions<OrgUnit> queryOptions)
         {
@@ -28,12 +34,23 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: odata/OrgUnits(5)
+        /// <summary>
+        /// GET API endpoint for a single OrgUnit
+        /// </summary>
+        /// <param name="key">Returns the OrgUnit identified by key</param>
+        /// <param name="queryOptions"></param>
+        /// <returns>A single OrgUnit</returns>
         public IQueryable<OrgUnit> Get([FromODataUri] int key, ODataQueryOptions<OrgUnit> queryOptions)
         {
             return GetQueryable(key, queryOptions);
         }
 
         //GET: odata/OrgUnits
+        /// <summary>
+        /// Returns OrgUnits for which the user identified by personId is responsible for approving.
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <returns>OrgUnits</returns>
         [EnableQuery]
         public IHttpActionResult GetWhereUserIsResponsible(int personId)
         {
@@ -41,12 +58,23 @@ namespace OS2Indberetning.Controllers
         }
 
         //PUT: odata/OrgUnits(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         public new IHttpActionResult Put([FromODataUri] int key, Delta<OrgUnit> delta)
         {
             return base.Put(key, delta);
         }
 
         //POST: odata/OrgUnits
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="orgUnit"></param>
+        /// <returns></returns>
         [EnableQuery]
         public new IHttpActionResult Post(OrgUnit orgUnit)
         {
@@ -54,6 +82,12 @@ namespace OS2Indberetning.Controllers
         }
 
         //PATCH: odata/OrgUnits(5)
+        /// <summary>
+        /// PATCH API endpoint for OrgUnits. Returns NotAllowed if the current user is not an admin.
+        /// </summary>
+        /// <param name="key">Patches the OrgUnit identified by key</param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<OrgUnit> delta)
@@ -62,6 +96,11 @@ namespace OS2Indberetning.Controllers
         }
 
         //DELETE: odata/OrgUnits(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
             return StatusCode(HttpStatusCode.MethodNotAllowed);

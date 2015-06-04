@@ -38,6 +38,11 @@ namespace OS2Indberetning.Controllers
             _cachedAddressRepo = cachedAddressRepo;
         }
 
+        /// <summary>
+        /// ODATA GET api endpoint for addresses
+        /// </summary>
+        /// <param name="queryOptions"></param>
+        /// <returns>Addresses</returns>
         [EnableQuery]
         public IQueryable<Address> Get(ODataQueryOptions<Address> queryOptions)
         {
@@ -45,6 +50,10 @@ namespace OS2Indberetning.Controllers
             return res;
         }
 
+        /// <summary>
+        /// API endpoint for getting the starting address of the map in the frontend.
+        /// </summary>
+        /// <returns>Starting address of frontend map</returns>
         public Address GetMapStart()
         {
             if (MapStartAddress == null)
@@ -63,12 +72,24 @@ namespace OS2Indberetning.Controllers
             return MapStartAddress;
         }
 
+        
         //GET: odata/Addresses(5)
+        /// <summary>
+        /// ODATA GET api endpoint for a single address
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="queryOptions"></param>
+        /// <returns>An address</returns>
         public IQueryable<Address> Get([FromODataUri] int key, ODataQueryOptions<Address> queryOptions)
         {
             return GetQueryable(key, queryOptions);
         }
 
+        /// <summary>
+        /// Takes an address without coordinates and performs a lookup on the coordinates.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns>An address with coordinates</returns>
         [EnableQuery]
         public IQueryable<Address> SetCoordinatesOnAddress(Address address)
         {
@@ -81,13 +102,25 @@ namespace OS2Indberetning.Controllers
             return list;
         }
 
+        
         //PUT: odata/Addresses(5)
+        /// <summary>
+        /// Is not implemented
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         public new IHttpActionResult Put([FromODataUri] int key, Delta<Address> delta)
         {
             return base.Put(key, delta);
         }
 
         //POST: odata/Addresses
+        /// <summary>
+        /// ODATA POST api endpoint for addresses.
+        /// </summary>
+        /// <param name="Address"></param>
+        /// <returns>The posted object</returns>
         [EnableQuery]
         public new IHttpActionResult Post(Address Address)
         {
@@ -95,6 +128,12 @@ namespace OS2Indberetning.Controllers
         }
 
         //PATCH: odata/Addresses(5)
+        /// <summary>
+        /// ODATA PATCH api endpoint for addresses.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Address> delta)
@@ -109,6 +148,11 @@ namespace OS2Indberetning.Controllers
         }
 
         //DELETE: odata/Addresses(5)
+        /// <summary>
+        /// DELETE API Endpoint. Deletes the entity identified by key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
             var addr = Repo.AsQueryable().SingleOrDefault(x => x.Id.Equals(key));
@@ -119,6 +163,11 @@ namespace OS2Indberetning.Controllers
             return base.Delete(key);
         }
 
+        /// <summary>
+        /// Returns personal and standard addresses for the user identified by personId
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <returns>Personal and standard addresses</returns>
         [EnableQuery]
         public IHttpActionResult GetPersonalAndStandard(int personId)
         {
@@ -128,14 +177,18 @@ namespace OS2Indberetning.Controllers
             }
 
             var rep = Repo.AsQueryable();
+            // Select all addresses that arent points in a route or drivereportpoints in a drivereport.
             var temp = rep.Where(elem => !(elem is DriveReportPoint || elem is Point));
             var res = new List<Address>();
+
+            // Add all addresses that are personaladdresses which belong to the current user.
             foreach (var address in temp)
             {
                 if (address is PersonalAddress && ((PersonalAddress)address).PersonId == personId)
                 {
                     res.Add(address);
                 }
+                //  Add all addresses that remain that arent personaladdresses, cachedAddresses or WorkAddresses. Those are Standard Addresses
                 else if (!(address is PersonalAddress) && !(address is CachedAddress) && !(address is WorkAddress))
                 {
                     res.Add(address);
@@ -144,6 +197,7 @@ namespace OS2Indberetning.Controllers
 
             var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(personId)).ToList();
 
+            // Add the workAddress of each of the user's employments.
             foreach (var empl in employments)
             {
                 var tempAddr = empl.OrgUnit.Address;
@@ -156,6 +210,13 @@ namespace OS2Indberetning.Controllers
             return Ok(res.AsQueryable());
         }
 
+        /// <summary>
+        /// Returns CachedAddresses for address cleaning in the admin view.
+        /// A clean address is an address on which a coordinate lookup was performed successfully.
+        /// By default, it will only return addresses that could not be looked up.
+        /// </summary>
+        /// <param name="includeCleanAddresses">if includeCleanAddresses is true it will also return the clean ones.</param>
+        /// <returns>Addresses for which coordinate lookup failed.</returns>
         [EnableQuery]
         public IHttpActionResult GetCachedAddresses(bool includeCleanAddresses = false)
         {
@@ -172,6 +233,10 @@ namespace OS2Indberetning.Controllers
             return StatusCode(HttpStatusCode.Forbidden);
         }
 
+        /// <summary>
+        /// Returns standard addresses
+        /// </summary>
+        /// <returns></returns>
         [EnableQuery]
         public IQueryable<Address> GetStandard()
         {
@@ -180,6 +245,12 @@ namespace OS2Indberetning.Controllers
             return res.AsQueryable();
         }
 
+        /// <summary>
+        /// Receives an address from the address cleaning view of the admin page.
+        /// The address is changed and a new coordinate lookup is performed.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns>IHttpActionResult</returns>
         [EnableQuery]
         public IHttpActionResult AttemptCleanCachedAddress(Address input)
         {

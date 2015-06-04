@@ -30,6 +30,9 @@
       
 
         $scope.confirmSave = function () {
+            /// <summary>
+            /// Confirms creation of new Standard Address
+            /// </summary>
             var result = {};
             result.address = $scope.Address.Name;
             result.description = $scope.description;
@@ -38,6 +41,9 @@
         }
 
         $scope.cancel = function () {
+            /// <summary>
+            /// Cancels creation of new Standard Address
+            /// </summary>
             $modalInstance.dismiss('cancel');
             NotificationService.AutoFadeNotification("warning", "", "Oprettelse af adressen blev annulleret.");
         }

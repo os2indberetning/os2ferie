@@ -10,14 +10,14 @@
         <div class="row setting-area">
             <div class="col-lg-12">
                 <div class="form-group form-inline">
-                    <h3>Diverse</h3>
+                    <h3>Registreringsnumre</h3>
 
-                    <label for="">Registreringsnummer på egen eller ægtefælles bil:</label>
+                    <label for="">Registreringsnummer på egen eller ægtefælles bil</label>
                     <div></div>
                     <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlate" kendo-auto-complete k-placeholder="'AB 12 345'" />
                     <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlateDescription" kendo-auto-complete k-placeholder="'Beskrivelse'" />
                     <button type="submit" class="btn btn-primary" ng-click="saveNewLicensePlate()">Tilføj</button>
-                    <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed"><span ng-if="isCollapsed">Vis nummerplader</span> <span ng-if="!isCollapsed">Skjul nummerplader</span></button>
+                    <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed"><span ng-if="isCollapsed">Anvendte registreringsnumre</span> <span ng-if="!isCollapsed">Skjul anvendte registreringsnumre</span></button>
                     <div collapse="isCollapsed">
                         <div class="well well-lg">
                             <div class="row margin-5">
@@ -31,7 +31,7 @@
                                     <p class="margin-5"><strong>Primær</strong></p>
                                 </div>
                                 <div class="col-sm-1">
-                                    <span class="info-popup pull-right margin-5" popover="Den primære nummerplade bruges ved mobil-indberetninger." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+                                    <span class="info-popup pull-right margin-5" ng-show="primaryLicensePlateHelpText.length > 0" popover="{{primaryLicensePlateHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                                 </div>
                             </div>
                             <div class="row margin-5" ng-repeat="plate in licenseplates">
@@ -53,6 +53,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="seperator"></div>
                 </div>
             </div>
@@ -68,22 +69,22 @@
                         </div>
 
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-xs-7">
 
-                            <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+                            <input type="text" kendo-auto-complete ng-change="homeAddressChanged()" k-data-text-field="'tekst'" k-data-value-field="'tekst'"
                                    k-data-source="SmartAddress" ng-model="alternativeHomeAddress.string" class="fill-width" k-placeholder="'Skriv her'" />
 
                         </div>
                         <div class="col-xs-2">
-                          
+
                         </div>
-                        <div class="col-xs-1 pull-right margin-right-20">
+                        <div class="col-xs-1 pull-left margin-right-20">
                             <button ng-click="saveAlternativeHomeAddress()" class="btn btn-success">Gem</button>
                         </div>
 
-                        <div class="col-xs-1 pull-right margin-right-5">
+                        <div class="col-xs-1 pull-left margin-right-5">
                             <button ng-click="clearHomeClicked()" class="btn btn-danger">Nulstil</button>
                         </div>
 
@@ -96,14 +97,14 @@
                 <div ng-include="'App/Settings/AlternativeWorkAddressTemplate.html'"></div>
             </div>
         </div>
-        
+
         <div class="row setting-area">
             <div class="col-lg-12">
                 <div class="form-group form-inline">
                     <h3>Mobiltokens til app</h3>
 
                     <label for="">Se eller opret tokens til din mobiltelefon</label>
-                    <span class="info-popup" popover="Der er også mulighed for at indberette befordring via en app. Mobiltoken bruges til at forbinde din mobile enhed med eIndberetning. Du kan høre mere om app’en ved din leder." popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+                    <span class="info-popup" ng-show="mobileTokenHelpText.length > 0" popover="{{mobileTokenHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                     <div class="row margin-5">
                         <div class="col-sm-4">
                             <p class="margin-5"><strong>Token</strong></p>
@@ -180,6 +181,8 @@
                         <label class="btn btn-success" ng-click="invertRecieveMail()" ng-model="mailAdvice" btn-radio="'Yes'">Ja tak</label>
                         <label class="btn btn-danger" ng-click="invertRecieveMail()" ng-model="mailAdvice" btn-radio="'No'">Nej tak</label>
                     </div>
+                    <label ng-if="mailAdvice == 'Yes'">Ja tak</label>
+                    <label ng-if="mailAdvice == 'No'">Nej tak</label>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("SettingController", [
-    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope",
-    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope) {
+    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope", "HelpText",
+    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope, HelpText) {
         $scope.gridContainer = {};
         $scope.isCollapsed = true;
         $scope.mailAdvice = '';
@@ -15,6 +15,15 @@
         $scope.isCollapsed = true;
         $scope.tokenIsCollapsed = true;
         $scope.newTokenDescription = "";
+
+        HelpText.get({ id: "MobileTokenHelpText" }).$promise.then(function (res) {
+            $scope.mobileTokenHelpText = res.text;
+        });
+
+        HelpText.get({ id: "PrimaryLicensePlateHelpText" }).$promise.then(function (res) {
+            $scope.primaryLicensePlateHelpText = res.text;
+        });
+
 
 
         var personId = $rootScope.CurrentUser.Id;
@@ -54,9 +63,11 @@
         $scope.SmartAddress = SmartAdresseSource;
 
 
-        //Gem ny nummerplade
-        $scope.saveNewLicensePlate = function () {
 
+        $scope.saveNewLicensePlate = function () {
+            /// <summary>
+            /// Handles saving of new license plate.
+            /// </summary>
             var plateWithoutSpaces = $scope.newLicensePlate.replace(/ /g, "");
             if (plateWithoutSpaces.length < 2 || plateWithoutSpaces.length > 7) {
                 NotificationService.AutoFadeNotification("danger", "", "Nummerpladens længde skal være mellem 2 og 7 tegn (Mellemrum tæller ikke med)");
@@ -83,8 +94,11 @@
             });
         };
 
-        //Slet eksisterende nummerplade
         $scope.deleteLicensePlate = function (plate) {
+            /// <summary>
+            /// Delete existing license plate.
+            /// </summary>
+            /// <param name="plate"></param>
             LicensePlate.delete({ id: plate.Id }, function () {
                 NotificationService.AutoFadeNotification("success", "", "Nummerplade blev slettet");
                 //Load licenseplates again
@@ -96,8 +110,11 @@
             };
         }
 
-        //Skift valg om mailnotifikationer
+
         $scope.invertRecieveMail = function () {
+            /// <summary>
+            /// Inverts choice of mail notification.
+            /// </summary>
             $scope.recieveMail = !$scope.recieveMail;
 
             var newPerson = new Person({
@@ -113,6 +130,10 @@
         }
 
         $scope.loadGrids = function (id) {
+            /// <summary>
+            /// Loads personal routes and addresses to kendo grid datasources.
+            /// </summary>
+            /// <param name="id"></param>
             $scope.personalRoutes = {
                 dataSource: {
                     type: "odata",
@@ -315,11 +336,17 @@
         $scope.loadGrids($rootScope.CurrentUser.Id);
 
         $scope.updatePersonalAddresses = function () {
+            /// <summary>
+            /// Refreshes personal addresses data source.
+            /// </summary>
             $scope.gridContainer.personalAddressesGrid.dataSource.transport.options.read.url = "odata/PersonalAddresses()?$filter=PersonId eq " + $scope.currentPerson.Id;
             $scope.gridContainer.personalAddressesGrid.dataSource.read();
         }
 
         $scope.updatePersonalRoutes = function () {
+            /// <summary>
+            /// refreshes personal routes data source.
+            /// </summary>
             $scope.gridcontainer.personalRoutesGrid.dataSource.transport.options.read.url = "odata/PersonalRoutes()?$filter=PersonId eq " + $scope.currentPerson.Id + "&$expand=Points";
             $scope.gridcontainer.personalRoutesGrid.dataSource.read();
 
@@ -345,7 +372,10 @@
         //};
 
         $scope.openRouteEditModal = function (id) {
-
+            /// <summary>
+            /// Opens edit route modal.
+            /// </summary>
+            /// <param name="id"></param>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/RouteEditModal.html',
                 controller: 'RouteEditModalInstanceController',
@@ -366,6 +396,10 @@
         };
 
         $scope.openRouteAddModal = function (id) {
+            /// <summary>
+            /// Opens add route modal.
+            /// </summary>
+            /// <param name="id"></param>
 
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/RouteAddModal.html',
@@ -387,7 +421,10 @@
         };
 
         $scope.openRouteDeleteModal = function (id) {
-
+            /// <summary>
+            /// Opens delete route modal.
+            /// </summary>
+            /// <param name="id"></param>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/RouteDeleteModal.html',
                 controller: 'RouteDeleteModalInstanceController',
@@ -408,7 +445,9 @@
         };
 
         $scope.openAddressAddModal = function () {
-
+            /// <summary>
+            ///Opens add personal address modal. 
+            /// </summary>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/AddressAddModal.html',
                 controller: 'AddressEditModalInstanceController',
@@ -429,7 +468,10 @@
         };
 
         $scope.openAddressEditModal = function (id) {
-
+            /// <summary>
+            /// Opens edit personal address modal.
+            /// </summary>
+            /// <param name="id"></param>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/AddressEditModal.html',
                 controller: 'AddressEditModalInstanceController',
@@ -450,7 +492,10 @@
         };
 
         $scope.openAddressDeleteModal = function (id) {
-
+            /// <summary>
+            /// Opens delete personal address modal.
+            /// </summary>
+            /// <param name="id"></param>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/AddressDeleteModal.html',
                 controller: 'AddressDeleteModalInstanceController',
@@ -477,6 +522,10 @@
         });
 
         $scope.deleteToken = function (token) {
+            /// <summary>
+            /// Deletes MobileToken.
+            /// </summary>
+            /// <param name="token"></param>
             var objIndex = $scope.tokens.indexOf(token);
             $scope.tokens.splice(objIndex, 1);
 
@@ -489,6 +538,9 @@
         }
 
         $scope.saveToken = function () {
+            /// <summary>
+            /// Saves MobileToken.
+            /// </summary>
             var newToken = new Token({
                 PersonId: personId,
                 Status: "Created",
@@ -516,7 +568,10 @@
         }
 
         $scope.openConfirmDeleteTokenModal = function (token) {
-
+            /// <summary>
+            /// Opens confirm delete MobileToken modal.
+            /// </summary>
+            /// <param name="token"></param>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/confirmDeleteTokenModal.html',
                 controller: 'confirmDeleteToken',
@@ -536,6 +591,10 @@
         };
 
         $scope.makeLicensePlatePrimary = function (plate) {
+            /// <summary>
+            /// Makes license plate primary.
+            /// </summary>
+            /// <param name="plate"></param>
             LicensePlate.patch({ id: plate.Id }, { IsPrimary: true }, function () {
                 //Load licenseplates when finished request.
                 LicensePlate.get({ id: personId }, function (data) {
@@ -558,5 +617,41 @@
 
             });
         };
+
+        var checkShouldPrompt = function () {
+            /// <summary>
+            /// Return true if there are unsaved changes on the page. 
+            /// </summary>
+
+            if ($scope.newTokenDescription != "" ||
+                $scope.newLicensePlate != "" ||
+                $scope.newLicensePlateDescription != "") {
+                return true;
+            }
+            return false;
+        }
+
+        // Alert the user when navigating away from the page if there are unsaved changes.
+        $scope.$on('$stateChangeStart', function (event) {
+            if (checkShouldPrompt() === true) {
+                var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
+                if (!answer) {
+                    event.preventDefault();
+                }
+            }
+        });
+
+        window.onbeforeunload = function (e) {
+            if (checkShouldPrompt() === true) {
+                return "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+            }
+        };
+
+        $scope.$on('$destroy', function () {
+            /// <summary>
+            /// Unregister refresh event handler when leaving the page.
+            /// </summary>
+            window.onbeforeunload = undefined;
+        });
     }
 ]);

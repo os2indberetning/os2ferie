@@ -24,6 +24,9 @@ angular.module("application").controller("AdminRejectedReportsController",
        var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
        $scope.loadReports = function () {
+           /// <summary>
+           /// Loads rejected reports from backend to kendo grid datasource.
+           /// </summary>
            $scope.Reports = {
                dataSource: {
                    type: "odata",
@@ -191,6 +194,9 @@ angular.module("application").controller("AdminRejectedReportsController",
        }
 
        $scope.loadInitialDates = function () {
+           /// <summary>
+           /// Load initial date filters.
+           /// </summary>
            // Set initial values for kendo datepickers.
 
            initialLoad = 2;
@@ -203,6 +209,10 @@ angular.module("application").controller("AdminRejectedReportsController",
        }
 
        $scope.showRouteModal = function (routeId) {
+           /// <summary>
+           /// Opens show route modal.
+           /// </summary>
+           /// <param name="routeId"></param>
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
                controller: 'ShowRouteModalController',
@@ -216,6 +226,9 @@ angular.module("application").controller("AdminRejectedReportsController",
        }
 
        $scope.refreshGrid = function () {
+           /// <summary>
+           /// refreshes kendo grid datasource.
+           /// </summary>
            $scope.gridContainer.grid.dataSource.read();
        }
 
@@ -241,11 +254,19 @@ angular.module("application").controller("AdminRejectedReportsController",
        }
 
        $scope.clearClicked = function () {
+           /// <summary>
+           /// Clears filters.
+           /// </summary>
            $scope.gridContainer.grid.dataSource.filter([{ field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }]);
            $scope.loadInitialDates();
        }
 
        $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
+           /// <summary>
+           /// Applies date filters.
+           /// </summary>
+           /// <param name="fromDateStamp"></param>
+           /// <param name="toDateStamp"></param>
            var newFilters = [];
            newFilters.push({ field: "DriveDateTimestamp", operator: "gte", value: fromDateStamp });
            newFilters.push({ field: "DriveDateTimestamp", operator: "lte", value: toDateStamp });
@@ -254,11 +275,6 @@ angular.module("application").controller("AdminRejectedReportsController",
 
        // Load up the grids.
        $scope.loadReports();
-
-       $scope.refreshGrid = function () {
-           $scope.gridContainer.grid.dataSource.read();
-       }
-
 
        // Contains references to kendo ui grids.
        $scope.gridContainer = {};

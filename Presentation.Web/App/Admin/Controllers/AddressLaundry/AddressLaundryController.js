@@ -7,9 +7,16 @@
            $scope.autoCompleteDataSource = res.value;
        });
 
+       $scope.autoCompleteOptions = {
+           filter: "contains"
+       };
+
        $scope.addressLocalCopy = [];
 
        $scope.loadDirtyAddresses = function () {
+           /// <summary>
+           /// Loads Kendo grid datasource
+           /// </summary>
            $scope.dirtyAddresses = {
                dataSource: {
                    type: "odata-v4",
@@ -107,6 +114,10 @@
 
 
        $scope.saveClicked = function (id) {
+           /// <summary>
+           /// Attempts to clean address identified by id
+           /// </summary>
+           /// <param name="id"></param>
            var addr = AddressFormatter.fn($scope.addressLocalCopy[id]);
            if (addr == undefined) {
                NotificationService.AutoFadeNotification("warning", "", "Adressen kunne ikke vaskes.");
@@ -121,6 +132,9 @@
        }
 
        $scope.includeCleanChanged = function () {
+           /// <summary>
+           /// Updates datasource to either show or hide clean addresses.
+           /// </summary>
            // Timeout to allow changes to be written to model.
            $timeout(function () {
                $scope.container.grid.dataSource.transport.options.read.url = "/odata/Addresses/Service.GetCachedAddresses?includeCleanAddresses=" + $scope.container.includeClean;
@@ -129,6 +143,9 @@
        }
 
        $scope.descriptionTextChanged = function () {
+           /// <summary>
+           /// Updates grid filter according to description filter.
+           /// </summary>
            $timeout(function () {
                var oldFilters = $scope.container.grid.dataSource.filter();
                var newFilters = [];
@@ -157,6 +174,9 @@
        }
 
        $scope.dirtyStringTextChanged = function () {
+           /// <summary>
+           /// Updates grid filter according to dirtyString filter
+           /// </summary>
            $timeout(function () {
                var oldFilters = $scope.container.grid.dataSource.filter();
                var newFilters = [];
@@ -184,7 +204,10 @@
            });
        }
 
-       $scope.clearClicked = function() {
+       $scope.clearClicked = function () {
+           /// <summary>
+           /// Clears input fields.
+           /// </summary>
            $scope.container.dirtyStringFilter = "";
            $scope.container.descriptionFilter = "";
            $scope.container.grid.dataSource.filter([]);

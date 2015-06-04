@@ -17,6 +17,10 @@ namespace Core.ApplicationServices
             _subRepo = subRepo;
         }
 
+        /// <summary>
+        /// Removes CPR-number from Substitutes.
+        /// </summary>
+        /// <param name="subs">Subs to remove CPR-number from.</param>
         public void ScrubCprFromPersons(IQueryable<Substitute> subs)
         {
             foreach (var sub in subs.ToList())
@@ -28,6 +32,11 @@ namespace Core.ApplicationServices
             }
         }
 
+        /// <summary>
+        /// Returns timestamp for Start of the day of timestamp.
+        /// </summary>
+        /// <param name="timestamp"></param>
+        /// <returns></returns>
         public long GetStartOfDayTimestamp(long timestamp)
         {
             var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
@@ -37,6 +46,11 @@ namespace Core.ApplicationServices
             return unixTimestamp;
         }
 
+        /// <summary>
+        /// Returns end of day timestamp for timestamp.
+        /// </summary>
+        /// <param name="timestamp"></param>
+        /// <returns></returns>
         public long GetEndOfDayTimestamp(long timestamp)
         {
             var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
@@ -46,6 +60,11 @@ namespace Core.ApplicationServices
             return unixTimestamp;
         }
 
+        /// <summary>
+        /// Checks whether any existing subs for same Person or Orgunit with overlapping time periods exist.
+        /// </summary>
+        /// <param name="newSub">New Substitute to be created.</param>
+        /// <returns>Returns true if the new sub is allowed to be inserted. False if not.</returns>
         public bool CheckIfNewSubIsAllowed(Substitute newSub)
         {
             // newSub is a substitute

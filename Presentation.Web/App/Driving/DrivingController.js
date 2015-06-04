@@ -1,12 +1,26 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance",
-    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance) {
+    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "HelpText", "$window",
+    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, HelpText, $window) {
 
+        HelpText.get({ id: "ReadReportCommentHelp" }).$promise.then(function (res) {
+            $scope.ReadReportCommentHelp = res.text;
+        });
+
+        HelpText.get({ id: "PurposeHelpText" }).$promise.then(function (res) {
+            $scope.PurposeHelpText = res.text;
+        });
+
+        HelpText.get({ id: "FourKmRuleHelpText" }).$promise.then(function (res) {
+            $scope.fourKmRuleHelpText = res.text;
+        });
 
         // Setup functions in scope.
         $scope.Number = Number;
         $scope.toString = toString;
         $scope.replace = String.replace;
+
+
+        var isFormDirty = false;
 
         var isEditingReport = ReportId > 0;
         $scope.container = {};
@@ -22,7 +36,7 @@
 
         $scope.container.addressFieldOptions = {
             select: function () {
-                $timeout(function() {
+                $timeout(function () {
                     $scope.addressInputChanged();
                 });
             }
@@ -37,6 +51,9 @@
         $scope.validateInput = function () { };
 
         var setupForNewReport = function () {
+            /// <summary>
+            /// Initializes fields for new report.
+            /// </summary>
             $scope.DriveReport = new DriveReport();
             $scope.DriveReport.Addresses = [];
             $scope.DriveReport.Addresses.push({ Name: "", Personal: "" });
@@ -48,12 +65,20 @@
         setupForNewReport();
 
         $scope.AddViapoint = function () {
+            /// <summary>
+            /// Adds via point
+            /// </summary>
             var temp = $scope.DriveReport.Addresses.pop();
             $scope.DriveReport.Addresses.push({ Name: "", Personal: "", Save: false });
             $scope.DriveReport.Addresses.push(temp);
         };
 
         $scope.Remove = function (array, index) {
+            /// <summary>
+            /// Removes via point
+            /// </summary>
+            /// <param name="array"></param>
+            /// <param name="index"></param>
             array.splice(index, 1);
             $scope.addressInputChanged(index);
         };
@@ -67,6 +92,12 @@
         };
 
         $scope.shaveExtraCommasOffAddressString = function (address) {
+            /// <summary>
+            /// Removes commas from Address string from Septima.
+            /// Septima addresses are in the format                 "StreetName StreetNumber, ZipCode, Town"
+            /// Addresses used in the app need to be in the format  "StreetName StreetNumber, Zipcode Town"
+            /// </summary>
+            /// <param name="address"></param>
             var res = address.toString().replace(/,/, "###");
             res = res.replace(/,/g, "");
             res = res.replace(/###/, ",");
@@ -74,6 +105,10 @@
         }
 
         var getCurrentUserEmployment = function (employmentId) {
+            /// <summary>
+            /// Gets employment for current user.
+            /// </summary>
+            /// <param name="employmentId"></param>
             var res;
             angular.forEach($scope.currentUser.Employments, function (empl, key) {
                 if (empl.Id == employmentId) {
@@ -85,6 +120,13 @@
 
 
         var loadValuesFromReport = function (report) {
+            /// <summary>
+            /// Loads values from user's latest report and sets fields in the view.
+            /// </summary>
+            /// <param name="report"></param>
+            $scope.DriveReport.FourKmRule = {};
+            $scope.DriveReport.FourKmRule.Value = $rootScope.CurrentUser.DistanceFromHomeToBorder.toString().replace(".", ",");
+
             // Select position in dropdown.
             $scope.container.PositionDropDown.select(function (item) {
                 return item.Id == report.EmploymentId;
@@ -129,7 +171,6 @@
             // Load additional data if a report is being edited.
             if (isEditingReport) {
                 $scope.DriveReport.Purpose = report.Purpose;
-                $scope.DriveReport.FourKmRule = {};
                 $scope.DriveReport.FourKmRule.Using = report.FourKmRule;
                 $scope.DriveReport.Date = moment.unix(report.DriveDateTimestamp)._d;
 
@@ -253,12 +294,19 @@
         });
 
         var setNotRoute = function () {
+            /// <summary>
+            /// Sets fields for report to be not a personal route.
+            /// </summary>
             $scope.container.PersonalRouteDropDown.select(0);
             $scope.IsRoute = false;
             $scope.DriveReport.Addresses = [{ Name: "" }, { Name: "" }];
         }
 
         var setIsRoute = function (index) {
+            /// <summary>
+            /// Sets field for report to be a personal route.
+            /// </summary>
+            /// <param name="index"></param>
             $scope.IsRoute = true;
             var route = $scope.Routes[index];
             $scope.DriveReport.Addresses = [];
@@ -273,9 +321,14 @@
                 mapArray.push({ name: addr.Name, lat: addr.Latitude, lng: addr.Longitude });
             });
             setMap(mapArray);
+            isFormDirty = true;
         }
 
         $scope.personalRouteDropdownChange = function (e) {
+            /// <summary>
+            /// Event handler for personal route dropdown.
+            /// </summary>
+            /// <param name="e"></param>
             var index = e.sender.selectedIndex;
             if (index == 0) {
                 setNotRoute();
@@ -306,10 +359,19 @@
                 }
             });
             return res;
+        }
 
+        var validateDate = function () {
+            if ($scope.DriveReport.Date == null || $scope.DriveReport.Date == undefined) {
+                return false;
+            }
+            return true;
         }
 
         var validatePurpose = function () {
+            /// <summary>
+            /// Validates purposes and sets error message in view accordingly.
+            /// </summary>
             $scope.purposeErrorMessage = "";
             if ($scope.DriveReport.Purpose == undefined || $scope.DriveReport.Purpose == "") {
                 $scope.purposeErrorMessage = "* Du skal angive et formål.";
@@ -318,7 +380,22 @@
             return true;
         }
 
+        var validateFourKmRule = function () {
+            /// <summary>
+            /// Validates fourkmrule and sets error message in view accordingly.
+            /// </summary>
+            $scope.fourKmRuleValueErrorMessage = "";
+            if ($scope.DriveReport.FourKmRule.Using === true && ($scope.DriveReport.FourKmRule.Value == "" || $scope.DriveReport.FourKmRule.Value == undefined)) {
+                $scope.fourKmRuleValueErrorMessage = "* Du skal udfylde en 4 km-regel værdi.";
+                return false;
+            }
+            return true;
+        }
+
         var validateLicensePlate = function () {
+            /// <summary>
+            /// Validates license plate and sets error message in view accordingly.
+            /// </summary>
             $scope.licensePlateErrorMessage = "";
             if (getKmRate($scope.DriveReport.KmRate).Type.RequiresLicensePlate && $scope.LicensePlates[0].PresentationString == "Ingen nummerplader") {
                 $scope.licensePlateErrorMessage = "* Det valgte transportmiddel kræver en nummerplade.";
@@ -328,6 +405,9 @@
         }
 
         var validateReadInput = function () {
+            /// <summary>
+            /// Validates Read Report driven distance and sets eror message in view accordingly.
+            /// </summary>
             $scope.readDistanceErrorMessage = "";
             $scope.userCommentErrorMessage = "";
             var distRes = true;
@@ -348,9 +428,15 @@
 
 
         $scope.addressInputChanged = function (index) {
+            /// <summary>
+            /// Resolves address coordinates and updates map.
+            /// </summary>
+            /// <param name="index"></param>
             if (!validateAddressInput() || mapChanging) {
                 return;
             }
+
+
 
             $scope.validateInput();
             var promises = [];
@@ -376,10 +462,15 @@
 
             $q.all(promises).then(function (data) {
                 setMap(mapArray);
+                isFormDirty = true;
             });
         }
 
         var setMap = function (mapArray) {
+            /// <summary>
+            /// Updates the map widget in the view.
+            /// </summary>
+            /// <param name="mapArray"></param>
             $timeout(function () {
                 setMapPromise = $q.defer();
                 mapChanging = true;
@@ -399,11 +490,14 @@
         });
 
         var createMap = function () {
+            /// <summary>
+            /// Creates the map widget in the view.
+            /// </summary>
             $timeout(function () {
                 if (angular.element('#map').length) {
                     OS2RouteMap.create({
                         id: 'map',
-                        change: function(obj) {
+                        change: function (obj) {
                             $scope.currentMapAddresses = obj.Addresses;
                             $scope.latestMapDistance = obj.distance;
                             updateDrivenKm();
@@ -421,13 +515,13 @@
                             mapChanging = true;
                             $scope.DriveReport.Addresses = [];
                             // Load the adresses from the map.
-                            angular.forEach(obj.Addresses, function(address, key) {
+                            angular.forEach(obj.Addresses, function (address, key) {
                                 var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
                                 $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
                             });
                             // Apply to update the view.
                             $scope.$apply();
-                            $timeout(function() {
+                            $timeout(function () {
                                 // Wait for the view to render before setting mapChanging to false.
 
                                 mapChanging = false;
@@ -441,10 +535,13 @@
         }
 
 
-        // Is called when Kendo has rendered up to and including KilometerAllowanceDropDown and data has been loaded from backend.
-        // Consider this function Main()
-        // Is needed to make sure data and kendo widgets are ready for setting values from previous drivereport.
+
         var dataAndKendoLoaded = function () {
+            /// <summary>
+            ///  Is called when Kendo has rendered up to and including KilometerAllowanceDropDown and data has been loaded from backend.
+            /// Consider this function Main()
+            /// Is needed to make sure data and kendo widgets are ready for setting values from previous drivereport.
+            /// </summary>
 
             // Define validateInput now. Otherwise it gets called from drivingview.html before having loaded resources.
             $scope.validateInput = function () {
@@ -453,6 +550,8 @@
                     $scope.canSubmitDriveReport &= validateAddressInput();
                     $scope.canSubmitDriveReport &= validatePurpose();
                     $scope.canSubmitDriveReport &= validateLicensePlate();
+                    $scope.canSubmitDriveReport &= validateFourKmRule();
+                    $scope.canSubmitDriveReport &= validateDate();
                 });
             }
 
@@ -470,6 +569,11 @@
         }
 
         $scope.clearClicked = function () {
+            /// <summary>
+            /// Clears user input
+            /// </summary>
+
+            isFormDirty = false;
 
             if (!isEditingReport) {
                 setMap($scope.mapStartAddress);
@@ -494,10 +598,10 @@
             });
         }
 
-        $scope.Save = function () {
-            if (!$scope.canSubmitDriveReport) {
-                return;
-            }
+        var handleSave = function () {
+            /// <summary>
+            /// Handles saving of drivereport.
+            /// </summary>
             $scope.canSubmitDriveReport = false;
             if (isEditingReport) {
                 DriveReport.delete({ id: ReportId }).$promise.then(function () {
@@ -514,13 +618,30 @@
             } else {
                 DriveReport.create($scope).$promise.then(function (res) {
                     $scope.latestDriveReport = res;
-                    NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev gemt");
+                    NotificationService.AutoFadeNotification("success", "", "Din indberetning er sendt til godkendelse.");
                     $scope.clearClicked();
                 }, function () {
                     NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under oprettelsen af tjenestekørselsindberetningen.");
                 });
             }
         }
+
+        $scope.Save = function () {
+            if (!$scope.canSubmitDriveReport) {
+                return;
+            }
+
+            if ($rootScope.CurrentUser.DistanceFromHomeToBorder != $scope.DriveReport.FourKmRule.Value && $scope.DriveReport.FourKmRule.Value != "" && $scope.DriveReport.FourKmRule.Value != undefined) {
+                $rootScope.CurrentUser.DistanceFromHomeToBorder = $scope.DriveReport.FourKmRule.Value
+                Person.patch({ id: $rootScope.CurrentUser.Id }, { DistanceFromHomeToBorder: $scope.DriveReport.FourKmRule.Value.toString().replace(",", ".") }).$promise.then(function () {
+                    handleSave();
+                });
+            } else {
+                handleSave();
+            }
+        }
+
+
 
         $scope.kilometerAllowanceChanged = function () {
             updateDrivenKm();
@@ -548,6 +669,9 @@
         }
 
         var routeStartsAtHome = function () {
+            /// <summary>
+            /// returns true if route starts at home
+            /// </summary>
             if ($scope.DriveReport.KilometerAllowance == "Read") {
                 var index = $scope.container.StartEndHomeDropDown.selectedIndex;
                 if (index == 1 || index == 3) {
@@ -564,6 +688,9 @@
         }
 
         var routeEndsAtHome = function () {
+            /// <summary>
+            /// Returns true if route ends at home.
+            /// </summary>
             if ($scope.DriveReport.KilometerAllowance == "Read") {
                 var index = $scope.container.StartEndHomeDropDown.selectedIndex;
                 if (index == 2 || index == 3) {
@@ -600,6 +727,9 @@
         }
 
         var updateDrivenKm = function () {
+            /// <summary>
+            /// Updates drivenkm fields under map widget.
+            /// </summary>
             if ($scope.DriveReport.KilometerAllowance != "CalculatedWithoutExtraDistance") {
                 if (routeStartsAtHome() && routeEndsAtHome()) {
                     $scope.TransportAllowance = Number(getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance) * 2;
@@ -645,8 +775,52 @@
             updateDrivenKm();
         }
 
-        $scope.closeModalWindow = function() {
+        $scope.closeModalWindow = function () {
             $modalInstance.dismiss();
         }
+
+
+        var checkShouldPrompt = function () {
+            /// <summary>
+            /// Return true if there are unsaved changes on the page. 
+            /// </summary>
+
+            if (isFormDirty === true) {
+                return true;
+            }
+            if ($scope.DriveReport.Purpose != $scope.latestDriveReport.Purpose && $scope.DriveReport.Purpose != "" && $scope.DriveReport.Purpose != undefined) {
+                return true;
+            }
+            if ($scope.DriveReport.ReadDistance != $scope.latestDriveReport.Distance.toString().replace(".", ",") && $scope.DriveReport.ReadDistance != "" && $scope.DriveReport.ReadDistance != undefined) {
+                return true;
+            }
+            if ($scope.DriveReport.UserComment != undefined && $scope.DriveReport.UserComment != $scope.latestDriveReport.UserComment && $scope.DriveReport.UserComment != "") {
+                return true;
+            }
+            return false;
+        }
+
+        // Alert the user when navigating away from the page if there are unsaved changes.
+        $scope.$on('$stateChangeStart', function (event) {
+            if (checkShouldPrompt() === true) {
+                var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
+                if (!answer) {
+                    event.preventDefault();
+                }
+            }
+        });
+
+        window.onbeforeunload = function (e) {
+            if (checkShouldPrompt() === true) {
+                return "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+            }
+        };
+
+        $scope.$on('$destroy', function () {
+            /// <summary>
+            /// Unregister refresh event handler when leaving the page.
+            /// </summary>
+            window.onbeforeunload = undefined;
+        });
     }
 ]);

@@ -27,6 +27,10 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: Generate KMD File
+        /// <summary>
+        /// Generates KMD file.
+        /// </summary>
+        /// <returns></returns>
         public IHttpActionResult Get()
         {
             if (!CurrentUser.IsAdmin)

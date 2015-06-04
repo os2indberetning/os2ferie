@@ -25,12 +25,20 @@ namespace Core.DomainServices
             _coordinates = coordinates;
         }
 
+        /// <summary>
+        /// Attempts to launder an Address.
+        /// If the address has previously been successfully laundered, then the result of that launder will be returned.
+        /// Otherwise an actual lookup will be performed.
+        /// </summary>
+        /// <param name="inputAddress"></param>
+        /// <returns>An Address</returns>
         public Address Launder(Address inputAddress)
         {
             var inputAddressString = inputAddress.StreetName + " " + inputAddress.StreetNumber + ", " + inputAddress.ZipCode + " " + inputAddress.Town;
             var cachedAddress = _repo.AsQueryable()
                 .FirstOrDefault(addr => addr.DirtyString.Equals(inputAddressString));
 
+            // Return CachedAddress if one exists that is not dirty.
             if (cachedAddress != null && !cachedAddress.IsDirty)
             {
                 return cachedAddress;

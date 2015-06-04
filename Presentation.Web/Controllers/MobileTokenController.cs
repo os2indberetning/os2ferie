@@ -21,6 +21,11 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: odata/MobileTokens
+        /// <summary>
+        /// ODATA GET API endpoint for MobileTokens
+        /// </summary>
+        /// <param name="queryOptions"></param>
+        /// <returns>MobileTokens</returns>
         [EnableQuery]
         public IQueryable<MobileToken> Get(ODataQueryOptions<MobileToken> queryOptions)
         {
@@ -28,18 +33,36 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: odata/MobileTokens(5)
+        /// <summary>
+        /// GET API endpoint for MobileTokens
+        /// </summary>
+        /// <param name="key">Returns MobileTokens belonging to the user identified by key</param>
+        /// <param name="queryOptions"></param>
+        /// <returns>MobileTokens</returns>
         public IQueryable<MobileToken> Get([FromODataUri] int key, ODataQueryOptions<MobileToken> queryOptions)
         {
             return _tokenService.GetByPersonId(key);
         }
 
         //PUT: odata/MobileTokens(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         public new IHttpActionResult Put([FromODataUri] int key, Delta<MobileToken> delta)
         {
             return base.Put(key, delta);
         }
 
         //POST: odata/MobileTokens
+        /// <summary>
+        /// POST API endpoint for MobileTokens.
+        /// Returns forbidden if the user associated with the token is not the current user.
+        /// </summary>
+        /// <param name="mobileToken"></param>
+        /// <returns></returns>
         [EnableQuery]
         public new IHttpActionResult Post(MobileToken mobileToken)
         {
@@ -51,6 +74,12 @@ namespace OS2Indberetning.Controllers
         }
 
         //PATCH: odata/MobileTokens(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<MobileToken> delta)
@@ -59,9 +88,15 @@ namespace OS2Indberetning.Controllers
         }
 
         //DELETE: odata/MobileTokens(5)
+        /// <summary>
+        /// DELETE API endpoint for MobileTokens.
+        /// Returns firbidden if the user associated with the MobileToken is not the current user.
+        /// </summary>
+        /// <param name="key">Deletes the MobileToken identified by key</param>
+        /// <returns></returns>
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            return CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).PersonId) ? base.Delete(key) : Unauthorized();
+            return CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).PersonId) ? base.Delete(key) : StatusCode(HttpStatusCode.Forbidden);
         }
     }
 }

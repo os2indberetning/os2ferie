@@ -19,6 +19,12 @@ namespace Core.ApplicationServices
             _repo = repo;
         }
 
+        /// <summary>
+        /// Makes the license plate identified by plateId the primary license plate.
+        /// Makes all other license plates for the same person not primary.
+        /// </summary>
+        /// <param name="plateId"></param>
+        /// <returns>True if successfull, false if the plate doesnt exist.</returns>
         public bool MakeLicensePlatePrimary(int plateId)
         {
             // Get the plate to make primary.
