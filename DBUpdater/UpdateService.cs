@@ -43,6 +43,11 @@ namespace DBUpdater
             _mailSender = mailSender;
         }
 
+        /// <summary>
+        /// Splits an address represented as "StreetName StreetNumber" into a list of "StreetName" , "StreetNumber"
+        /// </summary>
+        /// <param name="address">String to split</param>
+        /// <returns>List of StreetName and StreetNumber</returns>
         public List<String> SplitAddressOnNumber(string address)
         {
             var result = new List<string>();
@@ -59,6 +64,9 @@ namespace DBUpdater
             return result;
         }
 
+        /// <summary>
+        /// Migrate organisations from Kommune database to OS2 database.
+        /// </summary>
         public void MigrateOrganisations()
         {
             var orgs = _dataProvider.GetOrganisationsAsQueryable().OrderBy(x => x.Level);
@@ -107,6 +115,9 @@ namespace DBUpdater
             Console.WriteLine("Done migrating organisations.");
         }
 
+        /// <summary>
+        /// Migrate employees from kommune database to OS2 database.
+        /// </summary>
         public void MigrateEmployees()
         {
             var empls = _dataProvider.GetEmployeesAsQueryable();
@@ -161,7 +172,12 @@ namespace DBUpdater
             }
         }
 
-
+        /// <summary>
+        /// Create employment in OS2 database for person identified by personId
+        /// </summary>
+        /// <param name="empl"></param>
+        /// <param name="personId"></param>
+        /// <returns></returns>
         public Employment CreateEmployment(Employee empl, int personId)
         {
             if (empl.AnsaettelsesDato == null)
@@ -215,6 +231,11 @@ namespace DBUpdater
 
         }
 
+        /// <summary>
+        /// Updates home address for person identified by personId.
+        /// </summary>
+        /// <param name="empl"></param>
+        /// <param name="personId"></param>
         public void UpdateHomeAddress(Employee empl, int personId)
         {
             if (empl.Adresse == null)
@@ -270,6 +291,11 @@ namespace DBUpdater
             }
         }
 
+        /// <summary>
+        /// Gets work address wor organisation.
+        /// </summary>
+        /// <param name="org"></param>
+        /// <returns>WorkAddress</returns>
         public WorkAddress GetWorkAddress(Organisation org)
         {
             var launderer = new CachedAddressLaunderer(_cachedRepo, _actualLaunderer, _coordinates);

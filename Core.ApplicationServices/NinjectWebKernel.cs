@@ -12,6 +12,7 @@ using Infrastructure.AddressServices;
 using Infrastructure.AddressServices.Interfaces;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
+using Infrastructure.DmzDataAccess;
 using Ninject;
 using Ninject.Web.Common;
 using OS2Indberetning;

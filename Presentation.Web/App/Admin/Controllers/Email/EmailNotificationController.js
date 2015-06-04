@@ -2,11 +2,16 @@
     "$scope", "$modal", "EmailNotification", "HelpText", function ($scope, $modal, EmailNotification, HelpText) {
 
 
-        $scope.EmailHelpText = HelpText.get({ id: "EmailHelpText" });
+        HelpText.get({ id: "EmailHelpText" }).$promise.then(function(res) {
+            $scope.EmailHelpText = res.text;
+        });
 
         $scope.gridContainer = {};
 
         $scope.loadNotifications = function () {
+            /// <summary>
+            /// Loads existing MailNotifications from backend to kendo grid datasource.
+            /// </summary>
             $scope.notifications = {
                 dataSource: {
                     type: "odata",
@@ -94,6 +99,9 @@
         }
 
         $scope.updateNotificationGrid = function () {
+            /// <summary>
+            /// Refreshes kendo grid datasource.
+            /// </summary>
             $scope.gridContainer.notificationGrid.dataSource.read();
         }
 
@@ -105,6 +113,10 @@
 
 
         $scope.editClick = function (id) {
+            /// <summary>
+            /// Opens Edit MailNotification modal
+            /// </summary>
+            /// <param name="id">Id of MailNotification to edit</param>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Admin/HTML/Email/EditMailNotificationTemplate.html',
                 controller: 'EditMailNotificationController',
@@ -126,11 +138,15 @@
             });
         }
 
-        $scope.pageSizeChanged = function () {
-            $scope.gridContainer.notificationGrid.dataSource.pageSize(Number($scope.gridContainer.gridPageSize));
-        }
+        //$scope.pageSizeChanged = function () {
+        //    $scope.gridContainer.notificationGrid.dataSource.pageSize(Number($scope.gridContainer.gridPageSize));
+        //}
 
         $scope.deleteClick = function (id) {
+            /// <summary>
+            /// Opens delete MailNotification modal
+            /// </summary>
+            /// <param name="id">Id of MailNotification to delete</param>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Admin/HTML/Email/ConfirmDeleteMailNotificationTemplate.html',
                 controller: 'DeleteMailNotificationController',
@@ -150,6 +166,9 @@
         }
 
         $scope.addNewClick = function () {
+            /// <summary>
+            /// Opens add new MailNotification modal
+            /// </summary>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Admin/HTML/Email/AddNewMailNotificationTemplate.html',
                 controller: 'AddNewMailNotificationController',

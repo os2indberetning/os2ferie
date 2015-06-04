@@ -1,4 +1,6 @@
-﻿angular.module('application').directive('routeLoader', function () {
+﻿// Is not used.
+
+angular.module('application').directive('routeLoader', function () {
     return {
         restrict: 'EA',
         link: function (scope, element) {

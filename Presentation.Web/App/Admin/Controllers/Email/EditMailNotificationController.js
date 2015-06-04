@@ -24,6 +24,9 @@
         });
 
         $scope.confirmSave = function () {
+            /// <summary>
+            /// Confirms edit of MailNotification.
+            /// </summary>
             var error = false;
 
             $scope.repeatErrorMessage = "";

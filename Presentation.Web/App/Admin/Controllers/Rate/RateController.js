@@ -5,6 +5,9 @@
         $scope.container = {};
 
         $scope.loadRates = function () {
+            /// <summary>
+            /// Loads existing rates from backend to kendo grid datasource.
+            /// </summary>
             $scope.rates = {
                 dataSource: {
                     type: "odata",
@@ -77,6 +80,9 @@
         }
 
         $scope.updateRatesGrid = function () {
+            /// <summary>
+            /// Refreshes kendo grid datasource.
+            /// </summary>
             $scope.container.rateGrid.dataSource.read();
         }
 
@@ -94,7 +100,10 @@
 
         $scope.loadRates();
 
-        $scope.addNewRateClick = function() {
+        $scope.addNewRateClick = function () {
+            /// <summary>
+            /// Opens add new Rate modal
+            /// </summary>
             $scope.newRateYearError = "";
             $scope.newRateRateError = "";
             $scope.newRateTFCodeError = "";

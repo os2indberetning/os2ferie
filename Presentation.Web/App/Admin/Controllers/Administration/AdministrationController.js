@@ -6,10 +6,18 @@
            $scope.nonAdmins = res.value;
        });
 
+
+       $scope.autoCompleteOptions = {
+           filter: "contains"
+       };
+
        $scope.gridContainer = {};
        $scope.person = {};
 
        $scope.loadAdmins = function () {
+           /// <summary>
+           /// Loads existing admins from backend.
+           /// </summary>
            $scope.admins = {
                dataSource: {
                    type: "odata",
@@ -76,6 +84,11 @@
        };
 
        $scope.removeAdmin = function (Id, FullName) {
+           /// <summary>
+           /// Opens remove admin modal
+           /// </summary>
+           /// <param name="Id">Id of person</param>
+           /// <param name="FullName">FullName of person</param>
            var modalInstance = $modal.open({
                templateUrl: 'App/Admin/HTML/Administration/Modal/RemoveAdminModalTemplate.html',
                controller: 'RemoveAdminModalController',
@@ -105,6 +118,9 @@
        }
 
        $scope.addAdminClicked = function () {
+           /// <summary>
+           /// Opens add admin modal
+           /// </summary>
            if ($scope.person.chosenAdmin == undefined || $scope.person.chosenAdmin[0] == undefined) {
                return;
            }
@@ -136,6 +152,9 @@
        }
 
        $scope.generateKMDFileClicked = function () {
+           /// <summary>
+           /// Opens confirm generate kmd file modal
+           /// </summary>
            var modalInstance = $modal.open({
                templateUrl: 'App/Admin/HTML/Administration/Modal/ConfirmGenerateFileModalTemplate.html',
                controller: 'GenerateFileModalController',

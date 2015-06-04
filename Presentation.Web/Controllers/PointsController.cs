@@ -32,6 +32,11 @@ namespace OS2Indberetning.Controllers
         public PointsController(IGenericRepository<Point> repo, IGenericRepository<Person> personRepo) : base(repo, personRepo){}
 
         //GET: odata/Points
+        /// <summary>
+        /// GET API endpoint for Points
+        /// </summary>
+        /// <param name="queryOptions"></param>
+        /// <returns></returns>
         [EnableQuery]
         public IQueryable<Point> Get(ODataQueryOptions<Point> queryOptions)
         {
@@ -40,18 +45,35 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: odata/Points(5)
+        /// <summary>
+        /// GET API endpoint for a single point.
+        /// </summary>
+        /// <param name="key">Returns the point identified by key.</param>
+        /// <param name="queryOptions"></param>
+        /// <returns></returns>
         public IQueryable<Point> Get([FromODataUri] int key, ODataQueryOptions<Point> queryOptions)
         {
             return GetQueryable(key, queryOptions);
         }
 
         //PUT: odata/Points(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         public new IHttpActionResult Put([FromODataUri] int key, Delta<Point> delta)
         {
             return base.Put(key, delta);
         }
 
         //POST: odata/Points
+        /// <summary>
+        /// POST API endpoint for points.
+        /// </summary>
+        /// <param name="Point">The point to be posted.</param>
+        /// <returns>The posted point.</returns>
         [EnableQuery]
         public new IHttpActionResult Post(Point Point)
         {
@@ -59,6 +81,12 @@ namespace OS2Indberetning.Controllers
         }
 
         //PATCH: odata/Points(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Point> delta)
@@ -67,6 +95,11 @@ namespace OS2Indberetning.Controllers
         }
 
         //DELETE: odata/Points(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
             return StatusCode(HttpStatusCode.MethodNotAllowed);

@@ -1,4 +1,5 @@
-﻿angular.module("application").directive("awsfield", function () {
+﻿// Is not used.
+angular.module("application").directive("awsfield", function () {
     return {
         restrict: 'AE',
         link: function(scope, element, attrs) {

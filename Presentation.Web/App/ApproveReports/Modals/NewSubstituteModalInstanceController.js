@@ -8,6 +8,10 @@
             $scope.orgUnit = $scope.orgUnits[0];
         });
         
+        $scope.autoCompleteOptions = {
+            filter: "contains"
+        };
+
         $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
 
         // Remove leader from array

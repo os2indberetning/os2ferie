@@ -32,6 +32,11 @@ namespace Core.ApplicationServices
             _routeRepo = routeRepo;
         }
 
+        /// <summary>
+        /// Creates and inserts a Personal Route into the database.
+        /// </summary>
+        /// <param name="route">The Route to be inserted.</param>
+        /// <returns>The created Personal Route.</returns>
         public PersonalRoute Create(PersonalRoute route)
         {
             var pointsWithCoordinates =

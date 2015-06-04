@@ -9,11 +9,17 @@
 
       
         $scope.confirmDelete = function () {
+            /// <summary>
+            /// Confirms deletion of Standard Address
+            /// </summary>
             $modalInstance.close($scope.itemId);
             NotificationService.AutoFadeNotification("success", "", "Adressen blev slettet.");
         }
 
         $scope.cancel = function () {
+            /// <summary>
+            /// Cancels deletion of Standard Address
+            /// </summary>
             $modalInstance.dismiss('cancel');
             NotificationService.AutoFadeNotification("warning", "", "Sletning af adressen blev annulleret.");
         }

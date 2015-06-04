@@ -28,6 +28,12 @@ namespace Core.ApplicationServices.MailerService.Impl
 
         }
 
+        /// <summary>
+        /// Sends an email
+        /// </summary>
+        /// <param name="to">Email address of recipient.</param>
+        /// <param name="subject">Subject of the email.</param>
+        /// <param name="body">Body of the email.</param>
         public void SendMail(string to, string subject, string body)
         {
             var msg = new MailMessage();
@@ -41,7 +47,7 @@ namespace Core.ApplicationServices.MailerService.Impl
             }
             catch (Exception)
             {
-                //TODO
+
             }
         }
     }

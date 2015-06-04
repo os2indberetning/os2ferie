@@ -1,8 +1,12 @@
 angular.module("application").controller("MyAcceptedReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "$timeout", function ($scope, $modal, $rootScope, Report, $timeout) {
+   "$scope", "$modal", "$rootScope", "Report", "$timeout", "HelpText", function ($scope, $modal, $rootScope, Report, $timeout, HelpText) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
+
+       HelpText.get({ id: "TableSortHelp" }).$promise.then(function (res) {
+           $scope.tableSortHelp = res.text;
+       });
 
        $scope.getEndOfDayStamp = function (d) {
            var m = moment(d);
@@ -21,6 +25,9 @@ angular.module("application").controller("MyAcceptedReportsController", [
        var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
        $scope.loadReports = function () {
+           /// <summary>
+           /// Loads current user's accepted reports from backend to kendo grid datasource.
+           /// </summary>
            $scope.Reports = {
                dataSource: {
                    type: "odata",
@@ -123,7 +130,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
                               return result;
                           } else {
                               if (data.IsFromApp) {
-                                  return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
+                                  return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
                               } else {
                                   return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
                               }
@@ -184,11 +191,17 @@ angular.module("application").controller("MyAcceptedReportsController", [
        }
 
        $scope.clearClicked = function () {
+           /// <summary>
+           /// Clears filters.
+           /// </summary>
            $scope.gridContainer.grid.dataSource.filter([{ field: "PersonId", operator: "eq", value: personId }]);
            $scope.loadInitialDates();
        }
 
        $scope.loadInitialDates = function () {
+           /// <summary>
+           /// Loads initial date filters.
+           /// </summary>
            // Set initial values for kendo datepickers.
 
            initialLoad = 2;
@@ -224,6 +237,9 @@ angular.module("application").controller("MyAcceptedReportsController", [
        }
 
        $scope.refreshGrid = function () {
+           /// <summary>
+           /// Refreshes kendo grid datasource.
+           /// </summary>
            $scope.gridContainer.grid.dataSource.read();
        }
 
@@ -247,6 +263,11 @@ angular.module("application").controller("MyAcceptedReportsController", [
        };
 
        $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
+           /// <summary>
+           /// Applies date filters.
+           /// </summary>
+           /// <param name="fromDateStamp"></param>
+           /// <param name="toDateStamp"></param>
            var newFilters = [];
            newFilters.push({ field: "PersonId", operator: "eq", value: personId });
            newFilters.push({ field: "DriveDateTimestamp", operator: "gte", value: fromDateStamp });
@@ -255,6 +276,10 @@ angular.module("application").controller("MyAcceptedReportsController", [
        }
 
        $scope.showRouteModal = function (routeId) {
+           /// <summary>
+           /// Opens show route modal.
+           /// </summary>
+           /// <param name="routeId"></param>
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
                controller: 'ShowRouteModalController',

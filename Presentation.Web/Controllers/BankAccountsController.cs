@@ -26,12 +26,23 @@ namespace OS2Indberetning.Controllers
         }
 
         //PUT: odata/BankAccounts(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         public new IHttpActionResult Put([FromODataUri] int key, Delta<BankAccount> delta)
         {
             return base.Put(key, delta);
         }
 
         //POST: odata/BankAccounts
+        /// <summary>
+        /// Post a new bankaccount if the user attempting to post is an admin.
+        /// </summary>
+        /// <param name="BankAccount"></param>
+        /// <returns></returns>
         [EnableQuery]
         public new IHttpActionResult Post(BankAccount BankAccount)
         {
@@ -39,6 +50,13 @@ namespace OS2Indberetning.Controllers
         }
 
         //PATCH: odata/BankAccounts(5)
+        /// <summary>
+        /// PATCH API endpoint for BankAccounts
+        /// Patches the BankAccount identified by key, if the current user is an admin
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<BankAccount> delta)
@@ -47,6 +65,12 @@ namespace OS2Indberetning.Controllers
         }
 
         //DELETE: odata/BankAccounts(5)
+        /// <summary>
+        /// DELETE API endpoint for BankAccounts.
+        /// Deletes the BankAccount identified by key if the current user is an admin.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
             return CurrentUser.IsAdmin ? base.Delete(key) : Unauthorized();

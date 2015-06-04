@@ -13,7 +13,10 @@
 
 
 
-        $scope.confirmEdit = function () {
+       $scope.confirmEdit = function () {
+           /// <summary>
+           /// Confirms edit of Standard Address
+           /// </summary>
             var result = {};
             result.address = $scope.address;
             result.description = $scope.description;
@@ -21,7 +24,10 @@
             NotificationService.AutoFadeNotification("success", "", "Adressen blev redigeret.");
         }
 
-        $scope.cancel = function () {
+       $scope.cancel = function () {
+           /// <summary>
+           /// Cancels edit of Standard Address
+           /// </summary>
             $modalInstance.dismiss('cancel');
             NotificationService.AutoFadeNotification("warning", "", "Redigering af adressen blev annulleret.");
         }

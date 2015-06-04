@@ -59,7 +59,7 @@
                     NotificationService.AutoFadeNotification("success", "", "Godkender blev redigeret");
                     $modalInstance.close();
                 }, function () {
-                    NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette stedfortræder");
+                    NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette godkender");
                 });
             };
 

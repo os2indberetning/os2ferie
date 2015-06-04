@@ -14,6 +14,12 @@ namespace OS2Indberetning.Controllers
         public EmploymentsController(IGenericRepository<Employment> repo, IGenericRepository<Person> personRepo) : base(repo, personRepo){}
         
         //GET: odata/Employments
+        /// <summary>
+        /// ODATA GET API endpoint for employments.
+        /// Strips away CPR-number for persons returned.
+        /// </summary>
+        /// <param name="queryOptions"></param>
+        /// <returns>Employments</returns>
         [EnableQuery]
         public IQueryable<Employment> Get(ODataQueryOptions<Employment> queryOptions)
         {
@@ -26,6 +32,12 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: odata/Employments(5)
+        /// <summary>
+        /// GET API endpoint for a single employment.
+        /// </summary>
+        /// <param name="key">Returns the employment identified by key</param>
+        /// <param name="queryOptions"></param>
+        /// <returns></returns>
         public IQueryable<Employment> Get([FromODataUri] int key, ODataQueryOptions<Employment> queryOptions)
         {
             var res = GetQueryable(key, queryOptions).Include("Person");
@@ -37,6 +49,12 @@ namespace OS2Indberetning.Controllers
         }
 
         //PUT: odata/Employments(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         public new IHttpActionResult Put([FromODataUri] int key, Delta<Employment> delta)
         {
             return base.Put(key, delta);
@@ -50,6 +68,12 @@ namespace OS2Indberetning.Controllers
         }
 
         //PATCH: odata/Employments(5)
+        /// <summary>
+        /// PATCH API endpoint for employments
+        /// </summary>
+        /// <param name="key">Patches the employment identified by key</param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<Employment> delta)
@@ -59,6 +83,11 @@ namespace OS2Indberetning.Controllers
         }
 
         //DELETE: odata/Employments(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
             return StatusCode(HttpStatusCode.MethodNotAllowed);

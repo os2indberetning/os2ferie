@@ -1,10 +1,15 @@
 ﻿angular.module("application").controller("ApproveReportsSettingsController", [
-   "$scope", "$rootScope", "OrgUnit", "Person", "$modal", function ($scope, $rootScope, OrgUnit, Person, $modal) {
+   "$scope", "$rootScope", "OrgUnit", "Person", "$modal","HelpText", function ($scope, $rootScope, OrgUnit, Person, $modal,HelpText) {
        $scope.collapseSubtitute = false;
        $scope.collapsePersonalApprover = false;
        $scope.orgUnits = [];
        $scope.persons = [];
        $scope.currentPerson = {};
+
+
+       HelpText.get({ id: "PersonalApproverHelpText" }).$promise.then(function (res) {
+           $scope.personalApproverHelpText = res.text;
+       });
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
@@ -30,6 +35,9 @@
 
 
        $scope.loadGrids = function () {
+           /// <summary>
+           /// Load substitutes from backend to kendo grid datasource.
+           /// </summary>
            $scope.substitutes = {
                dataSource: {
                    type: "odata",
@@ -306,6 +314,10 @@
        $scope.loadGrids();
 
        $scope.openDeleteApprover = function (id) {
+           /// <summary>
+           /// Opens delete personal approver modal.
+           /// </summary>
+           /// <param name="id">Id of personal approver to delete.</param>
            var modalInstance = $modal.open({
                templateUrl: 'App/ApproveReports/Modals/ConfirmDeleteApproverModal.html',
                controller: 'ConfirmDeleteApproverModalInstanceController',
@@ -335,6 +347,10 @@
        }
 
        $scope.openDeleteSubstitute = function (id) {
+           /// <summary>
+           /// Opens delete substitute modal.
+           /// </summary>
+           /// <param name="id">Id of substitute to delete.</param>
            var modalInstance = $modal.open({
                templateUrl: 'App/ApproveReports/Modals/ConfirmDeleteSubstituteModal.html',
                controller: 'ConfirmDeleteSubstituteModalInstanceController',
@@ -365,6 +381,10 @@
 
 
        $scope.openEditSubstitute = function (id) {
+           /// <summary>
+           /// Opens edit substitute modal
+           /// </summary>
+           /// <param name="id"></param>
            var modalInstance = $modal.open({
                templateUrl: 'App/ApproveReports/Modals/editSubstituteModal.html',
                controller: 'EditSubstituteModalInstanceController',
@@ -394,6 +414,10 @@
        }
 
        $scope.openEditApprover = function (id) {
+           /// <summary>
+           /// Opens edit approver modal
+           /// </summary>
+           /// <param name="id">Id of approver to edit.</param>
            var modalInstance = $modal.open({
                templateUrl: 'App/ApproveReports/Modals/editApproverModal.html',
                controller: 'EditApproverModalInstanceController',
@@ -423,6 +447,9 @@
        }
 
        $scope.createNewApprover = function () {
+           /// <summary>
+           /// Opens create new approver modal.
+           /// </summary>
            var modalInstance = $modal.open({
                templateUrl: 'App/ApproveReports/Modals/newApproverModal.html',
                controller: 'NewApproverModalInstanceController',
@@ -449,6 +476,9 @@
        };
 
        $scope.createNewSubstitute = function () {
+           /// <summary>
+           /// Opens create new substitute modal
+           /// </summary>
            var modalInstance = $modal.open({
                templateUrl: 'App/ApproveReports/Modals/newSubstituteModal.html',
                controller: 'NewSubstituteModalInstanceController',

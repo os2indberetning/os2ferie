@@ -11,10 +11,17 @@ namespace OS2Indberetning.Controllers
     public class HelpTextController : ApiController
     {
         // GET api/<controller>/5
+        /// <summary>
+        /// API Endpoint for getting help texts to be displayed in the frontend.
+        /// HelpTexts are read from CustomSettings.config
+        /// </summary>
+        /// <param name="id">Returns the helptext identified by id</param>
+        /// <returns>Help text</returns>
         public IHttpActionResult Get(string id)
         {
             try
             {
+                // Do not allow returning of keys that start with PROTECTED.
                 if(id.IndexOf("PROTECTED", StringComparison.Ordinal) > -1)
                 {
                     // If the key contains PROTECTED, then return forbidden.

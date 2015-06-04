@@ -1,9 +1,13 @@
 
 angular.module("application").controller("MyRejectedReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "$timeout", function ($scope, $modal, $rootScope, Report, $timeout) {
+   "$scope", "$modal", "$rootScope", "Report", "$timeout", "HelpText", function ($scope, $modal, $rootScope, Report, $timeout, HelpText) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
+
+       HelpText.get({ id: "TableSortHelp" }).$promise.then(function (res) {
+           $scope.tableSortHelp = res.text;
+       });
 
        $scope.getEndOfDayStamp = function (d) {
            var m = moment(d);
@@ -22,6 +26,9 @@ angular.module("application").controller("MyRejectedReportsController", [
        var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
        $scope.loadReports = function () {
+           /// <summary>
+           /// Loads current users rejected reports from backend to kendo grid datasource.
+           /// </summary>
            $scope.Reports = {
                dataSource: {
                    type: "odata",
@@ -33,7 +40,7 @@ angular.module("application").controller("MyRejectedReportsController", [
 
 
 
-                           url: "/odata/DriveReports?status=Rejected &$expand=DriveReportPoints,ApprovedBy",
+                           url: "/odata/DriveReports?status=Rejected &$expand=DriveReportPoints,ApprovedBy($select=FullName)",
                            dataType: "json",
                            cache: false
                        },
@@ -96,13 +103,6 @@ angular.module("application").controller("MyRejectedReportsController", [
                       title: "Kørselsdato"
                   }, {
                       field: "Purpose",
-                      template: function (data) {
-                          if (data.Comment != "") {
-                              return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"transparent-background pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
-                          }
-                          return data.Purpose;
-
-                      },
                       title: "Formål"
                   }, {
                       title: "Rute",
@@ -125,7 +125,7 @@ angular.module("application").controller("MyRejectedReportsController", [
                               return result;
                           } else {
                               if (data.IsFromApp) {
-                                  return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
+                                  return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
                               } else {
                                   return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
                               }
@@ -163,12 +163,15 @@ angular.module("application").controller("MyRejectedReportsController", [
                           var date = m._d.getDate() + "/" +
                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                  m._d.getFullYear();
-                          return date + "<div kendo-tooltip k-content=\"'" + data.Comment + "'\"><i class='fa fa-comment-o'></i></div>";
+                          return date;
 
                       },
                   }, {
                       field: "ApprovedBy.FullName",
-                      title: "Afvist af"
+                      title: "Afvist af",
+                      template: function(data) {
+                          return data.ApprovedBy.FullName + "<div kendo-tooltip k-content=\"'" + data.Comment + "'\"><i class='fa fa-comment-o'></i></div>";
+                      }
                   }
                ],
                scrollable: false
@@ -176,6 +179,9 @@ angular.module("application").controller("MyRejectedReportsController", [
        }
 
        $scope.loadInitialDates = function () {
+           /// <summary>
+           /// Sets initial date filters.
+           /// </summary>
            // Set initial values for kendo datepickers.
 
            initialLoad = 2;
@@ -213,11 +219,19 @@ angular.module("application").controller("MyRejectedReportsController", [
        }
 
        $scope.clearClicked = function () {
+           /// <summary>
+           /// Clears filters.
+           /// </summary>
            $scope.gridContainer.grid.dataSource.filter([{ field: "PersonId", operator: "eq", value: personId }]);
            $scope.loadInitialDates();
        }
 
        $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
+           /// <summary>
+           /// Applies date filters.
+           /// </summary>
+           /// <param name="fromDateStamp"></param>
+           /// <param name="toDateStamp"></param>
            var newFilters = [];
            newFilters.push({ field: "PersonId", operator: "eq", value: personId });
            newFilters.push({ field: "DriveDateTimestamp", operator: "gte", value: fromDateStamp });
@@ -226,6 +240,9 @@ angular.module("application").controller("MyRejectedReportsController", [
        }
 
        $scope.refreshGrid = function () {
+           /// <summary>
+           /// Refreshes kendo grid datasource.
+           /// </summary>
            $scope.gridContainer.grid.dataSource.read();
        }
 
@@ -247,6 +264,10 @@ angular.module("application").controller("MyRejectedReportsController", [
        };
 
        $scope.showRouteModal = function (routeId) {
+           /// <summary>
+           /// Opens show route modal.
+           /// </summary>
+           /// <param name="routeId"></param>
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
                controller: 'ShowRouteModalController',

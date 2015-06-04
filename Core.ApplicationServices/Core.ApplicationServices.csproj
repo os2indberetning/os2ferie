@@ -108,7 +108,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IOrgUnitService.cs" />
+    <Compile Include="Interfaces\IOrgUnitService.cs" />
     <Compile Include="OrgUnitService.cs" />
     <Compile Include="PersonalRouteService.cs" />
     <Compile Include="FileGenerator\FileRecord.cs" />
@@ -160,6 +160,10 @@
     <ProjectReference Include="..\Infrastructure.DataAccess\Infrastructure.DataAccess.csproj">
       <Project>{9914DB94-E465-4751-939C-8121C30AC945}</Project>
       <Name>Infrastructure.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure.DmzDataAccess\Infrastructure.DmzDataAccess.csproj">
+      <Project>{90a44adf-5bcf-47b6-8dd7-f4e069f3942e}</Project>
+      <Name>Infrastructure.DmzDataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -78,7 +78,7 @@ namespace Infrastructure.AddressServices
                 }
                 catch (AddressLaunderingException e)
                 {
-                    throw new AddressCoordinatesException("Errors in address, see inner exception.", e);
+                    throw new AddressCoordinatesException("En valgt adresse kunne ikke vaskes.", e);
                 }
             }
 
