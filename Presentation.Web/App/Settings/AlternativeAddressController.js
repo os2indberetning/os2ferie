@@ -258,48 +258,48 @@
         }
     }
 
-    var handleDiscardChanges = function (event) {
-        /// <summary>
-        /// Prompts user when attempting to leave a page with unsaved changes.
-        /// </summary>
-        /// <param name="event"></param>
-        var returnVal = undefined;
-        var showConfirm = false;
-        if ($scope.alternativeHomeAddress != undefined) {
-            if (homeAddressIsDirty === true && $scope.alternativeHomeAddress.string != $scope.alternativeHomeAddress.StreetName + " " + $scope.alternativeHomeAddress.StreetNumber + ", " + $scope.alternativeHomeAddress.ZipCode + " " + $scope.alternativeHomeAddress.Town) {
-                showConfirm = true;
-            }
-        }
-        angular.forEach(workAddressDirty, function (value, key) {
-            if (value == true) {
-                showConfirm = true;
-            }
-        });
-        if (showConfirm) {
-            var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
-            if (!answer) {
-                returnVal = "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
-                event.preventDefault();
-            }
-        }
-        return returnVal;
-
-    }
-
     $scope.homeAddressChanged = function() {
         homeAddressIsDirty = true;
     }
 
-    // Alert user if there are unsaved changes when navigating away.
+    var checkShouldPrompt = function () {
+        /// <summary>
+        /// Return true if there are unsaved changes on the page. 
+        /// </summary>
+        var returnVal = false;
+        if ($scope.alternativeHomeAddress != undefined) {
+            if (homeAddressIsDirty === true && $scope.alternativeHomeAddress.string != $scope.alternativeHomeAddress.StreetName + " " + $scope.alternativeHomeAddress.StreetNumber + ", " + $scope.alternativeHomeAddress.ZipCode + " " + $scope.alternativeHomeAddress.Town) {
+                returnVal = true;
+            }
+        }
+        angular.forEach(workAddressDirty, function (value, key) {
+            if (value == true) {
+                returnVal = true;
+            }
+        });
+        return returnVal;
+    }
+
+    // Alert the user when navigating away from the page if there are unsaved changes.
     $scope.$on('$stateChangeStart', function (event) {
-        handleDiscardChanges(event);
+        if (checkShouldPrompt() === true) {
+            var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
+            if (!answer) {
+                event.preventDefault();
+            }
+        }
     });
 
     window.onbeforeunload = function (e) {
-        return handleDiscardChanges(e);
+        if (checkShouldPrompt() === true) {
+            return "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+        }
     };
 
     $scope.$on('$destroy', function () {
+        /// <summary>
+        /// Unregister refresh event handler when leaving the page.
+        /// </summary>
         window.onbeforeunload = undefined;
     });
 

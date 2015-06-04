@@ -780,35 +780,46 @@
         }
 
 
-        var handleDiscardChanges = function (event) {
+        var checkShouldPrompt = function () {
             /// <summary>
-            /// Prompts the user when he/she attempts to leave a page with unsaved changes.
+            /// Return true if there are unsaved changes on the page. 
             /// </summary>
-            /// <param name="event"></param>
-            var returnVal = undefined;
-            if (isFormDirty === true ||
-               ($scope.DriveReport.Purpose != $scope.latestDriveReport.Purpose && $scope.DriveReport.Purpose != "") ||
-               ($scope.DriveReport.ReadDistance != $scope.latestDriveReport.Distance.toString().replace(".", ",") && $scope.DriveReport.ReadDistance != "") ||
-               ($scope.DriveReport.UserComment != undefined && $scope.DriveReport.UserComment != $scope.latestDriveReport.UserComment && $scope.DriveReport.UserComment != "")) {
-                var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
-                if (!answer) {
-                    returnVal = "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
-                    event.preventDefault();
-                }
+
+            if (isFormDirty === true) {
+                return true;
             }
-            return returnVal;
+            if ($scope.DriveReport.Purpose != $scope.latestDriveReport.Purpose && $scope.DriveReport.Purpose != "" && $scope.DriveReport.Purpose != undefined) {
+                return true;
+            }
+            if ($scope.DriveReport.ReadDistance != $scope.latestDriveReport.Distance.toString().replace(".", ",") && $scope.DriveReport.ReadDistance != "" && $scope.DriveReport.ReadDistance != undefined) {
+                return true;
+            }
+            if ($scope.DriveReport.UserComment != undefined && $scope.DriveReport.UserComment != $scope.latestDriveReport.UserComment && $scope.DriveReport.UserComment != "") {
+                return true;
+            }
+            return false;
         }
 
         // Alert the user when navigating away from the page if there are unsaved changes.
         $scope.$on('$stateChangeStart', function (event) {
-            handleDiscardChanges(event);
+            if (checkShouldPrompt() === true) {
+                var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
+                if (!answer) {
+                    event.preventDefault();
+                }
+            }
         });
 
         window.onbeforeunload = function (e) {
-            return handleDiscardChanges(e);
+            if (checkShouldPrompt() === true) {
+                return "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+            }
         };
 
         $scope.$on('$destroy', function () {
+            /// <summary>
+            /// Unregister refresh event handler when leaving the page.
+            /// </summary>
             window.onbeforeunload = undefined;
         });
     }

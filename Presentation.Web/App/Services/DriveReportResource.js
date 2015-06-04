@@ -250,7 +250,7 @@
         "getLatest": {
             method: "GET",
             isArray: false,
-            url: "/odata/DriveReports?$filter=PersonId eq :id &$top=1&$orderby=CreatedDateTimestamp desc &$select=Id,EmploymentId,LicensePlate,KilometerAllowance,TFCode",
+            url: "/odata/DriveReports?$filter=PersonId eq :id &$top=1&$orderby=CreatedDateTimestamp desc &$select=Id,EmploymentId,LicensePlate,KilometerAllowance,TFCode,Distance,Purpose",
             transformResponse: function (data) {
                 var res = angular.fromJson(data);
                 if (res.error == undefined) {

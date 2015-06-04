@@ -63,7 +63,7 @@
         $scope.SmartAddress = SmartAdresseSource;
 
 
-        
+
         $scope.saveNewLicensePlate = function () {
             /// <summary>
             /// Handles saving of new license plate.
@@ -110,7 +110,7 @@
             };
         }
 
-        
+
         $scope.invertRecieveMail = function () {
             /// <summary>
             /// Inverts choice of mail notification.
@@ -618,35 +618,39 @@
             });
         };
 
-        var handleDiscardChanges = function (event) {
+        var checkShouldPrompt = function () {
             /// <summary>
-            /// Prompts user when attempting to leave page with unsaved changes.
+            /// Return true if there are unsaved changes on the page. 
             /// </summary>
-            /// <param name="event"></param>
-            var returnVal = undefined;
+
             if ($scope.newTokenDescription != "" ||
-               $scope.newLicensePlate != "" ||
-               $scope.newLicensePlateDescription != "") {
-                returnVal = "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+                $scope.newLicensePlate != "" ||
+                $scope.newLicensePlateDescription != "") {
+                return true;
+            }
+            return false;
+        }
+
+        // Alert the user when navigating away from the page if there are unsaved changes.
+        $scope.$on('$stateChangeStart', function (event) {
+            if (checkShouldPrompt() === true) {
                 var answer = confirm("Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?");
-                if (!answer) {   
+                if (!answer) {
                     event.preventDefault();
                 }
             }
-            return returnVal;
-        }
-
-        // Alert user if there are unsaved changes when navigating away.
-        $scope.$on('$stateChangeStart', function (event) {
-            handleDiscardChanges(event);
         });
 
-        // Alert user if there are unsaved changes when refreshing.
         window.onbeforeunload = function (e) {
-            return handleDiscardChanges(e);
+            if (checkShouldPrompt() === true) {
+                return "Du har lavet ændringer på siden, der ikke er gemt. Ønsker du at kassere disse ændringer?";
+            }
         };
 
         $scope.$on('$destroy', function () {
+            /// <summary>
+            /// Unregister refresh event handler when leaving the page.
+            /// </summary>
             window.onbeforeunload = undefined;
         });
     }
