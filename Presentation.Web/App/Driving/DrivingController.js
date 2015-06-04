@@ -24,7 +24,6 @@
 
         var isEditingReport = ReportId > 0;
         $scope.container = {};
-        $scope.container.datePickerMaxDate = new Date();
         $scope.isEditingReport = isEditingReport;
         var kendoPromise = $q.defer();
         var loadingPromises = [kendoPromise.promise];
@@ -60,6 +59,7 @@
             $scope.DriveReport.Addresses.push({ Name: "", Personal: "" });
             // Set the datepicker date to today.
             $scope.DriveReport.Date = new Date();
+            $scope.container.datePickerMaxDate = new Date();
         }
 
         setupForNewReport();
@@ -124,6 +124,7 @@
             /// Loads values from user's latest report and sets fields in the view.
             /// </summary>
             /// <param name="report"></param>
+
             $scope.DriveReport.FourKmRule = {};
             $scope.DriveReport.FourKmRule.Value = $rootScope.CurrentUser.DistanceFromHomeToBorder.toString().replace(".", ",");
 
