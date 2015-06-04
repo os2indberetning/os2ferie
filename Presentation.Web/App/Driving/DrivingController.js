@@ -574,6 +574,8 @@
             /// Clears user input
             /// </summary>
 
+
+
             isFormDirty = false;
 
             if (!isEditingReport) {
@@ -582,7 +584,7 @@
 
             setNotRoute();
 
-            $scope.container.driveDatePicker.open();
+
             loadValuesFromReport($scope.latestDriveReport);
             $scope.DriveReport.Addresses = [{ Name: "" }, { Name: "" }];
             $scope.DriveReport.ReadDistance = 0;
@@ -590,6 +592,13 @@
             $scope.DriveReport.Purpose = "";
             $scope.validateInput();
             updateDrivenKm();
+            $window.scrollTo(0, 0);
+            // Timeout to allow the page to scroll to the top before opening datepicker.
+            // Otherwise datepicker would sometimes open in the middle of the page instead of anchoring to the control.
+            $timeout(function () {
+                $scope.container.driveDatePicker.open();
+            }, 200);
+
         }
 
         $scope.transportChanged = function (res) {

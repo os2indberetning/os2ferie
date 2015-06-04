@@ -34,30 +34,19 @@
         // Contains references to kendo ui grids.
         $scope.gridContainer = {};
 
-        $scope.GetPerson = Person.get({ id: personId }, function (data) {
-            $scope.currentPerson = data;
-            //  $scope.workDistanceOverride = $scope.currentPerson.WorkDistanceOverride.toString().replace('.', ',');
-            $scope.recieveMail = data.RecieveMail;
+        $scope.recieveMail = $rootScope.CurrentUser.RecieveMail;
 
-            //Set choice of mail notification
-            if ($scope.recieveMail == true) {
-                $scope.mailAdvice = 'Yes';
-            } else {
-                $scope.mailAdvice = 'No';
-            }
+        //Set choice of mail notification
+        if ($scope.recieveMail == true) {
+            $scope.mailAdvice = 'Yes';
+        } else {
+            $scope.mailAdvice = 'No';
+        }
 
-            //Load licenseplates
-            LicensePlate.get({ id: personId }, function (data) {
-                $scope.licenseplates = data;
-            });
-
-
-            //NotificationService.AutoFadeNotification("success", "Success", "Person fundet");
-        }, function () {
-            NotificationService.AutoFadeNotification("danger", "", "Person ikke fundet");
+        //Load licenseplates
+        LicensePlate.get({ id: personId }, function (data) {
+            $scope.licenseplates = data;
         });
-
-
 
         //Funtionalitet til opslag af adresser
         $scope.SmartAddress = SmartAdresseSource;
@@ -116,7 +105,7 @@
             /// Inverts choice of mail notification.
             /// </summary>
 
-            $timeout(function() {
+            $timeout(function () {
                 $scope.recieveMail = $scope.mailAdvice == "Yes";
 
                 var newPerson = new Person({
@@ -131,7 +120,7 @@
                 };
             });
 
-           
+
         }
 
         $scope.loadGrids = function (id) {
