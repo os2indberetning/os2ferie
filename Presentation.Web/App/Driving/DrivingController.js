@@ -2,17 +2,13 @@
     "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "HelpText", "$window",
     function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, HelpText, $window) {
 
-        HelpText.get({ id: "ReadReportCommentHelp" }).$promise.then(function (res) {
-            $scope.ReadReportCommentHelp = res.text;
+        var helpTexts = HelpText.getAll().$promise.then(function (res) {
+            $scope.ReadReportCommentHelp = res.ReadReportCommentHelp.text;
+            $scope.PurposeHelpText = res.PurposeHelpText.text;
+            $scope.fourKmRuleHelpText = res.FourKmRuleHelpText.text;
         });
 
-        HelpText.get({ id: "PurposeHelpText" }).$promise.then(function (res) {
-            $scope.PurposeHelpText = res.text;
-        });
 
-        HelpText.get({ id: "FourKmRuleHelpText" }).$promise.then(function (res) {
-            $scope.fourKmRuleHelpText = res.text;
-        });
 
         // Setup functions in scope.
         $scope.Number = Number;
@@ -217,36 +213,33 @@
         }));
 
         // Load user's license plates.
-        loadingPromises.push(LicensePlate.get({ id: currentUser.Id }).$promise.then(function (res) {
-            if (res.length > 0) {
-                angular.forEach(res, function (value, key) {
-                    if (value.Description != "") {
-                        value.PresentationString = value.Plate + " - " + value.Description;
-                    } else {
-                        value.PresentationString = value.Plate;
-                    }
-                });
-                $scope.LicensePlates = res;
-            } else {
-                $scope.LicensePlates = [{ PresentationString: "Ingen nummerplader", Plate: "0000000" }];
-            }
-
-        }));
+        var plates = currentUser.LicensePlates.slice(0);
+        if (plates.length > 0) {
+            angular.forEach(plates, function (value, key) {
+                if (value.Description != "") {
+                    value.PresentationString = value.Plate + " - " + value.Description;
+                } else {
+                    value.PresentationString = value.Plate;
+                }
+            });
+            $scope.LicensePlates = plates;
+        } else {
+            $scope.LicensePlates = [{ PresentationString: "Ingen nummerplader", Plate: "0000000" }];
+        }
 
         // Load user's personal routes
-        loadingPromises.push(PersonalRoute.getForUser({ id: currentUser.Id }).$promise.then(function (res) {
-            angular.forEach(res, function (value, key) {
-                value.PresentationString = "";
-                if (value.Description != "") {
-                    value.PresentationString += value.Description + " : ";
-                }
-                value.PresentationString += value.Points[0].StreetName + " " + value.Points[0].StreetNumber + ", " + value.Points[0].ZipCode + " " + value.Points[0].Town + " -> ";
-                value.PresentationString += value.Points[value.Points.length - 1].StreetName + " " + value.Points[value.Points.length - 1].StreetNumber + ", " + value.Points[value.Points.length - 1].ZipCode + " " + value.Points[value.Points.length - 1].Town;
-                value.PresentationString += " Antal viapunkter: " + Number(value.Points.length - 2);
-            });
-            res.unshift({ PresentationString: "Vælg personlig rute" });
-            $scope.Routes = res;
-        }));
+        var routes = currentUser.PersonalRoutes.slice(0);
+        angular.forEach(routes, function (value, key) {
+            value.PresentationString = "";
+            if (value.Description != "") {
+                value.PresentationString += value.Description + " : ";
+            }
+            value.PresentationString += value.Points[0].StreetName + " " + value.Points[0].StreetNumber + ", " + value.Points[0].ZipCode + " " + value.Points[0].Town + " -> ";
+            value.PresentationString += value.Points[value.Points.length - 1].StreetName + " " + value.Points[value.Points.length - 1].StreetNumber + ", " + value.Points[value.Points.length - 1].ZipCode + " " + value.Points[value.Points.length - 1].Town;
+            value.PresentationString += " Antal viapunkter: " + Number(value.Points.length - 2);
+        });
+        routes.unshift({ PresentationString: "Vælg personlig rute" });
+        $scope.Routes = routes;
 
         // Load map start address
         loadingPromises.push(Address.getMapStart().$promise.then(function (res) {
