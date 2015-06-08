@@ -178,25 +178,19 @@ namespace OS2Indberetning.Controllers
 
             var rep = Repo.AsQueryable();
             // Select all addresses that arent points in a route, cachedAddress, workAddress or drivereportpoints in a drivereport.
-            var temp = rep.Where(elem => !(elem is DriveReportPoint || elem is Point ||elem is CachedAddress || elem is WorkAddress)).ToList();
+            var temp = rep.Where(elem => !(elem is DriveReportPoint || elem is Point ||elem is CachedAddress || elem is WorkAddress));
             var res = new List<Address>();
 
-            // Add all addresses that are personaladdresses which belong to the current user.
+            // Add all addresses that are personaladdresses which belong to the current user or arent personalAddresses at all. Those are standard addresses.
             foreach (var address in temp)
             {
-                if (address is PersonalAddress && ((PersonalAddress)address).PersonId == personId)
-                {
-                    res.Add(address);
-                }
-                //  Add all addresses that remain that arent personaladdresses. Those are Standard Addresses
-                else if (!(address is PersonalAddress))
+                if ((address is PersonalAddress && ((PersonalAddress)address).PersonId == personId) || !(address is PersonalAddress))
                 {
                     res.Add(address);
                 }
             }
 
             var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(personId)).ToList();
-
             // Add the workAddress of each of the user's employments.
             foreach (var empl in employments)
             {
@@ -204,8 +198,6 @@ namespace OS2Indberetning.Controllers
                 tempAddr.Description = empl.OrgUnit.LongDescription;
                 res.Add(tempAddr);
             }
-
-            
 
             return Ok(res.AsQueryable());
         }
