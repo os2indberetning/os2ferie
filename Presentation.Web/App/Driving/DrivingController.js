@@ -330,6 +330,15 @@
             }
         }
 
+        $scope.clearErrorMessages = function() {
+            $scope.addressSelectionErrorMessage = "";
+            $scope.purposeErrorMessage = "";
+            $scope.fourKmRuleValueErrorMessage = "";
+            $scope.licensePlateErrorMessage = "";
+            $scope.readDistanceErrorMessage = "";
+            $scope.userCommentErrorMessage = "";
+        }
+
         $scope.isAddressNameSet = function (address) {
             return !(address.Name == "" || address.Name == $scope.addressPlaceholderText || address.Name == undefined);
         }
@@ -581,6 +590,7 @@
             $scope.DriveReport.ReadDistance = 0;
             $scope.DriveReport.UserComment = "";
             $scope.DriveReport.Purpose = "";
+            $scope.clearErrorMessages();
             updateDrivenKm();
             $window.scrollTo(0, 0);
             // Timeout to allow the page to scroll to the top before opening datepicker.
