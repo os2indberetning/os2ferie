@@ -27,6 +27,8 @@
 
 
         var personId = $rootScope.CurrentUser.Id;
+        $scope.currentPerson = $rootScope.CurrentUser;
+        
         $scope.showMailNotification = $rootScope.CurrentUser.IsLeader;
         // Used for alternative address template
         $scope.employments = $rootScope.CurrentUser.Employments;

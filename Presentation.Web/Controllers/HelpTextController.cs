@@ -22,13 +22,34 @@ namespace OS2Indberetning.Controllers
             try
             {
                 // Do not allow returning of keys that start with PROTECTED.
-                if(id.IndexOf("PROTECTED", StringComparison.Ordinal) > -1)
+                if (id.IndexOf("PROTECTED", StringComparison.Ordinal) > -1)
                 {
                     // If the key contains PROTECTED, then return forbidden.
                     return StatusCode(HttpStatusCode.Forbidden);
                 }
                 // If the key doesnt contain protected, then return the result.
                 var res = ConfigurationManager.AppSettings[id];
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
+        }
+
+        /// <summary>
+        /// Returns all help texts to cut down number of requests.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IHttpActionResult GetAll()
+        {
+            var res = new List<KeyValuePair<string, string>>();
+            try
+            {
+                res.AddRange(from key in ConfigurationManager.AppSettings.AllKeys 
+                             where !key.Contains("PROTECTED") select new KeyValuePair<string, string>(key, ConfigurationManager.AppSettings[key]));
+
                 return Ok(res);
             }
             catch (Exception e)

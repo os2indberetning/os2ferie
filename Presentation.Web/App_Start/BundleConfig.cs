@@ -23,7 +23,10 @@ namespace OS2Indberetning
                 .Include("~/Scripts/angular-resource.js")
                 .Include("~/Scripts/kendo-ie-fix.js")
                 .Include("~/Scripts/bootstrap.js")
-                .Include("~/Scripts/respond.js"));
+                .Include("~/Scripts/respond.js")
+                .Include("~/Scripts/kendo/kendo.all.min.js")
+                .Include("~/Scripts/kendo/cultures/kendo.culture.da-DK.min.js")
+                .Include("~/Scripts/loading-bar.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/loading-bar.min.css",
@@ -33,7 +36,13 @@ namespace OS2Indberetning
                       "~/Content/Themes/SbAdmin/font-awesome/css/font-awesome.css",
                       "~/Content/site.css",
                       "~/Content/timeline.css",
-                      "~/Content/custom.css"));
+                      "~/Content/custom.css",
+                      "~/Content/kendo/kendo.common.min.css",
+                      "~/Content/kendo/kendo.common-bootstrap.min.css",
+                      "~/Content/kendo/kendo.rtl.css",
+                      "~/Content/kendo/kendo.bootstrap.min.css",
+                      "~/Content/kendo/kendo.dataviz.min.css",
+                      "~/Content/kendo/kendo.dataviz.bootstrap.min.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").IncludeDirectoryWithExclusion("~/App", "*.js", true, "*.spec.js"));
         }
