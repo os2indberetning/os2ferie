@@ -273,6 +273,10 @@
     <Compile Include="Migrations\201505191109180_RemovedMiddleNameFromPerson.Designer.cs">
       <DependentUpon>201505191109180_RemovedMiddleNameFromPerson.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506030820493_AddedCostCenterToEmployment.cs" />
+    <Compile Include="Migrations\201506030820493_AddedCostCenterToEmployment.Designer.cs">
+      <DependentUpon>201506030820493_AddedCostCenterToEmployment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -443,6 +447,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505191109180_RemovedMiddleNameFromPerson.resx">
       <DependentUpon>201505191109180_RemovedMiddleNameFromPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506030820493_AddedCostCenterToEmployment.resx">
+      <DependentUpon>201506030820493_AddedCostCenterToEmployment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Text;
 using Core.DomainModel;
+using Microsoft.Ajax.Utilities;
 
 namespace Core.ApplicationServices.FileGenerator
 {
@@ -13,6 +14,8 @@ namespace Core.ApplicationServices.FileGenerator
         public string TFCode { get; set; }
         public int EmploymentType { get; set; }
         public int ExtraNumber { get; set; }
+        public string Account { get; set; }
+        public bool IsAdministrativeWorker { get; set; }
 
         public FileRecord(DriveReport report, string ownerCpr)
         {
@@ -26,6 +29,14 @@ namespace Core.ApplicationServices.FileGenerator
             ExtraNumber = report.Employment.ExtraNumber;
             ReimbursementDistance = report.Distance;
             TFCode = report.TFCode;
+            if ( ! string.IsNullOrWhiteSpace(report.AccountNumber) )
+            {
+                Account = report.AccountNumber;
+            }
+            else if (IsAdministrativeWorker)
+            {
+                Account = getSetting("PROTECTED_AdministrativeAccount");
+            }
         }
 
         public new string ToString()
@@ -36,15 +47,24 @@ namespace Core.ApplicationServices.FileGenerator
 
             var builder = new StringBuilder();
 
-            builder.Append(getSetting("PROTECTED_KMDStaticNr"));               //KMD statisk identifier
-            builder.Append(getSetting("PROTECTED_CommuneNr"));                 //Syddjurs' KommuneNr.
-            builder.Append(EmploymentType);                        //Ansættelsesform (0,1,3)
-            builder.Append(CprNr);                              //CPR Nr.
-            builder.Append(ExtraNumber);                    //Ekstra ciffer (0,1,2,3 nn)
-            builder.Append(TFCode);                              //TF Kode
+            builder.Append(getSetting("PROTECTED_KMDStaticNr"));        //KMD statisk identifier
+            builder.Append(getSetting("PROTECTED_CommuneNr"));          //Syddjurs' KommuneNr.
+            builder.Append(EmploymentType);                             //Ansættelsesform (0,1,3)
+            builder.Append(CprNr);                                      //CPR Nr.
+            builder.Append(ExtraNumber);                                //Ekstra ciffer (0,1,2,3 nn)
+            builder.Append(TFCode);                                     //TF Kode
             builder.Append(DistanceStringBuilder(distance.ToString())); //Kørte Km
-            builder.Append(getSetting("PROTECTED_KMDReservedNr"));             //KMD reserverede pladser
-            builder.Append("             ");                            //13 whitespaces
+            builder.Append(getSetting("PROTECTED_KMDReservedNr"));      //KMD reserverede pladser
+
+            if ( string.IsNullOrWhiteSpace(Account) )
+            {
+                builder.Append("   ");                                  //3 spaces
+                builder.Append(Account);                                //Account, either administrative or other account chosend when the report was approved
+            } 
+            else 
+            {
+                builder.Append("             ");                        //13 whitespaces
+            }
             builder.Append(date);                                       //Dato
 
             return builder.ToString();
@@ -57,7 +77,7 @@ namespace Core.ApplicationServices.FileGenerator
 
             distance = distance.Replace('.', ',');
 
-            if (distance.Contains(","))
+             if (distance.Contains(","))
             {
                 var index = distance.IndexOf(",");
 
