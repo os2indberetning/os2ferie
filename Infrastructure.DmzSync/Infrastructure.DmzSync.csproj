@@ -58,6 +58,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Impl\DriveReportSyncService.cs" />
+    <Compile Include="Services\Impl\RateSyncService.cs" />
     <Compile Include="Services\Impl\PersonSyncService.cs" />
     <Compile Include="Services\Impl\TokenSyncService.cs" />
     <Compile Include="Services\Interface\ISyncService.cs" />

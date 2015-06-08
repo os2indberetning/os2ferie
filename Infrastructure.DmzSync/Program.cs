@@ -40,6 +40,9 @@ namespace Infrastructure.DmzSync
             var driveSync = new DriveReportSyncService(new GenericDmzRepository<DriveReport>(new DmzContext()),
                new GenericRepository<Core.DomainModel.DriveReport>(new DataContext()),new GenericRepository<Rate>(new DataContext()),new GenericRepository<LicensePlate>(new DataContext()), NinjectWebKernel.CreateKernel().Get<IDriveReportService>(), NinjectWebKernel.CreateKernel().Get<IRoute<RouteInformation>>(), NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>());
 
+            var rateSync = new RateSyncService(new GenericDmzRepository<Core.DmzModel.Rate>(new DmzContext()),
+                new GenericRepository<Rate>(new DataContext()));
+
             Console.WriteLine("TokenSyncFromDmz");
             tokenSync.SyncFromDmz();
 
@@ -55,11 +58,17 @@ namespace Infrastructure.DmzSync
             Console.WriteLine("DriveReportClearDmz");
             driveSync.ClearDmz();
 
+            Console.WriteLine("RateClearDmz");
+            rateSync.ClearDmz();
+
             Console.WriteLine("PersonSyncToDmz");
             personSync.SyncToDmz();
 
             Console.WriteLine("TokenSyncToDmz");
             tokenSync.SyncToDmz();
+
+            Console.WriteLine("RateSyncToDmz");
+            rateSync.SyncToDmz();
 
             Console.WriteLine("Done");
 
