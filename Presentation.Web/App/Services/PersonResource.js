@@ -63,7 +63,7 @@
             }
         },
         "GetCurrentUser" : {
-            url: "/odata/Person/Service.GetCurrentUser?$expand=Employments($expand=AlternativeWorkAddress,OrgUnit($expand=Address))",
+            url: "/odata/Person/Service.GetCurrentUser?$select=Id,IsSubstitute,RecieveMail,IsAdmin,FullName,Mail,DistanceFromHomeToBorder &$expand=Employments($select=Id,HomeWorkDistance,Position,WorkDistanceOverride,AlternativeWorkAddressId;$expand=AlternativeWorkAddress;$expand=OrgUnit($select=Id,LongDescription,HasAccessToFourKmRule;$expand=Address))",
             method: "GET",
             transformResponse: function (data) {
                 var res = angular.fromJson(data);

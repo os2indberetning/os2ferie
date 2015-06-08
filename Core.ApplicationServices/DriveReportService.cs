@@ -47,6 +47,11 @@ namespace Core.ApplicationServices
             _driveReportRepository = driveReportRepository;
         }
 
+        /// <summary>
+        /// Validates report and creates it in the database if it validates.
+        /// </summary>
+        /// <param name="report">Report to be created.</param>
+        /// <returns>Created report.</returns>
         public DriveReport Create(DriveReport report)
         {
             if (report.PersonId == 0)
@@ -122,6 +127,11 @@ namespace Core.ApplicationServices
             return report;
         }
 
+        /// <summary>
+        /// Validates report.
+        /// </summary>
+        /// <param name="report">Report to be validated.</param>
+        /// <returns>True or false</returns>
         public bool Validate(DriveReport report)
         {
             if (report.KilometerAllowance == KilometerAllowance.Read && report.Distance <= 0)
@@ -139,6 +149,12 @@ namespace Core.ApplicationServices
             return true;
         }
 
+        /// <summary>
+        /// Is called from DriveReport Patch.
+        /// Sends email to the user associated with the report identified by key, if his/her report has been rejected.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
         public void SendMailIfRejectedReport(int key, Delta<DriveReport> delta)
         {
             var status = new object();
@@ -167,6 +183,11 @@ namespace Core.ApplicationServices
             }
         }
 
+        /// <summary>
+        /// Gets the Responsible Leader and sets it for each of the reports in repo.
+        /// </summary>
+        /// <param name="repo"></param>
+        /// <returns>DriveReports with ResponsibleLeader attached</returns>
         public IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> repo)
         {
             var res = repo.ToList();
@@ -194,6 +215,11 @@ namespace Core.ApplicationServices
             return res.AsQueryable();
         }
 
+        /// <summary>
+        /// Gets the ResponsibleLeader for driveReport
+        /// </summary>
+        /// <param name="driveReport"></param>
+        /// <returns>DriveReport with ResponsibleLeader attached</returns>
         public Person GetResponsibleLeaderForReport(DriveReport driveReport)
         {
             var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
@@ -246,11 +272,23 @@ namespace Core.ApplicationServices
             return sub != null ? sub.Sub : leaderOfOrgUnit.Person;
         }
 
+        /// <summary>
+        /// Sets Person as ResponsibleLeader on driveReport.
+        /// </summary>
+        /// <param name="driveReport"></param>
+        /// <param name="person"></param>
         private void SetResponsibleLeaderOnReport(DriveReport driveReport, Person person)
         {
             driveReport.ResponsibleLeader = person;
         }
 
+        /// <summary>
+        /// Filters the reports in repo by leaderId and getReportsWhereSubExists.
+        /// </summary>
+        /// <param name="repo">Reports to be filtered.</param>
+        /// <param name="leaderId">Id of leader to filter for</param>
+        /// <param name="getReportsWhereSubExists">Includes reports where a substitute exists if true</param>
+        /// <returns>Filtered list of DriveReports</returns>
         public IQueryable<DriveReport> FilterByLeader(IQueryable<DriveReport> repo, int leaderId, bool getReportsWhereSubExists = false)
         {
             var result = new List<DriveReport>();
@@ -309,6 +347,12 @@ namespace Core.ApplicationServices
             return result.AsQueryable();
         }
 
+        /// <summary>
+        /// Adds reports belonging to non leaders of the OrgUnit identified by orgUnitId and reports belonging to leaders of child orgs to driveReportList.
+        /// </summary>
+        /// <param name="repo"></param>
+        /// <param name="orgUnitId"></param>
+        /// <param name="driveReportList"></param>
         private void AddReportsOfOrgAndChildOrgLeaders(IQueryable<DriveReport> repo, int orgUnitId, List<DriveReport> driveReportList)
         {
             //The reports for the leaders of the child org units should also be approved

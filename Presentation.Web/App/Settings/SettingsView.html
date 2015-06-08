@@ -10,14 +10,14 @@
         <div class="row setting-area">
             <div class="col-lg-12">
                 <div class="form-group form-inline">
-                    <h3>Diverse</h3>
+                    <h3>Registreringsnumre</h3>
 
                     <label for="">Registreringsnummer på egen eller ægtefælles bil</label>
                     <div></div>
                     <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlate" kendo-auto-complete k-placeholder="'AB 12 345'" />
                     <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlateDescription" kendo-auto-complete k-placeholder="'Beskrivelse'" />
                     <button type="submit" class="btn btn-primary" ng-click="saveNewLicensePlate()">Tilføj</button>
-                    <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed"><span ng-if="isCollapsed">Anvendte registreringsnumre</span> <span ng-if="!isCollapsed">Skjul anvendte registreringsnumre</span></button>
+                    <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed"><span ng-if="isCollapsed">Vis anvendte registreringsnumre</span> <span ng-if="!isCollapsed">Skjul anvendte registreringsnumre</span></button>
                     <div collapse="isCollapsed">
                         <div class="well well-lg">
                             <div class="row margin-5">
@@ -53,6 +53,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="seperator"></div>
                 </div>
             </div>
@@ -68,22 +69,22 @@
                         </div>
 
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-xs-7">
 
-                            <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+                            <input type="text" kendo-auto-complete ng-change="homeAddressChanged()" k-data-text-field="'tekst'" k-data-value-field="'tekst'"
                                    k-data-source="SmartAddress" ng-model="alternativeHomeAddress.string" class="fill-width" k-placeholder="'Skriv her'" />
 
                         </div>
                         <div class="col-xs-2">
-                          
+
                         </div>
-                        <div class="col-xs-1 pull-right margin-right-20">
+                        <div class="col-xs-1 pull-left margin-right-20">
                             <button ng-click="saveAlternativeHomeAddress()" class="btn btn-success">Gem</button>
                         </div>
 
-                        <div class="col-xs-1 pull-right margin-right-5">
+                        <div class="col-xs-1 pull-left margin-right-5">
                             <button ng-click="clearHomeClicked()" class="btn btn-danger">Nulstil</button>
                         </div>
 
@@ -96,7 +97,7 @@
                 <div ng-include="'App/Settings/AlternativeWorkAddressTemplate.html'"></div>
             </div>
         </div>
-        
+
         <div class="row setting-area">
             <div class="col-lg-12">
                 <div class="form-group form-inline">
@@ -170,15 +171,15 @@
                 </div>
             </div>
         </div>
-        <div ng-if="showMailNotification" class="row setting-area">
+        <div class="row setting-area">
             <div class="col-lg-12">
                 <div class="form-group form-inline">
                     <h3>Mailadviseringer</h3>
                     <label for="">Send mig mailadviseringer om indberetninger til godkendelse:</label>
                     <div class="seperator"></div>
                     <div class="btn-group">
-                        <label class="btn btn-success" ng-click="invertRecieveMail()" ng-model="mailAdvice" btn-radio="'Yes'">Ja tak</label>
-                        <label class="btn btn-danger" ng-click="invertRecieveMail()" ng-model="mailAdvice" btn-radio="'No'">Nej tak</label>
+                        <label class="btn btn-success" ng-class="mailAdvice == 'No' ? 'opaque' : ''" ng-click="invertRecieveMail()" ng-model="mailAdvice" btn-radio="'Yes'">Ja tak</label>
+                        <label class="btn btn-danger" ng-class="mailAdvice == 'Yes' ? 'opaque' : ''" ng-click=" invertRecieveMail()" ng-model="mailAdvice" btn-radio="'No'">Nej tak</label>
                     </div>
                 </div>
             </div>

@@ -24,6 +24,9 @@ namespace Infrastructure.DmzSync.Services.Impl
             _masterTokenRepo = masterTokenRepo;
         }
 
+        /// <summary>
+        /// Syncs all MobileTokens from DMZ database to OS2 database.
+        /// </summary>
         public void SyncFromDmz()
         {
             var i = 0;
@@ -41,6 +44,10 @@ namespace Infrastructure.DmzSync.Services.Impl
 
 
         // Dont run this method before syncing people.
+        /// <summary>
+        /// Syncs all MobileTokens from OS2 database to DMZ database.
+        /// Do not run this before having synced people.
+        /// </summary>
         public void SyncToDmz()
         {
             var i = 0;
@@ -63,6 +70,9 @@ namespace Infrastructure.DmzSync.Services.Impl
             _dmzTokenRepo.Save();
         }
 
+        /// <summary>
+        /// Clears all MobileTokens in DMZ database.
+        /// </summary>
         public void ClearDmz()
         {
             var list = _dmzTokenRepo.AsQueryable().ToList();

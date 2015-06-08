@@ -14,6 +14,10 @@ namespace DBUpdater
     {
         private readonly string _connectionString = ConfigurationManager.ConnectionStrings["DBUpdaterConnection"].ConnectionString;
 
+        /// <summary>
+        /// Reads employees from Kommune database and returns them asqueryable.
+        /// </summary>
+        /// <returns></returns>
         public IQueryable<Employee> GetEmployeesAsQueryable()
         {
             var result = new List<Employee>();
@@ -64,6 +68,10 @@ namespace DBUpdater
             return result.AsQueryable();
         }
 
+        /// <summary>
+        /// Read Organisations from Kommune database and returns them asQueryably.
+        /// </summary>
+        /// <returns></returns>
         public IQueryable<Organisation> GetOrganisationsAsQueryable()
         {
             var result = new List<Organisation>();

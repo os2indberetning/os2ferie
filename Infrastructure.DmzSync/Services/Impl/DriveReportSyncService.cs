@@ -40,6 +40,9 @@ namespace Infrastructure.DmzSync.Services.Impl
             _coordinates = coordinates;
         }
 
+        /// <summary>
+        /// Synchronizes all DriveReports from DMZ to OS2 database.
+        /// </summary>
         public void SyncFromDmz()
         {
             var i = 0;
@@ -105,12 +108,18 @@ namespace Infrastructure.DmzSync.Services.Impl
             }
         }
 
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
         public void SyncToDmz()
         {
             // We are not interested in syncing reports from OS2 to DMZ.
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Clears all DriveReports from DMZ database.
+        /// </summary>
         public void ClearDmz()
         {
             var i = 0;

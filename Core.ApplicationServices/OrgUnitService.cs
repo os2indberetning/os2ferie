@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 

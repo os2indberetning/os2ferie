@@ -15,11 +15,18 @@
             mask: "LL-0000000000-00000"
         }
 
-        $scope.accountTypeChanged = function() {
+        $scope.accountTypeChanged = function () {
+            /// <summary>
+            /// Clears the accountnumber field when account type is changed
+            /// </summary>
             $scope.newAccountAccountNumber = "";
         }
 
+        
         $scope.loadAccounts = function () {
+            /// <summary>
+            /// Loads BankAccounts from BackEnd to the Kendo Grid datasource
+            /// </summary>
             $scope.accounts = {
                 dataSource: {
                     type: "odata",
@@ -94,12 +101,18 @@
         }
 
         $scope.updateAccountGrid = function () {
+            /// <summary>
+            /// Refreshes the BankAccount grid
+            /// </summary>
             $scope.container.accountGrid.dataSource.read();
         }
 
         $scope.loadAccounts();
 
         $scope.addNewAccountClick = function () {
+            /// <summary>
+            /// Post new BankAccount to Backend
+            /// </summary>
             $scope.accountNumberErrorMessage = "";
             $scope.accountDescriptionErrorMessage = "";
             var error = false;
@@ -125,6 +138,10 @@
         }
 
         $scope.deleteAccountClick = function (id) {
+            /// <summary>
+            /// Sends DELETE request to backend
+            /// </summary>
+            /// <param name="id">Identifies BankAccount to be deleted</param>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Admin/HTML/Account/ConfirmDeleteAccountTemplate.html',
                 controller: 'DeleteAccountController',

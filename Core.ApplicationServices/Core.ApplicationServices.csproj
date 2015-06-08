@@ -108,7 +108,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IOrgUnitService.cs" />
+    <Compile Include="Interfaces\IOrgUnitService.cs" />
     <Compile Include="OrgUnitService.cs" />
     <Compile Include="PersonalRouteService.cs" />
     <Compile Include="FileGenerator\FileRecord.cs" />

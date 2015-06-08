@@ -30,6 +30,17 @@ namespace OS2Indberetning.Controllers
         }
 
         // GET: odata/DriveReports
+        /// <summary>
+        /// ODATA GET API endpoint for drivereports.
+        /// Converts string status to a ReportStatus enum and filters by it.
+        /// Filters reports by leaderId and returns reports which that leader is responsible for approving.
+        /// Does not return reports for which there is a substitute, unless getReportsWhereSubExists is true.
+        /// </summary>
+        /// <param name="queryOptions"></param>
+        /// <param name="status"></param>
+        /// <param name="leaderId"></param>
+        /// <param name="getReportsWhereSubExists"></param>
+        /// <returns>DriveReports</returns>
         [EnableQuery]
         public IHttpActionResult Get(ODataQueryOptions<DriveReport> queryOptions, string status = "", int leaderId = 0, bool getReportsWhereSubExists = false)
         {
@@ -64,6 +75,12 @@ namespace OS2Indberetning.Controllers
         }
 
         //GET: odata/DriveReports(5)
+        /// <summary>
+        /// ODATA API endpoint for a single drivereport.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="queryOptions"></param>
+        /// <returns>A single DriveReport</returns>
         public IHttpActionResult GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
             var res = _driveService.AttachResponsibleLeader(GetQueryable(key, queryOptions));
@@ -72,12 +89,24 @@ namespace OS2Indberetning.Controllers
         }
 
         // PUT: odata/DriveReports(5)
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         public new IHttpActionResult Put([FromODataUri] int key, Delta<DriveReport> delta)
         {
             return base.Put(key, delta);
         }
 
         // POST: odata/DriveReports
+        /// <summary>
+        /// ODATA POST api endpoint for drivereports.
+        /// Returns forbidden if the user associated with the posted report is not the current user.
+        /// </summary>
+        /// <param name="driveReport"></param>
+        /// <returns>The posted report.</returns>
         [EnableQuery]
         public new IHttpActionResult Post(DriveReport driveReport)
         {
@@ -92,6 +121,14 @@ namespace OS2Indberetning.Controllers
         }
 
         // PATCH: odata/DriveReports(5)
+        /// <summary>
+        /// PATCH API endpoint for drivereports.
+        /// Returns forbidden if a user is trying to patch his/her own report or if the user is not the responsible leader for the report.
+        /// Also returns forbidden if the report to be patched has a status other than pending.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="delta"></param>
+        /// <returns></returns>
         [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
         public new IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
@@ -139,6 +176,12 @@ namespace OS2Indberetning.Controllers
         }
 
         // DELETE: odata/DriveReports(5)
+        /// <summary>
+        /// DELETE API endpoint for drivereports.
+        /// Deletes the report identified by key if the current user is the owner of the report or is an admin.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
             if (CurrentUser.IsAdmin)

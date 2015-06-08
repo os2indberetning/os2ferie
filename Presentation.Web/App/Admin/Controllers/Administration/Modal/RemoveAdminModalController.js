@@ -6,11 +6,17 @@
 
         var resPerson = { Id: Id, FullName: FullName };
 
-       $scope.confirmRemoveAdmin = function () {
+        $scope.confirmRemoveAdmin = function () {
+            /// <summary>
+            /// Confirm remove admin
+            /// </summary>
            $modalInstance.close(resPerson);
        }
 
-       $scope.cancelRemoveAdmin = function () {
+        $scope.cancelRemoveAdmin = function () {
+            /// <summary>
+            /// Cancel remove admin
+            /// </summary>
            $modalInstance.dismiss('cancel');
        }
 

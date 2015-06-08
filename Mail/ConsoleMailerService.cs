@@ -29,6 +29,9 @@ namespace Mail
             Logger.Info("MailService startet.");
         }
 
+        /// <summary>
+        /// Checks if there are any mail notifications scheduled for now. If there is mails will be sent. Otherwise nothing happens.
+        /// </summary>
         public void RunMailService()
         {
             var startOfDay = ToUnixTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 00, 00, 00));
@@ -68,7 +71,11 @@ namespace Mail
 
         
             
-
+        /// <summary>
+        /// Attempts to send mails to leaders with pending reports to be approved.
+        /// </summary>
+        /// <param name="service">IMailService to use for sending mails.</param>
+        /// <param name="timesToAttempt">Number of times to attempt to send emails.</param>
         public void AttemptSendMails(IMailService service, int timesToAttempt)
         {
             if (timesToAttempt > 0)
@@ -93,12 +100,22 @@ namespace Mail
             }
         }
 
+        /// <summary>
+        /// Converts DateTime to timestamp
+        /// </summary>
+        /// <param name="date">DateTime to convert</param>
+        /// <returns>long timestamp</returns>
         public long ToUnixTime(DateTime date)
         {
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return Convert.ToInt64((date - epoch).TotalSeconds);
         }
 
+        /// <summary>
+        /// Converts timestamp to datetime
+        /// </summary>
+        /// <param name="unixTime">Timestamp to convert</param>
+        /// <returns>DateTime</returns>
         public DateTime FromUnixTime(long unixTime)
         {
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
