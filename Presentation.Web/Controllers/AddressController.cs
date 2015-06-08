@@ -178,7 +178,7 @@ namespace OS2Indberetning.Controllers
 
             var rep = Repo.AsQueryable();
             // Select all addresses that arent points in a route, cachedAddress, workAddress or drivereportpoints in a drivereport.
-            var temp = rep.Where(elem => !(elem is DriveReportPoint || elem is Point ||elem is CachedAddress || elem is WorkAddress));
+            var temp = rep.Where(elem => !(elem is DriveReportPoint || elem is Point ||elem is CachedAddress || elem is WorkAddress)).ToList();
             var res = new List<Address>();
 
             // Add all addresses that are personaladdresses which belong to the current user.
@@ -205,7 +205,7 @@ namespace OS2Indberetning.Controllers
                 res.Add(tempAddr);
             }
 
-
+            
 
             return Ok(res.AsQueryable());
         }
