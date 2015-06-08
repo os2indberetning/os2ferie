@@ -20,6 +20,10 @@ namespace Infrastructure.DmzSync.Encryption
 
         public static string Encrypt(string plainText, string passPhrase)
         {
+            if (plainText == null)
+            {
+                return null;
+            }
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
             using (PasswordDeriveBytes password = new PasswordDeriveBytes(passPhrase, null))
             {
@@ -46,6 +50,10 @@ namespace Infrastructure.DmzSync.Encryption
 
         public static string Decrypt(string cipherText, string passPhrase)
         {
+            if (cipherText == null)
+            {
+                return null;
+            }
             byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
             using (PasswordDeriveBytes password = new PasswordDeriveBytes(passPhrase, null))
             {

@@ -45,18 +45,19 @@ namespace Infrastructure.DmzSync.Services.Impl
         /// </summary>
         public void SyncFromDmz()
         {
-            var i = 0;
             var reports = _dmzDriveReportRepo.AsQueryable().ToList();
             var max = reports.Count;
 
-            foreach (var report in reports)
-            {
-                i++;
-                Console.WriteLine("Syncing report " + i + " of " + max + " from DMZ.");
-                var rate = _rateRepo.AsQueryable().First(x => x.Id.Equals(report.RateId));
-                var points = new List<DriveReportPoint>();
-                foreach (var gpsCoord in report.Route.GPSCoordinates)
+                for ( var i = 0; i < max; i++ )
                 {
+                var dmzReport = reports[i];
+                Console.WriteLine("Syncing report " + i + " of " + max + " from DMZ.");
+                var rate = _rateRepo.AsQueryable().First(x => x.Id.Equals(dmzReport.RateId));
+                var points = new List<DriveReportPoint>();
+                for ( var j = 0; j < dmzReport.Route.GPSCoordinates.Count; j++)
+                {
+                    var gpsCoord = dmzReport.Route.GPSCoordinates.ToArray()[j];
+                    gpsCoord = Encryptor.DecryptGPSCoordinate(gpsCoord);
                     var address = _coordinates.GetAddressFromCoordinates(new Address()
                     {
                         Latitude = gpsCoord.Latitude,
@@ -78,23 +79,23 @@ namespace Infrastructure.DmzSync.Services.Impl
                 {
                     
                     IsFromApp = true,
-                    Distance = report.Route.TotalDistance,
+                    Distance = dmzReport.Route.TotalDistance,
                     KilometerAllowance = KilometerAllowance.Read,
                     // Date might not be correct. Depends which culture is delivered from app. 
                     // https://msdn.microsoft.com/en-us/library/cc165448.aspx
-                    DriveDateTimestamp = (Int32)(Convert.ToDateTime(report.Date).Subtract(new DateTime(1970, 1, 1)).TotalSeconds),
-                    CreatedDateTimestamp = (Int32)(Convert.ToDateTime(report.Date).Subtract(new DateTime(1970, 1, 1)).TotalSeconds),
-                    StartsAtHome = report.StartsAtHome,
-                    EndsAtHome = report.EndsAtHome,
-                    Purpose = report.Purpose,
-                    PersonId = report.ProfileId,
-                    EmploymentId = report.EmploymentId,
+                    DriveDateTimestamp = (Int32)(Convert.ToDateTime(dmzReport.Date).Subtract(new DateTime(1970, 1, 1)).TotalSeconds),
+                    CreatedDateTimestamp = (Int32)(Convert.ToDateTime(dmzReport.Date).Subtract(new DateTime(1970, 1, 1)).TotalSeconds),
+                    StartsAtHome = dmzReport.StartsAtHome,
+                    EndsAtHome = dmzReport.EndsAtHome,
+                    Purpose = dmzReport.Purpose,
+                    PersonId = dmzReport.ProfileId,
+                    EmploymentId = dmzReport.EmploymentId,
                     KmRate = rate.KmRate,
                     TFCode = rate.Type.TFCode,
-                    UserComment = report.ManualEntryRemark,
+                    UserComment = dmzReport.ManualEntryRemark,
                     Status = ReportStatus.Pending,
-                    FullName = report.Profile.FullName,
-                    LicensePlate = _licensePlateRepo.AsQueryable().First(x => x.PersonId.Equals(report.ProfileId) && x.IsPrimary).Plate,
+                    FullName = dmzReport.Profile.FullName,
+                    LicensePlate = _licensePlateRepo.AsQueryable().First(x => x.PersonId.Equals(dmzReport.ProfileId) && x.IsPrimary).Plate,
                     Comment = "",
                 };
 

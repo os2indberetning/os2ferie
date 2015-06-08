@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
+using Infrastructure.DmzSync.Encryption;
 using Infrastructure.DmzSync.Services.Impl;
 using Infrastructure.DmzSync.Services.Interface;
 using NSubstitute;
@@ -37,7 +38,7 @@ namespace DmzSync.Test
             _dmzTokenList.Add(new Token()
             {
                 Id = 7,
-                GuId = new Guid().ToString(),
+                GuId = Guid.NewGuid().ToString(),
                 Status = 1,
                 ProfileId = 1,
                 TokenString = "1234",
@@ -45,7 +46,7 @@ namespace DmzSync.Test
             _dmzTokenList.Add(new Token()
             {
                 Id = 8,
-                GuId = new Guid().ToString(),
+                GuId = Guid.NewGuid().ToString(),
                 Status = 1,
                 ProfileId = 3,
                 TokenString = "1234",
@@ -90,6 +91,10 @@ namespace DmzSync.Test
 
             _masterRepoMock.AsQueryable().ReturnsForAnyArgs(_masterTokenList.AsQueryable());
 
+            for (int i = 0; i < _dmzTokenList.Count; i++)
+            {
+                Encryptor.EncryptToken(_dmzTokenList.ToArray()[i]);
+            }
 
             _uut = new TokenSyncService(_dmzRepoMock,_masterRepoMock);
         }

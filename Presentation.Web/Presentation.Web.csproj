@@ -395,6 +395,9 @@
     <Content Include="App\Settings\RouteDeleteModal.html" />
     <Content Include="App\Settings\RouteAddModal.html" />
     <Content Include="App\Settings\Substitutes\SubstituteController.js" />
+    <Content Include="Content\Bootstrap\loading-image.gif" />
+    <Content Include="Content\Bootstrap\loading.gif" />
+    <Content Include="Content\Bootstrap\sprite.png" />
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\kendo\Black\editor.png" />
     <Content Include="Content\kendo\Black\imagebrowser.png" />

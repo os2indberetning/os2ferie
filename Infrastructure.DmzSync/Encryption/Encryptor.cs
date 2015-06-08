@@ -9,7 +9,7 @@ namespace Infrastructure.DmzSync.Encryption
 {
     public static class Encryptor
     {
-        private const string EncryptKey = "testpasswordkey";
+        public const string EncryptKey = "testpasswordkey";
 
         public static Profile EncryptProfile(Profile profile)
         {
@@ -17,6 +17,7 @@ namespace Infrastructure.DmzSync.Encryption
             profile.LastName = StringCipher.Encrypt(profile.LastName, EncryptKey);
             profile.HomeLatitude = StringCipher.Encrypt(profile.HomeLatitude, EncryptKey);
             profile.HomeLongitude = StringCipher.Encrypt(profile.HomeLongitude, EncryptKey);
+            profile.FullName = StringCipher.Encrypt(profile.FullName, EncryptKey);
             return profile;
         }
 

@@ -47,7 +47,7 @@ namespace Infrastructure.DmzSync.Services.Impl
             var personList = _masterPersonRepo.AsQueryable().ToList();
             var max = personList.Count;
 
-            foreach (var person in personList)
+            foreach (var person in personList)  
             {
                 i++;
                 if (i%10 == 0)
@@ -55,20 +55,20 @@ namespace Infrastructure.DmzSync.Services.Impl
                     Console.WriteLine("Syncing person " + i + " of " + max);
                 }
 
-                
-
                 var homeAddress = _personService.GetHomeAddress(person);
 
-                _dmzProfileRepo.Insert(new Profile
-                {
-                    Id = person.Id,
-                    FirstName = person.FirstName,
-                    LastName = person.LastName,
-                    HomeLatitude = homeAddress !=  null ? homeAddress.Latitude : "0",
-                    HomeLongitude = homeAddress != null ? homeAddress.Longitude : "0",
-                    Initials = person.Initials,
-                    FullName = person.FullName,
-                });
+                var profile = new Profile
+                    {
+                        Id = person.Id,
+                        FirstName = person.FirstName,
+                        LastName = person.LastName,
+                        HomeLatitude = homeAddress != null ? homeAddress.Latitude : "0",
+                        HomeLongitude = homeAddress != null ? homeAddress.Longitude : "0",
+                        Initials = person.Initials,
+                        FullName = person.FullName,
+                    };
+                profile = Encryptor.EncryptProfile(profile);
+                _dmzProfileRepo.Insert(profile); 
             }
              _dmzProfileRepo.Save();
             SyncEmployments();
@@ -95,14 +95,16 @@ namespace Infrastructure.DmzSync.Services.Impl
                 var employments = new List<Employment>();
 
                 // Migrate list of employees as the model is not the same in DMZ and OS2.
-                foreach (var employment in person.Employments)
+                foreach (var masterEmployment in person.Employments)
                 {
-                    employments.Add(new Employment
+                    var dmzEmployment = new Employment 
                     {
-                        Id = employment.Id,
-                        ProfileId = employment.PersonId,
-                        EmploymentPosition = employment.Position + " - " + employment.OrgUnit.LongDescription,
-                    });
+                        Id = masterEmployment.Id,
+                        ProfileId = masterEmployment.PersonId,
+                        EmploymentPosition = masterEmployment.Position + " - " + masterEmployment.OrgUnit.LongDescription,
+                    };
+                    dmzEmployment = Encryptor.EncryptEmployment(dmzEmployment);
+                    employments.Add(dmzEmployment);
                 }
                 var pers = _dmzProfileRepo.AsQueryable().First(x => x.Id == person.Id);
                 pers.Employments = employments;

@@ -29,14 +29,14 @@ namespace Infrastructure.DmzSync.Services.Impl
         /// </summary>
         public void SyncFromDmz()
         {
-            var i = 0;
             var tokens = _dmzTokenRepo.AsQueryable().ToList();
             var max = tokens.Count;
 
-            foreach (var token in tokens)
-            {
-                i++;
+            for (var i = 0; i < max; i++)
+            { 
                 Console.WriteLine("Syncing token " + i + " of " + max + " from DMZ.");
+                var token = tokens[i];
+                token = Encryptor.DecryptToken(token);
                 _masterTokenRepo.AsQueryable().First(x => x.Guid.Equals(new Guid(token.GuId))).Status = (MobileTokenStatus) token.Status;
                 _masterTokenRepo.Save();
             }
@@ -50,22 +50,23 @@ namespace Infrastructure.DmzSync.Services.Impl
         /// </summary>
         public void SyncToDmz()
         {
-            var i = 0;
             var tokens = _masterTokenRepo.AsQueryable().ToList();
             var max = tokens.Count;
 
-            foreach (var token in tokens)
-            {
-                i++;
+            for (var i = 0; i < max; i++)
+            { //Encrypt token before insert
                 Console.WriteLine("Syncing token " + i + " of " + max + " to DMZ.");
-                _dmzTokenRepo.Insert(new Token
+                var masterToken = tokens[i];
+                var dmzToken = new Token
                 {
-                    Id = token.Id,
-                    Status = (int)token.Status,
-                    GuId = token.Guid.ToString(),
-                    TokenString = token.Token,
-                    ProfileId = token.PersonId,
-                });
+                    Id = masterToken.Id,
+                    Status = (int)masterToken.Status,
+                    GuId = masterToken.Guid.ToString(),
+                    TokenString = masterToken.Token,
+                    ProfileId = masterToken.PersonId,
+                };
+                dmzToken = Encryptor.EncryptToken(dmzToken);
+                _dmzTokenRepo.Insert(dmzToken);
             }
             _dmzTokenRepo.Save();
         }
