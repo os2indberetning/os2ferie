@@ -43,9 +43,7 @@
         }
 
         //Load licenseplates
-        LicensePlate.get({ id: personId }, function (data) {
-            $scope.licenseplates = data;
-        });
+        $scope.licenseplates = $rootScope.CurrentUser.LicensePlates;
 
         //Funtionalitet til opslag af adresser
         $scope.SmartAddress = SmartAdresseSource;
