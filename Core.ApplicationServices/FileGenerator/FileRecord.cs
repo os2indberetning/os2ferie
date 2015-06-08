@@ -29,7 +29,7 @@ namespace Core.ApplicationServices.FileGenerator
             ExtraNumber = report.Employment.ExtraNumber;
             ReimbursementDistance = report.Distance;
             TFCode = report.TFCode;
-            if ( ! string.IsNullOrWhiteSpace(report.AccountNumber) )
+            if ( ! string.IsNullOrWhiteSpace(report.AccountNumber) && report.AccountNumber.Length == 10)
             {
                 Account = report.AccountNumber;
             }
@@ -56,7 +56,7 @@ namespace Core.ApplicationServices.FileGenerator
             builder.Append(DistanceStringBuilder(distance.ToString())); //Kørte Km
             builder.Append(getSetting("PROTECTED_KMDReservedNr"));      //KMD reserverede pladser
 
-            if ( string.IsNullOrWhiteSpace(Account) )
+            if ( ! string.IsNullOrWhiteSpace(Account) && Account.Length == 10)
             {
                 builder.Append("   ");                                  //3 spaces
                 builder.Append(Account);                                //Account, either administrative or other account chosend when the report was approved
