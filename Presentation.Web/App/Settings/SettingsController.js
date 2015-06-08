@@ -16,20 +16,17 @@
         $scope.tokenIsCollapsed = true;
         $scope.newTokenDescription = "";
 
-        HelpText.get({ id: "MobileTokenHelpText" }).$promise.then(function (res) {
-            $scope.mobileTokenHelpText = res.text;
+        HelpText.getAll().$promise.then(function(res) {
+            $scope.mobileTokenHelpText = res.MobileTokenHelpText.text;
+            $scope.primaryLicensePlateHelpText = res.PrimaryLicensePlateHelpText.text;
         });
-
-        HelpText.get({ id: "PrimaryLicensePlateHelpText" }).$promise.then(function (res) {
-            $scope.primaryLicensePlateHelpText = res.text;
-        });
-
 
 
         var personId = $rootScope.CurrentUser.Id;
         $scope.currentPerson = $rootScope.CurrentUser;
         
-        $scope.showMailNotification = $rootScope.CurrentUser.IsLeader;
+        $scope.showMailNotification = $rootScope.CurrentUser.IsLeader || $rootScope.CurrentUser.IsSubstitute;
+
         // Used for alternative address template
         $scope.employments = $rootScope.CurrentUser.Employments;
 
