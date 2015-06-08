@@ -5,6 +5,7 @@ using Core.ApplicationServices.Interfaces;
 using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
+using Infrastructure.DmzSync.Encryption;
 using Infrastructure.DmzSync.Services.Impl;
 using Infrastructure.DmzSync.Services.Interface;
 using NSubstitute;
@@ -147,18 +148,18 @@ namespace DmzSync.Test
         public void SyncToDmz_ShouldSetEmploymentsCorrectly()
         {
             _uut.SyncToDmz();
-            Assert.AreEqual("Tester - IT Minds", _dmzProfileList.ElementAt(0).Employments.ElementAt(0).EmploymentPosition);
-            Assert.AreEqual("Tester2 - IT Minds", _dmzProfileList.ElementAt(1).Employments.ElementAt(0).EmploymentPosition);
-            Assert.AreEqual("Tester3 - IT Minds", _dmzProfileList.ElementAt(2).Employments.ElementAt(0).EmploymentPosition);
+            Assert.AreEqual(StringCipher.Encrypt("Tester - IT Minds", Encryptor.EncryptKey), _dmzProfileList.ElementAt(0).Employments.ElementAt(0).EmploymentPosition);
+            Assert.AreEqual(StringCipher.Encrypt("Tester2 - IT Minds", Encryptor.EncryptKey), _dmzProfileList.ElementAt(1).Employments.ElementAt(0).EmploymentPosition);
+            Assert.AreEqual(StringCipher.Encrypt("Tester3 - IT Minds", Encryptor.EncryptKey), _dmzProfileList.ElementAt(2).Employments.ElementAt(0).EmploymentPosition);
         }
 
         [Test]
         public void SyncToDmz_ShouldSetFullNameCorrectly()
         {
             _uut.SyncToDmz();
-            Assert.AreEqual("Test Testesen [TT]", _dmzProfileList.ElementAt(0).FullName);
-            Assert.AreEqual("Lars Testesen [LT]", _dmzProfileList.ElementAt(1).FullName);
-            Assert.AreEqual("Preben Testesen [PT]", _dmzProfileList.ElementAt(2).FullName);
+            Assert.AreEqual(StringCipher.Encrypt("Test Testesen [TT]", Encryptor.EncryptKey), _dmzProfileList.ElementAt(0).FullName);
+            Assert.AreEqual(StringCipher.Encrypt("Lars Testesen [LT]", Encryptor.EncryptKey), _dmzProfileList.ElementAt(1).FullName);
+            Assert.AreEqual(StringCipher.Encrypt("Preben Testesen [PT]", Encryptor.EncryptKey), _dmzProfileList.ElementAt(2).FullName);
 
         }
 

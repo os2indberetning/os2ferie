@@ -6,6 +6,7 @@ using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
+using Infrastructure.DmzSync.Encryption;
 using Infrastructure.DmzSync.Services.Impl;
 using Infrastructure.DmzSync.Services.Interface;
 using NSubstitute;
@@ -116,13 +117,13 @@ namespace DmzSync.Test
                         {
                             new GPSCoordinate()
                             {
-                                Latitude = "1",
-                                Longitude = "1",
+                                Latitude = StringCipher.Encrypt("1", Encryptor.EncryptKey),
+                                Longitude = StringCipher.Encrypt("1", Encryptor.EncryptKey),
                             },
                             new GPSCoordinate()
                             {
-                                Latitude = "2",
-                                Longitude = "2",
+                                Latitude = StringCipher.Encrypt("2", Encryptor.EncryptKey),
+                                Longitude = StringCipher.Encrypt("2", Encryptor.EncryptKey),
                             }
                         }
                     }
@@ -149,13 +150,13 @@ namespace DmzSync.Test
                         {
                             new GPSCoordinate()
                             {
-                                Latitude = "1",
-                                Longitude = "1",
+                                Latitude = StringCipher.Encrypt("1", Encryptor.EncryptKey),
+                                Longitude = StringCipher.Encrypt("1", Encryptor.EncryptKey),
                             },
                             new GPSCoordinate()
                             {
-                                Latitude = "2",
-                                Longitude = "2",
+                                Latitude = StringCipher.Encrypt("2", Encryptor.EncryptKey),
+                                Longitude = StringCipher.Encrypt("2", Encryptor.EncryptKey),
                             }
                         }
                     }
