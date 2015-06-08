@@ -193,7 +193,6 @@
                     });
                 }
             }
-            $scope.validateInput();
         }
 
         // Load all data
@@ -329,7 +328,15 @@
             } else {
                 setIsRoute(index);
             }
-            $scope.validateInput();
+        }
+
+        $scope.clearErrorMessages = function() {
+            $scope.addressSelectionErrorMessage = "";
+            $scope.purposeErrorMessage = "";
+            $scope.fourKmRuleValueErrorMessage = "";
+            $scope.licensePlateErrorMessage = "";
+            $scope.readDistanceErrorMessage = "";
+            $scope.userCommentErrorMessage = "";
         }
 
         $scope.isAddressNameSet = function (address) {
@@ -340,16 +347,21 @@
             return !(address.Personal == "" || address.Personal == $scope.addressDropDownPlaceholderText || address.Personal == undefined);
         }
 
-        var validateAddressInput = function () {
+        var validateAddressInput = function (setError) {
+            setError = typeof setError !== 'undefined' ? setError : true;
             if ($scope.DriveReport.KilometerAllowance == "Read") {
                 return true;
             }
             var res = true;
-            $scope.addressSelectionErrorMessage = "";
+            if (setError === true) {
+                $scope.addressSelectionErrorMessage = "";
+            }
             angular.forEach($scope.DriveReport.Addresses, function (address, key) {
                 if (!$scope.isAddressNameSet(address) && !$scope.isAddressPersonalSet(address)) {
                     res = false;
-                    $scope.addressSelectionErrorMessage = "*  Du skal udfylde alle adressefelter.";
+                    if (setError === true) {
+                        $scope.addressSelectionErrorMessage = "*  Du skal udfylde alle adressefelter.";
+                    }
                 }
             });
             return res;
@@ -426,13 +438,10 @@
             /// Resolves address coordinates and updates map.
             /// </summary>
             /// <param name="index"></param>
-            if (!validateAddressInput() || mapChanging) {
+            if (!validateAddressInput(false) || mapChanging) {
                 return;
             }
 
-
-
-            $scope.validateInput();
             var promises = [];
             var mapArray = [];
 
@@ -539,14 +548,12 @@
 
             // Define validateInput now. Otherwise it gets called from drivingview.html before having loaded resources.
             $scope.validateInput = function () {
-                $timeout(function () {
-                    $scope.canSubmitDriveReport = validateReadInput();
-                    $scope.canSubmitDriveReport &= validateAddressInput();
-                    $scope.canSubmitDriveReport &= validatePurpose();
-                    $scope.canSubmitDriveReport &= validateLicensePlate();
-                    $scope.canSubmitDriveReport &= validateFourKmRule();
-                    $scope.canSubmitDriveReport &= validateDate();
-                });
+                $scope.canSubmitDriveReport = validateReadInput();
+                $scope.canSubmitDriveReport &= validateAddressInput();
+                $scope.canSubmitDriveReport &= validatePurpose();
+                $scope.canSubmitDriveReport &= validateLicensePlate();
+                $scope.canSubmitDriveReport &= validateFourKmRule();
+                $scope.canSubmitDriveReport &= validateDate();
             }
 
             if (!isEditingReport) {
@@ -583,7 +590,7 @@
             $scope.DriveReport.ReadDistance = 0;
             $scope.DriveReport.UserComment = "";
             $scope.DriveReport.Purpose = "";
-            $scope.validateInput();
+            $scope.clearErrorMessages();
             updateDrivenKm();
             $window.scrollTo(0, 0);
             // Timeout to allow the page to scroll to the top before opening datepicker.
@@ -596,7 +603,6 @@
 
         $scope.transportChanged = function (res) {
             $q.all(loadingPromises).then(function () {
-                $scope.validateInput();
                 $scope.showLicensePlate = getKmRate($scope.DriveReport.KmRate).Type.RequiresLicensePlate;
             });
         }
@@ -630,6 +636,7 @@
         }
 
         $scope.Save = function () {
+            $scope.validateInput();
             if (!$scope.canSubmitDriveReport) {
                 return;
             }
@@ -656,8 +663,6 @@
                     $scope.addressInputChanged();
                     break;
             }
-            $scope.validateInput();
-
         }
 
         $scope.employmentChanged = function () {
@@ -668,7 +673,6 @@
                 }
             });
             updateDrivenKm();
-            $scope.validateInput();
         }
 
         var routeStartsAtHome = function () {
