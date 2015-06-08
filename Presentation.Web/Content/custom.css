@@ -38,6 +38,10 @@
     margin-left: 10px;
 }
 
+.errorOutline {
+  border:2px solid red;
+}
+
 .info-popup {
     border-radius: 8px;
     border-style: solid; 
