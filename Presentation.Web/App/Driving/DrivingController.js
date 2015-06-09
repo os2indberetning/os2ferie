@@ -2,7 +2,7 @@
     "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "HelpText", "$window",
     function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, HelpText, $window) {
 
-        var helpTexts = HelpText.getAll().$promise.then(function (res) {
+        HelpText.getAll().$promise.then(function (res) {
             $scope.ReadReportCommentHelp = res.ReadReportCommentHelp.text;
             $scope.PurposeHelpText = res.PurposeHelpText.text;
             $scope.fourKmRuleHelpText = res.FourKmRuleHelpText.text;
@@ -172,7 +172,8 @@
                 $scope.DriveReport.Date = moment.unix(report.DriveDateTimestamp)._d;
 
                 if (report.KilometerAllowance == "Read") {
-                    $scope.DriveReport.ReadDistance = report.Distance.toString().replace(".", ",");
+
+
                     $scope.DriveReport.UserComment = report.UserComment;
                     if (!report.StartsAtHome && !report.EndsAtHome) {
                         $scope.container.StartEndHomeDropDown.select(0);
@@ -185,6 +186,11 @@
                     }
                     $scope.DriveReport.StartsAtHome = report.StartsAtHome;
                     $scope.DriveReport.EndsAtHome = report.EndsAtHome;
+                    updateDrivenKm();
+                    // The distance value saved on a drivereport is the distance after subtracting transport allowance.
+                    // Therefore it is needed to add the transport allowance back on to the distance when editing it.
+                    report.Distance = (report.Distance + $scope.TransportAllowance).toFixed(2);
+                    $scope.DriveReport.ReadDistance = report.Distance.toString().replace(".", ",");
                 } else {
                     $scope.DriveReport.Addresses = [];
                     angular.forEach(report.DriveReportPoints, function (point, key) {
@@ -585,10 +591,7 @@
             }
 
             isFormDirty = false;
-
-            if (!isEditingReport) {
-                setMap($scope.mapStartAddress);
-            }
+            setMap($scope.mapStartAddress);
 
             setNotRoute();
 
@@ -736,7 +739,7 @@
 
             var longDiff = Math.abs(Number(long1) - Number(long2));
             var latDiff = Math.abs(Number(lat1) - Number(lat2));
-            return longDiff < 0.0001 && latDiff < 0.001; //Fourth decimal is ~10 meters
+            return longDiff < 0.001 && latDiff < 0.001; //Third decimal is ~100 meters
         }
 
         $scope.startEndHomeChanged = function () {
