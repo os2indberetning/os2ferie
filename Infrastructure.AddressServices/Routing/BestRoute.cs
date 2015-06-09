@@ -28,7 +28,7 @@ namespace Infrastructure.AddressServices.Routing
         /// <returns></returns>
         public RouteInformation GetRoute(IEnumerable<Address> addresses)
         {
-            if (addresses == null)
+            if (addresses == null || !addresses.Any())
             {
                 return null;
             }

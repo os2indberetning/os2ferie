@@ -8,8 +8,6 @@ namespace Core.DmzModel
 
         public string Longitude { get; set; }
 
-        public string TimeStamp { get; set; }
-
         public int RouteId { get; set; }
 
         public virtual Route Route { get; set; }

@@ -31,7 +31,6 @@ namespace Infrastructure.DmzSync.Encryption
         {
             gpscoord.Latitude = StringCipher.Decrypt(gpscoord.Latitude, EncryptKey);
             gpscoord.Longitude = StringCipher.Decrypt(gpscoord.Longitude, EncryptKey);
-            gpscoord.TimeStamp = StringCipher.Decrypt(gpscoord.TimeStamp, EncryptKey);
             return gpscoord;
         }
 

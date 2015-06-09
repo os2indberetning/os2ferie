@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
@@ -64,23 +65,11 @@ namespace Core.ApplicationServices
 
             if (report.KilometerAllowance != KilometerAllowance.Read)
             {
-                //Check if drivereport starts at users home address.
-                if (homeAddress.StreetName == report.DriveReportPoints.First().StreetName
-                    && homeAddress.StreetNumber == report.DriveReportPoints.First().StreetNumber
-                    && homeAddress.ZipCode == report.DriveReportPoints.First().ZipCode
-                    && homeAddress.Town == report.DriveReportPoints.First().Town)
-                {
-                    report.StartsAtHome = true;
-                }
 
+                //Check if drivereport starts at users home address.
+                report.StartsAtHome = areAddressesCloseToEachOther(homeAddress, report.DriveReportPoints.First());
                 //Check if drivereport ends at users home address.
-                if (homeAddress.StreetName == report.DriveReportPoints.Last().StreetName
-                    && homeAddress.StreetNumber == report.DriveReportPoints.Last().StreetNumber
-                    && homeAddress.ZipCode == report.DriveReportPoints.Last().ZipCode
-                    && homeAddress.Town == report.DriveReportPoints.Last().Town)
-                {
-                    report.EndsAtHome = true;
-                }
+                report.EndsAtHome = areAddressesCloseToEachOther(homeAddress, report.DriveReportPoints.Last());
             }
 
 
@@ -204,6 +193,28 @@ namespace Core.ApplicationServices
             {
                 report.AmountToReimburse = 0;
             }
+        }
+
+        /// <summary>
+        /// Checks that two addresses are within 100 meters, in
+        /// which case we assume they are the same when regarding
+        /// if a person starts or ends their route at home.
+        /// Longitude and latitude is called different things depending on
+        /// whether we get the information from the backend or from septima
+        /// </summary>
+        /// <param name="address1">First address</param>
+        /// <param name="address2">Second address</param>
+        /// <returns>true if the two addresses are within 100 meters of each other.</returns>
+        private bool areAddressesCloseToEachOther(Address address1, Address address2)
+        {
+            var long1 = Convert.ToDouble(address1.Longitude, CultureInfo.InvariantCulture);
+            var long2 = Convert.ToDouble(address2.Longitude, CultureInfo.InvariantCulture);
+            var lat1 = Convert.ToDouble(address1.Latitude, CultureInfo.InvariantCulture);
+            var lat2 = Convert.ToDouble(address2.Latitude, CultureInfo.InvariantCulture);
+
+            var longDiff = Math.Abs(long1 - long2);
+            var latDiff = Math.Abs(lat1 - lat2);
+            return longDiff < 0.001 && latDiff < 0.001; //Third decimal is ~100 meters
         }
 
 

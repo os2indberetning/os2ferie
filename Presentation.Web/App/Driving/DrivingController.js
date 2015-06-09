@@ -1,8 +1,8 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "HelpText", "$window",
-    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, HelpText, $window) {
+    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "HelpText", "$window", "$modal",
+    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, HelpText, $window, $modal) {
 
-        var helpTexts = HelpText.getAll().$promise.then(function (res) {
+        HelpText.getAll().$promise.then(function (res) {
             $scope.ReadReportCommentHelp = res.ReadReportCommentHelp.text;
             $scope.PurposeHelpText = res.PurposeHelpText.text;
             $scope.fourKmRuleHelpText = res.FourKmRuleHelpText.text;
@@ -172,7 +172,8 @@
                 $scope.DriveReport.Date = moment.unix(report.DriveDateTimestamp)._d;
 
                 if (report.KilometerAllowance == "Read") {
-                    $scope.DriveReport.ReadDistance = report.Distance.toString().replace(".", ",");
+
+
                     $scope.DriveReport.UserComment = report.UserComment;
                     if (!report.StartsAtHome && !report.EndsAtHome) {
                         $scope.container.StartEndHomeDropDown.select(0);
@@ -185,6 +186,11 @@
                     }
                     $scope.DriveReport.StartsAtHome = report.StartsAtHome;
                     $scope.DriveReport.EndsAtHome = report.EndsAtHome;
+                    updateDrivenKm();
+                    // The distance value saved on a drivereport is the distance after subtracting transport allowance.
+                    // Therefore it is needed to add the transport allowance back on to the distance when editing it.
+                    report.Distance = (report.Distance + $scope.TransportAllowance).toFixed(2);
+                    $scope.DriveReport.ReadDistance = report.Distance.toString().replace(".", ",");
                 } else {
                     $scope.DriveReport.Addresses = [];
                     angular.forEach(report.DriveReportPoints, function (point, key) {
@@ -330,7 +336,7 @@
             }
         }
 
-        $scope.clearErrorMessages = function() {
+        $scope.clearErrorMessages = function () {
             $scope.addressSelectionErrorMessage = "";
             $scope.purposeErrorMessage = "";
             $scope.fourKmRuleValueErrorMessage = "";
@@ -569,18 +575,13 @@
 
         }
 
-        $scope.clearClicked = function () {
+        $scope.clearReport = function () {
             /// <summary>
             /// Clears user input
             /// </summary>
 
-
-
             isFormDirty = false;
-
-            if (!isEditingReport) {
-                setMap($scope.mapStartAddress);
-            }
+            setMap($scope.mapStartAddress);
 
             setNotRoute();
 
@@ -595,9 +596,11 @@
             $window.scrollTo(0, 0);
             // Timeout to allow the page to scroll to the top before opening datepicker.
             // Otherwise datepicker would sometimes open in the middle of the page instead of anchoring to the control.
-            $timeout(function () {
-                $scope.container.driveDatePicker.open();
-            }, 200);
+            if (!isEditingReport) {
+                $timeout(function () {
+                    $scope.container.driveDatePicker.open();
+                }, 200);
+            }
 
         }
 
@@ -617,7 +620,7 @@
                     DriveReport.edit($scope).$promise.then(function (res) {
                         $scope.latestDriveReport = res;
                         NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev redigeret");
-                        $scope.clearClicked();
+                        $scope.clearReport();
                         $modalInstance.close();
                         $scope.container.driveDatePicker.close();
                     }, function () {
@@ -628,7 +631,7 @@
                 DriveReport.create($scope).$promise.then(function (res) {
                     $scope.latestDriveReport = res;
                     NotificationService.AutoFadeNotification("success", "", "Din indberetning er sendt til godkendelse.");
-                    $scope.clearClicked();
+                    $scope.clearReport();
                 }, function () {
                     NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under oprettelsen af tjenestekørselsindberetningen.");
                 });
@@ -726,7 +729,7 @@
 
             var longDiff = Math.abs(Number(long1) - Number(long2));
             var latDiff = Math.abs(Number(lat1) - Number(lat2));
-            return longDiff < 0.0001 && latDiff < 0.001; //Fourth decimal is ~10 meters
+            return longDiff < 0.001 && latDiff < 0.001; //Third decimal is ~100 meters
         }
 
         $scope.startEndHomeChanged = function () {
@@ -829,5 +832,21 @@
             /// </summary>
             window.onbeforeunload = undefined;
         });
+
+        $scope.clearClicked = function () {
+            /// <summary>
+            /// Opens confirm clear report modal.
+            /// </summary>
+            /// <param name="id"></param>
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Driving/ConfirmDiscardChangesTemplate.html',
+                controller: 'ConfirmDiscardChangesController',
+                backdrop: "static",
+            });
+
+            modalInstance.result.then(function () {
+                $scope.clearReport();
+            });
+        }
     }
 ]);
