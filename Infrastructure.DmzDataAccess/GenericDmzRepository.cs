@@ -93,8 +93,8 @@ namespace Infrastructure.DmzDataAccess
             var entry = _context.Entry(entity);
             foreach (var propertyInfo in typeof(T).GetProperties())
             {
-                if (propertyInfo.Name == "Id")
-                    continue; // skip primary key
+             //   if (propertyInfo.Name == "Id")
+               //     continue; // skip primary key
 
                 if (propertyInfo.GetValue(entity) != null && propertyInfo.PropertyType.IsValueType)
                     entry.Property(propertyInfo.Name).IsModified = true;

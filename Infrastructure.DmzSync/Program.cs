@@ -51,13 +51,13 @@ namespace Infrastructure.DmzSync
 
             Console.WriteLine("TokenClearDmz");
             tokenSync.ClearDmz();
-            
-            Console.WriteLine("PersonClearDmz");
-            personSync.ClearDmz();
 
             Console.WriteLine("DriveReportClearDmz");
             driveSync.ClearDmz();
-
+            
+            Console.WriteLine("PersonClearDmz");
+            personSync.ClearDmz();
+            
             Console.WriteLine("RateClearDmz");
             rateSync.ClearDmz();
 

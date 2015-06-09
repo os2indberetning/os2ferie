@@ -42,7 +42,7 @@ namespace Infrastructure.DmzSync.Services.Impl
         public void SyncToDmz()
         {
             var i = 0;
-            var rateList = _masterRateRepo.AsQueryable().ToList();
+            var rateList = _masterRateRepo.AsQueryable().Where(x => x.Active).ToList();
             var max = rateList.Count;
 
             foreach (var rate in rateList)  
@@ -59,7 +59,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                         Description = rate.Type.Description,
                         Year = rate.Year.ToString()
                     };
-                _dmzRateRepo.Insert(dmzRate); 
+                _dmzRateRepo.Insert(dmzRate);
             }
              _dmzRateRepo.Save();
         }

@@ -27,6 +27,32 @@ namespace Infrastructure.DmzDataAccess
             modelBuilder.Entity<DriveReport>()
                 .HasOptional(e => e.Route)
                 .WithRequired(e => e.DriveReport);
+
+            modelBuilder.Entity<DriveReport>()
+                .Property(x => x.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None)
+                .HasColumnName("Id");
+
+            modelBuilder.Entity<Rate>()
+                .Property(x => x.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None)
+                .HasColumnName("Id");
+
+            modelBuilder.Entity<Token>()
+                .Property(x => x.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None)
+                .HasColumnName("Id");
+
+            modelBuilder.Entity<Profile>()
+                .Property(x => x.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None)
+                .HasColumnName("Id");
+
+            modelBuilder.Entity<Employment>()
+                .Property(x => x.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None)
+                .HasColumnName("Id");
+
         }
     }
 }
