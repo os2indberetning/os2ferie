@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("AddNewAddressController", [
-    "$scope", "$modalInstance", "NotificationService", "StandardAddress", "AddressFormatter", "SmartAdresseSource",
-    function ($scope, $modalInstance, NotificationService, StandardAddress , AddressFormatter, SmartAdresseSource) {
+    "$scope", "$modalInstance", "NotificationService", "StandardAddress", "AddressFormatter", "SmartAdresseSource", "$modal",
+    function ($scope, $modalInstance, NotificationService, StandardAddress, AddressFormatter, SmartAdresseSource, $modal) {
 
         $scope.SmartAddress = {
             type: "json",
@@ -9,7 +9,7 @@
             crossDomain: true,
             transport: {
                 read: {
-                    url: function(item) {
+                    url: function (item) {
                         var req = 'http://dawa.aws.dk/adgangsadresser/autocomplete?q=' + item.filter.filters[0].value;
                         return req;
                     },
@@ -20,14 +20,14 @@
                 }
             },
             schema: {
-                data: function(data) {
+                data: function (data) {
                     return data; // <-- The result is just the data, it doesn't need to be unpacked.
                 }
             },
         };
-         
 
-      
+
+
 
         $scope.confirmSave = function () {
             /// <summary>
@@ -46,6 +46,36 @@
             /// </summary>
             $modalInstance.dismiss('cancel');
             NotificationService.AutoFadeNotification("warning", "", "Oprettelse af adressen blev annulleret.");
+        }
+
+
+        $scope.showConfirmDiscardChangesModal = function () {
+            /// <summary>
+            /// Opens confirm discard changes modal.
+            /// </summary>
+            /// <param name="id"></param>
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Admin/HTML/Address/ConfirmDiscardChangesTemplate.html',
+                controller: 'ConfirmDiscardChangesController',
+                backdrop: "static",
+            });
+
+            modalInstance.result.then(function () {
+                $scope.cancel();
+            });
+
+        }
+
+        $scope.cancelClicked = function () {
+            if ($scope.description == undefined) {
+                if ($scope.Address == undefined || $scope.Address.Name == undefined) {
+                    $scope.cancel();
+                } else {
+                    $scope.showConfirmDiscardChangesModal();
+                }
+            } else {
+                $scope.showConfirmDiscardChangesModal();
+            }
         }
     }
 ]);
