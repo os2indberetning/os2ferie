@@ -97,7 +97,7 @@
                        title: "Ny adresse",
                        width: 300,
                        template: function (data) {
-                           return "<input type='text' ng-model='addressLocalCopy[" + data.Id + "]' kendo-auto-complete k-data-text-field=\"'tekst'\" k-data-value-field=\"'tekst'\" k-data-source='SmartAddress' class='form-control'/>";
+                           return "<input type='text' ng-model='addressLocalCopy[" + data.Id + "]' kendo-auto-complete k-data-text-field=\"'tekst'\" k-data-value-field=\"'tekst'\" k-data-source='SmartAddress' class='form-control fill-width'/>";
                        }
                    },
                    {
