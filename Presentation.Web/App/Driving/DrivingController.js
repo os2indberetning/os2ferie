@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "HelpText", "$window",
-    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, HelpText, $window) {
+    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "HelpText", "$window", "$modal",
+    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, HelpText, $window, $modal) {
 
         HelpText.getAll().$promise.then(function (res) {
             $scope.ReadReportCommentHelp = res.ReadReportCommentHelp.text;
@@ -575,20 +575,10 @@
 
         }
 
-        $scope.clearClicked = function (askForConfirmation) {
+        $scope.clearReport = function () {
             /// <summary>
             /// Clears user input
             /// </summary>
-
-            if (askForConfirmation == undefined) {
-                askForConfirmation = true;
-            }
-
-            if (askForConfirmation) {
-                if (!confirm("Er du sikker på at du vil rydde indberetningen?")) {
-                    return;
-                }
-            }
 
             isFormDirty = false;
             setMap($scope.mapStartAddress);
@@ -630,7 +620,7 @@
                     DriveReport.edit($scope).$promise.then(function (res) {
                         $scope.latestDriveReport = res;
                         NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev redigeret");
-                        $scope.clearClicked(false);
+                        $scope.clearReport();
                         $modalInstance.close();
                         $scope.container.driveDatePicker.close();
                     }, function () {
@@ -641,7 +631,7 @@
                 DriveReport.create($scope).$promise.then(function (res) {
                     $scope.latestDriveReport = res;
                     NotificationService.AutoFadeNotification("success", "", "Din indberetning er sendt til godkendelse.");
-                    $scope.clearClicked(false);
+                    $scope.clearReport();
                 }, function () {
                     NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under oprettelsen af tjenestekørselsindberetningen.");
                 });
@@ -842,5 +832,21 @@
             /// </summary>
             window.onbeforeunload = undefined;
         });
+
+        $scope.clearClicked = function () {
+            /// <summary>
+            /// Opens confirm clear report modal.
+            /// </summary>
+            /// <param name="id"></param>
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Driving/ConfirmDiscardChangesTemplate.html',
+                controller: 'ConfirmDiscardChangesController',
+                backdrop: "static",
+            });
+
+            modalInstance.result.then(function () {
+                $scope.clearReport();
+            });
+        }
     }
 ]);
