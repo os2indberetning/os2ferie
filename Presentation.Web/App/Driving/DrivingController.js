@@ -330,7 +330,7 @@
             }
         }
 
-        $scope.clearErrorMessages = function() {
+        $scope.clearErrorMessages = function () {
             $scope.addressSelectionErrorMessage = "";
             $scope.purposeErrorMessage = "";
             $scope.fourKmRuleValueErrorMessage = "";
@@ -569,12 +569,20 @@
 
         }
 
-        $scope.clearClicked = function () {
+        $scope.clearClicked = function (askForConfirmation) {
             /// <summary>
             /// Clears user input
             /// </summary>
 
+            if (askForConfirmation == undefined) {
+                askForConfirmation = true;
+            }
 
+            if (askForConfirmation) {
+                if (!confirm("Er du sikker på at du vil rydde indberetningen?")) {
+                    return;
+                }
+            }
 
             isFormDirty = false;
 
@@ -595,9 +603,11 @@
             $window.scrollTo(0, 0);
             // Timeout to allow the page to scroll to the top before opening datepicker.
             // Otherwise datepicker would sometimes open in the middle of the page instead of anchoring to the control.
-            $timeout(function () {
-                $scope.container.driveDatePicker.open();
-            }, 200);
+            if (!isEditingReport) {
+                $timeout(function () {
+                    $scope.container.driveDatePicker.open();
+                }, 200);
+            }
 
         }
 
@@ -617,7 +627,7 @@
                     DriveReport.edit($scope).$promise.then(function (res) {
                         $scope.latestDriveReport = res;
                         NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev redigeret");
-                        $scope.clearClicked();
+                        $scope.clearClicked(false);
                         $modalInstance.close();
                         $scope.container.driveDatePicker.close();
                     }, function () {
@@ -628,7 +638,7 @@
                 DriveReport.create($scope).$promise.then(function (res) {
                     $scope.latestDriveReport = res;
                     NotificationService.AutoFadeNotification("success", "", "Din indberetning er sendt til godkendelse.");
-                    $scope.clearClicked();
+                    $scope.clearClicked(false);
                 }, function () {
                     NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under oprettelsen af tjenestekørselsindberetningen.");
                 });
