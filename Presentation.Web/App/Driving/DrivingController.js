@@ -798,10 +798,10 @@
             if (isFormDirty === true) {
                 return true;
             }
-            if ($scope.DriveReport.Purpose != $scope.latestDriveReport.Purpose && $scope.DriveReport.Purpose != "" && $scope.DriveReport.Purpose != undefined) {
+            if ($scope.DriveReport.Purpose != undefined && $scope.DriveReport.Purpose != $scope.latestDriveReport.Purpose && $scope.DriveReport.Purpose != "") {
                 return true;
             }
-            if ($scope.DriveReport.ReadDistance != $scope.latestDriveReport.Distance.toString().replace(".", ",") && $scope.DriveReport.ReadDistance != "" && $scope.DriveReport.ReadDistance != undefined) {
+            if ($scope.DriveReport.ReadDistance != undefined && $scope.DriveReport.ReadDistance != $scope.latestDriveReport.Distance.toString().replace(".", ",") && $scope.DriveReport.ReadDistance != "") {
                 return true;
             }
             if ($scope.DriveReport.UserComment != undefined && $scope.DriveReport.UserComment != $scope.latestDriveReport.UserComment && $scope.DriveReport.UserComment != "") {
