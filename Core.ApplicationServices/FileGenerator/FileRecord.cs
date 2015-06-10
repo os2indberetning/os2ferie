@@ -29,6 +29,9 @@ namespace Core.ApplicationServices.FileGenerator
             ExtraNumber = report.Employment.ExtraNumber;
             ReimbursementDistance = report.Distance;
             TFCode = report.TFCode;
+            IsAdministrativeWorker =
+                report.Employment.CostCenter.ToString()
+                    .StartsWith(getSetting("PROTECTED_AdministrativeCostCenterPrefix"));
             if ( ! string.IsNullOrWhiteSpace(report.AccountNumber) && report.AccountNumber.Length == 10)
             {
                 Account = report.AccountNumber;
