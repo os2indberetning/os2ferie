@@ -114,6 +114,7 @@
             return res;
         }
 
+        var initialLoad = 2;
 
         var loadValuesFromReport = function (report) {
             /// <summary>
@@ -192,11 +193,14 @@
                     report.Distance = (report.Distance + $scope.TransportAllowance).toFixed(2);
                     $scope.DriveReport.ReadDistance = report.Distance.toString().replace(".", ",");
                 } else {
+
                     $scope.DriveReport.Addresses = [];
+                    var tempArray = [];
                     angular.forEach(report.DriveReportPoints, function (point, key) {
                         var temp = { Name: point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town, Latitude: point.Latitude, Longitude: point.Longitude };
-                        $scope.DriveReport.Addresses.push(temp);
+                        tempArray.push(temp);
                     });
+                    $scope.DriveReport.Addresses = tempArray;
                 }
             }
         }
@@ -511,6 +515,12 @@
                             $scope.latestMapDistance = obj.distance;
                             updateDrivenKm();
 
+                            // Magic hacks. Reduces flickering of addresses when loading the view when editing a report.
+                            if (initialLoad > 0) {
+                                initialLoad--;
+                                return;
+                            }
+
                             // Return if the change comes from AddressInputChanged
                             if (mapChanging === true) {
                                 setMapPromise.resolve();
@@ -535,7 +545,6 @@
 
                                 mapChanging = false;
                             });
-
                         }
                     });
                     OS2RouteMap.set($scope.mapStartAddress);

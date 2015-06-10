@@ -39,12 +39,12 @@
 }
 
 .errorOutline {
-  border:2px solid red;
+    border: 2px solid red;
 }
 
 .info-popup {
     border-radius: 8px;
-    border-style: solid; 
+    border-style: solid;
     border-width: 1px;
     padding-left: 4px;
     padding-right: 4px;
@@ -81,7 +81,6 @@ a {
 
 .inline {
     display: inline;
-    
 }
 
 .vertical-text-bottom {
@@ -108,8 +107,6 @@ a {
     white-space: nowrap;
     /*padding: 2em;*/
     margin: 6px;
-    
-
 }
 
 .margin-left-5 {
@@ -228,17 +225,17 @@ a {
 
 /*CUSTOM CSS FOR NOTIFICATION SERVICE*/
 .errors-container {
-  position: fixed;
-  z-index: 2000;
-  bottom: 0;
-  left: 0;
+    position: fixed;
+    z-index: 2000;
+    bottom: 0;
+    left: 0;
     right: 0;
 }
-  /* line 554, C:/Users/larsvonqualen/development/cheetah-webapp/src/cheetah-webapp/cheetah.webapp.WebAPI/Content/app/style/sass/app.scss */
-  .errors-container .alert {
-    -webkit-border-radius: 0 !important;
-    border-radius: 0 !important;
-    border-bottom: 0;
+    /* line 554, C:/Users/larsvonqualen/development/cheetah-webapp/src/cheetah-webapp/cheetah.webapp.WebAPI/Content/app/style/sass/app.scss */
+    .errors-container .alert {
+        -webkit-border-radius: 0 !important;
+        border-radius: 0 !important;
+        border-bottom: 0;
         margin: 0;
     }
 /*************************************/
@@ -261,10 +258,10 @@ a {
     line-height: 2.4em;
 }
 
-.remove-box:hover {
-    background-color: #363636;
-    border-color: #4d4d4d;
-}
+    .remove-box:hover {
+        background-color: #363636;
+        border-color: #4d4d4d;
+    }
 
 .k-custom {
     height: 2.214em;
@@ -275,9 +272,9 @@ a {
     margin: 0;
 }
 
-.k-custom .k-input {
-    display: block;
-}
+    .k-custom .k-input {
+        display: block;
+    }
 
 .k-button-no-shadow {
     box-shadow: none;
@@ -286,24 +283,26 @@ a {
     border-radius: 1px;
 }
 
-.k-button-no-shadow:focus, .k-button-no-shadow:hover, .k-button-no-shadow:active {
-    -webkit-box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
-}
+    .k-button-no-shadow:focus, .k-button-no-shadow:hover, .k-button-no-shadow:active {
+        -webkit-box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2),0 2px 3px rgba(0,0,0,0.05);
+    }
 
 /*CUSTOM CSS FOR NOTIFICATION SERVICE*/
 .errors-container {
-  position: fixed;
-  z-index: 2000;
-  bottom: 0;
-  left: 0;
-  right: 0; }
-  /* line 554, C:/Users/larsvonqualen/development/cheetah-webapp/src/cheetah-webapp/cheetah.webapp.WebAPI/Content/app/style/sass/app.scss */
-  .errors-container .alert {
-    -webkit-border-radius: 0 !important;
-    border-radius: 0 !important;
-    border-bottom: 0;
-    margin: 0; }
+    position: fixed;
+    z-index: 2000;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+    /* line 554, C:/Users/larsvonqualen/development/cheetah-webapp/src/cheetah-webapp/cheetah.webapp.WebAPI/Content/app/style/sass/app.scss */
+    .errors-container .alert {
+        -webkit-border-radius: 0 !important;
+        border-radius: 0 !important;
+        border-bottom: 0;
+        margin: 0;
+    }
 /*************************************/
 
 .m-t-l {
@@ -318,58 +317,66 @@ a {
     opacity: 0.5;
 }
 
+.k-header {
+    font-weight: bold !important;
+}
+
+.k-grid {
+    font-size: 12px;
+}
+
 .k-toolbar {
-        border: none;
-        margin: 0;
+    border: none;
+    margin: 0;
+}
+
+    .k-toolbar .k-split-button {
+        border-radius: 4px;
     }
 
-        .k-toolbar .k-split-button {
-            border-radius: 4px;
+        .k-toolbar .k-split-button .k-button {
+            margin: 0;
+            color: #ffffff;
+            background-color: #5cb85c;
+            border-color: #4cae4c;
+            text-align: center;
+            vertical-align: text-top;
         }
 
-            .k-toolbar .k-split-button .k-button {
-                margin: 0;
+            .k-toolbar .k-split-button .k-button:hover,
+            .k-toolbar .k-split-button .k-button:focus,
+            .k-toolbar .k-split-button .k-button:active,
+            .k-toolbar .k-split-button .k-button.active,
+            .open .dropdown-toggle.k-toolbar .k-split-button .k-button {
                 color: #ffffff;
-                background-color: #5cb85c;
-                border-color: #4cae4c;
-                text-align: center;
-                vertical-align: text-top;
+                background-color: #47a447;
+                border-color: #398439;
             }
 
-                .k-toolbar .k-split-button .k-button:hover,
-                .k-toolbar .k-split-button .k-button:focus,
-                .k-toolbar .k-split-button .k-button:active,
-                .k-toolbar .k-split-button .k-button.active,
-                .open .dropdown-toggle.k-toolbar .k-split-button .k-button {
-                    color: #ffffff;
-                    background-color: #47a447;
-                    border-color: #398439;
-                }
+            .k-toolbar .k-split-button .k-button:active,
+            .k-toolbar .k-split-button .k-button.active,
+            .open .dropdown-toggle.k-toolbar .k-split-button .k-button {
+                background-image: none;
+            }
 
-                .k-toolbar .k-split-button .k-button:active,
-                .k-toolbar .k-split-button .k-button.active,
-                .open .dropdown-toggle.k-toolbar .k-split-button .k-button {
-                    background-image: none;
-                }
-
-                .k-toolbar .k-split-button .k-button.disabled,
-                .k-toolbar .k-split-button .k-button[disabled],
-                fieldset[disabled] .k-toolbar .k-split-button .k-button,
-                .k-toolbar .k-split-button .k-button.disabled:hover,
-                .k-toolbar .k-split-button .k-button[disabled]:hover,
-                fieldset[disabled] .k-toolbar .k-split-button .k-button:hover,
-                .k-toolbar .k-split-button .k-button.disabled:focus,
-                .k-toolbar .k-split-button .k-button[disabled]:focus,
-                fieldset[disabled] .k-toolbar .k-split-button .k-button:focus,
-                .k-toolbar .k-split-button .k-button.disabled:active,
-                .k-toolbar .k-split-button .k-button[disabled]:active,
-                fieldset[disabled] .k-toolbar .k-split-button .k-button:active,
-                .k-toolbar .k-split-button .k-button.disabled.active,
-                .k-toolbar .k-split-button .k-button[disabled].active,
-                fieldset[disabled] .k-toolbar .k-split-button .k-button.active {
-                    background-color: #5cb85c;
-                    border-color: #4cae4c;
-                }
+            .k-toolbar .k-split-button .k-button.disabled,
+            .k-toolbar .k-split-button .k-button[disabled],
+            fieldset[disabled] .k-toolbar .k-split-button .k-button,
+            .k-toolbar .k-split-button .k-button.disabled:hover,
+            .k-toolbar .k-split-button .k-button[disabled]:hover,
+            fieldset[disabled] .k-toolbar .k-split-button .k-button:hover,
+            .k-toolbar .k-split-button .k-button.disabled:focus,
+            .k-toolbar .k-split-button .k-button[disabled]:focus,
+            fieldset[disabled] .k-toolbar .k-split-button .k-button:focus,
+            .k-toolbar .k-split-button .k-button.disabled:active,
+            .k-toolbar .k-split-button .k-button[disabled]:active,
+            fieldset[disabled] .k-toolbar .k-split-button .k-button:active,
+            .k-toolbar .k-split-button .k-button.disabled.active,
+            .k-toolbar .k-split-button .k-button[disabled].active,
+            fieldset[disabled] .k-toolbar .k-split-button .k-button.active {
+                background-color: #5cb85c;
+                border-color: #4cae4c;
+            }
 
 
 .transparent-background {
@@ -377,7 +384,7 @@ a {
 }
 
 .app-modal-window-full .modal-dialog {
-  width: 95%;
+    width: 95%;
 }
 
 .scrollable {
@@ -388,4 +395,6 @@ a {
     padding-left: 0 !important;
 }
 
- .k-ff { overflow: inherit !important;}
+.k-ff {
+    overflow: inherit !important;
+}
