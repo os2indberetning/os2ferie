@@ -5,10 +5,6 @@ namespace Core.DomainModel
 {
     public class Employment
     {
-        //Administrative employees can be identified by their
-        //cost centers have a unique prefix
-        private const string AdministrativeCostCenterPrefix = "1012";
-
         public int Id { get; set; }
         public int EmploymentId { get; set; }
         public string Position { get; set; }
@@ -27,17 +23,6 @@ namespace Core.DomainModel
         public int OrgUnitId { get; set; }
         public virtual OrgUnit OrgUnit { get; set; }
         public long? CostCenter { get; set; }
-
-        /// <summary>
-        /// Determines if an employment is administrative based on the
-        /// prefix of the cost center (omkostningssted) 
-        /// </summary>
-        /// <returns></returns>
-        public bool IsAdministrativeEmployment()
-        {
-            var stringRepresentation = Convert.ToString(CostCenter);
-            return stringRepresentation.StartsWith(AdministrativeCostCenterPrefix);
-        }
     }
 
 }
