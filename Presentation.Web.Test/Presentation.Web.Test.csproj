@@ -196,11 +196,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="connections.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="app.config" />
-    <None Include="CustomSettings.config" />
   </ItemGroup>
   <ItemGroup />
   <Choose>
