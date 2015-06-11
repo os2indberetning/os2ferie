@@ -1,13 +1,11 @@
 ﻿angular.module("application").controller("AcceptedReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "BankAccount", "HelpText",
-   function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, BankAccount, HelpText) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "BankAccount",
+   function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, BankAccount) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
 
-       HelpText.get({ id: "TableSortHelp" }).$promise.then(function (res) {
-           $scope.tableSortHelp = res.text;
-       });
+       $scope.tableSortHelp = $rootScope.HelpTexts.TableSortHelp.text;
 
        $scope.getEndOfDayStamp = function (d) {
            var m = moment(d);
