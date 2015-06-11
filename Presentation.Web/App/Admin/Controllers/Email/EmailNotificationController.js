@@ -1,10 +1,8 @@
 ﻿angular.module("application").controller("EmailNotificationController", [
-    "$scope", "$modal", "EmailNotification", "HelpText", function ($scope, $modal, EmailNotification, HelpText) {
+    "$scope", "$modal", "EmailNotification", "$rootScope", function ($scope, $modal, EmailNotification, $rootScope) {
 
 
-        HelpText.get({ id: "EmailHelpText" }).$promise.then(function(res) {
-            $scope.EmailHelpText = res.text;
-        });
+        $scope.EmailHelpText = $rootScope.HelpTexts.EmailHelpText.text;
 
         $scope.gridContainer = {};
 
@@ -82,7 +80,7 @@
                     }, {
                         field: "Notified",
                         title: "Er kørt",
-                        template: function(data) {
+                        template: function (data) {
                             if (data.Notified) {
                                 return "<i class='fa fa-check'></i>";
                             }

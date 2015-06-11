@@ -1,13 +1,11 @@
 
 angular.module("application").controller("MyRejectedReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "$timeout", "HelpText", function ($scope, $modal, $rootScope, Report, $timeout, HelpText) {
+   "$scope", "$modal", "$rootScope", "Report", "$timeout", function ($scope, $modal, $rootScope, Report, $timeout) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
 
-       HelpText.get({ id: "TableSortHelp" }).$promise.then(function (res) {
-           $scope.tableSortHelp = res.text;
-       });
+       $scope.tableSortHelp = $rootScope.HelpTexts.TableSortHelp.text;
 
        $scope.getEndOfDayStamp = function (d) {
            var m = moment(d);
@@ -169,7 +167,7 @@ angular.module("application").controller("MyRejectedReportsController", [
                   }, {
                       field: "ApprovedBy.FullName",
                       title: "Afvist af",
-                      template: function(data) {
+                      template: function (data) {
                           return data.ApprovedBy.FullName + "<div kendo-tooltip k-content=\"'" + data.Comment + "'\"><i class='fa fa-comment-o'></i></div>";
                       }
                   }
@@ -193,7 +191,7 @@ angular.module("application").controller("MyRejectedReportsController", [
            $scope.dateContainer.fromDate = from;
        }
 
-      
+
 
        // Event handlers
 

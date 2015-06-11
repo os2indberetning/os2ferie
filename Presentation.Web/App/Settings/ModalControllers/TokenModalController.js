@@ -5,7 +5,8 @@
 
 }]);
 
-angular.module('application').controller('confirmDeleteToken', function ($scope, $modalInstance, token) {
+
+angular.module('application').controller('confirmDeleteToken', ["$scope","$modalInstance","token", function ($scope, $modalInstance, token) {
     
     $scope.confirmDelete = function () {
         $modalInstance.close(token);
@@ -14,4 +15,4 @@ angular.module('application').controller('confirmDeleteToken', function ($scope,
     $scope.cancelDelete = function () {
         $modalInstance.dismiss('cancel');
     };
-});
+}]);

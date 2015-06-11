@@ -1,12 +1,10 @@
 ﻿angular.module("application").controller("MyPendingReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "$timeout", "Person", "HelpText", function ($scope, $modal, $rootScope, Report, $timeout, Person, HelpText) {
+   "$scope", "$modal", "$rootScope", "Report", "$timeout", "Person", function ($scope, $modal, $rootScope, Report, $timeout, Person) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
 
-       HelpText.get({ id: "TableSortHelp" }).$promise.then(function (res) {
-           $scope.tableSortHelp = res.text;
-       });
+       $scope.tableSortHelp = $rootScope.HelpTexts.TableSortHelp.text;
 
        $scope.getEndOfDayStamp = function (d) {
            var m = moment(d);

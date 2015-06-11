@@ -1,14 +1,11 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "HelpText", "$window", "$modal",
-    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, HelpText, $window, $modal) {
-
-        HelpText.getAll().$promise.then(function (res) {
-            $scope.ReadReportCommentHelp = res.ReadReportCommentHelp.text;
-            $scope.PurposeHelpText = res.PurposeHelpText.text;
-            $scope.fourKmRuleHelpText = res.FourKmRuleHelpText.text;
-        });
+    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "$window", "$modal",
+    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, $window, $modal) {
 
 
+        $scope.ReadReportCommentHelp = $rootScope.HelpTexts.ReadReportCommentHelp.text;
+        $scope.PurposeHelpText = $rootScope.HelpTexts.PurposeHelpText.text;
+        $scope.fourKmRuleHelpText = $rootScope.HelpTexts.FourKmRuleHelpText.text;
 
         // Setup functions in scope.
         $scope.Number = Number;
@@ -114,6 +111,7 @@
             return res;
         }
 
+        var initialLoad = 2;
 
         var loadValuesFromReport = function (report) {
             /// <summary>
@@ -192,11 +190,14 @@
                     report.Distance = (report.Distance + $scope.TransportAllowance).toFixed(2);
                     $scope.DriveReport.ReadDistance = report.Distance.toString().replace(".", ",");
                 } else {
+
                     $scope.DriveReport.Addresses = [];
+                    var tempArray = [];
                     angular.forEach(report.DriveReportPoints, function (point, key) {
                         var temp = { Name: point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town, Latitude: point.Latitude, Longitude: point.Longitude };
-                        $scope.DriveReport.Addresses.push(temp);
+                        tempArray.push(temp);
                     });
+                    $scope.DriveReport.Addresses = tempArray;
                 }
             }
         }
@@ -511,6 +512,12 @@
                             $scope.latestMapDistance = obj.distance;
                             updateDrivenKm();
 
+                            // Magic hacks. Reduces flickering of addresses when loading the view when editing a report.
+                            if (initialLoad > 0) {
+                                initialLoad--;
+                                return;
+                            }
+
                             // Return if the change comes from AddressInputChanged
                             if (mapChanging === true) {
                                 setMapPromise.resolve();
@@ -535,7 +542,6 @@
 
                                 mapChanging = false;
                             });
-
                         }
                     });
                     OS2RouteMap.set($scope.mapStartAddress);

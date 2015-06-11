@@ -2,8 +2,9 @@ angular.module("application").controller("MainMenuController", [
    "$scope", "Person", "PersonalAddress", "HelpText", "$rootScope", function ($scope, Person, PersonalAddress, HelpText, $rootScope) {
 
 
-       HelpText.get({ id: "InformationHelpLink" }).$promise.then(function (res) {
-           $scope.helpLink = res;
+       HelpText.getAll().$promise.then(function (res) {
+           $scope.helpLink = res.InformationHelpLink;
+           $rootScope.HelpTexts = res;
        });
 
        if ($rootScope.CurrentUser == undefined) {

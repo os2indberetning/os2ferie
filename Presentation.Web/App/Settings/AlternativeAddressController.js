@@ -1,4 +1,4 @@
-﻿angular.module("application").controller('AlternativeAddressController', ["$scope", "SmartAdresseSource", "$rootScope", "$timeout", "PersonEmployments", "AddressFormatter", "Address", "NotificationService", "PersonalAddress", "HelpText", function ($scope, SmartAdresseSource, $rootScope, $timeout, PersonEmployments, AddressFormatter, Address, NotificationService, PersonalAddress, HelpText) {
+﻿angular.module("application").controller('AlternativeAddressController', ["$scope", "SmartAdresseSource", "$rootScope", "$timeout", "PersonEmployments", "AddressFormatter", "Address", "NotificationService", "PersonalAddress", function ($scope, SmartAdresseSource, $rootScope, $timeout, PersonEmployments, AddressFormatter, Address, NotificationService, PersonalAddress) {
 
     $scope.employments = $rootScope.CurrentUser.Employments;
     $scope.homeAddress = "";
@@ -12,11 +12,9 @@
         $scope.homeAddress = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town;
     });
 
-    HelpText.get({ id: "AlternativeWorkAddressHelpText" }).$promise.then(function (res) {
-        $scope.alternativeWorkAddressHelpText = res.text;
-    });
+    $scope.alternativeWorkAddressHelpText = $rootScope.HelpTexts.AlternativeWorkAddressHelpText.text;
 
-    
+
 
     PersonalAddress.GetAlternativeHomeForUser({ id: $rootScope.CurrentUser.Id }).$promise.then(function (res) {
         if (!(res.StreetNumber == undefined)) {
@@ -141,7 +139,7 @@
             }).$promise.then(function () {
                 workAddressDirty[index] = false;
                 if ($scope.employments[index].AlternativeWorkAddressId != null) {
-                    Address.delete({ id: $scope.employments[index].AlternativeWorkAddressId }).$promise.then(function() {
+                    Address.delete({ id: $scope.employments[index].AlternativeWorkAddressId }).$promise.then(function () {
                         $rootScope.$emit('PersonalAddressesChanged');
                     });
                 }
@@ -149,7 +147,7 @@
                 $scope.employments[index].AlternativeWorkAddress = null;
                 $scope.employments[index].AlternativeWorkAddressId = null;
                 $scope.employments[index].WorkDistanceOverride = $scope.alternativeWorkDistances[index];
-                
+
                 loadLocalModel();
                 NotificationService.AutoFadeNotification("success", "", "Afvigende afstand mellem hjem og arbejde gemt.");
                 $rootScope.$emit('PersonalAddressesChanged');
@@ -172,7 +170,7 @@
             $scope.alternativeWorkDistances[index] = 0;
             $scope.alternativeWorkAddresses[index] = "";
             if ($scope.employments[index].AlternativeWorkAddressId != null) {
-                Address.delete({ id: $scope.employments[index].AlternativeWorkAddressId }).$promise.then(function() {
+                Address.delete({ id: $scope.employments[index].AlternativeWorkAddressId }).$promise.then(function () {
                     $rootScope.$emit('PersonalAddressesChanged');
                     $scope.employments[index].AlternativeWorkAddress = null;
                     $scope.employments[index].AlternativeWorkAddressId = null;
@@ -193,7 +191,7 @@
     $scope.saveAlternativeHomeAddress = function () {
         $timeout(function () {
             handleSaveAltHome();
-           
+
         });
     }
 
@@ -258,7 +256,7 @@
         }
     }
 
-    $scope.homeAddressChanged = function() {
+    $scope.homeAddressChanged = function () {
         homeAddressIsDirty = true;
     }
 
