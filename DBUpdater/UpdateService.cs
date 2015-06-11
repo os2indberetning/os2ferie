@@ -211,6 +211,7 @@ namespace DBUpdater
             employment.StartDateTimestamp = (Int32)(startDate.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             employment.ExtraNumber = empl.EkstraCiffer ?? 0;
             employment.EmploymentType = int.Parse(empl.AnsatForhold);
+            employment.CostCenter = empl.Omkostningssted;
 
             if (empl.OphoersDato != null)
             {
