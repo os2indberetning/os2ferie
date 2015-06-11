@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("PendingReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "HelpText", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, HelpText) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService) {
 
        // Load people for auto-complete textbox
        $scope.people = [];
@@ -7,9 +7,7 @@
        $scope.orgUnit = {};
        $scope.orgUnits = [];
 
-       HelpText.get({ id: "TableSortHelp" }).$promise.then(function(res) {
-           $scope.tableSortHelp = res.text;
-       });
+       $scope.tableSortHelp = $rootScope.HelpTexts.TableSortHelp.text;
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
@@ -325,14 +323,14 @@
            }, {
                field: "Distance",
                title: "Afstand",
-               template: function(data) {
+               template: function (data) {
                    return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
                },
                footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
            }, {
                field: "AmountToReimburse",
                title: "Beløb",
-               template: function(data) {
+               template: function (data) {
                    return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
                },
                footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
@@ -375,7 +373,7 @@
                    } else {
                        return data.ResponsibleLeader.FullName + " er udpeget som godkender.";
                    }
-                   
+
                },
                headerTemplate: "Muligheder <div class='col-sm-1 pull-right'><input ng-change='checkAllBoxesOnPage()' type='checkbox' ng-model='checkAllBox.isChecked'></input></div>",
                footerTemplate: "<div class='pull-right fill-width' kendo-toolbar k-options='approveSelectedToolbar'></div>"
@@ -440,7 +438,7 @@
 
 
 
-      
+
 
        // Event handlers
 
@@ -482,7 +480,7 @@
                    "Status": "Accepted",
                    "ClosedDateTimestamp": moment().unix(),
                    "ApprovedById": $rootScope.CurrentUser.Id,
-           }, function () {
+               }, function () {
                    $scope.gridContainer.grid.dataSource.read();
                });
            });

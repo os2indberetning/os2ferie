@@ -1,14 +1,11 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "HelpText", "$window", "$modal",
-    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, HelpText, $window, $modal) {
-
-        HelpText.getAll().$promise.then(function (res) {
-            $scope.ReadReportCommentHelp = res.ReadReportCommentHelp.text;
-            $scope.PurposeHelpText = res.PurposeHelpText.text;
-            $scope.fourKmRuleHelpText = res.FourKmRuleHelpText.text;
-        });
+    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "$window", "$modal",
+    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, $window, $modal) {
 
 
+        $scope.ReadReportCommentHelp = $rootScope.HelpTexts.ReadReportCommentHelp.text;
+        $scope.PurposeHelpText = $rootScope.HelpTexts.PurposeHelpText.text;
+        $scope.fourKmRuleHelpText = $rootScope.HelpTexts.FourKmRuleHelpText.text;
 
         // Setup functions in scope.
         $scope.Number = Number;
