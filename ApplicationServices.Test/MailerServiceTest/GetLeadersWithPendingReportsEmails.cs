@@ -29,7 +29,7 @@ namespace ApplicationServices.Test.MailerServiceTest
 
             var senderMock = Substitute.For<IMailSender>();
 
-            uut = new MailService(driveRepoMock, subRepoMock, senderMock);
+            uut = new MailService(driveRepoMock, subRepoMock, senderMock, null);
         }
 
         [Test]
