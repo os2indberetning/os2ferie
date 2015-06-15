@@ -9,6 +9,7 @@ namespace Core.ApplicationServices.FileGenerator
     public class ReportFileWriter : IReportFileWriter
     {
         private readonly string _filePathName = GetSetting("PROTECTED_KMDFilePath") + @"\" + GetSetting("PROTECTED_KMDFileName");
+        private readonly string _backupFilePathName = GetSetting("PROTECTED_KMDBackupFilePath") + @"\" + DateTime.Now.ToString("yyyymmdd-hhmmss");
 
         public void WriteRecordsToFile(ICollection<FileRecord> recordList)
         {
@@ -40,6 +41,10 @@ namespace Core.ApplicationServices.FileGenerator
                     newWriter.Close();
                 }
                 Console.WriteLine("Error not all records were written to file, changes were rolled back");
+            }
+            else
+            {
+                File.Copy(_filePathName, _backupFilePathName);  
             }
         }
 

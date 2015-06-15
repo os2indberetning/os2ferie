@@ -78,6 +78,12 @@ namespace DBUpdater
                 Console.WriteLine("Migrating organisation " + i + " of " + orgs.Count() + ".");
                 var orgToInsert = _orgRepo.AsQueryable().FirstOrDefault(x => x.OrgId == org.LOSOrgId);
 
+                var workAddress = GetWorkAddress(org);
+                if (workAddress == null)
+                {
+                    continue;
+                }
+
                 if (orgToInsert == null)
                 {
                     orgToInsert = _orgRepo.Insert(new OrgUnit());
@@ -89,10 +95,9 @@ namespace DBUpdater
                 orgToInsert.HasAccessToFourKmRule = false;
                 orgToInsert.OrgId = org.LOSOrgId;
 
-                var workAddress = GetWorkAddress(org);
                 orgToInsert.Address = workAddress;
 
-                if(workAddress.Id != 0)
+                if(  workAddress.Id != 0)
                 {
                     orgToInsert.Address = null;
                     orgToInsert.AddressId = workAddress.Id;
@@ -211,6 +216,7 @@ namespace DBUpdater
             employment.StartDateTimestamp = (Int32)(startDate.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             employment.ExtraNumber = empl.EkstraCiffer ?? 0;
             employment.EmploymentType = int.Parse(empl.AnsatForhold);
+            employment.CostCenter = empl.Omkostningssted;
 
             if (empl.OphoersDato != null)
             {

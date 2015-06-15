@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Net;
 using System.Net.Mail;
 using Core.ApplicationServices.MailerService.Interface;
+using log4net;
 using Ninject;
 
 namespace Core.ApplicationServices.MailerService.Impl
@@ -10,6 +11,7 @@ namespace Core.ApplicationServices.MailerService.Impl
     public class MailSender : IMailSender
     {
         private readonly SmtpClient _smtpClient;
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public MailSender()
         {
@@ -36,6 +38,11 @@ namespace Core.ApplicationServices.MailerService.Impl
         /// <param name="body">Body of the email.</param>
         public void SendMail(string to, string subject, string body)
         {
+            if (String.IsNullOrWhiteSpace(to))
+            {
+                Logger.Warn("Email adressen er tom");
+                return;
+            }
             var msg = new MailMessage();
             msg.To.Add(to);
             msg.From = new MailAddress(ConfigurationManager.AppSettings["PROTECTED_MAIL_FROM_ADDRESS"]);
@@ -45,9 +52,9 @@ namespace Core.ApplicationServices.MailerService.Impl
             {
                 _smtpClient.Send(msg);
             }
-            catch (Exception)
+            catch (Exception e )
             {
-
+                Logger.Warn("Fejl under afsendelse af mail: " + e);
             }
         }
     }
