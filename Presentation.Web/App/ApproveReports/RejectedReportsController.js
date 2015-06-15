@@ -285,7 +285,7 @@
                                gridContent += point.StreetName;
                            }
                        });
-                       var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
+                       var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div> <a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></a>";
 
                        if (data.KilometerAllowance != "Read") {
                            return result;

@@ -504,6 +504,7 @@
             /// Creates the map widget in the view.
             /// </summary>
             $timeout(function () {
+                // Checks to see whether the map div has been created.
                 if (angular.element('#map').length) {
                     OS2RouteMap.create({
                         id: 'map',
@@ -607,6 +608,10 @@
                     $scope.container.driveDatePicker.open();
                 }, 200);
             }
+
+            $scope.DrivenKMDisplay = 0;
+            $scope.TransportAllowance = 0;
+            $scope.DriveReport.RoundTrip = false;
 
         }
 

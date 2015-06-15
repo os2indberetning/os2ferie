@@ -17,7 +17,7 @@
 
        // dates for kendo filter.
        var fromDateFilter = new Date();
-       fromDateFilter.setDate(fromDateFilter.getDate() - 30);
+       fromDateFilter.setDate(fromDateFilter.getDate() - 365);
        fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
        var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
@@ -123,13 +123,13 @@
                            gridContent += point.Town;
                        }
                    });
-                   var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
+                   var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div> <a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></a>";
 
                    if (data.KilometerAllowance != "Read") {
                        return result;
                    } else {
                        if (data.IsFromApp) {
-                           return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
+                           return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div> <a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></a>";
                        } else {
                            return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
                        }
@@ -192,7 +192,7 @@
            /// </summary>
            // Set initial values for kendo datepickers.
            var from = new Date();
-           from.setDate(from.getDate() - 30);
+           from.setDate(from.getDate() - 365);
 
            $scope.dateContainer.toDate = new Date();
            $scope.dateContainer.fromDate = from;
