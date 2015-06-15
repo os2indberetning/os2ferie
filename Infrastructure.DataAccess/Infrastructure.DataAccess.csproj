@@ -277,6 +277,14 @@
     <Compile Include="Migrations\201506030820493_AddedCostCenterToEmployment.Designer.cs">
       <DependentUpon>201506030820493_AddedCostCenterToEmployment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506151158574_addedIsExtraDistanceToDriveReport.cs" />
+    <Compile Include="Migrations\201506151158574_addedIsExtraDistanceToDriveReport.Designer.cs">
+      <DependentUpon>201506151158574_addedIsExtraDistanceToDriveReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506151235544_addedPayRoleTimestampToMailNotificationSchedule.cs" />
+    <Compile Include="Migrations\201506151235544_addedPayRoleTimestampToMailNotificationSchedule.Designer.cs">
+      <DependentUpon>201506151235544_addedPayRoleTimestampToMailNotificationSchedule.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -450,6 +458,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506030820493_AddedCostCenterToEmployment.resx">
       <DependentUpon>201506030820493_AddedCostCenterToEmployment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506151158574_addedIsExtraDistanceToDriveReport.resx">
+      <DependentUpon>201506151158574_addedIsExtraDistanceToDriveReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506151235544_addedPayRoleTimestampToMailNotificationSchedule.resx">
+      <DependentUpon>201506151235544_addedPayRoleTimestampToMailNotificationSchedule.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -55,10 +55,13 @@ namespace Mail
                         });
                     }
                     notification.Notified = true;
-                }
-                _repo.Save();
-                AttemptSendMails(_mailService, 2);
 
+                    AttemptSendMails(_mailService,FromUnixTime(notification.PayRoleTimestamp), 2);
+                }
+
+
+
+                _repo.Save();
             }
             else
             {
@@ -69,26 +72,26 @@ namespace Mail
             }
         }
 
-        
-            
+
+
         /// <summary>
         /// Attempts to send mails to leaders with pending reports to be approved.
         /// </summary>
         /// <param name="service">IMailService to use for sending mails.</param>
         /// <param name="timesToAttempt">Number of times to attempt to send emails.</param>
-        public void AttemptSendMails(IMailService service, int timesToAttempt)
+        public void AttemptSendMails(IMailService service, DateTime payRoleDateTime, int timesToAttempt)
         {
             if (timesToAttempt > 0)
             {
                 try
                 {
-                    service.SendMails();
+                    service.SendMails(payRoleDateTime);
                 }
                 catch (System.Net.Mail.SmtpException)
                 {
                     Console.WriteLine("Kunne ikke oprette forbindelse til SMTP-Serveren. Forsøger igen...");
                     Logger.Info("Kunne ikke oprette forbindelse til SMTP-Serveren. Forsøger igen...");
-                    AttemptSendMails(service, timesToAttempt - 1);
+                    AttemptSendMails(service, payRoleDateTime, timesToAttempt - 1);
                 }
             }
             else
@@ -96,7 +99,7 @@ namespace Mail
                 Console.WriteLine("Alle forsøg fejlede. Programmet lukker om 3 sekunder.");
                 Logger.Info("Alle forsøg fejlede. Programmet lukker om 3 sekunder.");
                 Thread.Sleep(3000);
-                
+
             }
         }
 

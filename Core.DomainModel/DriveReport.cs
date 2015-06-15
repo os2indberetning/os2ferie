@@ -32,6 +32,7 @@ namespace Core.DomainModel
         public bool IsFromApp { get; set; }
         public string UserComment { get; set; }
         public string RouteGeometry { get; set; }
+        public bool? IsExtraDistance { get; set; }
 
 
         public virtual ICollection<DriveReportPoint> DriveReportPoints { get; set; }

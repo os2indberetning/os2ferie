@@ -18,9 +18,10 @@
             if (res.Repeat) {
                 $scope.repeatMonthly = $scope.repeatItems[0];
             }
-            var t = moment.unix(res.DateTimestamp);
-            $scope.notificationDate = t._d;
-
+            var date = moment.unix(res.DateTimestamp);
+            var payDate = moment.unix(res.PayRoleTimestamp);
+            $scope.notificationDate = date._d;
+            $scope.payRoleDate = payDate._d;
         });
 
         $scope.confirmSave = function () {
@@ -41,10 +42,18 @@
                 $scope.dateErrorMessage = "* Du skal vælge en gyldig adviseringsdato.";
             }
 
+            $scope.payDateErrorMessage = "";
+            if ($scope.payRoleDate == undefined) {
+                error = true;
+                $scope.payDateErrorMessage = "* Du skal vælge en gyldig lønkørselsdato.";
+            }
+
             var result = {};
             result.repeatMonthly = $scope.repeatMonthly.bool;
 
             result.notificationDate = moment($scope.notificationDate).unix();
+
+            result.payDate = moment($scope.payRoleDate).unix();
 
             if (!error) {
                 $modalInstance.close(result);
