@@ -751,41 +751,43 @@
             /// <summary>
             /// Updates drivenkm fields under map widget.
             /// </summary>
-            if ($scope.DriveReport.KilometerAllowance != "CalculatedWithoutExtraDistance") {
-                if (routeStartsAtHome() && routeEndsAtHome()) {
-                    $scope.TransportAllowance = Number(getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance) * 2;
-                } else if (routeStartsAtHome() || routeEndsAtHome()) {
-                    $scope.TransportAllowance = getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance;
+            $timeout(function() {
+                if ($scope.DriveReport.KilometerAllowance != "CalculatedWithoutExtraDistance") {
+                    if (routeStartsAtHome() && routeEndsAtHome()) {
+                        $scope.TransportAllowance = Number(getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance) * 2;
+                    } else if (routeStartsAtHome() || routeEndsAtHome()) {
+                        $scope.TransportAllowance = getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance;
+                    } else {
+                        $scope.TransportAllowance = 0;
+                    }
                 } else {
                     $scope.TransportAllowance = 0;
                 }
-            } else {
-                $scope.TransportAllowance = 0;
-            }
 
-            if ($scope.DriveReport.KilometerAllowance == "Read") {
-                if ($scope.DriveReport.ReadDistance == undefined) {
-                    $scope.DriveReport.ReadDistance = 0;
-                }
-                $scope.DrivenKMDisplay = Number($scope.DriveReport.ReadDistance.toString().replace(",", "."));
-            } else {
-                if ($scope.latestMapDistance == undefined) {
-                    $scope.DrivenKMDisplay = 0;
+                if ($scope.DriveReport.KilometerAllowance == "Read") {
+                    if ($scope.DriveReport.ReadDistance == undefined) {
+                        $scope.DriveReport.ReadDistance = 0;
+                    }
+                    $scope.DrivenKMDisplay = Number($scope.DriveReport.ReadDistance.toString().replace(",", "."));
                 } else {
-                    $scope.DrivenKMDisplay = $scope.latestMapDistance;
+                    if ($scope.latestMapDistance == undefined) {
+                        $scope.DrivenKMDisplay = 0;
+                    } else {
+                        $scope.DrivenKMDisplay = $scope.latestMapDistance;
+                    }
                 }
-            }
 
-            if ($scope.DriveReport.RoundTrip === true) {
-                // Double the driven km if its a roundtrip.
-                $scope.DrivenKMDisplay = Number($scope.DrivenKMDisplay) * 2;
-                // If the route starts xor ends at home -> double the transportallowance.
-                // The case where the route both ends and starts at home is already covered.
-                if (routeStartsAtHome() != routeEndsAtHome()) {
+                if ($scope.DriveReport.RoundTrip === true) {
+                    // Double the driven km if its a roundtrip.
+                    $scope.DrivenKMDisplay = Number($scope.DrivenKMDisplay) * 2;
+                    // If the route starts xor ends at home -> double the transportallowance.
+                    // The case where the route both ends and starts at home is already covered.
+                    if (routeStartsAtHome() != routeEndsAtHome()) {
 
-                    $scope.TransportAllowance = Number($scope.TransportAllowance) * 2;
+                        $scope.TransportAllowance = Number($scope.TransportAllowance) * 2;
+                    }
                 }
-            }
+            });
         }
 
         $scope.readDistanceChanged = function () {

@@ -96,7 +96,7 @@ angular.module("application").controller("AdminAcceptedReportsController",
                     title: "Medarbejder"
                 }, {
                     field: "Employment.OrgUnit.LongDescription",
-                    title: "Organisationsenhed"
+                    title: "Org.enhed"
                 }, {
                     field: "DriveDateTimestamp",
                     template: function (data) {
@@ -105,7 +105,7 @@ angular.module("application").controller("AdminAcceptedReportsController",
                             (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                             m._d.getFullYear();
                     },
-                    title: "Kørselsdato"
+                    title: "Dato"
                 }, {
                     field: "Purpose",
                     title: "Formål",
@@ -139,21 +139,21 @@ angular.module("application").controller("AdminAcceptedReportsController",
                     }
                 }, {
                     field: "Distance",
-                    title: "Afstand",
+                    title: "Km",
                     template: function (data) {
-                        return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
+                        return data.Distance.toFixed(2).toString().replace('.', ',') + " km";
                     },
-                    footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+                    footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # km"
                 }, {
                     field: "AmountToReimburse",
                     title: "Beløb",
                     template: function (data) {
-                        return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
+                        return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " kr.";
                     },
-                    footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+                    footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
                 }, {
                     field: "KilometerAllowance",
-                    title: "Merkørsel",
+                    title: "MK",
                     template: function (data) {
                         if (data.KilometerAllowance == "CalculatedWithoutExtraDistance") {
                             return "<i class='fa fa-check'></i>";
@@ -171,7 +171,7 @@ angular.module("application").controller("AdminAcceptedReportsController",
                     }
                 }, {
                     field: "CreatedDateTimestamp",
-                    title: "Indberetningsdato",
+                    title: "Indberettet",
                     template: function (data) {
                         var m = moment.unix(data.CreatedDateTimestamp);
                         return m._d.getDate() + "/" +

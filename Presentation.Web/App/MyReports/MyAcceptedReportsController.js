@@ -96,7 +96,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
                               (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                               m._d.getFullYear();
                       },
-                      title: "Kørselsdato"
+                      title: "Dato"
                   }, {
                       field: "Purpose",
                       template: function (data) {
@@ -137,18 +137,18 @@ angular.module("application").controller("MyAcceptedReportsController", [
                       }
                   }, {
                       field: "Distance",
-                      title: "Afstand",
+                      title: "Km",
                       template: function (data) {
-                          return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
+                          return data.Distance.toFixed(2).toString().replace('.', ',') + " km";
                       },
-                      footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+                      footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # km"
                   }, {
                       field: "AmountToReimburse",
                       title: "Beløb",
                       template: function (data) {
-                          return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
+                          return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " kr.";
                       },
-                      footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+                      footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
                   }, {
                       field: "CreationDate",
                       template: function (data) {
@@ -157,7 +157,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                  m._d.getFullYear();
                       },
-                      title: "Indberetningsdato"
+                      title: "Indberettet"
                   }, {
                       field: "ClosedDateTimestamp",
                       title: "Godkendelsesdato",
