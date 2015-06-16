@@ -12,9 +12,10 @@
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
 
-       OrgUnit.get({ query: "$select=Id, LongDescription" }).$promise.then(function (res) {
-           $scope.orgUnits = res.value;
-       });
+       $scope.orgUnits = $rootScope.OrgUnits;
+       $scope.people = $rootScope.People;
+
+
 
        $scope.orgUnitChanged = function (item) {
            $scope.applyOrgUnitFilter($scope.orgUnit.chosenUnit);
@@ -321,13 +322,17 @@
                            gridContent += point.Town;
                        }
                    });
-                   var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div> <a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a>";
+                   var toolTip = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
+                   var globe = "<a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a>";
+                   var result = "<div class='col-sm-6' style='margin-left: -13px;'>" + toolTip + "</div><div class='col-sm-1' style='margin-left: -13px;'>" + globe + "</div>";
 
                    if (data.KilometerAllowance != "Read") {
                        return result;
                    } else {
                        if (data.IsFromApp) {
-                           return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div> <a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></a>";
+                           toolTip = "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
+                           result = "<div class='col-sm-6' style='margin-left: -13px;'>" + toolTip + "</div><div class='col-sm-1' style='margin-left: -13px;'>" + globe + "</div>";
+                           return result;
                        } else {
                            return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
                        }
@@ -687,12 +692,7 @@
 
        $scope.person.chosenPerson = "";
 
-       Person.getAll({ query: "$select=Id,FullName" }).$promise.then(function (res) {
-           $scope.people = res.value;
-           //angular.forEach(res.value, function (value, key) {
-           //    $scope.people.push({ Id: value.Id, FullName: value.FullName });
-           //});
-       });
+
 
 
 
