@@ -22,7 +22,13 @@ namespace Core.ApplicationServices.FileGenerator
             var usersToReimburse = GetUsersAndReportsToReimburse();
             var records = RecordListBuilder(usersToReimburse);
 
-            _fileWriter.WriteRecordsToFile(records);
+            var success = _fileWriter.WriteRecordsToFile(records);
+
+            if (!success)
+            {
+                //There was an error writing the file so the reports should not be marked as invoiced
+                return;
+            }
 
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 

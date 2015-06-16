@@ -90,9 +90,10 @@ namespace ApplicationServices.Test.FileGenerator
     {
         public ICollection<FileRecord> RecordList = new List<FileRecord>(); 
 
-        public void WriteRecordsToFile(ICollection<FileRecord> recordList)
+        public bool WriteRecordsToFile(ICollection<FileRecord> recordList)
         {
             RecordList = recordList;
+            return true;
         }
     }
 }
