@@ -12,6 +12,7 @@
         $scope.toString = toString;
         $scope.replace = String.replace;
 
+        $scope.saveBtnDisabled = false;
 
         var isFormDirty = false;
 
@@ -626,15 +627,18 @@
             /// Handles saving of drivereport.
             /// </summary>
             $scope.canSubmitDriveReport = false;
+            $scope.saveBtnDisabled = true;
             if (isEditingReport) {
                 DriveReport.delete({ id: ReportId }).$promise.then(function () {
                     DriveReport.edit($scope).$promise.then(function (res) {
                         $scope.latestDriveReport = res;
                         NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev redigeret");
                         $scope.clearReport();
+                        $scope.saveBtnDisabled = false;
                         $modalInstance.close();
                         $scope.container.driveDatePicker.close();
                     }, function () {
+                        $scope.saveBtnDisabled = false;
                         NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under redigering af tjenestekørselsindberetningen.");
                     });
                 });
@@ -643,7 +647,9 @@
                     $scope.latestDriveReport = res;
                     NotificationService.AutoFadeNotification("success", "", "Din indberetning er sendt til godkendelse.");
                     $scope.clearReport();
+                    $scope.saveBtnDisabled = false;
                 }, function () {
+                    $scope.saveBtnDisabled = false;
                     NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under oprettelsen af tjenestekørselsindberetningen.");
                 });
             }

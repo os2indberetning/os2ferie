@@ -115,15 +115,14 @@
                            var gridContent = "";
                            angular.forEach(data.DriveReportPoints, function (point, key) {
                                if (key != data.DriveReportPoints.length - 1) {
-                                   tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
-                                   gridContent += point.Town + "<br/>";
+                                   tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + " <br/> ";
+                                   gridContent += point.Town + " <br/> ";
                                } else {
                                    tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
                                    gridContent += point.Town;
                                }
                            });
                            var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div> <a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></a>";
-
                            if (data.KilometerAllowance != "Read") {
                                return result;
                            } else {
