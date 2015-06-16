@@ -17,6 +17,20 @@ angular.module("application").controller("AdminAcceptedReportsController", [
            return m.startOf('day').unix();
        }
 
+       $scope.orgUnitAutoCompleteOptions = {
+           filter: "contains",
+           select: function (e) {
+               $scope.orgUnitChanged();
+           }
+       }
+
+       $scope.personAutoCompleteOptions = {
+           filter: "contains",
+           select: function(e) {
+               $scope.personChanged();
+           }
+       };
+
        // dates for kendo filter.
        var fromDateFilter = new Date();
        fromDateFilter.setDate(fromDateFilter.getDate() - 30);
@@ -31,7 +45,7 @@ angular.module("application").controller("AdminAcceptedReportsController", [
        $scope.orgUnit = {};
        $scope.orgUnits = [];
 
-       OrgUnit.get().$promise.then(function (res) {
+       OrgUnit.get({ query: "$select=Id, LongDescription" }).$promise.then(function (res) {
            $scope.orgUnits = res.value;
        });
 
@@ -533,10 +547,11 @@ angular.module("application").controller("AdminAcceptedReportsController", [
        // Set initial value for grid pagesize
        $scope.gridContainer.gridPageSize = 20;
 
-       Person.getAll().$promise.then(function (res) {
-           angular.forEach(res.value, function (value, key) {
-               $scope.people.push({ Id: value.Id, FullName: value.FullName });
-           });
+       Person.getAll({ query: "$select=Id,FullName" }).$promise.then(function (res) {
+           $scope.people = res.value;
+           //angular.forEach(res.value, function (value, key) {
+           //    $scope.people.push({ Id: value.Id, FullName: value.FullName });
+           //});
        });
 
 

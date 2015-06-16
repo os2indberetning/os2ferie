@@ -14,13 +14,16 @@
        var personId = $rootScope.CurrentUser.Id;
        $scope.showSubstituteSettings = $rootScope.CurrentUser.IsLeader;
 
-       Person.get({ id: personId }, function (data) {
-           $scope.currentPerson = data;
-       });
+        $scope.currentPerson = $rootScope.CurrentUser;
 
-       Person.getAll(function (data) {
-           $scope.persons = data.value;
-       });
+       //Person.get({ id: personId }, function (data) {
+       //    $scope.currentPerson = data;
+       //});
+
+        Person.getAll({ query: "$select=Id,FullName" }).$promise.then(function(res) {
+            $scope.persons = res.value;
+        });
+
 
        OrgUnit.get(function (data) {
            $scope.orgUnits = data.value;

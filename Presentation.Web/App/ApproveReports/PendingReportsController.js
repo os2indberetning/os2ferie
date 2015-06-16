@@ -12,13 +12,27 @@
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
 
-       OrgUnit.get().$promise.then(function (res) {
+       OrgUnit.get({ query: "$select=Id, LongDescription" }).$promise.then(function (res) {
            $scope.orgUnits = res.value;
        });
 
        $scope.orgUnitChanged = function (item) {
            $scope.applyOrgUnitFilter($scope.orgUnit.chosenUnit);
        }
+
+       $scope.orgUnitAutoCompleteOptions = {
+           filter: "contains",
+           select: function (e) {
+               $scope.orgUnitChanged();
+           }
+       }
+
+       $scope.personAutoCompleteOptions = {
+           filter: "contains",
+           select: function (e) {
+               $scope.personChanged();
+           }
+       };
 
        $scope.getEndOfDayStamp = function (d) {
            var m = moment(d);
@@ -673,10 +687,11 @@
 
        $scope.person.chosenPerson = "";
 
-       Person.getAll().$promise.then(function (res) {
-           angular.forEach(res.value, function (value, key) {
-               $scope.people.push({ Id: value.Id, FullName: value.FullName });
-           });
+       Person.getAll({ query: "$select=Id,FullName" }).$promise.then(function (res) {
+           $scope.people = res.value;
+           //angular.forEach(res.value, function (value, key) {
+           //    $scope.people.push({ Id: value.Id, FullName: value.FullName });
+           //});
        });
 
 

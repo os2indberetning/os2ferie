@@ -16,10 +16,10 @@
         </div>
         <div class="row">
             <div class="col-xs-3">
-                <input id="searchDescriptionTextBox" k-options="autoCompleteOptions" ng-model="container.descriptionFilter" ng-change="descriptionTextChanged()" type="text" k-data-source="autoCompleteDataSource" k-data-value-field="'Description'" k-data-text-field="'Description'" kendo-auto-complete class="form-control" />
+                <input id="searchDescriptionTextBox" k-options="autoCompleteOptions" ng-model="container.descriptionFilter" ng-change="descriptionTextChanged()" type="text" k-data-source="autoCompleteDataSource" k-data-value-field="'Description'" k-data-text-field="'Description'" kendo-auto-complete class="form-control fill-width" />
             </div>
             <div class="col-xs-3">
-                <input id="SearchDirtyStringTextBox" k-options="autoCompleteOptions" ng-model="container.dirtyStringFilter" ng-change="dirtyStringTextChanged()" type="text" k-data-source="autoCompleteDataSource" k-data-value-field="'DirtyString'" k-data-text-field="'DirtyString'" kendo-auto-complete class="form-control" />
+                <input id="SearchDirtyStringTextBox" k-options="autoCompleteOptions" ng-model="container.dirtyStringFilter" ng-change="dirtyStringTextChanged()" type="text" k-data-source="autoCompleteDataSource" k-data-value-field="'DirtyString'" k-data-text-field="'DirtyString'" kendo-auto-complete class="form-control fill-width" />
             </div>
             <div class="col-xs-2">
                 <button class="btn btn-danger" ng-click="clearClicked()">Nulstil søgning</button>

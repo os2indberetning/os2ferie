@@ -24,18 +24,20 @@ namespace OS2Indberetning.Controllers
         private readonly IAddressLaunderer _launderer;
         private readonly IAddressCoordinates _coordinates;
         private readonly IGenericRepository<CachedAddress> _cachedAddressRepo;
+        private readonly IGenericRepository<PersonalAddress> _personalAddressRepo;
         private static Address MapStartAddress { get; set; }
 
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         //GET: odata/Addresses
-        public AddressesController(IGenericRepository<Address> repository, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo, IAddressLaunderer launderer, IAddressCoordinates coordinates, IGenericRepository<CachedAddress> cachedAddressRepo)
+        public AddressesController(IGenericRepository<Address> repository, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo, IAddressLaunderer launderer, IAddressCoordinates coordinates, IGenericRepository<CachedAddress> cachedAddressRepo, IGenericRepository<PersonalAddress> personalAddressRepo)
             : base(repository, personRepo)
         {
             _employmentRepo = employmentRepo;
             _launderer = launderer;
             _coordinates = coordinates;
             _cachedAddressRepo = cachedAddressRepo;
+            _personalAddressRepo = personalAddressRepo;
         }
 
         /// <summary>
@@ -177,18 +179,10 @@ namespace OS2Indberetning.Controllers
             }
 
             var rep = Repo.AsQueryable();
-            // Select all addresses that arent points in a route, cachedAddress, workAddress or drivereportpoints in a drivereport.
-            var temp = rep.Where(elem => !(elem is DriveReportPoint || elem is Point ||elem is CachedAddress || elem is WorkAddress));
-            var res = new List<Address>();
-
-            // Add all addresses that are personaladdresses which belong to the current user or arent personalAddresses at all. Those are standard addresses.
-            foreach (var address in temp)
-            {
-                if ((address is PersonalAddress && ((PersonalAddress)address).PersonId == personId) || !(address is PersonalAddress))
-                {
-                    res.Add(address);
-                }
-            }
+            // Select all standard addresses.
+            var addresses = rep.Where(elem => !(elem is DriveReportPoint || elem is Point ||elem is CachedAddress || elem is WorkAddress || elem is PersonalAddress)).ToList();
+            // Add personal addresses to addresses.
+            addresses.AddRange(_personalAddressRepo.AsQueryable().Where(elem => (elem.PersonId.Equals(personId))));
 
             var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(personId)).ToList();
             // Add the workAddress of each of the user's employments.
@@ -196,10 +190,10 @@ namespace OS2Indberetning.Controllers
             {
                 var tempAddr = empl.OrgUnit.Address;
                 tempAddr.Description = empl.OrgUnit.LongDescription;
-                res.Add(tempAddr);
+                addresses.Add(tempAddr);
             }
 
-            return Ok(res.AsQueryable());
+            return Ok(addresses.AsQueryable());
         }
 
         /// <summary>

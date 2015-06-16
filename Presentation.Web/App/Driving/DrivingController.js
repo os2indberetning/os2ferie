@@ -509,7 +509,7 @@
                 if (angular.element('#map').length) {
                     OS2RouteMap.create({
                         id: 'map',
-                        change: function (obj) {
+                        change: function(obj) {
                             $scope.currentMapAddresses = obj.Addresses;
                             $scope.latestMapDistance = obj.distance;
                             updateDrivenKm();
@@ -533,13 +533,13 @@
                             mapChanging = true;
                             $scope.DriveReport.Addresses = [];
                             // Load the adresses from the map.
-                            angular.forEach(obj.Addresses, function (address, key) {
+                            angular.forEach(obj.Addresses, function(address, key) {
                                 var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
                                 $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
                             });
                             // Apply to update the view.
                             $scope.$apply();
-                            $timeout(function () {
+                            $timeout(function() {
                                 // Wait for the view to render before setting mapChanging to false.
 
                                 mapChanging = false;
@@ -547,8 +547,10 @@
                         }
                     });
                     OS2RouteMap.set($scope.mapStartAddress);
+                } else {
+                    NotificationService.AutoFadeNotification("danger", "", "Kortet kunne ikke vises. Prøv at genopfriske siden.");
                 }
-            });
+            },500);
         }
 
 

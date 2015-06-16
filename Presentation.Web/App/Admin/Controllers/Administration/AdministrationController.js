@@ -6,7 +6,6 @@
            $scope.nonAdmins = res.value;
        });
 
-
        $scope.autoCompleteOptions = {
            filter: "contains"
        };

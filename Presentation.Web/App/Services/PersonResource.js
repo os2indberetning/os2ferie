@@ -3,62 +3,20 @@
         "get": {
             method: "GET", isArray: false, transformResponse: function (data) {
                 var res = angular.fromJson(data);
-                if (res.error == undefined) {
-                    return res.value[0];
-                }
-
-                var modalInstance = $modal.open({
-                    templateUrl: '/App/Services/Error/ServiceError.html',
-                    controller: "ServiceErrorController",
-                    backdrop: "static",
-                    resolve: {
-                        errorMsg: function () {
-                            return res.error.innererror.message;
-                        }
-                    }
-                });
                 return res;
             }
         },
         "getAll": {
-            method: "GET", isArray: false, url: "/odata/Person", transformResponse: function(data) {
+            method: "GET", isArray: false, url: "/odata/Person?:query", transformResponse: function(data) {
                 var res = angular.fromJson(data);
-                if (res.error == undefined) {
-                    return res;
-                }
-
-                var modalInstance = $modal.open({
-                    templateUrl: '/App/Services/Error/ServiceError.html',
-                    controller: "ServiceErrorController",
-                    backdrop: "static",
-                    resolve: {
-                        errorMsg: function () {
-                            return res.error.innererror.message;
-                        }
-                    }
-                });
                 return res;
             }
         },
         "patch": { method: "PATCH" },
         "getNonAdmins": {
-            url: "/odata/Person?$filter=IsAdmin eq false",
+            url: "/odata/Person?$filter=IsAdmin eq false &$select=Id,FullName",
             method: "GET", isArray: false, transformResponse: function(data) {
                 var res = angular.fromJson(data);
-                if (res.error == undefined) {
-                    return res;
-                }
-
-                var modalInstance = $modal.open({
-                    templateUrl: '/App/Services/Error/ServiceError.html',
-                    controller: "ServiceErrorController",
-                    backdrop: "static",
-                    resolve: {
-                        errorMsg: function () {
-                            return res.error.innererror.message;
-                        }
-                    }
-                });
                 return res;
             }
         },
@@ -80,7 +38,7 @@
             }
         },
         "GetLeaders" : {
-            url: "/odata/Employments?$filter=IsLeader eq true&$expand=Person&$select=Person",
+            url: "/odata/Employments?$filter=IsLeader eq true&$select=Person &$expand=Person($select=Id,FullName)",
             method: "GET",
             isArray: true,
             transformResponse: function (data) {
