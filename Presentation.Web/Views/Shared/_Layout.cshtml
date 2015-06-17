@@ -28,8 +28,8 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <div class="navbar-brand" ng-click="menuCollapse = !menuCollapse">
-                    <i class="fa fa-bars"></i>
-                    <label href="#">OS2Indberetning</label> 
+                    <i style="color:white" class="fa fa-bars"></i>
+                    <label href="#" style="color: white">OS2Indberetning</label> 
 
                 </div>
                 <img class="pull-right margin-top-5" src="../../logo.png" alt="" />
@@ -44,19 +44,19 @@
             <div ng-hide="menuCollapse">
                 <div class="navbar-collapse ng-cloak">
                     <ul class="nav navbar-nav side-nav">
-                        <li ui-sref-active="active">
+                        <li ui-sref-active="active" class="mainMenuLink">
                             <a ui-sref="driving"><i class="fa fa-fw fa-bar-chart-o"></i> Indberet tjenestekørsel</a>
                         </li>
-                        <li ui-sref-active="active">
+                        <li ui-sref-active="active" class="mainMenuLink">
                             <a ui-sref="myreports"><i class="fa fa-fw fa-table"></i> Mine indberetninger</a>
                         </li>
-                        <li ui-sref-active="active" class="ng-hide" ng-hide="!showApproveReports">
+                        <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showApproveReports">
                             <a ui-sref="approvereports"><i class="fa fa-fw fa-edit"></i> Godkend indberetninger</a>
                         </li>
-                        <li ui-sref-active="active">
+                        <li ui-sref-active="active" class="mainMenuLink">
                             <a ui-sref="settings"><i class="fa fa-fw fa-desktop"></i> Personlige indstillinger</a>
                         </li>
-                        <li ui-sref-active="active" class="ng-hide" ng-hide="!showAdministration">
+                        <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showAdministration">
                             <a ui-sref="admin"><i class="fa fa-fw fa-wrench"></i> Administrator</a>
                         </li>
 

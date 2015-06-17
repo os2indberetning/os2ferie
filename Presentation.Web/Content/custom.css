@@ -179,6 +179,19 @@ a {
     padding-bottom: 30px;
 }
 
+li.mainMenuLink.active {
+    text-decoration: underline !important;
+}
+
+li.mainMenuLink > a {
+    color: white !important;
+}
+
+li.mainMenuLink > a:hover {
+    text-decoration: underline !important;
+}
+
+
 .new-token-btn {
     width: 79%;
 }
