@@ -25,7 +25,7 @@
                 title: "<br/>" + title,
                 text: message,
                 min_height: "100px",
-                width: "500px",
+                width: "300px",
                 type: type,
                 icon: true,
                 delay: 5000,

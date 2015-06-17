@@ -171,6 +171,12 @@ a {
     border: 5px solid #fff;
 }
 
+a.informationHelpLink {
+    color: white;
+    text-decoration: underline;
+}
+
+
 .modal-dialog {
     right: auto;
     left: auto;
