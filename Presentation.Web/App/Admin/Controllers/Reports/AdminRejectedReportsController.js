@@ -275,7 +275,7 @@ angular.module("application").controller("AdminRejectedReportsController", [
                    last: "Gå til sidste side",
                    refresh: "Genopfrisk"
                },
-               pageSizes: [5, 10, 20, 30, 40, 50]
+               pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
            },
            dataBound: function () {
                this.expandRow(this.tbody.find("tr.k-master-row").first());
@@ -313,7 +313,7 @@ angular.module("application").controller("AdminRejectedReportsController", [
                            gridContent += point.StreetName;
                        }
                    });
-                   var gridContent = "<i class='fa fa-road fa-2x'></i>"
+                   var gridContent = "<i class='fa fa-road fa-2x'></i>";
                    var toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
                    var globe = "<a class='inline pull-right margin-right-5' ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a>";
                    var result = toolTip + globe;

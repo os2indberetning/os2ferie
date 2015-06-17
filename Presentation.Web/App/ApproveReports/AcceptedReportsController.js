@@ -310,7 +310,7 @@
                    last: "Gå til sidste side",
                    refresh: "Genopfrisk"
                },
-               pageSizes: [5, 10, 20, 30, 40, 50]
+               pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
            },
            dataBound: function () {
                $scope.getCurrentPageSums();
@@ -353,7 +353,7 @@
                            gridContent += point.Town;
                        }
                    });
-                   var gridContent = "<i class='fa fa-road fa-2x'></i>"
+                   var gridContent = "<i class='fa fa-road fa-2x'></i>";
                    var toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
                    var globe = "<a class='inline pull-right margin-right-5' ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a>";
                    var result = toolTip + globe;
