@@ -267,7 +267,7 @@
                        last: "Gå til sidste side",
                        refresh: "Genopfrisk",
                    },
-                   pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
+                   pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200],
                },
                dataBound: function () {
                    this.expandRow(this.tbody.find("tr.k-master-row").first());

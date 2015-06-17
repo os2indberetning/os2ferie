@@ -183,6 +183,10 @@ a {
     width: 79%;
 }
 
+.k-pager-wrap .k-dropdown {
+  width: 5.000em !important;
+}
+
 .close-token-modal {
     width: 19%;
 }
