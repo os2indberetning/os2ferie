@@ -292,7 +292,6 @@
                    field: "DriveReportPoints",
                    template: function (data) {
                        var tooltipContent = "";
-                       var gridContent = "";
                        angular.forEach(data.DriveReportPoints, function (point, key) {
                            if (key != data.DriveReportPoints.length - 1) {
                                tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
@@ -302,16 +301,17 @@
                                gridContent += point.StreetName;
                            }
                        });
-                       var toolTip = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
-                       var globe = "<a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a>";
-                       var result = "<div class='col-sm-6' style='margin-left: -13px;'>" + toolTip + "</div><div class='col-sm-1' style='margin-left: -13px;'>" + globe + "</div>";
+                       var gridContent = "<i class='fa fa-road fa-2x'></i>"
+                       var toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
+                       var globe = "<a class='inline pull-right margin-right-5' ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a>";
+                       var result = toolTip + globe;
 
                        if (data.KilometerAllowance != "Read") {
                            return result;
                        } else {
                            if (data.IsFromApp) {
-                               toolTip = "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
-                               result = "<div class='col-sm-6' style='margin-left: -13px;'>" + toolTip + "</div><div class='col-sm-1' style='margin-left: -13px;'>" + globe + "</div>";
+                               toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
+                               result = toolTip + globe;
                                return result;
                            } else {
                                return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";

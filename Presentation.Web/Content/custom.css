@@ -34,8 +34,16 @@
     margin: 5px;
 }
 
+.margin-left-5 {
+    margin-left: 5px;
+}
+
 .margin-left-10 {
     margin-left: 10px;
+}
+
+.margin-left-15 {
+    margin-left: 15px;
 }
 
 .errorOutline {
@@ -107,10 +115,6 @@ a {
     white-space: nowrap;
     /*padding: 2em;*/
     margin: 6px;
-}
-
-.margin-left-5 {
-    margin-left: 5px;
 }
 
 .margin-bottom-5 {
