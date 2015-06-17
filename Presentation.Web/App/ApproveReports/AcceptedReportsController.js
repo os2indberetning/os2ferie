@@ -4,6 +4,7 @@
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
+       $scope.isLeader = $rootScope.CurrentUser.IsLeader;
 
        $scope.tableSortHelp = $rootScope.HelpTexts.TableSortHelp.text;
 
