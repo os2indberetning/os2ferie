@@ -11,7 +11,7 @@ namespace Core.ApplicationServices.FileGenerator
         private readonly string _filePathName = GetSetting("PROTECTED_KMDFilePath") + @"\" + GetSetting("PROTECTED_KMDFileName");
         private readonly string _backupFilePathName = GetSetting("PROTECTED_KMDBackupFilePath") + @"\" + DateTime.Now.ToString("yyyymmdd-hhmmss");
 
-        public void WriteRecordsToFile(ICollection<FileRecord> recordList)
+        public bool WriteRecordsToFile(ICollection<FileRecord> recordList)
         {
             var existingLineCounter = 0;
             if (File.Exists(_filePathName))
@@ -41,10 +41,12 @@ namespace Core.ApplicationServices.FileGenerator
                     newWriter.Close();
                 }
                 Console.WriteLine("Error not all records were written to file, changes were rolled back");
+                return false;
             }
             else
             {
-                File.Copy(_filePathName, _backupFilePathName);  
+                File.Copy(_filePathName, _backupFilePathName);
+                return true;
             }
         }
 
