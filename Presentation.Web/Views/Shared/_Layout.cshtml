@@ -45,19 +45,41 @@
                 <div class="navbar-collapse ng-cloak">
                     <ul class="nav navbar-nav side-nav">
                         <li ui-sref-active="active" class="mainMenuLink">
-                            <a ui-sref="driving"><i class="fa fa-fw fa-bar-chart-o"></i> Indberet tjenestekørsel</a>
+                            <a ui-sref="driving"><i class="fa fa-car margin-right-10"></i>Indberet tjenestekørsel</a>
                         </li>
                         <li ui-sref-active="active" class="mainMenuLink">
-                            <a ui-sref="myreports"><i class="fa fa-fw fa-table"></i> Mine indberetninger</a>
+                            <a ui-sref="myreports"><i class="fa fa-fw fa-table margin-right-10"></i>Mine indberetninger</a>
                         </li>
                         <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showApproveReports">
-                            <a ui-sref="approvereports"><i class="fa fa-fw fa-edit"></i> Godkend indberetninger</a>
+                            <a ui-sref="approvereports"><i class="fa fa-fw fa-edit margin-right-10"></i>Godkend indberetninger</a>
                         </li>
                         <li ui-sref-active="active" class="mainMenuLink">
-                            <a ui-sref="settings"><i class="fa fa-fw fa-desktop"></i> Personlige indstillinger</a>
+                            <a ui-sref="settings"><i class="fa fa-fw fa-desktop margin-right-10"></i>Personlige indstillinger</a>
                         </li>
                         <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showAdministration">
-                            <a ui-sref="admin"><i class="fa fa-fw fa-wrench"></i> Administrator</a>
+                            <a ui-sref="admin"><i class="fa fa-fw fa-wrench margin-right-10"></i>Administrator</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div ng-hide="!menuCollapse">
+                <div class="navbar-collapse ng-cloak">
+                    <ul class="nav navbar-nav side-nav" style="width: 50px !important; overflow: hidden">
+                        <li ui-sref-active="active" class="mainMenuLink">
+                            <a ui-sref="driving"><i class="fa fa-car"></i></a>
+                        </li>
+                        <li ui-sref-active="active" class="mainMenuLink">
+                            <a ui-sref="myreports"><i class="fa fa-fw fa-table"></i></a>
+                        </li>
+                        <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showApproveReports">
+                            <a ui-sref="approvereports"><i class="fa fa-fw fa-edit"></i></a>
+                        </li>
+                        <li ui-sref-active="active" class="mainMenuLink">
+                            <a ui-sref="settings"><i class="fa fa-fw fa-desktop"></i></a>
+                        </li>
+                        <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showAdministration">
+                            <a ui-sref="admin"><i class="fa fa-fw fa-wrench"></i></a>
                         </li>
 
                     </ul>

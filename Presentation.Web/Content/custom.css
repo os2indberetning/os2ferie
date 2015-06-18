@@ -193,17 +193,24 @@ li.mainMenuLink > a {
     color: white !important;
 }
 
-li.mainMenuLink > a:hover {
+    li.mainMenuLink > a:hover {
+        text-decoration: underline !important;
+    }
+
+a:hover > i.fa {
     text-decoration: underline !important;
 }
 
+li.mainMenuLink.active > a > i.fa {
+    text-decoration: underline !important;
+}
 
 .new-token-btn {
     width: 79%;
 }
 
 .k-pager-wrap .k-dropdown {
-  width: 5.000em !important;
+    width: 5.000em !important;
 }
 
 .close-token-modal {
@@ -349,7 +356,7 @@ li.mainMenuLink > a:hover {
 }
 
 .k-grid {
-        font-size: 11px;
+    font-size: 11px;
 }
 
 .k-toolbar {
@@ -419,7 +426,7 @@ li.mainMenuLink > a:hover {
 }
 
 .mainMenuCollapse {
-    padding-left: 0 !important;
+    padding-left: 50px !important;
 }
 
 .k-ff {

@@ -17,9 +17,7 @@
                     <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlate" kendo-auto-complete k-placeholder="'AB 12 345'" />
                     <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlateDescription" kendo-auto-complete k-placeholder="'Beskrivelse'" />
                     <button type="submit" class="btn btn-primary" ng-click="saveNewLicensePlate()">Tilføj</button>
-                    <button class="btn btn-primary" ng-click="isCollapsed = !isCollapsed"><span ng-if="isCollapsed">Vis anvendte registreringsnumre</span> <span ng-if="!isCollapsed">Skjul anvendte registreringsnumre</span></button>
-                    <div collapse="isCollapsed">
-                        <div class="well well-lg">
+
                             <div class="row margin-5">
                                 <div class="col-sm-3">
                                     <p class="margin-5"><strong>Nummerplade</strong></p>
@@ -48,11 +46,10 @@
                                     <button ng-disabled="plate.IsPrimary" class="btn btn-primary pull-right" ng-click="makeLicensePlatePrimary(plate)">Gør primær</button>
                                 </div>
                                 <div class="col-md-1">
-                                    <button class="btn btn-danger pull-left margin-left-5" ng-click="deleteLicensePlate(plate)">Slet</button>
+                                    <button class="btn btn-danger pull-left margin-left-5" ng-click="openConfirmDeleteLicenseModal(plate)">Slet</button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+
 
                     <div class="seperator"></div>
                 </div>

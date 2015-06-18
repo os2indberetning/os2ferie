@@ -78,6 +78,30 @@
             });
         };
 
+        $scope.openConfirmDeleteLicenseModal = function (plate) {
+            /// <summary>
+            /// Opens confirm delete MobileToken modal.
+            /// </summary>
+            /// <param name="token"></param>
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/ConfirmDeleteLicenseModal.html',
+                controller: 'confirmDeleteToken',
+                backdrop: 'static',
+                resolve: {
+                    token: function () {
+                        return 0;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                $scope.deleteLicensePlate(plate);
+            }, function () {
+
+            });
+        };
+
+
         $scope.deleteLicensePlate = function (plate) {
             /// <summary>
             /// Delete existing license plate.
