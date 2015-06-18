@@ -34,7 +34,7 @@ namespace Core.DomainServices.RoutingClasses
         }
 
         /// <summary>
-        /// URL for route construction.
+        /// URL for car route construction.
         /// </summary>
         public static string RoutingUrl
         {
@@ -42,6 +42,18 @@ namespace Core.DomainServices.RoutingClasses
             {
                 var apiKey = ConfigurationManager.AppSettings["PROTECTED_SEPTIMA_API_KEY"];
                 return "http://new-routing.septima.dk/" + apiKey + "/car/viaroute?";
+            }
+        }
+
+        /// <summary>
+        /// URL for bike route construction.
+        /// </summary>
+        public static string BikeRoutingUrl
+        {
+            get
+            {
+                var apiKey = ConfigurationManager.AppSettings["PROTECTED_SEPTIMA_API_KEY"];
+                return "http://new-routing.septima.dk/" + apiKey + "/bicycle/viaroute?";
             }
         }
     }

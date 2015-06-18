@@ -102,7 +102,7 @@ namespace Core.ApplicationServices
                     };
                     if (homeAddress != null && workAddress != null)
                     {
-                        employment.HomeWorkDistance = _route.GetRoute(new List<Address>() { homeAddress, workAddress }).Length;
+                        employment.HomeWorkDistance = _route.GetRoute(DriveReportTransportType.Car, new List<Address>() { homeAddress, workAddress }).Length;
                     }
                 }
             }

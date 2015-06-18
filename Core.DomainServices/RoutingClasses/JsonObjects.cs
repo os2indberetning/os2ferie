@@ -114,6 +114,7 @@ namespace Core.DomainServices.RoutingClasses
         public int total_time { get; set; }
         public string start_point { get; set; }
         public string end_point { get; set; }
+        public int distance_not_including_ferry { get; set; }
     }
 
     public class AlternativeSummary
@@ -135,10 +136,10 @@ namespace Core.DomainServices.RoutingClasses
     {
         public RootRouteObject(JToken token)
         {
+            
             status = (int)token["status"];
             status_message = (string)token["status_message"];
             route_geometry = (string)token["route_geometry"];
-
             alternative_geometries = new List<string>();
             alternative_summaries = new List<AlternativeSummary>();
         }

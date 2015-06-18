@@ -47,7 +47,7 @@ namespace Core.ApplicationServices
         /// therefore used directly in the calculation of the amount to reimburse
         /// 
         /// </summary>
-        public DriveReport Calculate(DriveReport report)
+        public DriveReport Calculate(RouteInformation drivenRoute, DriveReport report)
         {
             //Check if user has manually provided a distance between home address and work address
             var homeWorkDistance = 0.0;
@@ -77,7 +77,7 @@ namespace Core.ApplicationServices
 
             if (homeWorkDistance <= 0)
             {
-                homeWorkDistance = _route.GetRoute(new List<Address>() { homeAddress, workAddress }).Length;
+                homeWorkDistance = _route.GetRoute(DriveReportTransportType.Car, new List<Address>() { homeAddress, workAddress }).Length;
             }
 
 
@@ -124,11 +124,6 @@ namespace Core.ApplicationServices
             {
                 case KilometerAllowance.Calculated:
                     {
-
-
-                        //Calculate the driven route
-                        var drivenRoute = _route.GetRoute(report.DriveReportPoints);
-
                         double drivenDistance = drivenRoute.Length;
 
                         //Adjust distance based on FourKmRule and if user start and/or ends at home
@@ -144,11 +139,6 @@ namespace Core.ApplicationServices
                     }
                 case KilometerAllowance.CalculatedWithoutExtraDistance:
                     {
-
-
-                        //Calculate the driven route
-                        var drivenRoute = _route.GetRoute(report.DriveReportPoints);
-
                         report.Distance = drivenRoute.Length;
 
                         if (report.FourKmRule)
