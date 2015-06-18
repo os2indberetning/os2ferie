@@ -82,7 +82,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
                        last: "Gå til sidste side",
                        refresh: "Genopfrisk"
                    },
-                   pageSizes: [5, 10, 20, 30, 40, 50]
+                   pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
                },
                dataBound: function () {
                    this.expandRow(this.tbody.find("tr.k-master-row").first());
@@ -96,7 +96,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
                               (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                               m._d.getFullYear();
                       },
-                      title: "Kørselsdato"
+                      title: "Dato"
                   }, {
                       field: "Purpose",
                       template: function (data) {
@@ -112,7 +112,6 @@ angular.module("application").controller("MyAcceptedReportsController", [
                       field: "DriveReportPoints",
                       template: function (data) {
                           var tooltipContent = "";
-                          var gridContent = "";
                           angular.forEach(data.DriveReportPoints, function (point, key) {
                               if (key != data.DriveReportPoints.length - 1) {
                                   tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
@@ -122,13 +121,18 @@ angular.module("application").controller("MyAcceptedReportsController", [
                                   gridContent += point.Town;
                               }
                           });
-                          var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
+                          var gridContent = "<i class='fa fa-road fa-2x'></i>";
+                          var toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
+                          var globe = "<a class='inline pull-right margin-right-5' ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a>";
+                          var result = toolTip + globe;
 
                           if (data.KilometerAllowance != "Read") {
                               return result;
                           } else {
                               if (data.IsFromApp) {
-                                  return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
+                                  toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
+                                  result = toolTip + globe;
+                                  return result;
                               } else {
                                   return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
                               }
@@ -137,18 +141,18 @@ angular.module("application").controller("MyAcceptedReportsController", [
                       }
                   }, {
                       field: "Distance",
-                      title: "Afstand",
+                      title: "Km",
                       template: function (data) {
-                          return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
+                          return data.Distance.toFixed(2).toString().replace('.', ',') + " km";
                       },
-                      footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+                      footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # km"
                   }, {
                       field: "AmountToReimburse",
                       title: "Beløb",
                       template: function (data) {
-                          return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
+                          return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " kr.";
                       },
-                      footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+                      footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
                   }, {
                       field: "CreationDate",
                       template: function (data) {
@@ -157,7 +161,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                  m._d.getFullYear();
                       },
-                      title: "Indberetningsdato"
+                      title: "Indberettet"
                   }, {
                       field: "ClosedDateTimestamp",
                       title: "Godkendelsesdato",

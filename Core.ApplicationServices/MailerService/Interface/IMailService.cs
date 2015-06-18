@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Core.ApplicationServices.MailerService.Interface
 {
     public interface IMailService
     {
-        void SendMails();
+        void SendMails(DateTime payRoleDateTime);
         IEnumerable<string> GetLeadersWithPendingReportsMails();
     }
 }

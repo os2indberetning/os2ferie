@@ -20,7 +20,7 @@
                     <label class="pull-left">År</label>
                 </div>
                 <div class="col-sm-8">
-                    <input kendo-datepicker data-role="datepicker" culture="'da-DK'" ng-model="container.newRateYear" data-start="'decade'" data-format="'yyyy'" data-depth="'decade'" />
+                    <input class="fill-width" kendo-datepicker data-role="datepicker" culture="'da-DK'" ng-model="container.newRateYear" data-start="'decade'" data-format="'yyyy'" data-depth="'decade'" />
 
                 </div>
 
@@ -32,7 +32,7 @@
                     <label class="pull-left">Takst</label>
                 </div>
                 <div class="col-sm-4">
-                    <input type="number" min="0" class="form-control" ng-model="container.newRateRate" />
+                    <input type="number" min="0" class="form-control fill-width" ng-model="container.newRateRate" />
                 </div>
                 <div class="col-sm-4">
                     <label class="margin-top-5">Ører pr. kilometer</label>
@@ -43,15 +43,18 @@
                 <div class="col-sm-4">
                     <label>Taksttype</label>
                 </div>
-                <div class="col-sm-4">
-                    <select kendo-drop-down-list="container.rateDropDown" class="form-control" k-data-source="rateTypes" k-data-text-field="'Description'" k-data-value-field="'Id'" ng-model="container.newRateRateType"></select>
+                <div class="col-sm-8">
+                    <select kendo-drop-down-list="container.rateDropDown" class="form-control fill-width" k-data-source="rateTypes" k-data-text-field="'Description'" k-data-value-field="'Id'" ng-model="container.newRateRateType"></select>
                 </div>
-                <div class="col-sm-4">
+                
+            </div>
+            
+            <div class="col-sm-12">
+                <div class="col-sm-4 pull-right">
                     <button class="btn btn-primary fill-width" ng-click="addNewRateClick()">Opret</button>
                 </div>
             </div>
-
-
+            
 
             <label class="text-danger" ng-bind="newRateYearError"></label><br />
             <label class="text-danger" ng-bind="newRateRateError"></label><br />

@@ -55,7 +55,7 @@
                         last: "Gå til sidste side",
                         refresh: "Genopfrisk"
                     },
-                    pageSizes: [5, 10, 20, 30, 40, 50]
+                    pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
                 },
                 scrollable: false,
                 columns: [
@@ -64,6 +64,15 @@
                         title: "Adviseringsdato",
                         template: function (data) {
                             var m = moment.unix(data.DateTimestamp);
+                            return m._d.getDate() + "/" +
+                                (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                m._d.getFullYear();
+                        }
+                    }, {
+                        field: "PayRoleTimestamp",
+                        title: "Lønkørselsdato",
+                        template: function (data) {
+                            var m = moment.unix(data.PayRoleTimestamp);
                             return m._d.getDate() + "/" +
                                 (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                 m._d.getFullYear();
@@ -103,8 +112,6 @@
             $scope.gridContainer.notificationGrid.dataSource.read();
         }
 
-        $scope.gridContainer.gridPageSize = 20;
-
 
         $scope.loadNotifications();
 
@@ -130,6 +137,7 @@
                 EmailNotification.patch({ id: id }, {
                     "DateTimestamp": result.notificationDate,
                     "Repeat": result.repeatMonthly,
+                    "PayRoleTimestamp": result.payDate,
                 }, function () {
                     $scope.updateNotificationGrid();
                 });
@@ -177,7 +185,8 @@
                 EmailNotification.post({
                     "DateTimestamp": result.notificationDate,
                     "Repeat": result.repeatMonthly,
-                    "Notified": false
+                    "Notified": false,
+                    "PayRoleTimestamp": result.payDate,
                 }, function () {
                     $scope.updateNotificationGrid();
                 });

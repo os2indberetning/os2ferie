@@ -29,6 +29,12 @@
                 $scope.dateErrorMessage = "* Du skal vælge en gyldig adviseringsdato.";
             }
 
+            $scope.payDateErrorMessage = "";
+            if ($scope.payRoleDate == undefined) {
+                error = true;
+                $scope.payDateErrorMessage = "* Du skal vælge en gyldig lønkørselsdato.";
+            }
+
             var result = {};
             if ($scope.repeatMonthly == "true") {
                 result.repeatMonthly = true;
@@ -37,7 +43,7 @@
             }
 
             result.notificationDate = moment($scope.notificationDate).unix();
-
+            result.payDate = moment($scope.payRoleDate).unix();
             if (!error) {
                 $modalInstance.close(result);
                 NotificationService.AutoFadeNotification("success", "", "Email-adviseringen blev oprettet.");

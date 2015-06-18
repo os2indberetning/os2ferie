@@ -26,12 +26,14 @@
         fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
         var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
-        Person.get({ id: personId }, function (data) {
-            $scope.currentPerson = data;
-        });
+        $scope.currentPerson = $rootScope.CurrentUser;
 
-        Person.getAll(function (data) {
-            $scope.persons = data.value;
+        //Person.get({ id: personId }, function (data) {
+        //    $scope.currentPerson = data;
+        //});
+
+        Person.getAll({ query: "$select=Id,FullName" }).$promise.then(function(res) {
+            $scope.persons = res.value;
         });
 
         OrgUnit.get(function (data) {
@@ -93,7 +95,7 @@
                     last: "Gå til sidste side",
                     refresh: "Genopfrisk"
                 },
-                pageSizes: [5, 10, 20, 30, 40, 50]
+                pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
             },
             dataBound: function () {
                 this.expandRow(this.tbody.find("tr.k-master-row").first());
@@ -213,7 +215,7 @@
                     last: "Gå til sidste side",
                     refresh: "Genopfrisk"
                 },
-                pageSizes: [5, 10, 20, 30, 40, 50]
+                pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
             },
             dataBound: function () {
                 this.expandRow(this.tbody.find("tr.k-master-row").first());

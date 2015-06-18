@@ -6,7 +6,6 @@
            $scope.nonAdmins = res.value;
        });
 
-
        $scope.autoCompleteOptions = {
            filter: "contains"
        };
@@ -63,7 +62,7 @@
                        last: "Gå til sidste side",
                        refresh: "Genopfrisk"
                    },
-                   pageSizes: [5, 10, 20, 30, 40, 50]
+                   pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
                },
                scrollable: false,
                columns: [

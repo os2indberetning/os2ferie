@@ -28,14 +28,16 @@ namespace Core.ApplicationServices.MailerService.Impl
         /// <summary>
         /// Sends an email to all leaders with pending reports to be approved.
         /// </summary>
-        public void SendMails()
+        public void SendMails(DateTime payRoleDateTime)
         {
             var mailAddresses = GetLeadersWithPendingReportsMails();
+
+            var mailBody = ConfigurationManager.AppSettings["PROTECTED_MAIL_BODY"];
+            mailBody = mailBody.Replace("####", payRoleDateTime.ToString("dd-MM-yyyy"));
+
             foreach (var mailAddress in mailAddresses)
             {
-                _mailSender.SendMail(mailAddress,
-                    ConfigurationManager.AppSettings["PROTECTED_MAIL_SUBJECT"],
-                     ConfigurationManager.AppSettings["PROTECTED_MAIL_BODY"]);
+                _mailSender.SendMail(mailAddress, ConfigurationManager.AppSettings["PROTECTED_MAIL_SUBJECT"], mailBody);
             }
 
         }

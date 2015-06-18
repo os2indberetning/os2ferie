@@ -4,6 +4,8 @@
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
 
+       $scope.isLeader = $rootScope.CurrentUser.IsLeader;
+
        var allReports = [];
 
        $scope.tableSortHelp = $rootScope.HelpTexts.TableSortHelp.text;
@@ -17,6 +19,20 @@
            var m = moment(d);
            return m.startOf('day').unix();
        }
+
+       $scope.orgUnitAutoCompleteOptions = {
+           filter: "contains",
+           select: function (e) {
+               $scope.orgUnitChanged();
+           }
+       }
+
+       $scope.personAutoCompleteOptions = {
+           filter: "contains",
+           select: function (e) {
+               $scope.personChanged();
+           }
+       };
 
 
 
@@ -32,9 +48,12 @@
        $scope.orgUnit = {};
        $scope.orgUnits = [];
 
-       OrgUnit.get().$promise.then(function (res) {
-           $scope.orgUnits = res.value;
-       });
+       // Load people for auto-complete textbox
+       $scope.people = [];
+       $scope.person = {};
+
+       $scope.orgUnits = $rootScope.OrgUnits;
+       $scope.people = $rootScope.People;
 
        $scope.orgUnitChanged = function (item) {
            /// <summary>
@@ -244,7 +263,7 @@
                        last: "Gå til sidste side",
                        refresh: "Genopfrisk"
                    },
-                   pageSizes: [5, 10, 20, 30, 40, 50]
+                   pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
                },
                dataBound: function () {
                    $scope.getCurrentPageSums();
@@ -257,7 +276,7 @@
                    title: "Medarbejder"
                }, {
                    field: "Employment.OrgUnit.LongDescription",
-                   title: "Organisationsenhed"
+                   title: "Org.enhed"
                }, {
                    field: "DriveDateTimestamp",
                    template: function (data) {
@@ -266,7 +285,7 @@
                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                            m._d.getFullYear();
                    },
-                   title: "Kørselsdato"
+                   title: "Dato"
                }, {
                    field: "Purpose",
                    title: "Formål",
@@ -275,7 +294,6 @@
                    field: "DriveReportPoints",
                    template: function (data) {
                        var tooltipContent = "";
-                       var gridContent = "";
                        angular.forEach(data.DriveReportPoints, function (point, key) {
                            if (key != data.DriveReportPoints.length - 1) {
                                tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
@@ -285,31 +303,41 @@
                                gridContent += point.StreetName;
                            }
                        });
-                       var result = "<div kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div> <a ng-click='showRouteModal(" + data.Id + ")'>Se rute på kort</a>";
+                       var gridContent = "<i class='fa fa-road fa-2x'></i>";
+                       var toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
+                       var globe = "<a class='inline pull-right margin-right-5' ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a>";
+                       var result = toolTip + globe;
 
                        if (data.KilometerAllowance != "Read") {
                            return result;
                        } else {
-                           return data.UserComment;
+                           if (data.IsFromApp) {
+                               toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
+                               result = toolTip + globe;
+                               return result;
+                           } else {
+                               return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
+                           }
+
                        }
                    }
                }, {
                    field: "Distance",
-                   title: "Afstand",
+                   title: "Km",
                    template: function (data) {
-                       return data.Distance.toFixed(2).toString().replace('.', ',') + " Km.";
+                       return data.Distance.toFixed(2).toString().replace('.', ',') + " km";
                    },
-                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Km"
+                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # km"
                }, {
                    field: "AmountToReimburse",
                    title: "Beløb",
                    template: function (data) {
-                       return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " Dkk.";
+                       return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " kr.";
                    },
-                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # Dkk"
+                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
                }, {
                    field: "KilometerAllowance",
-                   title: "Merkørsel",
+                   title: "MK",
                    template: function (data) {
                        if (data.KilometerAllowance == "CalculatedWithoutExtraDistance") {
                            return "<i class='fa fa-check'></i>";
@@ -327,7 +355,7 @@
                    }
                }, {
                    field: "CreatedDateTimestamp",
-                   title: "Indberetningsdato",
+                   title: "Indberettet",
                    template: function (data) {
                        var m = moment.unix(data.CreatedDateTimestamp);
                        return m._d.getDate() + "/" +
@@ -472,18 +500,9 @@
 
        }
 
-       // Load people for auto-complete textbox
-       $scope.people = [];
-       $scope.person = {};
 
-       // Set initial value for grid pagesize
-       $scope.gridContainer.gridPageSize = 20;
 
-       Person.getAll().$promise.then(function (res) {
-           angular.forEach(res.value, function (value, key) {
-               $scope.people.push({ Id: value.Id, FullName: value.FullName });
-           });
-       });
+
 
 
 

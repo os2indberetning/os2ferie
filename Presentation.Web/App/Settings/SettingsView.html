@@ -17,7 +17,7 @@
                     <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlate" kendo-auto-complete k-placeholder="'AB 12 345'" />
                     <input ng-enter="saveNewLicensePlate()" ng-model="newLicensePlateDescription" kendo-auto-complete k-placeholder="'Beskrivelse'" />
                     <button type="submit" class="btn btn-primary" ng-click="saveNewLicensePlate()">Tilføj</button>
-                    <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed"><span ng-if="isCollapsed">Vis anvendte registreringsnumre</span> <span ng-if="!isCollapsed">Skjul anvendte registreringsnumre</span></button>
+                    <button class="btn btn-primary" ng-click="isCollapsed = !isCollapsed"><span ng-if="isCollapsed">Vis anvendte registreringsnumre</span> <span ng-if="!isCollapsed">Skjul anvendte registreringsnumre</span></button>
                     <div collapse="isCollapsed">
                         <div class="well well-lg">
                             <div class="row margin-5">
@@ -27,7 +27,7 @@
                                 <div class="col-sm-3">
                                     <p class="margin-5"><strong>Beskrivelse</strong></p>
                                 </div>
-                                <div class="col-sm-1">
+                                <div class="col-sm-2">
                                     <p class="margin-5"><strong>Primær</strong></p>
                                 </div>
                                 <div class="col-sm-1">
@@ -140,7 +140,7 @@
 
                     <div class="col-md-12 margin-bottom-5">
 
-                        <button class="btn btn-success pull-right fill-width" ng-click="newToken()"><span ng-if="tokenIsCollapsed">Opret ny token</span><span ng-if="!tokenIsCollapsed">Annuller</span></button>
+                        <button class="btn btn-primary pull-right fill-width" ng-click="newToken()"><span ng-if="tokenIsCollapsed">Opret ny token</span><span ng-if="!tokenIsCollapsed">Annuller</span></button>
 
 
                     </div>
@@ -158,7 +158,7 @@
                 <div class="form-group form-inline">
                     <h3>Personlige adresser</h3>
                     <div kendo-grid="gridContainer.personalAddressesGrid" class="scrollable" options="personalAddresses"></div>
-                    <button class="btn btn-default set-margin-top-10" ng-click="openAddressAddModal()">Tilføj ny personlig adresse</button>
+                    <button class="btn btn-primary set-margin-top-10" ng-click="openAddressAddModal()">Tilføj ny personlig adresse</button>
                 </div>
             </div>
         </div>
@@ -167,7 +167,7 @@
                 <div class="form-group form-inline">
                     <h3>Personlige ruter</h3>
                     <div kendo-grid="gridcontainer.personalRoutesGrid" class="scrollable" options="personalRoutes"></div>
-                    <button class="btn btn-default set-margin-top-10" ng-click="openRouteAddModal()">Tilføj ny personlig rute</button>
+                    <button class="btn btn-primary set-margin-top-10" ng-click="openRouteAddModal()">Tilføj ny personlig rute</button>
                 </div>
             </div>
         </div>

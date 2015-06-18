@@ -12,6 +12,13 @@
                 
             </div>
             <div class="row">
+                <label class="col-md-6">Lønkørselsdato</label>
+                <div class="col-md-4">
+                    <input class="margin-5" kendo-datepicker k-options="dateOptions" k-ng-model="payRoleDate" />
+                </div>
+
+            </div>
+            <div class="row">
                 <label class="col-md-6">Gentag månedligt</label>
                 <div class="col-md-4">
                     <select class="form-control margin-5" ng-model="repeatMonthly">
@@ -23,6 +30,9 @@
             </div>
             <div class="row">
                 <label class="text-danger col-md-6" ng-bind="dateErrorMessage"></label>
+            </div>
+            <div class="row">
+                <label class="text-danger col-md-6" ng-bind="payDateErrorMessage"></label>
             </div>
             <div class="row">
                 <label class="text-danger col-md-6" ng-bind="repeatErrorMessage"></label>

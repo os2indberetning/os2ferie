@@ -12,6 +12,7 @@
         $scope.toString = toString;
         $scope.replace = String.replace;
 
+        $scope.saveBtnDisabled = false;
 
         var isFormDirty = false;
 
@@ -504,10 +505,11 @@
             /// Creates the map widget in the view.
             /// </summary>
             $timeout(function () {
+                // Checks to see whether the map div has been created.
                 if (angular.element('#map').length) {
                     OS2RouteMap.create({
                         id: 'map',
-                        change: function (obj) {
+                        change: function(obj) {
                             $scope.currentMapAddresses = obj.Addresses;
                             $scope.latestMapDistance = obj.distance;
                             updateDrivenKm();
@@ -531,13 +533,13 @@
                             mapChanging = true;
                             $scope.DriveReport.Addresses = [];
                             // Load the adresses from the map.
-                            angular.forEach(obj.Addresses, function (address, key) {
+                            angular.forEach(obj.Addresses, function(address, key) {
                                 var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
                                 $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
                             });
                             // Apply to update the view.
                             $scope.$apply();
-                            $timeout(function () {
+                            $timeout(function() {
                                 // Wait for the view to render before setting mapChanging to false.
 
                                 mapChanging = false;
@@ -545,8 +547,10 @@
                         }
                     });
                     OS2RouteMap.set($scope.mapStartAddress);
+                } else {
+                    NotificationService.AutoFadeNotification("danger", "", "Kortet kunne ikke vises. Prøv at genopfriske siden.");
                 }
-            });
+            },500);
         }
 
 
@@ -608,6 +612,10 @@
                 }, 200);
             }
 
+            $scope.DrivenKMDisplay = 0;
+            $scope.TransportAllowance = 0;
+            $scope.DriveReport.RoundTrip = false;
+
         }
 
         $scope.transportChanged = function (res) {
@@ -621,15 +629,18 @@
             /// Handles saving of drivereport.
             /// </summary>
             $scope.canSubmitDriveReport = false;
+            $scope.saveBtnDisabled = true;
             if (isEditingReport) {
                 DriveReport.delete({ id: ReportId }).$promise.then(function () {
                     DriveReport.edit($scope).$promise.then(function (res) {
                         $scope.latestDriveReport = res;
                         NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev redigeret");
                         $scope.clearReport();
+                        $scope.saveBtnDisabled = false;
                         $modalInstance.close();
                         $scope.container.driveDatePicker.close();
                     }, function () {
+                        $scope.saveBtnDisabled = false;
                         NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under redigering af tjenestekørselsindberetningen.");
                     });
                 });
@@ -638,7 +649,9 @@
                     $scope.latestDriveReport = res;
                     NotificationService.AutoFadeNotification("success", "", "Din indberetning er sendt til godkendelse.");
                     $scope.clearReport();
+                    $scope.saveBtnDisabled = false;
                 }, function () {
+                    $scope.saveBtnDisabled = false;
                     NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under oprettelsen af tjenestekørselsindberetningen.");
                 });
             }
@@ -746,41 +759,43 @@
             /// <summary>
             /// Updates drivenkm fields under map widget.
             /// </summary>
-            if ($scope.DriveReport.KilometerAllowance != "CalculatedWithoutExtraDistance") {
-                if (routeStartsAtHome() && routeEndsAtHome()) {
-                    $scope.TransportAllowance = Number(getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance) * 2;
-                } else if (routeStartsAtHome() || routeEndsAtHome()) {
-                    $scope.TransportAllowance = getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance;
+            $timeout(function() {
+                if ($scope.DriveReport.KilometerAllowance != "CalculatedWithoutExtraDistance") {
+                    if (routeStartsAtHome() && routeEndsAtHome()) {
+                        $scope.TransportAllowance = Number(getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance) * 2;
+                    } else if (routeStartsAtHome() || routeEndsAtHome()) {
+                        $scope.TransportAllowance = getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance;
+                    } else {
+                        $scope.TransportAllowance = 0;
+                    }
                 } else {
                     $scope.TransportAllowance = 0;
                 }
-            } else {
-                $scope.TransportAllowance = 0;
-            }
 
-            if ($scope.DriveReport.KilometerAllowance == "Read") {
-                if ($scope.DriveReport.ReadDistance == undefined) {
-                    $scope.DriveReport.ReadDistance = 0;
-                }
-                $scope.DrivenKMDisplay = Number($scope.DriveReport.ReadDistance.toString().replace(",", "."));
-            } else {
-                if ($scope.latestMapDistance == undefined) {
-                    $scope.DrivenKMDisplay = 0;
+                if ($scope.DriveReport.KilometerAllowance == "Read") {
+                    if ($scope.DriveReport.ReadDistance == undefined) {
+                        $scope.DriveReport.ReadDistance = 0;
+                    }
+                    $scope.DrivenKMDisplay = Number($scope.DriveReport.ReadDistance.toString().replace(",", "."));
                 } else {
-                    $scope.DrivenKMDisplay = $scope.latestMapDistance;
+                    if ($scope.latestMapDistance == undefined) {
+                        $scope.DrivenKMDisplay = 0;
+                    } else {
+                        $scope.DrivenKMDisplay = $scope.latestMapDistance;
+                    }
                 }
-            }
 
-            if ($scope.DriveReport.RoundTrip === true) {
-                // Double the driven km if its a roundtrip.
-                $scope.DrivenKMDisplay = Number($scope.DrivenKMDisplay) * 2;
-                // If the route starts xor ends at home -> double the transportallowance.
-                // The case where the route both ends and starts at home is already covered.
-                if (routeStartsAtHome() != routeEndsAtHome()) {
+                if ($scope.DriveReport.RoundTrip === true) {
+                    // Double the driven km if its a roundtrip.
+                    $scope.DrivenKMDisplay = Number($scope.DrivenKMDisplay) * 2;
+                    // If the route starts xor ends at home -> double the transportallowance.
+                    // The case where the route both ends and starts at home is already covered.
+                    if (routeStartsAtHome() != routeEndsAtHome()) {
 
-                    $scope.TransportAllowance = Number($scope.TransportAllowance) * 2;
+                        $scope.TransportAllowance = Number($scope.TransportAllowance) * 2;
+                    }
                 }
-            }
+            });
         }
 
         $scope.readDistanceChanged = function () {

@@ -1,5 +1,5 @@
 ﻿<div class="modal-header">
-    <h3 class="modal-title">Rediger rute</h3>
+    <h3 class="modal-title">Tilføj personlig rute</h3>
 </div>
 <div class="modal-body">
     <label>Beskrivelse</label>
@@ -12,10 +12,17 @@
     <label ng-if="viaPointModels.length > 0">Viapunkter</label>
     <div ng-repeat="viapoint in viaPointModels track by $index">
         <label>Viapunkt nr: {{$index + 1}}</label>
-        <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
-               k-data-source="SmartAddress" ng-model="viaPointModels[$index]" class="fill-90" k-placeholder="'Skriv her'" />
-        <button class="btn btn-danger pull-right" ng-click="removeViaPoint($index)">Slet</button>
-        <div class="seperator"></div>
+
+        <div class="col-sm-11" style="margin-left: -15px;">
+            <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+                   k-data-source="SmartAddress" ng-model="viaPointModels[$index]" class="fill-width" k-placeholder="'Skriv her'" />
+        </div>
+        <div class="col-sm-1 pull-right" style="margin-right: -15px;">
+            <button class="btn btn-danger pull-right" ng-click="removeViaPoint($index)">Slet</button>
+        </div>
+        <br />
+        <br />
+        <br />
     </div>
     <div class="seperator"></div>
     <label>Adresse 2</label>
@@ -23,9 +30,9 @@
            k-data-source="SmartAddress" ng-model="newEndPoint" class="fill-width" k-placeholder="'Skriv her'" />
     <div class="seperator"></div>
 
-    <button class="btn" ng-click="addNewViaPoint()"><i class="fa fa-plus"></i> Viapunkt</button>
+    <button class="btn btn-primary" ng-click="addNewViaPoint()"><i class="fa fa-plus"></i> Viapunkt</button>
 </div>
 <div class="modal-footer">
     <button class="btn btn-success pull-left new-token-btn" ng-disabled="isSaveDisabled" ng-click="saveRoute()">Gem</button>
-    <button class="btn btn-primary pull-right close-token-modal" ng-click="closeRouteEditModal()">Luk</button>
+    <button class="btn btn-danger pull-right close-token-modal" ng-click="closeRouteEditModal()">Luk</button>
 </div>

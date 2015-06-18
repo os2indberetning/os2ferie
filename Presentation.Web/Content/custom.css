@@ -34,8 +34,16 @@
     margin: 5px;
 }
 
+.margin-left-5 {
+    margin-left: 5px;
+}
+
 .margin-left-10 {
     margin-left: 10px;
+}
+
+.margin-left-15 {
+    margin-left: 15px;
 }
 
 .errorOutline {
@@ -109,10 +117,6 @@ a {
     margin: 6px;
 }
 
-.margin-left-5 {
-    margin-left: 5px;
-}
-
 .margin-bottom-5 {
     margin-bottom: 5px;
 }
@@ -167,6 +171,12 @@ a {
     border: 5px solid #fff;
 }
 
+a.informationHelpLink {
+    color: white;
+    text-decoration: underline;
+}
+
+
 .modal-dialog {
     right: auto;
     left: auto;
@@ -175,8 +185,25 @@ a {
     padding-bottom: 30px;
 }
 
+li.mainMenuLink.active {
+    text-decoration: underline !important;
+}
+
+li.mainMenuLink > a {
+    color: white !important;
+}
+
+li.mainMenuLink > a:hover {
+    text-decoration: underline !important;
+}
+
+
 .new-token-btn {
     width: 79%;
+}
+
+.k-pager-wrap .k-dropdown {
+  width: 5.000em !important;
 }
 
 .close-token-modal {
@@ -317,12 +344,12 @@ a {
     opacity: 0.5;
 }
 
-.k-header {
+.k-grid .k-header {
     font-weight: bold !important;
 }
 
 .k-grid {
-    font-size: 12px;
+        font-size: 11px;
 }
 
 .k-toolbar {
