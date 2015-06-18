@@ -687,6 +687,11 @@
             }
         }
 
+        $scope.fourKmRuleChanged = function()
+        {
+            updateDrivenKm();
+        }
+
         $scope.employmentChanged = function () {
             angular.forEach($scope.currentUser.Employments, function (empl, key) {
                 if (empl.Id == $scope.DriveReport.Position) {
@@ -794,6 +799,14 @@
 
                         $scope.TransportAllowance = Number($scope.TransportAllowance) * 2;
                     }
+                }
+
+                if ($scope.DriveReport.FourKmRule != undefined && $scope.DriveReport.FourKmRule.Using === true && $scope.DriveReport.FourKmRule.Value != undefined) {
+                   if (routeStartsAtHome() != routeEndsAtHome()) {
+                       $scope.TransportAllowance = Number($scope.DriveReport.FourKmRule.Value) + 4;
+                   } else if (routeStartsAtHome() && routeEndsAtHome()) {
+                       $scope.TransportAllowance = (Number($scope.DriveReport.FourKmRule.Value) * 2) + 4;
+                   }
                 }
             });
         }
