@@ -25,6 +25,7 @@ namespace Core.ApplicationServices
     public class DriveReportService : IDriveReportService
     {
         private readonly IRoute<RouteInformation> _route;
+        private readonly IGenericRepository<RateType> _rateTypeRepo;
         private readonly IAddressCoordinates _coordinates;
         private readonly IGenericRepository<DriveReport> _driveReportRepository;
         private readonly IReimbursementCalculator _calculator;
@@ -35,9 +36,10 @@ namespace Core.ApplicationServices
 
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IAddressCoordinates coordinates, IRoute<RouteInformation> route)
+        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IAddressCoordinates coordinates, IRoute<RouteInformation> route, IGenericRepository<RateType> rateTypeRepo)
         {
             _route = route;
+            _rateTypeRepo = rateTypeRepo;
             _coordinates = coordinates;
             _calculator = calculator;
             _orgUnitRepository = orgUnitRepository;
@@ -70,23 +72,34 @@ namespace Core.ApplicationServices
             {
                 var pointsWithCoordinates =
                     report.DriveReportPoints.Select((t, i) => report.DriveReportPoints.ElementAt(i))
-                        .Select(currentPoint => (DriveReportPoint)_coordinates.GetAddressCoordinates(currentPoint))
+                        .Select(currentPoint => (DriveReportPoint) _coordinates.GetAddressCoordinates(currentPoint))
                         .ToList();
 
                 report.DriveReportPoints = pointsWithCoordinates;
 
-                var drivenRoute = _route.GetRoute(report.DriveReportPoints);
+                var isBike = _rateTypeRepo.AsQueryable().First(x => x.TFCode.Equals(report.TFCode)).IsBike;
 
-                report.Distance = (double)drivenRoute.Length / 1000;
+
+                // Set transportType to Bike if isBike is true. Otherwise set it to Car.
+                var drivenRoute = _route.GetRoute(
+                    isBike ? DriveReportTransportType.Bike : DriveReportTransportType.Car, report.DriveReportPoints);
+
+                report.Distance = (double) drivenRoute.Length/1000;
 
                 if (report.Distance < 0)
                 {
                     report.Distance = 0;
                 }
+
+                report = _calculator.Calculate(drivenRoute, report);
+            }
+            else
+            {
+                report = _calculator.Calculate(null, report);
             }
 
 
-            report = _calculator.Calculate(report);
+
 
 
 

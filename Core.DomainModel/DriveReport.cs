@@ -14,6 +14,12 @@ namespace Core.DomainModel
         CalculatedWithoutExtraDistance
     }
 
+    public enum DriveReportTransportType
+    {
+        Car,
+        Bike
+    }
+
     public class DriveReport : Report
     {
         public double Distance { get; set; }

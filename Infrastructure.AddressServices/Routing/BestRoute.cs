@@ -21,12 +21,13 @@ namespace Infrastructure.AddressServices.Routing
         /// <summary>
         /// Returns the shortest route within the time limit. (Duration <= 300s , Length difference > 3000m)
         /// </summary>
+        /// <param name="transportType">Type of transport. Car or bike.</param>
         /// <param name="addresses"></param>
         /// <exception cref="AddressLaunderingException"></exception>
         /// <exception cref="AddressCoordinatesException"></exception>
         /// <exception cref="RouteInformationException"></exception>
         /// <returns></returns>
-        public RouteInformation GetRoute(IEnumerable<Address> addresses)
+        public RouteInformation GetRoute(DriveReportTransportType transportType, IEnumerable<Address> addresses)
         {
             if (addresses == null || !addresses.Any())
             {
@@ -93,7 +94,7 @@ namespace Infrastructure.AddressServices.Routing
             try
             {
                 List<RouteInformation> routes =
-                    septimaService.GetRoute(routeCoordinates).OrderBy(x => x.Duration).ToList();
+                    septimaService.GetRoute(transportType, routeCoordinates).OrderBy(x => x.Duration).ToList();
                 RouteInformation bestRoute = routes[0];
 
                 foreach (var route in routes)

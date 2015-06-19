@@ -8,8 +8,9 @@ namespace Core.DomainServices
         /// <summary>
         /// Returns a route for a set of addresses.
         /// </summary>
+        /// <param name="transportType">Type of transport. Car or bike</param>
         /// <param name="addresses"></param>
         /// <returns></returns>
-        T GetRoute(IEnumerable<Address> addresses);
+        T GetRoute(DriveReportTransportType transportType, IEnumerable<Address> addresses);
     }
 }

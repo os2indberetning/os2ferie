@@ -191,7 +191,7 @@
                     report.Distance = (report.Distance + $scope.TransportAllowance).toFixed(2);
                     $scope.DriveReport.ReadDistance = report.Distance.toString().replace(".", ",");
                 } else {
-
+                    $scope.initialEditReportLoad = true;
                     $scope.DriveReport.Addresses = [];
                     var tempArray = [];
                     angular.forEach(report.DriveReportPoints, function (point, key) {
@@ -509,20 +509,21 @@
                 if (angular.element('#map').length) {
                     OS2RouteMap.create({
                         id: 'map',
-                        change: function(obj) {
+                        change: function (obj) {
                             $scope.currentMapAddresses = obj.Addresses;
                             $scope.latestMapDistance = obj.distance;
                             updateDrivenKm();
 
-                            // Magic hacks. Reduces flickering of addresses when loading the view when editing a report.
-                            if (initialLoad > 0) {
-                                initialLoad--;
-                                return;
-                            }
-
                             // Return if the change comes from AddressInputChanged
                             if (mapChanging === true) {
                                 setMapPromise.resolve();
+                                return;
+                            }
+
+
+                            // Prevents flickering of addresses when loading a report to be edited.
+                            if ($scope.initialEditReportLoad === true) {
+                                $scope.initialEditReportLoad = false;
                                 return;
                             }
 
@@ -687,6 +688,11 @@
             }
         }
 
+        $scope.fourKmRuleChanged = function()
+        {
+            updateDrivenKm();
+        }
+
         $scope.employmentChanged = function () {
             angular.forEach($scope.currentUser.Employments, function (empl, key) {
                 if (empl.Id == $scope.DriveReport.Position) {
@@ -794,6 +800,14 @@
 
                         $scope.TransportAllowance = Number($scope.TransportAllowance) * 2;
                     }
+                }
+
+                if ($scope.DriveReport.FourKmRule != undefined && $scope.DriveReport.FourKmRule.Using === true && $scope.DriveReport.FourKmRule.Value != undefined) {
+                   if (routeStartsAtHome() != routeEndsAtHome()) {
+                       $scope.TransportAllowance = Number($scope.DriveReport.FourKmRule.Value) + 4;
+                   } else if (routeStartsAtHome() && routeEndsAtHome()) {
+                       $scope.TransportAllowance = (Number($scope.DriveReport.FourKmRule.Value) * 2) + 4;
+                   }
                 }
             });
         }

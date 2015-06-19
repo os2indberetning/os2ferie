@@ -12,5 +12,6 @@ namespace Core.DomainModel
         public string Description { get; set; }
         public String TFCode { get; set; }
         public bool RequiresLicensePlate { get; set; }
+        public bool IsBike { get; set; }
     }
 }
