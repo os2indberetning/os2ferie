@@ -19,7 +19,7 @@ namespace Core.ApplicationServices.MailerService.Impl
             {
                 Host = ConfigurationManager.AppSettings["PROTECTED_SMTP_HOST"],
                 Port = int.Parse(ConfigurationManager.AppSettings["PROTECTED_SMTP_HOST_PORT"]),
-                EnableSsl = true,
+                EnableSsl = false,
                 Credentials = new NetworkCredential()
                 {
                     UserName = ConfigurationManager.AppSettings["PROTECTED_SMTP_USER"],
