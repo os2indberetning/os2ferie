@@ -339,7 +339,7 @@
                    field: "KilometerAllowance",
                    title: "MK",
                    template: function (data) {
-                       if (data.KilometerAllowance == "CalculatedWithoutExtraDistance") {
+                       if (data.IsExtraDistance) {
                            return "<i class='fa fa-check'></i>";
                        }
                        return "";

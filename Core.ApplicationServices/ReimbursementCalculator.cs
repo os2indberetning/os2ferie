@@ -124,6 +124,12 @@ namespace Core.ApplicationServices
             {
                 case KilometerAllowance.Calculated:
                     {
+                        if ((report.StartsAtHome || report.EndsAtHome) && !report.FourKmRule)
+                        {
+                            report.IsExtraDistance = true;
+                        }
+
+
                         double drivenDistance = drivenRoute.Length;
 
                         //Adjust distance based on FourKmRule and if user start and/or ends at home
@@ -155,6 +161,11 @@ namespace Core.ApplicationServices
 
                 case KilometerAllowance.Read:
                     {
+                        if ((report.StartsAtHome || report.EndsAtHome) && !report.FourKmRule)
+                        {
+                            report.IsExtraDistance = true;
+                        }
+
                         //Take distance from report
                         var manuallyProvidedDrivenDistance = report.Distance;
 
@@ -169,6 +180,11 @@ namespace Core.ApplicationServices
             }
 
             //Calculate the actual amount to reimburse
+
+            if (report.Distance < 0)
+            {
+                report.Distance = 0;
+            }
 
             SetAmountToReimburse(report);
 

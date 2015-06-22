@@ -801,12 +801,13 @@
                         $scope.TransportAllowance = Number($scope.TransportAllowance) * 2;
                     }
                 }
-
                 if ($scope.DriveReport.FourKmRule != undefined && $scope.DriveReport.FourKmRule.Using === true && $scope.DriveReport.FourKmRule.Value != undefined) {
                    if (routeStartsAtHome() != routeEndsAtHome()) {
-                       $scope.TransportAllowance = Number($scope.DriveReport.FourKmRule.Value) + 4;
+                       $scope.TransportAllowance = Number($scope.DriveReport.FourKmRule.Value.toString().replace(",",".")) + 4;
                    } else if (routeStartsAtHome() && routeEndsAtHome()) {
-                       $scope.TransportAllowance = (Number($scope.DriveReport.FourKmRule.Value) * 2) + 4;
+                       $scope.TransportAllowance = (Number($scope.DriveReport.FourKmRule.Value.toString().replace(",",".")) * 2) + 4;
+                   } else {
+                       $scope.TransportAllowance = 4;
                    }
                 }
             });

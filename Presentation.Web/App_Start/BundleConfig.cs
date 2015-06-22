@@ -37,14 +37,14 @@ namespace OS2Indberetning
                       "~/Content/Themes/SbAdmin/font-awesome/css/font-awesome.css",
                       "~/Content/site.css",
                       "~/Content/timeline.css",
-                      "~/Content/custom.css",
                       "~/Content/kendo/kendo.common.min.css",
                       "~/Content/kendo/kendo.common-bootstrap.min.css",
                       "~/Content/kendo/kendo.rtl.css",
                       "~/Content/kendo/kendo.bootstrap.min.css",
                       "~/Content/kendo/kendo.dataviz.min.css",
                       "~/Content/kendo/kendo.dataviz.bootstrap.min.css",
-                      "~/Content/pnotify.custom.min.css"));
+                      "~/Content/pnotify.custom.min.css",
+                      "~/Content/custom.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").IncludeDirectoryWithExclusion("~/App", "*.js", true, "*.spec.js"));
         }
