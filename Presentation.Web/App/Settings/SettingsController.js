@@ -18,6 +18,7 @@
 
         $scope.mobileTokenHelpText = $rootScope.HelpTexts.MobileTokenHelpText.text;
         $scope.primaryLicensePlateHelpText = $rootScope.HelpTexts.PrimaryLicensePlateHelpText.text;
+        $scope.AlternativeHomeAddressHelpText = $rootScope.HelpTexts.AlternativeHomeAddressHelpText.text;
 
 
         var personId = $rootScope.CurrentUser.Id;

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using System.Web.Mvc;
+using System.Web.Optimization;
 using Core.ApplicationServices;
 using Core.ApplicationServices.FileGenerator;
 using Core.DomainModel;
@@ -49,5 +51,7 @@ namespace OS2Indberetning.Controllers
                 return InternalServerError();
             }
         }
+
+
     }
 }

@@ -1,0 +1,16 @@
+﻿CACHE MANIFEST
+# 2010-06-18:v2
+
+# Explicitly cached 'master entries'.
+CACHE:
+/favicon.ico
+/Content/custom.css
+/Content/logo.png
+/bundles/angular?v=w10cwLnNL7lUgEGA9b4SVX54IugCMj94bL-rkbHKwZ01
+
+# Resources that require the user to be online.
+NETWORK:
+*
+
+FALLBACK:
+* /Content/logo.png

@@ -46,6 +46,7 @@ namespace OS2Indberetning
                       "~/Content/pnotify.custom.min.css",
                       "~/Content/custom.css"));
 
+
             bundles.Add(new ScriptBundle("~/bundles/angular").IncludeDirectoryWithExclusion("~/App", "*.js", true, "*.spec.js"));
         }
     }
