@@ -34,16 +34,12 @@ namespace Core.ApplicationServices
         /// <returns>List of People with CPR-number removed.</returns>
         public IQueryable<Person> ScrubCprFromPersons(IQueryable<Person> queryable)
         {
-            var set = queryable.ToList();
-
-            // Add fullname to the resultset
-            foreach (var person in set)
+            foreach (var person in queryable)
             {
                 person.CprNumber = "";
             }
-
-
-            return set.AsQueryable();
+           
+            return queryable;
         }
 
         /// <summary>

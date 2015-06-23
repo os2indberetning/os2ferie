@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.OData;
@@ -72,11 +75,36 @@ namespace OS2Indberetning.Controllers
 
         protected IQueryable<T> GetQueryable(ODataQueryOptions<T> queryOptions)
         {
-            if (queryOptions.Filter != null) { 
-                return (IQueryable<T>)queryOptions.Filter.ApplyTo(Repo.AsQueryable(), new ODataQuerySettings());
-            }
-            return Repo.AsQueryable();
+            return _performODataQueryWithoutSelectAndExpand(Repo.AsQueryable(), queryOptions);
         }
+
+        /// <summary>
+        /// OData queries are only performed when our controllers have performed their tasks,
+        /// meaning that they perform tasks on the entire dbset before it is filtered according
+        /// to the odata query. We cannot just apply the odata query as select and expand will
+        /// alter what it returns so it no longer matches the type T, as some fields will be missing
+        /// or expanded.
+        /// Therefore we construct a new odata query option that does not perform select and expand
+        /// and filters the data according to that.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="queryOptions"></param>
+        /// <returns></returns>
+        private IQueryable<T> _performODataQueryWithoutSelectAndExpand(IQueryable<T> input,
+            ODataQueryOptions<T> queryOptions)
+        {
+            var request = queryOptions.Request;
+            var uri = request.RequestUri.AbsoluteUri;
+            uri = Regex.Replace(uri, "\\$select=", ""); //Remove select query options
+            uri = Regex.Replace(uri, "\\$expand=", ""); //Remove expand query options
+            request.RequestUri = new Uri(uri);
+            var newRequest = new HttpRequestMessage(request.Method, uri);
+            var queryOptionsCopy = new ODataQueryOptions(queryOptions.Context, newRequest);
+
+            var result = (IQueryable<T>)queryOptionsCopy.ApplyTo(input);
+            result.Load(); //Make sure we close data readers as traversing the result will not work if we do not
+            return result; 
+        } 
 
         protected IQueryable<T> GetQueryable(int key, ODataQueryOptions<T> queryOptions)
         {
@@ -86,11 +114,7 @@ namespace OS2Indberetning.Controllers
             {
                 result.Add(entity);
             }
-            if (queryOptions.Filter != null)
-            {
-                return (IQueryable<T>) queryOptions.Filter.ApplyTo(result.AsQueryable(), new ODataQuerySettings());
-            }
-            return result.AsQueryable();
+            return _performODataQueryWithoutSelectAndExpand(result.AsQueryable(), queryOptions);
         }
 
         protected IHttpActionResult Put(int key, Delta<T> delta)
