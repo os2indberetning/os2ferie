@@ -103,7 +103,7 @@
                             <input ng-model="DriveReport.ReadDistance" ng-change="readDistanceChanged()" id="ReadDistance" name="FourKmRuleValue" class="k-textbox" />
                         </div>
                         <div class="col-lg-6">
-                            <input type="text" ng-model="DriveReport.UserComment" id="UserComment"  name="UserComment" class="k-textbox fill-width" />
+                            <input type="text" ng-model="DriveReport.UserComment" id="UserComment" name="UserComment" class="k-textbox fill-width" />
                         </div>
                     </div>
                     <div class="row">
@@ -142,11 +142,16 @@
                                            k-data-source="SmartAddress" k-options="container.addressFieldOptions" ng-blur="addressInputChanged($index)" ng-model="DriveReport.Addresses[$index].Name" class="fill-width no-max-width" />
                                 </div>
 
-                                <div class="col-sm-3">
-                                    <!-- checkbox indicating if a address should be saved-->
-                                    <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" ng-enter="" /><label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
-                                    <button ng-if="$middle" class="k-button k-button-no-shadow" ng-enter="" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
-                                </div>
+                                
+                            </div>
+                            <div class="col-sm-3">
+                                <!-- checkbox indicating if a address should be saved-->
+                                <span ng-show="DriveReport.Addresses[$index].Personal == addressDropDownPlaceholderText">
+                                    <input type="checkbox" class="k-checkbox" id="AdressSave-{{$index}}" ng-model="Address.Save" ng-enter="" />
+                                    <label for="AdressSave-{{$index}}" class="k-checkbox-label">Gem</label>
+                                </span>
+
+                                <button ng-if="$middle" class="k-button k-button-no-shadow" ng-enter="" ng-click="Remove(DriveReport.Addresses, $index)"><i class="fa fa-times"></i></button>
                             </div>
 
                         </div>
@@ -181,7 +186,7 @@
                         <input type="text" ng-enter="" ng-change="fourKmRuleChanged()" ng-model="DriveReport.FourKmRule.Value" id="FourKmRuleValue" name="FourKmRuleValue" class="k-textbox" placeholder="4 km-regel værdi" /> km
                         <label ng-if="fourKmRuleValueErrorMessage.length > 0" ng-bind="fourKmRuleValueErrorMessage" class="text-danger"></label>
                     </div>
-                </div>            
+                </div>
             </div>
 
             <div class="row margin-bottom-5">
@@ -228,7 +233,7 @@
                 <div ng-if="Number(DrivenKMDisplay <= Number(TransportAllowance))">
                     0 km
                 </div>
-                
+
             </div>
         </div>
     </div>

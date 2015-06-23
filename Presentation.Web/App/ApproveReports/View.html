@@ -1,12 +1,12 @@
 ﻿<div class="container-fluid">
     <div class="row">
         <div class="col-xs-6 col-lg-2 margin-bottom-10">
-            <label>Sorter efter medarbejder</label>
+            <label>Medarbejder</label>
             <input ng-enter="" type="text" kendo-auto-complete k-options="personAutoCompleteOptions" ng-change="personChanged()" ng-model="person.chosenPerson" k-placeholder="'Indtast medarbejder'" k-data-source="people" k-data-value-field="'FullName'" k-data-text-field="'FullName'" class="form-control fill-width" />
          
         </div>
         <div class="col-xs-6 col-lg-2 margin-bottom-10">
-            <label>Sorter efter organisation</label>
+            <label>Organisation</label>
             <input ng-enter="" type="text" kendo-auto-complete k-options="orgUnitAutoCompleteOptions" ng-change="orgUnitChanged()" ng-model="orgUnit.chosenUnit" k-placeholder="'Indtast beskrivelse'" k-data-source="orgUnits" k-data-value-field="'LongDescription'" k-data-text-field="'LongDescription'" class="form-control fill-width" />
         </div>
         <div class="col-xs-6 col-lg-2">

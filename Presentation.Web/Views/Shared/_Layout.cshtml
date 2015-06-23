@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html ng-app="application">
+<html ng-app="application" manifest="~/manifest/manifest">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" initial-scale=1 />
@@ -16,7 +16,7 @@
 
     @Styles.Render("~/Content/css")
     <link href="../../Content/private.css" rel="stylesheet" />
-    
+
     <link rel="icon"
           type="image/png"
           href="~/Content/favicon.ico">
@@ -29,14 +29,15 @@
             <div class="navbar-header">
                 <div class="navbar-brand" ng-click="menuCollapse = !menuCollapse">
                     <i style="color:white" class="fa fa-bars"></i>
-                    <label href="#" style="color: white">OS2Indberetning</label> 
+                    <label href="#" style="color: white">OS2Indberetning</label>
 
                 </div>
                 <img class="pull-right margin-top-5" src="../../logo.png" alt="" />
             </div>
             <!-- Top Menu Items -->
             <div class="pull-right margin-top-15 margin-right-10">
-                <span style="color: #FFF"><a class="informationHelpLink" href="{{helpLink.text}}" target="_blank">Information og vejledning</a> -
+                <span style="color: #FFF">
+                    <a class="informationHelpLink" href="{{helpLink.text}}" target="_blank">Information og vejledning</a> -
                     {{UserName}}
                 </span>
             </div>
@@ -62,9 +63,9 @@
                         <li ng-click="menuCollapse = !menuCollapse" ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showAdministration">
                             <a><i class="fa fa-angle-double-left fa-2x pull-right margin-right-5"></i></a>
                         </li>
-                        
+
                     </ul>
-                   
+
                 </div>
 
             </div>
@@ -100,7 +101,7 @@
 
         @RenderBody()
 
-        
+
 
     </div>
 
@@ -113,7 +114,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 
     @*<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/base/jquery-ui.css"
-          type="text/css" rel="Stylesheet" />*@
+        type="text/css" rel="Stylesheet" />*@
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/redmond/jquery-ui.css"
           type="text/css" rel="Stylesheet" />
 

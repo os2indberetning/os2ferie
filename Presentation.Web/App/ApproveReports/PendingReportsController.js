@@ -324,7 +324,7 @@
                    });
                    var gridContent = "<i class='fa fa-road fa-2x'></i>";
                    var toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
-                   var globe = "<a class='inline pull-right margin-right-5' ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a>";
+                   var globe = "<div class='inline pull-right margin-right-5' kendo-tooltip k-content=\"'Se rute på kort'\"><a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a></div>";
                    var result = toolTip + globe;
 
                    if (data.KilometerAllowance != "Read") {
@@ -358,7 +358,7 @@
                field: "KilometerAllowance",
                title: "MK",
                template: function (data) {
-                   if (data.KilometerAllowance == "CalculatedWithoutExtraDistance") {
+                   if (data.IsExtraDistance) {
                        return "<i class='fa fa-check'></i>";
                    }
                    return "";
