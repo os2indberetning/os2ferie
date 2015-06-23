@@ -250,23 +250,9 @@
         "getLatest": {
             method: "GET",
             isArray: false,
-            url: "/odata/DriveReports?$filter=PersonId eq :id &$top=1&$orderby=CreatedDateTimestamp desc &$select=Id,EmploymentId,LicensePlate,KilometerAllowance,TFCode,Distance,Purpose",
+            url: "/odata/DriveReports/Service.GetLatestReportForUser?personId=:id",
             transformResponse: function (data) {
                 var res = angular.fromJson(data);
-                if (res.error == undefined) {
-                    return res.value[0];
-                }
-
-                var modalInstance = $modal.open({
-                    templateUrl: '/App/Services/Error/ServiceError.html',
-                    controller: "ServiceErrorController",
-                    backdrop: "static",
-                    resolve: {
-                        errorMsg: function () {
-                            return res.error.innererror.message;
-                        }
-                    }
-                });
                 return res;
             }
         },

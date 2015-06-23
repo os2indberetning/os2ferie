@@ -23,7 +23,7 @@ namespace OS2Indberetning.Controllers
 
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public DriveReportsController(IGenericRepository<DriveReport> repo, IDriveReportService driveService, IGenericRepository<Person> personRepo , IGenericRepository<Employment> employmentRepo)
+        public DriveReportsController(IGenericRepository<DriveReport> repo, IDriveReportService driveService, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo)
             : base(repo, personRepo)
         {
             _driveService = driveService;
@@ -48,7 +48,7 @@ namespace OS2Indberetning.Controllers
             var queryable = GetQueryable(queryOptions);
 
             if (leaderId != 0)
-              {
+            {
                 queryable = _driveService.FilterByLeader(queryable, leaderId, getReportsWhereSubExists);
             }
 
@@ -73,6 +73,21 @@ namespace OS2Indberetning.Controllers
             var result = _driveService.AttachResponsibleLeader(queryable);
 
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Returns the latest drivereport for a given user.
+        /// Used for setting the option fields in DrivingView to the same as the latest report by the user.
+        /// </summary>
+        /// <param name="personId">Id of person to get report for.</param>
+        /// <returns></returns>
+        [EnableQuery]
+        public IHttpActionResult GetLatestReportForUser(int personId)
+        {
+            return Ok(Repo.AsQueryable()
+                .Where(x => x.PersonId.Equals(personId))
+                .OrderByDescending(x => x.CreatedDateTimestamp)
+                .First());
         }
 
         //GET: odata/DriveReports(5)
