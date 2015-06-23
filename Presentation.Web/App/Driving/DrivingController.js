@@ -520,7 +520,6 @@
                                 return;
                             }
 
-
                             // Prevents flickering of addresses when loading a report to be edited.
                             if ($scope.initialEditReportLoad === true) {
                                 $scope.initialEditReportLoad = false;
@@ -590,7 +589,6 @@
             /// <summary>
             /// Clears user input
             /// </summary>
-
             isFormDirty = false;
             setMap($scope.mapStartAddress);
 

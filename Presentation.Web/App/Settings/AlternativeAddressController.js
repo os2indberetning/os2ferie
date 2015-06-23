@@ -12,12 +12,8 @@
         $scope.homeAddress = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town;
     });
 
-
     $scope.AlternativeWorkAddressHelpText = $rootScope.HelpTexts.AlternativeWorkAddressHelpText.text;
     $scope.AlternativeWorkDistanceHelpText = $rootScope.HelpTexts.AlternativeWorkDistanceHelpText.text;
-
-
-    var a = 12;
 
     PersonalAddress.GetAlternativeHomeForUser({ id: $rootScope.CurrentUser.Id }).$promise.then(function (res) {
         if (!(res.StreetNumber == undefined)) {
