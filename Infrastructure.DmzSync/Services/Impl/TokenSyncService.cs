@@ -37,8 +37,11 @@ namespace Infrastructure.DmzSync.Services.Impl
                 Console.WriteLine("Syncing token " + i + " of " + max + " from DMZ.");
                 var token = tokens[i];
                 token = Encryptor.DecryptToken(token);
-                _masterTokenRepo.AsQueryable().First(x => x.Guid.Equals(new Guid(token.GuId))).Status = (MobileTokenStatus) token.Status;
-                _masterTokenRepo.Save();
+                if (_masterTokenRepo.AsQueryable().Any(x => x.Guid.Equals(new Guid(token.GuId))))
+                {
+                    _masterTokenRepo.AsQueryable().First(x => x.Guid.Equals(new Guid(token.GuId))).Status = (MobileTokenStatus)token.Status;
+                    _masterTokenRepo.Save();
+                }
             }
         }
 
