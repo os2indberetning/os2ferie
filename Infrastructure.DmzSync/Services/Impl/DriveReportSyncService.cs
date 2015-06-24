@@ -99,7 +99,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                     Comment = "",
                 };
 
-                var route = _routeService.GetRoute(points);
+                var route = _routeService.GetRoute(rate.Type.IsBike ? DriveReportTransportType.Bike : DriveReportTransportType.Car, points);
                 if (route != null)
                 {
                     newReport.RouteGeometry = route.GeoPoints;
