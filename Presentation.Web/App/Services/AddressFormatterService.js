@@ -10,10 +10,12 @@
             }
 
             var splittet = (addressString.split(","));
-
             if (splittet.length != 2) {
                 if (splittet.length == 3) {
                     splittet = [splittet[0], splittet[2]];
+                }
+                else if (splittet.length == 4) {
+                    splittet = [splittet[0] + "," + splittet[1], splittet[3]];
                 } else {
                     return undefined;
                 }

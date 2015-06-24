@@ -73,13 +73,6 @@ http://www.septima.dk/os2routemap/dist/marker-icon-green.png
 http://www.septima.dk/os2routemap/dist/marker-icon-red.png
 http://cdn.leafletjs.com/leaflet-0.7.3/images/marker-icon.png
 http://cdn.leafletjs.com/leaflet-0.7.2/images/marker-shadow.png
-http://www.septima.dk/os2routemap/css/leaflet-routing-machine.css
-http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js
-http://www.septima.dk/os2routemap/js/os2routemap.js
-http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css
-https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js
-http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/redmond/jquery-ui.css
-http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js
 
 NETWORK:
 *
