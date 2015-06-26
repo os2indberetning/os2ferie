@@ -477,16 +477,22 @@
             });
         }
 
-        var setMap = function (mapArray) {
+
+
+        var setMap = function (mapArray, transportType) {
             /// <summary>
             /// Updates the map widget in the view.
             /// </summary>
             /// <param name="mapArray"></param>
+            if (transportType == undefined) {
+                transportType = "car";
+            }
+
             $timeout(function () {
                 setMapPromise = $q.defer();
                 mapChanging = true;
-                OS2RouteMap.set(mapArray);
 
+                OS2RouteMap.set(mapArray, transportType);
                 setMapPromise.promise.then(function () {
                     mapChanging = false;
                 });
@@ -533,13 +539,13 @@
                             mapChanging = true;
                             $scope.DriveReport.Addresses = [];
                             // Load the adresses from the map.
-                            angular.forEach(obj.Addresses, function(address, key) {
+                            angular.forEach(obj.Addresses, function (address, key) {
                                 var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
                                 $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
                             });
                             // Apply to update the view.
                             $scope.$apply();
-                            $timeout(function() {
+                            $timeout(function () {
                                 // Wait for the view to render before setting mapChanging to false.
 
                                 mapChanging = false;
@@ -550,7 +556,7 @@
                 } else {
                     NotificationService.AutoFadeNotification("danger", "", "Kortet kunne ikke vises. Prøv at genopfriske siden.");
                 }
-            },500);
+            }, 500);
         }
 
 
@@ -619,7 +625,13 @@
 
         $scope.transportChanged = function (res) {
             $q.all(loadingPromises).then(function () {
-                $scope.showLicensePlate = getKmRate($scope.DriveReport.KmRate).Type.RequiresLicensePlate;
+                var kmRate = getKmRate($scope.DriveReport.KmRate);
+                $scope.showLicensePlate = kmRate.Type.RequiresLicensePlate;
+                var transportType = "car";
+                if (kmRate.Type.IsBike) {
+                    transportType = "bicycle";
+                }
+                setMap($scope.currentMapAddresses, transportType);
             });
         }
 
@@ -686,8 +698,7 @@
             }
         }
 
-        $scope.fourKmRuleChanged = function()
-        {
+        $scope.fourKmRuleChanged = function () {
             updateDrivenKm();
         }
 
@@ -763,7 +774,7 @@
             /// <summary>
             /// Updates drivenkm fields under map widget.
             /// </summary>
-            $timeout(function() {
+            $timeout(function () {
                 if ($scope.DriveReport.KilometerAllowance != "CalculatedWithoutExtraDistance") {
                     if (routeStartsAtHome() && routeEndsAtHome()) {
                         $scope.TransportAllowance = Number(getCurrentUserEmployment($scope.DriveReport.Position).HomeWorkDistance) * 2;
@@ -800,13 +811,13 @@
                     }
                 }
                 if ($scope.DriveReport.FourKmRule != undefined && $scope.DriveReport.FourKmRule.Using === true && $scope.DriveReport.FourKmRule.Value != undefined) {
-                   if (routeStartsAtHome() != routeEndsAtHome()) {
-                       $scope.TransportAllowance = Number($scope.DriveReport.FourKmRule.Value.toString().replace(",",".")) + 4;
-                   } else if (routeStartsAtHome() && routeEndsAtHome()) {
-                       $scope.TransportAllowance = (Number($scope.DriveReport.FourKmRule.Value.toString().replace(",",".")) * 2) + 4;
-                   } else {
-                       $scope.TransportAllowance = 4;
-                   }
+                    if (routeStartsAtHome() != routeEndsAtHome()) {
+                        $scope.TransportAllowance = Number($scope.DriveReport.FourKmRule.Value.toString().replace(",", ".")) + 4;
+                    } else if (routeStartsAtHome() && routeEndsAtHome()) {
+                        $scope.TransportAllowance = (Number($scope.DriveReport.FourKmRule.Value.toString().replace(",", ".")) * 2) + 4;
+                    } else {
+                        $scope.TransportAllowance = 4;
+                    }
                 }
             });
         }
