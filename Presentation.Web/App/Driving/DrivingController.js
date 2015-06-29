@@ -477,22 +477,18 @@
             });
         }
 
-
-
-        var setMap = function (mapArray, transportType) {
+        var setMap = function (mapArray) {
             /// <summary>
             /// Updates the map widget in the view.
             /// </summary>
             /// <param name="mapArray"></param>
-            if (transportType == undefined) {
-                transportType = "car";
-            }
-
             $timeout(function () {
+
                 setMapPromise = $q.defer();
                 mapChanging = true;
+                OS2RouteMap.set(mapArray, $scope.transportType);
+                OS2RouteMap.set(mapArray, $scope.transportType);
 
-                OS2RouteMap.set(mapArray, transportType);
                 setMapPromise.promise.then(function () {
                     mapChanging = false;
                 });
@@ -627,11 +623,13 @@
             $q.all(loadingPromises).then(function () {
                 var kmRate = getKmRate($scope.DriveReport.KmRate);
                 $scope.showLicensePlate = kmRate.Type.RequiresLicensePlate;
-                var transportType = "car";
+                $scope.transportType = "car";
                 if (kmRate.Type.IsBike) {
-                    transportType = "bicycle";
+                    $scope.transportType = "bicycle";
                 }
-                setMap($scope.currentMapAddresses, transportType);
+                if ($scope.currentMapAddresses.length > 0) {
+                    setMap($scope.currentMapAddresses);
+                }
             });
         }
 
