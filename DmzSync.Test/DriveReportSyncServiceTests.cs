@@ -42,7 +42,7 @@ namespace DmzSync.Test
             _rateRepoMock = NSubstitute.Substitute.For<IGenericRepository<Rate>>();
             _licensePlateRepoMock = NSubstitute.Substitute.For<IGenericRepository<LicensePlate>>();
             _routeMock = NSubstitute.Substitute.For<IRoute<RouteInformation>>();
-            _routeMock.GetRoute(new List<Address>()).ReturnsForAnyArgs(new RouteInformation()
+            _routeMock.GetRoute(DriveReportTransportType.Car,new List<Address>()).ReturnsForAnyArgs(new RouteInformation()
             {
                 GeoPoints = "geogeo"
             });

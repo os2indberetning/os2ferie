@@ -42,7 +42,7 @@ namespace ConsoleApplications.Test
             repoMock.ReSeed();
             var uut = new ConsoleMailerService(mailSub, repoMock);
             uut.RunMailService();
-            mailSub.Received().SendMails();
+            mailSub.ReceivedWithAnyArgs().SendMails(new DateTime());
             Assert.AreEqual(preLength,repoMock.AsQueryable().ToList().Count);
         }
 
@@ -69,7 +69,7 @@ namespace ConsoleApplications.Test
             repoMock.ReSeed();
             var uut = new ConsoleMailerService(mailSub, repoMock);
             uut.RunMailService();
-            mailSub.Received().SendMails();
+            mailSub.ReceivedWithAnyArgs().SendMails(new DateTime());
             Assert.AreEqual(preLength+2,repoMock.AsQueryable().ToList().Count);
         }
 
@@ -98,7 +98,7 @@ namespace ConsoleApplications.Test
             repoMock.ReSeed();
             var uut = new ConsoleMailerService(mailSub, repoMock);
             uut.RunMailService();
-            mailSub.Received().SendMails();
+            mailSub.ReceivedWithAnyArgs().SendMails(new DateTime());
             Assert.AreEqual(preLength + 1, repoMock.AsQueryable().ToList().Count);
         }
 
@@ -124,7 +124,7 @@ namespace ConsoleApplications.Test
             repoMock.ReSeed();
             var uut = new ConsoleMailerService(mailSub, repoMock);
             uut.RunMailService();
-            mailSub.DidNotReceive().SendMails();
+            mailSub.DidNotReceive().SendMails(new DateTime());
         }
 
         [Test]
@@ -148,7 +148,7 @@ namespace ConsoleApplications.Test
             repoMock.ReSeed();
             var uut = new ConsoleMailerService(mailSub, repoMock);
             uut.RunMailService();
-            mailSub.DidNotReceive().SendMails();
+            mailSub.DidNotReceive().SendMails(new DateTime());
         }
 
 

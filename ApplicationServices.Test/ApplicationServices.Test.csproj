@@ -134,9 +134,6 @@
     <Compile Include="FileGenerator\ReportGeneratorTest.cs" />
     <Compile Include="FileGenerator\ReportRepositoryMock.cs" />
     <Compile Include="LicensePlateTest\LicensePlateServiceTest.cs" />
-    <Compile Include="MailerServiceTest\RepoMock.cs" />
-    <Compile Include="MailerServiceTest\GetLeadersWithPendingReportsEmails.cs" />
-    <Compile Include="MailerServiceTest\SendMails.cs" />
     <Compile Include="MobileTokenServiceTest\MobileTokenServiceTest.cs" />
     <Compile Include="OrgUnitServiceTest\GetChildOrgsWithoutLeaderTests.cs" />
     <Compile Include="OrgUnitServiceTest\GetWhereUserIsResponsibleTests.cs" />
@@ -150,7 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="PrivateSettings.config">
+    <Content Include="CustomSettings.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />

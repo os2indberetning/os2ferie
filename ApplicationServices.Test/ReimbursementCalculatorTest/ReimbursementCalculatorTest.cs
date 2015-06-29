@@ -56,7 +56,7 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
             }
             });
 
-            var result = calculator.Calculate(report);
+            var result = calculator.Calculate(new RouteInformation(){Length = 100}, report);
 
             Assert.That(distance, Is.EqualTo(result.Distance));
             Assert.That(distance * report.KmRate / 100, Is.EqualTo(result.AmountToReimburse));
@@ -104,108 +104,12 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
             }
             });
 
-            var result = calculator.Calculate(report);
+            var result = calculator.Calculate(new RouteInformation(), report);
 
             Assert.That(distance - 4, Is.EqualTo(result.Distance));
             Assert.AreEqual((distance - 4) * report.KmRate / 100, result.AmountToReimburse, 0.001);
         }
 
-        /// <summary>
-        /// Calculated
-        /// </summary>
-        [Test]
-        public void Calculate_ReportMethodIsCalculated_WithoutFourKmRule()
-        {
-            var report = GetDriveReport();
-            report.FourKmRule = false;
-            report.Employment = new Employment()
-            {
-                OrgUnit = new OrgUnit()
-                {
-                    Address = new WorkAddress()
-                    {
-                        StreetName = "Katrinebjergvej",
-                        StreetNumber = "93B",
-                        ZipCode = 8200,
-                        Town = "Aarhus N"
-                    }
-                }
-            };
-            report.StartsAtHome = false;
-            report.EndsAtHome = false;
-            report.Distance = 42;
-            report.KilometerAllowance = KilometerAllowance.Calculated;
-
-            var distance = report.Distance;
-
-            var calculator = GetCalculator(new List<Employment>()
-            {
-                new Employment()
-            {
-                OrgUnit = new OrgUnit()
-                {
-                    Address = new WorkAddress()
-                    {
-                        StreetName = "Katrinebjergvej",
-                        StreetNumber = "93B",
-                        ZipCode = 8200,
-                        Town = "Aarhus N"
-                    }
-                }
-            }
-            });
-
-            var result = calculator.Calculate(report);
-
-            Assert.That((distance) * report.KmRate / 100, Is.EqualTo(result.AmountToReimburse));
-        }
-
-        [Test]
-        public void Calculate_ReportMethodIsCalculated_WithFourKmRule()
-        {
-            var report = GetDriveReport();
-            report.FourKmRule = true;
-            report.Employment = new Employment()
-            {
-                OrgUnit = new OrgUnit()
-                {
-                    Address = new WorkAddress()
-                    {
-                        StreetName = "Katrinebjergvej",
-                        StreetNumber = "93B",
-                        ZipCode = 8200,
-                        Town = "Aarhus N"
-                    }
-                }
-            };
-            report.StartsAtHome = false;
-            report.EndsAtHome = false;
-            report.Distance = 42;
-            report.KilometerAllowance = KilometerAllowance.Calculated;
-
-            var distance = report.Distance;
-
-            var calculator = GetCalculator(new List<Employment>()
-            {
-                new Employment()
-            {
-                OrgUnit = new OrgUnit()
-                {
-                    Address = new WorkAddress()
-                    {
-                        StreetName = "Katrinebjergvej",
-                        StreetNumber = "93B",
-                        ZipCode = 8200,
-                        Town = "Aarhus N"
-                    }
-                }
-            }
-            });
-
-            var result = calculator.Calculate(report);
-
-            Assert.AreEqual((distance - 4) * report.KmRate / 100, (result.AmountToReimburse), 0.001);
-        }
 
         /// <summary>
         /// Calculated without allowance
@@ -252,7 +156,7 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
             }
             });
 
-            var result = calculator.Calculate(report);
+            var result = calculator.Calculate(new RouteInformation(){Length = 42}, report);
 
             Assert.That(distance * report.KmRate / 100, Is.EqualTo(result.AmountToReimburse));
         }
@@ -299,7 +203,7 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
             }
             });
 
-            var result = calculator.Calculate(report);
+            var result = calculator.Calculate(new RouteInformation(){Length = 42}, report);
 
             Assert.AreEqual(((distance - 4) * report.KmRate / 100), result.AmountToReimburse, 0.001);
         }

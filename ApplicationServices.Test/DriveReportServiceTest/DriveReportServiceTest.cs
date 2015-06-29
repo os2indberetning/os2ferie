@@ -41,6 +41,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
         private IDriveReportService _uut;
         private IReimbursementCalculator _calculatorMock;
         private IGenericRepository<DriveReport> _reportRepoMock;
+        private IGenericRepository<RateType> _rateTypeMock;
         private IRoute<RouteInformation> _routeMock;
         private IAddressCoordinates _coordinatesMock;
         private IMailSender _mailMock;
@@ -55,6 +56,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             _emplMock = Substitute.For<IGenericRepository<Employment>>();
             _calculatorMock = Substitute.For<IReimbursementCalculator>();
             _orgUnitMock = Substitute.For<IGenericRepository<OrgUnit>>();
+            _rateTypeMock = Substitute.For<IGenericRepository<RateType>>();
             _routeMock = Substitute.For<IRoute<RouteInformation>>();
             _coordinatesMock = Substitute.For<IAddressCoordinates>();
             _subMock = Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
@@ -64,7 +66,19 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             _reportRepoMock.Insert(new DriveReport()).ReturnsForAnyArgs(x => x.Arg<DriveReport>()).AndDoes(x => repoList.Add(x.Arg<DriveReport>())).AndDoes(x => x.Arg<DriveReport>().Id = idCounter).AndDoes(x => idCounter++);
             _reportRepoMock.AsQueryable().ReturnsForAnyArgs(repoList.AsQueryable());
 
-            _calculatorMock.Calculate(new DriveReport()).ReturnsForAnyArgs(x => x.Arg<DriveReport>());
+            _calculatorMock.Calculate(new RouteInformation(), new DriveReport()).ReturnsForAnyArgs(x => x.Arg<DriveReport>());
+
+            _rateTypeMock.AsQueryable().ReturnsForAnyArgs(new List<RateType>
+            {
+                new RateType()
+                {
+                    TFCode = "1234",
+                    IsBike = false,
+                    RequiresLicensePlate = true,
+                    Id = 1,
+                    Description = "TestRate"
+                }
+            }.AsQueryable());
 
             _coordinatesMock.GetAddressCoordinates(new Address()).ReturnsForAnyArgs(new DriveReportPoint()
             {
@@ -72,12 +86,12 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 Longitude = "2",
             });
 
-            _routeMock.GetRoute(new List<Address>()).ReturnsForAnyArgs(new RouteInformation()
+            _routeMock.GetRoute(DriveReportTransportType.Car, new List<Address>()).ReturnsForAnyArgs(new RouteInformation()
             {
                 Length = 2000
             });
 
-            _uut = new DriveReportService(_mailMock, _reportRepoMock, _calculatorMock, _orgUnitMock, _emplMock, _subMock, _coordinatesMock, _routeMock);
+            _uut = new DriveReportService(_mailMock, _reportRepoMock, _calculatorMock, _orgUnitMock, _emplMock, _subMock, _coordinatesMock, _routeMock, _rateTypeMock);
 
         }
 
@@ -653,7 +667,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 PersonId = 1
             };
             _uut.Create(report);
-            _calculatorMock.ReceivedWithAnyArgs().Calculate(report);
+            _calculatorMock.ReceivedWithAnyArgs().Calculate(new RouteInformation(), report);
         }
 
         [Test]
@@ -668,7 +682,8 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                     new DriveReportPoint()
                 },
                 PersonId = 1,
-                Purpose = "Test"
+                Purpose = "Test",
+                TFCode = "1234",
                     
             };
             _uut.Create(report);
@@ -678,7 +693,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
         [Test]
         public void Create_ValidCalculatedReport_DistanceLessThanZero_ShouldSetDistanceToZero()
         {
-            _routeMock.GetRoute(new List<Address>()).ReturnsForAnyArgs(new RouteInformation()
+            _routeMock.GetRoute(DriveReportTransportType.Car, new List<Address>()).ReturnsForAnyArgs(new RouteInformation()
             {
                 Length = -10
             });
@@ -693,7 +708,8 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                     new DriveReportPoint()
                 },
                 PersonId = 1,
-                Purpose = "Test"
+                Purpose = "Test",
+                TFCode = "1234",
 
             };
             var res = _uut.Create(report);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core.DomainModel;
 using Core.DomainServices;
 using System.Linq;
 using System.Text;
@@ -38,7 +39,7 @@ namespace Infrastructure.AddressServices.Tests
             };
             IRoute<RouteInformation> bestRoute = new BestRoute();
             //Act
-            _result = bestRoute.GetRoute(addresses);
+            _result = bestRoute.GetRoute(DriveReportTransportType.Car,addresses);
         }
 
         #endregion
@@ -55,7 +56,7 @@ namespace Infrastructure.AddressServices.Tests
         [Test]
         public void BestRoute_CheckIfDistanceIs30882()
         {
-            Assert.That(_result.Length, Is.EqualTo(30.88).Within(0.01));
+            Assert.That(_result.Length, Is.EqualTo(30.88).Within(1));
             //Assert.IsTrue(result.Length == 30886);
         }
 

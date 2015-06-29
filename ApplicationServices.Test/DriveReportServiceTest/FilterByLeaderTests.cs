@@ -33,7 +33,8 @@ namespace ApplicationServices.Test.DriveReportServiceTest
         private IGenericRepository<Substitute> _subRepoMock;
         private DriveReportService _uut;
         private IGenericRepository<DriveReport> _reportRepoMock;
-
+        private IGenericRepository<RateType> _rateTypeMock;
+        
         [SetUp]
         public void SetUp()
         {
@@ -45,15 +46,16 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             _calculatorMock = NSubstitute.Substitute.For<IReimbursementCalculator>();
             _orgUnitMock = NSubstitute.Substitute.For<IGenericRepository<OrgUnit>>();
             _routeMock = NSubstitute.Substitute.For<IRoute<RouteInformation>>();
+            _rateTypeMock = NSubstitute.Substitute.For<IGenericRepository<RateType>>();
             _coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
             _subRepoMock = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
-            _uut = new DriveReportService(NSubstitute.Substitute.For<IMailSender>(), NSubstitute.Substitute.For<IGenericRepository<DriveReport>>(), _calculatorMock, _orgUnitMock, _emplMock, _subRepoMock, _coordinatesMock, _routeMock);
+            _uut = new DriveReportService(NSubstitute.Substitute.For<IMailSender>(), NSubstitute.Substitute.For<IGenericRepository<DriveReport>>(), _calculatorMock, _orgUnitMock, _emplMock, _subRepoMock, _coordinatesMock, _routeMock,_rateTypeMock);
             _reportRepoMock = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
 
             _reportRepoMock.Insert(new DriveReport()).ReturnsForAnyArgs(x => x.Arg<DriveReport>()).AndDoes(x => repoList.Add(x.Arg<DriveReport>())).AndDoes(x => x.Arg<DriveReport>().Id = idCounter).AndDoes(x => idCounter++);
             _reportRepoMock.AsQueryable().ReturnsForAnyArgs(repoList.AsQueryable());
 
-            _calculatorMock.Calculate(new DriveReport()).ReturnsForAnyArgs(x => x.Arg<DriveReport>());
+            _calculatorMock.Calculate(new RouteInformation(){Length = 100}, new DriveReport()).ReturnsForAnyArgs(x => x.Arg<DriveReport>());
 
             _coordinatesMock.GetAddressCoordinates(new Address()).ReturnsForAnyArgs(new Address()
             {

@@ -56,112 +56,9 @@ namespace Presentation.Web.Test.
             };
         }
 
-        [Test]
-        public async void OnlyStandardAddresses_ShouldReturn_All()
-        {
-            AddressRepositoryMock.addresses = new List<Address>()
-            {
-                new Address()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "1",
-                    ZipCode = 8210,
-                    Town = "Aarhus V"
-                },
-                new Address()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "2",
-                    ZipCode = 8210,
-                    Town = "Aarhus V"
-                },
-                new Address()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V"
-                }
-            };
-            ReSeed();
-            var response = await Server.CreateRequest("/odata/Addresses/Service.GetPersonalAndStandard?personId=1").GetAsync();
-            var result = await response.Content.ReadAsAsync<ODataResponse<Address>>();
-            Assert.AreEqual(3, result.value.Count);
-        }
+     
 
-        [Test]
-        public async void OnlyPersonalAddresses_WithCorrectPerson_ShouldReturn_All()
-        {
-            AddressRepositoryMock.addresses = new List<Address>()
-            {
-                new PersonalAddress()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "1",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                    PersonId = 1
-                },
-                new PersonalAddress()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "2",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                    PersonId = 1
-                },
-                new PersonalAddress()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                    PersonId = 1
-                }
-            };
-            ReSeed();
-            var response = await Server.CreateRequest("/odata/Addresses/Service.GetPersonalAndStandard?personId=1").GetAsync();
-            var result = await response.Content.ReadAsAsync<ODataResponse<Address>>();
-            Assert.AreEqual(3, result.value.Count);
-        }
-
-        [Test]
-        public async void OnlyPersonalAddresses_With1IncorrectPerson_ShouldReturn_AllButOne()
-        {
-            AddressRepositoryMock.addresses = new List<Address>()
-            {
-                new PersonalAddress()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "1",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                    PersonId = 1
-                },
-                new PersonalAddress()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "2",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                    PersonId = 1
-                },
-                new PersonalAddress()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                    PersonId = 2
-                }
-            };
-            ReSeed();
-            var response = await Server.CreateRequest("/odata/Addresses/Service.GetPersonalAndStandard?personId=1").GetAsync();
-            var result = await response.Content.ReadAsAsync<ODataResponse<Address>>();
-            Assert.AreEqual(2, result.value.Count);
-        }
-
-        [Test]
+    [Test]
         public async void OnlyPersonalAddresses_With2IncorrectPerson_ShouldReturn_One()
         {
             AddressRepositoryMock.addresses = new List<Address>()
@@ -195,48 +92,6 @@ namespace Presentation.Web.Test.
             var response = await Server.CreateRequest("/odata/Addresses/Service.GetPersonalAndStandard?personId=1").GetAsync();
             var result = await response.Content.ReadAsAsync<ODataResponse<Address>>();
             Assert.AreEqual(1, result.value.Count);
-        }
-
-        [Test]
-        public async void MixedStandardAndPersonal_ShouldReturn_All()
-        {
-            AddressRepositoryMock.addresses = new List<Address>()
-            {
-                new Address()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "1",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                },
-                new Address()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "2",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                },
-                new PersonalAddress()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                    PersonId = 1
-                },
-                new PersonalAddress()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                    PersonId = 1
-                }
-            };
-            ReSeed();
-            var response = await Server.CreateRequest("/odata/Addresses/Service.GetPersonalAndStandard?personId=1").GetAsync();
-            var result = await response.Content.ReadAsAsync<ODataResponse<Address>>();
-            Assert.AreEqual(4, result.value.Count);
         }
 
         [Test]
@@ -312,46 +167,6 @@ namespace Presentation.Web.Test.
                 {
                     StreetName = "TestStreet",
                     StreetNumber = "4",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                }
-            };
-            ReSeed();
-            var response = await Server.CreateRequest("/odata/Addresses/Service.GetPersonalAndStandard?personId=1").GetAsync();
-            var result = await response.Content.ReadAsAsync<ODataResponse<Address>>();
-            Assert.AreEqual(0, result.value.Count);
-        }
-
-        [Test]
-        public async void MixedPointAndDriveReportPointAndStandard_ShouldReturn_Standard()
-        {
-            AddressRepositoryMock.addresses = new List<Address>()
-            {
-                new Point()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "1",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                },
-                new Point()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "2",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                },
-                new DriveReportPoint()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
-                    ZipCode = 8210,
-                    Town = "Aarhus V",
-                },
-                new Address()
-                {
-                    StreetName = "TestStreet",
-                    StreetNumber = "3",
                     ZipCode = 8210,
                     Town = "Aarhus V",
                 }

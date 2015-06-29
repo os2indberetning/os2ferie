@@ -51,7 +51,7 @@ namespace ApplicationServices.Test.PersonService
             }.AsQueryable();
 
             _routeMock = NSubstitute.Substitute.For<IRoute<RouteInformation>>();
-            _routeMock.GetRoute(new List<Address>()).ReturnsForAnyArgs(new RouteInformation());
+            _routeMock.GetRoute(DriveReportTransportType.Car, new List<Address>()).ReturnsForAnyArgs(new RouteInformation());
             _addressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
             _coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
             _coordinatesMock.GetAddressCoordinates(new Address()).ReturnsForAnyArgs(new Address
@@ -293,7 +293,7 @@ namespace ApplicationServices.Test.PersonService
             };
 
             _uut.AddHomeWorkDistanceToEmployments(testPerson);
-            _routeMock.ReceivedWithAnyArgs().GetRoute(new List<Address>());
+            _routeMock.ReceivedWithAnyArgs().GetRoute(DriveReportTransportType.Car, new List<Address>());
         }
 
         [Test]
@@ -331,7 +331,7 @@ namespace ApplicationServices.Test.PersonService
             };
 
             _uut.AddHomeWorkDistanceToEmployments(testPerson);
-            _routeMock.ReceivedWithAnyArgs().GetRoute(new List<Address>());
+            _routeMock.ReceivedWithAnyArgs().GetRoute(DriveReportTransportType.Car, new List<Address>());
         }
     }
 }

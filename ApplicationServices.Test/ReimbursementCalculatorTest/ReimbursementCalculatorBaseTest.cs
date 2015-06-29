@@ -5,8 +5,6 @@ using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
-using Core.DomainServices.Ínterfaces;
-using Infrastructure.DataAccess;
 using NSubstitute;
 using Substitute = NSubstitute.Substitute;
 
@@ -95,7 +93,7 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
 
     class RouterMock : IRoute<RouteInformation>
     {
-        public RouteInformation GetRoute(IEnumerable<Address> addresses)
+        public RouteInformation GetRoute(DriveReportTransportType transportType, IEnumerable<Address> addresses)
         {
             return new RouteInformation()
             {

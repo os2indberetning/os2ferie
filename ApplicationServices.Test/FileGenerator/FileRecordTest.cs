@@ -24,7 +24,8 @@ namespace ApplicationServices.Test.FileGenerator
         private static readonly Employment _employment = new Employment
         {
             EmploymentId = 2,
-            EmploymentType = 1
+            EmploymentType = 1,
+            CostCenter = 1234,
         };
 
         private readonly DriveReport _report = new DriveReport

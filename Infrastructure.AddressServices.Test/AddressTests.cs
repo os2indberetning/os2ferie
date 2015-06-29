@@ -35,7 +35,7 @@ namespace Infrastructure.AddressServices.Tests
             addresses.Add(firstWithCoordinates);
             addresses.Add(secondWithCoordinates);
 
-            var route = new BestRoute().GetRoute(addresses);
+            var route = new BestRoute().GetRoute(DriveReportTransportType.Car,addresses);
 
             double result = (double)route.Length;
 
@@ -79,7 +79,7 @@ namespace Infrastructure.AddressServices.Tests
             addresses.Add(secondWithCoordinates);
             addresses.Add(thirdWithCoordinates);
 
-            var route = new BestRoute().GetRoute(addresses);
+            var route = new BestRoute().GetRoute(DriveReportTransportType.Car,addresses);
 
             double result = (double)route.Length;
 

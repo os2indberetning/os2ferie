@@ -264,7 +264,8 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 PersonId = 1,
                 LeaderId = 1,
                 SubId = 2,
-                OrgUnitId = 12
+                OrgUnitId = 12,
+                Id = 1,
             };
 
             _repo = new List<Substitute>()
@@ -276,7 +277,8 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                     PersonId = 1,
                     LeaderId = 1,
                     SubId = 2,
-                    OrgUnitId = 12
+                    OrgUnitId = 12,
+                    Id = 2
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
@@ -295,7 +297,8 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 PersonId = 1,
                 LeaderId = 1,
                 SubId = 2,
-                OrgUnitId = 12
+                OrgUnitId = 12,
+                Id = 1
             };
 
             _repo = new List<Substitute>()
@@ -307,7 +310,8 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                     PersonId = 1,
                     LeaderId = 1,
                     SubId = 2,
-                    OrgUnitId = 12
+                    OrgUnitId = 12,
+                    Id = 2,
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
@@ -326,7 +330,8 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 PersonId = 1,
                 LeaderId = 1,
                 SubId = 2,
-                OrgUnitId = 12
+                OrgUnitId = 12,
+                Id = 1,
             };
 
             _repo = new List<Substitute>()
@@ -338,7 +343,8 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                     PersonId = 1,
                     LeaderId = 1,
                     SubId = 2,
-                    OrgUnitId = 12
+                    OrgUnitId = 12,
+                    Id = 2,
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
@@ -464,6 +470,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 PersonId = 3,
                 LeaderId = 1,
                 SubId = 2,
+                Id = 1,
             };
 
             _repo = new List<Substitute>()
@@ -475,6 +482,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                     PersonId = 3,
                     LeaderId = 1,
                     SubId = 2,
+                    Id = 2,
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
@@ -493,6 +501,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 PersonId = 1,
                 LeaderId = 3,
                 SubId = 2,
+                Id = 1,
             };
 
             _repo = new List<Substitute>()
@@ -504,6 +513,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                     PersonId = 1,
                     LeaderId = 3,
                     SubId = 2,
+                    Id = 2
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
@@ -522,6 +532,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 PersonId = 1,
                 LeaderId = 3,
                 SubId = 2,
+                Id = 1
             };
 
             _repo = new List<Substitute>()
@@ -533,6 +544,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                     PersonId = 1,
                     LeaderId = 3,
                     SubId = 2,
+                    Id = 2
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
