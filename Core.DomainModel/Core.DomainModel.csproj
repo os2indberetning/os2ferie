@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressDTO.cs" />
     <Compile Include="CachedAddress.cs" />
     <Compile Include="BankAccount.cs" />
     <Compile Include="Address.cs" />

@@ -74,7 +74,7 @@ namespace OS2Indberetning.Controllers
             return MapStartAddress;
         }
 
-        
+
         //GET: odata/Addresses(5)
         /// <summary>
         /// ODATA GET api endpoint for a single address
@@ -95,8 +95,7 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IQueryable<Address> SetCoordinatesOnAddress(Address address)
         {
-            var coordinates = NinjectWebKernel.CreateKernel().Get<IAddressCoordinates>();
-            var result = coordinates.GetAddressCoordinates(address);
+            var result = _coordinates.GetAddressCoordinates(address);
             var list = new List<Address>()
             {
                 result
@@ -104,7 +103,17 @@ namespace OS2Indberetning.Controllers
             return list;
         }
 
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="addresses"></param>
+        /// <returns></returns>
+        public IHttpActionResult SetCoordinatesOnAddressList(AddressDTO addresses)
+        {
+            return Ok(2);
+        }
+
+
         //PUT: odata/Addresses(5)
         /// <summary>
         /// Is not implemented
@@ -180,7 +189,7 @@ namespace OS2Indberetning.Controllers
 
             var rep = Repo.AsQueryable();
             // Select all standard addresses.
-            var addresses = rep.Where(elem => !(elem is DriveReportPoint || elem is Point ||elem is CachedAddress || elem is WorkAddress || elem is PersonalAddress)).ToList();
+            var addresses = rep.Where(elem => !(elem is DriveReportPoint || elem is Point || elem is CachedAddress || elem is WorkAddress || elem is PersonalAddress)).ToList();
             // Add personal addresses to addresses.
             addresses.AddRange(_personalAddressRepo.AsQueryable().Where(elem => (elem.PersonId.Equals(personId))));
 

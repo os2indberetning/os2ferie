@@ -27,6 +27,8 @@
         var mapChanging = false;
 
 
+        
+
         $scope.container.addressFieldOptions = {
             select: function () {
                 $timeout(function () {
@@ -112,14 +114,11 @@
             return res;
         }
 
-        var initialLoad = 2;
-
         var loadValuesFromReport = function (report) {
             /// <summary>
             /// Loads values from user's latest report and sets fields in the view.
             /// </summary>
             /// <param name="report"></param>
-
             $scope.DriveReport.FourKmRule = {};
             $scope.DriveReport.FourKmRule.Value = $rootScope.CurrentUser.DistanceFromHomeToBorder.toString().replace(".", ",");
 
@@ -193,12 +192,25 @@
                 } else {
                     $scope.initialEditReportLoad = true;
                     $scope.DriveReport.Addresses = [];
-                    var tempArray = [];
+                    mapChanging = true;
                     angular.forEach(report.DriveReportPoints, function (point, key) {
                         var temp = { Name: point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town, Latitude: point.Latitude, Longitude: point.Longitude };
-                        tempArray.push(temp);
+                        $scope.DriveReport.Addresses.push(temp);
                     });
-                    $scope.DriveReport.Addresses = tempArray;
+                    var res = "[";
+                    angular.forEach($scope.DriveReport.Addresses, function(addr, key) {
+                        res += "{name: \"" + addr.Name + "\", lat: " + addr.Latitude + ", lng: " + addr.Longitude + "},";
+                    });
+                    res += "]";
+                    console.log(res);
+
+                    $scope.$on("kendoWidgetCreated", function (event, widget) {
+                        if (widget === $scope.container.lastTextBox) {
+                            mapChanging = false;
+                            $scope.addressInputChanged();
+                        }
+                    });
+            
                 }
             }
         }
@@ -321,7 +333,7 @@
                 $scope.DriveReport.Addresses.push(addr);
                 mapArray.push({ name: addr.Name, lat: addr.Latitude, lng: addr.Longitude });
             });
-            setMap(mapArray);
+            setMap(mapArray, $scope.transportType);
             isFormDirty = true;
         }
 
@@ -442,6 +454,7 @@
 
 
         $scope.addressInputChanged = function (index) {
+
             /// <summary>
             /// Resolves address coordinates and updates map.
             /// </summary>
@@ -449,45 +462,44 @@
             if (!validateAddressInput(false) || mapChanging) {
                 return;
             }
+            console.log("foo");
 
-            var promises = [];
             var mapArray = [];
 
+            // Empty array to hold addresses
+            var postRequest = [];
             angular.forEach($scope.DriveReport.Addresses, function (addr, key) {
+                // Format all addresses and add them to postRequest
                 if (!$scope.isAddressNameSet(addr) && addr.Personal != $scope.addressDropDownPlaceholderText) {
                     var format = AddressFormatter.fn(addr.Personal);
-                    promises.push(Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }).$promise.then(function (res) {
-                        addr.Latitude = res[0].Latitude;
-                        addr.Longitude = res[0].Longitude;
-                        mapArray[key] = { name: addr.Name, lat: addr.Latitude, lng: addr.Longitude };
-                    }));
+                    postRequest.push({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town });
                 } else if ($scope.isAddressNameSet(addr)) {
                     var format = AddressFormatter.fn(addr.Name);
-                    promises.push(Address.setCoordinatesOnAddress({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town }).$promise.then(function (res) {
-                        addr.Latitude = res[0].Latitude;
-                        addr.Longitude = res[0].Longitude;
-                        mapArray[key] = { name: addr.Name, lat: addr.Latitude, lng: addr.Longitude };
-                    }));
+                    postRequest.push({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town });
                 }
             });
 
-            $q.all(promises).then(function (data) {
-                setMap(mapArray);
+            // Send request to backend
+            Address.setCoordinatesOnAddressList(postRequest).$promise.then(function (data) {
+                // Format address objects for OS2RouteMap once received.
+                angular.forEach(data, function (address, value) {
+                    mapArray.push({ name: address.streetName + " " + address.streetNumber + ", " + address.zipCode + " " + address.town, lat: address.latitude, lng: address.longitude });
+                });
+                setMap(mapArray, $scope.transportType);
                 isFormDirty = true;
             });
         }
 
-        var setMap = function (mapArray) {
+        var setMap = function (mapArray, transportType) {
             /// <summary>
             /// Updates the map widget in the view.
             /// </summary>
             /// <param name="mapArray"></param>
             $timeout(function () {
-
                 setMapPromise = $q.defer();
                 mapChanging = true;
-                OS2RouteMap.set(mapArray, $scope.transportType);
-                OS2RouteMap.set(mapArray, $scope.transportType);
+
+                OS2RouteMap.set(mapArray, transportType);
 
                 setMapPromise.promise.then(function () {
                     mapChanging = false;
@@ -512,6 +524,7 @@
                     OS2RouteMap.create({
                         id: 'map',
                         change: function (obj) {
+
                             $scope.currentMapAddresses = obj.Addresses;
                             $scope.latestMapDistance = obj.distance;
                             updateDrivenKm();
@@ -535,10 +548,12 @@
                             mapChanging = true;
                             $scope.DriveReport.Addresses = [];
                             // Load the adresses from the map.
+                            var addresses = [];
                             angular.forEach(obj.Addresses, function (address, key) {
                                 var shavedName = $scope.shaveExtraCommasOffAddressString(address.name);
-                                $scope.DriveReport.Addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
+                                addresses.push({ Name: shavedName, Latitude: address.lat, Longitude: address.lng });
                             });
+                            $scope.DriveReport.Addresses = addresses;
                             // Apply to update the view.
                             $scope.$apply();
                             $timeout(function () {
@@ -552,7 +567,7 @@
                 } else {
                     NotificationService.AutoFadeNotification("danger", "", "Kortet kunne ikke vises. Prøv at genopfriske siden.");
                 }
-            }, 500);
+            });
         }
 
 
@@ -592,7 +607,7 @@
             /// Clears user input
             /// </summary>
             isFormDirty = false;
-            setMap($scope.mapStartAddress);
+            setMap($scope.mapStartAddress, $scope.transportType);
 
             setNotRoute();
 
@@ -623,12 +638,32 @@
             $q.all(loadingPromises).then(function () {
                 var kmRate = getKmRate($scope.DriveReport.KmRate);
                 $scope.showLicensePlate = kmRate.Type.RequiresLicensePlate;
-                $scope.transportType = "car";
                 if (kmRate.Type.IsBike) {
+                    // If transport was car and has been switched to bicycle.
+                    if ($scope.transportType == "car") {
+                        if ($scope.currentMapAddresses != undefined) {
+                            if ($scope.currentMapAddresses.length > 0) {
+                                $scope.transportType = "bicycle";
+                                // Call setMap twice to trigger change.
+                                setMap($scope.currentMapAddresses, $scope.transportType);
+                                setMap($scope.currentMapAddresses, $scope.transportType);
+                            }
+                        }
+                    }
                     $scope.transportType = "bicycle";
-                }
-                if ($scope.currentMapAddresses.length > 0) {
-                    setMap($scope.currentMapAddresses);
+
+                } else {
+                    if ($scope.transportType == "bicycle") {
+                        if ($scope.currentMapAddresses != undefined) {
+                            if ($scope.currentMapAddresses.length > 0) {
+                                $scope.transportType = "car";
+                                // Call setMap twice to trigger change.
+                                setMap($scope.currentMapAddresses, $scope.transportType);
+                                setMap($scope.currentMapAddresses, $scope.transportType);
+                            }
+                        }
+                    }
+                    $scope.transportType = "car";
                 }
             });
         }
@@ -688,7 +723,7 @@
             updateDrivenKm();
             switch ($scope.DriveReport.KilometerAllowance) {
                 case "Read":
-                    setMap($scope.mapStartAddress);
+                    setMap($scope.mapStartAddress, $scope.transportType);
                     break;
                 default:
                     $scope.addressInputChanged();

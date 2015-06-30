@@ -56,6 +56,12 @@ namespace OS2Indberetning
             .ReturnsFromEntitySet<Address>("Addresses");
 
             builder.EntityType<Address>().Collection
+            .Action("SetCoordinatesOnAddressList")
+            .ReturnsFromEntitySet<Address>("Addresses");
+
+            
+
+            builder.EntityType<Address>().Collection
             .Function("GetPersonalAndStandard")
             .ReturnsFromEntitySet<Address>("Addresses");
 

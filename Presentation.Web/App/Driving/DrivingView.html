@@ -138,11 +138,18 @@
                             <div ng-show="DriveReport.Addresses[$index].Personal == addressDropDownPlaceholderText">
                                 <div class="col-sm-9">
                                     <!--Text field for adding addresses-->
-                                    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'" ng-enter="" k-placeholder="addressPlaceholderText"
-                                           k-data-source="SmartAddress" k-options="container.addressFieldOptions" ng-blur="addressInputChanged($index)" ng-model="DriveReport.Addresses[$index].Name" class="fill-width no-max-width" />
+                                    <div ng-if="$last">
+                                        <input type="text" kendo-auto-complete="container.lastTextBox" k-data-text-field="'tekst'" k-data-value-field="'tekst'" ng-enter="" k-placeholder="addressPlaceholderText"
+                                               k-data-source="SmartAddress" k-options="container.addressFieldOptions" ng-blur="addressInputChanged($index)" ng-model="DriveReport.Addresses[$index].Name" class="fill-width no-max-width" />
+                                    </div>
+                                    <div ng-if="!$last">
+                                        <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'" ng-enter="" k-placeholder="addressPlaceholderText"
+                                               k-data-source="SmartAddress" k-options="container.addressFieldOptions" ng-blur="addressInputChanged($index)" ng-model="DriveReport.Addresses[$index].Name" class="fill-width no-max-width" />
+                                    </div>
+                                    
                                 </div>
 
-                                
+
                             </div>
                             <div class="col-sm-3">
                                 <!-- checkbox indicating if a address should be saved-->

@@ -289,6 +289,14 @@
     <Compile Include="Migrations\201506181318082_AddedIsBikeToRateType.Designer.cs">
       <DependentUpon>201506181318082_AddedIsBikeToRateType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506301245523_AddedIsActiveToPerson.cs" />
+    <Compile Include="Migrations\201506301245523_AddedIsActiveToPerson.Designer.cs">
+      <DependentUpon>201506301245523_AddedIsActiveToPerson.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506301413546_RemovedPersonIdFromPerson.cs" />
+    <Compile Include="Migrations\201506301413546_RemovedPersonIdFromPerson.Designer.cs">
+      <DependentUpon>201506301413546_RemovedPersonIdFromPerson.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -471,6 +479,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506181318082_AddedIsBikeToRateType.resx">
       <DependentUpon>201506181318082_AddedIsBikeToRateType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506301245523_AddedIsActiveToPerson.resx">
+      <DependentUpon>201506301245523_AddedIsActiveToPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506301413546_RemovedPersonIdFromPerson.resx">
+      <DependentUpon>201506301413546_RemovedPersonIdFromPerson.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

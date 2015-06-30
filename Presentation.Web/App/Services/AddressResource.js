@@ -73,6 +73,15 @@
                 return res;
             }
         },
+        "setCoordinatesOnAddressList": {
+            method: "POST",
+            url: "/api/Coordinate/SetCoordinatesOnAddressList",
+            isArray: true,
+            transformResponse: function (data) {
+                var res = angular.fromJson(data);
+                return res;
+            }
+        },
         "GetPersonalAndStandard": {
             method: "GET",
             url: "/odata/Addresses/Service.GetPersonalAndStandard?personId=:personId",

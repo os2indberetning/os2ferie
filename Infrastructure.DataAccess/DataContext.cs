@@ -73,7 +73,6 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Person>().Property(p => p.FirstName).IsRequired();
             modelBuilder.Entity<Person>().Property(p => p.LastName).IsRequired();
             modelBuilder.Entity<Person>().Property(p => p.CprNumber).IsRequired();
-            modelBuilder.Entity<Person>().Property(p => p.PersonId).IsRequired();
             modelBuilder.Entity<Person>().Property(p => p.Mail).IsRequired();
             modelBuilder.Entity<Person>().Property(p => p.Initials).IsRequired();
             modelBuilder.Entity<Person>().Property(t => t.CprNumber).IsFixedLength().HasMaxLength(10);

@@ -10,7 +10,6 @@ namespace Core.DomainModel
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string CprNumber { get; set; }
-        public int PersonId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Mail { get; set; }
@@ -20,6 +19,7 @@ namespace Core.DomainModel
         public string FullName { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsSubstitute { get; set; }
+        public bool IsActive { get; set; }
 
         public virtual ICollection<PersonalAddress> PersonalAddresses { get; set; }
         public virtual ICollection<PersonalRoute> PersonalRoutes { get; set; }

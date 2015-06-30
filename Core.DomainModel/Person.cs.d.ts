@@ -2,7 +2,6 @@
 	interface Person {
 		id: number;
 		cprNumber: string;
-		personId: number;
 		firstName: string;
 		lastName: string;
 		mail: string;
@@ -12,6 +11,7 @@
 		fullName: string;
 		isAdmin: boolean;
 		isSubstitute: boolean;
+		isActive: boolean;
 		personalAddresses: any[];
 		personalRoutes: any[];
 		licensePlates: any[];
