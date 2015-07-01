@@ -143,7 +143,6 @@ namespace DBUpdater
                 personToInsert.Initials = employee.ADBrugerNavn ?? " ";
                 personToInsert.FullName = personToInsert.FirstName + " " + personToInsert.LastName + " [" + personToInsert.Initials + "]";
                 personToInsert.Mail = employee.Email ?? "";
-                personToInsert.PersonId = employee.MaNr ?? default(int);
 
                 _personRepo.Save(); 
             }
