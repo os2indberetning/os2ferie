@@ -29,7 +29,7 @@
                             <p class="margin-5"><strong>Primær</strong></p>
                         </div>
                         <div class="col-sm-1">
-                            <span class="info-popup pull-right margin-5" ng-show="primaryLicensePlateHelpText.length > 0" popover="{{primaryLicensePlateHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+                            <span class="info-popup pull-right margin-5" ng-show="primaryLicensePlateHelpText" popover="{{primaryLicensePlateHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                         </div>
                     </div>
                     <div class="row margin-5" ng-repeat="plate in licenseplates">
@@ -63,7 +63,7 @@
                     <div class="row">
                         <div class="col-xs-7">
                             <p class="pull-left">Afvigende adresse</p>
-                            <span class="info-popup pull-left margin-left-5" ng-show="AlternativeHomeAddressHelpText.length > 0" popover="{{AlternativeHomeAddressHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+                            <span class="info-popup pull-left margin-left-5" ng-show="AlternativeHomeAddressHelpText" popover="{{AlternativeHomeAddressHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                         </div>
 
                     </div>
@@ -102,7 +102,7 @@
                     <h3>Mobiltokens til app</h3>
 
                     <label for="">Se eller opret tokens til din mobiltelefon</label>
-                    <span class="info-popup" ng-show="mobileTokenHelpText.length > 0" popover="{{mobileTokenHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
+                    <span class="info-popup" ng-show="mobileTokenHelpText" popover="{{mobileTokenHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                     <div class="row margin-5">
                         <div class="col-sm-4">
                             <p class="margin-5"><strong>Token</strong></p>
