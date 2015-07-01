@@ -84,10 +84,17 @@ namespace OS2Indberetning.Controllers
         [EnableQuery]
         public IHttpActionResult GetLatestReportForUser(int personId)
         {
-            return Ok(Repo.AsQueryable()
+            var report = Repo.AsQueryable()
                 .Where(x => x.PersonId.Equals(personId))
                 .OrderByDescending(x => x.CreatedDateTimestamp)
-                .First());
+                .FirstOrDefault();
+
+            if (report != null)
+            {
+                return Ok(report);
+            }
+            
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         //GET: odata/DriveReports(5)
