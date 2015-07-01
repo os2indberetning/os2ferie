@@ -75,10 +75,7 @@ namespace DBUpdater
             foreach (var org in orgs)
             {
                 i++;
-                if (i%10 == 0)
-                {
-                    Console.WriteLine("Migrating organisation " + i + " of " + orgs.Count() + ".");
-                }
+                Console.WriteLine("Migrating organisation " + i + " of " + orgs.Count() + ".");
                 var orgToInsert = _orgRepo.AsQueryable().FirstOrDefault(x => x.OrgId == org.LOSOrgId);
 
                 var workAddress = GetWorkAddress(org);
@@ -123,26 +120,15 @@ namespace DBUpdater
         /// </summary>
         public void MigrateEmployees()
         {
-
-            foreach (var person in _personRepo.AsQueryable())
-            {
-                person.IsActive = false;
-            }
-            _personRepo.Save();
-
             var empls = _dataProvider.GetEmployeesAsQueryable();
 
             var i = 0;
             foreach (var employee in empls)
             {
                 i++;
-                if (i%10 == 0)
-                {
-                    Console.WriteLine("Migrating person " + i + " of " + empls.Count() + ".");
-                }
+                Console.WriteLine("Migrating person " + i + " of " + empls.Count() + ".");
 
-
-                var personToInsert = _personRepo.AsQueryable().FirstOrDefault(x => x.CprNumber.Equals(employee.CPR));
+                var personToInsert = _personRepo.AsQueryable().FirstOrDefault(x => x.CprNumber == employee.CPR);
                 
                 if (personToInsert == null)
                 {
@@ -157,26 +143,16 @@ namespace DBUpdater
                 personToInsert.Initials = employee.ADBrugerNavn ?? " ";
                 personToInsert.FullName = personToInsert.FirstName + " " + personToInsert.LastName + " [" + personToInsert.Initials + "]";
                 personToInsert.Mail = employee.Email ?? "";
-                personToInsert.IsActive = true;
+                personToInsert.PersonId = employee.MaNr ?? default(int);
 
                 _personRepo.Save(); 
             }
-
-
-            foreach (var empl in _emplRepo.AsQueryable().Where(x => x.EndDateTimestamp == 0))
-            {
-                empl.EndDateTimestamp = (Int32)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            }
-            _emplRepo.Save();
 
             i = 0;
             foreach (var employee in empls)
             {
                 i++;
-                if (i%10 == 0)
-                {
-                    Console.WriteLine("Adding employment and address to person " + i + " of " + empls.Count());
-                }
+                Console.WriteLine("Adding employment and address to person " + i + " of " + empls.Count());
                 var personToInsert = _personRepo.AsQueryable().First(x => x.CprNumber == employee.CPR);
 
                 CreateEmployment(employee, personToInsert.Id);
