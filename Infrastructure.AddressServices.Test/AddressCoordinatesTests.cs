@@ -40,8 +40,8 @@ namespace Infrastructure.AddressServices.Tests
                 StreetName = "Katrinebjergvej",
                 StreetNumber = "90",
                 ZipCode = 8200,
-                Longitude = "10.1906",
-                Latitude = "56.1735",
+                Longitude = "10.1906964757185",
+                Latitude = "56.1735754688399",
 
             };
 

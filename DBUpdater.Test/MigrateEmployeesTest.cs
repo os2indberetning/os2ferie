@@ -171,7 +171,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).CprNumber.Equals("123456784321"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals("Test@mail.dk"));
-            Assert.That(res.ElementAt(0).PersonId.Equals(1));
             Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
@@ -189,7 +188,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(1).CprNumber.Equals("123456781234"));
             Assert.That(res.ElementAt(1).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(1).Mail.Equals("Test@mail.dk"));
-            Assert.That(res.ElementAt(1).PersonId.Equals(2));
             Assert.That(res.ElementAt(1).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(1).OrgUnitId.Equals(2));
@@ -262,7 +260,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).CprNumber.Equals("123456784321"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals("Test@mail.dk"));
-            Assert.That(res.ElementAt(0).PersonId.Equals(1));
             Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
@@ -280,7 +277,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(1).CprNumber.Equals("123456781234"));
             Assert.That(res.ElementAt(1).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(1).Mail.Equals("Test@mail.dk"));
-            Assert.That(res.ElementAt(1).PersonId.Equals(2));
             Assert.That(res.ElementAt(1).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(1).OrgUnitId.Equals(1));
@@ -298,7 +294,6 @@ namespace DBUpdater.Test
         {
             _personRepoMock.Insert(new Person()
             {
-                PersonId = 1,
                 RecieveMail = true,
                 CprNumber = "123456781234"
             });
@@ -341,7 +336,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).CprNumber.Equals("123456781234"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals("Test@mail.dk"));
-            Assert.That(res.ElementAt(0).PersonId.Equals(1));
             Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
@@ -412,7 +406,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).CprNumber.Equals("123456784321"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals("Test@mail.dk"));
-            Assert.That(res.ElementAt(0).PersonId.Equals(1));
             Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
@@ -430,7 +423,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(1).CprNumber.Equals("123456781234"));
             Assert.That(res.ElementAt(1).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(1).Mail.Equals("Test@mail.dk"));
-            Assert.That(res.ElementAt(1).PersonId.Equals(2));
             Assert.That(res.ElementAt(1).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(1).OrgUnitId.Equals(1));
@@ -499,7 +491,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).CprNumber.Equals("123456784321"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals(""));
-            Assert.That(res.ElementAt(0).PersonId.Equals(1));
             Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
@@ -517,7 +508,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(1).CprNumber.Equals("123456781234"));
             Assert.That(res.ElementAt(1).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(1).Mail.Equals(""));
-            Assert.That(res.ElementAt(1).PersonId.Equals(2));
             Assert.That(res.ElementAt(1).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(1).OrgUnitId.Equals(1));
@@ -584,7 +574,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).CprNumber.Equals("123456784321"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals(""));
-            Assert.That(res.ElementAt(0).PersonId.Equals(1));
             Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
@@ -602,7 +591,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(1).CprNumber.Equals("123456781234"));
             Assert.That(res.ElementAt(1).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(1).Mail.Equals(""));
-            Assert.That(res.ElementAt(1).PersonId.Equals(2));
             Assert.That(res.ElementAt(1).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(1).OrgUnitId.Equals(1));
@@ -666,7 +654,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).CprNumber.Equals("123456784321"));
             Assert.That(res.ElementAt(0).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(0).Mail.Equals(""));
-            Assert.That(res.ElementAt(0).PersonId.Equals(1));
             Assert.That(res.ElementAt(0).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(0).OrgUnitId.Equals(1));
@@ -684,7 +671,6 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(1).CprNumber.Equals("123456781234"));
             Assert.That(res.ElementAt(1).IsAdmin.Equals(false));
             Assert.That(res.ElementAt(1).Mail.Equals(""));
-            Assert.That(res.ElementAt(1).PersonId.Equals(2));
             Assert.That(res.ElementAt(1).RecieveMail.Equals(true));
 
             Assert.That(empl.ElementAt(1).OrgUnitId.Equals(1));

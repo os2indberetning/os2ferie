@@ -112,7 +112,6 @@ namespace DBUpdater.Test
             personList.Add(new Person()
             {
                 Id = 1,
-                PersonId = 1,
             });
         }
 

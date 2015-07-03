@@ -70,7 +70,6 @@ namespace DBUpdater.Test
                 new Person()
                 {
                     Id = 1,
-                    PersonId = 1,
                 }
             }.AsQueryable());
 
