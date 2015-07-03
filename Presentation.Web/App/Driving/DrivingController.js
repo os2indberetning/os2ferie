@@ -16,6 +16,8 @@
 
         var isFormDirty = false;
 
+
+
         var isEditingReport = ReportId > 0;
         $scope.container = {};
         $scope.isEditingReport = isEditingReport;
@@ -26,7 +28,9 @@
 
         var mapChanging = false;
 
-
+        // Is true the first time the map is loaded to prevent filling the address textboxes with the mapstart addresses.
+        // Is initially false when loading a report to edit.
+        var firstMapLoad = true;
         
 
         $scope.container.addressFieldOptions = {
@@ -122,6 +126,9 @@
             $scope.DriveReport.FourKmRule = {};
             $scope.DriveReport.FourKmRule.Value = $rootScope.CurrentUser.DistanceFromHomeToBorder.toString().replace(".", ",");
 
+
+
+
             // Select position in dropdown.
             $scope.container.PositionDropDown.select(function (item) {
                 return item.Id == report.EmploymentId;
@@ -165,6 +172,7 @@
 
             // Load additional data if a report is being edited.
             if (isEditingReport) {
+                firstMapLoad = false;
                 $scope.DriveReport.Purpose = report.Purpose;
                 $scope.DriveReport.FourKmRule.Using = report.FourKmRule;
                 $scope.DriveReport.Date = moment.unix(report.DriveDateTimestamp)._d;
@@ -465,7 +473,6 @@
             if (!validateAddressInput(false) || mapChanging) {
                 return;
             }
-            console.log("foo");
 
             var mapArray = [];
 
@@ -527,9 +534,16 @@
                     OS2RouteMap.create({
                         id: 'map',
                         change: function (obj) {
-
+                            if (firstMapLoad) {
+                                firstMapLoad = false;
+                                return;
+                            }
+                            isFormDirty = true;
                             $scope.currentMapAddresses = obj.Addresses;
                             $scope.latestMapDistance = obj.distance;
+                            if (obj.distance == 0) {
+                                isFormDirty = false;
+                            }
                             updateDrivenKm();
 
                             // Return if the change comes from AddressInputChanged
@@ -609,7 +623,6 @@
             /// <summary>
             /// Clears user input
             /// </summary>
-            isFormDirty = false;
             setMap($scope.mapStartAddress, $scope.transportType);
 
             setNotRoute();
