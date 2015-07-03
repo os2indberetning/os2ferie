@@ -13,6 +13,7 @@ using Core.DomainModel;
 using Core.DomainServices;
 using DBUpdater.Models;
 using Infrastructure.AddressServices.Interfaces;
+using MoreLinq;
 using Ninject;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
 
@@ -75,7 +76,11 @@ namespace DBUpdater
             foreach (var org in orgs)
             {
                 i++;
-                Console.WriteLine("Migrating organisation " + i + " of " + orgs.Count() + ".");
+                if (i%10 == 0)
+                {
+                    Console.WriteLine("Migrating organisation " + i + " of " + orgs.Count() + ".");
+                }
+               
                 var orgToInsert = _orgRepo.AsQueryable().FirstOrDefault(x => x.OrgId == org.LOSOrgId);
 
                 var workAddress = GetWorkAddress(org);
@@ -109,9 +114,9 @@ namespace DBUpdater
                 {
                     orgToInsert.ParentId = _orgRepo.AsQueryable().Single(x => x.OrgId == org.ParentLosOrgId).Id;
                 }
-
                 _orgRepo.Save();
             }
+
             Console.WriteLine("Done migrating organisations.");
         }
 
@@ -120,13 +125,23 @@ namespace DBUpdater
         /// </summary>
         public void MigrateEmployees()
         {
+            foreach (var person in _personRepo.AsQueryable())
+            {
+                person.IsActive = false;
+            }
+            _personRepo.Save();
+
             var empls = _dataProvider.GetEmployeesAsQueryable();
 
             var i = 0;
-            foreach (var employee in empls)
+            foreach (var employee in empls.DistinctBy(x => x.CPR))
             {
                 i++;
-                Console.WriteLine("Migrating person " + i + " of " + empls.Count() + ".");
+                if (i%10 == 0)
+                {
+                    Console.WriteLine("Migrating person " + i + " of " + empls.DistinctBy(x => x.CPR).Count() + ".");
+                }
+               
 
                 var personToInsert = _personRepo.AsQueryable().FirstOrDefault(x => x.CprNumber == employee.CPR);
                 
@@ -143,21 +158,32 @@ namespace DBUpdater
                 personToInsert.Initials = employee.ADBrugerNavn ?? " ";
                 personToInsert.FullName = personToInsert.FirstName + " " + personToInsert.LastName + " [" + personToInsert.Initials + "]";
                 personToInsert.Mail = employee.Email ?? "";
+                personToInsert.IsActive = true;
 
-                _personRepo.Save(); 
+
             }
+            _personRepo.Save(); 
+
+            foreach (var employment in _emplRepo.AsQueryable())
+            {
+                employment.EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            }
+            _emplRepo.Save();
 
             i = 0;
             foreach (var employee in empls)
             {
                 i++;
-                Console.WriteLine("Adding employment and address to person " + i + " of " + empls.Count());
+                if (i%10 == 0)
+                {
+                    Console.WriteLine("Adding employment and address to person " + i + " of " + empls.Count());
+                }
                 var personToInsert = _personRepo.AsQueryable().First(x => x.CprNumber == employee.CPR);
 
                 CreateEmployment(employee, personToInsert.Id);
                 UpdateHomeAddress(employee, personToInsert.Id); 
-                _personalAddressRepo.Save();
             }
+            _personalAddressRepo.Save();
             _emplRepo.Save();
 
             Console.WriteLine("Done migrating employees");

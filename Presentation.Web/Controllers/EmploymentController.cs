@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
@@ -28,7 +29,13 @@ namespace OS2Indberetning.Controllers
             {
                 employment.Person.CprNumber = "";
             }
-            return res;
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
+            // Remove inactive people
+            res = res.Where(x => x.Person.IsActive);
+
+            // Remove employments that have expired.
+            return res.Where(x => x.EndDateTimestamp == 0 || x.EndDateTimestamp > currentTimestamp);
         }
 
         //GET: odata/Employments(5)
@@ -45,7 +52,13 @@ namespace OS2Indberetning.Controllers
             {
                 employment.Person.CprNumber = "";
             }
-            return res;
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
+            // Remove inactive people
+            res = res.Where(x => x.Person.IsActive);
+
+            // Remove employments that have expired.
+            return res.Where(x => x.EndDateTimestamp == 0 || x.EndDateTimestamp > currentTimestamp);
         }
 
         //PUT: odata/Employments(5)

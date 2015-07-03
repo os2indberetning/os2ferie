@@ -32,7 +32,7 @@
         //    $scope.currentPerson = data;
         //});
 
-        Person.getAll({ query: "$select=Id,FullName" }).$promise.then(function(res) {
+        Person.getAll({ query: "$select=Id,FullName &$filter=IsActive eq true" }).$promise.then(function(res) {
             $scope.persons = res.value;
         });
 

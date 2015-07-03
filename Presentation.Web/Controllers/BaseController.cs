@@ -56,6 +56,11 @@ namespace OS2Indberetning.Controllers
                     Logger.Error("AD-bruger ikke fundet i databasen (" + User.Identity.Name + ")");
                     throw new UnauthorizedAccessException("AD-bruger ikke fundet i databasen.");
                 }
+                if (!CurrentUser.IsActive)
+                {
+                    Logger.Error("Inaktiv bruger forsøgte at logge ind (" + User.Identity.Name + ")");
+                    throw new UnauthorizedAccessException("Inaktiv bruger forsøgte at logge ind.");
+                }
             }
             else
             {

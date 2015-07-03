@@ -13,6 +13,7 @@ using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
 using Infrastructure.DataAccess;
 using log4net.Repository.Hierarchy;
+using Newtonsoft.Json.Schema;
 
 namespace OS2Indberetning.Controllers
 {
@@ -43,6 +44,12 @@ namespace OS2Indberetning.Controllers
         {
             var res = GetQueryable(queryOptions);
             _person.ScrubCprFromPersons(res);
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            foreach (var person in res.ToList())
+            {
+                // Remove employments that have expired.
+                person.Employments = person.Employments.Where(x => x.EndDateTimestamp == 0 || x.EndDateTimestamp > currentTimestamp).ToList();
+            }
             return Ok(res);
         }
 
@@ -58,11 +65,18 @@ namespace OS2Indberetning.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
         public Person GetCurrentUser()
         {
-            var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(CurrentUser.Id));
-            CurrentUser.Employments = employments.ToList();
+            var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId == CurrentUser.Id && (x.EndDateTimestamp == 0 || x.EndDateTimestamp > currentDateTimestamp));
+            var employmentList = employments.ToList();
+
+            CurrentUser.Employments.Clear();
+            foreach (var employment in employmentList)
+            {
+                CurrentUser.Employments.Add(employment);
+            }
+
             _person.AddHomeWorkDistanceToEmployments(CurrentUser);
             CurrentUser.CprNumber = "";
-            var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             CurrentUser.IsSubstitute = _substituteRepo.AsQueryable().Any(x => x.SubId.Equals(CurrentUser.Id) && x.StartDateTimestamp < currentDateTimestamp && x.EndDateTimestamp > currentDateTimestamp);
             return CurrentUser;
         }
@@ -81,6 +95,12 @@ namespace OS2Indberetning.Controllers
             {
                 var cprScrubbed = _person.ScrubCprFromPersons(GetQueryable(key, queryOptions));
                 var res = cprScrubbed.ToList();
+                var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                foreach (var person in res.ToList())
+                {
+                    // Remove employments that have expired.
+                    person.Employments = person.Employments.Where(x => x.EndDateTimestamp == 0 || x.EndDateTimestamp > currentTimestamp).ToList();
+                }
                 return res.AsQueryable();
             }
             catch (RouteInformationException e)
@@ -157,8 +177,12 @@ namespace OS2Indberetning.Controllers
             }
             person = _person.AddHomeWorkDistanceToEmployments(person);
 
+            var currentTimestamp = (Int32) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
-            return Ok(person.Employments);
+            // Remove employments that have expired.
+            var res = person.Employments.Where(x => x.EndDateTimestamp == 0 || x.EndDateTimestamp > currentTimestamp);
+
+            return Ok(res);
         }
 
         // GET: odata/Person(5)/Service.HasLicensePlate

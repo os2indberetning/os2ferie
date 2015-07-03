@@ -24,7 +24,8 @@ namespace Core.ApplicationServices
         {
             var result = new List<OrgUnit>();
 
-            var leaderEmpls = _emplRepo.AsQueryable().Where(e => e.IsLeader && e.PersonId == personId).ToList(); // ToList to force close the datareader
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            var leaderEmpls = _emplRepo.AsQueryable().Where(e => e.IsLeader && e.PersonId == personId && (e.EndDateTimestamp == 0 || e.EndDateTimestamp > currentTimestamp)).ToList(); // ToList to force close the datareader
             foreach (var employment in leaderEmpls)
             {
                 var empl = employment;
