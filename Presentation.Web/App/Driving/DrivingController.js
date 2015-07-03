@@ -312,7 +312,10 @@
             /// </summary>
             $scope.container.PersonalRouteDropDown.select(0);
             $scope.IsRoute = false;
+            isFormDirty = false;
+            setMap($scope.mapStartAddress, $scope.transportType);
             $scope.DriveReport.Addresses = [{ Name: "" }, { Name: "" }];
+            updateDrivenKm();
         }
 
         var setIsRoute = function (index) {
