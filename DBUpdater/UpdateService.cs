@@ -78,7 +78,7 @@ namespace DBUpdater
                 i++;
                 if (i%10 == 0)
                 {
-                    Console.WriteLine("Migrating organisation " + i + " of " + orgs.Count() + ".");
+                Console.WriteLine("Migrating organisation " + i + " of " + orgs.Count() + ".");
                 }
                
                 var orgToInsert = _orgRepo.AsQueryable().FirstOrDefault(x => x.OrgId == org.LOSOrgId);
@@ -139,11 +139,11 @@ namespace DBUpdater
                 i++;
                 if (i%10 == 0)
                 {
-                    Console.WriteLine("Migrating person " + i + " of " + empls.DistinctBy(x => x.CPR).Count() + ".");
+                    Console.WriteLine("Migrating person " + i + " of " + empls.Count() + ".");
                 }
-               
 
-                var personToInsert = _personRepo.AsQueryable().FirstOrDefault(x => x.CprNumber == employee.CPR);
+
+                var personToInsert = _personRepo.AsQueryable().FirstOrDefault(x => x.CprNumber.Equals(employee.CPR));
                 
                 if (personToInsert == null)
                 {
@@ -162,11 +162,17 @@ namespace DBUpdater
 
 
             }
-            _personRepo.Save(); 
+                _personRepo.Save(); 
 
             foreach (var employment in _emplRepo.AsQueryable())
             {
                 employment.EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            }
+
+
+            foreach (var empl in _emplRepo.AsQueryable().Where(x => x.EndDateTimestamp == 0))
+            {
+                empl.EndDateTimestamp = (Int32)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             }
             _emplRepo.Save();
 
@@ -176,14 +182,14 @@ namespace DBUpdater
                 i++;
                 if (i%10 == 0)
                 {
-                    Console.WriteLine("Adding employment and address to person " + i + " of " + empls.Count());
+                Console.WriteLine("Adding employment and address to person " + i + " of " + empls.Count());
                 }
                 var personToInsert = _personRepo.AsQueryable().First(x => x.CprNumber == employee.CPR);
 
                 CreateEmployment(employee, personToInsert.Id);
                 UpdateHomeAddress(employee, personToInsert.Id); 
             }
-            _personalAddressRepo.Save();
+                _personalAddressRepo.Save();
             _emplRepo.Save();
 
             Console.WriteLine("Done migrating employees");
