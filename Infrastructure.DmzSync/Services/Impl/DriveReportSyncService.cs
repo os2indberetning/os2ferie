@@ -58,20 +58,11 @@ namespace Infrastructure.DmzSync.Services.Impl
                 {
                     var gpsCoord = dmzReport.Route.GPSCoordinates.ToArray()[j];
                     gpsCoord = Encryptor.DecryptGPSCoordinate(gpsCoord);
-                    var address = _coordinates.GetAddressFromCoordinates(new Address()
-                    {
-                        Latitude = gpsCoord.Latitude,
-                        Longitude = gpsCoord.Longitude
-                    });
 
                     points.Add(new DriveReportPoint
                     {
                         Latitude = gpsCoord.Latitude,
                         Longitude = gpsCoord.Longitude,
-                        StreetName = address.StreetName,
-                        StreetNumber = address.StreetNumber,
-                        ZipCode = address.ZipCode,
-                        Town = address.Town
                     });
                 }
                
