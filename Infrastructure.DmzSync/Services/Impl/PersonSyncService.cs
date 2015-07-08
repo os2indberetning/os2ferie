@@ -82,7 +82,7 @@ namespace Infrastructure.DmzSync.Services.Impl
         {
             var i = 0;
             var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            var personList = _masterPersonRepo.AsQueryable().ToList();
+            var personList = _masterPersonRepo.AsQueryable().Where(x => x.IsActive).ToList();
             var max = personList.Count;
 
             foreach (var person in personList)
