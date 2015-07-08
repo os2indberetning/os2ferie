@@ -9,6 +9,7 @@ using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
+using Infrastructure.AddressServices;
 using Infrastructure.DataAccess;
 using Infrastructure.DmzDataAccess;
 using Infrastructure.DmzSync.Encryption;
@@ -48,13 +49,13 @@ namespace Infrastructure.DmzSync.Services.Impl
             var reports = _dmzDriveReportRepo.AsQueryable().ToList();
             var max = reports.Count;
 
-                for ( var i = 0; i < max; i++ )
-                {
+            for (var i = 0; i < max; i++)
+            {
                 var dmzReport = reports[i];
                 Console.WriteLine("Syncing report " + i + " of " + max + " from DMZ.");
                 var rate = _rateRepo.AsQueryable().First(x => x.Id.Equals(dmzReport.RateId));
                 var points = new List<DriveReportPoint>();
-                for ( var j = 0; j < dmzReport.Route.GPSCoordinates.Count; j++)
+                for (var j = 0; j < dmzReport.Route.GPSCoordinates.Count; j++)
                 {
                     var gpsCoord = dmzReport.Route.GPSCoordinates.ToArray()[j];
                     gpsCoord = Encryptor.DecryptGPSCoordinate(gpsCoord);
@@ -65,10 +66,10 @@ namespace Infrastructure.DmzSync.Services.Impl
                         Longitude = gpsCoord.Longitude,
                     });
                 }
-               
+
                 var newReport = new Core.DomainModel.DriveReport
                 {
-                    
+
                     IsFromApp = true,
                     Distance = dmzReport.Route.TotalDistance,
                     KilometerAllowance = KilometerAllowance.Read,
@@ -90,11 +91,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                     Comment = "",
                 };
 
-                var route = _routeService.GetRoute(rate.Type.IsBike ? DriveReportTransportType.Bike : DriveReportTransportType.Car, points);
-                if (route != null)
-                {
-                    newReport.RouteGeometry = route.GeoPoints;
-                }
+                newReport.RouteGeometry = GeoService.Encode(points);
 
                 _driveService.Create(newReport);
             }

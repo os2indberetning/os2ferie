@@ -109,6 +109,10 @@
       <Project>{3A54FD98-5ECF-47C1-98C1-D827CFEBA317}</Project>
       <Name>Core.DomainServices</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Infrastructure.AddressServices\Infrastructure.AddressServices.csproj">
+      <Project>{720A3483-F089-4A45-830B-CED59F8CD1E7}</Project>
+      <Name>Infrastructure.AddressServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Infrastructure.DataAccess\Infrastructure.DataAccess.csproj">
       <Project>{9914DB94-E465-4751-939C-8121C30AC945}</Project>
       <Name>Infrastructure.DataAccess</Name>

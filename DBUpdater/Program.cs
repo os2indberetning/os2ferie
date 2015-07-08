@@ -11,6 +11,7 @@ using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using DBUpdater.Models;
+using Infrastructure.AddressServices;
 using Infrastructure.AddressServices.Interfaces;
 using Infrastructure.DataAccess;
 using Ninject;
@@ -38,7 +39,7 @@ namespace DBUpdater
 
 
 
-        
+
 
     }
 }
