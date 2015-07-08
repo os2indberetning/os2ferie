@@ -76,11 +76,11 @@ namespace DBUpdater
             foreach (var org in orgs)
             {
                 i++;
-                if (i%10 == 0)
+                if (i % 10 == 0)
                 {
-                Console.WriteLine("Migrating organisation " + i + " of " + orgs.Count() + ".");
+                    Console.WriteLine("Migrating organisation " + i + " of " + orgs.Count() + ".");
                 }
-               
+
                 var orgToInsert = _orgRepo.AsQueryable().FirstOrDefault(x => x.OrgId == org.LOSOrgId);
 
                 var workAddress = GetWorkAddress(org);
@@ -102,7 +102,7 @@ namespace DBUpdater
 
                 orgToInsert.Address = workAddress;
 
-                if(  workAddress.Id != 0)
+                if (workAddress.Id != 0)
                 {
                     orgToInsert.Address = null;
                     orgToInsert.AddressId = workAddress.Id;
@@ -134,17 +134,18 @@ namespace DBUpdater
             var empls = _dataProvider.GetEmployeesAsQueryable();
 
             var i = 0;
-            foreach (var employee in empls.DistinctBy(x => x.CPR))
+            var distinctEmpls = empls.DistinctBy(x => x.CPR).ToList();
+            foreach (var employee in distinctEmpls)
             {
                 i++;
-                if (i%10 == 0)
+                if (i % 10 == 0)
                 {
-                    Console.WriteLine("Migrating person " + i + " of " + empls.Count() + ".");
+                    Console.WriteLine("Migrating person " + i + " of " + distinctEmpls.Count() + ".");
                 }
 
 
                 var personToInsert = _personRepo.AsQueryable().FirstOrDefault(x => x.CprNumber.Equals(employee.CPR));
-                
+
                 if (personToInsert == null)
                 {
                     personToInsert = _personRepo.Insert(new Person());
@@ -162,17 +163,11 @@ namespace DBUpdater
 
 
             }
-                _personRepo.Save(); 
+            _personRepo.Save();
 
             foreach (var employment in _emplRepo.AsQueryable())
             {
                 employment.EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            }
-
-
-            foreach (var empl in _emplRepo.AsQueryable().Where(x => x.EndDateTimestamp == 0))
-            {
-                empl.EndDateTimestamp = (Int32)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             }
             _emplRepo.Save();
 
@@ -180,25 +175,25 @@ namespace DBUpdater
             foreach (var employee in empls)
             {
                 i++;
-                if (i%10 == 0)
+                if (i % 10 == 0)
                 {
-                Console.WriteLine("Adding employment and address to person " + i + " of " + empls.Count());
+                    Console.WriteLine("Adding employment and address to person " + i + " of " + empls.Count());
                 }
                 var personToInsert = _personRepo.AsQueryable().First(x => x.CprNumber == employee.CPR);
 
                 CreateEmployment(employee, personToInsert.Id);
-                UpdateHomeAddress(employee, personToInsert.Id); 
+                UpdateHomeAddress(employee, personToInsert.Id);
             }
-                _personalAddressRepo.Save();
+            _personalAddressRepo.Save();
             _emplRepo.Save();
 
             Console.WriteLine("Done migrating employees");
             var dirtyAddressCount = _cachedRepo.AsQueryable().Count(x => x.IsDirty);
-            if ( dirtyAddressCount > 0)
+            if (dirtyAddressCount > 0)
             {
                 foreach (var admin in _personRepo.AsQueryable().Where(x => x.IsAdmin))
                 {
-                    _mailSender.SendMail(admin.Mail, "Der er adresser der mangler at blive vasket", "Der mangler at blive vasket " + dirtyAddressCount + "adresser");    
+                    _mailSender.SendMail(admin.Mail, "Der er adresser der mangler at blive vasket", "Der mangler at blive vasket " + dirtyAddressCount + "adresser");
                 }
             }
         }
@@ -223,20 +218,14 @@ namespace DBUpdater
                 throw new Exception("OrgUnit does not exist.");
             }
 
-            if (!_personRepo.AsQueryable().Any(x => x.Id == personId))
-            {
-                throw new Exception("Person does not exist.");
-            }
+            var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.OrgUnitId == orgUnit.Id && x.EmploymentId == empl.MaNr);
 
-            var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.OrgUnitId == orgUnit.Id 
-                                                                            && x.PersonId == personId
-                                                                            && x.Position.Equals(empl.Stillingsbetegnelse));
             //It is ok that we do not save after inserting untill
             //we are done as we loop over employments from the view, and 
             //two view employments will not share an employment in the db. 
             if (employment == null)
             {
-                employment = _emplRepo.Insert(new Employment()); 
+                employment = _emplRepo.Insert(new Employment());
             }
 
             employment.OrgUnitId = orgUnit.Id;
@@ -248,6 +237,7 @@ namespace DBUpdater
             employment.ExtraNumber = empl.EkstraCiffer ?? 0;
             employment.EmploymentType = int.Parse(empl.AnsatForhold);
             employment.CostCenter = empl.Omkostningssted;
+            employment.EmploymentId = empl.MaNr ?? 0;
 
             if (empl.OphoersDato != null)
             {
