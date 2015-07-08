@@ -67,6 +67,9 @@ namespace Infrastructure.DmzSync.Services.Impl
                     });
                 }
 
+                var licensePlate = _licensePlateRepo.AsQueryable().FirstOrDefault(x => x.PersonId.Equals(dmzReport.ProfileId) && x.IsPrimary);
+                var plate = licensePlate != null ? licensePlate.Plate : "UKENDT";
+
                 var newReport = new Core.DomainModel.DriveReport
                 {
 
@@ -87,7 +90,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                     UserComment = dmzReport.ManualEntryRemark,
                     Status = ReportStatus.Pending,
                     FullName = dmzReport.Profile.FullName,
-                    LicensePlate = _licensePlateRepo.AsQueryable().First(x => x.PersonId.Equals(dmzReport.ProfileId) && x.IsPrimary).Plate,
+                    LicensePlate = plate,
                     Comment = "",
                 };
 
