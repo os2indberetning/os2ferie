@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web.OData;
@@ -84,6 +85,7 @@ namespace Core.ApplicationServices
                 var drivenRoute = _route.GetRoute(
                     isBike ? DriveReportTransportType.Bike : DriveReportTransportType.Car, report.DriveReportPoints);
 
+
                 report.Distance = (double) drivenRoute.Length/1000;
 
                 if (report.Distance < 0)
@@ -101,8 +103,9 @@ namespace Core.ApplicationServices
 
 
 
-
-
+            // Round off Distance and AmountToReimburse to two decimals.
+            report.Distance = Convert.ToDouble(report.Distance.ToString("0.##", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+            report.AmountToReimburse = Convert.ToDouble(report.AmountToReimburse.ToString("0.##", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
             var createdReport = _driveReportRepository.Insert(report);
             _driveReportRepository.Save();
@@ -147,14 +150,17 @@ namespace Core.ApplicationServices
         /// <returns>True or false</returns>
         public bool Validate(DriveReport report)
         {
+            // Report does not validate if it is read and distance is less than zero.
             if (report.KilometerAllowance == KilometerAllowance.Read && report.Distance < 0)
             {
                 return false;
             }
+            // Report does not validate if it is calculated and has less than two points.
             if (report.KilometerAllowance != KilometerAllowance.Read && report.DriveReportPoints.Count < 2)
             {
                 return false;
             }
+            // Report does not validate if it has no purpose given.
             if (string.IsNullOrEmpty(report.Purpose))
             {
                 return false;
