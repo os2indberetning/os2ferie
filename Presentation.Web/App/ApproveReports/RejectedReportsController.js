@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("RejectedReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "RateType", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, RateType) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
@@ -34,7 +34,9 @@
            }
        };
 
-
+       RateType.getAll().$promise.then(function (res) {
+           $scope.rateTypes = res;
+       });
 
        // dates for kendo filter.
        var fromDateFilter = new Date();
@@ -218,7 +220,6 @@
            $scope.gridContainer.grid.dataSource.filter(newFilters);
        }
 
-       $scope.loadReports = function () {
            /// <summary>
            /// Loads rejected reports from backend to kendo grid datasource.
            /// </summary>
@@ -289,6 +290,16 @@
                }, {
                    field: "Purpose",
                    title: "Formål",
+               },{
+                   field: "TFCode",
+                   title: "Taksttype",
+                   template: function (data) {
+                       for (var i = 0; i < $scope.rateTypes.length; i++) {
+                           if ($scope.rateTypes[i].TFCode == data.TFCode) {
+                               return $scope.rateTypes[i].Description;
+                           }
+                       }
+                   }
                }, {
                    title: "Rute",
                    field: "DriveReportPoints",
@@ -377,7 +388,6 @@
                }
                ],
            };
-       }
 
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
@@ -490,10 +500,6 @@
        $scope.dateOptions = {
            format: "dd/MM/yyyy",
        };
-
-
-       // Load up the grids.
-       $scope.loadReports();
 
        $scope.personChanged = function (item) {
            $scope.applyPersonFilter($scope.person.chosenPerson);

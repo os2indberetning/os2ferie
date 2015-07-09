@@ -22,6 +22,14 @@
                 return res;
             }
         },
+        "getAll": {
+            method: "GET",
+            isArray: true,
+            transformResponse: function (data) {
+                var res = angular.fromJson(data).value;
+                return res;
+            }
+        },
        "post": {method: "POST"}
     });
 }]);

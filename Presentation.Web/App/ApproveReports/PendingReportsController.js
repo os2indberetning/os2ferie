@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("PendingReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "RateType", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, RateType) {
 
        // Load people for auto-complete textbox
        $scope.people = [];
@@ -16,7 +16,9 @@
        $scope.orgUnits = $rootScope.OrgUnits;
        $scope.people = $rootScope.People;
 
-
+       RateType.getAll().$promise.then(function (res) {
+           $scope.rateTypes = res;
+       });
 
        $scope.orgUnitChanged = function (item) {
            $scope.applyOrgUnitFilter($scope.orgUnit.chosenUnit);
@@ -290,114 +292,124 @@
                this.expandRow(this.tbody.find("tr.k-master-row").first());
            },
            columns: [
-           {
-               field: "FullName",
-               title: "Medarbejder"
-           }, {
-               field: "Employment.OrgUnit.LongDescription",
-               title: "Org.enhed"
-           }, {
-               field: "DriveDateTimestamp",
-               template: function (data) {
-                   var m = moment.unix(data.DriveDateTimestamp);
-                   return m._d.getDate() + "/" +
-                       (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                       m._d.getFullYear();
-               },
-               title: "Dato"
-           }, {
-               field: "Purpose",
-               title: "Formål",
-           }, {
-               title: "Rute",
-               field: "DriveReportPoints",
-               template: function (data) {
-                   var tooltipContent = "";
-                   angular.forEach(data.DriveReportPoints, function (point, key) {
-                       if (key != data.DriveReportPoints.length - 1) {
-                           tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
-                           gridContent += point.Town + "<br/>";
-                       } else {
-                           tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
-                           gridContent += point.Town;
+               {
+                   field: "FullName",
+                   title: "Medarbejder"
+               }, {
+                   field: "Employment.OrgUnit.LongDescription",
+                   title: "Org.enhed"
+               }, {
+                   field: "DriveDateTimestamp",
+                   template: function (data) {
+                       var m = moment.unix(data.DriveDateTimestamp);
+                       return m._d.getDate() + "/" +
+                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                           m._d.getFullYear();
+                   },
+                   title: "Dato"
+               }, {
+                   field: "Purpose",
+                   title: "Formål",
+               }, {
+                   field: "TFCode",
+                   title: "Taksttype",
+                   template: function (data) {
+                       for (var i = 0; i < $scope.rateTypes.length; i++) {
+                           if ($scope.rateTypes[i].TFCode == data.TFCode) {
+                               return $scope.rateTypes[i].Description;
+                           }
                        }
-                   });
-                   var gridContent = "<i class='fa fa-road fa-2x'></i>";
-                   var toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
-                   var globe = "<div class='inline pull-right margin-right-5' kendo-tooltip k-content=\"'Se rute på kort'\"><a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a></div>";
-                   var result = toolTip + globe;
+                   }
+               }, {
+                   title: "Rute",
+                   field: "DriveReportPoints",
+                   template: function (data) {
+                       var tooltipContent = "";
+                       angular.forEach(data.DriveReportPoints, function (point, key) {
+                           if (key != data.DriveReportPoints.length - 1) {
+                               tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
+                               gridContent += point.Town + "<br/>";
+                           } else {
+                               tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
+                               gridContent += point.Town;
+                           }
+                       });
+                       var gridContent = "<i class='fa fa-road fa-2x'></i>";
+                       var toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
+                       var globe = "<div class='inline pull-right margin-right-5' kendo-tooltip k-content=\"'Se rute på kort'\"><a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a></div>";
+                       var result = toolTip + globe;
 
-                   if (data.KilometerAllowance != "Read") {
-                       return result;
-                   } else {
-                       if (data.IsFromApp) {
-                           toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
-                           result = toolTip + globe;
+                       if (data.KilometerAllowance != "Read") {
                            return result;
                        } else {
-                           return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
+                           if (data.IsFromApp) {
+                               toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
+                               result = toolTip + globe;
+                               return result;
+                           } else {
+                               return "<div kendo-tooltip k-content=\"'" + data.UserComment + "'\">Aflæst manuelt</div>";
+                           }
+
+                       }
+                   }
+               }, {
+                   field: "Distance",
+                   title: "Km",
+                   template: function (data) {
+                       return data.Distance.toFixed(2).toString().replace('.', ',') + " km";
+                   },
+                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # km"
+               }, {
+                   field: "AmountToReimburse",
+                   title: "Beløb",
+                   template: function (data) {
+                       return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " kr.";
+                   },
+                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
+               }, {
+                   field: "KilometerAllowance",
+                   title: "MK",
+                   template: function (data) {
+                       if (data.IsExtraDistance) {
+                           return "<i class='fa fa-check'></i>";
+                       }
+                       return "";
+                   }
+               }, {
+                   field: "FourKmRule",
+                   title: "4 km",
+                   template: function (data) {
+                       if (data.FourKmRule) {
+                           return "<i class='fa fa-check'></i>";
+                       }
+                       return "";
+                   }
+               }, {
+                   field: "CreatedDateTimestamp",
+                   title: "Indberettet",
+                   template: function (data) {
+                       var m = moment.unix(data.CreatedDateTimestamp);
+                       return m._d.getDate() + "/" +
+                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                           m._d.getFullYear();
+                   },
+               }, {
+                   sortable: false,
+                   field: "Id",
+                   template: function (data) {
+                       if (data.ResponsibleLeader.Id == data.PersonId) {
+                           return "Indberetning skal godkendes af din leder eller opsat personlig godkender.";
+                       }
+                       if (data.ResponsibleLeader.Id == $rootScope.CurrentUser.Id) {
+                           return "<a ng-click=approveClick(" + data.Id + ")>Godkend</a> | <a ng-click=rejectClick(" + data.Id + ")>Afvis</a> <div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[" + data.Id + "]' ng-change='rowChecked(" + data.Id + ")'></input></div>";
+                       } else {
+                           return data.ResponsibleLeader.FullName + " er udpeget som godkender.";
                        }
 
-                   }
+                   },
+                   headerTemplate: "Muligheder <div class='col-sm-1 pull-right'><input ng-change='checkAllBoxesOnPage()' type='checkbox' ng-model='checkAllBox.isChecked'></input></div>",
+                   footerTemplate: "<div class='pull-right fill-width' kendo-toolbar k-options='approveSelectedToolbar'></div>"
                }
-           }, {
-               field: "Distance",
-               title: "Km",
-               template: function (data) {
-                   return data.Distance.toFixed(2).toString().replace('.', ',') + " km";
-               },
-               footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # km"
-           }, {
-               field: "AmountToReimburse",
-               title: "Beløb",
-               template: function (data) {
-                   return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " kr.";
-               },
-               footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
-           }, {
-               field: "KilometerAllowance",
-               title: "MK",
-               template: function (data) {
-                   if (data.IsExtraDistance) {
-                       return "<i class='fa fa-check'></i>";
-                   }
-                   return "";
-               }
-           }, {
-               field: "FourKmRule",
-               title: "4 km",
-               template: function (data) {
-                   if (data.FourKmRule) {
-                       return "<i class='fa fa-check'></i>";
-                   }
-                   return "";
-               }
-           }, {
-               field: "CreatedDateTimestamp",
-               title: "Indberettet",
-               template: function (data) {
-                   var m = moment.unix(data.CreatedDateTimestamp);
-                   return m._d.getDate() + "/" +
-                       (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                       m._d.getFullYear();
-               },
-           }, {
-               sortable: false,
-               field: "Id",
-               template: function (data) {
-                   if (data.ResponsibleLeader.Id == data.PersonId) {
-                       return "Indberetning skal godkendes af din leder eller opsat personlig godkender.";
-                   }
-                   if (data.ResponsibleLeader.Id == $rootScope.CurrentUser.Id) {
-                       return "<a ng-click=approveClick(" + data.Id + ")>Godkend</a> | <a ng-click=rejectClick(" + data.Id + ")>Afvis</a> <div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[" + data.Id + "]' ng-change='rowChecked(" + data.Id + ")'></input></div>";
-                   } else {
-                       return data.ResponsibleLeader.FullName + " er udpeget som godkender.";
-                   }
-
-               },
-               headerTemplate: "Muligheder <div class='col-sm-1 pull-right'><input ng-change='checkAllBoxesOnPage()' type='checkbox' ng-model='checkAllBox.isChecked'></input></div>",
-               footerTemplate: "<div class='pull-right fill-width' kendo-toolbar k-options='approveSelectedToolbar'></div>"
-           }
            ],
        };
 
