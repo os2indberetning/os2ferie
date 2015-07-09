@@ -7,7 +7,7 @@
         transport: {
             read: {
                 url: function (item) {
-                    var req = 'http://dawa.aws.dk/adgangsadresser/autocomplete?q=' + item.filter.filters[0].value;
+                    var req = 'https://dawa.aws.dk/adgangsadresser/autocomplete?q=' + item.filter.filters[0].value;
                     return req;
                 },
                 dataType: "jsonp",

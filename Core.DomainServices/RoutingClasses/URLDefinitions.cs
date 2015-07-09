@@ -5,9 +5,9 @@ namespace Core.DomainServices.RoutingClasses
 {
     public class UrlDefinitions
     {
-        private const string _coordinateToAddressUrl = @"http://dawa.aws.dk/adgangsadresser/reverse?";
-        private const string _coordinatesURL = @"http://dawa.aws.dk/adresser?";
-        private const string _launderingUrl = @"http://dawa.aws.dk/adgangsadresser?";
+        private const string _coordinateToAddressUrl = @"https://dawa.aws.dk/adgangsadresser/reverse?";
+        private const string _coordinatesURL = @"https://dawa.aws.dk/adresser?";
+        private const string _launderingUrl = @"https://dawa.aws.dk/adgangsadresser?";
 
 
 

@@ -68,10 +68,6 @@ CACHE:
 /App/Settings/AlternativeWorkAddressTemplate.html
 /App/Settings/SettingsView.html
 /odata/Addresses/Service.GetMapStart
-http://www.septima.dk/os2routemap/dist/marker-icon-green.png
-http://www.septima.dk/os2routemap/dist/marker-icon-red.png
-http://cdn.leafletjs.com/leaflet-0.7.3/images/marker-icon.png
-http://cdn.leafletjs.com/leaflet-0.7.2/images/marker-shadow.png
 
 NETWORK:
 *

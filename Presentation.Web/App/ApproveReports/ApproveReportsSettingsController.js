@@ -6,6 +6,7 @@
        $scope.persons = [];
        $scope.currentPerson = {};
 
+        var infinitePeriod = 9999999999;
 
        $scope.personalApproverHelpText = $rootScope.HelpTexts.PersonalApproverHelpText.text;
 
@@ -117,7 +118,7 @@
                    title: "Til",
                    field: "EndDateTimestamp",
                    template: function (data) {
-                       if (data.EndDateTimestamp == 9999999999) {
+                       if (data.EndDateTimestamp == infinitePeriod) {
                            return "På ubestemt tid";
                        }
                        var m = moment.unix(data.EndDateTimestamp);
@@ -206,7 +207,7 @@
                    field: "EndDateTimestamp",
                    title: "Til",
                    template: function (data) {
-                       if (data.EndDateTimestamp == 9999999999) {
+                       if (data.EndDateTimestamp == infinitePeriod) {
                            return "På ubestemt tid";
                        }
                        var m = moment.unix(data.EndDateTimestamp);
@@ -299,7 +300,7 @@
                    title: "Til",
                    field: "EndDateTimestamp",
                    template: function (data) {
-                       if (data.EndDateTimestamp == 9999999999) {
+                       if (data.EndDateTimestamp == infinitePeriod) {
                            return "På ubestemt tid";
                        }
                        var m = moment.unix(data.EndDateTimestamp);
