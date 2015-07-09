@@ -71,7 +71,7 @@ namespace Infrastructure.AddressServices
             Address correctedAddress = address;
             try
             {
-                if (address.Latitude != null && address.Longitude != null)
+                if (address.Latitude != null && address.Longitude != null && address.Latitude != "" && address.Longitude != "")
                 {
                     return correctedAddress;
                 }

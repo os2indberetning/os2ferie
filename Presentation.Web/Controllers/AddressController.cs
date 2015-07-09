@@ -87,33 +87,6 @@ namespace OS2Indberetning.Controllers
             return GetQueryable(key, queryOptions);
         }
 
-        /// <summary>
-        /// Takes an address without coordinates and performs a lookup on the coordinates.
-        /// </summary>
-        /// <param name="address"></param>
-        /// <returns>An address with coordinates</returns>
-        [EnableQuery]
-        public IQueryable<Address> SetCoordinatesOnAddress(Address address)
-        {
-            var result = _coordinates.GetAddressCoordinates(address);
-            var list = new List<Address>()
-            {
-                result
-            }.AsQueryable();
-            return list;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="addresses"></param>
-        /// <returns></returns>
-        public IHttpActionResult SetCoordinatesOnAddressList(AddressDTO addresses)
-        {
-            return Ok(2);
-        }
-
-
         //PUT: odata/Addresses(5)
         /// <summary>
         /// Is not implemented
