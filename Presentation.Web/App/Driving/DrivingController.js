@@ -16,6 +16,11 @@
 
         var isFormDirty = false;
 
+        var fourKmAdjustment = 4;
+
+        // Coordinate threshold is the amount two gps coordinates can differ and still be considered the same address.
+        // Third decimal is 100 meters, so 0.001 means that addresses within 100 meters of each other will be considered the same when checking if route starts or ends at home.
+        var coordinateThreshold = 0.001;
 
 
         var isEditingReport = ReportId > 0;
@@ -314,14 +319,19 @@
             dataAndKendoLoaded();
         });
 
-        var setNotRoute = function () {
+        var setNotRoute = function (resetMap) {
             /// <summary>
             /// Sets fields for report to be not a personal route.
             /// </summary>
+            if (resetMap == undefined) {
+                resetMap = true;
+            }
             $scope.container.PersonalRouteDropDown.select(0);
             $scope.IsRoute = false;
             isFormDirty = false;
-            setMap($scope.mapStartAddress, $scope.transportType);
+            if (resetMap) {
+                setMap($scope.mapStartAddress, $scope.transportType);
+            }
             $scope.DriveReport.Addresses = [{ Name: "" }, { Name: "" }];
             updateDrivenKm();
         }
@@ -559,7 +569,7 @@
                             }
 
                             if ($scope.IsRoute) {
-                                setNotRoute();
+                                setNotRoute(false);
                             }
 
                             mapChanging = true;
@@ -812,7 +822,7 @@
 
             var longDiff = Math.abs(Number(long1) - Number(long2));
             var latDiff = Math.abs(Number(lat1) - Number(lat2));
-            return longDiff < 0.001 && latDiff < 0.001; //Third decimal is ~100 meters
+            return longDiff < coordinateThreshold && latDiff < coordinateThreshold;
         }
 
         $scope.startEndHomeChanged = function () {
@@ -861,11 +871,11 @@
                 }
                 if ($scope.DriveReport.FourKmRule != undefined && $scope.DriveReport.FourKmRule.Using === true && $scope.DriveReport.FourKmRule.Value != undefined) {
                     if (routeStartsAtHome() != routeEndsAtHome()) {
-                        $scope.TransportAllowance = Number($scope.DriveReport.FourKmRule.Value.toString().replace(",", ".")) + 4;
+                        $scope.TransportAllowance = Number($scope.DriveReport.FourKmRule.Value.toString().replace(",", ".")) + fourKmAdjustment;
                     } else if (routeStartsAtHome() && routeEndsAtHome()) {
-                        $scope.TransportAllowance = (Number($scope.DriveReport.FourKmRule.Value.toString().replace(",", ".")) * 2) + 4;
+                        $scope.TransportAllowance = (Number($scope.DriveReport.FourKmRule.Value.toString().replace(",", ".")) * 2) + fourKmAdjustment;
                     } else {
-                        $scope.TransportAllowance = 4;
+                        $scope.TransportAllowance = fourKmAdjustment;
                     }
                 }
             });

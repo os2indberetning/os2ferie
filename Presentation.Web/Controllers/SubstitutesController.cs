@@ -16,7 +16,7 @@ namespace OS2Indberetning.Controllers
     public class SubstitutesController : BaseController<Substitute>
     {
         private ISubstituteService _sub;
-
+        private const long UnlimitedPeriod = 9999999999;
         //GET: odata/Substitutes
         public SubstitutesController(IGenericRepository<Substitute> repository, ISubstituteService sub, IGenericRepository<Person> personRepo)
             : base(repository, personRepo)
@@ -80,7 +80,7 @@ namespace OS2Indberetning.Controllers
             if (CurrentUser.IsAdmin || CurrentUser.Id.Equals(Substitute.LeaderId))
             {
                 Substitute.StartDateTimestamp = _sub.GetStartOfDayTimestamp(Substitute.StartDateTimestamp);
-                if (Substitute.EndDateTimestamp != 9999999999)
+                if (Substitute.EndDateTimestamp != UnlimitedPeriod)
                 {
                     Substitute.EndDateTimestamp = _sub.GetEndOfDayTimestamp(Substitute.EndDateTimestamp);
                 }
@@ -123,8 +123,7 @@ namespace OS2Indberetning.Controllers
                 if (delta.TryGetPropertyValue("EndDateTimestamp", out endStamp))
                 {
                     patchedSub.EndDateTimestamp = (long)endStamp;
-                    // If endstamp is 9999999999 it means it is unlimited.
-                    if ((long)endStamp != 9999999999)
+                    if ((long)endStamp != UnlimitedPeriod)
                     {
                         var endOfDayStamp = _sub.GetEndOfDayTimestamp((long)endStamp);
                         delta.TrySetPropertyValue("EndDateTimestamp", endOfDayStamp);

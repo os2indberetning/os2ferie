@@ -19,6 +19,10 @@ namespace Core.ApplicationServices
         private readonly IPersonService _personService;
         private readonly IGenericRepository<Person> _personRepo;
         private readonly IGenericRepository<Employment> _emplrepo;
+        private const int FourKmAdjustment = 4;
+        // Coordinate threshold is the amount two gps coordinates can differ and still be considered the same address.
+        // Third decimal is 100 meters, so 0.001 means that addresses within 100 meters of each other will be considered the same when checking if route starts or ends at home.
+        private const double CoordinateThreshold = 0.001;
 
         public ReimbursementCalculator(IRoute<RouteInformation> route, IPersonService personService, IGenericRepository<Person> personRepo, IGenericRepository<Employment> emplrepo)
         {
@@ -103,8 +107,7 @@ namespace Core.ApplicationServices
                     toSubtract += borderDistance;
                 }
 
-                //Subtract 4 km because reasons.
-                toSubtract += 4;
+                toSubtract += FourKmAdjustment;
             }
             else
             {
@@ -149,7 +152,7 @@ namespace Core.ApplicationServices
 
                         if (report.FourKmRule)
                         {
-                            report.Distance -= 4;
+                            report.Distance -= FourKmAdjustment;
                         }
 
                         //Save RouteGeometry
@@ -193,6 +196,7 @@ namespace Core.ApplicationServices
 
         private void SetAmountToReimburse(DriveReport report)
         {
+            // report.KmRate / 100 to go from ører to kroner.
             report.AmountToReimburse = (report.Distance) * (report.KmRate / 100);
 
             if (report.AmountToReimburse < 0)
@@ -220,7 +224,7 @@ namespace Core.ApplicationServices
 
             var longDiff = Math.Abs(long1 - long2);
             var latDiff = Math.Abs(lat1 - lat2);
-            return longDiff < 0.001 && latDiff < 0.001; //Third decimal is ~100 meters
+            return longDiff < CoordinateThreshold && latDiff < CoordinateThreshold;
         }
 
 

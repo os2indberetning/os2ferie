@@ -4,6 +4,8 @@
 
             $scope.persons = persons;
 
+            var infinitePeriod = 9999999999;
+
             $scope.autoCompleteOptions = {
                 filter: "contains"
             };
@@ -67,7 +69,7 @@
                 });
 
                 if ($scope.infinitePeriod) {
-                    sub.EndDateTimestamp = 9999999999;
+                    sub.EndDateTimestamp = infinitePeriod;
                 }
 
                 sub.$post(function (data) {

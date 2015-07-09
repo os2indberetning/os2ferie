@@ -15,6 +15,10 @@ namespace Infrastructure.AddressServices.Routing
     public class BestRoute : IRoute<RouteInformation>
     {
 
+        // Number of seconds a new route must be shorter to be considered a better route.
+        private const int TimeThreshold = 300;
+        // Distance in meters a new route must be shorter to be considered a better route.
+        private const int DistanceThreshold = 3000;
 
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -99,13 +103,17 @@ namespace Infrastructure.AddressServices.Routing
 
                 foreach (var route in routes)
                 {
-                    bool betterRoute = (route.Duration - bestRoute.Duration <= 300) && (bestRoute.Length - route.Length > 3000);
+                    // Iterate all found routes and find the best one.
+                    // A route is considered better than the previous best route if the difference in distance is greater than DistanceThreshold
+                    // and if the difference in time in seconds is greater than TimeTreshold.
+                    bool betterRoute = (route.Duration - bestRoute.Duration <= TimeThreshold) && (bestRoute.Length - route.Length > DistanceThreshold);
                     if (betterRoute)
                     {
                         bestRoute = route;
                     }
                 }
 
+                // Divide by 1000 to get it in kilometers.
                 bestRoute.Length /= 1000;
                 return bestRoute;
             }

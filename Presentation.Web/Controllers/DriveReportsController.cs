@@ -47,6 +47,7 @@ namespace OS2Indberetning.Controllers
         {
             var queryable = GetQueryable(queryOptions);
 
+            // leaderId == 0 means no leaderId was given.
             if (leaderId != 0)
             {
                 queryable = _driveService.FilterByLeader(queryable, leaderId, getReportsWhereSubExists);

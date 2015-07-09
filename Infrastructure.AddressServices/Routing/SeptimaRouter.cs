@@ -14,6 +14,9 @@ namespace Infrastructure.AddressServices.Routing
     {
         #region Public methods
 
+        private const string CarFerryMode = "2";
+        private const string BicycleFerryMode = "3";
+
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
@@ -209,8 +212,7 @@ namespace Infrastructure.AddressServices.Routing
                     // If the transportType is car mode 2 means travelling on a ferry.
                     if (transportType.Equals(DriveReportTransportType.Car))
                     {
-                        // Add the distance if mode is not 2 (Mode 2 would mean ferry)
-                        if (mode != "2")
+                        if (mode != CarFerryMode)
                         {
                             // Replace "m" with nothing in the string, because the distance is given as "123m"
                             distanceWithoutFerry += int.Parse(currentInstruction.ElementAt(5).ToString().Replace("m", ""));
@@ -219,8 +221,7 @@ namespace Infrastructure.AddressServices.Routing
                     // If the transportType is bicycle mode 3 means travelling on a ferry. Annoying that it's not mode 2 for both of them.
                     else if (transportType.Equals(DriveReportTransportType.Bike))
                     {
-                        // Add the distance if mode is not 3 (Mode 3 would mean ferry)
-                        if (mode != "3")
+                        if (mode != BicycleFerryMode)
                         {
                             // Replace "m" with nothing in the string, because the distance is given as "123m"
                             distanceWithoutFerry += int.Parse(currentInstruction.ElementAt(5).ToString().Replace("m", ""));
