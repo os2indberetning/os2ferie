@@ -15,11 +15,6 @@ namespace Infrastructure.AddressServices.Routing
     public class BestRoute : IRoute<RouteInformation>
     {
 
-        // Number of seconds a new route must be shorter to be considered a better route.
-        private const int TimeThreshold = 300;
-        // Distance in meters a new route must be shorter to be considered a better route.
-        private const int DistanceThreshold = 3000;
-
         private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
@@ -99,19 +94,12 @@ namespace Infrastructure.AddressServices.Routing
             {
                 List<RouteInformation> routes =
                     septimaService.GetRoute(transportType, routeCoordinates).OrderBy(x => x.Duration).ToList();
-                RouteInformation bestRoute = routes[0];
 
-                foreach (var route in routes)
-                {
-                    // Iterate all found routes and find the best one.
-                    // A route is considered better than the previous best route if the difference in distance is greater than DistanceThreshold
-                    // and if the difference in time in seconds is greater than TimeTreshold.
-                    bool betterRoute = (route.Duration - bestRoute.Duration <= TimeThreshold) && (bestRoute.Length - route.Length > DistanceThreshold);
-                    if (betterRoute)
-                    {
-                        bestRoute = route;
-                    }
-                }
+                // Sort routes by duration and pick the one with the shortest duration.
+                // OS2RouteMap.js in the frontend picks the route with the shortest duration
+                // Therefore the backend should pick a route based on the same criteria.
+                routes = routes.OrderBy(x => x.Duration).ToList();
+                var bestRoute = routes[0];
 
                 // Divide by 1000 to get it in kilometers.
                 bestRoute.Length /= 1000;
