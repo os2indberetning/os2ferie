@@ -197,7 +197,7 @@ namespace Infrastructure.AddressServices.Routing
 
 		    if (jRouteObject["route_instructions"] != null)
 		    {
-                var distanceWithoutFerry = 0;
+                var ferryDistance = 0;
 		        var list = jRouteObject["route_instructions"].ToList();
 
                 // Iterate all route instructions except for the last one.
@@ -210,26 +210,15 @@ namespace Infrastructure.AddressServices.Routing
                     var mode = currentInstruction.ElementAt(8).ToString();
                                      
                     // If the transportType is car mode 2 means travelling on a ferry.
-                    if (transportType.Equals(DriveReportTransportType.Car))
-                    {
-                        if (mode != CarFerryMode)
-                        {
-                            // Replace "m" with nothing in the string, because the distance is given as "123m"
-                            distanceWithoutFerry += int.Parse(currentInstruction.ElementAt(5).ToString().Replace("m", ""));
-                        }
-                    }
                     // If the transportType is bicycle mode 3 means travelling on a ferry. Annoying that it's not mode 2 for both of them.
-                    else if (transportType.Equals(DriveReportTransportType.Bike))
+                    if ((transportType.Equals(DriveReportTransportType.Car) && mode == CarFerryMode) || 
+                        (transportType.Equals(DriveReportTransportType.Bike) && mode == BicycleFerryMode))
                     {
-                        if (mode != BicycleFerryMode)
-                        {
-                            // Replace "m" with nothing in the string, because the distance is given as "123m"
-                            distanceWithoutFerry += int.Parse(currentInstruction.ElementAt(5).ToString().Replace("m", ""));
-                        }
+                        // Replace "m" with nothing in the string, because the distance is given as "123m"
+                        ferryDistance += int.Parse(currentInstruction.ElementAt(5).ToString().Replace("m", ""));
                     }
-                   
                 }
-                route.route_summary.distance_not_including_ferry = distanceWithoutFerry;
+                route.route_summary.distance_not_including_ferry = route.route_summary.total_distance - ferryDistance;
 		    }
 						       
 			return route;
