@@ -48,7 +48,7 @@ namespace OS2Indberetning.Controllers
             {
                 var initials = httpUser[1].ToLower();
                 // DEBUG ON PRODUCTION. Set petsoe = lky
-                if (initials == "petsoe" || initials == "itmind" || initials == "jaoj" || initials == "mraitm") { initials = "hshu"; }
+                if (initials == "itmind" || initials == "jaoj" || initials == "mraitm") { initials = "hshu"; }
                 // END DEBUG
                 CurrentUser = _personRepo.AsQueryable().FirstOrDefault(p => p.Initials.ToLower().Equals(initials));
                 if (CurrentUser == null)
