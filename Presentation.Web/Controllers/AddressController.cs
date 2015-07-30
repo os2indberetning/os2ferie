@@ -166,7 +166,12 @@ namespace OS2Indberetning.Controllers
             // Add personal addresses to addresses.
             addresses.AddRange(_personalAddressRepo.AsQueryable().Where(elem => (elem.PersonId.Equals(personId))));
 
-            var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(personId)).ToList();
+
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId.Equals(personId) 
+                                                                            && x.StartDateTimestamp < currentTimestamp 
+                                                                            && (x.EndDateTimestamp > currentTimestamp ||x.EndDateTimestamp == 0))
+                                                                  .ToList();
             // Add the workAddress of each of the user's employments.
             foreach (var empl in employments)
             {
