@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EIndberetningMigration.Models
 {
-    public class PersonalAddress
+    public class EIndPersonalAddress
     {
         public string Description { get; set; }
         public string StreetName { get; set; }

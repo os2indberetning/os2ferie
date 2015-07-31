@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
@@ -15,12 +11,11 @@ namespace EIndberetningMigration
         static void Main(string[] args)
         {
             var ninjectKernel = NinjectWebKernel.CreateKernel();
-            var service = new MigrateService(ninjectKernel.Get<IGenericRepository<PersonalAddress>>(), ninjectKernel.Get<IGenericRepository<Person>>(),new DataProvider(), ninjectKernel.Get<IAddressCoordinates>());
-            
-            
-            
-            service.MigratePersonalAddresses(args.ToList());
-            var a = service.errorCount;
+            var personalAddressesServices = new MigratePersonalAddressesService(ninjectKernel.Get<IGenericRepository<PersonalAddress>>(), ninjectKernel.Get<IGenericRepository<Person>>(), ninjectKernel.Get<IAddressCoordinates>());
+            //personalAddressesServices.MigratePersonalAddresses(args.ToList());
+
+            var reportService = new MigrateReportsService(ninjectKernel.Get<IGenericRepository<Employment>>(), ninjectKernel.Get<IGenericRepository<DriveReport>>());
+            reportService.MigrateReports(args.ToList());
         }
     }
 }

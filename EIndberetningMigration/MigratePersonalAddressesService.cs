@@ -5,22 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.DomainModel;
 using Core.DomainServices;
-using PersonalAddress = EIndberetningMigration.Models.PersonalAddress;
+using Core.DomainServices.RoutingClasses;
+using PersonalAddress = EIndberetningMigration.Models.EIndPersonalAddress;
 
 namespace EIndberetningMigration
 {
-    public class MigrateService
+    public class MigratePersonalAddressesService
     {
         private readonly IGenericRepository<Core.DomainModel.PersonalAddress> _personalAddressRepo;
         private readonly IGenericRepository<Person> _personRepo;
         private readonly DataProvider _dataProvider;
         private readonly IAddressCoordinates _coordinates;
 
-        public MigrateService(IGenericRepository<Core.DomainModel.PersonalAddress> personalAddressRepo, IGenericRepository<Person> personRepo, DataProvider dataProvider, IAddressCoordinates coordinates)
+        public int Unwashed = 0;
+        public int UnknownPeople = 0;
+
+        public MigratePersonalAddressesService(IGenericRepository<Core.DomainModel.PersonalAddress> personalAddressRepo, IGenericRepository<Person> personRepo, IAddressCoordinates coordinates)
         {
             _personalAddressRepo = personalAddressRepo;
             _personRepo = personRepo;
-            _dataProvider = dataProvider;
             _coordinates = coordinates;
         }
 
@@ -34,17 +37,17 @@ namespace EIndberetningMigration
                     var person = _personRepo.AsQueryable().SingleOrDefault(x => x.Initials == initials);
                     if (person == null)
                     {
-                        return;
+                        continue;
                     }
                     var addresses =
-                        _dataProvider.GetPersonalAddressesAsQueryable().Where(x => x.CprNumber == person.CprNumber);
+                        DataProvider.GetPersonalAddressesAsQueryable().Where(x => x.CprNumber == person.CprNumber);
                     HandleMigratePersonalAddresses(addresses);
                 }
             }
             else
             {
                 // If no initials are given then migrate all personal addresses.
-                var addresses = _dataProvider.GetPersonalAddressesAsQueryable();
+                var addresses = DataProvider.GetPersonalAddressesAsQueryable();
                 HandleMigratePersonalAddresses(addresses);
             }
 
@@ -61,6 +64,7 @@ namespace EIndberetningMigration
                 if (person == null)
                 {
                     // Skip iteration if person does not exist.
+                    UnknownPeople++;
                     continue;
                 }
 
@@ -72,37 +76,37 @@ namespace EIndberetningMigration
                     // Skip this address if one already exists with the same description.
                     continue;
                 }
-
+                Address coordinates;
                 try
                 {
                     // Get Latitude and Longitude of address.
-                    var coordinates = _coordinates.GetAddressCoordinates(new Address()
+                    coordinates = _coordinates.GetAddressCoordinates(new Address()
                     {
                         StreetName = address.StreetName,
                         StreetNumber = address.StreetNumber,
                         ZipCode = address.ZipCode
                     });
-
-                    // Insert address to DB.
-                    _personalAddressRepo.Insert(new Core.DomainModel.PersonalAddress()
-                    {
-                        Description = address.Description,
-                        PersonId = person.Id,
-                        StreetName = address.StreetName,
-                        StreetNumber = address.StreetNumber,
-                        ZipCode = address.ZipCode,
-                        Town = coordinates.Town,
-                        Latitude = coordinates.Latitude,
-                        Longitude = coordinates.Longitude,
-                        Type = PersonalAddressType.Standard
-                    });
                 }
-                catch (Exception e)
+                catch (AddressCoordinatesException e)
                 {
-
+                    //Address laundering will throw an exception if no address could be found.
+                    //In that case we just ignore that address.
+                    Unwashed++;
+                    continue;
                 }
-
-
+                // Insert address to DB.
+                _personalAddressRepo.Insert(new Core.DomainModel.PersonalAddress()
+                {
+                    Description = address.Description,
+                    PersonId = person.Id,
+                    StreetName = address.StreetName,
+                    StreetNumber = address.StreetNumber,
+                    ZipCode = address.ZipCode,
+                    Town = coordinates.Town,
+                    Latitude = coordinates.Latitude,
+                    Longitude = coordinates.Longitude,
+                    Type = PersonalAddressType.Standard
+                });
             }
         }
     }
