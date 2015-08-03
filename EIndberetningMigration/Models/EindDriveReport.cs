@@ -23,5 +23,6 @@ namespace EIndberetningMigration.Models
         public bool Reimbursed { get; set; }
         public DateTime? ReimbursementDate { get; set; }
         public string CPR { get; set; }
+        public string RouteDescription { get; set; }
     }
 }

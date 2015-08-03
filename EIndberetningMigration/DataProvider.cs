@@ -57,12 +57,14 @@ namespace EIndberetningMigration
             {
                 var cmd = new SqlCommand
                 {
-                    CommandText = @"select report.Id, Date, Purpose, report.VehicleRegistrationNr, EmploymentId, AmountToReimburse, ManualEntryRemark, IsExtraDistance, ReimburseableDistance, ApproverEmploymentId, ApprovalDate, Rate_Id, CreationDate, Approved, Rejected, Reimbursed, ReimbursementDate, CprNr 
+                    CommandText = @"select report.Id, Date, Purpose, report.VehicleRegistrationNr, EmploymentId, AmountToReimburse, ManualEntryRemark, IsExtraDistance, ReimburseableDistance, ApproverEmploymentId, ApprovalDate, Rate_Id, CreationDate, Approved, Rejected, Reimbursed, ReimbursementDate, CprNr, RouteDescription 
                                     from Koerselsindberetning.dbo.DriveReports as report
                                     LEFT JOIN Koerselsindberetning.dbo.Status as status
                                     ON report.Id = status.DriveReport_Id
 									JOIN Koerselsindberetning.dbo.Profiles as profile
 									ON profile.Id = report.Profile_Id
+									JOIN Koerselsindberetning.dbo.Routes as routes
+									ON routes.DriveReport_Id = report.id
 									ORDER BY CprNr, EmploymentId",
                     CommandType = CommandType.Text,
                     Connection = sqlConnection
@@ -93,7 +95,8 @@ namespace EIndberetningMigration
                         Rejected = SafeGetBool(reader, 14),
                         Reimbursed = SafeGetBool(reader, 15),
                         ReimbursementDate = SafeGetDateTime(reader, 16),
-                        CPR = SafeGetString(reader, 17)
+                        CPR = SafeGetString(reader, 17),
+                        RouteDescription = SafeGetString(reader ,18)
                     };
 
                     result.Add(currentRow);

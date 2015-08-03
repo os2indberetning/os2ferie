@@ -133,14 +133,24 @@ namespace EIndberetningMigration
                     DriveDateTimestamp = DateTimeToTimestamp(oldReport.Date),
                     LicensePlate = oldReport.RegistrationNumber,
                     FullName = employee.Person.FullName,
-                    KilometerAllowance = KilometerAllowance.Read,
                     IsFromApp = false,
                     IsExtraDistance = oldReport.IsExtraDistance,
                     IsOldMigratedReport = true,
                     DriveReportPoints = points
                 };
 
-                if (status == ReportStatus.Accepted || status == ReportStatus.Rejected)
+                //KM Allowance
+                if (oldReport.RouteDescription.Equals("Aflæst"))
+                {
+                    newReport.KilometerAllowance = KilometerAllowance.Read;
+                }
+                else
+                {
+                    newReport.KilometerAllowance = KilometerAllowance.Calculated;
+                }
+
+
+                if (status == ReportStatus.Accepted || status == ReportStatus.Rejected || status == ReportStatus.Invoiced)
                 {
                     newReport.ClosedDateTimestamp = DateTimeToTimestamp(oldReport.ApprovalDate);
                     newReport.ApprovedById = approvedById;
