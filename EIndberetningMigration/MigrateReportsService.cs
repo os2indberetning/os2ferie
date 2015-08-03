@@ -163,10 +163,6 @@ namespace EIndberetningMigration
 
                 //Add reports to repo
                 _reportRepo.Insert(newReport);
-                if (j == 1000)
-                {
-                    break;
-                }
             }
             _reportRepo.Save();
         }
