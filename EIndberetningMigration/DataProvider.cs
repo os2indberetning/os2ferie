@@ -219,6 +219,10 @@ namespace EIndberetningMigration
             }
             str = str.Replace(".", "");
             str = str.Replace(',', '.');
+            if (str.StartsWith("."))
+            {
+                str = "0" + str;
+            }
             return Convert.ToDouble(str);
         }
 
