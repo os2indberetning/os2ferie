@@ -2,6 +2,7 @@
 using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
+using Infrastructure.DataAccess;
 using Ninject;
 
 namespace EIndberetningMigration
@@ -12,9 +13,9 @@ namespace EIndberetningMigration
         {
             var ninjectKernel = NinjectWebKernel.CreateKernel();
             var personalAddressesServices = new MigratePersonalAddressesService(ninjectKernel.Get<IGenericRepository<PersonalAddress>>(), ninjectKernel.Get<IGenericRepository<Person>>(), ninjectKernel.Get<IAddressCoordinates>());
-            personalAddressesServices.MigratePersonalAddresses(args.ToList());
+            //personalAddressesServices.MigratePersonalAddresses(args.ToList());
 
-            var reportService = new MigrateReportsService(ninjectKernel.Get<IGenericRepository<Employment>>(), ninjectKernel.Get<IGenericRepository<DriveReport>>());
+            var reportService = new MigrateReportsService(ninjectKernel.Get<IGenericRepository<Employment>>(), new GenericRepository<DriveReport>(new TempContext()));
             reportService.MigrateReports(args.ToList());
         }
     }

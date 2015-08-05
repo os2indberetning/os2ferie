@@ -5,13 +5,14 @@ using System.Linq;
 using Core.DomainModel;
 using Core.DomainServices;
 using EIndberetningMigration.Models;
+using Infrastructure.DataAccess;
 
 namespace EIndberetningMigration
 {
     class MigrateReportsService
     {
         private readonly IGenericRepository<Employment> _employeeRepo;
-        private readonly IGenericRepository<DriveReport> _reportRepo;
+        private IGenericRepository<DriveReport> _reportRepo;
         private readonly IQueryable<EindRate> _oldRates;
 
         private static readonly string _filePath = "legacyReports.csv";
@@ -68,7 +69,9 @@ namespace EIndberetningMigration
             var c = reports.Count();
             foreach (var oldReport in reports)
             {
-                Console.WriteLine("Migrating report " + j + " of " + c);
+                if ( j % 100 == 0) {
+                    Console.WriteLine("Migrating report " + j + " of " + c);
+                }
                 j++;
 
                 var employee = _employeeRepo.AsQueryable().FirstOrDefault(x => x.EmploymentId == oldReport.EmploymentID);
@@ -163,6 +166,12 @@ namespace EIndberetningMigration
 
                 //Add reports to repo
                 _reportRepo.Insert(newReport);
+
+                if (j % 1000 == 0)
+                {
+                    _reportRepo.Save();
+                    _reportRepo = new GenericRepository<DriveReport>(new TempContext());
+                }
             }
             _reportRepo.Save();
         }
