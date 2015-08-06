@@ -198,6 +198,7 @@ namespace EIndberetningMigration
                              "Formål\t" +
                              "Registreringsnummer\t" +
                              "Rute\t" +
+                             "Rutebeskrivelse\t" +
                              "Distance\t" +
                              "Beløb\t" +
                              "Med Merkørsel\t" +
@@ -241,7 +242,7 @@ namespace EIndberetningMigration
 
             if (status != ReportStatus.Invoiced)
             {
-                return; //TODO Get it cleared that we only save invoiced reports and then alter the else ifs
+                return;
             }
 
             DateTime approvedDate = report.ApprovalDate ?? new DateTime(1900, 1, 1);
@@ -254,6 +255,7 @@ namespace EIndberetningMigration
             writer.Write(report.Purpose + "\t");
             writer.Write(report.RegistrationNumber + "\t");
             writer.Write(route + "\t");
+            writer.Write(report.RouteDescription + "\t");
             writer.Write(report.ReimbursableDistance + "\t");
             writer.Write(report.AmmountToReimburse + "\t");
             writer.Write(report.IsExtraDistance + "\t");
