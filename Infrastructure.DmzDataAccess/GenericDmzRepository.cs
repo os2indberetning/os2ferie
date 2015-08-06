@@ -106,6 +106,11 @@ namespace Infrastructure.DmzDataAccess
             _dbSet.Remove(entity);
         }
 
+        public void DeleteRange(IEnumerable<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
+        }
+
         private int GetPrimaryKeyValue(Object obj)
         {
             var t = obj.GetType();

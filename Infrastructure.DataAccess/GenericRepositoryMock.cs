@@ -83,6 +83,11 @@ namespace Presentation.Web.Test.Controllers
             }
         }
 
+        public void DeleteRange(IEnumerable<T> entities)
+        {
+            _list.Clear();
+        }
+
         public PropertyInfo GetPrimaryKeyProperty()
         {
             return typeof(T).GetProperty("Id");
