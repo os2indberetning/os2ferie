@@ -70,19 +70,8 @@ namespace Infrastructure.DmzSync.Services.Impl
         /// </summary>
         public void ClearDmz()
         {
-            var i = 0;
             var rateList = _dmzRateRepo.AsQueryable().ToList();
-            var max = rateList.Count;
-
-            foreach (var rate in rateList)
-            {
-                i++;
-                if (i % 10 == 0)
-                {
-                    Console.WriteLine("Clearing rate " + i + " of " + max);
-                }
-                _dmzRateRepo.Delete(rate);
-            }
+            _dmzRateRepo.DeleteRange(rateList);
             _dmzRateRepo.Save();
         }
     }

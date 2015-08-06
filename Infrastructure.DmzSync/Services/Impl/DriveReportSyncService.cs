@@ -114,16 +114,8 @@ namespace Infrastructure.DmzSync.Services.Impl
         /// </summary>
         public void ClearDmz()
         {
-            var i = 0;
             var reports = _dmzDriveReportRepo.AsQueryable().ToList();
-            var max = reports.Count;
-
-            foreach (var report in reports)
-            {
-                i++;
-                Console.WriteLine("Clearing report " + i + " of " + max + " from DMZ.");
-                _dmzDriveReportRepo.Delete(report);
-            }
+            _dmzDriveReportRepo.DeleteRange(reports);
             _dmzDriveReportRepo.Save();
         }
 

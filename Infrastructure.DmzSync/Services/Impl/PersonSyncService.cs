@@ -118,19 +118,8 @@ namespace Infrastructure.DmzSync.Services.Impl
         /// </summary>
         public void ClearDmz()
         {
-            var i = 0;
             var personList = _dmzProfileRepo.AsQueryable().ToList();
-            var max = personList.Count;
-
-            foreach (var profile in personList)
-            {
-                i++;
-                if (i % 10 == 0)
-                {
-                    Console.WriteLine("Clearing person " + i + " of " + max);
-                }
-                _dmzProfileRepo.Delete(profile);
-            }
+            _dmzProfileRepo.DeleteRange(personList);
             _dmzProfileRepo.Save();
         }
 

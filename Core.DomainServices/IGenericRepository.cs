@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Core.DomainServices
@@ -24,6 +25,7 @@ namespace Core.DomainServices
         void Patch(T entity);
 
         void Delete(T entity);
+        void DeleteRange(IEnumerable<T> entities);
 
         PropertyInfo GetPrimaryKeyProperty();
     }

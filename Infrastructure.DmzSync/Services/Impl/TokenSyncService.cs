@@ -80,10 +80,7 @@ namespace Infrastructure.DmzSync.Services.Impl
         public void ClearDmz()
         {
             var list = _dmzTokenRepo.AsQueryable().ToList();
-            foreach (var token in list)
-            {
-                  _dmzTokenRepo.Delete(token);
-            }
+            _dmzTokenRepo.DeleteRange(list);
             _dmzTokenRepo.Save();
         }
 
