@@ -267,11 +267,13 @@ namespace Core.ApplicationServices
                 return null;
             }
 
-
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
             while ((leaderOfOrgUnit == null && orgUnit.Level > 0) || (leaderOfOrgUnit != null && leaderOfOrgUnit.PersonId == person.Id))
             {
-                leaderOfOrgUnit = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.ParentId && e.IsLeader); ;
+                leaderOfOrgUnit = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.ParentId && e.IsLeader &&
+                                                                                            e.StartDateTimestamp < currentTimestamp &&
+                                                                                            (e.EndDateTimestamp == 0 || e.EndDateTimestamp > currentTimestamp)); 
                 orgUnit = orgUnit.Parent;
             }
 

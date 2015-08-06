@@ -297,6 +297,10 @@
     <Compile Include="Migrations\201506301413546_RemovedPersonIdFromPerson.Designer.cs">
       <DependentUpon>201506301413546_RemovedPersonIdFromPerson.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201507301335181_AddsFlagToIndicateIfAReportHasBeenImportedFromEIndberetning.cs" />
+    <Compile Include="Migrations\201507301335181_AddsFlagToIndicateIfAReportHasBeenImportedFromEIndberetning.Designer.cs">
+      <DependentUpon>201507301335181_AddsFlagToIndicateIfAReportHasBeenImportedFromEIndberetning.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -485,6 +489,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506301413546_RemovedPersonIdFromPerson.resx">
       <DependentUpon>201506301413546_RemovedPersonIdFromPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507301335181_AddsFlagToIndicateIfAReportHasBeenImportedFromEIndberetning.resx">
+      <DependentUpon>201507301335181_AddsFlagToIndicateIfAReportHasBeenImportedFromEIndberetning.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

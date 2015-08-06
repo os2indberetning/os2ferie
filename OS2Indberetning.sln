@@ -63,6 +63,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.AddressServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DmzSync.Test", "DmzSync.Test\DmzSync.Test.csproj", "{2CA4B8F8-39E7-4286-B5A9-6429D37FDBE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EIndberetningMigration", "EIndberetningMigration\EIndberetningMigration.csproj", "{3D8D8AA6-8056-492B-BDEC-4450D0ED4A0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +143,10 @@ Global
 		{2CA4B8F8-39E7-4286-B5A9-6429D37FDBE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CA4B8F8-39E7-4286-B5A9-6429D37FDBE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CA4B8F8-39E7-4286-B5A9-6429D37FDBE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D8D8AA6-8056-492B-BDEC-4450D0ED4A0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D8D8AA6-8056-492B-BDEC-4450D0ED4A0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D8D8AA6-8056-492B-BDEC-4450D0ED4A0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D8D8AA6-8056-492B-BDEC-4450D0ED4A0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,5 +163,9 @@ Global
 		{90A44ADF-5BCF-47B6-8DD7-F4E069F3942E} = {A9413206-37FE-4261-9223-8E136288075E}
 		{F0C6C478-3A6A-405C-A193-9C498250CF2E} = {38A093DE-ECBD-4C54-9376-E71805D2C06B}
 		{A7C2603A-669B-408D-842F-08DB1E08F166} = {38A093DE-ECBD-4C54-9376-E71805D2C06B}
+		{3D8D8AA6-8056-492B-BDEC-4450D0ED4A0B} = {38A093DE-ECBD-4C54-9376-E71805D2C06B}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
