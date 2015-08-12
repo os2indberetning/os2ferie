@@ -70,10 +70,26 @@ namespace OS2Indberetning.Controllers
                 }
 
             }
+            if (reportStatus == ReportStatus.Pending)
+            {
+                if (queryOptions.OrderBy != null)
+                {
+                    queryable = queryOptions.OrderBy.ApplyTo(queryable);
+                }
+                var skip = queryOptions.Skip != null ? queryOptions.Skip.Value : 0;
 
-            var result = _driveService.AttachResponsibleLeader(queryable);
-
-            return Ok(result);
+                if (queryOptions.Top != null)
+                {
+                    queryable = _driveService.AttachResponsibleLeader(queryable, skip, queryOptions.Top.Value);
+                }
+                else
+                {
+                    queryable = _driveService.AttachResponsibleLeader(queryable, skip, queryable.Count());
+                }
+                
+                
+            }
+            return Ok(queryable);
         }
 
         /// <summary>
@@ -94,7 +110,7 @@ namespace OS2Indberetning.Controllers
             {
                 return Ok(report);
             }
-            
+
             return StatusCode(HttpStatusCode.NoContent);
         }
 

@@ -202,16 +202,19 @@ namespace Core.ApplicationServices
             }
         }
 
-        /// <summary>
-        /// Gets the Responsible Leader and sets it for each of the reports in repo.
-        /// </summary>
-        /// <param name="repo"></param>
-        /// <returns>DriveReports with ResponsibleLeader attached</returns>
-        public IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> repo)
+        public IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> repo, int offset, int number)
         {
+            var i = 0;
             var res = repo.ToList();
             foreach (var driveReport in res)
             {
+                
+                if (i < offset || i - offset >= number)
+                {
+                    i++;
+                    continue;
+                }
+                i++;
                 var responsibleLeader = GetResponsibleLeaderForReport(driveReport);
 
                 if (responsibleLeader != null)
@@ -232,6 +235,16 @@ namespace Core.ApplicationServices
             }
 
             return res.AsQueryable();
+        }
+
+        /// <summary>
+        /// Gets the Responsible Leader and sets it for each of the reports in repo.
+        /// </summary>
+        /// <param name="repo"></param>
+        /// <returns>DriveReports with ResponsibleLeader attached</returns>
+        public IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> repo)
+        {
+            return AttachResponsibleLeader(repo, 0, repo.Count());
         }
 
         /// <summary>

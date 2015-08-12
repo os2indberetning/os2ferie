@@ -20,15 +20,15 @@ namespace Infrastructure.DataAccess.Migrations
         
         public override void Down()
         {
-            DropIndex("Reports","DriveDateTimestamp");
-            DropIndex("Reports","status");
-            DropIndex("Employments","StartDateTimestamp");
-            DropIndex("Employments","EndDateTimestamp");
-            DropIndex("Employments","IsLeader");
-            DropIndex("People","CprNumber");
-            DropIndex("People","IsActive");
-            DropIndex("Addresses","Discriminator");
-            DropIndex("MobileTokens","Guid");
+            DropIndex("Reports",new[]{"DriveDateTimestamp"});
+            DropIndex("Reports",new[]{"status"});
+            DropIndex("Employments",new[]{"StartDateTimestamp"});
+            DropIndex("Employments",new[]{"EndDateTimestamp"});
+            DropIndex("Employments",new[]{"IsLeader"});
+            DropIndex("People",new[]{"CprNumber"});
+            DropIndex("People",new[]{"IsActive"});
+            DropIndex("Addresses",new[]{"Discriminator"});
+            DropIndex("MobileTokens",new[]{"Guid"});
         }
     }
 }
