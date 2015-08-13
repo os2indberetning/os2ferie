@@ -1,5 +1,4 @@
-﻿
-<div class="container-fluid">
+﻿<div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
@@ -11,26 +10,26 @@
                     <div ng-include='"App/Admin/HTML/Address/View.html"'></div>
                 </tab>
 
-                <tab heading="Emailadviseringer" ng-controller="EmailNotificationController">
+                <tab heading="Emailadviseringer" ng-controller="EmailNotificationController" ng-click="emailClicked()">
                     <div ng-include='"App/Admin/HTML/Email/View.html"'></div>
                 </tab>
 
-                <tab heading="Takster" ng-controller="RateController">
+                <tab heading="Takster" ng-controller="RateController" ng-click="ratesClicked()">
                     <div ng-include='"App/Admin/HTML/Rate/View.html"'></div>
                 </tab>
 
-                <tab heading="Afvigende kontering" ng-controller="AccountController">
+                <tab heading="Afvigende kontering" ng-controller="AccountController" ng-click="accountClicked()">
                     <div ng-include='"App/Admin/HTML/Account/View.html"'></div>
                 </tab>
-                <tab heading="Opsæt 4 km-regel" ng-controller="OrgUnitController">
+                <tab heading="Opsæt 4 km-regel" ng-controller="OrgUnitController" ng-click="fourKmClicked()">
                     <div ng-include='"App/Admin/HTML/OrgUnit/View.html"'></div>
                 </tab>
 
-                <tab heading="Administration" ng-controller="AdministrationController">
+                <tab heading="Administration" ng-controller="AdministrationController" ng-click="adminClicked()">
                     <div ng-include='"App/Admin/HTML/Administration/View.html"'></div>
                 </tab>
 
-                <tab heading="Indberetninger" ng-controller="AdminPendingReportsController">
+                <tab heading="Indberetninger" ng-controller="AdminPendingReportsController" ng-click="reportsClicked()">
                     <div ng-include='"App/Admin/HTML/Reports/View.html"'></div>
                 </tab>
 
@@ -38,7 +37,7 @@
                     <div ng-include='"App/Admin/HTML/Substitutes/View.html"'></div>
                 </tab>
 
-                <tab heading="Adressevask" ng-controller="AddressLaundryController">
+                <tab heading="Adressevask" ng-controller="AddressLaundryController" ng-click="laundryClicked()">
                     <div ng-include="'App/Admin/HTML/AddressLaundry/AddressLaundryView.html'"></div>
                 </tab>
 

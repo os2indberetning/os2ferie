@@ -13,6 +13,7 @@ namespace Core.ApplicationServices.Interfaces
         DriveReport Create(DriveReport report);
         void SendMailIfRejectedReport(int key, Delta<DriveReport> delta);
         IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> driveReport);
+        IQueryable<DriveReport> AttachResponsibleLeader(IQueryable<DriveReport> driveReport, int offset, int number);
         IQueryable<DriveReport> FilterByLeader(IQueryable<DriveReport> repo, int leaderId, bool getReportsWhereSubExists = false);
         Person GetResponsibleLeaderForReport(DriveReport driveReport);
         bool Validate(DriveReport report);

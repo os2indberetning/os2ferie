@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("OrgUnitController", [
-    "$scope", "OrgUnit", "NotificationService", function ($scope, OrgUnit, NotificationService) {
+    "$scope", "OrgUnit", "NotificationService", "$rootScope", function ($scope, OrgUnit, NotificationService, $rootScope) {
         $scope.gridContainer = {};
 
         $scope.checkboxes = [];
@@ -11,7 +11,12 @@
             filter: "contains"
         };
 
+        $scope.$on('4kmClicked', function (event, mass) {
+            $scope.gridContainer.grid.dataSource.read();
+        });
+
         $scope.OrgUnits = {
+            autoBind: false,
             dataSource: {
                 type: "odata-v4",
                 transport: {
@@ -115,11 +120,9 @@
             }
         }
 
-        OrgUnit.get({ query: "$select=Id,LongDescription,HasAccessToFourKmRule" }).$promise.then(function (res) {
-            angular.forEach(res.value, function (org, key) {
-                $scope.typeAheadOrgUnits.push({ Id: org.Id, LongDescription: org.LongDescription });
-                $scope.checkboxes[org.Id] = org.HasAccessToFourKmRule;
-            });
+        angular.forEach($rootScope.OrgUnits, function (org, key) {
+            $scope.typeAheadOrgUnits.push({ Id: org.Id, LongDescription: org.LongDescription });
+            $scope.checkboxes[org.Id] = org.HasAccessToFourKmRule;
         });
 
         $scope.orgUnitChanged = function (item) {

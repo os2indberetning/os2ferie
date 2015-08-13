@@ -2,84 +2,88 @@
    "$scope", "Person", "$modal", "NotificationService", "File",
    function ($scope, Person, $modal, NotificationService, File) {
 
-       Person.getNonAdmins(function (res) {
-           $scope.nonAdmins = res.value;
-       });
-
        $scope.autoCompleteOptions = {
            filter: "contains"
        };
 
+       // Called from AdminMenuController
+       // Prevents loading data before it is needed.
+       $scope.$on('administrationClicked', function (event, mass) {
+           $scope.gridContainer.grid.dataSource.read();
+           Person.getNonAdmins(function (res) {
+               $scope.nonAdmins = res.value;
+           });
+       });
+
        $scope.gridContainer = {};
        $scope.person = {};
 
-       $scope.loadAdmins = function () {
-           /// <summary>
-           /// Loads existing admins from backend.
-           /// </summary>
-           $scope.admins = {
-               dataSource: {
-                   type: "odata",
-                   transport: {
-                       read: {
-                           beforeSend: function (req) {
-                               req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
-                           },
-                           url: "/odata/Person?$filter=IsAdmin",
-                           dataType: "json",
-                           cache: false
+       /// <summary>
+       /// Loads existing admins from backend.
+       /// </summary>
+       $scope.admins = {
+           autoBind: false,
+           dataSource: {
+               type: "odata",
+               transport: {
+                   read: {
+                       beforeSend: function (req) {
+                           req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                        },
-                       parameterMap: function (options, type) {
-                           var d = kendo.data.transports.odata.parameterMap(options);
-                           delete d.$inlinecount; // <-- remove inlinecount parameter
-                           d.$count = true;
-                           return d;
-                       }
+                       url: "/odata/Person?$filter=IsAdmin",
+                       dataType: "json",
+                       cache: false
                    },
-                   schema: {
-                       data: function (data) {
-                           return data.value;
-                       },
-                       total: function (data) {
-                           return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
-                       }
-                   },
-                   pageSize: 20,
-                   serverPaging: true,
-                   serverSorting: true,
-               },
-               sortable: true,
-               pageable: {
-                   messages: {
-                       display: "{0} - {1} af {2} administratorer", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
-                       empty: "Ingen administratorer at vise",
-                       page: "Side",
-                       of: "af {0}", //{0} is total amount of pages
-                       itemsPerPage: "administratorer pr. side",
-                       first: "Gå til første side",
-                       previous: "Gå til forrige side",
-                       next: "Gå til næste side",
-                       last: "Gå til sidste side",
-                       refresh: "Genopfrisk"
-                   },
-                   pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
-               },
-               scrollable: false,
-               columns: [
-                   {
-                       field: "FullName",
-                       title: "Medarbejder"
-                   }, {
-                       field: "Mail",
-                       title: "Email"
-                   }, {
-                       title: "Muligheder",
-                       template: function (data) {
-                           return "<a ng-click='removeAdmin(" + data.Id + ",\"" + data.FullName + "\")'>Slet</a>";
-                       }
+                   parameterMap: function (options, type) {
+                       var d = kendo.data.transports.odata.parameterMap(options);
+                       delete d.$inlinecount; // <-- remove inlinecount parameter
+                       d.$count = true;
+                       return d;
                    }
-               ],
-           };
+               },
+               schema: {
+                   data: function (data) {
+                       return data.value;
+                   },
+                   total: function (data) {
+                       return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
+                   }
+               },
+               pageSize: 20,
+               serverPaging: true,
+               serverSorting: true,
+           },
+           sortable: true,
+           pageable: {
+               messages: {
+                   display: "{0} - {1} af {2} administratorer", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                   empty: "Ingen administratorer at vise",
+                   page: "Side",
+                   of: "af {0}", //{0} is total amount of pages
+                   itemsPerPage: "administratorer pr. side",
+                   first: "Gå til første side",
+                   previous: "Gå til forrige side",
+                   next: "Gå til næste side",
+                   last: "Gå til sidste side",
+                   refresh: "Genopfrisk"
+               },
+               pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
+           },
+           scrollable: false,
+           columns: [
+               {
+                   field: "FullName",
+                   title: "Medarbejder"
+               }, {
+                   field: "Mail",
+                   title: "Email"
+               }, {
+                   title: "Muligheder",
+                   template: function (data) {
+                       return "<a ng-click='removeAdmin(" + data.Id + ",\"" + data.FullName + "\")'>Slet</a>";
+                   }
+               }
+           ],
        };
 
        $scope.removeAdmin = function (Id, FullName) {
@@ -169,7 +173,5 @@
                });
            });
        }
-
-       $scope.loadAdmins();
    }
 ]);

@@ -68,7 +68,7 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             resolve: {
                 CurrentUser: ["Person", "$location", "$rootScope", function (Person, $location, $rootScope) {
                     if ($rootScope.CurrentUser == undefined) {
-                        return Person.GetCurrentUser().$promise.then(function(data) {
+                        return Person.GetCurrentUser().$promise.then(function (data) {
                             $rootScope.CurrentUser = data;
                             if (!data.IsLeader && !data.IsSubstitute) {
                                 $location.path("driving");
@@ -83,7 +83,7 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
                 }],
                 OrgUnits: ["$rootScope", "OrgUnit", function ($rootScope, OrgUnit) {
                     if ($rootScope.OrgUnits == undefined) {
-                        return OrgUnit.get({ query: "$select=Id, LongDescription" }).$promise.then(function (res) {
+                        return OrgUnit.get({ query: "$select=Id, LongDescription, HasAccessToFourKmRule" }).$promise.then(function (res) {
                             $rootScope.OrgUnits = res.value;
                         });
                     } else {
@@ -92,14 +92,14 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
                 }],
                 People: ["$rootScope", "Person", function ($rootScope, Person) {
                     if ($rootScope.People == undefined) {
-                        return Person.getAll({ query: "$select=Id,FullName" }).$promise.then(function (res) {
+                        return Person.getAll({ query: "$select=Id,FullName,IsActive" }).$promise.then(function (res) {
                             $rootScope.People = res.value;
                         });
                     } else {
                         return $rootScope.People;
                     }
                 }]
-                
+
             }
         })
         .state("settings", {
@@ -121,6 +121,7 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
         .state("admin", {
             url: "/admin",
             templateUrl: "/App/Admin/AdminView.html",
+            controller: "AdminMenuController",
             resolve: {
                 CurrentUser: ["Person", "$location", "$rootScope", function (Person, $location, $rootScope) {
                     if ($rootScope.CurrentUser == undefined) {
@@ -139,7 +140,7 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
                 }],
                 OrgUnits: ["$rootScope", "OrgUnit", function ($rootScope, OrgUnit) {
                     if ($rootScope.OrgUnits == undefined) {
-                        return OrgUnit.get({ query: "$select=Id, LongDescription" }).$promise.then(function (res) {
+                        return OrgUnit.get({ query: "$select=Id, LongDescription, HasAccessToFourKmRule" }).$promise.then(function (res) {
                             $rootScope.OrgUnits = res.value;
                         });
                     } else {
@@ -148,7 +149,7 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
                 }],
                 People: ["$rootScope", "Person", function ($rootScope, Person) {
                     if ($rootScope.People == undefined) {
-                        return Person.getAll({ query: "$select=Id,FullName" }).$promise.then(function (res) {
+                        return Person.getAll({ query: "$select=Id,FullName,IsActive" }).$promise.then(function (res) {
                             $rootScope.People = res.value;
                         });
                     } else {

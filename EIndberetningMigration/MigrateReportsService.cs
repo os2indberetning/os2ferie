@@ -125,7 +125,8 @@ namespace EIndberetningMigration
                     Status = status,
                     CreatedDateTimestamp = DateTimeToTimestamp(oldReport.CreationDate),
                     EditedDateTimestamp = DateTimeToTimestamp(oldReport.CreationDate),
-                    Comment = oldReport.ManualEntryRemark ?? "",
+                    Comment = "",
+                    UserComment = oldReport.ManualEntryRemark ?? "",
                     PersonId = employee.PersonId,
                     EmploymentId = employee.Id,
                     Distance = oldReport.ReimbursableDistance,
@@ -150,6 +151,10 @@ namespace EIndberetningMigration
                 else
                 {
                     newReport.KilometerAllowance = KilometerAllowance.Calculated;
+                    //Some reports in the old system did not have a route but saved the cities in the route description
+                    //Since calculated reports does not have a comment, we save this route description in the comment
+                    //this way we can fetch it if needed when displaying the users on the front page and the report does not have a route.
+                    newReport.UserComment = oldReport.RouteDescription;
                 }
 
 
