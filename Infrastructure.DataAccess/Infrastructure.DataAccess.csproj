@@ -301,6 +301,10 @@
     <Compile Include="Migrations\201507301335181_AddsFlagToIndicateIfAReportHasBeenImportedFromEIndberetning.Designer.cs">
       <DependentUpon>201507301335181_AddsFlagToIndicateIfAReportHasBeenImportedFromEIndberetning.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508120903395_CreateIndexes.cs" />
+    <Compile Include="Migrations\201508120903395_CreateIndexes.Designer.cs">
+      <DependentUpon>201508120903395_CreateIndexes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -492,6 +496,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201507301335181_AddsFlagToIndicateIfAReportHasBeenImportedFromEIndberetning.resx">
       <DependentUpon>201507301335181_AddsFlagToIndicateIfAReportHasBeenImportedFromEIndberetning.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508120903395_CreateIndexes.resx">
+      <DependentUpon>201508120903395_CreateIndexes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -295,6 +295,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App\Admin\AdminMenuController.js" />
     <Content Include="App\Admin\Controllers\AddressLaundry\AddressLaundryController.js" />
     <Content Include="App\Admin\Controllers\Administration\AdministrationController.js" />
     <Content Include="App\Admin\Controllers\Administration\Modal\GenerateFileModalController.js" />

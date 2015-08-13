@@ -121,6 +121,7 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
         .state("admin", {
             url: "/admin",
             templateUrl: "/App/Admin/AdminView.html",
+            controller: "AdminMenuController",
             resolve: {
                 CurrentUser: ["Person", "$location", "$rootScope", function (Person, $location, $rootScope) {
                     if ($rootScope.CurrentUser == undefined) {
@@ -139,7 +140,7 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
                 }],
                 OrgUnits: ["$rootScope", "OrgUnit", function ($rootScope, OrgUnit) {
                     if ($rootScope.OrgUnits == undefined) {
-                        return OrgUnit.get({ query: "$select=Id, LongDescription" }).$promise.then(function (res) {
+                        return OrgUnit.get({ query: "$select=Id, LongDescription, HasAccessToFourKmRule" }).$promise.then(function (res) {
                             $rootScope.OrgUnits = res.value;
                         });
                     } else {
