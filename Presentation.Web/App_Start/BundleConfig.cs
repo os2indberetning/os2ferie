@@ -27,7 +27,8 @@ namespace OS2Indberetning
                 .Include("~/Scripts/kendo/kendo.all.min.js")
                 .Include("~/Scripts/kendo/cultures/kendo.culture.da-DK.min.js")
                 .Include("~/Scripts/loading-bar.min.js")
-                .Include("~/Scripts/pnotify.custom.min.js"));
+                .Include("~/Scripts/pnotify.custom.min.js")
+                .Include("~/Scripts/linq.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/loading-bar.min.css",

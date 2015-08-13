@@ -23,11 +23,6 @@
             $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000);
         });
 
-
-        $scope.orgUnitSelected = function (id) {
-
-        }
-
         $scope.saveNewSubstitute = function () {
             if ($scope.person == undefined) {
                 NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en person");

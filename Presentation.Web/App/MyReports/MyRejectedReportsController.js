@@ -31,17 +31,15 @@ angular.module("application").controller("MyRejectedReportsController", [
        /// Loads current users rejected reports from backend to kendo grid datasource.
        /// </summary>
        $scope.Reports = {
+           autoBind: false,
            dataSource: {
-               type: "odata",
+               type: "odata-v4",
                transport: {
                    read: {
                        beforeSend: function (req) {
                            req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                        },
-
-
-
-                       url: "/odata/DriveReports?status=Rejected &$expand=DriveReportPoints,ApprovedBy($select=FullName)",
+                       url: "/odata/DriveReports?status=Rejected &$expand=DriveReportPoints,ApprovedBy($select=FullName) &$filter=PersonId eq " + personId + " and DriveDateTimestamp ge " + fromDateFilter + " and DriveDateTimestamp le " + toDateFilter,
                        dataType: "json",
                        cache: false
                    },
@@ -66,7 +64,6 @@ angular.module("application").controller("MyRejectedReportsController", [
                pageSize: 20,
                serverPaging: false,
                serverSorting: true,
-               filter: [{ field: "PersonId", operator: "eq", value: personId }, { field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }],
                sort: { field: "DriveDateTimestamp", dir: "desc" },
                aggregate: [
                { field: "Distance", aggregate: "sum" },
@@ -120,15 +117,19 @@ angular.module("application").controller("MyRejectedReportsController", [
                   field: "DriveReportPoints",
                   template: function (data) {
                       var tooltipContent = "";
-                      angular.forEach(data.DriveReportPoints, function (point, key) {
-                          if (key != data.DriveReportPoints.length - 1) {
-                              tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
-                              gridContent += point.Town + "<br/>";
-                          } else {
-                              tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
-                              gridContent += point.Town;
-                          }
-                      });
+                      if (data.DriveReportPoints != null && data.DriveReportPoints != undefined && data.DriveReportPoints.length > 0) {
+                          angular.forEach(data.DriveReportPoints, function (point, key) {
+                              if (key != data.DriveReportPoints.length - 1) {
+                                  tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
+                                  gridContent += point.Town + "<br/>";
+                              } else {
+                                  tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
+                                  gridContent += point.Town;
+                              }
+                          });
+                      } else {
+                          tooltipContent = data.UserComment;
+                      }
                       var gridContent = "<i class='fa fa-road fa-2x'></i>";
                       var toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
                       var globe = "<div class='inline pull-right margin-right-5' kendo-tooltip k-content=\"'Se rute på kort'\"><a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a></div>";
@@ -200,9 +201,6 @@ angular.module("application").controller("MyRejectedReportsController", [
            /// Sets initial date filters.
            /// </summary>
            // Set initial values for kendo datepickers.
-
-           initialLoad = 2;
-
            var from = new Date();
            from.setDate(from.getDate() - 30);
 
@@ -210,50 +208,23 @@ angular.module("application").controller("MyRejectedReportsController", [
            $scope.dateContainer.fromDate = from;
        }
 
-
-
-       // Event handlers
-
-
-       var initialLoad = 2;
-       $scope.dateChanged = function () {
-           // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
-           $timeout(function () {
-
-               var from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
-               var to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
-
-               // Initial load is also a bit of a hack.
-               // dateChanged is called twice when the default values for the datepickers are set.
-               // This leads to sorting the grid content on load, which is not what we want.
-               // Therefore the sorting is not done the first 2 times the dates change - Which are the 2 times we set the default values.
-               if (initialLoad <= 0) {
-
-                   $scope.applyDateFilter(from, to);
-               }
-               initialLoad--;
-           }, 0);
-       }
-
        $scope.clearClicked = function () {
-           /// <summary>
-           /// Clears filters.
-           /// </summary>
-           $scope.gridContainer.grid.dataSource.filter([{ field: "PersonId", operator: "eq", value: personId }]);
            $scope.loadInitialDates();
+           $scope.searchClicked();
        }
 
-       $scope.applyDateFilter = function (fromDateStamp, toDateStamp) {
-           /// <summary>
-           /// Applies date filters.
-           /// </summary>
-           /// <param name="fromDateStamp"></param>
-           /// <param name="toDateStamp"></param>
-           var newFilters = [];
-           newFilters.push({ field: "PersonId", operator: "eq", value: personId });
-           newFilters.push({ field: "DriveDateTimestamp", operator: "gte", value: fromDateStamp });
-           newFilters.push({ field: "DriveDateTimestamp", operator: "lte", value: toDateStamp });
-           $scope.gridContainer.grid.dataSource.filter(newFilters);
+       $scope.searchClicked = function () {
+           var from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
+           var to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
+           $scope.gridContainer.grid.dataSource.transport.options.read.url = getDataUrl(from, to);
+           $scope.gridContainer.grid.dataSource.read();
+       }
+
+       var getDataUrl = function (from, to) {
+           var url = "/odata/DriveReports?status=Rejected &$expand=DriveReportPoints,ApprovedBy($select=FullName)";
+           var filters = "&$filter=PersonId eq " + personId + " and DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+           var result = url + filters;
+           return result;
        }
 
        $scope.refreshGrid = function () {

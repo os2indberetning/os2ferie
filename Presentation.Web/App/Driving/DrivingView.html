@@ -16,6 +16,8 @@
                     <div class="form-group form-inline">
                         <label for="date">Dato for tjenestekørsel </label>
                         <input culture="'da-DK'" kendo-date-picker="container.driveDatePicker" k-max="container.datePickerMaxDate" k-format="'dd/MM/yyyy'" ng-model="notUsed" k-ng-model="DriveReport.Date" k-options="DateOptions" />
+                        </br>
+                        <label ng-if="dateErrorMessage.length > 0" ng-bind="dateErrorMessage" class="text-danger"></label>
                     </div>
                 </div>
             </div>
@@ -146,7 +148,7 @@
                                         <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'" ng-enter="" k-placeholder="addressPlaceholderText"
                                                k-data-source="SmartAddress" k-options="container.addressFieldOptions" ng-blur="addressInputChanged($index)" ng-model="DriveReport.Addresses[$index].Name" class="fill-width no-max-width" />
                                     </div>
-                                    
+
                                 </div>
 
 

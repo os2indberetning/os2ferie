@@ -62,8 +62,6 @@
             $scope.DriveReport.Addresses = [];
             $scope.DriveReport.Addresses.push({ Name: "", Personal: "" });
             $scope.DriveReport.Addresses.push({ Name: "", Personal: "" });
-            // Set the datepicker date to today.
-            $scope.DriveReport.Date = new Date();
             $scope.container.datePickerMaxDate = new Date();
         }
 
@@ -409,7 +407,9 @@
         }
 
         var validateDate = function () {
+            $scope.dateErrorMessage = "";
             if ($scope.DriveReport.Date == null || $scope.DriveReport.Date == undefined) {
+                $scope.dateErrorMessage = "* Du skal vælge en dato."
                 return false;
             }
             return true;
