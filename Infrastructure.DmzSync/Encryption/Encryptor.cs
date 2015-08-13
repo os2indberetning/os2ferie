@@ -13,22 +13,31 @@ namespace Infrastructure.DmzSync.Encryption
 
         public static Profile EncryptProfile(Profile profile)
         {
-            profile.FirstName = StringCipher.Encrypt(profile.FirstName, EncryptKey);
-            profile.LastName = StringCipher.Encrypt(profile.LastName, EncryptKey);
-            profile.HomeLatitude = StringCipher.Encrypt(profile.HomeLatitude, EncryptKey);
-            profile.HomeLongitude = StringCipher.Encrypt(profile.HomeLongitude, EncryptKey);
-            profile.FullName = StringCipher.Encrypt(profile.FullName, EncryptKey);
-            return profile;
+
+                profile.FirstName = StringCipher.Encrypt(profile.FirstName, EncryptKey);
+                profile.LastName = StringCipher.Encrypt(profile.LastName, EncryptKey);
+                profile.HomeLatitude = StringCipher.Encrypt(profile.HomeLatitude, EncryptKey);
+                profile.HomeLongitude = StringCipher.Encrypt(profile.HomeLongitude, EncryptKey);
+                profile.FullName = StringCipher.Encrypt(profile.FullName, EncryptKey);
+                return profile;
+
         }
 
         public static Profile DecryptProfile(Profile profile)
         {
-            profile.FirstName = StringCipher.Decrypt(profile.FirstName, EncryptKey);
-            profile.LastName = StringCipher.Decrypt(profile.LastName, EncryptKey);
-            profile.HomeLatitude = StringCipher.Decrypt(profile.HomeLatitude, EncryptKey);
-            profile.HomeLongitude = StringCipher.Decrypt(profile.HomeLongitude, EncryptKey);
-            profile.FullName = StringCipher.Decrypt(profile.FullName, EncryptKey);
-            return profile;    
+            try
+            {
+                profile.FirstName = StringCipher.Decrypt(profile.FirstName, EncryptKey);
+                profile.LastName = StringCipher.Decrypt(profile.LastName, EncryptKey);
+                profile.HomeLatitude = StringCipher.Decrypt(profile.HomeLatitude, EncryptKey);
+                profile.HomeLongitude = StringCipher.Decrypt(profile.HomeLongitude, EncryptKey);
+                profile.FullName = StringCipher.Decrypt(profile.FullName, EncryptKey);
+                return profile;               
+            }
+            catch (FormatException)
+            {
+                return profile;
+            } 
         }
 
         public static Employment EncryptEmployment(Employment employment)

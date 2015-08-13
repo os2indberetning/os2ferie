@@ -22,7 +22,7 @@ namespace Infrastructure.AddressServices
                 flatPoints.Add(Convert.ToDouble(point.Latitude, CultureInfo.InvariantCulture));
                 flatPoints.Add(Convert.ToDouble(point.Longitude, CultureInfo.InvariantCulture));
             }
-            return encodeDeltas(flatPoints);
+             return encodeDeltas(flatPoints);
 
         }
 
@@ -59,7 +59,7 @@ namespace Infrastructure.AddressServices
             var intList = new Int64[numbers.Count].ToList();
             for (var i = 0; i < numbers.Count; ++i)
             {
-                intList[i] = Convert.ToInt64(Math.Round(numbers[i] * Math.Pow(10, 5)));
+                intList[i] = Convert.ToInt64(Math.Round(numbers[i] * Math.Pow(10, 6)));
             }
             return encodeSignedIntegers(intList);
         }
