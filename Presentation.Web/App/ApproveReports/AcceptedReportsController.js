@@ -74,7 +74,7 @@
            $scope.gridContainer.grid.dataSource.transport.options.read.url = getDataUrl(from, to, $scope.person.chosenPerson, $scope.orgUnit.chosenUnit);
            $scope.gridContainer.grid.dataSource.read();
        }
-      
+
        var getDataUrl = function (from, to, fullName, longDescription) {
            var url = "/odata/DriveReports?leaderId=" + personId + "&status=Accepted" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints";
            var filters = "&$filter=DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
@@ -91,7 +91,7 @@
        $scope.reports = {
            autoBind: false,
            dataSource: {
-              
+
                sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
                type: "odata-v4",
                transport: {
@@ -187,15 +187,19 @@
                    field: "DriveReportPoints",
                    template: function (data) {
                        var tooltipContent = "";
-                       angular.forEach(data.DriveReportPoints, function (point, key) {
-                           if (key != data.DriveReportPoints.length - 1) {
-                               tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
-                               gridContent += point.Town + "<br/>";
-                           } else {
-                               tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
-                               gridContent += point.Town;
-                           }
-                       });
+                       if (data.DriveReportPoints != null && data.DriveReportPoints != undefined && data.DriveReportPoints.length > 0) {
+                           angular.forEach(data.DriveReportPoints, function (point, key) {
+                               if (key != data.DriveReportPoints.length - 1) {
+                                   tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
+                                   gridContent += point.Town + "<br/>";
+                               } else {
+                                   tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
+                                   gridContent += point.Town;
+                               }
+                           });
+                       } else {
+                           tooltipContent = data.UserComment;
+                       }
                        var gridContent = "<i class='fa fa-road fa-2x'></i>";
                        var toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
                        var globe = "<div class='inline pull-right margin-right-5' kendo-tooltip k-content=\"'Se rute på kort'\"><a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a></div>";
@@ -333,7 +337,7 @@
                }
            });
        }
-       
+
        $scope.refreshGrid = function () {
            /// <summary>
            /// Refreshes kendo grid datasource.

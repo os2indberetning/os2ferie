@@ -167,15 +167,19 @@ angular.module("application").controller("AdminRejectedReportsController", [
                    field: "DriveReportPoints",
                    template: function (data) {
                        var tooltipContent = "";
-                       angular.forEach(data.DriveReportPoints, function (point, key) {
-                           if (key != data.DriveReportPoints.length - 1) {
-                               tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
-                               gridContent += point.StreetName + "<br/>";
-                           } else {
-                               tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
-                               gridContent += point.StreetName;
-                           }
-                       });
+                       if (data.DriveReportPoints != null && data.DriveReportPoints != undefined && data.DriveReportPoints.length > 0) {
+                           angular.forEach(data.DriveReportPoints, function (point, key) {
+                               if (key != data.DriveReportPoints.length - 1) {
+                                   tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
+                                   gridContent += point.StreetName + "<br/>";
+                               } else {
+                                   tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town;
+                                   gridContent += point.StreetName;
+                               }
+                           });
+                       } else {
+                           tooltipContent = data.UserComment;
+                       }
                        var gridContent = "<i class='fa fa-road fa-2x'></i>";
                        var toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">" + gridContent + "</div>";
                        var globe = "<div class='inline pull-right margin-right-5' kendo-tooltip k-content=\"'Se rute på kort'\"><a ng-click='showRouteModal(" + data.Id + ")'><i class='fa fa-globe fa-2x'></i></a></div>";
@@ -285,7 +289,7 @@ angular.module("application").controller("AdminRejectedReportsController", [
            $scope.searchClicked();
        }
 
-      
+
        $scope.showRouteModal = function (routeId) {
            var modalInstance = $modal.open({
                templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
