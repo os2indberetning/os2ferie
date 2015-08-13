@@ -21,6 +21,16 @@ namespace Infrastructure.DmzSync.Encryption
             return profile;
         }
 
+        public static Profile DecryptProfile(Profile profile)
+        {
+            profile.FirstName = StringCipher.Decrypt(profile.FirstName, EncryptKey);
+            profile.LastName = StringCipher.Decrypt(profile.LastName, EncryptKey);
+            profile.HomeLatitude = StringCipher.Decrypt(profile.HomeLatitude, EncryptKey);
+            profile.HomeLongitude = StringCipher.Decrypt(profile.HomeLongitude, EncryptKey);
+            profile.FullName = StringCipher.Decrypt(profile.FullName, EncryptKey);
+            return profile;    
+        }
+
         public static Employment EncryptEmployment(Employment employment)
         {
             employment.EmploymentPosition = StringCipher.Encrypt(employment.EmploymentPosition, EncryptKey);

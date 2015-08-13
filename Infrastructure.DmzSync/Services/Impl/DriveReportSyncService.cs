@@ -52,6 +52,7 @@ namespace Infrastructure.DmzSync.Services.Impl
             for (var i = 0; i < max; i++)
             {
                 var dmzReport = reports[i];
+                dmzReport.Profile = Encryptor.DecryptProfile(dmzReport.Profile);
                 Console.WriteLine("Syncing report " + i + " of " + max + " from DMZ.");
                 var rate = _rateRepo.AsQueryable().First(x => x.Id.Equals(dmzReport.RateId));
                 var points = new List<DriveReportPoint>();
