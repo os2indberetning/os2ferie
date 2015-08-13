@@ -13,7 +13,6 @@
            Person.getNonAdmins(function (res) {
                $scope.nonAdmins = res.value;
            });
-
        });
 
        $scope.gridContainer = {};

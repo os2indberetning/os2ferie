@@ -30,14 +30,15 @@ angular.module("application").controller("MyAcceptedReportsController", [
        /// Loads current user's accepted reports from backend to kendo grid datasource.
        /// </summary>
        $scope.Reports = {
+           autoBind: false,
            dataSource: {
-               type: "odata",
+               type: "odata-v4",
                transport: {
                    read: {
                        beforeSend: function (req) {
                            req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                        },
-                       url: "/odata/DriveReports?status=Accepted &$expand=DriveReportPoints,ApprovedBy",
+                       url: "/odata/DriveReports?status=Accepted &$expand=DriveReportPoints,ApprovedBy &$filter=PersonId eq " + personId + " and DriveDateTimestamp ge " + fromDateFilter + " and DriveDateTimestamp le " + toDateFilter,
                        dataType: "json",
                        cache: false
                    },
@@ -64,7 +65,6 @@ angular.module("application").controller("MyAcceptedReportsController", [
                serverAggregates: false,
                serverSorting: true,
                serverFiltering: true,
-               filter: [{ field: "PersonId", operator: "eq", value: personId }, { field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }],
                sort: { field: "DriveDateTimestamp", dir: "desc" },
                aggregate: [
                { field: "Distance", aggregate: "sum" },
@@ -208,11 +208,22 @@ angular.module("application").controller("MyAcceptedReportsController", [
        };
 
        $scope.clearClicked = function () {
-           /// <summary>
-           /// Clears filters.
-           /// </summary>
-           $scope.gridContainer.grid.dataSource.filter([{ field: "PersonId", operator: "eq", value: personId }]);
            $scope.loadInitialDates();
+           $scope.searchClicked();
+       }
+
+       $scope.searchClicked = function () {
+           var from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
+           var to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
+           $scope.gridContainer.grid.dataSource.transport.options.read.url = getDataUrl(from, to);
+           $scope.gridContainer.grid.dataSource.read();
+       }
+
+       var getDataUrl = function (from, to) {
+           var url = "/odata/DriveReports?status=Accepted &$expand=DriveReportPoints,ApprovedBy";
+           var filters = " &$filter=PersonId eq " + personId + " and DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+           var result = url + filters;
+           return result;
        }
 
        $scope.loadInitialDates = function () {
@@ -220,37 +231,11 @@ angular.module("application").controller("MyAcceptedReportsController", [
            /// Loads initial date filters.
            /// </summary>
            // Set initial values for kendo datepickers.
-
-           initialLoad = 2;
-
            var from = new Date();
            from.setDate(from.getDate() - 30);
 
            $scope.dateContainer.toDate = new Date();
            $scope.dateContainer.fromDate = from;
-       }
-
-
-
-
-       var initialLoad = 2;
-       $scope.dateChanged = function () {
-           // $timeout is a bit of a hack, but it is needed to get the current input value because ng-change is called before ng-model updates.
-           $timeout(function () {
-
-               var from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
-               var to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
-
-               // Initial load is also a bit of a hack.
-               // dateChanged is called twice when the default values for the datepickers are set.
-               // This leads to sorting the grid content on load, which is not what we want.
-               // Therefore the sorting is not done the first 2 times the dates change - Which are the 2 times we set the default values.
-               if (initialLoad <= 0) {
-
-                   $scope.applyDateFilter(from, to);
-               }
-               initialLoad--;
-           }, 0);
        }
 
        $scope.refreshGrid = function () {

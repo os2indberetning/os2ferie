@@ -69,6 +69,36 @@ angular.module("application").controller("AdminAcceptedReportsController", [
        $scope.orgUnits = $rootScope.OrgUnits;
        $scope.people = $rootScope.People;
 
+
+       $scope.clearClicked = function () {
+           /// <summary>
+           /// Clears filters.
+           /// </summary>
+           $scope.loadInitialDates();
+           $scope.person.chosenPerson = "";
+           $scope.orgUnit.chosenUnit = "";
+           $scope.searchClicked();
+       }
+
+       $scope.searchClicked = function () {
+           var from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
+           var to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
+           $scope.gridContainer.grid.dataSource.transport.options.read.url = getDataUrl(from, to, $scope.person.chosenPerson, $scope.orgUnit.chosenUnit);
+           $scope.gridContainer.grid.dataSource.read();
+       }
+
+       var getDataUrl = function (from, to, fullName, longDescription) {
+           var url = "/odata/DriveReports?status=Accepted &getReportsWhereSubExists=true &$expand=DriveReportPoints,ApprovedBy,Employment($expand=OrgUnit)";
+           var filters = "&$filter=DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
+           if (fullName != undefined && fullName != "") {
+               filters += " and FullName eq '" + fullName + "'";
+           }
+           if (longDescription != undefined && longDescription != "") {
+               filters += " and Employment/OrgUnit/LongDescription eq '" + longDescription + "'";
+           }
+           var result = url + filters;
+           return result;
+       }
      
        /// <summary>
        /// Loads existing accepted reports from backend to kendo grid datasource.
@@ -76,13 +106,13 @@ angular.module("application").controller("AdminAcceptedReportsController", [
        $scope.Reports = {
            autoBind: false,
            dataSource: {
-               type: "odata",
+               type: "odata-v4",
                transport: {
                    read: {
                        beforeSend: function (req) {
                            req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                        },
-                       url: "/odata/DriveReports?status=Accepted &getReportsWhereSubExists=true &$expand=DriveReportPoints,ApprovedBy,Employment($expand=OrgUnit)",
+                       url: "/odata/DriveReports?status=Accepted &getReportsWhereSubExists=true &$expand=DriveReportPoints,ApprovedBy,Employment($expand=OrgUnit) &$filter=DriveDateTimestamp ge " + fromDateFilter + " and DriveDateTimestamp le " + toDateFilter,
                        dataType: "json",
                        cache: false
                    },
@@ -109,7 +139,6 @@ angular.module("application").controller("AdminAcceptedReportsController", [
                serverAggregates: false,
                serverSorting: true,
                serverFiltering: true,
-               filter: [{ field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }],
                sort: { field: "DriveDateTimestamp", dir: "desc" },
                aggregate: [
                    { field: "Distance", aggregate: "sum" },
@@ -306,16 +335,6 @@ angular.module("application").controller("AdminAcceptedReportsController", [
 
        $scope.clearName = function () {
            $scope.chosenPerson = "";
-       }
-
-       $scope.clearClicked = function () {
-           /// <summary>
-           /// Clears filters.
-           /// </summary>
-           $scope.loadInitialDates();
-           $scope.person.chosenPerson = "";
-           $scope.orgUnit.chosenUnit = "";
-           $scope.searchClicked();
        }
 
        $scope.showRouteModal = function (routeId) {

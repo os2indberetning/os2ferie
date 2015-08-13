@@ -6,12 +6,6 @@
        $scope.gridContainer = {};
        $scope.dateContainer = {};
 
-       $scope.$on('reportsClicked', function (event, mass) {
-           $timeout(function () {
-               $scope.gridContainer.grid.dataSource.read();
-           },0);
-       });
-
        // Load people for auto-complete textbox
        $scope.people = [];
        $scope.person = {};
@@ -26,23 +20,35 @@
        $scope.orgUnits = $rootScope.OrgUnits;
        $scope.people = $rootScope.People;
 
+       
+       $scope.clearClicked = function () {
+           /// <summary>
+           /// Clears filters.
+           /// </summary>
+           $scope.loadInitialDates();
+           $scope.person.chosenPerson = "";
+           $scope.orgUnit.chosenUnit = "";
+           $scope.searchClicked();
+       }
+
        $scope.searchClicked = function () {
            var from = $scope.getStartOfDayStamp($scope.dateContainer.fromDate);
            var to = $scope.getEndOfDayStamp($scope.dateContainer.toDate);
-           $scope.gridContainer.grid.dataSource.filter(getFilters(from, to, $scope.person.chosenPerson, $scope.orgUnit.chosenUnit));
+           $scope.gridContainer.grid.dataSource.transport.options.read.url = getDataUrl(from, to, $scope.person.chosenPerson, $scope.orgUnit.chosenUnit);
+           $scope.gridContainer.grid.dataSource.read();
        }
 
-       var getFilters = function (from, to, fullName, longDescription) {
-           var newFilters = [];
-           newFilters.push({ field: "DriveDateTimestamp", operator: "ge", value: from });
-           newFilters.push({ field: "DriveDateTimestamp", operator: "le", value: to });
+       var getDataUrl = function (from, to, fullName, longDescription) {
+           var url = "/odata/DriveReports?status=Pending &getReportsWhereSubExists=true &$expand=DriveReportPoints,ResponsibleLeader,Employment($expand=OrgUnit)";
+           var filters = "&$filter=DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
            if (fullName != undefined && fullName != "") {
-               newFilters.push({ field: "FullName", operator: "eq", value: fullName });
+               filters += " and FullName eq '" + fullName + "'";
            }
            if (longDescription != undefined && longDescription != "") {
-               newFilters.push({ field: "Employment.OrgUnit.LongDescription", operator: "eq", value: longDescription });
+               filters += " and Employment/OrgUnit/LongDescription eq '" + longDescription + "'";
            }
-           return newFilters;
+           var result = url + filters;
+           return result;
        }
 
        RateType.getAll().$promise.then(function (res) {
@@ -92,7 +98,8 @@
                        beforeSend: function (req) {
                            req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                        },
-                       url: "/odata/DriveReports?status=Pending &getReportsWhereSubExists=true &$expand=DriveReportPoints,ResponsibleLeader,Employment($expand=OrgUnit)",
+
+                       url: "/odata/DriveReports?status=Pending &getReportsWhereSubExists=true &$expand=DriveReportPoints,ResponsibleLeader,Employment($expand=OrgUnit) &$filter=DriveDateTimestamp ge " + fromDateFilter + " and DriveDateTimestamp le " + toDateFilter,
                        dataType: "json",
                        cache: false
                    },
@@ -119,7 +126,6 @@
                serverAggregates: false,
                serverSorting: true,
                serverFiltering: true,
-               filter: [{ field: "DriveDateTimestamp", operator: "gte", value: fromDateFilter }, { field: "DriveDateTimestamp", operator: "lte", value: toDateFilter }],
                sort: { field: "DriveDateTimestamp", dir: "desc" },
                aggregate: [
                    { field: "Distance", aggregate: "sum" },
@@ -258,6 +264,12 @@
            scrollable: false,
        };
 
+       $scope.$on('reportsClicked', function () {
+           if ($scope.gridContainer.grid != undefined) {
+               $scope.gridContainer.grid.dataSource.read();
+           }
+       });
+
        $scope.loadInitialDates = function () {
            /// <summary>
            /// Loads initial date filters.
@@ -283,16 +295,6 @@
 
        $scope.clearName = function () {
            $scope.chosenPerson = "";
-       }
-
-       $scope.clearClicked = function () {
-           /// <summary>
-           /// Clears filters.
-           /// </summary>
-           $scope.loadInitialDates();
-           $scope.person.chosenPerson = "";
-           $scope.orgUnit.chosenUnit = "";
-           $scope.searchClicked();
        }
 
        $scope.showRouteModal = function (routeId) {
