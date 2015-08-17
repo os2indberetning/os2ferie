@@ -125,6 +125,7 @@ namespace EIndberetningMigration
                     Status = status,
                     CreatedDateTimestamp = DateTimeToTimestamp(oldReport.CreationDate),
                     EditedDateTimestamp = DateTimeToTimestamp(oldReport.CreationDate),
+                    Comment = "",
                     UserComment = oldReport.ManualEntryRemark ?? "",
                     PersonId = employee.PersonId,
                     EmploymentId = employee.Id,
