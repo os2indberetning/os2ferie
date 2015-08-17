@@ -42,10 +42,10 @@
            var url = "/odata/DriveReports?status=Pending &getReportsWhereSubExists=true &$expand=DriveReportPoints,ResponsibleLeader,Employment($expand=OrgUnit)";
            var filters = "&$filter=DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
            if (fullName != undefined && fullName != "") {
-               filters += " and FullName eq '" + fullName + "'";
+               filters += " and PersonId eq " + $scope.person.chosenId;
            }
            if (longDescription != undefined && longDescription != "") {
-               filters += " and Employment/OrgUnit/LongDescription eq '" + longDescription + "'";
+               filters += " and Employment/OrgUnitId eq " + $scope.orgUnit.chosenId;
            }
            var result = url + filters;
            return result;
@@ -57,10 +57,16 @@
 
        $scope.orgUnitAutoCompleteOptions = {
            filter: "contains",
+           select: function (e) {
+               $scope.orgUnit.chosenId = this.dataItem(e.item.index()).Id;
+           }
        }
 
        $scope.personAutoCompleteOptions = {
            filter: "contains",
+           select: function (e) {
+               $scope.person.chosenId = this.dataItem(e.item.index()).Id;
+           }
        };
 
        $scope.getEndOfDayStamp = function (d) {

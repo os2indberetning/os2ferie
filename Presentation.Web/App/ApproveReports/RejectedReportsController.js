@@ -22,10 +22,16 @@
 
        $scope.orgUnitAutoCompleteOptions = {
            filter: "contains",
+           select: function (e) {
+               $scope.orgUnit.chosenId = this.dataItem(e.item.index()).Id;
+           }
        }
 
        $scope.personAutoCompleteOptions = {
            filter: "contains",
+           select: function (e) {
+               $scope.person.chosenId = this.dataItem(e.item.index()).Id;
+           }
        };
 
        RateType.getAll().$promise.then(function (res) {
@@ -72,10 +78,10 @@
            var url = "/odata/DriveReports?leaderId=" + personId + "&status=Rejected" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints";
            var filters = "&$filter=DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
            if (fullName != undefined && fullName != "") {
-               filters += " and FullName eq '" + fullName + "'";
+               filters += " and PersonId eq " + $scope.person.chosenId;
            }
            if (longDescription != undefined && longDescription != "") {
-               filters += " and Employment/OrgUnit/LongDescription eq '" + longDescription + "'";
+               filters += " and Employment/OrgUnitId eq " + $scope.orgUnit.chosenId;
            }
            var result = url + filters;
            return result;
