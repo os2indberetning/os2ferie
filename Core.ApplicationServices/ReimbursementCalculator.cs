@@ -191,7 +191,7 @@ namespace Core.ApplicationServices
 
 
             // Multiply the distance by two if the report is a return trip
-            if (report.IsReturnTrip)
+            if (report.IsRoundTrip)
             {
                 report.Distance *= 2;
             }
