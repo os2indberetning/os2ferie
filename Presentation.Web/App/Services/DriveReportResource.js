@@ -24,6 +24,7 @@
                 driveReport.DriveDateTimestamp = Math.floor($scope.DriveReport.Date.getTime() / 1000);
                 driveReport.KmRate = parseFloat(getKmRate().KmRate);
                 driveReport.TFCode = getKmRate().Type.TFCode;
+                driveReport.IsRoundTrip = $scope.DriveReport.IsRoundTrip;
 
                 driveReport.KilometerAllowance = $scope.DriveReport.KilometerAllowance;
                 driveReport.Distance = 0;
@@ -144,6 +145,7 @@
                 driveReport.DriveDateTimestamp = Math.floor($scope.DriveReport.Date.getTime() / 1000);
                 driveReport.KmRate = parseFloat(getKmRate().KmRate);
                 driveReport.TFCode = getKmRate().Type.TFCode;
+                driveReport.IsRoundTrip = $scope.DriveReport.IsRoundTrip;
 
                 driveReport.KilometerAllowance = $scope.DriveReport.KilometerAllowance;
                 driveReport.Distance = 0;

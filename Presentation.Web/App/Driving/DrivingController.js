@@ -223,6 +223,8 @@
                     });
             
                 }
+
+                $scope.DriveReport.IsRoundTrip = report.IsRoundTrip;
             }
         }
 
@@ -637,7 +639,7 @@
 
             setNotRoute();
 
-
+            $scope.DriveReport.IsRoundTrip = false;
             loadValuesFromReport($scope.latestDriveReport);
             $scope.DriveReport.Addresses = [{ Name: "" }, { Name: "" }];
             $scope.DriveReport.ReadDistance = 0;
@@ -656,7 +658,7 @@
 
             $scope.DrivenKMDisplay = 0;
             $scope.TransportAllowance = 0;
-            $scope.DriveReport.RoundTrip = false;
+
 
         }
 
@@ -859,7 +861,7 @@
                     }
                 }
 
-                if ($scope.DriveReport.RoundTrip === true) {
+                if ($scope.DriveReport.IsRoundTrip === true) {
                     // Double the driven km if its a roundtrip.
                     $scope.DrivenKMDisplay = Number($scope.DrivenKMDisplay) * 2;
                     // If the route starts xor ends at home -> double the transportallowance.
