@@ -192,7 +192,12 @@ angular.module("application").controller("AdminRejectedReportsController", [
                        if (data.IsOldMigratedReport) {
                            globe = "<div class='inline pull-right margin-right-5' kendo-tooltip k-content=\"'Denne indberetning er overført fra eIndberetning og der kan ikke genereres en rute på et kort'\"><i class='fa fa-circle-thin fa-2x'></i></a></div>";
                        }
-                       var result = toolTip + globe;
+                       var roundTrip = "";
+                       if (data.IsRoundTrip) {
+                           roundTrip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'Ruten er tur/retur'\"><i class='fa fa-exchange fa-2x'></i></div>";
+                       }
+
+                       var result = toolTip + roundTrip + globe;
                        var comment = data.UserComment != null ? data.UserComment : "Ingen kommentar angivet";
 
                        if (data.KilometerAllowance != "Read") {

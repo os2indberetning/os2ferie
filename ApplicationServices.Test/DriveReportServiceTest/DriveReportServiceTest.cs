@@ -95,6 +95,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
 
         }
 
+        
         [Test]
         public void AttachResponsibleLeader_WithNoSub_ShouldAttachLeader()
         {
