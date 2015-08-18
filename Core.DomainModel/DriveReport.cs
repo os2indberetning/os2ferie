@@ -40,6 +40,7 @@ namespace Core.DomainModel
         public string RouteGeometry { get; set; }
         public bool? IsExtraDistance { get; set; }
         public bool? IsOldMigratedReport { get; set; }
+        public bool IsReturnTrip { get; set; }
 
 
         public virtual ICollection<DriveReportPoint> DriveReportPoints { get; set; }
