@@ -208,7 +208,7 @@
                        return result;
                    } else {
                        if (data.IsFromApp) {
-                           toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + comment + "'\">Indberettet fra mobil app</div>";
+                           toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">Indberettet fra mobil app</div>";
                            result = toolTip + globe;
                            return result;
                        } else {
