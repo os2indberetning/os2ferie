@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Core.ApplicationServices.Interfaces;
@@ -47,6 +48,28 @@ namespace Core.ApplicationServices
             _repo.Save();
             return true;
 
+        }
+
+        public LicensePlate HandlePost(LicensePlate plate)
+        {
+            if (!_repo.AsQueryable().Any(lp => lp.PersonId == plate.PersonId))
+            {
+                plate.IsPrimary = true;
+            }
+            return plate;
+        }
+
+        public void HandleDelete(LicensePlate plate)
+        {
+            if (plate != null && plate.IsPrimary)
+            {
+                // Find a new plate to make primary.
+                var newPrimary = _repo.AsQueryable().FirstOrDefault(lp => lp.PersonId == plate.PersonId && lp.Id != plate.Id);
+                if (newPrimary != null)
+                {
+                    MakeLicensePlatePrimary(newPrimary.Id);
+                }
+            }
         }
     }
 }

@@ -64,7 +64,6 @@ CACHE:
 /App/ApproveReports/ApproveReportsView.html
 /App/MyReports/View.html
 /App/MyReports/MyReportsView.html
-/App/Driving/DrivingView.html
 /App/Settings/AlternativeWorkAddressTemplate.html
 /App/Settings/SettingsView.html
 /odata/Addresses/Service.GetMapStart
