@@ -112,15 +112,15 @@ namespace OS2Indberetning.Controllers
         /// <returns></returns>
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
+            // Get the plate to be deleted
+            var plate = Repo.AsQueryable().SingleOrDefault(lp => lp.Id == key);
+
             if (!CurrentUser.Id.Equals(plate.PersonId))
             {
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
-            // Get the plate to be deleted
-            var plate = Repo.AsQueryable().SingleOrDefault(lp => lp.Id == key);
-
-            _plateService.HandleDelete(plate, Repo);           
+            _plateService.HandleDelete(plate);           
 
             return base.Delete(key);
         }
