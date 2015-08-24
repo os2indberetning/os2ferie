@@ -74,6 +74,12 @@
                 $scope.newLicensePlateDescription = "";
 
                 NotificationService.AutoFadeNotification("success", "", "Ny nummerplade blev gemt");
+
+                // Reload CurrentUser to update LicensePlates in DrivingController
+                Person.GetCurrentUser().$promise.then(function (data) {
+                    $rootScope.CurrentUser = data;
+                });
+
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "", "Nummerplade blev ikke gemt");
             });
@@ -113,6 +119,10 @@
                 //Load licenseplates again
                 LicensePlate.get({ id: personId }, function (data) {
                     $scope.licenseplates = data;
+                });
+                // Reload CurrentUser to update LicensePlates in DrivingController
+                Person.GetCurrentUser().$promise.then(function (data) {
+                    $rootScope.CurrentUser = data;
                 });
             }), function () {
                 NotificationService.AutoFadeNotification("danger", "", "Nummerplade blev ikke slettet");
@@ -355,6 +365,10 @@
             /// </summary>
             $scope.gridContainer.personalAddressesGrid.dataSource.transport.options.read.url = "odata/PersonalAddresses()?$filter=PersonId eq " + $scope.currentPerson.Id;
             $scope.gridContainer.personalAddressesGrid.dataSource.read();
+            // Reload CurrentUser to update Personal Addresses in DrivingController
+            Person.GetCurrentUser().$promise.then(function (data) {
+                $rootScope.CurrentUser = data;
+            });
         }
 
         $scope.updatePersonalRoutes = function () {
@@ -363,27 +377,12 @@
             /// </summary>
             $scope.gridcontainer.personalRoutesGrid.dataSource.transport.options.read.url = "odata/PersonalRoutes()?$filter=PersonId eq " + $scope.currentPerson.Id + "&$expand=Points";
             $scope.gridcontainer.personalRoutesGrid.dataSource.read();
+            // Reload CurrentUser to update Personal Routes in DrivingController
+            Person.GetCurrentUser().$promise.then(function (data) {
+                $rootScope.CurrentUser = data;
+            });
 
         }
-
-        //$scope.openTokenModal = function (size) {
-
-        //    var modalInstance = $modal.open({
-        //        templateUrl: '/App/Settings/tokenModal.html',
-        //        controller: 'TokenInstanceController',
-        //        backdrop: 'static',
-        //        size: size,
-        //        resolve: {
-        //            personId: function () {
-        //                return $scope.currentPerson.Id;
-        //            }
-        //        }
-        //    });
-
-        //    modalInstance.result.then(function () {
-
-        //    });
-        //};
 
         $scope.openRouteEditModal = function (id) {
             /// <summary>
