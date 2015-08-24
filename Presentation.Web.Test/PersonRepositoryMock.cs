@@ -53,6 +53,7 @@ namespace Presentation.Web.Test
                     FirstName = "Test",
                     LastName = "Foo",
                     IsAdmin = true,
+                    IsActive = true,
                     Initials = "hshu"
                 }
             };

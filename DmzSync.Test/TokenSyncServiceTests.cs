@@ -41,6 +41,7 @@ namespace DmzSync.Test
                 GuId = Guid.NewGuid().ToString(),
                 Status = 1,
                 ProfileId = 1,
+                
                 TokenString = "1234",
             });
             _dmzTokenList.Add(new Token()
@@ -60,7 +61,7 @@ namespace DmzSync.Test
                 TokenString = "1234",
             });
             _dmzRepoMock.AsQueryable().ReturnsForAnyArgs(_dmzTokenList.AsQueryable());
-            _dmzRepoMock.WhenForAnyArgs(x => x.Delete(new Token())).Do(p => _dmzTokenList.Remove(p.Arg<Token>()));
+            _dmzRepoMock.WhenForAnyArgs(x => x.DeleteRange(_dmzTokenList)).Do(p => _dmzTokenList.Clear());
 
             _masterTokenList.Add(new MobileToken()
             {
@@ -68,6 +69,10 @@ namespace DmzSync.Test
                 Guid = new Guid(_dmzTokenList.ElementAt(0).GuId),
                 Status = MobileTokenStatus.Created,
                 PersonId = 1,
+                Person = new Person()
+                {
+                    IsActive = true
+                },
                 Token = "1234"
             });
             _masterTokenList.Add(new MobileToken()
@@ -76,6 +81,10 @@ namespace DmzSync.Test
                 Guid = new Guid(_dmzTokenList.ElementAt(1).GuId),
                 Status = MobileTokenStatus.Created,
                 PersonId = 3,
+                Person = new Person()
+                {
+                    IsActive = true
+                },
                 Token = "1234"
             });
             _masterTokenList.Add(new MobileToken()
@@ -84,6 +93,10 @@ namespace DmzSync.Test
                 Guid = new Guid(_dmzTokenList.ElementAt(2).GuId),
                 Status = MobileTokenStatus.Created,
                 PersonId = 3,
+                Person = new Person()
+                {
+                    IsActive = true
+                },
                 Token = "1234"
             });
 
@@ -100,12 +113,12 @@ namespace DmzSync.Test
         }
 
         [Test]
-        public void ClearDmz_ShouldCallDelete_OnceForEachToken()
+        public void ClearDmz_ShouldCallDeleteRange()
         {
             var numberOfReceivedCalls = 0;
-            _dmzRepoMock.WhenForAnyArgs(x => x.Delete(new Token())).Do(p => numberOfReceivedCalls++);
+            _dmzRepoMock.WhenForAnyArgs(x => x.DeleteRange(_dmzTokenList)).Do(p => numberOfReceivedCalls++);
             _uut.ClearDmz();
-            Assert.AreEqual(3, numberOfReceivedCalls);
+            Assert.AreEqual(1, numberOfReceivedCalls);
         }
 
         [Test]

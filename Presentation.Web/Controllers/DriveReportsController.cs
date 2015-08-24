@@ -102,7 +102,7 @@ namespace OS2Indberetning.Controllers
         public IHttpActionResult GetLatestReportForUser(int personId)
         {
             var report = Repo.AsQueryable()
-                .Where(x => x.PersonId.Equals(personId))
+                .Where(x => x.PersonId.Equals(personId) && !x.IsFromApp)
                 .OrderByDescending(x => x.CreatedDateTimestamp)
                 .FirstOrDefault();
 

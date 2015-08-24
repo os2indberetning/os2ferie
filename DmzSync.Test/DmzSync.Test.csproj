@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="DriveReportSyncServiceTests.cs" />
     <Compile Include="PersonSyncServiceTests.cs" />
+    <Compile Include="RateSyncServiceTests.cs" />
     <Compile Include="TokenSyncServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Core.ApplicationServices;
+using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices.RoutingClasses;
 using Core.DomainServices.Ínterfaces;
+using Ninject;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -60,6 +63,94 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
 
             Assert.That(distance, Is.EqualTo(result.Distance));
             Assert.That(distance * report.KmRate / 100, Is.EqualTo(result.AmountToReimburse));
+        }
+
+        [Test]
+        public void Calculate_WithRoundTrip_ShouldDoubleDistance()
+        {
+            var report = GetDriveReport();
+            report.Employment = new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            };
+            report.Distance = 42;
+            report.KilometerAllowance = KilometerAllowance.Read;
+            report.IsRoundTrip = true;
+
+            var calculator = GetCalculator(new List<Employment>()
+            {
+                new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            }
+            });
+
+            var result = calculator.Calculate(new RouteInformation() { Length = 100 }, report);
+
+            Assert.AreEqual(84, report.Distance);
+
+        }
+
+        [Test]
+        public void Calculate_WithoutRoundTrip_ShouldNotDoubleDistance()
+        {
+            var report = GetDriveReport();
+            report.Employment = new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            };
+            report.Distance = 42;
+            report.KilometerAllowance = KilometerAllowance.Read;
+            report.IsRoundTrip = false;
+
+            var calculator = GetCalculator(new List<Employment>()
+            {
+                new Employment()
+            {
+                OrgUnit = new OrgUnit()
+                {
+                    Address = new WorkAddress()
+                    {
+                        StreetName = "Katrinebjergvej",
+                        StreetNumber = "93B",
+                        ZipCode = 8200,
+                        Town = "Aarhus N"
+                    }
+                }
+            }
+            });
+
+            var result = calculator.Calculate(new RouteInformation() { Length = 100 }, report);
+
+            Assert.AreEqual(42, report.Distance);
+
         }
 
         [Test]

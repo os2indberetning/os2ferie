@@ -139,8 +139,6 @@
     <Compile Include="OrgUnitRepositoryMock.cs" />
     <Compile Include="Controllers\DriveReports\DriveReportsRepositoryMock.cs" />
     <Compile Include="Controllers\DriveReports\DriveReportsTest.cs" />
-    <Compile Include="Controllers\LicensePlates\LicensePlateRepositoryMock.cs" />
-    <Compile Include="Controllers\LicensePlates\LicensePlateTest.cs" />
     <Compile Include="Controllers\MobileTokens\MobileTokenRepositoryMock.cs" />
     <Compile Include="Controllers\MobileTokens\MobileTokenTest.cs" />
     <Compile Include="Controllers\Models\ODataMetaData.cs" />

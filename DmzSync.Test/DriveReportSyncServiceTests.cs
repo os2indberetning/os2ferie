@@ -170,15 +170,6 @@ namespace DmzSync.Test
         }
 
         [Test]
-        public void ClearDmz_ShouldCallDelete_OnceForEachReport()
-        {
-            var numberOfReceivedCalls = 0;
-            _dmzRepoMock.WhenForAnyArgs(x => x.Delete(new DriveReport())).Do(p => numberOfReceivedCalls++);
-            _uut.ClearDmz();
-            Assert.AreEqual(2, numberOfReceivedCalls);
-        }
-
-        [Test]
         public void SyncToDmz_ShouldThrow_NotImplemented()
         {
             Assert.Throws<NotImplementedException>(() => _uut.SyncToDmz());

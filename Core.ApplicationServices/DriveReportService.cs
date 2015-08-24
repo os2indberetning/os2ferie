@@ -110,7 +110,8 @@ namespace Core.ApplicationServices
             var createdReport = _driveReportRepository.Insert(report);
             _driveReportRepository.Save();
 
-            if (report.KilometerAllowance != KilometerAllowance.Read)
+            // If the report is calculated or from an app, then we would like to store the points.
+            if (report.KilometerAllowance != KilometerAllowance.Read || report.IsFromApp)
             {
                 for (var i = 0; i < createdReport.DriveReportPoints.Count; i++)
                 {
