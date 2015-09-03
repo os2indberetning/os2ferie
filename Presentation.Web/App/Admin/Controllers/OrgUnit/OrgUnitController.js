@@ -110,7 +110,7 @@
             if ($scope.checkboxes[id]) {
                 // Checkbox has been checked.
                 
-                Enumerable.From($rootScope.OrgUnits).Single(function (x) { return x.Id == id }).HasAccessToFourKmRule = true;
+                Enumerable.From($rootScope.OrgUnits).Single(function (x) { return x.Id == id; }).HasAccessToFourKmRule = true;
 
                 OrgUnit.patch({ id: id }, { "HasAccessToFourKmRule": true }).$promise.then(function () {
                     NotificationService.AutoFadeNotification("success", "", "Adgang til 4 km-regel givet til " + org);
@@ -123,7 +123,7 @@
             } else if (!$scope.checkboxes[id]) {
                 // Checkbox has been unchecked.
 
-                Enumerable.From($rootScope.OrgUnits).Single(function (x) { return x.Id == id }).HasAccessToFourKmRule = false;
+                Enumerable.From($rootScope.OrgUnits).Single(function (x) { return x.Id == id; }).HasAccessToFourKmRule = false;
 
                 OrgUnit.patch({ id: id }, { "HasAccessToFourKmRule": false }).$promise.then(function () {
                     NotificationService.AutoFadeNotification("success", "", "Adgang til 4 km-regel fjernet fra " + org);
