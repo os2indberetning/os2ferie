@@ -16,7 +16,7 @@
        $scope.showSubstituteSettings = $rootScope.CurrentUser.IsLeader;
 
        $scope.currentPerson = $rootScope.CurrentUser;
-       $scope.persons = Enumerable.From($rootScope.People).Where(function (x) { return x.IsActive == true }).ToArray();
+       $scope.persons = $rootScope.People;
        $scope.orgUnits = $rootScope.OrgUnits;
 
        $scope.substituteOrgUnit = "";

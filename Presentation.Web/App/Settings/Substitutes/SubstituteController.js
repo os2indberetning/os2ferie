@@ -28,17 +28,9 @@
 
         $scope.currentPerson = $rootScope.CurrentUser;
 
-        //Person.get({ id: personId }, function (data) {
-        //    $scope.currentPerson = data;
-        //});
+        $scope.persons = $rootScope.People;
 
-        Person.getAll({ query: "$select=Id,FullName &$filter=IsActive eq true" }).$promise.then(function(res) {
-            $scope.persons = res.value;
-        });
-
-        OrgUnit.get(function (data) {
-            $scope.orgUnits = data.value;
-        });
+        $scope.orgUnits = $rootScope.OrgUnits;
 
         $scope.substitutes = {
             dataSource: {
@@ -414,6 +406,7 @@
             }, function () {
 
             });
+
         };
 
         $scope.createNewSubstitute = function () {
