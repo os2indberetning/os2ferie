@@ -72,11 +72,7 @@ namespace OS2Indberetning.Controllers
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
-
-            if (!Repo.AsQueryable().Any(lp => lp.PersonId == LicensePlate.PersonId))
-            {
-                LicensePlate.IsPrimary = true;
-            }
+            LicensePlate = _plateService.HandlePost(LicensePlate);
 
             return base.Post(LicensePlate);
         }
@@ -124,19 +120,7 @@ namespace OS2Indberetning.Controllers
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
-            if (plate != null && plate.IsPrimary)
-            {
-                // Delete the plate. Save the result.
-                var res = base.Delete(key);
-                // Find a new plate to make primary.
-                var newPrimary = Repo.AsQueryable().FirstOrDefault(lp => lp.PersonId == plate.PersonId);
-                if (newPrimary != null)
-                {
-                    _plateService.MakeLicensePlatePrimary(newPrimary.Id);
-                }
-                // Make the new plate primary and return the result of the delete action.
-                return res;
-            }
+            _plateService.HandleDelete(plate);           
 
             return base.Delete(key);
         }

@@ -16,8 +16,7 @@
             });
 
             $scope.substitute = data.value[0]; // This is bad, but can't change the service
-
-
+            $scope.orgUnit = $scope.substitute.OrgUnit;
             $scope.person[0] = $scope.substitute.Sub;
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000);
             $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000);

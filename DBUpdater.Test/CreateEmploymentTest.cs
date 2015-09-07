@@ -89,7 +89,7 @@ namespace DBUpdater.Test
                 Leder = true,
                 Stillingsbetegnelse = "Udvikler",
                 AnsaettelsesDato = new DateTime(2015, 4, 28),
-                OphoersDato = new DateTime(2015,5,12)
+                OphoersDato = new DateTime(2015, 5, 12)
             };
 
             _uut.CreateEmployment(empl, 1);
@@ -134,23 +134,6 @@ namespace DBUpdater.Test
         }
 
         [Test]
-        public void CreateEmployment_WithNonExistingPerson_ShouldThrowException()
-        {
-            var empl = new Employee()
-            {
-                LOSOrgId = 1,
-                AnsatForhold = "1",
-                EkstraCiffer = 1,
-                Leder = true,
-                Stillingsbetegnelse = "Udvikler",
-                AnsaettelsesDato = new DateTime(2015, 4, 28),
-                OphoersDato = new DateTime(2015, 5, 12)
-            };
-
-            Assert.Throws<Exception>(() => _uut.CreateEmployment(empl,10));
-        }
-
-        [Test]
         public void CreateEmployment_WithNonExistingOrgUnit_ShouldThrowException()
         {
             var empl = new Employee()
@@ -167,7 +150,7 @@ namespace DBUpdater.Test
             Assert.Throws<Exception>(() => _uut.CreateEmployment(empl, 10));
         }
 
-        
+
 
     }
 }

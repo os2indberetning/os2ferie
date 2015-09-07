@@ -305,6 +305,14 @@
     <Compile Include="Migrations\201508120903395_CreateIndexes.Designer.cs">
       <DependentUpon>201508120903395_CreateIndexes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508180852198_AddedIsReturnTripToDriveReport.cs" />
+    <Compile Include="Migrations\201508180852198_AddedIsReturnTripToDriveReport.Designer.cs">
+      <DependentUpon>201508180852198_AddedIsReturnTripToDriveReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508180900459_ChangedIsReturnTripOnDriveReportToIsRoundTrip.cs" />
+    <Compile Include="Migrations\201508180900459_ChangedIsReturnTripOnDriveReportToIsRoundTrip.Designer.cs">
+      <DependentUpon>201508180900459_ChangedIsReturnTripOnDriveReportToIsRoundTrip.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -499,6 +507,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201508120903395_CreateIndexes.resx">
       <DependentUpon>201508120903395_CreateIndexes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508180852198_AddedIsReturnTripToDriveReport.resx">
+      <DependentUpon>201508180852198_AddedIsReturnTripToDriveReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508180900459_ChangedIsReturnTripOnDriveReportToIsRoundTrip.resx">
+      <DependentUpon>201508180900459_ChangedIsReturnTripOnDriveReportToIsRoundTrip.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

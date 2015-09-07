@@ -20,10 +20,16 @@
 
        $scope.orgUnitAutoCompleteOptions = {
            filter: "contains",
+           select: function (e) {
+               $scope.orgUnit.chosenId = this.dataItem(e.item.index()).Id;
+           }
        }
 
        $scope.personAutoCompleteOptions = {
            filter: "contains",
+           select: function (e) {
+               $scope.person.chosenId = this.dataItem(e.item.index()).Id;
+           }
        };
 
        RateType.getAll().$promise.then(function (res) {
@@ -79,10 +85,10 @@
            var url = "/odata/DriveReports?leaderId=" + personId + "&status=Accepted" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints";
            var filters = "&$filter=DriveDateTimestamp ge " + from + " and DriveDateTimestamp le " + to;
            if (fullName != undefined && fullName != "") {
-               filters += " and FullName eq '" + fullName + "'";
+               filters += " and PersonId eq " + $scope.person.chosenId;
            }
            if (longDescription != undefined && longDescription != "") {
-               filters += " and Employment/OrgUnit/LongDescription eq '" + longDescription + "'";
+               filters += " and Employment/OrgUnitId eq " + $scope.orgUnit.chosenId;
            }
            var result = url + filters;
            return result;
@@ -206,14 +212,19 @@
                        if (data.IsOldMigratedReport) {
                            globe = "<div class='inline pull-right margin-right-5' kendo-tooltip k-content=\"'Denne indberetning er overført fra eIndberetning og der kan ikke genereres en rute på et kort'\"><i class='fa fa-circle-thin fa-2x'></i></a></div>";
                        }
-                       var result = toolTip + globe;
+                       var roundTrip = "";
+                       if (data.IsRoundTrip) {
+                           roundTrip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'Ruten er tur/retur'\"><i class='fa fa-exchange fa-2x'></i></div>";
+                       }
+
+                       var result = toolTip + roundTrip + globe;
                        var comment = data.UserComment != null ? data.UserComment : "Ingen kommentar angivet";
 
                        if (data.KilometerAllowance != "Read") {
                            return result;
                        } else {
                            if (data.IsFromApp) {
-                               toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + comment + "'\">Indberettet fra mobil app</div>";
+                               toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">Indberettet fra mobil app</div>";
                                result = toolTip + globe;
                                return result;
                            } else {

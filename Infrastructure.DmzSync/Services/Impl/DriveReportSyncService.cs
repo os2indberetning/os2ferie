@@ -56,6 +56,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                 Console.WriteLine("Syncing report " + i + " of " + max + " from DMZ.");
                 var rate = _rateRepo.AsQueryable().First(x => x.Id.Equals(dmzReport.RateId));
                 var points = new List<DriveReportPoint>();
+                var viaPoints = new List<DriveReportPoint>();
                 for (var j = 0; j < dmzReport.Route.GPSCoordinates.Count; j++)
                 {
                     var gpsCoord = dmzReport.Route.GPSCoordinates.ToArray()[j];
@@ -66,6 +67,25 @@ namespace Infrastructure.DmzSync.Services.Impl
                         Latitude = gpsCoord.Latitude,
                         Longitude = gpsCoord.Longitude,
                     });
+
+                    if (gpsCoord.IsViaPoint)
+                    {
+                        var address = _coordinates.GetAddressFromCoordinates(new Address
+                        {
+                            Latitude = gpsCoord.Latitude,
+                            Longitude = gpsCoord.Longitude
+                        });
+
+                        viaPoints.Add(new DriveReportPoint()
+                        {
+                            Latitude = gpsCoord.Latitude,
+                            Longitude = gpsCoord.Longitude,
+                            StreetName = address.StreetName,
+                            StreetNumber = address.StreetNumber,
+                            ZipCode = address.ZipCode,
+                            Town = address.Town,
+                        });
+                    }
                 }
 
                 var licensePlate = _licensePlateRepo.AsQueryable().FirstOrDefault(x => x.PersonId.Equals(dmzReport.ProfileId) && x.IsPrimary);
@@ -93,6 +113,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                     FullName = dmzReport.Profile.FullName,
                     LicensePlate = plate,
                     Comment = "",
+                    DriveReportPoints = viaPoints
                 };
 
                 newReport.RouteGeometry = GeoService.Encode(points);

@@ -19,7 +19,7 @@ namespace DmzSync.Test
     {
 
         private ISyncService _uut;
-        private IGenericRepository<Person> _masterRepoMock; 
+        private IGenericRepository<Person> _masterRepoMock;
         private IGenericRepository<Profile> _dmzRepoMock;
         private List<Profile> _dmzProfileList = new List<Profile>();
         private List<Person> _masterPersonList = new List<Person>();
@@ -31,7 +31,7 @@ namespace DmzSync.Test
             _dmzRepoMock = NSubstitute.Substitute.For<IGenericRepository<Profile>>();
             _masterRepoMock = NSubstitute.Substitute.For<IGenericRepository<Person>>();
             _personServiceMock = NSubstitute.Substitute.For<IPersonService>();
-          
+
 
             _dmzRepoMock.WhenForAnyArgs(x => x.Delete(new Profile())).Do(p => _dmzProfileList.Remove(p.Arg<Profile>()));
 
@@ -49,6 +49,7 @@ namespace DmzSync.Test
                 new Person()
                 {
                     Id = 1,
+                    IsActive = true,
                     FirstName = "Test",
                     LastName = "Testesen",
                     Initials = "TT",
@@ -71,6 +72,7 @@ namespace DmzSync.Test
                 {
                     Id = 2,
                     FirstName = "Lars",
+                    IsActive = true,
                     LastName = "Testesen",
                     Initials = "LT",
                     FullName = "Lars Testesen [LT]",
@@ -91,6 +93,7 @@ namespace DmzSync.Test
                 new Person()
                 {
                     Id = 3,
+                   IsActive = true,
                     FirstName = "Preben",
                     LastName = "Testesen",
                     Initials = "PT",
@@ -115,19 +118,19 @@ namespace DmzSync.Test
             _masterRepoMock.AsQueryable().ReturnsForAnyArgs(_masterPersonList.AsQueryable());
             _dmzRepoMock.AsQueryable().ReturnsForAnyArgs(_dmzProfileList.AsQueryable());
 
-            _uut = new PersonSyncService(_dmzRepoMock,_masterRepoMock,_personServiceMock);
+            _uut = new PersonSyncService(_dmzRepoMock, _masterRepoMock, _personServiceMock);
         }
 
         [Test]
-        public void ClearDmz_ShouldCallDelete_OnceForEachPerson()
+        public void ClearDmz_ShouldCallDeleteRange()
         {
             _dmzProfileList.Add(new Profile());
             _dmzProfileList.Add(new Profile());
             _dmzProfileList.Add(new Profile());
             var numberOfReceivedCalls = 0;
-            _dmzRepoMock.WhenForAnyArgs(x => x.Delete(new Profile())).Do(p => numberOfReceivedCalls++);
+            _dmzRepoMock.WhenForAnyArgs(x => x.DeleteRange(_dmzProfileList)).Do(p => numberOfReceivedCalls++);
             _uut.ClearDmz();
-            Assert.AreEqual(3, numberOfReceivedCalls);
+            Assert.AreEqual(1, numberOfReceivedCalls);
         }
 
         [Test]

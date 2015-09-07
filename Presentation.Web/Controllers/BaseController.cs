@@ -39,7 +39,7 @@ namespace OS2Indberetning.Controllers
             base.Initialize(requestContext);
 
 #if DEBUG
-            string[] httpUser = @"syddjursnet\jbp".Split('\\'); // Fissirul Lehmann - administrator
+            string[] httpUser = @"syddjursnet\hshu".Split('\\'); // Fissirul Lehmann - administrator
 #else
                 string[] httpUser = User.Identity.Name.Split('\\');                
 #endif

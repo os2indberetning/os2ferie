@@ -160,11 +160,35 @@ namespace DBUpdater
                 personToInsert.FullName = personToInsert.FirstName + " " + personToInsert.LastName + " [" + personToInsert.Initials + "]";
                 personToInsert.Mail = employee.Email ?? "";
                 personToInsert.IsActive = true;
-
-
             }
             _personRepo.Save();
 
+            /**
+             * We need the person id before we can attach personal addresses
+             * so we loop through the distinct employees once again and
+             * look up the created persons
+             */
+            i = 0;
+            foreach (var employee in distinctEmpls)
+            {
+                if (i%50 == 0)
+                {
+                    Console.WriteLine("Adding home address to person " + i + " out of " + distinctEmpls.Count());
+                }
+                i++;
+                var personToInsert = _personRepo.AsQueryable().First(x => x.CprNumber == employee.CPR);
+                UpdateHomeAddress(employee, personToInsert.Id);
+                if (i % 500 == 0)
+                {
+                    _personalAddressRepo.Save();
+                }
+            }
+            _personalAddressRepo.Save();
+
+            //Sets all employments to end now in the case there was
+            //one day where the updater did not run and the employee
+            //has been removed from the latest MDM view we are working on
+            //The end date will be adjusted in the next loop
             foreach (var employment in _emplRepo.AsQueryable())
             {
                 employment.EndDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
@@ -177,12 +201,15 @@ namespace DBUpdater
                 i++;
                 if (i % 10 == 0)
                 {
-                    Console.WriteLine("Adding employment and address to person " + i + " of " + empls.Count());
+                    Console.WriteLine("Adding employment to person " + i + " of " + empls.Count());
                 }
                 var personToInsert = _personRepo.AsQueryable().First(x => x.CprNumber == employee.CPR);
 
                 CreateEmployment(employee, personToInsert.Id);
-                UpdateHomeAddress(employee, personToInsert.Id);
+                if (i%500 == 0)
+                {
+                    _emplRepo.Save();
+                }
             }
             _personalAddressRepo.Save();
             _emplRepo.Save();
@@ -310,6 +337,8 @@ namespace DBUpdater
                 homeAddr.StreetNumber = launderedAddress.StreetNumber;
                 homeAddr.ZipCode = launderedAddress.ZipCode;
                 homeAddr.Town = addressToLaunder.Town;
+                homeAddr.Latitude = addressToLaunder.Latitude ?? "";
+                homeAddr.Longitude = addressToLaunder.Longitude ?? "";
             }
         }
 

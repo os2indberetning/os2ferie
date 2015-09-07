@@ -10,6 +10,8 @@ namespace Core.DmzModel
 
         public int RouteId { get; set; }
 
+        public bool IsViaPoint { get; set; }
+
         public virtual Route Route { get; set; }
     }
 }

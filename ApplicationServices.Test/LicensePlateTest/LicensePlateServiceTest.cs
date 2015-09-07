@@ -11,6 +11,7 @@ using Core.DomainModel;
 using Core.DomainServices;
 using NSubstitute;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace ApplicationServices.Test.LicensePlateTest
 {
@@ -18,12 +19,14 @@ namespace ApplicationServices.Test.LicensePlateTest
     public class LicensePlateServiceTest
     {
         private ILicensePlateService uut;
-
+        private IGenericRepository<LicensePlate> _repoMock;
+            
+            
         [Test]
         public void MakeLicensePlatePrimary_ShouldSetPrimaryTrue_RestFalse()
         {
-            var repoMock = NSubstitute.Substitute.For<IGenericRepository<LicensePlate>>();
-            repoMock.AsQueryable().ReturnsForAnyArgs(new List<LicensePlate>()
+            _repoMock = NSubstitute.Substitute.For<IGenericRepository<LicensePlate>>();
+            _repoMock.AsQueryable().ReturnsForAnyArgs(new List<LicensePlate>()
             {
                 new LicensePlate()
                 {
@@ -49,11 +52,11 @@ namespace ApplicationServices.Test.LicensePlateTest
 
             }.AsQueryable());
 
-            uut = new LicensePlateService(repoMock);
+            uut = new LicensePlateService(_repoMock);
             uut.MakeLicensePlatePrimary(2);
-            Assert.IsFalse(repoMock.AsQueryable().ElementAt(0).IsPrimary);
-            Assert.IsFalse(repoMock.AsQueryable().ElementAt(2).IsPrimary);
-            Assert.IsTrue(repoMock.AsQueryable().ElementAt(1).IsPrimary);
+            Assert.IsFalse(_repoMock.AsQueryable().ElementAt(0).IsPrimary);
+            Assert.IsFalse(_repoMock.AsQueryable().ElementAt(2).IsPrimary);
+            Assert.IsTrue(_repoMock.AsQueryable().ElementAt(1).IsPrimary);
         }
 
         [Test]
@@ -182,6 +185,84 @@ namespace ApplicationServices.Test.LicensePlateTest
 
             uut = new LicensePlateService(repoMock);
             Assert.IsFalse(uut.MakeLicensePlatePrimary(2));
+        }
+
+        [Test]
+        public void NoExistingPlates_PostedPlate_ShouldBeMadePrimary()
+        {
+            _repoMock = NSubstitute.Substitute.For<IGenericRepository<LicensePlate>>();
+            _repoMock.AsQueryable().ReturnsForAnyArgs(new List<LicensePlate>(){}.AsQueryable());
+            uut = new LicensePlateService(_repoMock);
+            var plate = new LicensePlate(){PersonId = 1};
+            uut.HandlePost(plate);
+            Assert.AreEqual(true,plate.IsPrimary);
+        }
+
+        [Test]
+        public void OneExistingPlate_PostedPlate_ShouldNotBeMadePrimary()
+        {
+            _repoMock = NSubstitute.Substitute.For<IGenericRepository<LicensePlate>>();
+            _repoMock.AsQueryable().ReturnsForAnyArgs(new List<LicensePlate>()
+            {
+                new LicensePlate()
+                {
+                    IsPrimary = true,
+                    PersonId = 1
+                }
+            }.AsQueryable());
+            uut = new LicensePlateService(_repoMock);
+            var plate = new LicensePlate() {PersonId = 1};
+            uut.HandlePost(plate);
+            Assert.AreEqual(false,plate.IsPrimary);
+
+        }
+
+        [Test]
+        public void TwoExistingPlates_DeletePrimary_RemainingShouldBeMadePrimary()
+        {
+            _repoMock = NSubstitute.Substitute.For<IGenericRepository<LicensePlate>>();
+            _repoMock.AsQueryable().ReturnsForAnyArgs(new List<LicensePlate>()
+            {
+                new LicensePlate()
+                {
+                    Id = 1,
+                    IsPrimary = true,
+                    PersonId = 1
+                },
+                new LicensePlate()
+                {
+                    Id = 2,
+                    IsPrimary = false,
+                    PersonId = 1
+                }
+            }.AsQueryable());
+            uut = new LicensePlateService(_repoMock);
+            uut.HandleDelete(_repoMock.AsQueryable().First(x => x.Id == 1));
+            Assert.AreEqual(true,_repoMock.AsQueryable().First(x => x.Id == 2).IsPrimary);
+        }
+
+        [Test]
+        public void TwoExistingPlates_DeleteNonPrimary_RemainingShouldStillBePrimary()
+        {
+            _repoMock = NSubstitute.Substitute.For<IGenericRepository<LicensePlate>>();
+            _repoMock.AsQueryable().ReturnsForAnyArgs(new List<LicensePlate>()
+            {
+                new LicensePlate()
+                {
+                    Id = 1,
+                    IsPrimary = true,
+                    PersonId = 1
+                },
+                new LicensePlate()
+                {
+                    Id = 2,
+                    IsPrimary = false,
+                    PersonId = 1
+                }
+            }.AsQueryable());
+            uut = new LicensePlateService(_repoMock);
+            uut.HandleDelete(_repoMock.AsQueryable().First(x => x.Id == 2));
+            Assert.AreEqual(true, _repoMock.AsQueryable().First(x => x.Id == 1).IsPrimary);
         }
     }
 }

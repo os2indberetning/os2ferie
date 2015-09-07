@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.Web", "Presentation.Web\Presentation.Web.csproj", "{2B953FAB-7F22-4884-9325-2A5C53519F3D}"
 EndProject
@@ -164,8 +164,5 @@ Global
 		{F0C6C478-3A6A-405C-A193-9C498250CF2E} = {38A093DE-ECBD-4C54-9376-E71805D2C06B}
 		{A7C2603A-669B-408D-842F-08DB1E08F166} = {38A093DE-ECBD-4C54-9376-E71805D2C06B}
 		{3D8D8AA6-8056-492B-BDEC-4450D0ED4A0B} = {38A093DE-ECBD-4C54-9376-E71805D2C06B}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

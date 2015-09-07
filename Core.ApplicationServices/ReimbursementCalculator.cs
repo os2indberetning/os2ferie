@@ -189,6 +189,14 @@ namespace Core.ApplicationServices
                 report.Distance = 0;
             }
 
+
+            // Multiply the distance by two if the report is a return trip
+            if (report.IsRoundTrip == true)
+            {
+                report.Distance *= 2;
+            }
+
+
             SetAmountToReimburse(report);
 
             return report;
