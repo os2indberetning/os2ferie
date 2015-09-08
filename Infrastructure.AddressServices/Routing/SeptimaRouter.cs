@@ -104,11 +104,11 @@ namespace Infrastructure.AddressServices.Routing
                 throw up;
             }
 
-            if (!((origin.Latitude.Length - origin.Latitude.IndexOf(".") + 1) <= 5))
-            {
-                origin.Latitude = origin.Latitude.Substring(0, origin.Latitude.IndexOf('.') + 1 + AddressCoordinates.CoordDecimals);
-                origin.Longitude = origin.Longitude.Substring(0, origin.Longitude.IndexOf('.') + 1 + AddressCoordinates.CoordDecimals);
-            }
+            //if (!((origin.Latitude.Length - origin.Latitude.IndexOf(".") + 1) <= 5))
+            //{
+            //    origin.Latitude = origin.Latitude.Substring(0, origin.Latitude.IndexOf('.') + 1 + AddressCoordinates.CoordDecimals);
+            //    origin.Longitude = origin.Longitude.Substring(0, origin.Longitude.IndexOf('.') + 1 + AddressCoordinates.CoordDecimals);
+            //}
 
             query = "loc=" + origin.Latitude + "," + origin.Longitude;
 

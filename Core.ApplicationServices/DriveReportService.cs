@@ -274,7 +274,7 @@ namespace Core.ApplicationServices
             //Find an org unit where the person is not the leader, and then find the leader of that org unit to attach to the drive report
             var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == driveReport.Employment.OrgUnitId);
             var leaderOfOrgUnit =
-                _employmentRepository.AsQueryable().FirstOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader);
+                _employmentRepository.AsQueryable().FirstOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader && e.StartDateTimestamp < currentDateTimestamp && (e.EndDateTimestamp > currentDateTimestamp || e.EndDateTimestamp == 0));
 
             if (orgUnit == null)
             {
