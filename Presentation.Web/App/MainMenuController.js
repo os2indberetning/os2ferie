@@ -16,18 +16,5 @@ angular.module("application").controller("MainMenuController", [
            });
        }
 
-        if ($rootScope.OrgUnits == undefined) {
-            $rootScope.OrgUnits = OrgUnit.get({ query: "$select=Id, LongDescription, HasAccessToFourKmRule" }).$promise.then(function(res) {
-                $rootScope.OrgUnits = res.value;
-            });
-        }
-
-        if ($rootScope.People == undefined) {
-            $rootScope.People = Person.getAll({ query: "$select=Id,FullName,IsActive" }).$promise.then(function (res) {
-                $rootScope.People = res.value;
-            });
-        }
-
-
     }
 ]);
