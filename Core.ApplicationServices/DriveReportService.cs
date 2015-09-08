@@ -71,10 +71,20 @@ namespace Core.ApplicationServices
 
             if (report.KilometerAllowance != KilometerAllowance.Read)
             {
-                var pointsWithCoordinates =
-                    report.DriveReportPoints.Select((t, i) => report.DriveReportPoints.ElementAt(i))
-                        .Select(currentPoint => (DriveReportPoint) _coordinates.GetAddressCoordinates(currentPoint))
-                        .ToList();
+                var pointsWithCoordinates = new List<DriveReportPoint>();
+                foreach (var driveReportPoint in report.DriveReportPoints)
+                {
+                    if (string.IsNullOrEmpty(driveReportPoint.Latitude) || driveReportPoint.Latitude == "0" ||
+                        string.IsNullOrEmpty(driveReportPoint.Longitude) || driveReportPoint.Longitude == "0")
+                    {
+                        pointsWithCoordinates.Add(
+                            (DriveReportPoint) _coordinates.GetAddressCoordinates(driveReportPoint));
+                    }
+                    else
+                    {
+                        pointsWithCoordinates.Add(driveReportPoint);
+                    }
+                }
 
                 report.DriveReportPoints = pointsWithCoordinates;
 
