@@ -312,8 +312,31 @@ namespace Core.ApplicationServices
             }
 
             var leader = leaderOfOrgUnit.Person;
-            var sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.PersonId.Equals(s.LeaderId));
 
+            // Recursively look for substitutes in child orgs, up to the org of the actual leader.
+            // Say the actual leader is leader of orgunit 1 with children 2 and 3. Child 2 has another child 4.
+            // A report comes in for orgUnit 4. Check if leader has a substitute for that org.
+            // If not then check if leader has a substitute for org 2.
+            // If not then return the actual leader.
+            var orgToCheck = driveReport.Employment.OrgUnit;
+            Substitute sub = null;
+            var loopHasFinished = false;
+            while (!loopHasFinished)
+            {
+                sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.OrgUnitId == orgToCheck.Id && s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.PersonId.Equals(s.LeaderId));
+                if (sub != null)
+                {
+                    loopHasFinished = true;
+                }
+                else
+                {
+                    orgToCheck = orgToCheck.Parent;
+                    if (orgToCheck == null || orgToCheck.Id == orgUnit.Parent.Id)
+                    {
+                        loopHasFinished = true;
+                    }
+                }
+            }
             return sub != null ? sub.Sub : leaderOfOrgUnit.Person;
         }
 
