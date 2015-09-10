@@ -1,4 +1,4 @@
-﻿angular.module('application').controller('noLicensePlateModalController', function ($scope, $modalInstance) {
+﻿angular.module('application').controller('NoLicensePlateModalController', function ($scope, $modalInstance) {
     $scope.ok = function () {
         $modalInstance.close();        
     };

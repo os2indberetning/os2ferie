@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "$window", "$modal",
-    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, $window, $modal) {
+    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "$window", "$modal", "$location",
+    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, $window, $modal, $location) {
 
 
         $scope.ReadReportCommentHelp = $rootScope.HelpTexts.ReadReportCommentHelp.text;
@@ -447,6 +447,7 @@
             /// </summary>
             $scope.licensePlateErrorMessage = "";
             if (getKmRate($scope.DriveReport.KmRate).Type.RequiresLicensePlate && $scope.LicensePlates[0].PresentationString == "Ingen nummerplader") {
+                $scope.openNoLicensePlateModal();
                 $scope.licensePlateErrorMessage = "* Det valgte transportmiddel kræver en nummerplade.";
                 return false;
             }
@@ -952,6 +953,22 @@
 
             modalInstance.result.then(function () {
                 $scope.clearReport();
+            });
+        }
+
+        $scope.openNoLicensePlateModal = function () {
+            /// <summary>
+            /// Opens no license plate modal.
+            /// </summary>
+            /// <param name="id"></param>
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Driving/NoLicensePlateModalTemplate.html',
+                controller: 'NoLicensePlateModalController',
+                backdrop: "static",
+            });
+
+            modalInstance.result.then(function () {
+                $location.path("/settings");
             });
         }
     }
