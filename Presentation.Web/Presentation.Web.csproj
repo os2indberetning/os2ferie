@@ -25,6 +25,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <NuGetPackageImportStamp>bb2330ea</NuGetPackageImportStamp>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1196,8 +1197,8 @@
     <Content Include="App\Directives\AwsDirective.js" />
     <Content Include="App\Driving\DrivingView.html" />
     <Content Include="App\Driving\DrivingController.js" />
-    <Content Include="App\Driving\noLicensePlateModal.html" />
-    <Content Include="App\Driving\noLicensePlateModalController.js" />
+    <Content Include="App\Driving\NoLicensePlateModalTemplate.html" />
+    <Content Include="App\Driving\NoLicensePlateModalController.js" />
     <Content Include="App\MyReports\ConfirmDeleteReportController.js" />
     <Content Include="App\MyReports\ConfirmDeleteTemplate.html" />
     <Content Include="App\MyReports\EditReportTemplate.html" />
