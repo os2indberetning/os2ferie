@@ -25,7 +25,7 @@ namespace Mail
         {
             _mailService = mailService;
             _repo = repo;
-            log4net.Config.XmlConfigurator.Configure();
+            //log4net.Config.XmlConfigurator.Configure();
             Logger.Info("MailService startet.");
         }
 
