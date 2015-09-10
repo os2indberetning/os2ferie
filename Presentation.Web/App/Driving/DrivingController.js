@@ -6,6 +6,7 @@
         $scope.ReadReportCommentHelp = $rootScope.HelpTexts.ReadReportCommentHelp.text;
         $scope.PurposeHelpText = $rootScope.HelpTexts.PurposeHelpText.text;
         $scope.fourKmRuleHelpText = $rootScope.HelpTexts.FourKmRuleHelpText.text;
+        $scope.noLicensePlateHelpText = $rootScope.HelpTexts.NoLicensePlateHelpText.text;
 
         // Setup functions in scope.
         $scope.Number = Number;
@@ -247,6 +248,7 @@
         // Load user's license plates.
         var plates = currentUser.LicensePlates.slice(0);
         if (plates.length > 0) {
+            $scope.userHasLicensePlate = true;
             angular.forEach(plates, function (value, key) {
                 if (value.Description != "") {
                     value.PresentationString = value.Plate + " - " + value.Description;
@@ -256,6 +258,7 @@
             });
             $scope.LicensePlates = plates;
         } else {
+            $scope.userHasLicensePlate = false;
             $scope.LicensePlates = [{ PresentationString: "Ingen nummerplader", Plate: "0000000" }];
         }
 

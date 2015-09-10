@@ -45,8 +45,9 @@
             <div class="row m-b-l">
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <label for="">Nummerplade</label>
+                        <label for="">Nummerplade</label> <span ng-show="!userHasLicensePlate" popover="{{noLicensePlateHelpText}}" popover-trigger="mouseenter" popover-append-to-body='true' class="info-popup"><i class="fa fa-question"></i></span> 
                         <select ng-disabled="!showLicensePlate" class="fill-width" kendo-drop-down-list="container.LicensePlateDropDown" ng-model="DriveReport.LicensePlate" id="" k-data-source="LicensePlates" k-data-text-field="'PresentationString'" k-data-value-field="'Plate'" k-placeholder="'Brugerens nummerplade(r)'"></select>
+                       
                         <label class="text-danger" ng-if="licensePlateErrorMessage.length > 0" ng-bind="licensePlateErrorMessage"></label>
                     </div>
                 </div>
