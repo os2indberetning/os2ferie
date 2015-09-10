@@ -75,6 +75,11 @@ namespace DBUpdater
             var i = 0;
             foreach (var org in orgs)
             {
+                if(org.LOSOrgId == 884369)
+                {
+                    var a = 2;
+                    var b = 2 * a;
+                }
                 i++;
                 if (i % 10 == 0)
                 {
@@ -100,12 +105,10 @@ namespace DBUpdater
                 orgToInsert.HasAccessToFourKmRule = false;
                 orgToInsert.OrgId = org.LOSOrgId;
 
-                orgToInsert.Address = workAddress;
-
-                if (workAddress.Id != 0)
+                // If WorkAddress.Id is 0, it means that the WorkAddress has changed since the update was last run.
+                if(workAddress.Id == 0)
                 {
-                    orgToInsert.Address = null;
-                    orgToInsert.AddressId = workAddress.Id;
+                    orgToInsert.Address = workAddress;
                 }
 
 
@@ -382,7 +385,18 @@ namespace DBUpdater
 
             var existingOrg = _orgRepo.AsQueryable().FirstOrDefault(x => x.OrgId.Equals(org.LOSOrgId));
 
-            if (existingOrg != null)
+            // If the address hasn't changed then set the Id to be the same as the existing one.
+            // That way a new address won't be created in the database.
+            // If the address is not the same as the existing one,
+            // Then the Id will be 0, and a new address will be created in the database.
+            if (existingOrg != null &&
+                existingOrg.Address.StreetName == launderedAddress.StreetName
+                && existingOrg.Address.StreetNumber == launderedAddress.StreetNumber
+                && existingOrg.Address.ZipCode == launderedAddress.ZipCode
+                && existingOrg.Address.Town == launderedAddress.Town
+                && existingOrg.Address.Latitude == launderedAddress.Latitude
+                && existingOrg.Address.Longitude == launderedAddress.Longitude
+                && existingOrg.Address.Description == launderedAddress.Description)
             {
                 launderedAddress.Id = existingOrg.AddressId;
             }
