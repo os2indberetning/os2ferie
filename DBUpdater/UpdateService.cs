@@ -75,11 +75,6 @@ namespace DBUpdater
             var i = 0;
             foreach (var org in orgs)
             {
-                if(org.LOSOrgId == 884369)
-                {
-                    var a = 2;
-                    var b = 2 * a;
-                }
                 i++;
                 if (i % 10 == 0)
                 {
@@ -97,12 +92,12 @@ namespace DBUpdater
                 if (orgToInsert == null)
                 {
                     orgToInsert = _orgRepo.Insert(new OrgUnit());
+                    orgToInsert.HasAccessToFourKmRule = false;
                 }
 
                 orgToInsert.Level = org.Level;
                 orgToInsert.LongDescription = org.Navn;
                 orgToInsert.ShortDescription = org.KortNavn;
-                orgToInsert.HasAccessToFourKmRule = false;
                 orgToInsert.OrgId = org.LOSOrgId;
 
                 // If WorkAddress.Id is 0, it means that the WorkAddress has changed since the update was last run.
