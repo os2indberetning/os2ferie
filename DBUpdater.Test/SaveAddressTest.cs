@@ -84,7 +84,7 @@ namespace DBUpdater.Test
             _actualLaundererMock.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-                _personalAddressRepoMock, _actualLaundererMock, _coordinatesMock, _dataProviderMock, _mailSenderMock);
+                _personalAddressRepoMock, _actualLaundererMock, _coordinatesMock, _dataProviderMock, _mailSenderMock, NSubstitute.Substitute.For<IAddressHistoryService>());
 
             _orgUnitRepoMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
             {

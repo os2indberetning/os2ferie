@@ -9,6 +9,6 @@ namespace Core.DomainModel
 {
     public class WorkAddress : Address
     {
-       
+        public int OrgUnitId { get; set; }
     }
 }

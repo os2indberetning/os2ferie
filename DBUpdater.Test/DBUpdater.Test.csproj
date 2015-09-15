@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressHistoryServiceTests.cs" />
     <Compile Include="SaveAddressTest.cs" />
     <Compile Include="CreateEmploymentTest.cs" />
     <Compile Include="MigrateEmployeesTest.cs" />
