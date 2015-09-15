@@ -71,7 +71,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressHistoryService.cs" />
     <Compile Include="DataProvider.cs" />
+    <Compile Include="IAddressHistoryService.cs" />
     <Compile Include="IDBUpdaterDataProvider.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\Organisation.cs" />

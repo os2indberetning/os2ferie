@@ -7,7 +7,8 @@ namespace Core.DomainModel
         Home,
         Work,
         AlternativeHome,
-        AlternativeWork
+        AlternativeWork,
+        OldHome
     }
 
     public class PersonalAddress : Address

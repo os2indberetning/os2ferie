@@ -30,8 +30,9 @@ namespace DBUpdater
         private readonly IAddressCoordinates _coordinates;
         private readonly IDbUpdaterDataProvider _dataProvider;
         private readonly IMailSender _mailSender;
+        private readonly IAddressHistoryService _historyService;
 
-        public UpdateService(IGenericRepository<Employment> emplRepo, IGenericRepository<OrgUnit> orgRepo, IGenericRepository<Person> personRepo, IGenericRepository<CachedAddress> cachedRepo, IGenericRepository<PersonalAddress> personalAddressRepo, IAddressLaunderer actualLaunderer, IAddressCoordinates coordinates, IDbUpdaterDataProvider dataProvider, IMailSender mailSender)
+        public UpdateService(IGenericRepository<Employment> emplRepo, IGenericRepository<OrgUnit> orgRepo, IGenericRepository<Person> personRepo, IGenericRepository<CachedAddress> cachedRepo, IGenericRepository<PersonalAddress> personalAddressRepo, IAddressLaunderer actualLaunderer, IAddressCoordinates coordinates, IDbUpdaterDataProvider dataProvider, IMailSender mailSender, IAddressHistoryService historyService)
         {
             _emplRepo = emplRepo;
             _orgRepo = orgRepo;
@@ -42,6 +43,7 @@ namespace DBUpdater
             _coordinates = coordinates;
             _dataProvider = dataProvider;
             _mailSender = mailSender;
+            _historyService = historyService;
         }
 
         /// <summary>
@@ -100,9 +102,11 @@ namespace DBUpdater
                 orgToInsert.ShortDescription = org.KortNavn;
                 orgToInsert.OrgId = org.LOSOrgId;
 
+                var addressChanged = false;
                 // If WorkAddress.Id is 0, it means that the WorkAddress has changed since the update was last run.
                 if(workAddress.Id == 0)
                 {
+                    addressChanged = true;
                     orgToInsert.Address = workAddress;
                 }
 
@@ -113,6 +117,13 @@ namespace DBUpdater
                     orgToInsert.ParentId = _orgRepo.AsQueryable().Single(x => x.OrgId == org.ParentLosOrgId).Id;
                 }
                 _orgRepo.Save();
+
+                if (addressChanged)
+                {
+                    workAddress.OrgUnitId = orgToInsert.Id;
+                    _historyService.AddWorkAddress(workAddress);
+                }
+            
             }
 
             Console.WriteLine("Done migrating organisations.");
@@ -320,6 +331,7 @@ namespace DBUpdater
                 Town = addressToLaunder.Town,
                 Latitude = addressToLaunder.Latitude ?? "",
                 Longitude = addressToLaunder.Longitude ?? "",
+                Description = addressToLaunder.Description
             };
 
             var homeAddr = _personalAddressRepo.AsQueryable().FirstOrDefault(x => x.PersonId.Equals(personId) &&
@@ -331,12 +343,27 @@ namespace DBUpdater
             }
             else
             {
-                homeAddr.StreetName = launderedAddress.StreetName;
-                homeAddr.StreetNumber = launderedAddress.StreetNumber;
-                homeAddr.ZipCode = launderedAddress.ZipCode;
-                homeAddr.Town = addressToLaunder.Town;
-                homeAddr.Latitude = addressToLaunder.Latitude ?? "";
-                homeAddr.Longitude = addressToLaunder.Longitude ?? "";
+                if (!(homeAddr.StreetName == launderedAddress.StreetName
+                    && homeAddr.StreetNumber == launderedAddress.StreetNumber
+                    && homeAddr.ZipCode == launderedAddress.ZipCode
+                    && homeAddr.Town == launderedAddress.Town
+                    && homeAddr.Latitude == launderedAddress.Latitude
+                    && homeAddr.Longitude == launderedAddress.Longitude))
+                {
+                    // Address has changed
+                    // Change type of current (The one about to be changed) home address to OldHome.
+                    // Is done in loop because there was an error that created one or more home addresses for the same person.
+                    // This will make sure all home addresses are set to old if more than one exists.
+                    foreach (var addr in _personalAddressRepo.AsQueryable().Where(x => x.PersonId.Equals(personId) && x.Type == PersonalAddressType.Home).ToList())
+                    {
+                        addr.Type = PersonalAddressType.OldHome;;
+                    }
+                    
+                    // Update actual current home address.
+                    _personalAddressRepo.Insert(launderedAddress);
+                    _personalAddressRepo.Save();
+                    _historyService.AddHomeAddress(launderedAddress);
+                }
             }
         }
 
@@ -384,8 +411,9 @@ namespace DBUpdater
             // That way a new address won't be created in the database.
             // If the address is not the same as the existing one,
             // Then the Id will be 0, and a new address will be created in the database.
-            if (existingOrg != null &&
-                existingOrg.Address.StreetName == launderedAddress.StreetName
+            if (existingOrg != null
+                && existingOrg.Address != null
+                && existingOrg.Address.StreetName == launderedAddress.StreetName
                 && existingOrg.Address.StreetNumber == launderedAddress.StreetNumber
                 && existingOrg.Address.ZipCode == launderedAddress.ZipCode
                 && existingOrg.Address.Town == launderedAddress.Town
@@ -394,6 +422,10 @@ namespace DBUpdater
                 && existingOrg.Address.Description == launderedAddress.Description)
             {
                 launderedAddress.Id = existingOrg.AddressId;
+            }
+            else
+            {
+                var a = 2;
             }
 
             return launderedAddress;

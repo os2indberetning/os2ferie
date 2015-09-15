@@ -6,6 +6,7 @@ using System.Web.Http;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Impl;
 using Core.ApplicationServices.MailerService.Interface;
+using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices;
