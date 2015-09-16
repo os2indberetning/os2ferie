@@ -128,7 +128,7 @@
                        return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                    },
                },
-               pageSize: 20,
+               pageSize: 50,
                serverPaging: true,
                serverAggregates: false,
                serverSorting: true,
