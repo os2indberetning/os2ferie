@@ -133,7 +133,7 @@
                        return data.value;
                    },
                },
-               pageSize: 20,
+               pageSize: 50,
                serverPaging: true,
                serverAggregates: false,
                serverSorting: true,

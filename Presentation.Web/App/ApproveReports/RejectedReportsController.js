@@ -113,7 +113,7 @@
 
                    },
                },
-               pageSize: 20,
+               pageSize: 50,
                serverPaging: true,
                serverSorting: true,
                serverFiltering: true,
