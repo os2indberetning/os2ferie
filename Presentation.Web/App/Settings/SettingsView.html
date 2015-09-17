@@ -176,8 +176,8 @@
                     <label for="">Send mig mailadviseringer om indberetninger til godkendelse:</label>
                     <div class="seperator"></div>
                     <div class="btn-group">
-                        <label class="btn btn-success" ng-class="mailAdvice == 'No' ? 'opaque' : ''" ng-click="invertRecieveMail()" ng-model="mailAdvice" btn-radio="'Yes'">Ja tak</label>
-                        <label class="btn btn-danger" ng-class="mailAdvice == 'Yes' ? 'opaque' : ''" ng-click=" invertRecieveMail()" ng-model="mailAdvice" btn-radio="'No'">Nej tak</label>
+                        <label class="btn btn-success" ng-class="mailAdvice == 'No' ? 'opaque' : ''" ng-click="setReceiveMail(true)" ng-model="mailAdvice" btn-radio="'Yes'">Ja tak</label>
+                        <label class="btn btn-danger" ng-class="mailAdvice == 'Yes' ? 'opaque' : ''" ng-click=" setReceiveMail(false)" ng-model="mailAdvice" btn-radio="'No'">Nej tak</label>
                     </div>
                 </div>
             </div>

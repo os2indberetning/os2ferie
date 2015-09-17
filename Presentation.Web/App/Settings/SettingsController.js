@@ -130,16 +130,15 @@
         }
 
 
-        $scope.invertRecieveMail = function () {
+        $scope.setReceiveMail = function (receiveMails) {
             /// <summary>
             /// Inverts choice of mail notification.
             /// </summary>
 
             $timeout(function () {
-                $scope.recieveMail = $scope.mailAdvice == "Yes";
 
                 var newPerson = new Person({
-                    RecieveMail: $scope.recieveMail
+                    RecieveMail: receiveMails
                 });
 
                 newPerson.$patch({ id: personId }, function () {
