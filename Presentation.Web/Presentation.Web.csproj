@@ -389,6 +389,7 @@
     <Content Include="App\Services\HelpTextResource.js" />
     <Content Include="App\Services\RateTypeResource.js" />
     <Content Include="App\Services\Error\ServiceError.html" />
+    <Content Include="App\Services\PersonAutocompleteResource.js" />
     <Content Include="App\Services\StandardAddressResource.js" />
     <Content Include="App\Services\OrgUnitResource.js" />
     <Content Include="App\Services\RouteContainerResource.js" />
