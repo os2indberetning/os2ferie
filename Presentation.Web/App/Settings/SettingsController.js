@@ -3,12 +3,10 @@
     function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope, $timeout) {
         $scope.gridContainer = {};
         $scope.isCollapsed = true;
-        $scope.mailAdvice = '';
         $scope.licenseplates = [];
         $scope.newLicensePlate = "";
         $scope.newLicensePlateDescription = "";
         $scope.workDistanceOverride = 0;
-        $scope.recieveMail = false;
         $scope.routes = [];
         $scope.addresses = [];
         $scope.tokens = [];
@@ -23,6 +21,7 @@
 
         var personId = $rootScope.CurrentUser.Id;
         $scope.currentPerson = $rootScope.CurrentUser;
+        $scope.mailAdvice = $scope.currentPerson.RecieveMail;
 
         $scope.showMailNotification = $rootScope.CurrentUser.IsLeader || $rootScope.CurrentUser.IsSubstitute;
 
@@ -32,14 +31,9 @@
         // Contains references to kendo ui grids.
         $scope.gridContainer = {};
 
-        $scope.recieveMail = $rootScope.CurrentUser.RecieveMail;
 
-        //Set choice of mail notification
-        if ($scope.recieveMail == true) {
-            $scope.mailAdvice = 'Yes';
-        } else {
-            $scope.mailAdvice = 'No';
-        }
+
+        
 
         //Load licenseplates
         $scope.licenseplates = $rootScope.CurrentUser.LicensePlates;
@@ -136,15 +130,15 @@
             /// </summary>
 
             $timeout(function () {
-
                 var newPerson = new Person({
                     RecieveMail: receiveMails
                 });
 
                 newPerson.$patch({ id: personId }, function () {
+                    $scope.mailAdvice = receiveMails;
                     NotificationService.AutoFadeNotification("success", "", "Valg om modtagelse af mails blev gemt");
                 }), function () {
-                    $scope.recieveMail = !$scope.recieveMail;
+
                     NotificationService.AutoFadeNotification("danger", "", "Valg om modtagelse af mails blev ikke gemt");
                 };
             });
