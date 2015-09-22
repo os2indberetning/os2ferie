@@ -1,11 +1,12 @@
 ﻿angular.module("application").controller("PendingReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "RateType", "OrgUnit", "Person", "$q", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, RateType, OrgUnit, Person, $q) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "RateType", "OrgUnit", "Person", "Autocomplete", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, RateType, OrgUnit, Person, Autocomplete) {
 
        // Load people for auto-complete textbox
-       $scope.people = [];
+       $scope.people = Autocomplete.activeUsers();
+       $scope.orgUnits = Autocomplete.orgUnits();
        $scope.person = {};
        $scope.orgUnit = {};
-       $scope.orgUnits = [];
+
 
 
 
@@ -523,72 +524,6 @@
        RateType.getAll().$promise.then(function (res) {
            $scope.rateTypes = res;
        });
-
-
-
-       var handleLoadingOfAutoCompleteData = function () {
-           $scope.gridContainer.orgsHaveLoaded = false;
-           $scope.gridContainer.peopleHaveLoaded = false;
-
-           var peopleAutoPromise = $q.defer();
-           var peopleDataPromise = $q.defer();
-           var orgsDataPromise = $q.defer();
-           var orgsAutoPromise = $q.defer();
-
-           if ($rootScope.OrgUnits == undefined) {
-               OrgUnit.get({ query: "$select=Id, LongDescription, HasAccessToFourKmRule" }).$promise.then(function (res) {
-                   $rootScope.OrgUnits = res.value;
-                   $scope.orgUnits = res.value;
-                   orgsDataPromise.resolve();
-               });
-           } else {
-               $scope.orgUnits = $rootScope.OrgUnits;
-               orgsDataPromise.resolve();
-           }
-
-           if ($rootScope.People == undefined) {
-               Person.getAll({ query: "$select=Id,FullName,IsActive" }).$promise.then(function (res) {
-                   $rootScope.People = res.value;
-                   $scope.people = res.value;
-                   peopleDataPromise.resolve();
-               });
-           } else {
-               $scope.people = $rootScope.People;
-               peopleDataPromise.resolve();
-           }
-
-           $scope.$on("kendoWidgetCreated", function (event, widget) {
-               if (widget === $scope.gridContainer.orgAutoComplete) {
-                   orgsAutoPromise.resolve();
-               }
-           });
-
-
-           $scope.$on("kendoWidgetCreated", function (event, widget) {
-               if (widget === $scope.gridContainer.peopleAutoComplete) {
-                   peopleAutoPromise.resolve();
-               }
-           });
-
-           $q.all([
-                orgsDataPromise.promise,
-                orgsAutoPromise.promise
-           ]).then(function () {
-               $scope.gridContainer.orgsHaveLoaded = true;
-               $scope.gridContainer.orgAutoComplete.dataSource.read();
-           });
-
-           $q.all([
-                peopleDataPromise.promise,
-                peopleAutoPromise.promise
-           ]).then(function () {
-               $scope.gridContainer.peopleHaveLoaded = true;
-               $scope.gridContainer.peopleAutoComplete.dataSource.read();
-           });
-       }
-
-
-       handleLoadingOfAutoCompleteData();
 
    }
 ]);

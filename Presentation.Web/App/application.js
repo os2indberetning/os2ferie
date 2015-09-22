@@ -119,24 +119,6 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
                         return $rootScope.CurrentUser;
                     }
                 }],
-                OrgUnits: ["$rootScope", "OrgUnit", function ($rootScope, OrgUnit) {
-                    if ($rootScope.OrgUnits == undefined) {
-                        return OrgUnit.get({ query: "$select=Id, LongDescription, HasAccessToFourKmRule" }).$promise.then(function (res) {
-                            $rootScope.OrgUnits = res.value;
-                        });
-                    } else {
-                        return $rootScope.OrgUnits;
-                    }
-                }],
-                People: ["$rootScope", "Person", function ($rootScope, Person) {
-                    if ($rootScope.People == undefined) {
-                        return Person.getAll({ query: "$select=Id,FullName,IsActive" }).$promise.then(function (res) {
-                            $rootScope.People = res.value;
-                        });
-                    } else {
-                        return $rootScope.People;
-                    }
-                }]
             }
         });
 }]);

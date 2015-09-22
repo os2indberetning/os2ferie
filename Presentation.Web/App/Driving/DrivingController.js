@@ -26,6 +26,7 @@
 
         var isEditingReport = ReportId > 0;
         $scope.container = {};
+        $scope.container.addressNotFound = false;
         $scope.isEditingReport = isEditingReport;
         var kendoPromise = $q.defer();
         var loadingPromises = [kendoPromise.promise];
@@ -37,14 +38,18 @@
         // Is true the first time the map is loaded to prevent filling the address textboxes with the mapstart addresses.
         // Is initially false when loading a report to edit.
         var firstMapLoad = true;
-        
+
 
         $scope.container.addressFieldOptions = {
             select: function () {
                 $timeout(function () {
                     $scope.addressInputChanged();
                 });
-            }
+            },
+            dataBound: function () {
+                $scope.container.addressNotFound = this.dataSource._data.length == 0;
+                $scope.$apply();
+            },
         }
 
         $scope.addressPlaceholderText = "Eller indtast adresse her";
@@ -210,7 +215,7 @@
                         $scope.DriveReport.Addresses.push(temp);
                     });
                     var res = "[";
-                    angular.forEach($scope.DriveReport.Addresses, function(addr, key) {
+                    angular.forEach($scope.DriveReport.Addresses, function (addr, key) {
                         res += "{name: \"" + addr.Name + "\", lat: " + addr.Latitude + ", lng: " + addr.Longitude + "},";
                     });
                     res += "]";
@@ -222,7 +227,7 @@
                             $scope.addressInputChanged();
                         }
                     });
-            
+
                 }
 
                 $scope.DriveReport.IsRoundTrip = report.IsRoundTrip;

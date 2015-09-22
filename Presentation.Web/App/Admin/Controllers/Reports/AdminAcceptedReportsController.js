@@ -1,6 +1,6 @@
 angular.module("application").controller("AdminAcceptedReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "BankAccount", "RateType",
-   function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, BankAccount, RateType) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "BankAccount", "RateType","Autocomplete",
+   function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, BankAccount, RateType, Autocomplete) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
@@ -72,8 +72,8 @@ angular.module("application").controller("AdminAcceptedReportsController", [
        $scope.people = [];
        $scope.person = {};
 
-       $scope.orgUnits = $rootScope.OrgUnits;
-       $scope.people = $rootScope.People;
+       $scope.orgUnits = Autocomplete.orgUnits();
+       $scope.people = Autocomplete.allUsers();
 
 
        $scope.clearClicked = function () {

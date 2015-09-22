@@ -1,5 +1,5 @@
 angular.module("application").controller("AdminRejectedReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "RateType", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, RateType) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "RateType","Autocomplete", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, RateType, Autocomplete) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
@@ -72,8 +72,8 @@ angular.module("application").controller("AdminRejectedReportsController", [
        $scope.people = [];
        $scope.person = {};
 
-       $scope.orgUnits = $rootScope.OrgUnits;
-       $scope.people = $rootScope.People;
+        $scope.orgUnits = Autocomplete.orgUnits();
+        $scope.people = Autocomplete.allUsers();
 
        /// <summary>
        /// Loads rejected reports from backend to kendo grid datasource.
