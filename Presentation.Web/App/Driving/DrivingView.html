@@ -187,7 +187,7 @@
                 <div class="col-sm-6 margin-bottom-30" style="margin-left: -15px">
                     <div ng-show="hasAccessToFourKmRule" class="col-sm-12 margin-bottom-10">
                         <input type="checkbox" class="k-checkbox" ng-change="fourKmRuleChanged()" id="FourKmRule" ng-model="DriveReport.FourKmRule.Using" /><label for="FourKmRule" class="k-checkbox-label">Jeg bruger 4 Km-reglen</label>
-                        <span ng-show="fourKmRuleHelpText" popover="{{fourKmRuleHelpText}}" popover-trigger="mouseenter" class="info-popup"><i class="fa fa-question"></i></span>
+                        <span ng-show="fourKmRuleHelpText" popover="{{fourKmRuleHelpText}}" popover-append-to-body='true' popover-trigger="mouseenter" class="info-popup"><i class="fa fa-question"></i></span>
                     </div>
                     <div class="col-lg-12 margin-bottom-10">
                         <input type="checkbox" class="k-checkbox" id="returnTrip" ng-change="roundTripChanged()" ng-model="DriveReport.IsRoundTrip" /><label for="returnTrip" class="k-checkbox-label">Tur + retur</label>
