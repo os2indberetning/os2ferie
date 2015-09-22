@@ -8,7 +8,7 @@
         </div>
         <div class="col-xs-6 col-lg-6">
             <label>Medarbejder</label>
-            <input ng-enter="" type="text" ng-disabled="!gridContainer.peopleHaveLoaded" kendo-auto-complete="gridContainer.peopleAutoComplete" k-options="personAutoCompleteOptions" ng-model="person.chosenPerson" k-placeholder="'Indtast medarbejder'" k-data-source="people" k-data-value-field="'FullName'" k-data-text-field="'FullName'" class="form-control fill-width margin-bottom-10" />
+            <input ng-enter="" type="text" kendo-auto-complete="gridContainer.peopleAutoComplete" k-options="personAutoCompleteOptions" ng-model="person.chosenPerson" k-placeholder="'Indtast medarbejder'" k-data-source="people" k-data-value-field="'FullName'" k-data-text-field="'FullName'" class="form-control fill-width margin-bottom-10" />
         </div>
         <div class="col-xs-6 col-lg-6">
             <label>Kørselsdato til</label>
@@ -18,7 +18,7 @@
         </div>
         <div class="col-xs-6 col-lg-6">
             <label>Organisation</label>
-            <input ng-enter="" ng-disabled="!gridContainer.orgsHaveLoaded" type="text" kendo-auto-complete="gridContainer.orgAutoComplete" k-options="orgUnitAutoCompleteOptions" ng-model="orgUnit.chosenUnit" k-placeholder="'Indtast beskrivelse'" k-data-source="orgUnits" k-data-value-field="'LongDescription'" k-data-text-field="'LongDescription'" class="form-control fill-width margin-bottom-10" />
+            <input ng-enter="" type="text" kendo-auto-complete="gridContainer.orgAutoComplete" k-options="orgUnitAutoCompleteOptions" ng-model="orgUnit.chosenUnit" k-placeholder="'Indtast beskrivelse'" k-data-source="orgUnits" k-data-value-field="'LongDescription'" k-data-text-field="'LongDescription'" class="form-control fill-width margin-bottom-10" />
         </div>
         <div class="col-lg-6 pull-right">
 

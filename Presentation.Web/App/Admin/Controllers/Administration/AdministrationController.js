@@ -1,18 +1,17 @@
 ﻿angular.module("application").controller("AdministrationController", [
-   "$scope", "Person", "$modal", "NotificationService", "File",
-   function ($scope, Person, $modal, NotificationService, File) {
+   "$scope", "Person", "$modal", "NotificationService", "File", "Autocomplete",
+   function ($scope, Person, $modal, NotificationService, File, Autocomplete) {
 
        $scope.autoCompleteOptions = {
            filter: "contains"
        };
 
+       $scope.nonAdmins = Autocomplete.nonAdmins();
+
        // Called from AdminMenuController
        // Prevents loading data before it is needed.
        $scope.$on('administrationClicked', function (event, mass) {
            $scope.gridContainer.grid.dataSource.read();
-           Person.getNonAdmins(function (res) {
-               $scope.nonAdmins = res.value;
-           });
        });
 
        $scope.gridContainer = {};
@@ -111,9 +110,6 @@
                Person.patch({ id: resPerson.Id }, { "IsAdmin": false }, function () {
                    NotificationService.AutoFadeNotification("success", "", resPerson.FullName + " blev slettet som administrator.");
                    $scope.gridContainer.grid.dataSource.read();
-                   Person.getNonAdmins(function (res) {
-                       $scope.nonAdmins = res.value;
-                   });
                }, function () {
                    NotificationService.AutoFadeNotification("danger", "", resPerson.FullName + " blev ikke slettet som administrator.");
                });
@@ -144,9 +140,6 @@
                Person.patch({ id: person.Id }, { "IsAdmin": true }, function () {
                    NotificationService.AutoFadeNotification("success", "", person.FullName + " blev gjort til administrator.");
                    $scope.gridContainer.grid.dataSource.read();
-                   Person.getNonAdmins(function (res) {
-                       $scope.nonAdmins = res.value;
-                   });
                    $scope.person.chosenAdmin = "";
                }, function () {
                    NotificationService.AutoFadeNotification("danger", "", person.FullName + " blev ikke gjort til administrator.");

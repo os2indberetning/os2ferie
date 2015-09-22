@@ -159,7 +159,7 @@
             /// <param name="id"></param>
             $scope.personalRoutes = {
                 dataSource: {
-                    type: "odata",
+                    type: "odata-v4",
                     transport: {
                         read: {
                             beforeSend: function (req) {

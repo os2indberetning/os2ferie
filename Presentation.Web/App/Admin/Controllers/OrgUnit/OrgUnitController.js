@@ -1,15 +1,16 @@
 ﻿angular.module("application").controller("OrgUnitController", [
-    "$scope", "OrgUnit", "NotificationService", "$rootScope", "Person", function ($scope, OrgUnit, NotificationService, $rootScope, Person) {
+    "$scope", "OrgUnit", "NotificationService", "$rootScope", "Person", "Autocomplete", function ($scope, OrgUnit, NotificationService, $rootScope, Person, Autocomplete) {
         $scope.gridContainer = {};
 
-        $scope.checkboxes = [];
-        $scope.typeAheadOrgUnits = [];
+        $scope.orgUnits = Autocomplete.orgUnits();
         $scope.orgUnit = {};
-        $scope.people = [];
 
         $scope.autoCompleteOptions = {
-            filter: "contains"
-        };
+            filter: "contains",
+            select: function (e) {
+                $scope.orgUnit.chosenId = this.dataItem(e.item.index()).Id;
+            }
+        }
 
         $scope.$on('4kmClicked', function (event, mass) {
             $scope.gridContainer.grid.dataSource.read();
@@ -87,68 +88,46 @@
                     field: "HasAccessToFourKmRule",
                     title: "Kan benytte 4 km-regel",
                     template: function (data) {
-                        var res = "<input type='checkbox' ng-model='checkboxes[" + data.Id + "]' ng-change='rowChecked(" + data.Id + ")'></input>";
-                        return res;
+                        if (data.HasAccessToFourKmRule) {
+                            return "<input type='checkbox' ng-click='rowChecked(" + data.Id + ", false)' checked></input>";
+                        } else {
+                            return "<input type='checkbox' ng-click='rowChecked(" + data.Id + ", true)'></input>";
+                        }
                     }
                 }
             ]
         };
 
-        $scope.rowChecked = function (id) {
+        $scope.rowChecked = function (id, newValue) {
             /// <summary>
             /// Is called when the user checks an orgunit in the grid.
             /// Patches HasAccessToFourKmRule on the backend.
             /// </summary>
             /// <param name="id"></param>
-            var org = "";
-            for (var i = 0; i < $scope.typeAheadOrgUnits.length; i++) {
-                if ($scope.typeAheadOrgUnits[i].Id == id) {
-                    org = $scope.typeAheadOrgUnits[i].LongDescription;
+
+            OrgUnit.patch({ id: id }, { "HasAccessToFourKmRule": newValue }).$promise.then(function () {
+                if (newValue) {
+                    NotificationService.AutoFadeNotification("success", "", "Adgang til 4 km-regel tilføjet.");
+                } else {
+                    NotificationService.AutoFadeNotification("success", "", "Adgang til 4 km-regel fjernet.");
                 }
-            }
 
-            if ($scope.checkboxes[id]) {
-                // Checkbox has been checked.
-                
-                Enumerable.From($rootScope.OrgUnits).Single(function (x) { return x.Id == id; }).HasAccessToFourKmRule = true;
 
-                OrgUnit.patch({ id: id }, { "HasAccessToFourKmRule": true }).$promise.then(function () {
-                    NotificationService.AutoFadeNotification("success", "", "Adgang til 4 km-regel givet til " + org);
-
-                    //// Reload CurrentUser to update FourKmRule in DrivingController
-                    Person.GetCurrentUser().$promise.then(function (data) {
-                        $rootScope.CurrentUser = data;
-                    });
+                //// Reload CurrentUser to update FourKmRule in DrivingController
+                Person.GetCurrentUser().$promise.then(function (data) {
+                    $rootScope.CurrentUser = data;
                 });
-            } else if (!$scope.checkboxes[id]) {
-                // Checkbox has been unchecked.
-
-                Enumerable.From($rootScope.OrgUnits).Single(function (x) { return x.Id == id; }).HasAccessToFourKmRule = false;
-
-                OrgUnit.patch({ id: id }, { "HasAccessToFourKmRule": false }).$promise.then(function () {
-                    NotificationService.AutoFadeNotification("success", "", "Adgang til 4 km-regel fjernet fra " + org);
-
-                    //// Reload CurrentUser to update FourKmRule in DrivingController
-                    Person.GetCurrentUser().$promise.then(function (data) {
-                        $rootScope.CurrentUser = data;
-                    });
-                });
-            }
+            });
         }
-
-        angular.forEach($rootScope.OrgUnits, function (org, key) {
-            $scope.typeAheadOrgUnits.push({ Id: org.Id, LongDescription: org.LongDescription });
-            $scope.checkboxes[org.Id] = org.HasAccessToFourKmRule;
-        });
 
         $scope.orgUnitChanged = function (item) {
             /// <summary>
             /// Filters grid content
             /// </summary>
             /// <param name="item"></param>
-            var filter = [];
-            filter.push({ field: "LongDescription", operator: "startswith", value: $scope.orgUnit.chosenUnit });
-            $scope.gridContainer.grid.dataSource.filter(filter);
+            $scope.gridContainer.grid.dataSource.transport.options.read.url =
+                "/odata/OrgUnits?$filter=contains(LongDescription," + "'" + encodeURIComponent($scope.orgUnit.chosenUnit + "')");
+            $scope.gridContainer.grid.dataSource.read();
         }
 
         $scope.clearClicked = function () {
@@ -156,8 +135,8 @@
             /// Clears filters.
             /// </summary>
             $scope.orgUnit.chosenUnit = "";
-            $scope.gridContainer.grid.dataSource.filter({});
-
+            $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/OrgUnits";
+            $scope.gridContainer.grid.dataSource.read();
         }
 
     }

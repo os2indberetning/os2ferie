@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("SubstituteController", [
-    "$scope", "$rootScope", "$modal", "NotificationService", "$timeout", "Person", "OrgUnit",
-    function ($scope, $rootScope, $modal, NotificationService, $timeout, Person, OrgUnit) {
+    "$scope", "$rootScope", "$modal", "NotificationService", "$timeout", "Person", "OrgUnit", "Autocomplete",
+    function ($scope, $rootScope, $modal, NotificationService, $timeout, Person, OrgUnit, Autocomplete) {
 
         $scope.container = {};
 
@@ -28,9 +28,9 @@
 
         $scope.currentPerson = $rootScope.CurrentUser;
 
-        $scope.persons = $rootScope.People;
+        $scope.persons = Autocomplete.activeUsers();
 
-        $scope.orgUnits = $rootScope.OrgUnits;
+        $scope.orgUnits = Autocomplete.orgUnits();
 
         $scope.substitutes = {
             dataSource: {

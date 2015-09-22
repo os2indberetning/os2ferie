@@ -1,6 +1,6 @@
 ﻿angular.module('application').controller('AdminNewSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "$timeout", "persons",
-        function ($scope, $modalInstance, OrgUnit, leader, Substitute, Person, NotificationService, $timeout, persons) {
+    ["$scope", "$modalInstance", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "$timeout", "persons", "Autocomplete",
+        function ($scope, $modalInstance, OrgUnit, leader, Substitute, Person, NotificationService, $timeout, persons, Autocomplete) {
 
             $scope.persons = persons;
 
@@ -10,9 +10,9 @@
                 filter: "contains"
             };
 
-            Person.GetLeaders().$promise.then(function (res) {
-                $scope.leaders = res;
-            });
+
+            $scope.leaders = Autocomplete.leaders();
+
 
             $scope.substituteFromDate = new Date();
             $scope.substituteToDate = new Date();

@@ -9,7 +9,7 @@
             </div>
 
             <div class="col-md-6 col-sm-12">
-                <input type="text" typeahead-editable="false" ng-model="target" placeholder="Indtast navn" typeahead="person as person.FullName for person in personsWithoutLeader | filter:$viewValue" class="form-control fill-width" />
+                <input class="form-control fill-width" kendo-auto-complete="container.autoCompleteFor" k-options="autoCompleteOptionsFor" k-data-source="personsWithoutLeader" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
             </div>
         </div>
 
@@ -20,7 +20,7 @@
                 <label>Vælg godkender:</label>
             </div>
             <div class="col-md-6 col-sm-12">
-                <input type="text" typeahead-editable="false" ng-model="approver" placeholder="Indtast navn" typeahead="person as person.FullName for person in persons | filter:$viewValue" class="form-control fill-width" />
+                <input class="form-control fill-width" kendo-auto-complete="container.autoCompleteSub" k-options="autoCompleteOptionsSub" k-data-source="persons" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
             </div>
         </div>
         

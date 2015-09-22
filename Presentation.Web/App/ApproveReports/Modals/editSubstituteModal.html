@@ -8,7 +8,7 @@
                 <label>Vælg stedfortræder:</label>
             </div>
             <div class="col-md-6">
-                <input type="text" typeahead-editable="false" ng-model="person[0]" placeholder="Indtast navn" typeahead="person as person.FullName for person in persons | filter:$viewValue" class="form-control fill-width " />
+                <input class="form-control fill-width" kendo-auto-complete="container.autoComplete" k-options="autoCompleteOptions" k-data-source="persons" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
             </div>
         </div>
         

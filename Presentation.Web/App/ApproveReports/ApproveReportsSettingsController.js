@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("ApproveReportsSettingsController", [
-   "$scope", "$rootScope", "OrgUnit", "Person", "$modal", function ($scope, $rootScope, OrgUnit, Person, $modal) {
+   "$scope", "$rootScope", "OrgUnit", "Person", "$modal", "Autocomplete", function ($scope, $rootScope, OrgUnit, Person, $modal, Autocomplete) {
        $scope.collapseSubtitute = false;
        $scope.collapsePersonalApprover = false;
        $scope.orgUnits = [];
@@ -16,8 +16,8 @@
        $scope.showSubstituteSettings = $rootScope.CurrentUser.IsLeader;
 
        $scope.currentPerson = $rootScope.CurrentUser;
-       $scope.persons = $rootScope.People;
-       $scope.orgUnits = $rootScope.OrgUnits;
+       $scope.persons = Autocomplete.activeUsers();
+       $scope.orgUnits = Autocomplete.orgUnits();
 
        $scope.substituteOrgUnit = "";
 

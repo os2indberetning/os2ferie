@@ -1,5 +1,5 @@
 ﻿angular.module('application').controller('NewApproverModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService) {
+    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService","Autocomplete", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService,Autocomplete) {
 
         $scope.persons = persons;
         $scope.approverFromDate = new Date();
@@ -11,15 +11,9 @@
             filter: "contains"
         };
 
-        $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
+        $scope.personsWithoutLeader = Autocomplete.activeUsersWithoutLeader(leader.Id); 
 
-        // Remove leader from array
-        angular.forEach($scope.persons, function (value, key) {
-            if (value.Id == leader.Id) {
-                $scope.personsWithoutLeader.splice(key, 1);
-            }
-        });
-
+    
         $scope.saveNewApprover = function () {
             if ($scope.approver == undefined) {
                 NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en godkender");
@@ -38,7 +32,7 @@
                 EndDateTimestamp: Math.floor($scope.approverToDate.getTime() / 1000),
                 LeaderId: leader.Id,
                 SubId: $scope.approver[0].Id,
-                OrgUnitId: $scope.orgUnit.Id,
+                OrgUnitId: 1,
                 PersonId: $scope.target[0].Id
             });
 

@@ -1,10 +1,17 @@
 ﻿angular.module('application').controller('EditSubstituteModalInstanceController',
     ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "substituteId", function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, substituteId) {
 
+        $scope.container = {};
 
         $scope.persons = persons;
 
         $scope.person = [];
+
+        $scope.autoCompleteOptions = {
+            select: function (e) {
+                $scope.person[0] = this.dataItem(e.item.index());
+            }
+        }
 
         $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
             if (data.value[0].EndDateTimestamp == 9999999999) {
@@ -20,6 +27,7 @@
             $scope.person[0] = $scope.substitute.Sub;
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000);
             $scope.substituteToDate = new Date($scope.substitute.EndDateTimestamp * 1000);
+            $scope.container.autoComplete.value($scope.substitute.Sub.FullName);
         });
 
         $scope.saveNewSubstitute = function () {

@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("AdminPendingReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "RateType", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, RateType) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "RateType", "Autocomplete", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, RateType, Autocomplete) {
 
 
        // Contains references to kendo ui grids.
@@ -17,10 +17,10 @@
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
 
-       $scope.orgUnits = $rootScope.OrgUnits;
-       $scope.people = $rootScope.People;
+       $scope.orgUnits = Autocomplete.orgUnits();
+       $scope.people = Autocomplete.allUsers();
 
-       
+
        $scope.clearClicked = function () {
            /// <summary>
            /// Clears filters.
