@@ -16,6 +16,7 @@ using Infrastructure.AddressServices.Interfaces;
 using MoreLinq;
 using Ninject;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
+using Core.ApplicationServices.Interfaces;
 
 namespace DBUpdater
 {
@@ -31,8 +32,10 @@ namespace DBUpdater
         private readonly IDbUpdaterDataProvider _dataProvider;
         private readonly IMailSender _mailSender;
         private readonly IAddressHistoryService _historyService;
+        private readonly IGenericRepository<DriveReport> _reportRepo;
+        private readonly IDriveReportService _driveService;
 
-        public UpdateService(IGenericRepository<Employment> emplRepo, IGenericRepository<OrgUnit> orgRepo, IGenericRepository<Person> personRepo, IGenericRepository<CachedAddress> cachedRepo, IGenericRepository<PersonalAddress> personalAddressRepo, IAddressLaunderer actualLaunderer, IAddressCoordinates coordinates, IDbUpdaterDataProvider dataProvider, IMailSender mailSender, IAddressHistoryService historyService)
+        public UpdateService(IGenericRepository<Employment> emplRepo, IGenericRepository<OrgUnit> orgRepo, IGenericRepository<Person> personRepo, IGenericRepository<CachedAddress> cachedRepo, IGenericRepository<PersonalAddress> personalAddressRepo, IAddressLaunderer actualLaunderer, IAddressCoordinates coordinates, IDbUpdaterDataProvider dataProvider, IMailSender mailSender, IAddressHistoryService historyService, IGenericRepository<DriveReport> reportRepo, IDriveReportService driveService)
         {
             _emplRepo = emplRepo;
             _orgRepo = orgRepo;
@@ -44,6 +47,8 @@ namespace DBUpdater
             _dataProvider = dataProvider;
             _mailSender = mailSender;
             _historyService = historyService;
+            _reportRepo = reportRepo;
+            _driveService = driveService;
         }
 
         /// <summary>
@@ -430,5 +435,29 @@ namespace DBUpdater
 
             return launderedAddress;
         }
+
+        public void UpdateLeadersOnAllReports()
+        {
+            var i = 0;
+
+            var reports = _reportRepo.AsQueryable().Where(x => x.Employment.OrgUnit.Level > 1).ToList();
+            var max = reports.Count();
+            foreach(var report in reports)
+            {
+                Console.WriteLine("Updating leaders on report " + i + " of " + max);
+                i++;
+                report.ResponsibleLeaderId = _driveService.GetResponsibleLeaderForReport(report).Id;
+                report.ActualLeaderId = _driveService.GetActualLeaderForReport(report).Id;
+                if(i % 10000 == 0)
+                {
+                    Console.WriteLine("Saving to database");
+                    _reportRepo.Save();
+                }
+            }
+            Console.WriteLine("Saving to database");
+            _reportRepo.Save();
+
+        }
+
     }
 }

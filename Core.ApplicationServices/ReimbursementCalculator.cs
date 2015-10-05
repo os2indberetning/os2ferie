@@ -67,7 +67,7 @@ namespace Core.ApplicationServices
 
             if (homeAddress.Type != PersonalAddressType.AlternativeHome)
             {
-                if (addressHistory.HomeAddress != null)
+                if (addressHistory != null && addressHistory.HomeAddress != null)
                 {
                     // If user doesn't have an alternative address set up then use the homeaddress at the time of DriveDateTimestamp
                     // If the user does have an alternative address then always use that.
@@ -80,7 +80,7 @@ namespace Core.ApplicationServices
             
             Address workAddress = employment.OrgUnit.Address;
 
-            if (addressHistory.WorkAddress != null)
+            if (addressHistory != null && addressHistory.WorkAddress != null)
             {
                 // If an AddressHistory.WorkAddress exists, then use that.
                 workAddress = addressHistory.WorkAddress;

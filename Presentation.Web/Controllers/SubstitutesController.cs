@@ -10,18 +10,28 @@ using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
+using System.Threading.Tasks;
+using System.Threading;
+using Ninject;
 
 namespace OS2Indberetning.Controllers
 {
     public class SubstitutesController : BaseController<Substitute>
     {
         private ISubstituteService _sub;
+        private IGenericRepository<DriveReport> _driveRepo;
+        private IDriveReportService _driveService;
         private const long UnlimitedPeriod = 9999999999;
+        private IOrgUnitService _orgService;
         //GET: odata/Substitutes
-        public SubstitutesController(IGenericRepository<Substitute> repository, ISubstituteService sub, IGenericRepository<Person> personRepo)
+        public SubstitutesController(IGenericRepository<Substitute> repository, ISubstituteService sub, IGenericRepository<Person> personRepo, IGenericRepository<DriveReport> driveRepo, IOrgUnitService orgService, IDriveReportService driveService)
             : base(repository, personRepo)
         {
             _sub = sub;
+            _driveRepo = driveRepo;
+            _orgService = orgService;
+            _driveService = driveService;
+
         }
 
         /// <summary>
@@ -86,7 +96,15 @@ namespace OS2Indberetning.Controllers
                 }
 
                 // Return BadRequest if a sub or personal approver already exists in the time period. Otherwise create the sub or approver.
-                return !_sub.CheckIfNewSubIsAllowed(Substitute) ? BadRequest() : base.Post(Substitute);
+                var isAllowed = _sub.CheckIfNewSubIsAllowed(Substitute);
+
+                var result = isAllowed ? base.Post(Substitute) : BadRequest();
+
+                if (isAllowed)
+                {
+                    _sub.UpdateReportsAffectedBySubstitute(Substitute);
+                }
+                return result;
             }
             return StatusCode(HttpStatusCode.Forbidden);
 
@@ -132,7 +150,15 @@ namespace OS2Indberetning.Controllers
                 }
 
                 // Check if the patch is allowed.
-                return !_sub.CheckIfNewSubIsAllowed(patchedSub) ? BadRequest() : base.Patch(key,delta);
+                var isAllowed = _sub.CheckIfNewSubIsAllowed(patchedSub);
+
+                var result = isAllowed ? base.Patch(key, delta) : BadRequest();
+
+                if (isAllowed)
+                {
+                    _sub.UpdateReportsAffectedBySubstitute(patchedSub);
+                }
+                return result;
             }
             return StatusCode(HttpStatusCode.Forbidden);
         }
@@ -146,9 +172,13 @@ namespace OS2Indberetning.Controllers
         /// <returns></returns>
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            if (CurrentUser.IsAdmin || CurrentUser.Id.Equals(Repo.AsQueryable().Single(x => x.Id.Equals(key)).LeaderId))
+            var sub = Repo.AsQueryable().Single(x => x.Id == key);
+            if (CurrentUser.IsAdmin || CurrentUser.Id.Equals(sub.LeaderId))
             {
-                return base.Delete(key);
+
+                var result = base.Delete(key);
+                _sub.UpdateReportsAffectedBySubstitute(sub);
+                return result;
             }
             return StatusCode(HttpStatusCode.Forbidden);
         }

@@ -5,6 +5,8 @@ using System.Linq;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
+using System.Threading;
+using Ninject;
 
 namespace Core.ApplicationServices
 {
@@ -94,6 +96,41 @@ namespace Core.ApplicationServices
                 }
             }
             return true;
+        }
+
+        public void UpdateReportsAffectedBySubstitute(Substitute sub)
+        {
+                var ninjectKernel = NinjectWebKernel.CreateKernel();
+                var orgService = ninjectKernel.Get<IOrgUnitService>();
+                var driveService = ninjectKernel.Get<IDriveReportService>();
+                var driveRepo = ninjectKernel.Get<IGenericRepository<DriveReport>>();
+
+
+                if (sub.LeaderId == sub.PersonId)
+                {
+                    // Substitute is a substitute - Not a Personal Approver.
+                    // Select reports to be updated based on OrgUnits
+                    var orgIds = new List<int>();
+                    orgIds.Add(sub.OrgUnitId);
+                    orgIds.AddRange(orgService.GetChildOrgsWithoutLeader(sub.OrgUnitId).Select(x => x.Id));
+                    var reports = driveRepo.AsQueryable().Where(rep => orgIds.Contains(rep.Employment.OrgUnitId)).ToList();
+                    foreach (var report in reports)
+                    {
+                        report.ResponsibleLeaderId = driveService.GetResponsibleLeaderForReport(report).Id;
+                    }
+                    driveRepo.Save();
+                }
+                else
+                {
+                    // Substitute is a personal approver
+                    // Select reports to be updated based on PersonId on report
+                    var reports2 = driveRepo.AsQueryable().Where(rep => rep.PersonId == sub.PersonId).ToList();
+                    foreach (var report in reports2)
+                    {
+                        report.ResponsibleLeaderId = driveService.GetResponsibleLeaderForReport(report).Id;
+                    }
+                    driveRepo.Save();
+                }
         }
     }
 }

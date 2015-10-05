@@ -47,12 +47,6 @@ namespace OS2Indberetning.Controllers
         {
             var queryable = GetQueryable(queryOptions);
 
-            // leaderId == 0 means no leaderId was given.
-            if (leaderId != 0)
-            {
-                queryable = _driveService.FilterByLeader(queryable, leaderId, getReportsWhereSubExists);
-            }
-
             ReportStatus reportStatus;
             if (ReportStatus.TryParse(status, true, out reportStatus))
             {
@@ -69,25 +63,6 @@ namespace OS2Indberetning.Controllers
                     queryable = queryable.Where(dr => dr.Status == reportStatus);
                 }
 
-            }
-            if (reportStatus == ReportStatus.Pending)
-            {
-                if (queryOptions.OrderBy != null)
-                {
-                    queryable = queryOptions.OrderBy.ApplyTo(queryable);
-                }
-                var skip = queryOptions.Skip != null ? queryOptions.Skip.Value : 0;
-
-                if (queryOptions.Top != null)
-                {
-                    queryable = _driveService.AttachResponsibleLeader(queryable, skip, queryOptions.Top.Value);
-                }
-                else
-                {
-                    queryable = _driveService.AttachResponsibleLeader(queryable, skip, queryable.Count());
-                }
-                
-                
             }
             return Ok(queryable);
         }
@@ -123,9 +98,7 @@ namespace OS2Indberetning.Controllers
         /// <returns>A single DriveReport</returns>
         public IHttpActionResult GetDriveReport([FromODataUri] int key, ODataQueryOptions<DriveReport> queryOptions)
         {
-            var res = _driveService.AttachResponsibleLeader(GetQueryable(key, queryOptions));
-
-            return Ok(res);
+            return Ok(GetQueryable(key, queryOptions));
         }
 
         // PUT: odata/DriveReports(5)

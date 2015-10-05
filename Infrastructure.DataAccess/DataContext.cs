@@ -198,7 +198,6 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Report>().Property(p => p.Comment).IsRequired();
             modelBuilder.Entity<Report>().HasRequired(p => p.Person);
             modelBuilder.Entity<Report>().HasRequired(p => p.Employment);
-            modelBuilder.Entity<Report>().Ignore(p => p.ResponsibleLeader);
         }
 
         private void ConfigurePropertiesForEmployment(DbModelBuilder modelBuilder)
