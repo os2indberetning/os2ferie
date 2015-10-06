@@ -7,5 +7,6 @@ namespace Core.ApplicationServices.Interfaces
     {
         List<OrgUnit> GetWhereUserIsResponsible(int personId);
         IEnumerable<OrgUnit> GetChildOrgsWithoutLeader(int parentId);
+        IEnumerable<int> GetIdsOfLeadersInImmediateChildOrgs(int parentOrgId);
     }
 }
