@@ -491,7 +491,7 @@ namespace DBUpdater
             foreach(var sub in affectedSubstitutes)
             {
                 _subService.UpdateReportsAffectedBySubstitute(sub);
-            }
+            } 
             
         }
 
