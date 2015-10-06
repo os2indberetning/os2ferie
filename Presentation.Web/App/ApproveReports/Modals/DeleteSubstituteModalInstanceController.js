@@ -30,7 +30,7 @@
             $scope.showSpinner = true;
 
             sub.$delete({ id: $scope.substitute.Id }, function (data) {
-                NotificationService.AutoFadeNotification("success", "", "Stedfortræderen er blev slettet gemt");
+                NotificationService.AutoFadeNotification("success", "", "Stedfortræderen blev slettet.");
                 $modalInstance.close();
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "", "Kunne ikke slette stedfortræder");
