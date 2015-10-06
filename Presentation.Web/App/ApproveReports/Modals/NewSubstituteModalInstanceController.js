@@ -13,13 +13,7 @@
             filter: "contains"
         };
 
-        $scope.personsWithoutLeader = $scope.persons.slice(0); // Clone array;
-        // Remove leader from array
-        angular.forEach($scope.persons, function (value, key) {
-            if (value.Id == leader.Id) {
-                $scope.personsWithoutLeader.splice(key, 1);
-            }
-        });
+        $scope.personsWithoutLeader = Autocomplete.activeUsersWithoutLeader(leader.Id);
 
         $scope.saveNewSubstitute = function () {
             if ($scope.person == undefined) {
