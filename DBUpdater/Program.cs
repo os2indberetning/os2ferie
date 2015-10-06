@@ -38,14 +38,16 @@ namespace DBUpdater
                 ninjectKernel.Get<IMailSender>(),
                 historyService,
                 ninjectKernel.Get<IGenericRepository<DriveReport>>(),
-                ninjectKernel.Get<IDriveReportService>());
+                ninjectKernel.Get<IDriveReportService>(),
+                ninjectKernel.Get<ISubstituteService>(),
+                ninjectKernel.Get<IGenericRepository<Substitute>>());
 
             service.MigrateOrganisations();
             service.MigrateEmployees();
             historyService.CreateNonExistingHistories();
             historyService.UpdateAddressHistories();
             historyService.CreateNonExistingHistories();
-            service.UpdateLeadersOnAllReports();
+            service.UpdateLeadersOnExpiredOrActivatedSubstitutes();
         }
 
 

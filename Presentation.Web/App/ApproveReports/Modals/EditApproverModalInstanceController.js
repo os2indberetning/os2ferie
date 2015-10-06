@@ -63,6 +63,8 @@
                     sub.EndDateTimestamp = 9999999999;
                 }
 
+                $scope.showSpinner = true;
+
                 sub.$patch({ id: substituteId }, function (data) {
                     NotificationService.AutoFadeNotification("success", "", "Godkender blev redigeret");
                     $modalInstance.close();

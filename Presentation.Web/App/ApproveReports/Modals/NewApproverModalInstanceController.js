@@ -40,6 +40,8 @@
                 sub.EndDateTimestamp = 9999999999;
             }
 
+            $scope.showSpinner = true;
+
             sub.$post(function (data) {
                 NotificationService.AutoFadeNotification("success", "", "Godkender blev oprettet");
                 $modalInstance.close();
