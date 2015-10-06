@@ -47,6 +47,8 @@
                 sub.EndDateTimestamp = 9999999999;
             }
 
+            $scope.showSpinner = true;
+
             sub.$patch({ id: $scope.substitute.Id }, function (data) {
                 NotificationService.AutoFadeNotification("success", "", "Stedfortræder blev gemt");
                 $modalInstance.close();

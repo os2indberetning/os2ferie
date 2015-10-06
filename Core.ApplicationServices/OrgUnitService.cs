@@ -53,5 +53,13 @@ namespace Core.ApplicationServices
             }
             return result;
         }
+
+        public IEnumerable<int> GetIdsOfLeadersInImmediateChildOrgs(int parentOrgId)
+        {
+           
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            var immediateChildOrgsWithLeader = _emplRepo.AsQueryable().Where(e => e.IsLeader && e.OrgUnit.ParentId == parentOrgId && e.StartDateTimestamp < currentTimestamp && (e.EndDateTimestamp == 0 || e.EndDateTimestamp > currentTimestamp)).Select(x => x.PersonId).ToList();
+            return immediateChildOrgsWithLeader;
+        }
     }
 }

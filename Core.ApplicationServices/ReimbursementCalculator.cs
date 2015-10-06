@@ -19,17 +19,19 @@ namespace Core.ApplicationServices
         private readonly IPersonService _personService;
         private readonly IGenericRepository<Person> _personRepo;
         private readonly IGenericRepository<Employment> _emplrepo;
+        private readonly IGenericRepository<AddressHistory> _addressHistoryRepo;
         private const int FourKmAdjustment = 4;
         // Coordinate threshold is the amount two gps coordinates can differ and still be considered the same address.
         // Third decimal is 100 meters, so 0.001 means that addresses within 100 meters of each other will be considered the same when checking if route starts or ends at home.
         private const double CoordinateThreshold = 0.001;
 
-        public ReimbursementCalculator(IRoute<RouteInformation> route, IPersonService personService, IGenericRepository<Person> personRepo, IGenericRepository<Employment> emplrepo)
+        public ReimbursementCalculator(IRoute<RouteInformation> route, IPersonService personService, IGenericRepository<Person> personRepo, IGenericRepository<Employment> emplrepo, IGenericRepository<AddressHistory> addressHistoryRepo)
         {
             _route = route;
             _personService = personService;
             _personRepo = personRepo;
             _emplrepo = emplrepo;
+            _addressHistoryRepo = addressHistoryRepo;
         }
 
         /// <summary>
@@ -60,10 +62,34 @@ namespace Core.ApplicationServices
 
             var homeAddress = _personService.GetHomeAddress(person);
 
+            // Get Work and Homeaddress of employment at time of DriveDateTimestamp for report.
+            var addressHistory = _addressHistoryRepo.AsQueryable().SingleOrDefault(x => x.EmploymentId == report.EmploymentId && x.StartTimestamp < report.DriveDateTimestamp && x.EndTimestamp > report.DriveDateTimestamp);
+
+            if (homeAddress.Type != PersonalAddressType.AlternativeHome)
+            {
+                if (addressHistory != null && addressHistory.HomeAddress != null)
+                {
+                    // If user doesn't have an alternative address set up then use the homeaddress at the time of DriveDateTimestamp
+                    // If the user does have an alternative address then always use that.
+                    homeAddress = addressHistory.HomeAddress;
+                }
+            }
+
+
             var employment = _emplrepo.AsQueryable().FirstOrDefault(x => x.Id.Equals(report.EmploymentId));
+            
             Address workAddress = employment.OrgUnit.Address;
+
+            if (addressHistory != null && addressHistory.WorkAddress != null)
+            {
+                // If an AddressHistory.WorkAddress exists, then use that.
+                workAddress = addressHistory.WorkAddress;
+            }
+
+            
             if (employment.AlternativeWorkAddress != null)
             {
+                // Overwrite workaddress if an alternative work address exists.
                 workAddress = employment.AlternativeWorkAddress;
             }
 

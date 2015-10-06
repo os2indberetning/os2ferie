@@ -60,8 +60,8 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-success" ng-click="saveNewSubstitute()">Gem</button>
-    <button class="btn btn-danger" ng-click="cancelNewSubstitute()">Annuller</button>
+    <button class="btn btn-success" ng-disabled="showSpinner" ng-click="saveNewSubstitute()">Gem <i ng-show="showSpinner" class="fa fa-cog fa-spin"></i></button>
+    <button class="btn btn-danger" ng-disabled="showSpinner" ng-click="cancelNewSubstitute()">Annuller</button>
 </div>
 
 

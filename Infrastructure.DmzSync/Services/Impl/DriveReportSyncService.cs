@@ -68,7 +68,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                         Longitude = gpsCoord.Longitude,
                     });
 
-                    if (gpsCoord.IsViaPoint)
+                    if (gpsCoord.IsViaPoint || j == 0 || j == dmzReport.Route.GPSCoordinates.Count - 1)
                     {
                         var address = _coordinates.GetAddressFromCoordinates(new Address
                         {

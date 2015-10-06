@@ -13,5 +13,6 @@ namespace Core.ApplicationServices.Interfaces
         long GetEndOfDayTimestamp(long timestamp);
         long GetStartOfDayTimestamp(long timestamp);
         bool CheckIfNewSubIsAllowed(Substitute newSub);
+        void UpdateReportsAffectedBySubstitute(Substitute sub);
     }
 }

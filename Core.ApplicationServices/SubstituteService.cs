@@ -5,16 +5,24 @@ using System.Linq;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
+using System.Threading;
+using Ninject;
 
 namespace Core.ApplicationServices
 {
     public class SubstituteService : ISubstituteService
     {
         private readonly IGenericRepository<Substitute> _subRepo;
+        private readonly IOrgUnitService _orgService;
+        private readonly IDriveReportService _driveService;
+        private readonly IGenericRepository<DriveReport> _driveRepo;
 
-        public SubstituteService(IGenericRepository<Substitute> subRepo)
+        public SubstituteService(IGenericRepository<Substitute> subRepo, IOrgUnitService orgService, IDriveReportService driveService, IGenericRepository<DriveReport> driveRepo)
         {
             _subRepo = subRepo;
+            _orgService = orgService;
+            _driveService = driveService;
+            _driveRepo = driveRepo;
         }
 
         /// <summary>
@@ -94,6 +102,38 @@ namespace Core.ApplicationServices
                 }
             }
             return true;
+        }
+
+        public void UpdateReportsAffectedBySubstitute(Substitute sub)
+        {
+                if (sub.LeaderId == sub.PersonId)
+                {
+                    // Substitute is a substitute - Not a Personal Approver.
+                    // Select reports to be updated based on OrgUnits
+                    var orgIds = new List<int>();
+                    orgIds.Add(sub.OrgUnitId);
+                    orgIds.AddRange(_orgService.GetChildOrgsWithoutLeader(sub.OrgUnitId).Select(x => x.Id));
+                    var reports = _driveRepo.AsQueryable().Where(rep => orgIds.Contains(rep.Employment.OrgUnitId)).ToList();
+                    var idsOfLeadersOfImmediateChildOrgs = _orgService.GetIdsOfLeadersInImmediateChildOrgs(sub.OrgUnitId);
+                    var reportsForLeadersOfImmediateChildOrgs = _driveRepo.AsQueryable().Where(rep => idsOfLeadersOfImmediateChildOrgs.Contains(rep.PersonId)).ToList();
+                    reports.AddRange(reportsForLeadersOfImmediateChildOrgs);
+                    foreach (var report in reports)
+                    {
+                        report.ResponsibleLeaderId = _driveService.GetResponsibleLeaderForReport(report).Id;
+                    }
+                    _driveRepo.Save();
+                }
+                else
+                {
+                    // Substitute is a personal approver
+                    // Select reports to be updated based on PersonId on report
+                    var reports2 = _driveRepo.AsQueryable().Where(rep => rep.PersonId == sub.PersonId).ToList();
+                    foreach (var report in reports2)
+                    {
+                        report.ResponsibleLeaderId = _driveService.GetResponsibleLeaderForReport(report).Id;
+                    }
+                    _driveRepo.Save();
+                }
         }
     }
 }

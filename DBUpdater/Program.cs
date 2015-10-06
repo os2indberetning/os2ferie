@@ -16,6 +16,7 @@ using Infrastructure.AddressServices.Interfaces;
 using Infrastructure.DataAccess;
 using Ninject;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
+using Core.ApplicationServices.Interfaces;
 
 namespace DBUpdater
 {
@@ -35,13 +36,18 @@ namespace DBUpdater
                 ninjectKernel.Get<IAddressLaunderer>(),
                 ninjectKernel.Get<IAddressCoordinates>(), new DataProvider(),
                 ninjectKernel.Get<IMailSender>(),
-                historyService);
+                historyService,
+                ninjectKernel.Get<IGenericRepository<DriveReport>>(),
+                ninjectKernel.Get<IDriveReportService>(),
+                ninjectKernel.Get<ISubstituteService>(),
+                ninjectKernel.Get<IGenericRepository<Substitute>>());
 
             service.MigrateOrganisations();
             service.MigrateEmployees();
             historyService.CreateNonExistingHistories();
             historyService.UpdateAddressHistories();
             historyService.CreateNonExistingHistories();
+            service.UpdateLeadersOnExpiredOrActivatedSubstitutes();
         }
 
 

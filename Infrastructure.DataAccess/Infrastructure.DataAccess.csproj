@@ -317,6 +317,14 @@
     <Compile Include="Migrations\201509150758033_AddedAddressHistory.Designer.cs">
       <DependentUpon>201509150758033_AddedAddressHistory.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510051905165_AddedLeadersToReport.cs" />
+    <Compile Include="Migrations\201510051905165_AddedLeadersToReport.Designer.cs">
+      <DependentUpon>201510051905165_AddedLeadersToReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510051917583_MadeResponsibleLeaderNotIgnored.cs" />
+    <Compile Include="Migrations\201510051917583_MadeResponsibleLeaderNotIgnored.Designer.cs">
+      <DependentUpon>201510051917583_MadeResponsibleLeaderNotIgnored.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -520,6 +528,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509150758033_AddedAddressHistory.resx">
       <DependentUpon>201509150758033_AddedAddressHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510051905165_AddedLeadersToReport.resx">
+      <DependentUpon>201510051905165_AddedLeadersToReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510051917583_MadeResponsibleLeaderNotIgnored.resx">
+      <DependentUpon>201510051917583_MadeResponsibleLeaderNotIgnored.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

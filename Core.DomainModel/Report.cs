@@ -20,7 +20,6 @@ namespace Core.DomainModel
         public String Comment { get; set; }
         public long ClosedDateTimestamp { get; set; }
         public long ProcessedDateTimestamp { get; set; }
-        public Person ResponsibleLeader { get; set; }
         public virtual Person ApprovedBy { get; set; }
         public int? ApprovedById { get; set; }
 
@@ -28,5 +27,9 @@ namespace Core.DomainModel
         public virtual Person Person { get; set; }
         public int EmploymentId { get; set; }
         public virtual Employment Employment { get; set; }
+        public int? ResponsibleLeaderId { get; set; }
+        public virtual Person ResponsibleLeader { get; set; }
+        public int? ActualLeaderId { get; set; }
+        public virtual Person ActualLeader { get; set; }
     }
 }
