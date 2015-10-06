@@ -187,6 +187,8 @@ a.informationHelpLink {
 
 li.mainMenuLink.active {
     text-decoration: underline !important;
+    text-decoration-color: white !important;
+    color: white !important;
 }
 
 li.mainMenuLink > a {
