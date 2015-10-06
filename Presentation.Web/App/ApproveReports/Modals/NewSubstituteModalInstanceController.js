@@ -1,5 +1,5 @@
 ﻿angular.module('application').controller('NewSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService) {
+    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "Autocomplete", function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, Autocomplete) {
        
         $scope.persons = persons;
         $scope.substituteFromDate = new Date();
