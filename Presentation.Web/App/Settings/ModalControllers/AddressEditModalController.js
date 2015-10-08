@@ -16,7 +16,19 @@
 
     $scope.loadAddressData();
 
+    $scope.addressNotFound = false;
+
+    $scope.addressFieldOptions = {
+            dataBound: function () {
+                $scope.addressNotFound = this.dataSource._data.length == 0;
+                $scope.$apply();
+            }
+        }
+
     $scope.saveEditedAddress = function () {
+
+        if ($scope.addressNotFound) return;
+
         $scope.newAddress = $scope.oldAddress;
 
         var result = AddressFormatter.fn($scope.newAddress);

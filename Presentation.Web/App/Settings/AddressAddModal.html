@@ -4,12 +4,12 @@
 <div class="modal-body">
 
     <label>Adresse</label>
-    <input ng-enter="saveEditedAddress()" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+    <input ng-enter="saveEditedAddress()" type="text" kendo-auto-complete k-data-text-field="'tekst'" k-options="addressFieldOptions" k-data-value-field="'tekst'"
            k-data-source="SmartAddress" ng-model="oldAddress" class="fill-width" k-placeholder="'Skriv her'" />
     <div class="seperator"></div>
     <label>Beskrivelse</label>
     <input ng-enter="saveEditedAddress()" class="form-control" ng-model="addressDescription" />
-
+    <div ng-hide="!addressNotFound" style="border-radius: 25px; padding: 15px; background-color: #d3d3d3;margin-top: 10px" class="fill-width">OS2Indberetning kan ikke finde adressen. Kontroller venligst stavemåden, om husnummeret er korrekt fx 3A, og at der ikke indgår etager som fx 3, 1th. Hvis du har kopieret adressen ind, prøv da at skrive den i stedet.</div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-success pull-left new-token-btn" ng-click="saveEditedAddress()">Gem</button>

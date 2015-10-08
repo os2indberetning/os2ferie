@@ -6,7 +6,7 @@
     <input class="form-control" ng-model="newRouteDescription" />
     <div class="seperator"></div>
     <label>Adresse 1</label>
-    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'" k-options="addressFieldOptions"
            k-data-source="SmartAddress" ng-model="newStartPoint" class="fill-width" k-placeholder="'Skriv her'" />
     <div class="seperator"></div>
     <label ng-if="viaPointModels.length > 0">Viapunkter</label>
@@ -14,7 +14,7 @@
         <label>Viapunkt nr: {{$index + 1}}</label>
 
         <div class="col-sm-11" style="margin-left: -15px;">
-            <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+            <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'" k-options="addressFieldOptions"
                    k-data-source="SmartAddress" ng-model="viaPointModels[$index]" class="fill-width" k-placeholder="'Skriv her'" />
         </div>
         <div class="col-sm-1 pull-right" style="margin-right: -15px;">
@@ -26,11 +26,14 @@
     </div>
     <div class="seperator"></div>
     <label>Adresse 2</label>
-    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'"
+    <input type="text" kendo-auto-complete k-data-text-field="'tekst'" k-data-value-field="'tekst'" k-options="addressFieldOptions"
            k-data-source="SmartAddress" ng-model="newEndPoint" class="fill-width" k-placeholder="'Skriv her'" />
     <div class="seperator"></div>
 
     <button class="btn btn-primary" ng-click="addNewViaPoint()"><i class="fa fa-plus"></i> Viapunkt</button>
+
+    <div ng-hide="!addressNotFound" style="border-radius: 25px; padding: 15px; background-color: #d3d3d3;margin-top: 10px" class="fill-width">OS2Indberetning kan ikke finde adressen. Kontroller venligst stavemåden, om husnummeret er korrekt fx 3A, og at der ikke indgår etager som fx 3, 1th. Hvis du har kopieret adressen ind, prøv da at skrive den i stedet.</div>
+
 </div>
 <div class="modal-footer">
     <button class="btn btn-success pull-left new-token-btn" ng-disabled="isSaveDisabled" ng-click="saveRoute()">Gem</button>
