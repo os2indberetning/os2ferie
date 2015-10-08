@@ -432,3 +432,7 @@ li.mainMenuLink.active > a > i.fa {
 .k-ff {
     overflow: inherit !important;
 }
+
+.navbar {
+    border: none;
+}
