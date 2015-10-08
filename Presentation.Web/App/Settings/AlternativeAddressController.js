@@ -82,6 +82,9 @@
         /// </summary>
         /// <param name="index"></param>
         // Both fields empty. Clear.
+
+        $scope.alternativeWorkDistances[index] = Math.floor($scope.alternativeWorkDistances[index].replace(/[^\d\.\-\,\ ]/g, '').replace(/[^\d\.\-\ ]/g, '.'));
+
         if (!isAddressSet(index) && (!isDistanceSet(index) || $scope.alternativeWorkDistances[index] == 0)) {
             $scope.clearWorkClicked(index);
         }
