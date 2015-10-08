@@ -136,6 +136,7 @@
 
                 newPerson.$patch({ id: personId }, function () {
                     $scope.mailAdvice = receiveMails;
+                    $rootScope.CurrentUser.RecieveMail = receiveMails;
                     NotificationService.AutoFadeNotification("success", "", "Valg om modtagelse af mails blev gemt");
                 }), function () {
 
