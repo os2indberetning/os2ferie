@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Dynamic;
+using AddressHistoryMigration.Models;
 using Core.DomainModel;
 
 
@@ -35,8 +36,8 @@ namespace Infrastructure.DataAccess
         public IDbSet<BankAccount> BankAccounts { get; set; } 
         public IDbSet<RateType> RateTypes { get; set; }
         public IDbSet<CachedAddress> CachedAddresses { get; set; }
-        public IDbSet<AddressHistory> AddressHistory { get; set; } 
-        
+        public IDbSet<AddressHistory> AddressHistory { get; set; }
+        public IDbSet<TempAddressHistory> TempAddressHistory { get; set; } 
   
 
         /**

@@ -128,6 +128,11 @@
                 });
             }
         }
+            // Show popup if distance contains , or .
+        else if ($scope.alternativeWorkDistances[index].toString().indexOf(".") > -1 || $scope.alternativeWorkDistances[index].toString().indexOf(",") > -1) {
+            NotificationService.AutoFadeNotification("warning", "", "Afvigende km på ikke indeholde komma eller punktum.");
+        }
+
             // Address is not set. Distance is. Save that.
         else if (Number($scope.alternativeWorkDistances[index]) >= 0) {
             PersonEmployments.patchEmployment({ id: $scope.employments[index].Id },

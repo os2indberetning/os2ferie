@@ -75,6 +75,7 @@
     <Compile Include="Report.cs" />
     <Compile Include="Substitute.cs" />
     <Compile Include="Example\Product.cs" />
+    <Compile Include="TempAddressHistory.cs" />
     <Compile Include="WorkAddress.cs" />
   </ItemGroup>
   <ItemGroup>
