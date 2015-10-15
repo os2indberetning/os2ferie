@@ -36,7 +36,7 @@
                     if ($scope.outdated) {
 
                         // set the message to a generic message or the passed message via the checkie-message attribute
-                        $scope.msg = ($scope.checkieMessage && $scope.checkieMessage.length > 0) ? $scope.checkieMessage : "Du bruger en gammel version af Internet Explorer. Du skal have version 11 eller bruge Chrome/Firefox.";
+                        $scope.msg = ($scope.checkieMessage && $scope.checkieMessage.length > 0) ? $scope.checkieMessage : "Browseren kan ikke anvendes til OS2Indberetning. Din version af browseren Internet Explorer er for gammel. Du bedes opdatere Internet Explorer til version 11, alternativt bruge browserne Chrome eller Firefox.";
 
                         var modalInstance = $modal.open({
                             templateUrl: '/App/Services/Error/ServiceError.html',
