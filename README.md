@@ -113,6 +113,10 @@ Hjælpeteksten vises under Admin->Emailadviseringer
 Udfyldes med hjælpetekst der beskriver formål med tjenestekørselsindberetning.
 Hjælpeteksten vises under Indberet tjenestekørsel.
 
+###### NoLicensePlateHelpText
+Udfyles med hjælpetekst der fortæller brugeren han ingen nummerplader har.
+Hjælpeteksten vises under Indberet tjenestekørsel, når man ingen nummerplader har.
+
 ###### ReadReportCommentHelp
 Udfyldes med hjælpetekst der beskriver kommentar til aflæst tjenestekørselsindberetning.
 Hjælpeteksten vises under Indberet tjenestekørsel, når man har valgt aflæst indberetning.
