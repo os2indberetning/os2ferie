@@ -272,8 +272,13 @@
                            m._d.getFullYear();
                    },
                }, {
-                   field: "ResponsibleLeader.FullName",
-                   title: "Godkender"
+                   title: "Godkender",
+                   template: function(data) {
+                       if (data.ResponsibleLeader != 0 && data.ResponsibleLeader != null && data.ResponsibleLeader != undefined) {
+                            return data.ResponsibleLeader.FullName;
+                       }
+                       return "";
+                   }
                }
            ],
            scrollable: false,
