@@ -9,6 +9,7 @@ using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.AddressServices;
 using Ninject;
+using AddressHistory = Core.DomainModel.AddressHistory;
 
 namespace AddressHistoryMigration
 {
@@ -35,6 +36,132 @@ namespace AddressHistoryMigration
             return result;
         }
 
+
+        public void TryReClean()
+        {
+            var tempRepo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<TempAddressHistory>>();
+            var coords = new AddressCoordinates();
+            var i = 0;
+            var rows = tempRepo.AsQueryable().Where(x => x.HomeIsDirty || x.WorkIsDirty).ToList();
+            foreach (var history in rows)
+            {
+                i++;
+                Console.WriteLine(i + " of " + rows.Count);
+                history.WorkIsDirty = false;
+                history.HomeIsDirty = false;
+
+                try
+                {
+                    coords.GetAddressCoordinates(new Address
+                    {
+                        StreetName = SplitAddressOnNumber(history.HjemmeAdresse)[0],
+                        StreetNumber = SplitAddressOnNumber(history.HjemmeAdresse)[1],
+                        ZipCode = history.HjemmePostNr,
+                        Town = history.HjemmeBy
+                    });
+
+                }
+                catch (Exception e)
+                {
+                    history.HomeIsDirty = true;
+                }
+
+                try
+                {
+                    coords.GetAddressCoordinates(new Address
+                    {
+                        StreetName = SplitAddressOnNumber(history.ArbejdsAdresse)[0],
+                        StreetNumber = SplitAddressOnNumber(history.ArbejdsAdresse)[1],
+                        ZipCode = history.ArbejdsPostNr,
+                        Town = history.ArbejdsBy
+                    });
+
+                }
+                catch (Exception e)
+                {
+                    history.WorkIsDirty = true;
+                }
+            }
+            tempRepo.Save();
+        }
+
+        public void TransferFromTempToActual()
+        {
+            var tempRepo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<TempAddressHistory>>();
+            var actualRepo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<AddressHistory>>();
+            var workAddressRepo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<WorkAddress>>();
+            var personalAddressRepo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<PersonalAddress>>();
+            var coords = new AddressCoordinates();
+            var emplRepo = NinjectWebKernel.CreateKernel().Get<IGenericRepository<Employment>>();
+
+            var i = 0;
+
+            var rows = tempRepo.AsQueryable().ToList();
+
+            foreach (var tempHistory in rows)
+            {
+                i++;
+                Console.WriteLine(i + " of " + rows.Count);
+                var empl = emplRepo.AsQueryable().Single(x => x.EmploymentId == tempHistory.MaNr);
+
+                var workTemp = coords.GetAddressCoordinates(new WorkAddress()
+                {
+                    StreetName = SplitAddressOnNumber(tempHistory.ArbejdsAdresse)[0],
+                    StreetNumber = SplitAddressOnNumber(tempHistory.ArbejdsAdresse)[1],
+                    ZipCode = tempHistory.ArbejdsPostNr,
+                    Town = tempHistory.ArbejdsBy,
+                });
+
+                var workAddress = new WorkAddress
+                {
+                    StreetName = workTemp.StreetName,
+                    StreetNumber = workTemp.StreetNumber,
+                    ZipCode = workTemp.ZipCode,
+                    Town = workTemp.Town,
+                    Latitude = workTemp.Latitude,
+                    Longitude = workTemp.Longitude
+                };
+
+                var homeTemp = coords.GetAddressCoordinates(new PersonalAddress
+                {
+                    StreetName = SplitAddressOnNumber(tempHistory.HjemmeAdresse)[0],
+                    StreetNumber = SplitAddressOnNumber(tempHistory.HjemmeAdresse)[1],
+                    ZipCode = tempHistory.HjemmePostNr,
+                    Town = tempHistory.HjemmeBy,
+                });
+
+                var homeAddress = new PersonalAddress()
+                {
+                    StreetName = homeTemp.StreetName,
+                    StreetNumber = homeTemp.StreetNumber,
+                    ZipCode = homeTemp.ZipCode,
+                    Town = homeTemp.Town,
+                    Latitude = homeTemp.Latitude,
+                    Longitude = homeTemp.Longitude,
+                    PersonId = empl.PersonId,
+                    Type = PersonalAddressType.OldHome,
+                };
+
+                workAddressRepo.Insert(workAddress);
+                personalAddressRepo.Insert(homeAddress);
+                workAddressRepo.Save();
+                personalAddressRepo.Save();
+
+                var addressHistory = new Core.DomainModel.AddressHistory
+                {
+                    WorkAddressId = workAddress.Id,
+                    HomeAddressId = homeAddress.Id,
+                    StartTimestamp = tempHistory.AktivFra,
+                    EndTimestamp = tempHistory.AktivTil,
+                    EmploymentId = empl.Id,                   
+                };
+
+                actualRepo.Insert(addressHistory);
+
+            }
+            actualRepo.Save();
+        }
+
         public HashSet<string> GetUncleanableAddresses()
         {
             var provider = new DataProvider();
@@ -51,8 +178,9 @@ namespace AddressHistoryMigration
 
                 var tempHistory = new TempAddressHistory
                 {
-                    AktivFra = (Int32) (DateTime.UtcNow.Subtract(ah.AktivFra)).TotalSeconds,
-                    AktivTil = (Int32) (DateTime.UtcNow.Subtract(ah.AktivTil)).TotalSeconds,
+
+                    AktivFra = (Int32)(ah.AktivFra.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
+                    AktivTil = (Int32)(ah.AktivTil.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
                     ArbejdsAdresse = ah.ArbejdsAdresse,
                     ArbejdsBy = ah.ArbejdsBy,
                     ArbejdsPostNr = ah.ArbejdsPostNr,
@@ -62,7 +190,8 @@ namespace AddressHistoryMigration
                     HjemmePostNr = ah.HjemmePostNr,
                     MaNr = ah.MaNr,
                     Navn = ah.Navn,
-                    IsDirty = false
+                    HomeIsDirty = false,
+                    WorkIsDirty = false,
                 };
 
                 var home = new Address();
@@ -81,7 +210,7 @@ namespace AddressHistoryMigration
                 }
                 catch (Exception e)
                 {
-                    tempHistory.IsDirty = true;
+                    tempHistory.HomeIsDirty = true;
                 }
 
                 var work = new Address();
@@ -101,7 +230,7 @@ namespace AddressHistoryMigration
                 }
                 catch (Exception e)
                 {
-                    tempHistory.IsDirty = true;
+                    tempHistory.WorkIsDirty = true;
                 }
                 repo.Insert(tempHistory);
             }
