@@ -329,6 +329,10 @@
     <Compile Include="Migrations\201510081248253_AddedTempAddressHistory.Designer.cs">
       <DependentUpon>201510081248253_AddedTempAddressHistory.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511031130224_editedTempHistory.cs" />
+    <Compile Include="Migrations\201511031130224_editedTempHistory.Designer.cs">
+      <DependentUpon>201511031130224_editedTempHistory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -541,6 +545,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510081248253_AddedTempAddressHistory.resx">
       <DependentUpon>201510081248253_AddedTempAddressHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511031130224_editedTempHistory.resx">
+      <DependentUpon>201511031130224_editedTempHistory.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
