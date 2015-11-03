@@ -20,6 +20,7 @@ namespace AddressHistoryMigration.Models
         public string ArbejdsAdresse { get; set; }
         public int ArbejdsPostNr { get; set; }
         public string ArbejdsBy { get; set; }
-        public bool IsDirty { get; set; }
+        public bool HomeIsDirty { get; set; }
+        public bool WorkIsDirty { get; set; }
     }
 }
