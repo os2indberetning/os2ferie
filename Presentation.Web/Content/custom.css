@@ -187,6 +187,8 @@ a.informationHelpLink {
 
 li.mainMenuLink.active {
     text-decoration: underline !important;
+    text-decoration-color: white !important;
+    color: white !important;
 }
 
 li.mainMenuLink > a {
@@ -431,4 +433,16 @@ li.mainMenuLink.active > a > i.fa {
 
 .k-ff {
     overflow: inherit !important;
+}
+
+.k-input:-ms-input-placeholder,.k-textbox:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:#ccc;
+}
+
+.k-textbox:-ms-input-placeholder:hover,.k-input:-ms-input-placeholder:hover { /* Internet Explorer 10-11 */
+   color:#ccc;
+}
+
+.navbar {
+    border: none;
 }

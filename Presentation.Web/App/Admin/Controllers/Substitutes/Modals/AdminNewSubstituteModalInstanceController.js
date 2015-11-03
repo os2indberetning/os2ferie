@@ -72,6 +72,8 @@
                     sub.EndDateTimestamp = infinitePeriod;
                 }
 
+                $scope.showSpinner = true;
+
                 sub.$post(function (data) {
                     NotificationService.AutoFadeNotification("success", "", "Stedfortræder blev oprettet");
                     $modalInstance.close();

@@ -7,6 +7,12 @@
 
         $scope.isSaveDisabled = false;
 
+        $scope.addressFieldOptions = {
+            dataBound: function () {
+                $scope.addressNotFound = this.dataSource._data.length == 0;
+                $scope.$apply();
+            }
+        }
 
         if (routeId != undefined) {
             Route.getSingle({ id: routeId }, function (res) {
@@ -26,6 +32,7 @@
         }
 
         $scope.saveRoute = function () {
+            if ($scope.addressNotFound) return;
             $scope.isSaveDisabled = true;
             if (routeId != undefined) {
                 // routeId is defined -> User is editing existing route ->  Delete it, and then post the edited route as a new route.

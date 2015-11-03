@@ -113,9 +113,24 @@
 
                             delete personalAddress.Id;
 
-                            personalAddress.$save();
+                            personalAddress.$save(function (res) {
+                                res.PresentationString = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town,
+                                res.address = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town
+
+                                $scope.PersonalAddresses.push(res);
+                                console.log($scope.PersonalAddresses);
+                                angular.forEach($scope.container.PersonalAddressDropDown, function (entry, innerKey) {
+                                    entry.dataSource.read();
+                                });
+                                
+                            });
+
+                            
                         }
                     });
+
+                    
+                    
                 }
 
                 if (typeof $scope.DriveReport.FourKmRule !== "undefined" && $scope.DriveReport.FourKmRule.Using === true) {

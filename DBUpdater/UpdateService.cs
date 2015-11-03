@@ -16,6 +16,7 @@ using Infrastructure.AddressServices.Interfaces;
 using MoreLinq;
 using Ninject;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
+using Core.ApplicationServices.Interfaces;
 
 namespace DBUpdater
 {
@@ -26,13 +27,30 @@ namespace DBUpdater
         private readonly IGenericRepository<Person> _personRepo;
         private readonly IGenericRepository<CachedAddress> _cachedRepo;
         private readonly IGenericRepository<PersonalAddress> _personalAddressRepo;
+        private readonly IGenericRepository<Substitute> _subRepo;
         private readonly IAddressLaunderer _actualLaunderer;
         private readonly IAddressCoordinates _coordinates;
         private readonly IDbUpdaterDataProvider _dataProvider;
         private readonly IMailSender _mailSender;
         private readonly IAddressHistoryService _historyService;
+        private readonly IGenericRepository<DriveReport> _reportRepo;
+        private readonly IDriveReportService _driveService;
+        private readonly ISubstituteService _subService;
 
-        public UpdateService(IGenericRepository<Employment> emplRepo, IGenericRepository<OrgUnit> orgRepo, IGenericRepository<Person> personRepo, IGenericRepository<CachedAddress> cachedRepo, IGenericRepository<PersonalAddress> personalAddressRepo, IAddressLaunderer actualLaunderer, IAddressCoordinates coordinates, IDbUpdaterDataProvider dataProvider, IMailSender mailSender, IAddressHistoryService historyService)
+        public UpdateService(IGenericRepository<Employment> emplRepo,
+            IGenericRepository<OrgUnit> orgRepo,
+            IGenericRepository<Person> personRepo,
+            IGenericRepository<CachedAddress> cachedRepo,
+            IGenericRepository<PersonalAddress> personalAddressRepo,
+            IAddressLaunderer actualLaunderer,
+            IAddressCoordinates coordinates,
+            IDbUpdaterDataProvider dataProvider,
+            IMailSender mailSender,
+            IAddressHistoryService historyService,
+            IGenericRepository<DriveReport> reportRepo,
+            IDriveReportService driveService,
+            ISubstituteService subService,
+            IGenericRepository<Substitute> subRepo)
         {
             _emplRepo = emplRepo;
             _orgRepo = orgRepo;
@@ -44,6 +62,9 @@ namespace DBUpdater
             _dataProvider = dataProvider;
             _mailSender = mailSender;
             _historyService = historyService;
+            _reportRepo = reportRepo;
+            _subService = subService;
+            _subRepo = subRepo;
         }
 
         /// <summary>
@@ -430,5 +451,49 @@ namespace DBUpdater
 
             return launderedAddress;
         }
+
+        public void UpdateLeadersOnAllReports()
+        {
+            var i = 0;
+
+            var reports = _reportRepo.AsQueryable().Where(x => x.Employment.OrgUnit.Level > 1).ToList();
+            var max = reports.Count();
+            foreach(var report in reports)
+            {
+                Console.WriteLine("Updating leaders on report " + i + " of " + max);
+                i++;
+                report.ResponsibleLeaderId = _driveService.GetResponsibleLeaderForReport(report).Id;
+                report.ActualLeaderId = _driveService.GetActualLeaderForReport(report).Id;
+                if(i % 10000 == 0)
+                {
+                    Console.WriteLine("Saving to database");
+                    _reportRepo.Save();
+                }
+            }
+            Console.WriteLine("Saving to database");
+            _reportRepo.Save();
+
+        }
+
+        /// <summary>
+        /// Updates ResponsibleLeader on all reports that had a substitute which expired yesterday or became active today.
+        /// </summary>
+        public void UpdateLeadersOnExpiredOrActivatedSubstitutes()
+        {
+            var yesterdayTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(1))).TotalSeconds;
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
+            var endOfDayStamp = _subService.GetEndOfDayTimestamp(yesterdayTimestamp);
+            var startOfDayStamp = _subService.GetStartOfDayTimestamp(currentTimestamp);
+
+            var affectedSubstitutes = _subRepo.AsQueryable().Where(s => (s.EndDateTimestamp == endOfDayStamp) || (s.StartDateTimestamp == startOfDayStamp)).ToList();
+            Console.WriteLine(affectedSubstitutes.Count() + " substitutes have expired or become active. Updating affected reports.");
+            foreach(var sub in affectedSubstitutes)
+            {
+                _subService.UpdateReportsAffectedBySubstitute(sub);
+            } 
+            
+        }
+
     }
 }

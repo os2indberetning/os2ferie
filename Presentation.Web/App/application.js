@@ -1,4 +1,4 @@
-﻿var application = angular.module("application", ["kendo.directives", "ui.router", "ui.bootstrap", "ui.bootstrap.tooltip", "ngResource", "template/modal/window.html", "template/modal/window.html", "template/modal/backdrop.html", "template/tabs/tab.html", "template/tabs/tabset.html", "angularMoment", "template/popover/popover.html", "kendo-ie-fix", 'angular-loading-bar'])
+﻿var application = angular.module("application", ["kendo.directives", "ui.router", "ui.bootstrap", "ui.bootstrap.tooltip", "ngResource", "template/modal/window.html", "template/modal/window.html", "template/modal/backdrop.html", "template/tabs/tab.html", "template/tabs/tabset.html", "angularMoment", "template/popover/popover.html", "kendo-ie-fix", 'angular-loading-bar','checkie'])
     .config([
         'cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
             cfpLoadingBarProvider.includeSpinner = false;
@@ -67,7 +67,7 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             templateUrl: "/App/ApproveReports/ApproveReportsView.html",
             resolve: {
                 CurrentUser: ["Person", "$location", "$rootScope", function (Person, $location, $rootScope) {
-                    if ($rootScope.CurrentUser == undefined) {
+                    if ($rootScope.CurrentUser == undefined || ($rootScope.CurrentUser.$$state != undefined && $rootScope.CurrentUser.$$state.status == 0)) {
                         return Person.GetCurrentUser().$promise.then(function (data) {
                             $rootScope.CurrentUser = data;
                             if (!data.IsLeader && !data.IsSubstitute) {
@@ -105,7 +105,8 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             controller: "AdminMenuController",
             resolve: {
                 CurrentUser: ["Person", "$location", "$rootScope", function (Person, $location, $rootScope) {
-                    if ($rootScope.CurrentUser == undefined) {
+                    if ($rootScope.CurrentUser == undefined || ($rootScope.CurrentUser.$$state != undefined && $rootScope.CurrentUser.$$state.status == 0)) {
+
                         return Person.GetCurrentUser().$promise.then(function (data) {
                             $rootScope.CurrentUser = data;
                             if (!data.IsAdmin) {

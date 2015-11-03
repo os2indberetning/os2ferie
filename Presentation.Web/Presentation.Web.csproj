@@ -373,6 +373,7 @@
     <Content Include="App\ApproveReports\Modals\ConfirmRejectTemplate.html" />
     <Content Include="App\ApproveReports\SettingsView.html" />
     <Content Include="App\ApproveReports\View.html" />
+    <Content Include="App\Directives\CheckIeDirective.js" />
     <Content Include="App\Directives\EnterKeypress.js" />
     <Content Include="App\Directives\RouteLoader.js" />
     <Content Include="App\Driving\ConfirmDiscardChangesController.js" />

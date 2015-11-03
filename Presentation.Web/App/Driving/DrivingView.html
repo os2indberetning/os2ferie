@@ -119,7 +119,7 @@
                     </div>
 
                 </div>
-                <div ng-hide="!container.addressNotFound" style="border-radius: 25px; padding: 15px; background-color: #d3d3d3;" class="fill-width">OS2Indberetning kan ikke finde adressen. Kontroller venligst stavemåden, om husnummeret er korrekt fx 3A, og at der ikke indgår etager som fx 3, 1th. Hvis du har kopieret adressen ind, prøv da at skrive den i stedet.</div>
+                <div ng-hide="!(container.addressNotFound && DriveReport.KilometerAllowance != 'Read')" style="border-radius: 25px; padding: 15px; background-color: #d3d3d3;" class="fill-width">OS2Indberetning kan ikke finde adressen. Kontroller venligst stavemåden, om husnummeret er korrekt fx 3A, og at der ikke indgår etager som fx 3, 1th. Hvis du har kopieret adressen ind, prøv da at skrive den i stedet.</div>
                 <div ng-switch-default>
                     <label ng-if="addressSelectionErrorMessage.length > 0" ng-bind="addressSelectionErrorMessage" class="text-danger"></label>
                    
@@ -136,7 +136,7 @@
 
                                 <div ng-show="isAddressNameSet(DriveReport.Addresses[$index]) === false">
                                     <!--Dropdown for selecting standard addresses-->
-                                    <select class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'PresentationString'" k-data-value-field="'address'" k-placeholder="'Brugerens Personlige adresser'"> </select>
+                                    <select class="fill-width" kendo-drop-down-list="container.PersonalAddressDropDown[{{$index}}]" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'PresentationString'" k-data-value-field="'address'" k-placeholder="'Brugerens Personlige adresser'"> </select>
                                 </div>
 
                             </div>
