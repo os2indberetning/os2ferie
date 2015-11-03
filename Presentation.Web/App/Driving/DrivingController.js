@@ -149,21 +149,6 @@
             });
             $scope.container.LicensePlateDropDown.trigger("change");
 
-            // Select kilometer allowance.
-            switch (report.KilometerAllowance) {
-                case "Calculated":
-                    $scope.container.KilometerAllowanceDropDown.select(0);
-                    break;
-                case "Read":
-                    $scope.container.KilometerAllowanceDropDown.select(1);
-                    break;
-                case "CalculatedWithoutExtraDistance":
-                    $scope.container.KilometerAllowanceDropDown.select(2);
-                    break;
-            }
-
-            $scope.DriveReport.KilometerAllowance = $scope.container.KilometerAllowanceDropDown._selectedValue;
-
             // Select KmRate
 
             $scope.container.KmRateDropDown.select(function (item) {
@@ -181,6 +166,22 @@
 
             // Load additional data if a report is being edited.
             if (isEditingReport) {
+
+                // Select kilometer allowance.
+                switch (report.KilometerAllowance) {
+                    case "Calculated":
+                        $scope.container.KilometerAllowanceDropDown.select(0);
+                        break;
+                    case "Read":
+                        $scope.container.KilometerAllowanceDropDown.select(1);
+                        break;
+                    case "CalculatedWithoutExtraDistance":
+                        $scope.container.KilometerAllowanceDropDown.select(2);
+                        break;
+                }
+
+                $scope.DriveReport.KilometerAllowance = $scope.container.KilometerAllowanceDropDown._selectedValue;
+
                 firstMapLoad = false;
                 $scope.DriveReport.Purpose = report.Purpose;
                 $scope.DriveReport.FourKmRule.Using = report.FourKmRule;
