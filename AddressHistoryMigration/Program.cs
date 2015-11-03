@@ -12,7 +12,7 @@ namespace DBUpdater
         {
             var ninjectKernel = NinjectWebKernel.CreateKernel();
             var updateService = new Service();
-            updateService.GetUncleanableAddresses();
+            updateService.TransferFromTempToActual();
         }
 
 
