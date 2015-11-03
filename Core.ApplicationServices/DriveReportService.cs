@@ -233,6 +233,13 @@ namespace Core.ApplicationServices
         {
             var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
+            // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
+            if (driveReport.Person == null && driveReport.PersonId != 0)
+            {
+                driveReport.Person =
+                    _employmentRepository.AsQueryable().Single(x => x.PersonId == driveReport.PersonId).Person;
+            }
+
             var person = driveReport.Person;
 
             //Fetch personal approver for the person (Person and Leader of the substitute is the same)
