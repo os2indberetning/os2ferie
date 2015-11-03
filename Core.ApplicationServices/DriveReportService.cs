@@ -237,7 +237,7 @@ namespace Core.ApplicationServices
             if (driveReport.Person == null && driveReport.PersonId != 0)
             {
                 driveReport.Person =
-                    _employmentRepository.AsQueryable().Single(x => x.PersonId == driveReport.PersonId).Person;
+                    _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId).Person;
             }
 
             var person = driveReport.Person;
