@@ -188,8 +188,13 @@
                    },
                    title: "Indberettet"
                }, {
-                   field: "ResponsibleLeader.FullName",
-                   title: "Godkender"
+                   title: "Godkender",
+                   template: function(data) {
+                       if (data.ResponsibleLeader != 0 && data.ResponsibleLeader != null && data.ResponsibleLeader != undefined) {
+                            return data.ResponsibleLeader.FullName;
+                       }
+                       return "";
+                   }
                }, {
                    field: "Id",
                    template: "<a ng-click=deleteClick(${Id})>Slet</a> | <a ng-click=editClick(${Id})>Rediger</a>",
