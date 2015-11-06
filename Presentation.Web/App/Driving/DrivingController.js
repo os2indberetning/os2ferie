@@ -555,6 +555,7 @@
                 if (angular.element('#map').length) {
                     OS2RouteMap.create({
                         id: 'map',
+                        routeToken: $rootScope.HelpTexts.SEPTIMA_API_KEY.text,
                         change: function (obj) {
                             if (firstMapLoad) {
                                 firstMapLoad = false;

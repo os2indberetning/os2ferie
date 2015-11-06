@@ -408,7 +408,6 @@
     <Content Include="Content\Bootstrap\loading-image.gif" />
     <Content Include="Content\Bootstrap\loading.gif" />
     <Content Include="Content\Bootstrap\sprite.png" />
-    <Content Include="Content\favicon.ico" />
     <Content Include="Content\kendo\Black\editor.png" />
     <Content Include="Content\kendo\Black\imagebrowser.png" />
     <Content Include="Content\kendo\Black\indeterminate.gif" />
@@ -683,8 +682,6 @@
     <Content Include="Content\loading-bar.css" />
     <Content Include="Content\loading-bar.min.css" />
     <Content Include="Content\pnotify.custom.min.css" />
-    <Content Include="logo.png" />
-    <Content Include="Content\private.css" />
     <Content Include="Content\simple-sidebar.css" />
     <Content Include="Content\Themes\SbAdmin\css\bootstrap-rtl.css" />
     <Content Include="Content\Themes\SbAdmin\css\bootstrap-rtl.min.css" />
@@ -1188,6 +1185,7 @@
     <Content Include="Scripts\kendo\messages\kendo.messages.zh-HK.min.js" />
     <Content Include="Scripts\kendo\messages\kendo.messages.zh-TW.min.js" />
     <Content Include="Scripts\kendo\pako_deflate.min.js" />
+    <None Include="Properties\PublishProfiles\Skanderborg.pubxml" />
     <None Include="Scripts\linq-vsdoc.js" />
     <Content Include="Scripts\linq.js" />
     <Content Include="Scripts\linq.min.js" />
@@ -1241,7 +1239,6 @@
     <Content Include="Content\Themes\SbAdmin\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\Themes\SbAdmin\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\timeline.css" />
-    <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1379,12 +1376,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="fonts\glyphicons-halflings-regular.woff2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="connections.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CustomSettings.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Themes\SbAdmin\fonts\glyphicons-halflings-regular.woff2">
@@ -2378,7 +2369,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1983</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
