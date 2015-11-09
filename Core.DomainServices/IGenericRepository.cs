@@ -20,6 +20,7 @@ namespace Core.DomainServices
          * for querying.
          */
         IQueryable<T> AsQueryable();
+        IQueryable<T> AsNoTracking();
         void Save();
         void Update(T entity);
         void Patch(T entity);

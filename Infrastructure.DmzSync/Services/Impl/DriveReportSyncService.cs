@@ -29,8 +29,9 @@ namespace Infrastructure.DmzSync.Services.Impl
         private readonly IDriveReportService _driveService;
         private readonly IRoute<RouteInformation> _routeService;
         private readonly IAddressCoordinates _coordinates;
+        private readonly IGenericRepository<Core.DomainModel.Employment> _emplRepo;
 
-        public DriveReportSyncService(IGenericRepository<Core.DmzModel.DriveReport> dmzDriveReportRepo, IGenericRepository<Core.DomainModel.DriveReport> masterDriveReportRepo, IGenericRepository<Core.DomainModel.Rate> rateRepo, IGenericRepository<LicensePlate> licensePlateRepo, IDriveReportService driveService, IRoute<RouteInformation> routeService, IAddressCoordinates coordinates)
+        public DriveReportSyncService(IGenericRepository<Core.DmzModel.DriveReport> dmzDriveReportRepo, IGenericRepository<Core.DomainModel.DriveReport> masterDriveReportRepo, IGenericRepository<Core.DomainModel.Rate> rateRepo, IGenericRepository<LicensePlate> licensePlateRepo, IDriveReportService driveService, IRoute<RouteInformation> routeService, IAddressCoordinates coordinates, IGenericRepository<Core.DomainModel.Employment> emplRepo)
         {
             _dmzDriveReportRepo = dmzDriveReportRepo;
             _masterDriveReportRepo = masterDriveReportRepo;
@@ -39,6 +40,7 @@ namespace Infrastructure.DmzSync.Services.Impl
             _driveService = driveService;
             _routeService = routeService;
             _coordinates = coordinates;
+            _emplRepo = emplRepo;
         }
 
         /// <summary>
@@ -91,6 +93,8 @@ namespace Infrastructure.DmzSync.Services.Impl
                 var licensePlate = _licensePlateRepo.AsQueryable().FirstOrDefault(x => x.PersonId.Equals(dmzReport.ProfileId) && x.IsPrimary);
                 var plate = licensePlate != null ? licensePlate.Plate : "UKENDT";
 
+                var empl = _emplRepo.AsNoTracking().FirstOrDefault(x => x.Id == dmzReport.EmploymentId);
+
                 var newReport = new Core.DomainModel.DriveReport
                 {
 
@@ -105,6 +109,8 @@ namespace Infrastructure.DmzSync.Services.Impl
                     EndsAtHome = dmzReport.EndsAtHome,
                     Purpose = dmzReport.Purpose,
                     PersonId = dmzReport.ProfileId,
+                    Person = empl.Person,
+                    Employment = empl,
                     EmploymentId = dmzReport.EmploymentId,
                     KmRate = rate.KmRate,
                     TFCode = rate.Type.TFCode,

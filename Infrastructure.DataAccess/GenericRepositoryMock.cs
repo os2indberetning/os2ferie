@@ -37,6 +37,11 @@ namespace Presentation.Web.Test.Controllers
             return _list.AsQueryable();
         }
 
+        public IQueryable<T> AsNoTracking()
+        {
+            return _list.AsQueryable();
+        }
+
         public virtual void Save()
         {
 

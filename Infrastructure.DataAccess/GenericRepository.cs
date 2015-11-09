@@ -69,6 +69,11 @@ namespace Infrastructure.DataAccess
             return _dbSet.AsQueryable();
         }
 
+        public IQueryable<T> AsNoTracking()
+        {
+            return _dbSet.AsNoTracking().AsQueryable();
+        }
+
         public void Save()
         {
             try
