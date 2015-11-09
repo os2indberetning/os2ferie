@@ -120,6 +120,7 @@ namespace Core.ApplicationServices
             var createdReport = _driveReportRepository.Insert(report);
             createdReport.ResponsibleLeaderId = GetResponsibleLeaderForReport(report).Id;
             createdReport.ActualLeaderId = GetActualLeaderForReport(report).Id;
+            
             _driveReportRepository.Save();
 
             // If the report is calculated or from an app, then we would like to store the points.
@@ -232,15 +233,13 @@ namespace Core.ApplicationServices
         public Person GetResponsibleLeaderForReport(DriveReport driveReport)
         {
             var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+          
+            // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
+            var person = _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId).Person;
+
 
             // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
-            if (driveReport.Person == null && driveReport.PersonId != 0)
-            {
-                driveReport.Person =
-                    _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId).Person;
-            }
-
-            var person = driveReport.Person;
+            var empl = _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId);
 
             //Fetch personal approver for the person (Person and Leader of the substitute is the same)
             var personalApprover =
@@ -255,7 +254,7 @@ namespace Core.ApplicationServices
             }
 
             //Find an org unit where the person is not the leader, and then find the leader of that org unit to attach to the drive report
-            var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == driveReport.Employment.OrgUnitId);
+            var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == empl.OrgUnitId);
             var leaderOfOrgUnit =
                 _employmentRepository.AsQueryable().FirstOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader && e.StartDateTimestamp < currentDateTimestamp && (e.EndDateTimestamp > currentDateTimestamp || e.EndDateTimestamp == 0));
 
@@ -291,7 +290,7 @@ namespace Core.ApplicationServices
             // A report comes in for orgUnit 4. Check if leader has a substitute for that org.
             // If not then check if leader has a substitute for org 2.
             // If not then return the actual leader.
-            var orgToCheck = driveReport.Employment.OrgUnit;
+            var orgToCheck = empl.OrgUnit;
             Substitute sub = null;
             var loopHasFinished = false;
             while (!loopHasFinished)
@@ -322,10 +321,14 @@ namespace Core.ApplicationServices
         {
             var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
-            var person = driveReport.Person;
+            // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
+            var person = _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId).Person;
+
+            // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
+            var empl = _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId);
 
             //Find an org unit where the person is not the leader, and then find the leader of that org unit to attach to the drive report
-            var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == driveReport.Employment.OrgUnitId);
+            var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == empl.OrgUnitId);
             var leaderOfOrgUnit =
                 _employmentRepository.AsQueryable().FirstOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader && e.StartDateTimestamp < currentDateTimestamp && (e.EndDateTimestamp > currentDateTimestamp || e.EndDateTimestamp == 0));
 

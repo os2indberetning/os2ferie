@@ -333,6 +333,10 @@
     <Compile Include="Migrations\201511031130224_editedTempHistory.Designer.cs">
       <DependentUpon>201511031130224_editedTempHistory.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511091655051_RemovedTempAddress.cs" />
+    <Compile Include="Migrations\201511091655051_RemovedTempAddress.Designer.cs">
+      <DependentUpon>201511091655051_RemovedTempAddress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -548,6 +552,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511031130224_editedTempHistory.resx">
       <DependentUpon>201511031130224_editedTempHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511091655051_RemovedTempAddress.resx">
+      <DependentUpon>201511091655051_RemovedTempAddress.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

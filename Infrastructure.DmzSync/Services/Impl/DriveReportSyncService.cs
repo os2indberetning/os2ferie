@@ -109,8 +109,6 @@ namespace Infrastructure.DmzSync.Services.Impl
                     EndsAtHome = dmzReport.EndsAtHome,
                     Purpose = dmzReport.Purpose,
                     PersonId = dmzReport.ProfileId,
-                    Person = empl.Person,
-                    Employment = empl,
                     EmploymentId = dmzReport.EmploymentId,
                     KmRate = rate.KmRate,
                     TFCode = rate.Type.TFCode,
