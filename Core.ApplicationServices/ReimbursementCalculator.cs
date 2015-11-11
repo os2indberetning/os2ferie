@@ -132,8 +132,6 @@ namespace Core.ApplicationServices
                 {
                     toSubtract += borderDistance;
                 }
-
-                toSubtract += FourKmAdjustment;
             }
             else
             {
@@ -176,11 +174,6 @@ namespace Core.ApplicationServices
                     {
                         report.Distance = drivenRoute.Length;
 
-                        if (report.FourKmRule)
-                        {
-                            report.Distance -= FourKmAdjustment;
-                        }
-
                         //Save RouteGeometry
                         report.RouteGeometry = drivenRoute.GeoPoints;
 
@@ -215,15 +208,18 @@ namespace Core.ApplicationServices
                 report.Distance = 0;
             }
 
-
             // Multiply the distance by two if the report is a return trip
             if (report.IsRoundTrip == true)
             {
                 report.Distance *= 2;
             }
 
+            if (report.FourKmRule)
+            {
+                report.Distance -= FourKmAdjustment;
+            }
 
-            SetAmountToReimburse(report);
+             SetAmountToReimburse(report);
 
             return report;
         }

@@ -360,6 +360,11 @@
        $scope.gridContainer = {};
        $scope.dateContainer = {};
 
+
+       $scope.refreshGrid = function () {
+           $scope.gridContainer.grid.dataSource.read();
+       }
+
        $scope.loadInitialDates();
 
        // Format for datepickers.
