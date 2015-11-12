@@ -239,7 +239,7 @@ namespace Core.ApplicationServices
 
 
             // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
-            var empl = _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId);
+            var empl = _employmentRepository.AsQueryable().First(x => x.Id == driveReport.EmploymentId);
 
             //Fetch personal approver for the person (Person and Leader of the substitute is the same)
             var personalApprover =
@@ -325,7 +325,7 @@ namespace Core.ApplicationServices
             var person = _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId).Person;
 
             // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
-            var empl = _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId);
+            var empl = _employmentRepository.AsQueryable().First(x => x.Id == driveReport.EmploymentId);
 
             //Find an org unit where the person is not the leader, and then find the leader of that org unit to attach to the drive report
             var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == empl.OrgUnitId);
