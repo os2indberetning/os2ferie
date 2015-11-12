@@ -149,12 +149,12 @@ namespace OS2Indberetning.Controllers
 
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
 
-            var leader = _driveService.GetResponsibleLeaderForReport(report);
-
             if (report == null)
             {
                 return NotFound();
             }
+
+            var leader = report.ResponsibleLeader;
 
             if (leader == null)
             {
