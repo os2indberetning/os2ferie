@@ -63,6 +63,7 @@ namespace DBUpdater
             _mailSender = mailSender;
             _historyService = historyService;
             _reportRepo = reportRepo;
+            _driveService = driveService;
             _subService = subService;
             _subRepo = subRepo;
             _driveService = driveService;
