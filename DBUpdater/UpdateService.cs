@@ -65,6 +65,7 @@ namespace DBUpdater
             _reportRepo = reportRepo;
             _subService = subService;
             _subRepo = subRepo;
+            _driveService = driveService;
         }
 
         /// <summary>
@@ -462,8 +463,11 @@ namespace DBUpdater
             {
                 Console.WriteLine("Updating leaders on report " + i + " of " + max);
                 i++;
-                report.ResponsibleLeaderId = _driveService.GetResponsibleLeaderForReport(report).Id;
-                report.ActualLeaderId = _driveService.GetActualLeaderForReport(report).Id;
+                var responsibleLeader = _driveService.GetResponsibleLeaderForReport(report);
+                var actualLeader = _driveService.GetActualLeaderForReport(report);
+
+                report.ResponsibleLeaderId = responsibleLeader.Id;
+                report.ActualLeaderId = actualLeader.Id;
                 if(i % 10000 == 0)
                 {
                     Console.WriteLine("Saving to database");
