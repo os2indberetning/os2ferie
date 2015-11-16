@@ -126,28 +126,32 @@ namespace Core.ApplicationServices
             // If the report is calculated or from an app, then we would like to store the points.
             if (report.KilometerAllowance != KilometerAllowance.Read || report.IsFromApp)
             {
-                for (var i = 0; i < createdReport.DriveReportPoints.Count; i++)
+                // Reports from app with manual distance have no drivereportpoints.
+                if (report.DriveReportPoints.Count > 1)
                 {
-                    var currentPoint = createdReport.DriveReportPoints.ElementAt(i);
+                    for (var i = 0; i < createdReport.DriveReportPoints.Count; i++)
+                    {
+                        var currentPoint = createdReport.DriveReportPoints.ElementAt(i);
 
-                    if (i == report.DriveReportPoints.Count - 1)
-                    {
-                        // last element   
-                        currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
+                        if (i == report.DriveReportPoints.Count - 1)
+                        {
+                            // last element   
+                            currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
+                        }
+                        else if (i == 0)
+                        {
+                            // first element
+                            currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
+                        }
+                        else
+                        {
+                            // between first and last
+                            currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
+                            currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
+                        }
                     }
-                    else if (i == 0)
-                    {
-                        // first element
-                        currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
-                    }
-                    else
-                    {
-                        // between first and last
-                        currentPoint.NextPointId = createdReport.DriveReportPoints.ElementAt(i + 1).Id;
-                        currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
-                    }
+                    _driveReportRepository.Save();
                 }
-                _driveReportRepository.Save();
             }
 
 
@@ -239,7 +243,7 @@ namespace Core.ApplicationServices
 
 
             // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
-            var empl = _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId);
+            var empl = _employmentRepository.AsQueryable().First(x => x.Id == driveReport.EmploymentId);
 
             //Fetch personal approver for the person (Person and Leader of the substitute is the same)
             var personalApprover =
@@ -325,7 +329,7 @@ namespace Core.ApplicationServices
             var person = _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId).Person;
 
             // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
-            var empl = _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId);
+            var empl = _employmentRepository.AsQueryable().First(x => x.Id == driveReport.EmploymentId);
 
             //Find an org unit where the person is not the leader, and then find the leader of that org unit to attach to the drive report
             var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == empl.OrgUnitId);

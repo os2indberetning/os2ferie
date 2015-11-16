@@ -222,8 +222,14 @@
                            return result;
                        } else {
                            if (data.IsFromApp) {
-                               toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + tooltipContent + "'\">Indberettet fra mobil app</div>";
-                               result = toolTip + globe;
+                               var fromAppTooltip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + data.UserComment + "'\">Indberettet fra mobil app</div>";
+                               if (data.DriveReportPoints.length > 1) {
+                                   result = toolTip + roundTrip + fromAppTooltip + globe;
+                               } else {
+                                   // Set road tooltip to just contain "Aflæst manuelt"
+                                   toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + "Aflæst manuelt" + "'\">" + gridContent + "</div>";
+                                   result = toolTip + roundTrip + fromAppTooltip
+                               }
                                return result;
                            } else {
                                return "<div kendo-tooltip k-content=\"'" + comment + "'\">Aflæst manuelt</div>";
