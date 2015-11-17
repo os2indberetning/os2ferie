@@ -18,7 +18,6 @@ using Infrastructure.DmzSync.Services.Interface;
 using DriveReport = Core.DomainModel.DriveReport;
 using Employment = Core.DmzModel.Employment;
 using Rate = Core.DomainModel.Rate;
-using log4net;
 
 namespace Infrastructure.DmzSync.Services.Impl
 {
