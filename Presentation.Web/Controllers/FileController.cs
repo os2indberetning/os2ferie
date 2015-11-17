@@ -8,9 +8,9 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using Core.ApplicationServices;
 using Core.ApplicationServices.FileGenerator;
+using Core.ApplicationServices.Logger;
 using Core.DomainModel;
 using Core.DomainServices;
-using log4net;
 using Ninject;
 
 namespace OS2Indberetning.Controllers
@@ -19,13 +19,14 @@ namespace OS2Indberetning.Controllers
     {
         private readonly IGenericRepository<DriveReport> _repo;
 
-        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger _logger;
 
 
 
-        public FileController(IGenericRepository<DriveReport> repo, IGenericRepository<Person> personRepo) : base(repo, personRepo)
+        public FileController(IGenericRepository<DriveReport> repo, IGenericRepository<Person> personRepo, ILogger logger) : base(repo, personRepo)
         {
             _repo = repo;
+            _logger = logger;
         }
 
         //GET: Generate KMD File
@@ -42,12 +43,12 @@ namespace OS2Indberetning.Controllers
             try
             {
                 new ReportGenerator(_repo, new ReportFileWriter()).WriteRecordsToFileAndAlterReportStatus();
-                Logger.Info("Fil til KMD genereret.");
+                _logger.Log("Fil til KMD genereret.", "web");
                 return Ok();
             }
             catch (Exception e)
             {
-                Logger.Error("Fejl ved generering af fil til KMD", e);
+                _logger.Log("Fejl ved generering af fil til KMD", "web");
                 return InternalServerError();
             }
         }

@@ -14,10 +14,10 @@ using System.Web.OData;
 using System.Web.OData.Query;
 using System.Web.Routing;
 using Core.ApplicationServices;
+using Core.ApplicationServices.Logger;
 using Core.DomainModel;
 using Core.DomainModel.Example;
 using Core.DomainServices;
-using log4net;
 using Ninject;
 using Expression = System.Linq.Expressions.Expression;
 
@@ -30,7 +30,7 @@ namespace OS2Indberetning.Controllers
         private readonly IGenericRepository<Person> _personRepo;
         private readonly PropertyInfo _primaryKeyProp;
 
-        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger _logger;
 
         protected Person CurrentUser;
 
@@ -53,18 +53,18 @@ namespace OS2Indberetning.Controllers
                 CurrentUser = _personRepo.AsQueryable().FirstOrDefault(p => p.Initials.ToLower().Equals(initials));
                 if (CurrentUser == null)
                 {
-                    Logger.Error("AD-bruger ikke fundet i databasen (" + User.Identity.Name + ")");
+                    _logger.Log("AD-bruger ikke fundet i databasen (" + User.Identity.Name + ")", "web");
                     throw new UnauthorizedAccessException("AD-bruger ikke fundet i databasen.");
                 }
                 if (!CurrentUser.IsActive)
                 {
-                    Logger.Error("Inaktiv bruger forsøgte at logge ind (" + User.Identity.Name + ")");
+                    _logger.Log("Inaktiv bruger forsøgte at logge ind (" + User.Identity.Name + ")", "web");
                     throw new UnauthorizedAccessException("Inaktiv bruger forsøgte at logge ind.");
                 }
             }
             else
             {
-                Logger.Info("Gyldig domænebruger ikke fundet (" + User.Identity.Name + ")");
+                _logger.Log("Gyldig domænebruger ikke fundet (" + User.Identity.Name + ")", "web");
                 throw new UnauthorizedAccessException("Gyldig domænebruger ikke fundet.");
             }
         }
@@ -76,6 +76,7 @@ namespace OS2Indberetning.Controllers
             ValidationSettings.MaxExpansionDepth = 4;
             Repo = repository;
             _primaryKeyProp = Repo.GetPrimaryKeyProperty();
+            _logger = NinjectWebKernel.CreateKernel().Get<ILogger>();
         }
 
         protected IQueryable<T> GetQueryable(ODataQueryOptions<T> queryOptions)
@@ -123,7 +124,7 @@ namespace OS2Indberetning.Controllers
             }
             catch (Exception e)
             {
-                Logger.Error("Exception doing post of type " + typeof(T), e);
+                _logger.Log("Exception doing post of type " + typeof(T), "web");
                 return InternalServerError(e);
             }
         }
@@ -150,7 +151,7 @@ namespace OS2Indberetning.Controllers
             }
             catch (Exception e)
             {
-                Logger.Error("Exception doing patch of type " + typeof(T), e);
+                _logger.Log("Exception doing patch of type " + typeof(T), "web");
                 return InternalServerError(e);
             }
 
@@ -171,7 +172,7 @@ namespace OS2Indberetning.Controllers
             }
             catch (Exception e)
             {
-                Logger.Error("Exception doing delete", e);
+                _logger.Log("Exception doing delete", "web");
                 return InternalServerError(e);
             }
             return Ok();

@@ -12,7 +12,6 @@ using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
 using Infrastructure.DataAccess;
-using log4net.Repository.Hierarchy;
 using Newtonsoft.Json.Schema;
 
 namespace OS2Indberetning.Controllers

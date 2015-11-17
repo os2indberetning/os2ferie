@@ -10,7 +10,6 @@ using Core.ApplicationServices;
 using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.AddressServices.Interfaces;
-using log4net;
 using Ninject;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
 
@@ -26,8 +25,6 @@ namespace OS2Indberetning.Controllers
         private readonly IGenericRepository<CachedAddress> _cachedAddressRepo;
         private readonly IGenericRepository<PersonalAddress> _personalAddressRepo;
         private static Address MapStartAddress { get; set; }
-
-        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         //GET: odata/Addresses
         public AddressesController(IGenericRepository<Address> repository, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo, IAddressLaunderer launderer, IAddressCoordinates coordinates, IGenericRepository<CachedAddress> cachedAddressRepo, IGenericRepository<PersonalAddress> personalAddressRepo)
