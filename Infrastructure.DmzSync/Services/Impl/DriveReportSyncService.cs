@@ -112,8 +112,6 @@ namespace Infrastructure.DmzSync.Services.Impl
                 var licensePlate = _licensePlateRepo.AsQueryable().FirstOrDefault(x => x.PersonId.Equals(dmzReport.ProfileId) && x.IsPrimary);
                 var plate = licensePlate != null ? licensePlate.Plate : "UKENDT";
 
-                var empl = _emplRepo.AsNoTracking().FirstOrDefault(x => x.Id == dmzReport.EmploymentId);
-
                 var newReport = new Core.DomainModel.DriveReport
                 {
 
