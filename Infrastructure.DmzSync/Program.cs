@@ -26,6 +26,9 @@ namespace Infrastructure.DmzSync
     {
         static void Main(string[] args)
         {
+
+            log4net.Config.XmlConfigurator.Configure();
+
             // hacks because of error with Entity Framework.
             // This forces the dmzconnection to use MySql.
             new DataContext();
