@@ -8,6 +8,7 @@ using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
+using log4net;
 namespace Core.ApplicationServices.MailerService.Impl
 {
     public class MailService : IMailService
@@ -16,6 +17,7 @@ namespace Core.ApplicationServices.MailerService.Impl
         private readonly IGenericRepository<Substitute> _subRepo;
         private readonly IMailSender _mailSender;
         private readonly IDriveReportService _driveReportService;
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public MailService(IGenericRepository<DriveReport> driveRepo, IGenericRepository<Substitute> subRepo, IMailSender mailSender, IDriveReportService driveReportService)
         {
@@ -51,6 +53,14 @@ namespace Core.ApplicationServices.MailerService.Impl
             var approverEmails = new HashSet<String>();
 
             var reports = _driveRepo.AsQueryable().Where(r => r.Status == ReportStatus.Pending).ToList();
+
+            var reportsWithNoLeader = reports.Where(driveReport => driveReport.ResponsibleLeaderId != null);
+
+            foreach (var report in reportsWithNoLeader)
+            {
+                Logger.Warn(report.Person.FullName + "s indberetning har ingen leder");
+            }
+
             foreach (var driveReport in reports.Where(driveReport => driveReport.ResponsibleLeaderId != null && !string.IsNullOrEmpty(driveReport.ResponsibleLeader.Mail) && driveReport.ResponsibleLeader.RecieveMail))
             {
                 approverEmails.Add(driveReport.ResponsibleLeader.Mail);
