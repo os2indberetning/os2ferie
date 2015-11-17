@@ -51,7 +51,7 @@ namespace Core.ApplicationServices.MailerService.Impl
             var approverEmails = new HashSet<String>();
 
             var reports = _driveRepo.AsQueryable().Where(r => r.Status == ReportStatus.Pending).ToList();
-            foreach (var driveReport in reports.Where(driveReport => !string.IsNullOrEmpty(driveReport.ResponsibleLeader.Mail) && driveReport.ResponsibleLeader.RecieveMail))
+            foreach (var driveReport in reports.Where(driveReport => driveReport.ResponsibleLeaderId != null && !string.IsNullOrEmpty(driveReport.ResponsibleLeader.Mail) && driveReport.ResponsibleLeader.RecieveMail))
             {
                 approverEmails.Add(driveReport.ResponsibleLeader.Mail);
             }
