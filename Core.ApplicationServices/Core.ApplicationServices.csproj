@@ -109,6 +109,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IOrgUnitService.cs" />
+    <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="Logger\Logger.cs" />
     <Compile Include="OrgUnitService.cs" />
     <Compile Include="PersonalRouteService.cs" />
     <Compile Include="FileGenerator\FileRecord.cs" />

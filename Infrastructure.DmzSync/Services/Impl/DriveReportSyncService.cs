@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
+using Core.ApplicationServices.Logger;
 using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
@@ -31,11 +32,11 @@ namespace Infrastructure.DmzSync.Services.Impl
         private readonly IRoute<RouteInformation> _routeService;
         private readonly IAddressCoordinates _coordinates;
         private readonly IGenericRepository<Core.DomainModel.Employment> _emplRepo;
-        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger _logger;
 
-
-        public DriveReportSyncService(IGenericRepository<Core.DmzModel.DriveReport> dmzDriveReportRepo, IGenericRepository<Core.DomainModel.DriveReport> masterDriveReportRepo, IGenericRepository<Core.DomainModel.Rate> rateRepo, IGenericRepository<LicensePlate> licensePlateRepo, IDriveReportService driveService, IRoute<RouteInformation> routeService, IAddressCoordinates coordinates, IGenericRepository<Core.DomainModel.Employment> emplRepo)
+        public DriveReportSyncService(IGenericRepository<Core.DmzModel.DriveReport> dmzDriveReportRepo, IGenericRepository<Core.DomainModel.DriveReport> masterDriveReportRepo, IGenericRepository<Core.DomainModel.Rate> rateRepo, IGenericRepository<LicensePlate> licensePlateRepo, IDriveReportService driveService, IRoute<RouteInformation> routeService, IAddressCoordinates coordinates, IGenericRepository<Core.DomainModel.Employment> emplRepo, ILogger logger)
         {
+            _logger.Log("Test123", "dmz.log");
             _dmzDriveReportRepo = dmzDriveReportRepo;
             _masterDriveReportRepo = masterDriveReportRepo;
             _rateRepo = rateRepo;
@@ -44,6 +45,7 @@ namespace Infrastructure.DmzSync.Services.Impl
             _routeService = routeService;
             _coordinates = coordinates;
             _emplRepo = emplRepo;
+            _logger = logger;
         }
 
         /// <summary>

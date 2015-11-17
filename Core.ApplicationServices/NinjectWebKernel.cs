@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using Core.ApplicationServices.Interfaces;
+using Core.ApplicationServices.Logger;
 using Core.ApplicationServices.MailerService.Impl;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
@@ -72,6 +73,7 @@ namespace Core.ApplicationServices
             kernel.Bind<IPersonalRouteService>().To<PersonalRouteService>();
             kernel.Bind<IAddressLaunderer>().To<AddressLaundering>();
             kernel.Bind<IOrgUnitService>().To<OrgUnitService>();
+            kernel.Bind<ILogger>().To<Logger.Logger>();
         }        
     }
 }
