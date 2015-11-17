@@ -17,6 +17,7 @@ using Infrastructure.DmzSync.Services.Interface;
 using DriveReport = Core.DomainModel.DriveReport;
 using Employment = Core.DmzModel.Employment;
 using Rate = Core.DomainModel.Rate;
+using log4net;
 
 namespace Infrastructure.DmzSync.Services.Impl
 {
@@ -30,6 +31,8 @@ namespace Infrastructure.DmzSync.Services.Impl
         private readonly IRoute<RouteInformation> _routeService;
         private readonly IAddressCoordinates _coordinates;
         private readonly IGenericRepository<Core.DomainModel.Employment> _emplRepo;
+        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 
         public DriveReportSyncService(IGenericRepository<Core.DmzModel.DriveReport> dmzDriveReportRepo, IGenericRepository<Core.DomainModel.DriveReport> masterDriveReportRepo, IGenericRepository<Core.DomainModel.Rate> rateRepo, IGenericRepository<LicensePlate> licensePlateRepo, IDriveReportService driveService, IRoute<RouteInformation> routeService, IAddressCoordinates coordinates, IGenericRepository<Core.DomainModel.Employment> emplRepo)
         {
@@ -95,6 +98,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                         catch (AddressCoordinatesException e)
                         {
                             coordinatesFailed = true;
+                            Logger.Warn("Report belonging to " + dmzReport.Profile.FullName + " with purpose \"" + dmzReport.Purpose + "\" had invalid coordinates and was not synced.");
                             break;
                         }
                     }
@@ -102,7 +106,7 @@ namespace Infrastructure.DmzSync.Services.Impl
 
                 if (coordinatesFailed)
                 {
-                    break;
+                    continue;
                 }
 
                 var licensePlate = _licensePlateRepo.AsQueryable().FirstOrDefault(x => x.PersonId.Equals(dmzReport.ProfileId) && x.IsPrimary);
