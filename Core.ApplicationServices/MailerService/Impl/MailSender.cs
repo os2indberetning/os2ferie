@@ -3,18 +3,19 @@ using System.Configuration;
 using System.Net;
 using System.Net.Mail;
 using Core.ApplicationServices.MailerService.Interface;
-using log4net;
 using Ninject;
+using Core.ApplicationServices.Logger;
 
 namespace Core.ApplicationServices.MailerService.Impl
 {
     public class MailSender : IMailSender
     {
         private readonly SmtpClient _smtpClient;
-        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger _logger;
 
-        public MailSender()
+        public MailSender(ILogger logger)
         {
+            _logger = logger;
             _smtpClient = new SmtpClient()
             {
                 Host = ConfigurationManager.AppSettings["PROTECTED_SMTP_HOST"],
@@ -40,7 +41,7 @@ namespace Core.ApplicationServices.MailerService.Impl
         {
             if (String.IsNullOrWhiteSpace(to))
             {
-                Logger.Warn("Email adressen er tom");
+                _logger.Log("Email adressen er tom", "mail");
                 return;
             }
             var msg = new MailMessage();
@@ -54,7 +55,7 @@ namespace Core.ApplicationServices.MailerService.Impl
             }
             catch (Exception e )
             {
-                Logger.Warn("Fejl under afsendelse af mail: " + e);
+                _logger.Log("Fejl under afsendelse af mail", "mail");
             }
         }
     }

@@ -8,7 +8,6 @@ using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
-using log4net.Repository.Hierarchy;
 using Microsoft.Ajax.Utilities;
 using Ninject;
 

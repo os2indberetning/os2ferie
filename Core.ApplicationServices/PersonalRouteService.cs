@@ -14,7 +14,6 @@ using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
-using log4net;
 using Ninject;
 using OS2Indberetning;
 

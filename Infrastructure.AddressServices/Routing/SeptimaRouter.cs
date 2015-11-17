@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using Core.DomainModel;
 using Core.DomainServices.RoutingClasses;
-using log4net;
 using Newtonsoft.Json.Linq;
 
 namespace Infrastructure.AddressServices.Routing
@@ -17,7 +16,7 @@ namespace Infrastructure.AddressServices.Routing
         private const string CarFerryMode = "2";
         private const string BicycleFerryMode = "3";
 
-        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+       
 
         /// <summary>
         /// Get routes and alternative routes for the given set of coordinates.
@@ -35,14 +34,14 @@ namespace Infrastructure.AddressServices.Routing
             if (result == null)
             {
                 var e = new RouteInformationException("No route returned.");
-                Logger.Error("Exception when getting route information", e);
+                //Logger.Error("Exception when getting route information", e);
                 throw e;
             }
 
             if (result.status != 0)
             {
                 var e = new RouteInformationException("No route found."); ;
-                Logger.Error("Exception when getting route information", e);
+                //Logger.Error("Exception when getting route information", e);
                 throw e;
             }
 
@@ -93,14 +92,14 @@ namespace Infrastructure.AddressServices.Routing
             catch (InvalidOperationException e)
             {
                 var up = new RouteInformationException("Mutltiple coordinates with type Origin and/or Destination.", e);
-                Logger.Error("Multiple coordinates with type origin and/or destination", up);
+                //Logger.Error("Multiple coordinates with type origin and/or destination", up);
                 throw up;
             }
 
             if (origin == null || destination == null)
             {
                 var up = new RouteInformationException("Coordinate of type Origin and/or Destination missing.");
-                Logger.Error("Coordinate of type Origin and/or destination missing.", up);
+                //Logger.Error("Coordinate of type Origin and/or destination missing.", up);
                 throw up;
             }
 
@@ -148,7 +147,7 @@ namespace Infrastructure.AddressServices.Routing
             catch (WebException e)
             {
                 var up = new RouteInformationException("Server error", e);
-                Logger.Error("Server error", up);
+                //Logger.Error("Server error", up);
                 throw up;
             }
 

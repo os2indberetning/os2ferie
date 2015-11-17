@@ -16,9 +16,9 @@ using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
-using log4net;
 using Ninject;
 using OS2Indberetning;
+using Core.ApplicationServices.Logger;
 
 
 namespace Core.ApplicationServices
@@ -35,7 +35,7 @@ namespace Core.ApplicationServices
         private readonly IGenericRepository<Substitute> _substituteRepository;
         private readonly IMailSender _mailSender;
 
-        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILogger _logger;
 
         public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IAddressCoordinates coordinates, IRoute<RouteInformation> route, IGenericRepository<RateType> rateTypeRepo)
         {
@@ -48,6 +48,7 @@ namespace Core.ApplicationServices
             _substituteRepository = substituteRepository;
             _mailSender = mailSender;
             _driveReportRepository = driveReportRepository;
+            _logger = NinjectWebKernel.CreateKernel().Get<ILogger>();
         }
 
         /// <summary>
@@ -59,13 +60,13 @@ namespace Core.ApplicationServices
         {
             if (report.PersonId == 0)
             {
-                Logger.Info("Forsøg på at oprette indberetning uden person angivet.");
+                _logger.Log("Forsøg på at oprette indberetning uden person angivet.", "web");
                 throw new Exception("No person provided");
             }
 
             if (!Validate(report))
             {
-                Logger.Info("Forsøg på at oprette indberetning med ugyldige parametre.");
+                _logger.Log("Forsøg på at oprette indberetning med ugyldige parametre.", "web");
                 throw new Exception("DriveReport has some invalid parameters");
             }
 
@@ -206,7 +207,7 @@ namespace Core.ApplicationServices
                         recipient = report.Person.Mail;
                     } else
                     {
-                        Logger.Info("Forsøg på at sende mail om afvist indberetning til " + report.Person.FullName + ", men der findes ingen emailadresse.");
+                        _logger.Log("Forsøg på at sende mail om afvist indberetning til " + report.Person.FullName + ", men der findes ingen emailadresse.", "mail");
                         throw new Exception("Forsøg på at sende mail til person uden emailaddresse");
                     }
                     var comment = new object();
