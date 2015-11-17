@@ -18,7 +18,7 @@ using Infrastructure.DmzSync.Services.Impl;
 using Ninject;
 using DriveReport = Core.DmzModel.DriveReport;
 using Rate = Core.DomainModel.Rate;
-
+[assembly: log4net.Config.XmlConfigurator(ConfigFile ="Log4Net.config", Watch = true)]
 
 namespace Infrastructure.DmzSync
 {
@@ -26,8 +26,6 @@ namespace Infrastructure.DmzSync
     {
         static void Main(string[] args)
         {
-
-            log4net.Config.XmlConfigurator.Configure();
 
             // hacks because of error with Entity Framework.
             // This forces the dmzconnection to use MySql.
