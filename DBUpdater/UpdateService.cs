@@ -461,11 +461,14 @@ namespace DBUpdater
             var max = reports.Count();
             foreach(var report in reports)
             {
-                Console.WriteLine("Updating leaders on report " + i + " of " + max);
+                if (i % 100 == 0)
+                {
+                    Console.WriteLine("Updating leaders on report " + i + " of " + max);
+                }
                 i++;
                 report.ResponsibleLeaderId = _driveService.GetResponsibleLeaderForReport(report).Id;
                 report.ActualLeaderId = _driveService.GetActualLeaderForReport(report).Id;
-                if(i % 10000 == 0)
+                if(i % 1000 == 0)
                 {
                     Console.WriteLine("Saving to database");
                     _reportRepo.Save();
