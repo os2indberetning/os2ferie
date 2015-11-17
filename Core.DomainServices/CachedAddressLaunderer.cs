@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Core.DomainModel;
 using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices.Interfaces;
-using log4net;
 
 namespace Core.DomainServices
 {
@@ -16,7 +15,6 @@ namespace Core.DomainServices
         private readonly IAddressLaunderer _actualLaunderer;
         private readonly IAddressCoordinates _coordinates;
 
-        private static readonly ILog Logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public CachedAddressLaunderer(IGenericRepository<CachedAddress> repo, IAddressLaunderer actualLaunderer, IAddressCoordinates coordinates)
         {
@@ -60,7 +58,7 @@ namespace Core.DomainServices
             }
             catch (AddressLaunderingException e)
             {
-                Logger.Error("Fejl ved adressevask", e);
+                //Logger.Error("Fejl ved adressevask", e);
                 isDirty = true;
             }
             if (cachedAddress.Latitude == null || cachedAddress.Latitude.Equals("0"))
@@ -71,7 +69,7 @@ namespace Core.DomainServices
                 }
                 catch (AddressCoordinatesException e)
                 {
-                    Logger.Error("Fejl ved opslag af adressekoordinater", e);
+                    //Logger.Error("Fejl ved opslag af adressekoordinater", e);
                     isDirty = true;
                     cachedAddress.Latitude = "0";
                     cachedAddress.Longitude = "0";
