@@ -12,7 +12,7 @@ namespace Core.ApplicationServices.Logger
     {
         public void Log(string msg, string fileName)
         {
-            using (var file = new StreamWriter("c://logs//" + fileName, true))
+            using (var file = new StreamWriter("c://logs//" + fileName + ".log", true))
             {
                 var time = DateTime.Now.ToString();
                 file.WriteLine(time + " : " + msg);

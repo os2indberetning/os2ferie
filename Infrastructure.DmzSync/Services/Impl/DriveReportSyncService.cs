@@ -36,7 +36,6 @@ namespace Infrastructure.DmzSync.Services.Impl
 
         public DriveReportSyncService(IGenericRepository<Core.DmzModel.DriveReport> dmzDriveReportRepo, IGenericRepository<Core.DomainModel.DriveReport> masterDriveReportRepo, IGenericRepository<Core.DomainModel.Rate> rateRepo, IGenericRepository<LicensePlate> licensePlateRepo, IDriveReportService driveService, IRoute<RouteInformation> routeService, IAddressCoordinates coordinates, IGenericRepository<Core.DomainModel.Employment> emplRepo, ILogger logger)
         {
-            _logger.Log("Test123", "dmz.log");
             _dmzDriveReportRepo = dmzDriveReportRepo;
             _masterDriveReportRepo = masterDriveReportRepo;
             _rateRepo = rateRepo;
@@ -100,7 +99,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                         catch (AddressCoordinatesException e)
                         {
                             coordinatesFailed = true;
-                            Logger.Warn("Report belonging to " + dmzReport.Profile.FullName + " with purpose \"" + dmzReport.Purpose + "\" had invalid coordinates and was not synced.");
+                            _logger.Log("Report belonging to " + dmzReport.Profile.FullName + " with purpose \"" + dmzReport.Purpose + "\" had invalid coordinates and was not synced.", "dmz");
                             break;
                         }
                     }
