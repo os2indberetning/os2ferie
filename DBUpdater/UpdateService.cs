@@ -460,16 +460,16 @@ namespace DBUpdater
 
             var reports = _reportRepo.AsQueryable().Where(x => x.Employment.OrgUnit.Level > 1).ToList();
             var max = reports.Count();
-            foreach(var report in reports)
+            foreach (var report in reports)
             {
-                Console.WriteLine("Updating leaders on report " + i + " of " + max);
+                if (i % 100 == 0)
+                {
+                    Console.WriteLine("Updating leaders on report " + i + " of " + max);
+                }
                 i++;
-                var responsibleLeader = _driveService.GetResponsibleLeaderForReport(report);
-                var actualLeader = _driveService.GetActualLeaderForReport(report);
-
-                report.ResponsibleLeaderId = responsibleLeader.Id;
-                report.ActualLeaderId = actualLeader.Id;
-                if(i % 10000 == 0)
+                report.ResponsibleLeaderId = _driveService.GetResponsibleLeaderForReport(report).Id;
+                report.ActualLeaderId = _driveService.GetActualLeaderForReport(report).Id;
+                if (i % 1000 == 0)
                 {
                     Console.WriteLine("Saving to database");
                     _reportRepo.Save();
@@ -477,7 +477,6 @@ namespace DBUpdater
             }
             Console.WriteLine("Saving to database");
             _reportRepo.Save();
-
         }
 
         /// <summary>
