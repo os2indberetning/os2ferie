@@ -557,10 +557,30 @@
                         id: 'map',
                         routeToken: $rootScope.HelpTexts.SEPTIMA_API_KEY.text,
                         change: function (obj) {
+
+                            if (obj.status !== 0) {
+                                createMap();
+                                var modalInstance = $modal.open({
+                                    templateUrl: '/App/Services/Error/ServiceError.html',
+                                    controller: "ServiceErrorController",
+                                    backdrop: "static",
+                                    resolve: {
+                                        errorMsg: function () {
+                                            return 'Føglende fejl blev modtaget af Septima: "' + obj.status + " - " + obj.message
+                                                + '". Fejlen kan skyldes en/eller flere af dine adresser er ugyldige. Prøv igen eller brug en anden adresse tæt på.';
+                                        }
+                                    }
+                                });
+                                return;
+                            }
+
                             if (firstMapLoad) {
                                 firstMapLoad = false;
                                 return;
                             }
+
+                            
+
                             isFormDirty = true;
                             $scope.currentMapAddresses = obj.Addresses;
                             $scope.latestMapDistance = obj.distance;
