@@ -359,7 +359,10 @@ namespace Core.ApplicationServices
             }
             if (leaderOfOrgUnit == null)
             {
-                return null;
+                // This statement will be hit when all orgunits up to (not including) level 0 have been checked for a leader. 
+                // If no actual leader has been found then return the reponsibleleader.
+                // This will happen when members of orgunit 0 try to create a report, as orgunit 0 has no leaders and they are all handled by a substitute.
+                return GetResponsibleLeaderForReport(driveReport);
             }
 
             return leaderOfOrgUnit.Person;
