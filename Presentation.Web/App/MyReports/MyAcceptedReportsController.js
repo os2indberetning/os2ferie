@@ -186,7 +186,7 @@ angular.module("application").controller("MyAcceptedReportsController", [
                   },
                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
               }, {
-                  field: "CreationDate",
+                  field: "CreatedDateTimestamp",
                   template: function (data) {
                       var m = moment.unix(data.CreatedDateTimestamp);
                       return m._d.getDate() + "/" +
