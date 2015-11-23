@@ -446,3 +446,7 @@ li.mainMenuLink.active > a > i.fa {
 .navbar {
     border: none;
 }
+
+.to-front {
+    z-index: 1000;
+}
