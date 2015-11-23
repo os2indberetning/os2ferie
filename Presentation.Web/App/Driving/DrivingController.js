@@ -407,6 +407,9 @@
                 $scope.addressSelectionErrorMessage = "";
             }
             angular.forEach($scope.DriveReport.Addresses, function (address, key) {
+                if ($scope.isAddressNameSet(address) && address.Personal != $scope.addressDropDownPlaceholderText) {
+                    address.Name = "";
+                }
                 if (!$scope.isAddressNameSet(address) && !$scope.isAddressPersonalSet(address)) {
                     res = false;
                     if (setError === true) {
@@ -558,7 +561,7 @@
                         routeToken: $rootScope.HelpTexts.SEPTIMA_API_KEY.text,
                         change: function (obj) {
 
-                            if (obj.status !== 0) {
+                            if (obj.status !== 0 && obj.status != undefined) {
                                 createMap();
                                 var modalInstance = $modal.open({
                                     templateUrl: '/App/Services/Error/ServiceError.html',
