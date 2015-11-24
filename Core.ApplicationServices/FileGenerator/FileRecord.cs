@@ -44,8 +44,7 @@ namespace Core.ApplicationServices.FileGenerator
 
         public new string ToString()
         {
-            var date = Date.GetDateTimeFormats()[1]; //Get correct time format
-            date = date.Replace("-", "");
+            var date  = Date.Day.ToString().PadLeft(2, '0') + Date.Month.ToString().PadLeft(2, '0') + Date.Year.ToString()[2] + Date.Year.ToString()[3];
             var distance = ReimbursementDistance;
 
             var builder = new StringBuilder();
