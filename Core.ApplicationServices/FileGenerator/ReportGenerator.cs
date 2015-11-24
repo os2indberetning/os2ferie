@@ -72,17 +72,19 @@ namespace Core.ApplicationServices.FileGenerator
             var fileRecords = new List<FileRecord>();
             foreach (var cpr in usersToReimburse.Keys)
             {
-                var driveReports = usersToReimburse[cpr].OrderBy(x => x.EmploymentId).OrderBy(x => x.TFCode).ThenBy(x => x.DriveDateTimestamp);
+                var driveReports = usersToReimburse[cpr].OrderBy(x => x.EmploymentId).OrderBy(x => x.TFCode).ThenBy(x => x.AccountNumber).ThenBy(x => x.DriveDateTimestamp);
                 DriveReport currentDriveReport = null;
                 var currentTfCode = "";
                 var currentMonth = -1;
+                var currentAccountNumber = "";
                 foreach (var driveReport in driveReports)
                 {
                     var driveDate = TimestampToDate(driveReport.DriveDateTimestamp);
                     if ( ! driveReport.TFCode.Equals(currentTfCode) //We make one file record for each employment and each tf code
                             || driveDate.Month != currentMonth 
                             || currentDriveReport == null 
-                            || ! driveReport.EmploymentId.Equals(currentDriveReport.EmploymentId) )
+                            || ! driveReport.EmploymentId.Equals(currentDriveReport.EmploymentId)
+                            || ! driveReport.AccountNumber.Equals(currentAccountNumber))
                     {
                         if (currentDriveReport != null)
                         {
@@ -90,9 +92,11 @@ namespace Core.ApplicationServices.FileGenerator
                         }
                         currentMonth = driveDate.Month;
                         currentTfCode = driveReport.TFCode;
+                        currentAccountNumber = driveReport.AccountNumber;
                         currentDriveReport = new DriveReport
                         {
                             TFCode = driveReport.TFCode,
+                            AccountNumber = driveReport.AccountNumber,
                             Employment = driveReport.Employment,
                             EmploymentId = driveReport.EmploymentId,
                             Distance = 0,
