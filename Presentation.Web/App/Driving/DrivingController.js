@@ -407,7 +407,7 @@
                 $scope.addressSelectionErrorMessage = "";
             }
             angular.forEach($scope.DriveReport.Addresses, function (address, key) {
-                if ($scope.isAddressNameSet(address) && address.Personal != $scope.addressDropDownPlaceholderText) {
+                if($scope.isAddressNameSet(address) && $scope.isAddressPersonalSet(address)) {
                     address.Name = "";
                 }
                 if (!$scope.isAddressNameSet(address) && !$scope.isAddressPersonalSet(address)) {
