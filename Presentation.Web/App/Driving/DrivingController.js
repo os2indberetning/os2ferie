@@ -569,9 +569,8 @@
                                     backdrop: "static",
                                     resolve: {
                                         errorMsg: function () {
-                                            return 'Føglende fejl blev modtaget af Septima: "' + obj.status + " - " + obj.message
-                                                + '". Fejlen kan skyldes en/eller flere af dine adresser er ugyldige. Prøv igen eller brug en anden adresse tæt på.';
-                                        }
+                                            return 'OS2Indberetning kunne ikke beregne ruten. Fejlen kan skyldes, at det ikke er muligt at køre til en/eller flere af dine adresser. Prøv igen eller med en anden adresse tæt på.';
+                                        }   
                                     }
                                 });
                                 return;
