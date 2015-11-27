@@ -4,8 +4,9 @@
         Home: "Home",
         Work: "Work",
         AlternativeHome: "AlternativeHome",
-        AlternativeWork: "AlternativeWork"
-    }
+        AlternativeWork: "AlternativeWork",
+        OldHome: "OldHome"
+}
 });
 
 

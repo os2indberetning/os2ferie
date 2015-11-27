@@ -272,7 +272,7 @@
                             beforeSend: function (req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
-                            url: "odata/PersonalAddresses()?$filter=PersonId eq " + personId,
+                            url: "odata/PersonalAddresses()?$filter=PersonId eq " + personId + " and Type ne Core.DomainModel.PersonalAddressType'OldHome'",
                             dataType: "json",
                             cache: false
                         },
