@@ -33,6 +33,7 @@ namespace DBUpdater
             Console.WriteLine("Creating non-existing address histories.");
             var i = 0;
             var empls = _emplRepo.AsQueryable().ToList();
+            var activeHistories = _addressHistoryRepo.AsQueryable().Where(x => x.EndTimestamp == 0).ToList();
             foreach (var employment in empls)
             {
                 i++;
@@ -40,7 +41,7 @@ namespace DBUpdater
                 {
                     Console.WriteLine("Checking employment " + i + " of " + empls.Count);
                 }
-                if (!_addressHistoryRepo.AsQueryable().Any(x => x.EmploymentId == employment.Id && x.EndTimestamp == 0))
+                if (!activeHistories.AsQueryable().Any(x => x.EmploymentId == employment.Id))
                 {
                     var homeAddress =
                         _personalAddressRepo.AsQueryable()
