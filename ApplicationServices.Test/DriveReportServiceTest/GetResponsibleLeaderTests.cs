@@ -16,8 +16,6 @@ using Ninject;
 using NUnit.Framework;
 using OS2Indberetning;
 using Owin;
-using Presentation.Web.Test.Controllers.DriveReports;
-using Presentation.Web.Test.Controllers.PersonalRoutes;
 using NSubstitute;
 using Presentation.Web.Test;
 using Substitute = NSubstitute.Substitute;

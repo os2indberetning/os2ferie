@@ -14,6 +14,7 @@ using Infrastructure.DataAccess;
 using NSubstitute;
 using NUnit.Framework;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
+using Core.ApplicationServices.Interfaces;
 
 namespace DBUpdater.Test
 {
@@ -26,6 +27,10 @@ namespace DBUpdater.Test
         private IGenericRepository<Person> _personRepoMock;
         private IGenericRepository<CachedAddress> _cachedAddressRepoMock;
         private IGenericRepository<PersonalAddress> _personalAddressRepoMock;
+        private IGenericRepository<DriveReport> _reportRepo;
+        private IDriveReportService _driveService;
+        private ISubstituteService _subservice;
+        private IGenericRepository<Core.DomainModel.Substitute> _subRepo;
         private IAddressLaunderer _actualLaunderer;
         private IAddressCoordinates _coordinates;
         private IDbUpdaterDataProvider _dataProvider;
@@ -59,10 +64,15 @@ namespace DBUpdater.Test
 
             _cachedAddressRepoMock.AsQueryable().Returns(cachedAddressList.AsQueryable());
 
+            _subRepo = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
+            _reportRepo = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
+            _driveService = NSubstitute.Substitute.For<IDriveReportService>();
+            _subservice = NSubstitute.Substitute.For<ISubstituteService>();
+
             _actualLaunderer.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-                _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>());
+                _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(),_reportRepo,_driveService, _subservice, _subRepo);
 
         }
 

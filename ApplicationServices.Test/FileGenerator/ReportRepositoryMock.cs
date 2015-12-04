@@ -46,7 +46,8 @@ namespace ApplicationServices.Test.FileGenerator
             Distance = 100,
             Employment = Employment,
             Person = Person1,
-            Status = ReportStatus.Accepted
+            Status = ReportStatus.Accepted,
+            AccountNumber = ""
         };
 
         public DriveReport Report2 = new DriveReport
@@ -56,7 +57,8 @@ namespace ApplicationServices.Test.FileGenerator
             Distance = 200,
             Employment = Employment,
             Person = Person2,
-            Status = ReportStatus.Accepted
+            Status = ReportStatus.Accepted,
+            AccountNumber = ""
         };
 
         public DriveReport Report3 = new DriveReport
@@ -66,7 +68,8 @@ namespace ApplicationServices.Test.FileGenerator
             Distance = 300,
             Employment = Employment,
             Person = Person2,
-            Status = ReportStatus.Rejected
+            Status = ReportStatus.Rejected,
+            AccountNumber = ""
         };
 
         public DriveReport Report4 = new DriveReport
@@ -76,7 +79,8 @@ namespace ApplicationServices.Test.FileGenerator
             Distance = 400,
             Employment = Employment,
             Person = Person1,
-            Status = ReportStatus.Invoiced
+            Status = ReportStatus.Invoiced,
+            AccountNumber = ""
         };
 
         public DriveReport Report5 = new DriveReport
@@ -86,7 +90,8 @@ namespace ApplicationServices.Test.FileGenerator
             Distance = 500,
             Employment = Employment,
             Person = Person1,
-            Status = ReportStatus.Accepted
+            Status = ReportStatus.Accepted,
+            AccountNumber = ""
         };
 
         public DriveReport Report6 = new DriveReport
@@ -96,7 +101,8 @@ namespace ApplicationServices.Test.FileGenerator
             Distance = 600,
             Employment = Employment,
             Person = Person2,
-            Status = ReportStatus.Accepted
+            Status = ReportStatus.Accepted,
+            AccountNumber = ""
         };
 
         public DriveReport Report7 = new DriveReport
@@ -106,7 +112,8 @@ namespace ApplicationServices.Test.FileGenerator
             Distance = 600,
             Employment = Employment,
             Person = Person2,
-            Status = ReportStatus.Accepted
+            Status = ReportStatus.Accepted,
+            AccountNumber = ""
         };
 
         public DriveReport Report8 = new DriveReport
@@ -116,7 +123,8 @@ namespace ApplicationServices.Test.FileGenerator
             Distance = 600,
             Employment = Employment,
             Person = Person2,
-            Status = ReportStatus.Accepted
+            Status = ReportStatus.Accepted,
+            AccountNumber = ""
         };
 
 

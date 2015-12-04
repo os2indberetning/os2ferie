@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.ApplicationServices.Interfaces;
+using Core.ApplicationServices.Logger;
 using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
@@ -25,6 +26,8 @@ namespace DmzSync.Test
         private IGenericRepository<Core.DomainModel.DriveReport> _masterRepoMock; 
         private IGenericRepository<Rate> _rateRepoMock; 
         private IGenericRepository<LicensePlate> _licensePlateRepoMock; 
+        private IGenericRepository<Employment> _emplRepo; 
+        private ILogger _logger; 
         private IGenericRepository<Core.DmzModel.DriveReport> _dmzRepoMock;
         private List<Core.DmzModel.DriveReport> _dmzReportList = new List<Core.DmzModel.DriveReport>();
         private List<Core.DomainModel.DriveReport> _masterReportList = new List<Core.DomainModel.DriveReport>();
@@ -35,6 +38,8 @@ namespace DmzSync.Test
         [SetUp]
         public void SetUp()
         {
+            _emplRepo = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
+            _logger = NSubstitute.Substitute.For<ILogger>();
             _dmzRepoMock = NSubstitute.Substitute.For<IGenericRepository<Core.DmzModel.DriveReport>>();
             _coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
             _masterRepoMock = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.DriveReport>>();
@@ -166,7 +171,7 @@ namespace DmzSync.Test
             _masterRepoMock.AsQueryable().ReturnsForAnyArgs(_masterReportList.AsQueryable());
             _dmzRepoMock.AsQueryable().ReturnsForAnyArgs(_dmzReportList.AsQueryable());
 
-            _uut = new DriveReportSyncService(_dmzRepoMock,_masterRepoMock,_rateRepoMock,_licensePlateRepoMock,_driveReportServiceMock, _routeMock, _coordinatesMock);
+            _uut = new DriveReportSyncService(_dmzRepoMock,_masterRepoMock,_rateRepoMock,_licensePlateRepoMock,_driveReportServiceMock, _routeMock, _coordinatesMock,_emplRepo, _logger);
         }
 
         [Test]

@@ -46,8 +46,6 @@
   <ItemGroup>
     <Compile Include="AddressCoordinatesTests.cs" />
     <Compile Include="AddressLaunderingTests.cs" />
-    <Compile Include="AddressTests.cs" />
-    <Compile Include="BestRouteTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
@@ -29,6 +30,14 @@ namespace DBUpdater.Test
         private IDbUpdaterDataProvider _dataProviderMock;
         private IGenericRepository<WorkAddress> _workAddressRepoMock;
         private IMailSender _mailSenderMock;
+        private IGenericRepository<DriveReport> _reportRepo;
+        private IDriveReportService _driveService;
+        private ISubstituteService _subservice;
+        private IGenericRepository<Core.DomainModel.Substitute> _subRepo;
+        private IAddressLaunderer _actualLaunderer;
+        private IAddressCoordinates _coordinates;
+        private IDbUpdaterDataProvider _dataProvider;
+        private IMailSender _mailSender;
 
         [SetUp]
         public void SetUp()
@@ -54,6 +63,16 @@ namespace DBUpdater.Test
             _dataProviderMock = NSubstitute.Substitute.For<IDbUpdaterDataProvider>();
             _workAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<WorkAddress>>();
             _mailSenderMock = NSubstitute.Substitute.For<IMailSender>();
+            _actualLaunderer = NSubstitute.Substitute.For<IAddressLaunderer>();
+            _coordinates = NSubstitute.Substitute.For<IAddressCoordinates>();
+            _dataProvider = NSubstitute.Substitute.For<IDbUpdaterDataProvider>();
+            _mailSender = NSubstitute.Substitute.For<IMailSender>();
+
+
+            _subRepo = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
+            _reportRepo = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
+            _driveService = NSubstitute.Substitute.For<IDriveReportService>();
+            _subservice = NSubstitute.Substitute.For<ISubstituteService>();
 
             _personRepoMock.AsQueryable().Returns(personList.AsQueryable());
 
@@ -84,7 +103,7 @@ namespace DBUpdater.Test
             _actualLaundererMock.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-                _personalAddressRepoMock, _actualLaundererMock, _coordinatesMock, _dataProviderMock, _mailSenderMock, NSubstitute.Substitute.For<IAddressHistoryService>());
+           _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _driveService, _subservice, _subRepo);
 
             _orgUnitRepoMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
             {
@@ -150,6 +169,20 @@ namespace DBUpdater.Test
                 By = "Aarhus V"
             };
 
+            _actualLaundererMock.Launder(new CachedAddress()).ReturnsForAnyArgs(new CachedAddress
+            {
+                IsDirty = false,
+                StreetName = "Jens Baggesens Vej",
+                StreetNumber = "44",
+                ZipCode = 8210,
+                Town = "Aarhus V",
+                DirtyString = "Jens Baggesens Vej 44, 8210 Aarhus V",
+            });
+
+            _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
+           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _driveService, _subservice, _subRepo);
+
+
             _uut.UpdateHomeAddress(empl,1);
 
             _actualLaundererMock.ReceivedWithAnyArgs().Launder(new Address());
@@ -171,9 +204,23 @@ namespace DBUpdater.Test
                 By = "Aarhus V"
             };
 
+            _actualLaundererMock.Launder(new CachedAddress()).ReturnsForAnyArgs(new CachedAddress
+            {
+                IsDirty = false,
+                StreetName = "Jens Baggesens Vej",
+                StreetNumber = "44",
+                ZipCode = 8210,
+                Town = "Aarhus V",
+                DirtyString = "Jens Baggesens Vej 44, 8210 Aarhus V",
+            });
+
+            _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
+           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _driveService, _subservice, _subRepo);
+
+
             _uut.UpdateHomeAddress(empl, 1);
 
-            _coordinatesMock.ReceivedWithAnyArgs().GetAddressCoordinates(new Address());
+            _coordinates.ReceivedWithAnyArgs().GetAddressCoordinates(new Address());
         }
 
         [Test]
@@ -191,6 +238,20 @@ namespace DBUpdater.Test
                 PostNr = 8210,
                 By = "Aarhus V"
             };
+
+            _actualLaundererMock.Launder(new CachedAddress()).ReturnsForAnyArgs(new CachedAddress
+            {
+                IsDirty = false,
+                StreetName = "Jens Baggesens Vej",
+                StreetNumber = "44",
+                ZipCode = 8210,
+                Town = "Aarhus V",
+                DirtyString = "Jens Baggesens Vej 44, 8210 Aarhus V",
+            });
+
+            _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
+           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _driveService, _subservice, _subRepo);
+
 
             _uut.UpdateHomeAddress(empl, 1);
 
@@ -268,6 +329,19 @@ namespace DBUpdater.Test
                 DirtyString = "Jens Baggesens Vej 44, 8210 Aarhus V"
             });
 
+            _actualLaundererMock.Launder(new CachedAddress()).ReturnsForAnyArgs(new CachedAddress
+            {
+                IsDirty = false,
+                StreetName = "Jens Baggesens Vej",
+                StreetNumber = "44",
+                ZipCode = 8210,
+                Town = "Aarhus V",
+                DirtyString = "Jens Baggesens Vej 44, 8210 Aarhus V"
+            });
+
+            _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
+           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _driveService, _subservice, _subRepo);
+
             _uut.UpdateHomeAddress(empl, 1);
 
             var res = _cachedAddressRepoMock.AsQueryable().First(a => a.StreetName.Equals("Jens Baggesens Vej"));
@@ -275,7 +349,6 @@ namespace DBUpdater.Test
             Assert.That(res.StreetNumber.Equals("44"));
             Assert.That(res.ZipCode.Equals(8210));
             Assert.That(res.Town.Equals("Aarhus V"));
-            Assert.That(res.IsDirty.Equals(false));
 
         }
 
@@ -294,6 +367,20 @@ namespace DBUpdater.Test
                 PostNr = 8210,
                 By = "Aarhus V"
             };
+
+            _actualLaundererMock.Launder(new CachedAddress()).ReturnsForAnyArgs(new CachedAddress
+            {
+                IsDirty = false,
+                StreetName = "Jens Baggesens Vej",
+                StreetNumber = "44",
+                ZipCode = 8210,
+                Town = "Aarhus V",
+                DirtyString = "Jens Baggesens Vej 44, 8210 Aarhus V",
+            });
+
+            _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
+           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _driveService, _subservice, _subRepo);
+
 
             _uut.UpdateHomeAddress(empl, 1);
 

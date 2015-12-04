@@ -126,7 +126,6 @@
     <Compile Include="DriveReportServiceTest\DriveReportMock.cs" />
     <Compile Include="DriveReportServiceTest\GetResponsibleLeaderTests.cs" />
     <Compile Include="DriveReportServiceTest\DriveReportServiceTest.cs" />
-    <Compile Include="DriveReportServiceTest\FilterByLeaderTests.cs" />
     <Compile Include="DriveReportServiceTest\SubstituteRepositoryMock.cs" />
     <Compile Include="DriveReportServiceTest\EmploymentRepositoryMock.cs" />
     <Compile Include="DriveReportServiceTest\OrgUnitRepositoryMock.cs" />
@@ -172,10 +171,6 @@
     <ProjectReference Include="..\Infrastructure.DataAccess\Infrastructure.DataAccess.csproj">
       <Project>{9914DB94-E465-4751-939C-8121C30AC945}</Project>
       <Name>Infrastructure.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Presentation.Web.Test\Presentation.Web.Test.csproj">
-      <Project>{8A5EC991-4B8B-4D71-9051-8AE020695A62}</Project>
-      <Name>Presentation.Web.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\Presentation.Web\Presentation.Web.csproj">
       <Project>{2B953FAB-7F22-4884-9325-2A5C53519F3D}</Project>

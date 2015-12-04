@@ -6,6 +6,7 @@ using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
 using NSubstitute;
+using NUnit.Framework;
 using Substitute = NSubstitute.Substitute;
 
 namespace ApplicationServices.Test.ReimbursementCalculatorTest
@@ -31,7 +32,9 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
                     StreetName = "Jens Baggesens Vej",
                     StreetNumber = "46",
                     ZipCode = 8210,
-                    Town = "Aarhus"
+                    Town = "Aarhus",
+                    Latitude = "12341234",
+                    Longitude = "12341234"
                 });
 
             return personService;
@@ -66,7 +69,18 @@ namespace ApplicationServices.Test.ReimbursementCalculatorTest
 
         protected IReimbursementCalculator GetCalculator(List<Employment> emplMockData)
         { //TODO changed to make the code compile
-            return new ReimbursementCalculator(new RouterMock(), GetPersonServiceMock(), GetPersonRepository(), GetEmplRepository(emplMockData));
+            var historyMock = NSubstitute.Substitute.For<IGenericRepository<AddressHistory>>();
+            historyMock.AsQueryable().ReturnsForAnyArgs(new List<AddressHistory>().AsQueryable());
+
+            return new ReimbursementCalculator(new RouterMock(), GetPersonServiceMock(), GetPersonRepository(), GetEmplRepository(emplMockData),historyMock);
+        }
+
+        protected IReimbursementCalculator GetCalculator(List<Employment> emplMockData, List<AddressHistory> historyMockData)
+        { //TODO changed to make the code compile
+            var historyMock = NSubstitute.Substitute.For<IGenericRepository<AddressHistory>>();
+            historyMock.AsQueryable().ReturnsForAnyArgs(historyMockData.AsQueryable());
+
+            return new ReimbursementCalculator(new RouterMock(), GetPersonServiceMock(), GetPersonRepository(), GetEmplRepository(emplMockData), historyMock);
         }
 
         protected DriveReport GetDriveReport()

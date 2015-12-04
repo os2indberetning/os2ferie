@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using ApplicationServices.Test.FileGenerator;
 using Core.ApplicationServices;
+using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using NSubstitute;
@@ -19,12 +20,17 @@ namespace ApplicationServices.Test.SubstituteServiceTest
         private SubstituteService _uut;
         private List<Substitute> _repo;
         private IGenericRepository<Substitute> _repoMock;
-
+        private IOrgUnitService _orgService;
+        private IDriveReportService _driveService;
+        private IGenericRepository<DriveReport> _driveRepo;
+            
         [SetUp]
         public void SetUp()
         {
-
+            _orgService = NSubstitute.Substitute.For<IOrgUnitService>();
             _repoMock = NSubstitute.Substitute.For<IGenericRepository<Substitute>>();
+            _driveRepo = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
+            _driveService = NSubstitute.Substitute.For<IDriveReportService>();
 
 
             _repo = new List<Substitute>
@@ -81,7 +87,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 }
             };
 
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock,_orgService,_driveService,_driveRepo);
 
         }
 
@@ -156,7 +162,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
 
             _repo = new List<Substitute>();
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock,_orgService,_driveService,_driveRepo);
 
             Assert.IsTrue(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -187,7 +193,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock, _orgService,_driveService,_driveRepo);
 
             Assert.IsTrue(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -218,7 +224,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock, _orgService,_driveService, _driveRepo);
 
             Assert.IsTrue(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -249,7 +255,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock, _orgService, _driveService, _driveRepo);
 
             Assert.IsTrue(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -282,7 +288,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock, _orgService, _driveService, _driveRepo);
 
             Assert.IsFalse(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -315,7 +321,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock, _orgService, _driveService, _driveRepo);
 
             Assert.IsFalse(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -348,7 +354,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock, _orgService, _driveService, _driveRepo);
 
             Assert.IsFalse(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -368,7 +374,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
 
             _repo = new List<Substitute>();
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock, _orgService, _driveService, _driveRepo);
 
             Assert.IsTrue(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -397,7 +403,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock, _orgService, _driveService,_driveRepo);
 
             Assert.IsTrue(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -426,7 +432,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock,_orgService,_driveService,_driveRepo);
 
             Assert.IsTrue(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -455,7 +461,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock,_orgService,_driveService,_driveRepo);
 
             Assert.IsTrue(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -486,7 +492,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock,_orgService,_driveService,_driveRepo);
 
             Assert.IsFalse(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -517,7 +523,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock,_orgService,_driveService,_driveRepo);
 
             Assert.IsFalse(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -548,7 +554,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock,_orgService,_driveService,_driveRepo);
 
             Assert.IsFalse(_uut.CheckIfNewSubIsAllowed(substitute));
         }
@@ -578,7 +584,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
                 },
             };
             _repoMock.AsQueryable().ReturnsForAnyArgs(_repo.AsQueryable());
-            _uut = new SubstituteService(_repoMock);
+            _uut = new SubstituteService(_repoMock,_orgService,_driveService,_driveRepo);
 
             Assert.IsTrue(_uut.CheckIfNewSubIsAllowed(substitute));
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
@@ -29,6 +30,10 @@ namespace DBUpdater.Test
         private IGenericRepository<WorkAddress> _workAddressRepoMock;
         private IDbUpdaterDataProvider _dataProvider;
         private IMailSender _mailSenderMock;
+        private IGenericRepository<DriveReport> _reportRepo;
+        private IDriveReportService _driveService;
+        private ISubstituteService _subservice;
+        private IGenericRepository<Core.DomainModel.Substitute> _subRepo;
 
         [SetUp]
         public void SetUp()
@@ -52,6 +57,12 @@ namespace DBUpdater.Test
 
             _emplRepoMock.Insert(new Employment()).ReturnsForAnyArgs(x => x.Arg<Employment>()).AndDoes(x => emplList.Add(x.Arg<Employment>())).AndDoes(x => x.Arg<Employment>().Id = emplIdCount).AndDoes(x => emplIdCount++);
 
+            _subRepo = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
+            _reportRepo = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
+            _driveService = NSubstitute.Substitute.For<IDriveReportService>();
+            _subservice = NSubstitute.Substitute.For<ISubstituteService>();
+
+
             _orgUnitRepoMock.AsQueryable().Returns(new List<OrgUnit>()
             {
                 new OrgUnit()
@@ -74,7 +85,7 @@ namespace DBUpdater.Test
             }.AsQueryable());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-                _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSenderMock, NSubstitute.Substitute.For<IAddressHistoryService>());
+               _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSenderMock, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _driveService, _subservice, _subRepo);
 
         }
 

@@ -277,8 +277,30 @@ namespace DBUpdater.Test
         }
 
         [Test]
-        public void UpdateAddressHistories_WithNoChanges_ShouldNotAlterAnyHistories()
+        public void UpdateAddressHistories_WithOneActiveHistory_NoChangesInAddress_ShouldNotDeactivate()
         {
+            var homeAddress = new PersonalAddress
+            {
+                StreetName = "TestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 1
+            };
+
+            var workAddress = new WorkAddress
+            {
+                StreetName = "TestStreetWork",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234"
+            };
+
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
             emplRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>
             {
@@ -288,7 +310,7 @@ namespace DBUpdater.Test
                     PersonId = 1,
                     OrgUnit = new OrgUnit()
                     {
-                        AddressId = 1
+                       Address = workAddress
                     }
                 }
             }.AsQueryable());
@@ -300,34 +322,53 @@ namespace DBUpdater.Test
                 {
                     EmploymentId = 1,
                     EndTimestamp = 0,
+                    Employment = emplRepoMock.AsQueryable().First(),
+                    WorkAddress = workAddress,
+                    HomeAddress = homeAddress,
+                   
                 }
             };
-            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
-            addressHistoryRepoMock.Insert(new AddressHistory())
-                .ReturnsForAnyArgs(x => x.Arg<AddressHistory>())
-                .AndDoes(x => historyList.Add(x.Arg<AddressHistory>()));
 
             var personalAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
             personalAddressRepoMock.AsQueryable().ReturnsForAnyArgs(new List<PersonalAddress>
             {
-                new PersonalAddress()
-                {
-                    PersonId = 1,
-                    Type = PersonalAddressType.Home
-                }
+               homeAddress
             }.AsQueryable());
 
+            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
+
             var uut = new AddressHistoryService(emplRepoMock, addressHistoryRepoMock, personalAddressRepoMock);
-            Assert.AreEqual(1, historyList.ElementAt(0).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(0).EndTimestamp);
+
             uut.UpdateAddressHistories();
-            Assert.AreEqual(1, historyList.ElementAt(0).EmploymentId);
             Assert.AreEqual(0, historyList.ElementAt(0).EndTimestamp);
+
         }
 
         [Test]
-        public void UpdateAddressHistories_WithOneChangeInPersonalAddress_ShouldAlterOldHistory_AndAddNewOne()
+        public void UpdateAddressHistories_WithOneActiveHistory_ChangeInWorkAddress_ShouldDeactivate()
         {
+            var homeAddress = new PersonalAddress
+            {
+                StreetName = "TestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 1
+            };
+
+            var workAddress = new WorkAddress
+            {
+                StreetName = "TestStreetWork",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234"
+            };
+
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
             emplRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>
             {
@@ -337,8 +378,16 @@ namespace DBUpdater.Test
                     PersonId = 1,
                     OrgUnit = new OrgUnit()
                     {
-                        AddressId = 1,
-                        Address = new WorkAddress()
+                       Address =  new WorkAddress
+                       {
+                            StreetName = "NewTestStreetWork",
+                            StreetNumber = "1",
+                            ZipCode = 1234,
+                            Town = "TestTown",
+                            Latitude = "1234",
+                            Longitude = "1234" 
+                       }
+
                     }
                 }
             }.AsQueryable());
@@ -349,63 +398,132 @@ namespace DBUpdater.Test
                 new AddressHistory()
                 {
                     EmploymentId = 1,
-                    Employment = new Employment()
+                    EndTimestamp = 0,
+                    Employment = emplRepoMock.AsQueryable().First(),
+                    WorkAddress = workAddress,
+                    HomeAddress = homeAddress,
+                   
+                }
+            };
+
+            var personalAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
+            personalAddressRepoMock.AsQueryable().ReturnsForAnyArgs(new List<PersonalAddress>
+            {
+               homeAddress
+            }.AsQueryable());
+
+            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
+
+            var uut = new AddressHistoryService(emplRepoMock, addressHistoryRepoMock, personalAddressRepoMock);
+
+            uut.UpdateAddressHistories();
+            Assert.AreNotEqual(0, historyList.ElementAt(0).EndTimestamp);
+
+        }
+
+        [Test]
+        public void UpdateAddressHistories_WithOneActiveHistory_ChangesInHomeAddress_ShouldDeactivate()
+        {
+            var homeAddress = new PersonalAddress
+            {
+                StreetName = "TestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 1
+            };
+
+            var workAddress = new WorkAddress
+            {
+                StreetName = "TestStreetWork",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234"
+            };
+
+            var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
+            emplRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>
+            {
+                new Employment()
+                {
+                    Id = 1,
+                    PersonId = 1,
+                    OrgUnit = new OrgUnit()
                     {
+                       Address = workAddress
+                    }
+                }
+            }.AsQueryable());
+
+            var addressHistoryRepoMock = NSubstitute.Substitute.For<IGenericRepository<AddressHistory>>();
+            var historyList = new List<AddressHistory>
+            {
+                new AddressHistory()
+                {
+                    EmploymentId = 1,
+                    EndTimestamp = 0,
+                    Employment = emplRepoMock.AsQueryable().First(),
+                    WorkAddress = workAddress,
+                    HomeAddress = homeAddress,
+                   
+                }
+            };
+
+            var personalAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
+            personalAddressRepoMock.AsQueryable().ReturnsForAnyArgs(new List<PersonalAddress>
+            {
+               new PersonalAddress
+               {
+                        StreetName = "NewTestStreetHome",
+                        StreetNumber = "1",
+                        ZipCode = 1234,
+                        Town = "TestTown",
+                        Latitude = "1234",
+                        Longitude = "1234",
+                        Type = PersonalAddressType.Home,
                         PersonId = 1
-                    },
-                    HomeAddressId = 1,
-                    EndTimestamp = 0,
-                }
-            };
-            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
-            addressHistoryRepoMock.Insert(new AddressHistory())
-                .ReturnsForAnyArgs(x => x.Arg<AddressHistory>())
-                .AndDoes(x => historyList.Add(x.Arg<AddressHistory>()));
+               }
+            }.AsQueryable());
 
-            var personalAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
-            var personalAddressList = new List<PersonalAddress>
-            {
-                new PersonalAddress()
-                {
-                    PersonId = 1,
-                    Type = PersonalAddressType.OldHome,
-                    Id = 1
-                },
-                new PersonalAddress()
-                {
-                    PersonId = 1,
-                    Type = PersonalAddressType.Home,
-                    Id = 2
-                }
-            };
-            personalAddressRepoMock.AsQueryable().ReturnsForAnyArgs(personalAddressList.AsQueryable());
+            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
 
             var uut = new AddressHistoryService(emplRepoMock, addressHistoryRepoMock, personalAddressRepoMock);
-            Assert.AreEqual(1, historyList.ElementAt(0).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(0).EndTimestamp);
-            Assert.AreEqual(1, historyList.Count);
-
-            uut.AddHomeAddress(new PersonalAddress()
-            {
-                PersonId = 1,
-                Id = 2
-            });
 
             uut.UpdateAddressHistories();
-            uut.CreateNonExistingHistories();
-            Assert.AreEqual(1, historyList.ElementAt(0).EmploymentId);
             Assert.AreNotEqual(0, historyList.ElementAt(0).EndTimestamp);
-            Assert.AreEqual(1, historyList.ElementAt(0).HomeAddressId);
 
-            Assert.AreEqual(1, historyList.ElementAt(1).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(1).EndTimestamp);
-            Assert.AreEqual(2, historyList.ElementAt(1).HomeAddressId);
-            Assert.AreEqual(2, historyList.Count);
         }
 
         [Test]
-        public void UpdateAddressHistories_WithOneChangeInWorkAddress_ShouldAlterOldHistory_AndAddNewOne()
+        public void UpdateAddressHistories_WithOneActiveHistory_ChangesInBothAddresses_ShouldDeactivate()
         {
+            var homeAddress = new PersonalAddress
+            {
+                StreetName = "TestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 1
+            };
+
+            var workAddress = new WorkAddress
+            {
+                StreetName = "TestStreetWork",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234"
+            };
+
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
             emplRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>
             {
@@ -413,12 +531,17 @@ namespace DBUpdater.Test
                 {
                     Id = 1,
                     PersonId = 1,
-                    OrgUnitId = 1,
                     OrgUnit = new OrgUnit()
                     {
-                        AddressId = 12,
-                        Address = new WorkAddress(),
-                        Id = 1
+                       Address =  new WorkAddress
+                       {
+                            StreetName = "NewTestStreetWork",
+                            StreetNumber = "1",
+                            ZipCode = 1234,
+                            Town = "TestTown",
+                            Latitude = "1234",
+                            Longitude = "1234" 
+                       }
                     }
                 }
             }.AsQueryable());
@@ -429,202 +552,86 @@ namespace DBUpdater.Test
                 new AddressHistory()
                 {
                     EmploymentId = 1,
-                    Employment = new Employment()
-                    {
-                        OrgUnitId = 1
-                    },
                     EndTimestamp = 0,
-                    WorkAddressId = 1
+                    Employment = emplRepoMock.AsQueryable().First(),
+                    WorkAddress = workAddress,
+                    HomeAddress = homeAddress,
+                   
                 }
             };
-            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
-            addressHistoryRepoMock.Insert(new AddressHistory())
-                .ReturnsForAnyArgs(x => x.Arg<AddressHistory>())
-                .AndDoes(x => historyList.Add(x.Arg<AddressHistory>()));
 
             var personalAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
             personalAddressRepoMock.AsQueryable().ReturnsForAnyArgs(new List<PersonalAddress>
             {
-                new PersonalAddress()
-                {
-                    PersonId = 1,
-                    Type = PersonalAddressType.Home
-                }
+               new PersonalAddress
+               {
+                        StreetName = "NewTestStreetHome",
+                        StreetNumber = "1",
+                        ZipCode = 1234,
+                        Town = "TestTown",
+                        Latitude = "1234",
+                        Longitude = "1234",
+                        Type = PersonalAddressType.Home,
+                        PersonId = 1
+               }
             }.AsQueryable());
 
-            var uut = new AddressHistoryService(emplRepoMock, addressHistoryRepoMock, personalAddressRepoMock);
-            uut.AddWorkAddress(new WorkAddress()
-            {
-                OrgUnitId = 1,
-                Id = 12
-            });
+            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
 
-            Assert.AreEqual(1, historyList.ElementAt(0).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(0).EndTimestamp);
-            Assert.AreEqual(1, historyList.ElementAt(0).WorkAddressId);
-            Assert.AreEqual(1, historyList.Count);
+            var uut = new AddressHistoryService(emplRepoMock, addressHistoryRepoMock, personalAddressRepoMock);
 
             uut.UpdateAddressHistories();
-            uut.CreateNonExistingHistories();
-
-            Assert.AreEqual(1, historyList.ElementAt(0).EmploymentId);
             Assert.AreNotEqual(0, historyList.ElementAt(0).EndTimestamp);
-            Assert.AreEqual(1, historyList.ElementAt(0).WorkAddressId);
 
-            Assert.AreEqual(1, historyList.ElementAt(1).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(1).EndTimestamp);
-            Assert.AreEqual(12, historyList.ElementAt(1).WorkAddressId);
-            Assert.AreEqual(2, historyList.Count);
         }
 
         [Test]
-        public void UpdateAddressHistories_WithOneChangeInPersonalAddress_AndLotsOfOldHistories_ShouldAlterOnlyActiveHistory_AndAddNewHistory()
+        public void UpdateAddressHistories_WithTwoActiveHistories_NoChanges_ShouldNotDeactivate()
         {
-            var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
-            emplRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>
+            var homeAddress1 = new PersonalAddress
             {
-                new Employment()
-                {
-                    Id = 1,
-                    PersonId = 1,
-                    OrgUnitId = 1,
-                    OrgUnit = new OrgUnit()
-                    {
-                        AddressId = 12,
-                        Address = new WorkAddress(),
-                        Id = 1
-                    }
-                }
-            }.AsQueryable());
-
-            var addressHistoryRepoMock = NSubstitute.Substitute.For<IGenericRepository<AddressHistory>>();
-            var historyList = new List<AddressHistory>
-            {
-                new AddressHistory()
-                {
-                    EmploymentId = 1,
-                    Employment = new Employment()
-                    {
-                        OrgUnitId = 1
-                    },
-                    StartTimestamp = 20,
-                    EndTimestamp = 30,
-                    WorkAddressId = 1
-                },
-                new AddressHistory()
-                {
-                    EmploymentId = 1,
-                    Employment = new Employment()
-                    {
-                        OrgUnitId = 1
-                    },
-                    StartTimestamp = 20,
-                    EndTimestamp = 30,
-                    WorkAddressId = 1
-                },
-                new AddressHistory()
-                {
-                    EmploymentId = 1,
-                    Employment = new Employment()
-                    {
-                        OrgUnitId = 1
-                    },
-                    StartTimestamp = 20,
-                    EndTimestamp = 30,
-                    WorkAddressId = 1
-                },new AddressHistory()
-                {
-                    EmploymentId = 1,
-                    Employment = new Employment()
-                    {
-                        OrgUnitId = 1
-                    },
-                    StartTimestamp = 20,
-                    EndTimestamp = 30,
-                    WorkAddressId = 1
-                },
-                new AddressHistory()
-                {
-                    EmploymentId = 1,
-                    Employment = new Employment()
-                    {
-                        OrgUnitId = 1
-                    },
-                    StartTimestamp = 20,
-                    EndTimestamp = 30,
-                    WorkAddressId = 1
-                },
-                new AddressHistory()
-                {
-                    EmploymentId = 1,
-                    Employment = new Employment()
-                    {
-                        OrgUnitId = 1
-                    },
-                    StartTimestamp = 20,
-                    EndTimestamp = 0,
-                    WorkAddressId = 1
-                }
+                StreetName = "TestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 1
             };
-            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
-            addressHistoryRepoMock.Insert(new AddressHistory())
-                .ReturnsForAnyArgs(x => x.Arg<AddressHistory>())
-                .AndDoes(x => historyList.Add(x.Arg<AddressHistory>()));
 
-            var personalAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
-            personalAddressRepoMock.AsQueryable().ReturnsForAnyArgs(new List<PersonalAddress>
+            var workAddress1 = new WorkAddress
             {
-                new PersonalAddress()
-                {
-                    PersonId = 1,
-                    Type = PersonalAddressType.OldHome,
-                    Id = 1
-                },
-                new PersonalAddress()
-                {
-                    PersonId = 1,
-                    Type = PersonalAddressType.Home,
-                    Id = 2
-                }
-            }.AsQueryable());
+                StreetName = "TestStreetWork",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234"
+            };
 
-            var uut = new AddressHistoryService(emplRepoMock, addressHistoryRepoMock, personalAddressRepoMock);
-            uut.AddWorkAddress(new WorkAddress()
+            var homeAddress2 = new PersonalAddress
             {
-                OrgUnitId = 1,
-                Id = 12
-            });
+                StreetName = "TestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 2
+            };
 
-            uut.AddHomeAddress(new PersonalAddress()
+            var workAddress2 = new WorkAddress
             {
-                PersonId = 1,
-                Id = 2
-            });
+                StreetName = "TestStreetWork",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234"
+            };
 
-            for (var i = 0; i < 5; i++)
-            {
-                Assert.AreEqual(30, historyList.ElementAt(i).EndTimestamp);
-            }
-
-            Assert.AreEqual(6, historyList.Count);
-            Assert.AreEqual(0, historyList.ElementAt(5).EndTimestamp);
-
-            uut.UpdateAddressHistories();
-            uut.CreateNonExistingHistories();
-
-            for (var i = 0; i < 5; i++)
-            {
-                Assert.AreEqual(30, historyList.ElementAt(i).EndTimestamp);
-            }
-
-            Assert.AreNotEqual(0, historyList.ElementAt(5).EndTimestamp);
-            Assert.AreEqual(0, historyList.ElementAt(6).EndTimestamp);
-            Assert.AreEqual(2, historyList.ElementAt(6).HomeAddressId);
-        }
-
-        [Test]
-        public void UpdateAddressHistories_WithTwoChangesInPersonalAddress_ShouldAlterOldHistory_AndAddNewOneForEachEmpl()
-        {
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
             emplRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>
             {
@@ -634,8 +641,7 @@ namespace DBUpdater.Test
                     PersonId = 1,
                     OrgUnit = new OrgUnit()
                     {
-                        AddressId = 1,
-                        Address = new WorkAddress()
+                       Address = workAddress1
                     }
                 },
                 new Employment()
@@ -644,8 +650,7 @@ namespace DBUpdater.Test
                     PersonId = 2,
                     OrgUnit = new OrgUnit()
                     {
-                        AddressId = 2,
-                        Address = new WorkAddress()
+                       Address = workAddress2
                     }
                 }
             }.AsQueryable());
@@ -656,102 +661,84 @@ namespace DBUpdater.Test
                 new AddressHistory()
                 {
                     EmploymentId = 1,
-                    Employment = new Employment()
-                    {
-                        PersonId = 1
-                    },
-                    HomeAddressId = 1,
                     EndTimestamp = 0,
+                    Employment = emplRepoMock.AsQueryable().Single(x => x.Id == 1),
+                    WorkAddress = workAddress1,
+                    HomeAddress = homeAddress1,
                 },
-                new AddressHistory()
+                 new AddressHistory()
                 {
                     EmploymentId = 2,
-                    Employment = new Employment()
-                    {
-                        PersonId = 2
-                    },
-                    HomeAddressId = 3,
                     EndTimestamp = 0,
+                    Employment = emplRepoMock.AsQueryable().Single(x => x.Id == 2),
+                    WorkAddress = workAddress2,
+                    HomeAddress = homeAddress2,
                 }
             };
-            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
-            addressHistoryRepoMock.Insert(new AddressHistory())
-                .ReturnsForAnyArgs(x => x.Arg<AddressHistory>())
-                .AndDoes(x => historyList.Add(x.Arg<AddressHistory>()));
 
             var personalAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
-            var personalAddressList = new List<PersonalAddress>
+            personalAddressRepoMock.AsQueryable().ReturnsForAnyArgs(new List<PersonalAddress>
             {
-                new PersonalAddress()
-                {
-                    PersonId = 1,
-                    Type = PersonalAddressType.OldHome,
-                    Id = 1
-                },
-                new PersonalAddress()
-                {
-                    PersonId = 1,
-                    Type = PersonalAddressType.Home,
-                    Id = 2
-                },
-                new PersonalAddress()
-                {
-                    PersonId = 2,
-                    Type = PersonalAddressType.OldHome,
-                    Id = 3
-                },
-                new PersonalAddress()
-                {
-                    PersonId = 2,
-                    Type = PersonalAddressType.Home,
-                    Id = 4
-                }
-            };
-            personalAddressRepoMock.AsQueryable().ReturnsForAnyArgs(personalAddressList.AsQueryable());
+               homeAddress1, homeAddress2
+            }.AsQueryable());
+
+            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
 
             var uut = new AddressHistoryService(emplRepoMock, addressHistoryRepoMock, personalAddressRepoMock);
-            Assert.AreEqual(1, historyList.ElementAt(0).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(0).EndTimestamp);
-            Assert.AreEqual(2, historyList.ElementAt(1).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(1).EndTimestamp);
-            Assert.AreEqual(2, historyList.Count);
-
-            uut.AddHomeAddress(new PersonalAddress()
-            {
-                PersonId = 1,
-                Id = 2
-            });
-
-            uut.AddHomeAddress(new PersonalAddress()
-            {
-                PersonId = 2,
-                Id = 4
-            });
 
             uut.UpdateAddressHistories();
-            uut.CreateNonExistingHistories();
-            Assert.AreEqual(1, historyList.ElementAt(0).EmploymentId);
-            Assert.AreNotEqual(0, historyList.ElementAt(0).EndTimestamp);
-            Assert.AreEqual(1, historyList.ElementAt(0).HomeAddressId);
+            Assert.AreEqual(0, historyList.ElementAt(0).EndTimestamp);
+            Assert.AreEqual(0, historyList.ElementAt(1).EndTimestamp);
 
-            Assert.AreEqual(2, historyList.ElementAt(1).EmploymentId);
-            Assert.AreNotEqual(0, historyList.ElementAt(1).EndTimestamp);
-            Assert.AreEqual(3, historyList.ElementAt(1).HomeAddressId);
-
-            Assert.AreEqual(1, historyList.ElementAt(2).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(2).EndTimestamp);
-            Assert.AreEqual(2, historyList.ElementAt(2).HomeAddressId);
-
-            Assert.AreEqual(2, historyList.ElementAt(3).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(3).EndTimestamp);
-            Assert.AreEqual(4, historyList.ElementAt(3).HomeAddressId);
-
-            Assert.AreEqual(4, historyList.Count);
         }
 
         [Test]
-        public void UpdateAddressHistories_WithTwoChangesInWorkAddresses_ShouldAlterOldHistory_AndAddNewOneForEachEmpl()
+        public void UpdateAddressHistories_WithTwoActiveHistories_ChangesInOneWorkAddress_ShouldDeactivateOneHistory()
         {
+            var homeAddress1 = new PersonalAddress
+            {
+                StreetName = "TestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 1
+            };
+
+            var workAddress1 = new WorkAddress
+            {
+                StreetName = "TestStreetWork",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234"
+            };
+
+            var homeAddress2 = new PersonalAddress
+            {
+                StreetName = "TestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 2
+            };
+
+            var workAddress2 = new WorkAddress
+            {
+                StreetName = "TestStreetWork",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234"
+            };
+
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
             emplRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>
             {
@@ -759,24 +746,26 @@ namespace DBUpdater.Test
                 {
                     Id = 1,
                     PersonId = 1,
-                    OrgUnitId = 1,
                     OrgUnit = new OrgUnit()
                     {
-                        AddressId = 12,
-                        Address = new WorkAddress(),
-                        Id = 1
+                       Address = workAddress1
                     }
                 },
                 new Employment()
                 {
                     Id = 2,
                     PersonId = 2,
-                    OrgUnitId = 2,
                     OrgUnit = new OrgUnit()
                     {
-                        AddressId = 13,
-                        Address = new WorkAddress(),
-                        Id = 2
+                       Address = new WorkAddress
+                       {
+                            StreetName = "NewTestStreetWork",
+                            StreetNumber = "1",
+                            ZipCode = 1234,
+                            Town = "TestTown",
+                            Latitude = "1234",
+                            Longitude = "1234"
+                       }
                     }
                 }
             }.AsQueryable());
@@ -787,92 +776,84 @@ namespace DBUpdater.Test
                 new AddressHistory()
                 {
                     EmploymentId = 1,
-                    Employment = new Employment()
-                    {
-                        OrgUnitId = 1
-                    },
                     EndTimestamp = 0,
-                    WorkAddressId = 1
+                    Employment = emplRepoMock.AsQueryable().Single(x => x.Id == 1),
+                    WorkAddress = workAddress1,
+                    HomeAddress = homeAddress1,
                 },
-                new AddressHistory()
+                 new AddressHistory()
                 {
                     EmploymentId = 2,
-                    Employment = new Employment()
-                    {
-                        OrgUnitId = 2
-                    },
                     EndTimestamp = 0,
-                    WorkAddressId = 2
+                    Employment = emplRepoMock.AsQueryable().Single(x => x.Id == 2),
+                    WorkAddress = workAddress2,
+                    HomeAddress = homeAddress2,
                 }
             };
-            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
-            addressHistoryRepoMock.Insert(new AddressHistory())
-                .ReturnsForAnyArgs(x => x.Arg<AddressHistory>())
-                .AndDoes(x => historyList.Add(x.Arg<AddressHistory>()));
 
             var personalAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
             personalAddressRepoMock.AsQueryable().ReturnsForAnyArgs(new List<PersonalAddress>
             {
-                new PersonalAddress()
-                {
-                    PersonId = 1,
-                    Type = PersonalAddressType.Home
-                },
-                 new PersonalAddress()
-                {
-                    PersonId = 2,
-                    Type = PersonalAddressType.Home
-                }
+               homeAddress1, homeAddress2
             }.AsQueryable());
 
+            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
+
             var uut = new AddressHistoryService(emplRepoMock, addressHistoryRepoMock, personalAddressRepoMock);
-            uut.AddWorkAddress(new WorkAddress()
-            {
-                OrgUnitId = 1,
-                Id = 12
-            });
-            uut.AddWorkAddress(new WorkAddress()
-            {
-                OrgUnitId = 2,
-                Id = 13
-            });
-
-            Assert.AreEqual(1, historyList.ElementAt(0).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(0).EndTimestamp);
-            Assert.AreEqual(1, historyList.ElementAt(0).WorkAddressId);
-
-            Assert.AreEqual(2, historyList.ElementAt(1).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(1).EndTimestamp);
-            Assert.AreEqual(2, historyList.ElementAt(1).WorkAddressId);
-
-            Assert.AreEqual(2, historyList.Count);
 
             uut.UpdateAddressHistories();
-            uut.CreateNonExistingHistories();
-
-            Assert.AreEqual(1, historyList.ElementAt(0).EmploymentId);
-            Assert.AreNotEqual(0, historyList.ElementAt(0).EndTimestamp);
-            Assert.AreEqual(1, historyList.ElementAt(0).WorkAddressId);
-
-            Assert.AreEqual(2, historyList.ElementAt(1).EmploymentId);
+            Assert.AreEqual(0, historyList.ElementAt(0).EndTimestamp);
             Assert.AreNotEqual(0, historyList.ElementAt(1).EndTimestamp);
-            Assert.AreEqual(2, historyList.ElementAt(1).WorkAddressId);
 
-            Assert.AreEqual(1, historyList.ElementAt(2).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(2).EndTimestamp);
-            Assert.AreEqual(12, historyList.ElementAt(2).WorkAddressId);
-
-            Assert.AreEqual(2, historyList.ElementAt(3).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(3).EndTimestamp);
-            Assert.AreEqual(13, historyList.ElementAt(3).WorkAddressId);
-
-
-            Assert.AreEqual(4, historyList.Count);
         }
 
         [Test]
-        public void UpdateAddressHistories_WithChangeInPersonalAndWorkAddress_ShouldAlterOldHistory_AndAddNewOne()
+        public void UpdateAddressHistories_WithTwoActiveHistories_ChangeInOneHomeAddress_ShouldDeactivateOneHistory()
         {
+            var homeAddress1 = new PersonalAddress
+            {
+                StreetName = "TestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 1
+            };
+
+            var workAddress1 = new WorkAddress
+            {
+                StreetName = "TestStreetWork",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234"
+            };
+
+            var homeAddress2 = new PersonalAddress
+            {
+                StreetName = "TestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 2
+            };
+
+            var workAddress2 = new WorkAddress
+            {
+                StreetName = "TestStreetWork",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234"
+            };
+
             var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
             emplRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>
             {
@@ -880,12 +861,18 @@ namespace DBUpdater.Test
                 {
                     Id = 1,
                     PersonId = 1,
-                    OrgUnitId = 1,
                     OrgUnit = new OrgUnit()
                     {
-                        AddressId = 13,
-                        Address = new WorkAddress(),
-                        Id = 1
+                       Address = workAddress1
+                    }
+                },
+                new Employment()
+                {
+                    Id = 2,
+                    PersonId = 2,
+                    OrgUnit = new OrgUnit()
+                    {
+                       Address = workAddress2
                     }
                 }
             }.AsQueryable());
@@ -896,73 +883,171 @@ namespace DBUpdater.Test
                 new AddressHistory()
                 {
                     EmploymentId = 1,
-                    Employment = new Employment()
-                    {
-                        OrgUnitId = 1,
-                        PersonId = 1
-                    },
                     EndTimestamp = 0,
-                    WorkAddressId = 1,
-                    HomeAddressId = 10
+                    Employment = emplRepoMock.AsQueryable().Single(x => x.Id == 1),
+                    WorkAddress = workAddress1,
+                    HomeAddress = homeAddress1,
+                },
+                 new AddressHistory()
+                {
+                    EmploymentId = 2,
+                    EndTimestamp = 0,
+                    Employment = emplRepoMock.AsQueryable().Single(x => x.Id == 2),
+                    WorkAddress = workAddress2,
+                    HomeAddress = homeAddress2,
                 }
             };
-            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
-            addressHistoryRepoMock.Insert(new AddressHistory())
-                .ReturnsForAnyArgs(x => x.Arg<AddressHistory>())
-                .AndDoes(x => historyList.Add(x.Arg<AddressHistory>()));
 
             var personalAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
             personalAddressRepoMock.AsQueryable().ReturnsForAnyArgs(new List<PersonalAddress>
             {
-                new PersonalAddress()
+               new PersonalAddress
+               {
+                  StreetName = "NewTestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 1   
+               }, homeAddress2
+            }.AsQueryable());
+
+            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
+
+            var uut = new AddressHistoryService(emplRepoMock, addressHistoryRepoMock, personalAddressRepoMock);
+
+            uut.UpdateAddressHistories();
+            Assert.AreNotEqual(0, historyList.ElementAt(0).EndTimestamp);
+            Assert.AreEqual(0, historyList.ElementAt(1).EndTimestamp);
+
+        }
+
+        [Test]
+        public void UpdateAddressHistories_WithTwoActiveHistories_ChangesInOneHomeAddressOneWorkAddress_ShouldDeactivateBothHistories()
+        {
+            var homeAddress1 = new PersonalAddress
+            {
+                StreetName = "TestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 1
+            };
+
+            var workAddress1 = new WorkAddress
+            {
+                StreetName = "TestStreetWork",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234"
+            };
+
+            var homeAddress2 = new PersonalAddress
+            {
+                StreetName = "TestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 2
+            };
+
+            var workAddress2 = new WorkAddress
+            {
+                StreetName = "TestStreetWork",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234"
+            };
+
+            var emplRepoMock = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
+            emplRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Employment>
+            {
+                new Employment()
                 {
+                    Id = 1,
                     PersonId = 1,
-                    Id = 10,
-                    Type = PersonalAddressType.OldHome
+                    OrgUnit = new OrgUnit()
+                    {
+                       Address = workAddress1
+                    }
                 },
-                 new PersonalAddress()
+                new Employment()
                 {
-                    Id = 20,
-                    PersonId = 1,
-                    Type = PersonalAddressType.Home
+                    Id = 2,
+                    PersonId = 2,
+                    OrgUnit = new OrgUnit()
+                    {
+                       Address = new WorkAddress
+                       {
+                            StreetName = "NewTestStreetWork",
+                            StreetNumber = "1",
+                            ZipCode = 1234,
+                            Town = "TestTown",
+                            Latitude = "1234",
+                            Longitude = "1234"
+                       }
+                    }
                 }
             }.AsQueryable());
 
+            var addressHistoryRepoMock = NSubstitute.Substitute.For<IGenericRepository<AddressHistory>>();
+            var historyList = new List<AddressHistory>
+            {
+                new AddressHistory()
+                {
+                    EmploymentId = 1,
+                    EndTimestamp = 0,
+                    Employment = emplRepoMock.AsQueryable().Single(x => x.Id == 1),
+                    WorkAddress = workAddress1,
+                    HomeAddress = homeAddress1,
+                },
+                 new AddressHistory()
+                {
+                    EmploymentId = 2,
+                    EndTimestamp = 0,
+                    Employment = emplRepoMock.AsQueryable().Single(x => x.Id == 2),
+                    WorkAddress = workAddress2,
+                    HomeAddress = homeAddress2,
+                }
+            };
+
+            var personalAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
+            personalAddressRepoMock.AsQueryable().ReturnsForAnyArgs(new List<PersonalAddress>
+            {
+               new PersonalAddress
+               {
+                  StreetName = "NewTestStreetHome",
+                StreetNumber = "1",
+                ZipCode = 1234,
+                Town = "TestTown",
+                Latitude = "1234",
+                Longitude = "1234",
+                Type = PersonalAddressType.Home,
+                PersonId = 1   
+               }, homeAddress2
+            }.AsQueryable());
+
+            addressHistoryRepoMock.AsQueryable().ReturnsForAnyArgs(historyList.AsQueryable());
+
             var uut = new AddressHistoryService(emplRepoMock, addressHistoryRepoMock, personalAddressRepoMock);
-            uut.AddHomeAddress(new PersonalAddress()
-            {
-                PersonId = 1,
-                Id = 2
-            });
-            uut.AddWorkAddress(new WorkAddress()
-            {
-                OrgUnitId = 1,
-                Id = 13
-            });
-
-            Assert.AreEqual(1, historyList.ElementAt(0).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(0).EndTimestamp);
-            Assert.AreEqual(1, historyList.ElementAt(0).WorkAddressId);
-            Assert.AreEqual(10, historyList.ElementAt(0).HomeAddressId);
-
-            Assert.AreEqual(1, historyList.Count);
 
             uut.UpdateAddressHistories();
-            uut.CreateNonExistingHistories();
-
-
-            Assert.AreEqual(1, historyList.ElementAt(0).EmploymentId);
             Assert.AreNotEqual(0, historyList.ElementAt(0).EndTimestamp);
-            Assert.AreEqual(1, historyList.ElementAt(0).WorkAddressId);
-            Assert.AreEqual(10, historyList.ElementAt(0).HomeAddressId);
+            Assert.AreNotEqual(0, historyList.ElementAt(1).EndTimestamp);
 
-            Assert.AreEqual(1, historyList.ElementAt(1).EmploymentId);
-            Assert.AreEqual(0, historyList.ElementAt(1).EndTimestamp);
-            Assert.AreEqual(13, historyList.ElementAt(1).WorkAddressId);
-            Assert.AreEqual(20, historyList.ElementAt(1).HomeAddressId);
-            Assert.AreEqual(2, historyList.Count);
         }
-
 
     }
 }
