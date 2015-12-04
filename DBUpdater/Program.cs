@@ -44,7 +44,6 @@ namespace DBUpdater
 
             service.MigrateOrganisations();
             service.MigrateEmployees();
-            historyService.CreateNonExistingHistories();
             historyService.UpdateAddressHistories();
             historyService.CreateNonExistingHistories();
             service.UpdateLeadersOnExpiredOrActivatedSubstitutes();
