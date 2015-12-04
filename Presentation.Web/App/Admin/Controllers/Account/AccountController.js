@@ -84,10 +84,11 @@
                     field: "Type",
                     title: "Type",
                     template: function (data) {
-                        if (data.Type == "PSPElement") {
-                            return "PSP-element";
-                        }
-                        return data.Type;
+                        //if (data.Type == "PSPElement") {
+                        //    return "PSP-element";
+                        //}
+                        //return data.Type;
+                        return "Kontonummer";
                     }
                 }, {
                     field: "Number",
