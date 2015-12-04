@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Core.DomainModel;
 using Core.DomainServices;
 
@@ -25,16 +26,6 @@ namespace DBUpdater
             _changedHistories = new HashSet<int>();
             _homeAddresses = new List<PersonalAddress>();
             _workAddresses = new List<WorkAddress>();
-        }
-
-        public void AddHomeAddress(PersonalAddress homeAddress)
-        {
-            _homeAddresses.Add(homeAddress);
-        }
-
-        public void AddWorkAddress(WorkAddress workAddress)
-        {
-            _workAddresses.Add(workAddress);
         }
 
         public void CreateNonExistingHistories()
@@ -75,33 +66,21 @@ namespace DBUpdater
 
         public void UpdateAddressHistories()
         {
-            foreach (var homeAddress in _homeAddresses)
+            var activeHistories = _addressHistoryRepo.AsQueryable().Where(x => x.EndTimestamp == 0).ToList();
+            foreach (var addressHistory in activeHistories)
             {
-                var activeHistory = _addressHistoryRepo.AsQueryable().FirstOrDefault(x => x.EndTimestamp == 0 && x.Employment.PersonId == homeAddress.PersonId);
-                if (activeHistory != null)
+                var homeAddress =
+                    _personalAddressRepo.AsQueryable()
+                        .FirstOrDefault(
+                            x => x.PersonId == addressHistory.Employment.PersonId && x.Type == PersonalAddressType.Home);
+                if (homeAddress != addressHistory.HomeAddress ||
+                    addressHistory.WorkAddress != addressHistory.Employment.OrgUnit.Address)
                 {
-                    _changedHistories.Add(activeHistory.EmploymentId);
+                    // One or two addresses have changed. End the history;
+                    addressHistory.EndTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
                 }
-            }
-
-            foreach (var workAddress in _workAddresses)
-            {
-                var activeHistory = _addressHistoryRepo.AsQueryable().FirstOrDefault(x => x.EndTimestamp == 0 && x.Employment.OrgUnitId == workAddress.OrgUnitId);
-                if (activeHistory != null)
-                {
-                    _changedHistories.Add(activeHistory.EmploymentId);
-                }
-            }
-
-            foreach (var changedHistory in _changedHistories)
-            {
-                // Iterate all active histories where addresses have changed
-                // Set the EndTimestamp to now on these histories.
-                _addressHistoryRepo.AsQueryable().Single(x => x.EmploymentId == changedHistory && x.EndTimestamp == 0).EndTimestamp = (Int32) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             }
             _addressHistoryRepo.Save();
-
-
         }
 
 

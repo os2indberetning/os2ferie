@@ -9,8 +9,6 @@ namespace DBUpdater
 {
     public interface IAddressHistoryService
     {
-        void AddHomeAddress(PersonalAddress homeAddress);
-        void AddWorkAddress(WorkAddress workAddress);
         void UpdateAddressHistories();
         void CreateNonExistingHistories();
     }

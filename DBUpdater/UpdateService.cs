@@ -126,8 +126,8 @@ namespace DBUpdater
                 orgToInsert.OrgId = org.LOSOrgId;
 
                 var addressChanged = false;
-                // If WorkAddress.Id is 0, it means that the WorkAddress has changed since the update was last run.
-                if(workAddress.Id == 0)
+               
+                if(workAddress != orgToInsert.Address)
                 {
                     addressChanged = true;
                     orgToInsert.Address = workAddress;
@@ -144,7 +144,6 @@ namespace DBUpdater
                 if (addressChanged)
                 {
                     workAddress.OrgUnitId = orgToInsert.Id;
-                    _historyService.AddWorkAddress(workAddress);
                 }
             
             }
@@ -366,12 +365,7 @@ namespace DBUpdater
             }
             else
             {
-                if (!(homeAddr.StreetName == launderedAddress.StreetName
-                    && homeAddr.StreetNumber == launderedAddress.StreetNumber
-                    && homeAddr.ZipCode == launderedAddress.ZipCode
-                    && homeAddr.Town == launderedAddress.Town
-                    && homeAddr.Latitude == launderedAddress.Latitude
-                    && homeAddr.Longitude == launderedAddress.Longitude))
+                if (homeAddr != launderedAddress)
                 {
                     // Address has changed
                     // Change type of current (The one about to be changed) home address to OldHome.
@@ -385,7 +379,6 @@ namespace DBUpdater
                     // Update actual current home address.
                     _personalAddressRepo.Insert(launderedAddress);
                     _personalAddressRepo.Save();
-                    _historyService.AddHomeAddress(launderedAddress);
                 }
             }
         }
