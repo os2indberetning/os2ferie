@@ -1,6 +1,6 @@
 ﻿angular.module('application').controller('AdminNewSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "$timeout", "persons", "Autocomplete",
-        function ($scope, $modalInstance, OrgUnit, leader, Substitute, Person, NotificationService, $timeout, persons, Autocomplete) {
+    ["$scope", "$modalInstance", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "$timeout", "persons", "Autocomplete", "leader",
+        function ($scope, $modalInstance, OrgUnit, leader, Substitute, Person, NotificationService, $timeout, persons, Autocomplete, leader) {
 
             $scope.persons = persons;
 
@@ -65,7 +65,8 @@
                     LeaderId: $scope.personFor[0].Id,
                     SubId: $scope.person[0].Id,
                     OrgUnitId: $scope.orgUnit.Id,
-                    PersonId: $scope.personFor[0].Id
+                    PersonId: $scope.personFor[0].Id,
+                    CreatedById: leader.Id
                 });
 
                 if ($scope.infinitePeriod) {
