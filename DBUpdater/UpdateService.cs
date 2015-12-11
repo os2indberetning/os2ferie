@@ -489,7 +489,27 @@ namespace DBUpdater
             {
                 _subService.UpdateReportsAffectedBySubstitute(sub);
             } 
-            
+        }
+
+        public void AddLeadersToReportsThatHaveNone()
+        {
+            // Fail-safe as some reports for unknown reasons have not had a leader attached
+            Console.WriteLine("Adding leaders to reports that have none");
+            var i = 0;
+            var reports = _reportRepo.AsQueryable().Where(r => r.ResponsibleLeader == null || r.ActualLeader == null).ToList();
+            foreach (var report in reports)
+            {
+                i++;
+                Console.WriteLine("Adding leaders to report " + i + " of " + reports.Count);
+                report.ResponsibleLeaderId = _driveService.GetResponsibleLeaderForReport(report).Id;
+                report.ActualLeaderId = _driveService.GetActualLeaderForReport(report).Id;
+                if (i % 100 == 0)
+                {
+                    Console.WriteLine("Saving to database");
+                    _reportRepo.Save();
+                }
+            }
+            _reportRepo.Save();
         }
 
     }
