@@ -41,7 +41,7 @@
                         beforeSend: function (req) {
                             req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                         },
-                        url: "odata/Substitutes/Service.Substitute?$expand=OrgUnit,Sub,Person,Leader",
+                        url: "odata/Substitutes/Service.Substitute?$expand=OrgUnit,Sub,Person,Leader,CreatedBy",
                         dataType: "json",
                         cache: false
                     },
@@ -103,7 +103,11 @@
                 title: "Organisationsenhed"
             }, {
                 field: "Leader.FullName",
-                title: "Opsat af"
+                title: "Opsat af",
+                template: function (data) {
+                    if (data.CreatedBy == undefined) return "<i>Ikke tilgængelig</i>";
+                    return data.CreatedBy.FullName;
+                }
             },
             {
                 field: "StartDateTimestamp",
@@ -165,7 +169,7 @@
                         beforeSend: function (req) {
                             req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                         },
-                        url: "odata/Substitutes/Service.Personal?$expand=OrgUnit,Sub,Leader,Person",
+                        url: "odata/Substitutes/Service.Personal?$expand=OrgUnit,Sub,Leader,Person,CreatedBy",
                         dataType: "json",
                         cache: false
                     },
@@ -219,8 +223,12 @@
                 field: "Person.FullName",
                 title: "Godkender for"
             }, {
-                field: "Leader.FullName",
+                field: "CreatedBy",
                 title: "Opsat af",
+                template: function(data) {
+                    if (data.CreatedBy == undefined) return "<i>Ikke tilgængelig</i>";
+                    return data.CreatedBy.FullName;
+                }
             }, {
                 field: "StartDateTimestamp",
                 title: "Fra",
