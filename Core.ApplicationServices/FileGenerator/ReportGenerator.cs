@@ -76,7 +76,7 @@ namespace Core.ApplicationServices.FileGenerator
                 DriveReport currentDriveReport = null;
                 var currentTfCode = "";
                 var currentMonth = -1;
-                var currentAccountNumber = "";
+                String currentAccountNumber = null;
                 foreach (var driveReport in driveReports)
                 {
                     var driveDate = TimestampToDate(driveReport.DriveDateTimestamp);
@@ -84,7 +84,7 @@ namespace Core.ApplicationServices.FileGenerator
                             || driveDate.Month != currentMonth 
                             || currentDriveReport == null 
                             || ! driveReport.EmploymentId.Equals(currentDriveReport.EmploymentId)
-                            || ! driveReport.AccountNumber.Equals(currentAccountNumber))
+                            || !(driveReport.AccountNumber == currentAccountNumber))
                     {
                         if (currentDriveReport != null)
                         {
@@ -96,7 +96,7 @@ namespace Core.ApplicationServices.FileGenerator
                         currentDriveReport = new DriveReport
                         {
                             TFCode = driveReport.TFCode,
-                            AccountNumber = driveReport.AccountNumber,
+                            AccountNumber = currentAccountNumber ?? String.Empty,
                             Employment = driveReport.Employment,
                             EmploymentId = driveReport.EmploymentId,
                             Distance = 0,
