@@ -53,10 +53,14 @@
     <Compile Include="Service.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="connections.config">
+    <None Include="connections.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="CustomSettings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core.ApplicationServices\Core.ApplicationServices.csproj">

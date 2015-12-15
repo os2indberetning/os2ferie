@@ -1,10 +1,6 @@
-﻿using AddressHistoryMigration;
-using Core.ApplicationServices;
-using Core.DomainModel;
-using Core.DomainServices;
-using Ninject;
+﻿using Core.ApplicationServices;
 
-namespace DBUpdater
+namespace AddressHistoryMigration
 {
     static class Program
     {
@@ -12,7 +8,7 @@ namespace DBUpdater
         {
             var ninjectKernel = NinjectWebKernel.CreateKernel();
             var updateService = new Service();
-            updateService.TransferFromTempToActual();
+            updateService.TryReClean();
         }
 
 

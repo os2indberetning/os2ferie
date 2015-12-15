@@ -36,6 +36,7 @@ namespace Infrastructure.DataAccess
         public IDbSet<RateType> RateTypes { get; set; }
         public IDbSet<CachedAddress> CachedAddresses { get; set; }
         public IDbSet<AddressHistory> AddressHistory { get; set; }
+        public IDbSet<TempAddressHistory> TempAddressHistory { get; set; }
   
 
         /**

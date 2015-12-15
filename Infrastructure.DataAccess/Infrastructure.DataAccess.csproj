@@ -337,6 +337,14 @@
     <Compile Include="Migrations\201511091655051_RemovedTempAddress.Designer.cs">
       <DependentUpon>201511091655051_RemovedTempAddress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512111327212_AddedTempAddressHistory1.cs" />
+    <Compile Include="Migrations\201512111327212_AddedTempAddressHistory1.Designer.cs">
+      <DependentUpon>201512111327212_AddedTempAddressHistory1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512111434353_dunno1.cs" />
+    <Compile Include="Migrations\201512111434353_dunno1.Designer.cs">
+      <DependentUpon>201512111434353_dunno1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -555,6 +563,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511091655051_RemovedTempAddress.resx">
       <DependentUpon>201511091655051_RemovedTempAddress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512111327212_AddedTempAddressHistory1.resx">
+      <DependentUpon>201512111327212_AddedTempAddressHistory1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512111434353_dunno1.resx">
+      <DependentUpon>201512111434353_dunno1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
