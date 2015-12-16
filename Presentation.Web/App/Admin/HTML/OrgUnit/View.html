@@ -1,9 +1,4 @@
 ﻿<div class="panel panel-default">
-
-
-
-
-
     <div class="panel-body">
         <div class="row">
             <div class="col-md-12">
@@ -11,12 +6,16 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-3 col-lg-2 pull-right">
-                <button class="btn btn-danger pull-right" ng-click="clearClicked()">Nulstil søgning</button>
+            <div class="col-xs-4 col-lg-2 pull-right">
+                <button class="btn btn-danger fill-width" ng-click="clearClicked()">Nulstil søgning</button>
             </div>
 
             <div class="col-xs-4 col-lg-2 pull-right">
-                <input type="text" k-options="autoCompleteOptions" kendo-auto-complete ng-change="orgUnitChanged($item)" ng-model="orgUnit.chosenUnit" placeholder="'Indtast beskrivelse'" k-data-source="orgUnits" k-data-value-field="'LongDescription'" k-data-text-field="'LongDescription'" class="form-control" />
+                <input type="text" k-options="autoCompleteOptions" kendo-auto-complete ng-change="orgUnitChanged($item)" ng-model="orgUnit.chosenUnit" placeholder="'Indtast beskrivelse'" k-data-source="orgUnits" k-data-value-field="'LongDescription'" k-data-text-field="'LongDescription'" class="form-control fill-width"/>
+            </div>
+
+            <div class="col-xs-4 col-lg-2 pull-right">
+                <select kendo-drop-down-list="gridContainer.kmRule" k-options="kmRuleOptions" class="fill-width"></select>
             </div>
 
 
