@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("PendingReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "RateType", "OrgUnit", "Person", "Autocomplete", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, RateType, OrgUnit, Person, Autocomplete) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "RateType", "OrgUnit", "Person", "Autocomplete", "MkColumnFormatter", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, RateType, OrgUnit, Person, Autocomplete,MkColumnFormatter) {
 
        // Load people for auto-complete textbox
        $scope.people = Autocomplete.activeUsers();
@@ -282,10 +282,7 @@
                    field: "KilometerAllowance",
                    title: "MK",
                    template: function (data) {
-                       if (data.IsExtraDistance) {
-                           return "<i class='fa fa-check'></i>";
-                       }
-                       return "";
+                       return MkColumnFormatter.format(data);
                    }
                }, {
                    field: "FourKmRule",

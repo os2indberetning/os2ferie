@@ -1,5 +1,5 @@
 angular.module("application").controller("MyAcceptedReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "$timeout", "RateType", function ($scope, $modal, $rootScope, Report, $timeout, RateType) {
+   "$scope", "$modal", "$rootScope", "Report", "$timeout", "RateType","MkColumnFormatter", function ($scope, $modal, $rootScope, Report, $timeout, RateType,MkColumnFormatter) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
@@ -185,6 +185,12 @@ angular.module("application").controller("MyAcceptedReportsController", [
                       return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " kr.";
                   },
                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
+              }, {
+                  field: "KilometerAllowance",
+                  title: "MK",
+                  template: function (data) {
+                    return MkColumnFormatter.format(data);
+                  }
               }, {
                   field: "CreatedDateTimestamp",
                   template: function (data) {

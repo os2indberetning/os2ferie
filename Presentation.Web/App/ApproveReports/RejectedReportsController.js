@@ -1,5 +1,5 @@
 ﻿angular.module("application").controller("RejectedReportsController", [
-   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "RateType", "Autocomplete", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, RateType, Autocomplete) {
+   "$scope", "$modal", "$rootScope", "Report", "OrgUnit", "Person", "$timeout", "NotificationService", "RateType", "Autocomplete","MkColumnFormatter", function ($scope, $modal, $rootScope, Report, OrgUnit, Person, $timeout, NotificationService, RateType, Autocomplete,MkColumnFormatter) {
 
        // Set personId. The value on $rootScope is set in resolve in application.js
        var personId = $rootScope.CurrentUser.Id;
@@ -250,10 +250,7 @@
                field: "KilometerAllowance",
                title: "MK",
                template: function (data) {
-                   if (data.IsExtraDistance) {
-                       return "<i class='fa fa-check'></i>";
-                   }
-                   return "";
+                   return MkColumnFormatter.format(data);
                }
            }, {
                field: "FourKmRule",
