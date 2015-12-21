@@ -53,7 +53,6 @@
         }
 
         $scope.addressPlaceholderText = "Eller indtast adresse her";
-        $scope.addressDropDownPlaceholderText = "Vælg fast adresse";
         $scope.SmartAddress = SmartAdresseSource;
         $scope.IsRoute = false;
 
@@ -220,7 +219,6 @@
                         res += "{name: \"" + addr.Name + "\", lat: " + addr.Latitude + ", lng: " + addr.Longitude + "},";
                     });
                     res += "]";
-                    console.log(res);
 
                     $scope.$on("kendoWidgetCreated", function (event, widget) {
                         if (widget === $scope.container.lastTextBox) {
@@ -319,7 +317,6 @@
                 value.PresentationString += value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
                 value.address = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
             });
-            res.unshift({ PresentationString: $scope.addressDropDownPlaceholderText });
             $scope.PersonalAddresses = res;
         }));
 
@@ -394,7 +391,7 @@
         }
 
         $scope.isAddressPersonalSet = function (address) {
-            return !(address.Personal == "" || address.Personal == $scope.addressDropDownPlaceholderText || address.Personal == undefined);
+            return !(address.Personal == undefined || address.Personal == "");
         }
 
         var validateAddressInput = function (setError) {
@@ -505,7 +502,7 @@
             var postRequest = [];
             angular.forEach($scope.DriveReport.Addresses, function (addr, key) {
                 // Format all addresses and add them to postRequest
-                if (!$scope.isAddressNameSet(addr) && addr.Personal != $scope.addressDropDownPlaceholderText) {
+                if (!$scope.isAddressNameSet(addr) && addr.Personal != "") {
                     var format = AddressFormatter.fn(addr.Personal);
                     postRequest.push({ StreetName: format.StreetName, StreetNumber: format.StreetNumber, ZipCode: format.ZipCode, Town: format.Town });
                 } else if ($scope.isAddressNameSet(addr)) {
