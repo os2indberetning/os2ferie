@@ -21,8 +21,6 @@
                 function link($scope, elem, attr) {
                     var ieversion = ($scope.checkieDebug) ? $scope.checkieDebug : _getExplorerVersion();
 
-                    console.log(ieversion);
-
                     // set the minimum ie to 9 if no value was passed from the attributes
                     $scope.checkieMinIe = ($scope.checkieMinIe && $scope.checkieMinIe.length) ? $scope.checkieMinIe : 9;
 
