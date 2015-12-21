@@ -4,11 +4,57 @@
 
         $scope.orgUnits = Autocomplete.orgUnits();
         $scope.orgUnit = {};
+        $scope.selectedKmRule = -1;
+
+        $scope.updateSourceUrl = function() {
+            var url = "/odata/OrgUnits";
+
+            if (Object.keys($scope.orgUnit).length !== 0) {
+                url += "?$filter=contains(LongDescription," + "'" + encodeURIComponent($scope.orgUnit.chosenUnit + "')");
+                if ($scope.selectedKmRule !== -1)
+                    url += " and HasAccessToFourKmRule eq " + ($scope.selectedKmRule === 0 ? "false" : "true");
+            } else {
+                if ($scope.selectedKmRule !== -1)
+                    url += "?$filter=HasAccessToFourKmRule eq " + ($scope.selectedKmRule === 0 ? "false" : "true");
+            }
+
+
+            $scope.gridContainer.grid.dataSource.transport.options.read.url = url;
+            $scope.gridContainer.grid.dataSource.read();
+        }
 
         $scope.autoCompleteOptions = {
             filter: "contains",
             select: function (e) {
                 $scope.orgUnit.chosenId = this.dataItem(e.item.index()).Id;
+            }
+        }
+
+        
+
+        $scope.kmRuleOptions = {
+            dataSource: {
+                data: [{
+                    value: -1,
+                    text: 'Alle'
+                }, {
+                    value: 1,
+                    text: 'Bruger 4 km-reglen'
+                }, {
+                    value: 0,
+                    text: 'Bruger ikke 4 km-reglen'
+                }]
+            },
+            dataTextField: 'text',
+            dataValueField: 'value',
+            select: function(e) {
+                var value = this.dataItem(e.item).value;
+                $scope.selectedKmRule = value;
+
+                $scope.updateSourceUrl();
+            },
+            clear: function() {
+                this.dataSource.read();
             }
         }
 
@@ -125,15 +171,15 @@
             /// Filters grid content
             /// </summary>
             /// <param name="item"></param>
-            $scope.gridContainer.grid.dataSource.transport.options.read.url =
-                "/odata/OrgUnits?$filter=contains(LongDescription," + "'" + encodeURIComponent($scope.orgUnit.chosenUnit + "')");
-            $scope.gridContainer.grid.dataSource.read();
+            $scope.updateSourceUrl();
         }
 
         $scope.clearClicked = function () {
             /// <summary>
             /// Clears filters.
             /// </summary>
+            $scope.selectedKmRule = -1;
+            $scope.gridContainer.kmRule.select(0);
             $scope.orgUnit.chosenUnit = "";
             $scope.gridContainer.grid.dataSource.transport.options.read.url = "/odata/OrgUnits";
             $scope.gridContainer.grid.dataSource.read();

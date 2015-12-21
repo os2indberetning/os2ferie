@@ -96,13 +96,31 @@ namespace AddressHistoryMigration
 
             var i = 0;
 
-            var rows = tempRepo.AsQueryable().ToList();
+            var rows = tempRepo.AsQueryable().Where(x => !x.WorkIsDirty && !x.HomeIsDirty).ToList();
 
             foreach (var tempHistory in rows)
             {
                 i++;
                 Console.WriteLine(i + " of " + rows.Count);
-                var empl = emplRepo.AsQueryable().Single(x => x.EmploymentId == tempHistory.MaNr);
+                var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                var empls = emplRepo.AsQueryable().Where(x => x.EmploymentId == tempHistory.MaNr).ToList();
+                if (empls.Count == 0)
+                {
+                    continue; ;
+                }
+                var empl = new Employment();
+                if (empls.Count == 1)
+                {
+                    // If only one empl with manr exists just use that
+                    empl = empls.First();
+                }
+                else
+                {
+                    // If more than one exists then select the active one.
+                    // If an active one does not exist then select the one that ended most recently
+                    empl = empls.FirstOrDefault(x => x.EndDateTimestamp == 0) ??
+                           empls.OrderByDescending(x => x.EndDateTimestamp).First();
+                }
 
                 var workTemp = coords.GetAddressCoordinates(new WorkAddress()
                 {
@@ -153,7 +171,8 @@ namespace AddressHistoryMigration
                     HomeAddressId = homeAddress.Id,
                     StartTimestamp = tempHistory.AktivFra,
                     EndTimestamp = tempHistory.AktivTil,
-                    EmploymentId = empl.Id,                   
+                    EmploymentId = empl.Id,        
+                    IsMigrated = true,
                 };
 
                 actualRepo.Insert(addressHistory);

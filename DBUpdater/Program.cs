@@ -47,6 +47,7 @@ namespace DBUpdater
             historyService.UpdateAddressHistories();
             historyService.CreateNonExistingHistories();
             service.UpdateLeadersOnExpiredOrActivatedSubstitutes();
+            service.AddLeadersToReportsThatHaveNone();
         }
 
 

@@ -118,7 +118,6 @@
                                 res.address = res.StreetName + " " + res.StreetNumber + ", " + res.ZipCode + " " + res.Town
 
                                 $scope.PersonalAddresses.push(res);
-                                console.log($scope.PersonalAddresses);
                                 angular.forEach($scope.container.PersonalAddressDropDown, function (entry, innerKey) {
                                     entry.dataSource.read();
                                 });

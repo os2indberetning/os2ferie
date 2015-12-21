@@ -16,6 +16,8 @@ namespace Core.DomainModel
         public virtual Person Person { get; set; }
         public int PersonId { get; set; }
         public int OrgUnitId { get; set; }
-        public virtual OrgUnit OrgUnit{ get; set; }
+        public virtual OrgUnit OrgUnit { get; set; }
+        public int? CreatedById { get; set; }
+        public virtual Person CreatedBy { get; set; }
     }
 }

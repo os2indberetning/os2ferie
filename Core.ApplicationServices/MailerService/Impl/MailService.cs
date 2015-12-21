@@ -56,7 +56,7 @@ namespace Core.ApplicationServices.MailerService.Impl
 
             var reports = _driveRepo.AsQueryable().Where(r => r.Status == ReportStatus.Pending).ToList();
 
-            var reportsWithNoLeader = reports.Where(driveReport => driveReport.ResponsibleLeaderId != null);
+            var reportsWithNoLeader = reports.Where(driveReport => driveReport.ResponsibleLeader == null);
 
             foreach (var report in reportsWithNoLeader)
             {

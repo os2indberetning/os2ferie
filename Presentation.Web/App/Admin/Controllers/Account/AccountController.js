@@ -1,7 +1,9 @@
 ﻿angular.module("application").controller("AccountController", [
-    "$scope", "$modal", "BankAccount", "NotificationService",
-    function ($scope, $modal, BankAccount, NotificationService) {
+    "$scope", "$modal", "BankAccount", "NotificationService", "$rootScope",
+    function ($scope, $modal, BankAccount, NotificationService, $rootScope) {
 
+
+        $scope.AccountHelpText = $rootScope.HelpTexts.AccountHelpText.text;
 
         $scope.$on('accountClicked', function (event, mass) {
             $scope.container.accountGrid.dataSource.read();
@@ -84,10 +86,11 @@
                     field: "Type",
                     title: "Type",
                     template: function (data) {
-                        if (data.Type == "PSPElement") {
-                            return "PSP-element";
-                        }
-                        return data.Type;
+                        //if (data.Type == "PSPElement") {
+                        //    return "PSP-element";
+                        //}
+                        //return data.Type;
+                        return "Kontonummer";
                     }
                 }, {
                     field: "Number",

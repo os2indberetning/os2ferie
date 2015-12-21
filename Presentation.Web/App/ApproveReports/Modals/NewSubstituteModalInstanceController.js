@@ -27,7 +27,8 @@
                 LeaderId: leader.Id,
                 SubId: $scope.person[0].Id,
                 OrgUnitId: $scope.orgUnit.Id,
-                PersonId: leader.Id
+                PersonId: leader.Id,
+                CreatedById: leader.Id
             });
 
             if ($scope.infinitePeriod) {

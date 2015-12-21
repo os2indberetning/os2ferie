@@ -8,7 +8,7 @@ namespace AddressHistoryMigration
         {
             var ninjectKernel = NinjectWebKernel.CreateKernel();
             var updateService = new Service();
-            updateService.TryReClean();
+            updateService.TransferFromTempToActual();
         }
 
 

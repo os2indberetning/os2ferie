@@ -40,7 +40,8 @@
                 StartDateTimestamp: Math.floor($scope.substituteFromDate.getTime() / 1000),
                 EndDateTimestamp: Math.floor($scope.substituteToDate.getTime() / 1000),
                 SubId: $scope.person[0].Id,
-                OrgUnitId: $scope.orgUnit.Id
+                OrgUnitId: $scope.orgUnit.Id,
+                CreatedById: leader.Id
             });
 
             if ($scope.infinitePeriod) {

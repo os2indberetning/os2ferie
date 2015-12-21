@@ -56,7 +56,8 @@
                     EndDateTimestamp: Math.floor($scope.approverToDate.getTime() / 1000),
                     SubId: $scope.approver.Id,
                     OrgUnitId: 1,
-                    PersonId: $scope.target.Id
+                    PersonId: $scope.target.Id,
+                    CreatedById: leader.Id
                 });
 
                 if ($scope.infinitePeriod) {
