@@ -127,36 +127,35 @@
            $scope.searchClicked();
        }
 
-       $scope.reports = {
-           dataSource:
-           {
-               type: "odata-v4",
-               transport: {
-                   read: {
-                       url: "/odata/DriveReports?status=Pending &$expand=Employment($expand=OrgUnit),DriveReportPoints,ResponsibleLeader &$filter=DriveDateTimestamp ge " + fromDateFilter + " and DriveDateTimestamp le " + toDateFilter + " and ResponsibleLeaderId eq " + $scope.CurrentUser.Id,
-                       dataType: "json",
-                       cache: false
-                   },
+        $scope.reports = {
+            dataSource:
+            {
+                type: "odata-v4",
+                transport: {
+                    read: {
+                        url: "/odata/DriveReports?status=Pending &$expand=Employment($expand=OrgUnit),DriveReportPoints,ResponsibleLeader &$filter=DriveDateTimestamp ge " + fromDateFilter + " and DriveDateTimestamp le " + toDateFilter + " and ResponsibleLeaderId eq " + $scope.CurrentUser.Id,
+                        dataType: "json",
+                        cache: false
+                    },
 
-               },
-               schema: {
-                   data: function (data) {
-                       allReports = data.value;
-                       return data.value;
-                   },
-               },
-               pageSize: 50,
-               serverPaging: true,
-               serverAggregates: false,
-               serverSorting: true,
-               serverFiltering: true,
-               sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
-               aggregate: [
-                   { field: "Distance", aggregate: "sum" },
-                   { field: "AmountToReimburse", aggregate: "sum" },
-               ]
-           },
-
+                },
+                schema: {
+                    data: function(data) {
+                        allReports = data.value;
+                        return data.value;
+                    },
+                },
+                pageSize: 50,
+                serverPaging: true,
+                serverAggregates: false,
+                serverSorting: true,
+                serverFiltering: true,
+                sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
+                aggregate: [
+                    { field: "Distance", aggregate: "sum" },
+                    { field: "AmountToReimburse", aggregate: "sum" },
+                ]
+            },
            sortable: { mode: "multiple" },
            resizable: true,
            pageable: {
@@ -203,7 +202,7 @@
                    title: "Dato"
                }, {
                    field: "Purpose",
-                   title: "Formål",
+                   title: "Formål"
                }, {
                    field: "TFCode",
                    title: "Taksttype",
@@ -266,13 +265,13 @@
                            return "Indberetning skal godkendes af din leder eller opsat personlig godkender.";
                        }
                        if (data.ResponsibleLeader.Id == $rootScope.CurrentUser.Id) {
-                           return "<a ng-click=approveClick(" + data.Id + ")>Godkend</a> | <a ng-click=rejectClick(" + data.Id + ")>Afvis</a> <div class='col-md-1 pull-right'><input type='checkbox' ng-model='checkboxes[" + data.Id + "]' ng-change='rowChecked(" + data.Id + ")'></input></div>";
+                           return "<a ng-click=approveClick(" + data.Id + ")>Godkend</a> | <a ng-click=rejectClick(" + data.Id + ")>Afvis</a> <div class='pull-right'><input type='checkbox' ng-model='checkboxes[" + data.Id + "]' ng-change='rowChecked(" + data.Id + ")'></input></div>";
                        } else {
                            return data.ResponsibleLeader.FullName + " er udpeget som godkender.";
                        }
 
                    },
-                   headerTemplate: "<div style='margin: 0' class='col-sm-1 pull-right'><input style='margin: 0' ng-change='checkAllBoxesOnPage()' type='checkbox' ng-model='checkAllBox.isChecked'></input></div><span class='pull-right'>Marker alle</span> ",
+                   headerTemplate: "<div class='fill-width' kendo-toolbar k-options='approveSelectedToolbar'></div><div style=\"padding-right: 1px !important;padding-left: 0;padding-top: 6px;padding-bottom:3px;\" class='pull-right inline'><input class='pull-right' style='margin: 0' ng-change='checkAllBoxesOnPage()' type='checkbox' ng-model='checkAllBox.isChecked'></input><span class='margin-right-5 pull-right'>Marker alle</span></div> ",
                    footerTemplate: "<div class='pull-right fill-width' kendo-toolbar k-options='approveSelectedToolbar'></div>"
                }
            ],
