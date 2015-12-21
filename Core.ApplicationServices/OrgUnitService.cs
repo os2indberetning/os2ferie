@@ -54,6 +54,30 @@ namespace Core.ApplicationServices
             return result;
         }
 
+        public Person GetLeaderOfOrg(int orgUnitId)
+        {
+            var orgUnit = _orgRepo.AsQueryable().Single(x => x.Id == orgUnitId);
+            var empl = _emplRepo.AsQueryable().FirstOrDefault(x => x.OrgUnitId == orgUnitId && x.IsLeader);
+            if (empl == null)
+            {
+                var parent = orgUnit.Parent;
+                empl = _emplRepo.AsQueryable().FirstOrDefault(x => x.IsLeader && x.OrgUnitId == parent.Id);
+                while (empl == null && parent.Level > 0)
+                {
+                    parent = parent.Parent;
+                    empl = _emplRepo.AsQueryable().FirstOrDefault(x => x.IsLeader && x.OrgUnitId == parent.Id);
+                }
+            }
+            if (empl == null)
+            {
+                return new Person
+                {
+                    FullName = "Leder ikke fundet"
+                };
+            }
+            return empl.Person;
+        }
+
         public IEnumerable<int> GetIdsOfLeadersInImmediateChildOrgs(int parentOrgId)
         {
             var childOrgsToSearch = new HashSet<int>();

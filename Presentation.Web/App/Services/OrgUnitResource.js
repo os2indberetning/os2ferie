@@ -9,6 +9,15 @@
             transformResponse: function (data) {
                 return angular.fromJson(data).value;
             }
+        },
+        "getLeaderOfOrg": {
+            method: "GET",
+            isArray: false,
+            url: "/odata/OrgUnits/Service.GetLeaderOfOrg?orgId=:id",
+            transformResponse: function (data) {
+                var result = angular.fromJson(data);
+                return result;
+            }
         }
     });
 }]);
