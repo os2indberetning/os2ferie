@@ -136,7 +136,7 @@
 
                                 <div ng-show="isAddressNameSet(DriveReport.Addresses[$index]) === false">
                                     <!--Dropdown for selecting standard addresses-->
-                                    <select class="fill-width" kendo-combo-box="container.[{{$index}}]" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'PresentationString'" k-data-value-field="'address'" k-placeholder="'Vælg din personlige adresse'" k-filter="'contains'"> </select>
+                                    <select class="fill-width" kendo-combo-box="container.PersonalAddressDropDown[{{$index}}]" ng-model="DriveReport.Addresses[$index].Personal" ng-change="addressInputChanged($index)" k-data-source="PersonalAddresses" k-data-text-field="'PresentationString'" k-data-value-field="'address'" k-placeholder="'Vælg din personlige adresse'" k-filter="'contains'"> </select>
                                 </div>
 
                             </div>
