@@ -19,9 +19,10 @@
             <div class="col-md-6">
                 <label>Stedfortræder for:</label>
             </div>
-            <div class="col-md-6">
-                <input k-options="personForOptions" class="form-control pull-right fill-width" kendo-auto-complete k-data-source="leaders" k-ng-model="personFor" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+            <div class="col-md-5">
+                <input k-options="personForOptions" ng-model="personForString" class="form-control pull-right fill-width" kendo-auto-complete k-data-source="leaders" k-ng-model="personFor" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
             </div>
+                <button class="btn btn-default" ng-click="clearSelections()" title="Nulstil valgt stedfortræder for og organisation.">X</button>
         </div>
 
 
@@ -32,7 +33,7 @@
                 <label>Organisationsenhed:</label>
             </div>
             <div class="col-md-6">
-                <select ng-disabled="orgUnitsDisabled" class="fill-width pull-right" kendo-drop-down-list="PositionDropDown" k-ng-model="orgUnit" k-data-text-field="'LongDescription'" id=" " k-data-source="orgUnits" k-data-value-field="'Id'"></select>
+                <select kendo-combo-box k-options="orgUnitOptions" class="fill-width pull-right" k-ng-model="orgUnit" k-data-text-field="'LongDescription'" k-placeholder="'Indtast/vælg organisation'" k-data-source="orgUnits" k-data-value-field="'Id'"></select>
             </div>
         </div>  
         

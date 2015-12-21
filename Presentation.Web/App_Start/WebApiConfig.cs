@@ -140,6 +140,11 @@ namespace OS2Indberetning
             .Function("GetAlternativeHome")
             .ReturnsFromEntitySet<PersonalAddress>("PersonalAddresses");
 
+
+            builder.EntityType<OrgUnit>().Collection
+            .Function("GetLeaderOfOrg")
+            .ReturnsFromEntitySet<Person>("Person");
+
             builder.EntityType<OrgUnit>().Collection
             .Function("GetWhereUserIsResponsible")
             .ReturnsFromEntitySet<OrgUnit>("OrgUnits");

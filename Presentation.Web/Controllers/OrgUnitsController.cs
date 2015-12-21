@@ -57,6 +57,17 @@ namespace OS2Indberetning.Controllers
            return Ok(_orgService.GetWhereUserIsResponsible(personId));
         }
 
+        /// <summary>
+        /// Returns the leader of the orgunit specified by orgId
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <returns>OrgUnits</returns>
+        [EnableQuery]
+        public IHttpActionResult GetLeaderOfOrg(int orgId)
+        {
+            return Ok(_orgService.GetLeaderOfOrg(orgId));
+        }
+
         //PUT: odata/OrgUnits(5)
         /// <summary>
         /// Not implemented.

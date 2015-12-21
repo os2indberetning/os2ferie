@@ -192,6 +192,40 @@
                     }
                 },
             }
+        },
+        orgUnitsThatHaveALeader: function () {
+            return {
+                type: "json",
+                minLength: 3,
+                serverFiltering: true,
+                crossDomain: true,
+                transport: {
+                    read: {
+                        url: function (item) {
+                            if (item.filter == undefined) {
+                                item.filter = {};
+                                item.filter.filters = [];
+                                item.filter.filters.push({field: "LongDescription", ignoreCase: "true", operator: "contains", value: ""})
+                            }
+                            var req = "/odata/Employments?$filter=contains(OrgUnit/LongDescription," + "'" + encodeURIComponent(item.filter.filters[0].value) + "') and IsLeader&$select=OrgUnit&$expand=OrgUnit";
+                            return req;
+                        },
+                        dataType: "json",
+                        data: {
+
+                        }
+                    }
+                },
+                schema: {
+                    data: function (data) {
+                        var result = [];
+                        for (var i = 0; i < data.value.length; i++) {
+                            result.push(data.value[i].OrgUnit);
+                        }
+                        return result;
+                    }
+                },
+            }
         }
     }
 });

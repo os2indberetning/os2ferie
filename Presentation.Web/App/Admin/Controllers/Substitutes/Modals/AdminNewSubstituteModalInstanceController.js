@@ -16,22 +16,38 @@
 
             $scope.substituteFromDate = new Date();
             $scope.substituteToDate = new Date();
-            $scope.orgUnitsDisabled = true;
-            $scope.orgUnits = [];
+            $scope.orgUnits = Autocomplete.orgUnitsThatHaveALeader();
 
+            $scope.clearSelections = function() {
+                $scope.personFor = [];
+                $scope.personForString = "";
+                $scope.orgUnits = Autocomplete.orgUnitsThatHaveALeader();
+                $scope.orgUnit = {LongDescription: "Nope", Id: ""}
+            }
+
+            $scope.orgUnitOptions = {
+                filter: "contains",
+                select: function (item) {
+                    $timeout(function () {
+                        OrgUnit.getLeaderOfOrg({ id: $scope.orgUnit.Id }, function (res) {
+                            $scope.personForString = res.FullName;
+                            $scope.personFor = [];
+                            $scope.personFor.push(res);
+                        });
+                    }, 0);
+
+                }
+            }
 
 
             $scope.personForOptions = {
                 filter: "contains",
                 select: function (item) {
-                    $scope.orgUnitsDisabled = true;
-                    $scope.orgUnit = undefined;
                     $timeout(function () {
                         OrgUnit.getWhereUserIsLeader({ id: $scope.personFor[0].Id }, function (res) {
                             $scope.orgUnits = res;
                             if ($scope.orgUnits.length > 0) {
                                 $scope.orgUnit = $scope.orgUnits[0];
-                                $scope.orgUnitsDisabled = false;
                             }
                         });
                     }, 0);
@@ -40,6 +56,7 @@
             }
 
             $scope.saveNewSubstitute = function () {
+                debugger;
                 /// <summary>
                 /// Post new substitute to backend if fields are filled correctly.
                 /// </summary>
