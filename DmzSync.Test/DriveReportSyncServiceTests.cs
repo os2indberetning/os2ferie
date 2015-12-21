@@ -7,7 +7,7 @@ using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
-using Infrastructure.DmzSync.Encryption;
+using Core.DomainServices.Encryption;
 using Infrastructure.DmzSync.Services.Impl;
 using Infrastructure.DmzSync.Services.Interface;
 using NSubstitute;

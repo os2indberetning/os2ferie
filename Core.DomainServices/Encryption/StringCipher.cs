@@ -6,7 +6,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.DmzSync.Encryption
+
+namespace Core.DomainServices.Encryption
 {
     public static class StringCipher
     {

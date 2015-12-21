@@ -14,7 +14,7 @@ using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices;
 using Infrastructure.DmzDataAccess;
 using Infrastructure.DataAccess;
-using Infrastructure.DmzSync.Encryption;
+using Core.DomainServices.Encryption;
 using Infrastructure.DmzSync.Services.Impl;
 using Ninject;
 using DriveReport = Core.DmzModel.DriveReport;

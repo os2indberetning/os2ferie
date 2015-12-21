@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
+using Core.DomainServices.Encryption;
 using IMobileTokenService = Core.ApplicationServices.Interfaces.IMobileTokenService;
 
 namespace Core.ApplicationServices
@@ -9,10 +11,12 @@ namespace Core.ApplicationServices
     public class MobileTokenService : IMobileTokenService
     {
         private readonly IGenericRepository<MobileToken> _repo;
+        private IGenericRepository<Token> _dmzTokenRepo;
 
-        public MobileTokenService(IGenericRepository<MobileToken> repo)
+        public MobileTokenService(IGenericRepository<MobileToken> repo, IGenericRepository<Token> dmzTokenRepo)
         {
             _repo = repo;
+            _dmzTokenRepo = dmzTokenRepo;
         }
 
         /// <summary>
@@ -56,6 +60,18 @@ namespace Core.ApplicationServices
             var createdToken = _repo.Insert(token);
 
             _repo.Save();
+
+            var dmzToken = new Token
+            {
+                Id = createdToken.Id,
+                Status = (int)createdToken.Status,
+                GuId = createdToken.Guid.ToString(),
+                TokenString = createdToken.Token,
+                ProfileId = createdToken.PersonId,
+            };
+            dmzToken = Encryptor.EncryptToken(dmzToken);
+            _dmzTokenRepo.Insert(dmzToken);
+            _dmzTokenRepo.Save();
 
             return createdToken;
         }
