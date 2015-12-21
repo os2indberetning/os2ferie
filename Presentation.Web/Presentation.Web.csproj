@@ -388,6 +388,7 @@
     <Content Include="App\Services\RateTypeResource.js" />
     <Content Include="App\Services\Error\ServiceError.html" />
     <Content Include="App\Services\AutocompleteResource.js" />
+    <Content Include="App\Services\RouteColumnFormatterService.js" />
     <Content Include="App\Services\StandardAddressResource.js" />
     <Content Include="App\Services\OrgUnitResource.js" />
     <Content Include="App\Services\RouteContainerResource.js" />
