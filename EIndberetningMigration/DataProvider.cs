@@ -149,11 +149,11 @@ namespace EIndberetningMigration
             {
                 if (i > 0)
                 {
-                    result[i].PreviousPoint = result[i-1];
+                    result[i].PreviousPointId = result[i-1].Id;
                 }
                 if (i < result.Count - 1)
                 {
-                    result[i].NextPoint = result[i+1];
+                    result[i].NextPointId = result[i+1].Id;
                 }
             }
 

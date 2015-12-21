@@ -173,7 +173,6 @@ namespace Infrastructure.DataAccess
         private void ConfigurePropertiesForDriveReportPoint(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<DriveReportPoint>().HasRequired(p => p.DriveReport);
-            modelBuilder.Entity<DriveReportPoint>().HasOptional(p => p.NextPoint).WithOptionalDependent(p => p.PreviousPoint);
         }
 
         private void ConfigurePropertiesForDriveReport(DbModelBuilder modelBuilder)
