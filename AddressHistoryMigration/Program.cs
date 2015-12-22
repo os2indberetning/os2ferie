@@ -1,10 +1,6 @@
-﻿using AddressHistoryMigration;
-using Core.ApplicationServices;
-using Core.DomainModel;
-using Core.DomainServices;
-using Ninject;
+﻿using Core.ApplicationServices;
 
-namespace DBUpdater
+namespace AddressHistoryMigration
 {
     static class Program
     {

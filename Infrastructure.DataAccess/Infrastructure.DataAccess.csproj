@@ -337,9 +337,25 @@
     <Compile Include="Migrations\201511091655051_RemovedTempAddress.Designer.cs">
       <DependentUpon>201511091655051_RemovedTempAddress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512111327212_AddedTempAddressHistory1.cs" />
+    <Compile Include="Migrations\201512111327212_AddedTempAddressHistory1.Designer.cs">
+      <DependentUpon>201512111327212_AddedTempAddressHistory1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512111434353_dunno1.cs" />
+    <Compile Include="Migrations\201512111434353_dunno1.Designer.cs">
+      <DependentUpon>201512111434353_dunno1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201512111454415_AddedCreatedByIdToSubstitutes.cs" />
     <Compile Include="Migrations\201512111454415_AddedCreatedByIdToSubstitutes.Designer.cs">
       <DependentUpon>201512111454415_AddedCreatedByIdToSubstitutes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512211319485_notsure.cs" />
+    <Compile Include="Migrations\201512211319485_notsure.Designer.cs">
+      <DependentUpon>201512211319485_notsure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512211341442_diditwork.cs" />
+    <Compile Include="Migrations\201512211341442_diditwork.Designer.cs">
+      <DependentUpon>201512211341442_diditwork.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
@@ -560,8 +576,20 @@
     <EmbeddedResource Include="Migrations\201511091655051_RemovedTempAddress.resx">
       <DependentUpon>201511091655051_RemovedTempAddress.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512111327212_AddedTempAddressHistory1.resx">
+      <DependentUpon>201512111327212_AddedTempAddressHistory1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512111434353_dunno1.resx">
+      <DependentUpon>201512111434353_dunno1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512111454415_AddedCreatedByIdToSubstitutes.resx">
       <DependentUpon>201512111454415_AddedCreatedByIdToSubstitutes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512211319485_notsure.resx">
+      <DependentUpon>201512211319485_notsure.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512211341442_diditwork.resx">
+      <DependentUpon>201512211341442_diditwork.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
