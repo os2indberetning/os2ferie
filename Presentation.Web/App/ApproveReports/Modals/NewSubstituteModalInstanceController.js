@@ -1,6 +1,8 @@
 ﻿angular.module('application').controller('NewSubstituteModalInstanceController',
     ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "Autocomplete", function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, Autocomplete) {
-       
+
+        $scope.loadingPromise = null;
+
         $scope.persons = persons;
         $scope.substituteFromDate = new Date();
         $scope.substituteToDate = new Date();
@@ -37,7 +39,7 @@
 
             $scope.showSpinner = true;
 
-            sub.$post(function (data) {
+            $scope.loadingPromise = sub.$post(function (data) {
                 NotificationService.AutoFadeNotification("success", "", "Stedfortræder blev oprettet");
                 $modalInstance.close();
             }, function () {

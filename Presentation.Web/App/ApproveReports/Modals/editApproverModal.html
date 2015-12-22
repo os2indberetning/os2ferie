@@ -1,68 +1,69 @@
-﻿<div class="modal-header">
-    <h3 class="modal-title">Rediger personlig godkender</h3>
-</div>
-<div class="modal-body">
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <label>Vælg ansat der skal godkendes for:</label>
+﻿<div cg-busy="loadingPromise">
+    <div class="modal-header">
+        <h3 class="modal-title">Rediger personlig godkender</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <label>Vælg ansat der skal godkendes for:</label>
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                    <input class="form-control fill-width" kendo-auto-complete="container.autoCompleteFor" k-options="autoCompleteOptionsFor" k-data-source="personsWithoutLeader" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+                </div>
             </div>
 
-            <div class="col-md-6 col-sm-12">
-                <input class="form-control fill-width" kendo-auto-complete="container.autoCompleteFor" k-options="autoCompleteOptionsFor" k-data-source="personsWithoutLeader" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+            <div class="seperator"></div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <label>Vælg godkender:</label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <input class="form-control fill-width" kendo-auto-complete="container.autoCompleteSub" k-options="autoCompleteOptionsSub" k-data-source="persons" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+                </div>
             </div>
+
+            <div class="seperator"></div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <label>Fra</label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <input class="fill-width" culture="'da-DK'" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverFromDate" />
+                </div>
+            </div>
+
+            <div class="seperator"></div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <label>Til</label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <input class="fill-width" ng-disabled="infinitePeriod" culture="'da-DK'" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverToDate" />
+                </div>
+            </div>
+
+            <div class="seperator"></div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <label>På ubestemt tid</label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <input class="pull-right" type="checkbox" ng-model="infinitePeriod" />
+                </div>
+            </div>
+
+            <!-- <input class="form-control pull-right" kendo-auto-complete="acTarget" k-data-source="persons" k-ng-model="target" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />-->
         </div>
+    </div>
+    <div class="modal-footer">
 
-        <div class="seperator"></div>
-
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <label>Vælg godkender:</label>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <input class="form-control fill-width" kendo-auto-complete="container.autoCompleteSub" k-options="autoCompleteOptionsSub" k-data-source="persons" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
-            </div>
-        </div>
-        
-        <div class="seperator"></div>
-
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <label>Fra</label>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <input class="fill-width" culture="'da-DK'" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverFromDate" />
-            </div>
-        </div>
-
-        <div class="seperator"></div>
-
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <label>Til</label>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <input class="fill-width" ng-disabled="infinitePeriod" culture="'da-DK'" kendo-datepicker k-format="'dd/MM/yyyy'" k-options="dateOptions" k-ng-model="approverToDate" />
-            </div>
-        </div>
-        
-        <div class="seperator"></div>
-
-        <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <label>På ubestemt tid</label>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <input class="pull-right" type="checkbox" ng-model="infinitePeriod" />
-            </div>
-        </div>
-        
-        <!-- <input class="form-control pull-right" kendo-auto-complete="acTarget" k-data-source="persons" k-ng-model="target" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />-->
+        <button class="btn btn-success" ng-disabled="showSpinner" ng-click="saveNewApprover()">Gem <i ng-show="showSpinner" class="fa fa-cog fa-spin"></i></button>
+        <button class="btn btn-danger" ng-disabled="showSpinner" ng-click="cancelNewApprover()">Annuller</button>
     </div>
 </div>
-<div class="modal-footer">
-   
-    <button class="btn btn-success" ng-disabled="showSpinner" ng-click="saveNewApprover()">Gem <i ng-show="showSpinner" class="fa fa-cog fa-spin"></i></button>
-    <button class="btn btn-danger" ng-disabled="showSpinner" ng-click="cancelNewApprover()">Annuller</button>
-</div>
-

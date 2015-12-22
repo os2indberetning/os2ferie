@@ -1,10 +1,12 @@
-﻿<div class="modal-header">
-    <h3 class="modal-title">Slet personlig godkender</h3>
-</div>
-<div class="modal-body">
-    Er du sikker på du vil slette <b>{{sub.FullName}}</b> som personlig godkender for <b>{{person.FullName}}</b> fra <b> {{substituteFromDate}} </b> til <b>{{substituteToDate}}</b>?
-</div>
-<div class="modal-footer">
-    <button class="btn btn-success" ng-disabled="showSpinner" ng-click="deleteSubstitute()">Ja <i ng-show="showSpinner" class="fa fa-cog fa-spin"></i></button>
-    <button class="btn btn-danger" ng-disabled="showSpinner" ng-click="cancelSubstitute()">Annuller</button>
+﻿<div cg-busy="loadingPromise">
+    <div class="modal-header">
+        <h3 class="modal-title">Slet personlig godkender</h3>
+    </div>
+    <div class="modal-body">
+        Er du sikker på du vil slette <b>{{sub.FullName}}</b> som personlig godkender for <b>{{person.FullName}}</b> fra <b> {{substituteFromDate}} </b> til <b>{{substituteToDate}}</b>?
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" ng-disabled="showSpinner" ng-click="deleteSubstitute()">Ja <i ng-show="showSpinner" class="fa fa-cog fa-spin"></i></button>
+        <button class="btn btn-danger" ng-disabled="showSpinner" ng-click="cancelSubstitute()">Annuller</button>
+    </div>
 </div>

@@ -5,6 +5,8 @@
 
         $scope.persons = persons;
 
+        $scope.loadingPromise = null;
+
         $scope.person = [];
 
         $scope.autoCompleteOptions = {
@@ -49,8 +51,8 @@
             }
 
             $scope.showSpinner = true;
-
-            sub.$patch({ id: $scope.substitute.Id }, function (data) {
+            
+            $scope.loadingPromise = sub.$patch({ id: $scope.substitute.Id }, function (data) {
                 NotificationService.AutoFadeNotification("success", "", "Stedfortræder blev gemt");
                 $modalInstance.close();
             }, function () {

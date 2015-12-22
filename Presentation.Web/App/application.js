@@ -1,4 +1,4 @@
-﻿var application = angular.module("application", ["kendo.directives", "ui.router", "ui.bootstrap", "ui.bootstrap.tooltip", "ngResource", "template/modal/window.html", "template/modal/window.html", "template/modal/backdrop.html", "template/tabs/tab.html", "template/tabs/tabset.html", "angularMoment", "template/popover/popover.html", "kendo-ie-fix", 'angular-loading-bar','checkie'])
+﻿var application = angular.module("application", ["kendo.directives", "ui.router", "ui.bootstrap", "ui.bootstrap.tooltip", "ngResource", "template/modal/window.html", "template/modal/window.html", "template/modal/backdrop.html", "template/tabs/tab.html", "template/tabs/tabset.html", "angularMoment", "template/popover/popover.html", "kendo-ie-fix", 'angular-loading-bar','checkie','cgBusy'])
     .config([
         'cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
             cfpLoadingBarProvider.includeSpinner = false;
@@ -123,6 +123,14 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             }
         });
 }]);
+
+angular.module('application').value('cgBusyDefaults',{
+  message:'Vent venligst..',
+  backdrop: true,
+  templateUrl: 'template/loading-template.html',
+  delay: 100,
+  minDuration: 700
+});
 
 application.constant('angularMomentConfig', {
     preprocess: 'utc',

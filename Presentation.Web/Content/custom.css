@@ -450,3 +450,7 @@ li.mainMenuLink.active > a > i.fa {
 .to-front {
     z-index: 1000;
 }
+
+.modal-body {
+    min-height: 140px;
+}

@@ -6,6 +6,8 @@
             $scope.orgUnits = orgUnits;
             $scope.orgUnit = $scope.orgUnits[0];
 
+            $scope.loadingPromise = null;
+
             $scope.personsWithoutLeader = Autocomplete.activeUsersWithoutLeader(leader.Id);
 
             $scope.autoCompleteOptionsFor = {
@@ -66,7 +68,7 @@
 
                 $scope.showSpinner = true;
 
-                sub.$patch({ id: substituteId }, function (data) {
+                $scope.loadingPromise = sub.$patch({ id: substituteId }, function (data) {
                     NotificationService.AutoFadeNotification("success", "", "Godkender blev redigeret");
                     $modalInstance.close();
                 }, function () {

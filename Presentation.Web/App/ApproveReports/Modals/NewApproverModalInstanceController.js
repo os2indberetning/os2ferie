@@ -1,6 +1,8 @@
 ﻿angular.module('application').controller('NewApproverModalInstanceController',
     ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService","Autocomplete", function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService,Autocomplete) {
 
+        $scope.loadingPromise = null;
+
         $scope.persons = persons;
         $scope.approverFromDate = new Date();
         $scope.approverToDate = new Date();
@@ -43,7 +45,7 @@
 
             $scope.showSpinner = true;
 
-            sub.$post(function (data) {
+            $scope.loadingPromise = sub.$post(function (data) {
                 NotificationService.AutoFadeNotification("success", "", "Godkender blev oprettet");
                 $modalInstance.close();
             }, function () {

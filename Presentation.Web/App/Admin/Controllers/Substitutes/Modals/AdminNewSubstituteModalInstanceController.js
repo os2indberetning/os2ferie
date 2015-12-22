@@ -4,6 +4,8 @@
 
             $scope.persons = persons;
 
+            $scope.loadingPromise = null;
+
             var infinitePeriod = 9999999999;
 
             $scope.autoCompleteOptions = {
@@ -56,7 +58,7 @@
             }
 
             $scope.saveNewSubstitute = function () {
-                debugger;
+
                 /// <summary>
                 /// Post new substitute to backend if fields are filled correctly.
                 /// </summary>
@@ -92,7 +94,7 @@
 
                 $scope.showSpinner = true;
 
-                sub.$post(function (data) {
+                $scope.loadingPromise = sub.$post(function (data) {
                     NotificationService.AutoFadeNotification("success", "", "Stedfortræder blev oprettet");
                     $modalInstance.close();
                 }, function () {

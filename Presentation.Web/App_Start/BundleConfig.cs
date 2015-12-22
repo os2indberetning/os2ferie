@@ -28,7 +28,8 @@ namespace OS2Indberetning
                 .Include("~/Scripts/kendo/cultures/kendo.culture.da-DK.min.js")
                 .Include("~/Scripts/loading-bar.min.js")
                 .Include("~/Scripts/pnotify.custom.min.js")
-                .Include("~/Scripts/linq.min.js"));
+                .Include("~/Scripts/linq.min.js")
+                .Include("~/Scripts/angular-busy.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/loading-bar.min.css",
@@ -45,7 +46,8 @@ namespace OS2Indberetning
                       "~/Content/kendo/kendo.dataviz.min.css",
                       "~/Content/kendo/kendo.dataviz.bootstrap.min.css",
                       "~/Content/pnotify.custom.min.css",
-                      "~/Content/custom.css"));
+                      "~/Content/custom.css",
+                      "~/Content/angular-busy.min.css"));
 
 
             bundles.Add(new ScriptBundle("~/bundles/angular").IncludeDirectoryWithExclusion("~/App", "*.js", true, "*.spec.js"));

@@ -29,7 +29,7 @@
 
             $scope.showSpinner = true;
 
-            sub.$delete({ id: $scope.substitute.Id }, function (data) {
+            $scope.loadingPromise = sub.$delete({ id: $scope.substitute.Id }, function (data) {
                 NotificationService.AutoFadeNotification("success", "", "Stedfortræderen blev slettet.");
                 $modalInstance.close();
             }, function () {
