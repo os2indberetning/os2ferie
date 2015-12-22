@@ -28,6 +28,12 @@
                 roundTrip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'Ruten er tur/retur'\"><i class='fa fa-exchange fa-2x'></i></div>";
             }
 
+            var edited = "";
+
+            if (data.CreatedDateTimestamp < data.EditedDateTimestamp) {
+                edited = "<div class='inline pull-right margin-right-5' kendo-tooltip k-content=\"'Denne indberetning er blevet redigeret'\"><i class='fa fa-pencil fa-2x'></i></div>";
+            }
+
             var result = toolTip + roundTrip + globe;
             var comment = data.UserComment != null ? data.UserComment : "Ingen kommentar angivet";
 
@@ -35,17 +41,17 @@
                 return result;
             } else {
                 if (data.IsFromApp) {
-                    var fromAppTooltip = "<div class='inline margin-left-5'>Indberettet fra mobil app</div><div class='inline margin-left-5 pull-right' kendo-tooltip k-content=\"'" + data.UserComment + "'\"><i class=\"fa fa-2x fa-comment-o\"></i></div>";
+                    var fromAppTooltip = "<div class='inline margin-left-5'>Indberettet fra mobil app</div><div class='inline margin-right-5 pull-right' kendo-tooltip k-content=\"'" + data.UserComment + "'\"><i class=\"fa fa-2x fa-comment-o\"></i></div>";
                     if (data.DriveReportPoints.length > 1) {
-                        result = toolTip + roundTrip + fromAppTooltip + globe;
+                        result = toolTip + roundTrip + fromAppTooltip + globe + edited;
                     } else {
                         // Set road tooltip to just contain "Aflæst manuelt"
                         toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + "Aflæst manuelt" + "'\">" + gridContent + "</div>";
-                        result = toolTip + roundTrip + fromAppTooltip
+                        result = toolTip + roundTrip + fromAppTooltip + edited;
                     }
                     return result;
                 } else {
-                    return "<div kendo-tooltip k-content=\"'" + comment + "'\">Aflæst manuelt</div>";
+                    return "<div class='inline' kendo-tooltip k-content=\"'" + comment + "'\">Aflæst manuelt</div>";
                 }
             }
 
