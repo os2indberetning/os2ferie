@@ -11,7 +11,7 @@
 
         <tabset justified="false">
             <tab heading="Afventer godkendelse" ng-controller="PendingReportsController" ng-click="refreshGrid()">
-                <div class="panel panel-default">
+                <div class="panel panel-default" cg-busy="loadingPromise">
 
                     <div class="col-xs-12">
                         <h2 class="inline pull-left">Afventer godkendelse</h2>

@@ -7,7 +7,7 @@
        $scope.person = {};
        $scope.orgUnit = {};
 
-
+       $scope.loadingPromise = null;
 
 
        // Contains references to kendo ui grids.
@@ -348,13 +348,13 @@
            });
 
            modalInstance.result.then(function () {
-               Report.patch({ id: id }, {
+               $scope.loadingPromise = Report.patch({ id: id }, {
                    "Status": "Accepted",
                    "ClosedDateTimestamp": moment().unix(),
                    "ApprovedById": $rootScope.CurrentUser.Id,
                }, function () {
                    $scope.gridContainer.grid.dataSource.read();
-               });
+               }).$promise;
            });
        }
 
@@ -379,14 +379,14 @@
 
                modalInstance.result.then(function (accountNumber) {
                    angular.forEach(checkedReports, function (value, key) {
-                       Report.patch({ id: value }, {
+                       $scope.loadingPromise = Report.patch({ id: value }, {
                            "Status": "Accepted",
                            "ClosedDateTimestamp": moment().unix(),
                            "AccountNumber": accountNumber,
                            "ApprovedById": $rootScope.CurrentUser.Id,
                        }, function () {
                            $scope.gridContainer.grid.dataSource.read();
-                       });
+                       }).$promise;
                    });
                    checkedReports = [];
                });
@@ -414,13 +414,13 @@
 
                modalInstance.result.then(function () {
                    angular.forEach(checkedReports, function (value, key) {
-                       Report.patch({ id: value }, {
+                       $scope.loadingPromise = Report.patch({ id: value }, {
                            "Status": "Accepted",
                            "ClosedDateTimestamp": moment().unix(),
                            "ApprovedById": $rootScope.CurrentUser.Id,
                        }, function () {
                            $scope.gridContainer.grid.dataSource.read();
-                       });
+                       }).$promise;
                    });
                    checkedReports = [];
                });
@@ -461,7 +461,7 @@
            });
 
            modalInstance.result.then(function (res) {
-               Report.patch({ id: id }, {
+               $scope.loadingPromise = Report.patch({ id: id }, {
                    "Status": "Rejected",
                    "ClosedDateTimestamp": moment().unix(),
                    "Comment": res.Comment,
@@ -469,7 +469,7 @@
                }, function () {
                    $scope.gridContainer.grid.dataSource.read();
 
-               });
+               }).$promise;
            });
        }
 
