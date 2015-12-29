@@ -67,12 +67,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LogMailer\LogReaderTests.cs" />
+    <Compile Include="LogMailer\LogParserTests.cs" />
+    <Compile Include="LogMailer\LogMailerTests.cs" />
     <Compile Include="MailerTests.cs" />
     <Compile Include="MailNotificationsRepoMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="LogMailer\web.log">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <Content Include="PrivateSettings.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
