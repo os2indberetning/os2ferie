@@ -349,6 +349,10 @@
     <Compile Include="Migrations\201512111454415_AddedCreatedByIdToSubstitutes.Designer.cs">
       <DependentUpon>201512111454415_AddedCreatedByIdToSubstitutes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512210915295_RemovedNavigationPropertiesOnDriveReportPoint.cs" />
+    <Compile Include="Migrations\201512210915295_RemovedNavigationPropertiesOnDriveReportPoint.Designer.cs">
+      <DependentUpon>201512210915295_RemovedNavigationPropertiesOnDriveReportPoint.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201512211319485_notsure.cs" />
     <Compile Include="Migrations\201512211319485_notsure.Designer.cs">
       <DependentUpon>201512211319485_notsure.cs</DependentUpon>
@@ -590,6 +594,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512211341442_diditwork.resx">
       <DependentUpon>201512211341442_diditwork.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512210915295_RemovedNavigationPropertiesOnDriveReportPoint.resx">
+      <DependentUpon>201512210915295_RemovedNavigationPropertiesOnDriveReportPoint.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
