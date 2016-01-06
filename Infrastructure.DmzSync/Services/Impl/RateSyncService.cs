@@ -31,18 +31,19 @@ namespace Infrastructure.DmzSync.Services.Impl
         /// </summary>
         public void SyncFromDmz()
         {
-            // We are not interested in migrating profiles from DMZ to os2.
+            // We are not interested in migrating rates from DMZ to os2.
             throw new NotImplementedException();
         }
 
 
         /// <summary>
-        /// Syncs all People from OS2 database to DMZ database.
+        /// Syncs all rates from OS2 database to DMZ database.
         /// </summary>
         public void SyncToDmz()
         {
             var i = 0;
-            var rateList = _masterRateRepo.AsQueryable().Where(x => x.Active).ToList();
+            var currentYear = DateTime.Now.Year;
+            var rateList = _masterRateRepo.AsQueryable().Where(x => x.Active && x.Year == currentYear).ToList();
             var max = rateList.Count;
 
             foreach (var rate in rateList)  
