@@ -117,7 +117,7 @@ namespace Infrastructure.DmzSync.Services.Impl
 
                     IsFromApp = true,
                     Distance = dmzReport.Route.TotalDistance,
-                    KilometerAllowance = KilometerAllowance.Read,
+                    KilometerAllowance = KilometerAllowance.Calculated,
                     // Date might not be correct. Depends which culture is delivered from app. 
                     // https://msdn.microsoft.com/en-us/library/cc165448.aspx
                     DriveDateTimestamp = (Int32)(Convert.ToDateTime(dmzReport.Date).Subtract(new DateTime(1970, 1, 1)).TotalSeconds),

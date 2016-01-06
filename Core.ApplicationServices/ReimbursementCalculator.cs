@@ -93,7 +93,7 @@ namespace Core.ApplicationServices
                 workAddress = employment.AlternativeWorkAddress;
             }
 
-            if (report.KilometerAllowance != KilometerAllowance.Read)
+            if (report.KilometerAllowance != KilometerAllowance.Read && !report.IsFromApp)
             {
 
                 //Check if drivereport starts at users home address.
@@ -157,16 +157,24 @@ namespace Core.ApplicationServices
                         }
 
 
-                        double drivenDistance = drivenRoute.Length;
+                        double drivenDistance = report.Distance;
 
+                        if (!report.IsFromApp)
+                        {
+                            // In case the report is not from app then get distance from the supplied route.
+                            drivenDistance = drivenRoute.Length;
+                        }
                         //Adjust distance based on FourKmRule and if user start and/or ends at home
                         var correctDistance = drivenDistance - toSubtract;
 
                         //Set distance to corrected
                         report.Distance = correctDistance;
 
-                        //Save RouteGeometry
-                        report.RouteGeometry = drivenRoute.GeoPoints;
+                        if (!report.IsFromApp)
+                        {
+                            //Get RouteGeometry from driven route if the report is not from app. If it is from App then RouteGeometry is already set.
+                            report.RouteGeometry = drivenRoute.GeoPoints;
+                        }
 
                         break;
                     }

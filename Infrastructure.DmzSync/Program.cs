@@ -46,31 +46,31 @@ namespace Infrastructure.DmzSync
                 new GenericRepository<Rate>(new DataContext()));
 
             Console.WriteLine("TokenSyncFromDmz");
-            tokenSync.SyncFromDmz();
+            //tokenSync.SyncFromDmz();
 
             Console.WriteLine("DriveReportsSyncFromDmz");
             driveSync.SyncFromDmz();
 
             Console.WriteLine("TokenClearDmz");
-            tokenSync.ClearDmz();
+            //tokenSync.ClearDmz();
 
             Console.WriteLine("DriveReportClearDmz");
-            driveSync.ClearDmz();
+           // driveSync.ClearDmz();
             
             Console.WriteLine("PersonClearDmz");
-            personSync.ClearDmz();
+           // personSync.ClearDmz();
             
             Console.WriteLine("RateClearDmz");
-            rateSync.ClearDmz();
+          //  rateSync.ClearDmz();
 
             Console.WriteLine("PersonSyncToDmz");
-            personSync.SyncToDmz();
+           // personSync.SyncToDmz();
 
             Console.WriteLine("TokenSyncToDmz");
-            tokenSync.SyncToDmz();
+           // tokenSync.SyncToDmz();
 
             Console.WriteLine("RateSyncToDmz");
-            rateSync.SyncToDmz();
+           // rateSync.SyncToDmz();
 
             Console.WriteLine("Done");
 

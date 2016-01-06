@@ -70,45 +70,52 @@ namespace Core.ApplicationServices
                 throw new Exception("DriveReport has some invalid parameters");
             }
 
-            if (report.KilometerAllowance != KilometerAllowance.Read)
+            if (report.IsFromApp)
             {
-                var pointsWithCoordinates = new List<DriveReportPoint>();
-                foreach (var driveReportPoint in report.DriveReportPoints)
-                {
-                    if (string.IsNullOrEmpty(driveReportPoint.Latitude) || driveReportPoint.Latitude == "0" ||
-                        string.IsNullOrEmpty(driveReportPoint.Longitude) || driveReportPoint.Longitude == "0")
-                    {
-                        pointsWithCoordinates.Add(
-                            (DriveReportPoint) _coordinates.GetAddressCoordinates(driveReportPoint));
-                    }
-                    else
-                    {
-                        pointsWithCoordinates.Add(driveReportPoint);
-                    }
-                }
-
-                report.DriveReportPoints = pointsWithCoordinates;
-
-                var isBike = _rateTypeRepo.AsQueryable().First(x => x.TFCode.Equals(report.TFCode)).IsBike;
-
-
-                // Set transportType to Bike if isBike is true. Otherwise set it to Car.
-                var drivenRoute = _route.GetRoute(
-                    isBike ? DriveReportTransportType.Bike : DriveReportTransportType.Car, report.DriveReportPoints);
-
-
-                report.Distance = (double) drivenRoute.Length/1000;
-
-                if (report.Distance < 0)
-                {
-                    report.Distance = 0;
-                }
-
-                report = _calculator.Calculate(drivenRoute, report);
+                report = _calculator.Calculate(null, report);
             }
             else
             {
-                report = _calculator.Calculate(null, report);
+                if (report.KilometerAllowance != KilometerAllowance.Read)
+                {
+                    var pointsWithCoordinates = new List<DriveReportPoint>();
+                    foreach (var driveReportPoint in report.DriveReportPoints)
+                    {
+                        if (string.IsNullOrEmpty(driveReportPoint.Latitude) || driveReportPoint.Latitude == "0" ||
+                            string.IsNullOrEmpty(driveReportPoint.Longitude) || driveReportPoint.Longitude == "0")
+                        {
+                            pointsWithCoordinates.Add(
+                                (DriveReportPoint)_coordinates.GetAddressCoordinates(driveReportPoint));
+                        }
+                        else
+                        {
+                            pointsWithCoordinates.Add(driveReportPoint);
+                        }
+                    }
+
+                    report.DriveReportPoints = pointsWithCoordinates;
+
+                    var isBike = _rateTypeRepo.AsQueryable().First(x => x.TFCode.Equals(report.TFCode)).IsBike;
+
+
+                    // Set transportType to Bike if isBike is true. Otherwise set it to Car.
+                    var drivenRoute = _route.GetRoute(
+                        isBike ? DriveReportTransportType.Bike : DriveReportTransportType.Car, report.DriveReportPoints);
+
+
+                    report.Distance = (double)drivenRoute.Length / 1000;
+
+                    if (report.Distance < 0)
+                    {
+                        report.Distance = 0;
+                    }
+
+                    report = _calculator.Calculate(drivenRoute, report);
+                }
+                else
+                {
+                    report = _calculator.Calculate(null, report);
+                }
             }
 
 

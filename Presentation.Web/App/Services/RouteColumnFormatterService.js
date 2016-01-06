@@ -38,8 +38,6 @@
             var comment = data.UserComment != null ? data.UserComment : "Ingen kommentar angivet";
 
             if (data.KilometerAllowance != "Read") {
-                return result;
-            } else {
                 if (data.IsFromApp) {
                     var fromAppTooltip = "<div class='inline margin-left-5'>Indberettet fra mobil app</div><div class='inline margin-right-5 pull-right' kendo-tooltip k-content=\"'" + data.UserComment + "'\"><i class=\"fa fa-2x fa-comment-o\"></i></div>";
                     if (data.DriveReportPoints.length > 1) {
@@ -51,8 +49,10 @@
                     }
                     return result;
                 } else {
-                    return "<div class='inline' kendo-tooltip k-content=\"'" + comment + "'\">Aflæst manuelt</div>";
+                    return result;
                 }
+            } else {
+                    return "<div class='inline' kendo-tooltip k-content=\"'" + comment + "'\">Aflæst manuelt</div>";
             }
 
         }
