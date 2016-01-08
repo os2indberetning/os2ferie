@@ -150,13 +150,13 @@
                 serverAggregates: false,
                 serverSorting: true,
                 serverFiltering: true,
-                sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
+                sort: { field: "DriveDateTimestamp", dir: "desc" },
                 aggregate: [
                     { field: "Distance", aggregate: "sum" },
                     { field: "AmountToReimburse", aggregate: "sum" },
                 ]
             },
-           sortable: { mode: "multiple" },
+           sortable: true,
            resizable: true,
            pageable: {
                messages: {
@@ -250,13 +250,13 @@
                    }
                }, {
                    field: "CreatedDateTimestamp",
-                   title: "Indberettet",
                    template: function (data) {
                        var m = moment.unix(data.CreatedDateTimestamp);
                        return m._d.getDate() + "/" +
                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                            m._d.getFullYear();
                    },
+                   title: "Indberettet"
                }, {
                    sortable: false,
                    field: "Id",

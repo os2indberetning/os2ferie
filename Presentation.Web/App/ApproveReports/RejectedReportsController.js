@@ -127,13 +127,13 @@
                serverPaging: true,
                serverSorting: true,
                serverFiltering: true,
-               sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
+               sort: { field: "DriveDateTimestamp", dir: "desc" },
                aggregate: [
                     { field: "Distance", aggregate: "sum" },
                     { field: "AmountToReimburse", aggregate: "sum" },
                ]
            },
-           sortable: { mode: "multiple" },
+           sortable: true,
            scrollable: false,
            pageable: {
                messages: {

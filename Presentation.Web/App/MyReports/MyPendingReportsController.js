@@ -157,6 +157,7 @@
                    title: "Indberettet"
                }, {
                    title: "Godkender",
+                   field: "ResponsibleLeader.FullName",
                    template: function(data) {
                        if (data.ResponsibleLeader != 0 && data.ResponsibleLeader != null && data.ResponsibleLeader != undefined) {
                             return data.ResponsibleLeader.FullName;

@@ -100,7 +100,7 @@
            autoBind: false,
            dataSource: {
 
-               sort: [{ field: "FullName", dir: "desc" }, { field: "DriveDateTimestamp", dir: "desc" }],
+               sort: { field: "DriveDateTimestamp", dir: "desc" },
                type: "odata-v4",
                transport: {
                    read: {
@@ -139,7 +139,7 @@
                    { field: "AmountToReimburse", aggregate: "sum" }
                ]
            },
-           sortable: { mode: "multiple" },
+           sortable: true,
            scrollable: false,
            pageable: {
                messages: {
