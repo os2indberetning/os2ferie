@@ -7,6 +7,8 @@ using Core.ApplicationServices.MailerService.Interface;
 using Mail.LogMailer;
 using NSubstitute;
 using NUnit.Framework;
+using Core.ApplicationServices;
+using Ninject;
 
 namespace ConsoleApplications.Test.LogMailer
 {
@@ -26,7 +28,9 @@ namespace ConsoleApplications.Test.LogMailer
                 .Messages(Arg.Any<List<string>>(), Arg.Any<DateTime>())
                 .Returns(new List<string>
                 {
-                    "Exception doing post of type Core.DomainModel.Substitute"
+                    "Exception doing post of type Core.DomainModel.Substitute",
+                    "Exception doing post of type Core.DomainModel.Substitute",
+                    "Exception doing post of type Core.DomainModel.Substitute",
                 });
 
             var readerSub = NSubstitute.Substitute.For<ILogReader>();
@@ -42,7 +46,23 @@ namespace ConsoleApplications.Test.LogMailer
 
             logMailer.Send();
 
-            mailSub.Received().SendMail(Arg.Any<string>(), Arg.Any<string>(), "Exception doing post of type Core.DomainModel.Substitute");
+            mailSub.Received().SendMail(Arg.Any<string>(), Arg.Any<string>(), @"Web:
+
+Exception doing post of type Core.DomainModel.Substitute
+Exception doing post of type Core.DomainModel.Substitute
+Exception doing post of type Core.DomainModel.Substitute
+
+DMZ: 
+
+Exception doing post of type Core.DomainModel.Substitute
+Exception doing post of type Core.DomainModel.Substitute
+Exception doing post of type Core.DomainModel.Substitute
+
+Mail: 
+
+Exception doing post of type Core.DomainModel.Substitute
+Exception doing post of type Core.DomainModel.Substitute
+Exception doing post of type Core.DomainModel.Substitute");
 
         }
 

@@ -32,13 +32,39 @@ namespace Mail.LogMailer
 
             var receivers = configvalue.Split(',');
 
-            var lines = _logReader.Read("C:\\logs\\os2eindberetning\\web.log");
+            var webLines = _logReader.Read("C:\\logs\\os2eindberetning\\web.log");
+            var dmzLines = _logReader.Read("C:\\logs\\os2eindberetning\\dmz.log");
+            var mailLines = _logReader.Read("C:\\logs\\os2eindberetning\\mail.log");
 
-            var message = String.Join(Environment.NewLine, _logParser.Messages(lines, DateTime.Now.AddDays(-1)));
+            var webMessage = String.Join(Environment.NewLine, _logParser.Messages(webLines, DateTime.Now.AddDays(-1)));
+            var dmzMessage = String.Join(Environment.NewLine, _logParser.Messages(dmzLines, DateTime.Now.AddDays(-1)));
+            var mailMessage = String.Join(Environment.NewLine, _logParser.Messages(mailLines, DateTime.Now.AddDays(-1)));
 
-            foreach (var receiver in receivers)
+            var newLine = System.Environment.NewLine;
+
+            var result = "";
+
+            // Only add each header if there are log messages in that category.
+            if (webMessage.Any())
             {
-                _mailSender.SendMail(receiver, "Log", message);
+                result += "Web:" + newLine + newLine + webMessage + newLine + newLine;
+            }
+            if (dmzMessage.Any())
+            {
+                result += "DMZ: " + newLine + newLine + dmzMessage + newLine + newLine;
+            }
+            if (mailMessage.Any())
+            {
+                result += "Mail: " + newLine + newLine + mailMessage;
+            }
+
+            // Only send mails if there are any new log messages.
+            if (result != "")
+            {
+                foreach (var receiver in receivers)
+                {
+                    _mailSender.SendMail(receiver, "Log", result);
+                }
             }
             
         
