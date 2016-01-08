@@ -47,6 +47,9 @@
                     backdrop: "static",
                     resolve: {
                         errorMsg: function () {
+                            if (res.error.innererror.message === "Errors in address, see inner exception.") {
+                                return "Din arbejds- eller hjemmeadresse er ikke gyldig. Kontakt en administrator for at få den vasket. Indtil da kan du ikke anvende systemet."
+                            }
                             return res.error.innererror.message;
                         }
                     }
