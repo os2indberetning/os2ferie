@@ -240,7 +240,7 @@
 
         // Load user's positions.
         angular.forEach(currentUser.Employments, function (value, key) {
-            value.PresentationString = value.Position + " - " + value.OrgUnit.LongDescription;
+            value.PresentationString = value.Position + " - " + value.OrgUnit.LongDescription + " (" + value.EmploymentId + ")";
         });
         $scope.Employments = currentUser.Employments;
 
