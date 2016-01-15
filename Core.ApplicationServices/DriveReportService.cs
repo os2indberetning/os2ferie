@@ -375,6 +375,33 @@ namespace Core.ApplicationServices
             return leaderOfOrgUnit.Person;
         }
 
-       
+        public void SendMailToUserAndApproverOfEditedReport(DriveReport report, string emailText, Person admin)
+        {
+            var mailContent = "Hej," + Environment.NewLine + Environment.NewLine + 
+            "Jeg, " + admin.FullName + ", har pr. dags dato redigeret/afvist den følgende godkendte kørselsindberetning:" + Environment.NewLine + Environment.NewLine
+            + "Startadresse: " + report.DriveReportPoints.ElementAt(0).ToString() + Environment.NewLine
+            + "Slutadresse: " + report.DriveReportPoints.Last().ToString() + Environment.NewLine
+            + "Afstand: " + report.Distance.ToString().Replace(".",",") + Environment.NewLine
+            + "Kørselsdato: " + FromUnixTime(report.DriveDateTimestamp) + Environment.NewLine + Environment.NewLine
+            + "Hvis du mener at dette er en fejl, så kontakt mig da venligst på " + admin.Mail + Environment.NewLine
+            + "Med venlig hilsen " + admin.FullName + Environment.NewLine + Environment.NewLine
+            + "Besked fra administrator: " + Environment.NewLine + emailText;
+
+            _mailSender.SendMail("joj@it-minds.dk", "En administrator har ændret i din indberetning.", mailContent);
+        }
+
+        /// <summary>
+        /// Converts timestamp to datetime
+        /// </summary>
+        /// <param name="unixTime">Timestamp to convert</param>
+        /// <returns>DateTime</returns>
+        private string FromUnixTime(long unixTime)
+        {
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTime).ToLocalTime();
+            return dtDateTime.Day + "/" + dtDateTime.Month + "/" + dtDateTime.Year;
+        }
+
+
     }
 }

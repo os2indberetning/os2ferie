@@ -284,10 +284,44 @@ angular.module("application").controller("AdminAcceptedReportsController", [
                            return "Nej";
                        }
                    }
+               }, {
+                    field: "Id",
+                    title: "Muligheder",
+                    template: function(data){
+                        if(data.Status == "Accepted"){
+                            return "<a ng-click=rejectClick(" + data.Id + ")>Afvis</a> | <a ng-click=editClick(" + data.Id + ")>Rediger</a>";
+                        } else {
+                            // Report has already been invoiced.
+                            return "";
+                        }
+                    }
                }
            ],
            scrollable: false
-       };
+       }
+
+       /// <summary>
+       /// Opens confirm delete accepted report modal
+       /// </summary>
+       $scope.rejectClick = function (id) {
+           var modalInstance = $modal.open({
+               templateUrl: '/App/Admin/HTML/Reports/Modal/ConfirmRejectApprovedReportTemplate.html',
+               controller: 'ConfirmRejectApprovedReportModalController',
+               backdrop: "static",
+               resolve: {
+                   itemId: function () {
+                       return id;
+                   }
+               }
+           });
+
+           modalInstance.result.then(function (res) {
+               debugger;
+               Report.patch({ id: id, status: "Rejected", emailText: res }, function () {
+                   $scope.gridContainer.grid.dataSource.read();
+               });
+           });
+       }
 
        $scope.loadInitialDates = function () {
            /// <summary>

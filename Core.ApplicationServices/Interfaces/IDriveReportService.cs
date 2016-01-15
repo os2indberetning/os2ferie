@@ -16,5 +16,7 @@ namespace Core.ApplicationServices.Interfaces
         Person GetResponsibleLeaderForReport(DriveReport driveReport);
         Person GetActualLeaderForReport(DriveReport driveReport);
         bool Validate(DriveReport report);
+
+        void SendMailToUserAndApproverOfEditedReport(DriveReport report, string emailText, Person admin);
     }
 }

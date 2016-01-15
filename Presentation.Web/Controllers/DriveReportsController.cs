@@ -142,10 +142,11 @@ namespace OS2Indberetning.Controllers
         /// </summary>
         /// <param name="key"></param>
         /// <param name="delta"></param>
+        /// <param name="emailText">The message to be sent to the owner of a report an admin has rejected or edited.</param>
         /// <returns></returns>
         [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
-        public new IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta)
+        public new IHttpActionResult Patch([FromODataUri] int key, Delta<DriveReport> delta, string emailText)
         {
 
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
@@ -160,6 +161,13 @@ namespace OS2Indberetning.Controllers
             if (leader == null)
             {
                 return StatusCode(HttpStatusCode.Forbidden);
+            }
+
+            if (CurrentUser.IsAdmin && emailText != null)
+            {
+                // An admin is trying to edit or reject an approved report.
+                _driveService.SendMailToUserAndApproverOfEditedReport(report, emailText, CurrentUser);
+                return base.Patch(key, delta);
             }
 
 

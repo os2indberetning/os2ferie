@@ -7,5 +7,10 @@ namespace Core.DomainModel
         public int? PreviousPointId { get; set; }
         public int DriveReportId { get; set; }
         public virtual DriveReport DriveReport { get; set; }
+
+        public override string ToString()
+        {
+            return StreetName + " " + StreetNumber + ", " + ZipCode + " " + Town;
+        }
     }
 }

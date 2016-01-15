@@ -305,10 +305,14 @@
     <Content Include="App\Admin\Controllers\Reports\AdminAcceptedReportsController.js" />
     <Content Include="App\Admin\Controllers\Reports\AdminPendingReportsController.js" />
     <Content Include="App\Admin\Controllers\Reports\AdminRejectedReportsController.js" />
+    <Content Include="App\Admin\Controllers\Reports\Modal\ConfirmRejectApprovedReportModalController.js" />
+    <Content Include="App\Admin\Controllers\Reports\Modal\ConfirmEditApprovedReportModalController.js" />
     <Content Include="App\Admin\Controllers\Reports\Modal\ShowRouteModalController.js" />
     <Content Include="App\Admin\Controllers\Substitutes\Modals\AdminNewSubstituteModalInstanceController.js" />
     <Content Include="App\Admin\HTML\AddressLaundry\AddressLaundryView.html" />
     <Content Include="App\Admin\HTML\Address\ConfirmDiscardChangesTemplate.html" />
+    <Content Include="App\Admin\HTML\Reports\Modal\ConfirmRejectApprovedReportTemplate.html" />
+    <Content Include="App\Admin\HTML\Reports\Modal\ConfirmEditApprovedReportTemplate.html" />
     <Content Include="App\Admin\HTML\Reports\Modal\ShowRouteModalTemplate.html" />
     <Content Include="App\Admin\HTML\Administration\Modal\ConfirmGenerateFileModalTemplate.html" />
     <Content Include="App\Admin\HTML\Administration\Modal\RemoveAdminModalTemplate.html" />
