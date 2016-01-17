@@ -123,6 +123,12 @@ namespace OS2Indberetning
            .Function("GetCurrentUser")
            .ReturnsFromEntitySet<Person>("Person");
 
+            builder.EntityType<Person>().Collection
+            .Function("GetUserAsCurrentUser")
+            .ReturnsFromEntitySet<Person>("Person");
+
+            
+
             builder.EntitySet<PersonalAddress>("PersonalAddresses");
 
             builder.EntityType<PersonalAddress>().Collection

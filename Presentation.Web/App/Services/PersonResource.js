@@ -59,6 +59,45 @@
                 return res;
             }
         },
+        "GetUserAsCurrentUser" : {
+            url: "/odata/Person/Service.GetUserAsCurrentUser?Id=:id&$select=Id,IsSubstitute,RecieveMail,IsAdmin,FullName,Mail,DistanceFromHomeToBorder &$expand=PersonalRoutes($expand=Points),LicensePlates,Employments($expand=AlternativeWorkAddress,OrgUnit($select=Id,LongDescription,HasAccessToFourKmRule; $expand=Address); $select=Id,Position,IsLeader,HomeWorkDistance,WorkDistanceOverride, AlternativeWorkAddressId, EmploymentId)",
+            method: "GET",
+            transformResponse: function (data) {
+                var res = angular.fromJson(data);
+
+                if (res.error == undefined) {
+                    // If the request did not yield an error, then finish the request and return it.
+                    res.IsLeader = (function () {
+                        var returnVal = false;
+                        angular.forEach(res.Employments, function (value, key) {
+                            if (value.IsLeader === true) {
+                                returnVal = true;
+                            }
+                        });
+                        return returnVal;
+                    })();
+                    return res;
+                }
+
+                // If there was an error then open modal.
+                var modalInstance = $modal.open({
+                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    controller: "ServiceErrorController",
+                    backdrop: "static",
+                    resolve: {
+                        errorMsg: function () {
+                            if (res.error.innererror.message === "Errors in address, see inner exception.") {
+                                return "Din arbejds- eller hjemmeadresse er ikke gyldig. Kontakt en administrator for at få den vasket. Indtil da kan du ikke anvende systemet."
+                            }
+                            return res.error.innererror.message;
+                        }
+                    }
+                });
+
+               
+                return res;
+            }
+        },
         "GetLeaders" : {
             url: "/odata/Employments?$filter=IsLeader eq true&$select=Person &$expand=Person($select=Id,FullName)",
             method: "GET",

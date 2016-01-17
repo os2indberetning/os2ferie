@@ -5,10 +5,15 @@
             method: "PATCH",
             isArray: true, 
             url: "/odata/DriveReports(:id)?emailText=:emailText",
-            transformRequest: function (data) {
-                debugger;
-                delete data.emailText;
-            },
+        },
+        "getOwner": { 
+            url: "/odata/DriveReports?$filter=Id eq :id&$select=Person&$expand=Person",
+            method: "GET", 
+            isArray: false, 
+            transformResponse: function(data){
+                var res = angular.fromJson(data).value[0].Person;
+                return res; 
+            } 
         },
 		"delete" : {method: "DELETE", isArray: true}
     });

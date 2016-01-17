@@ -292,12 +292,41 @@ angular.module("application").controller("AdminAcceptedReportsController", [
                             return "<a ng-click=rejectClick(" + data.Id + ")>Afvis</a> | <a ng-click=editClick(" + data.Id + ")>Rediger</a>";
                         } else {
                             // Report has already been invoiced.
-                            return "";
+                            return "Er kørt til løn.";
                         }
                     }
                }
            ],
            scrollable: false
+       }
+
+       $scope.editClick = function (id) {
+           /// <summary>
+           /// Opens edit report modal
+           /// </summary>
+           /// <param name="id"></param>
+           var modalInstance = $modal.open({
+               templateUrl: '/App/MyReports/EditReportTemplate.html',
+               controller: 'DrivingController',
+               backdrop: "static",
+               windowClass: "app-modal-window-full",
+               resolve: {
+                   ReportId: function () {
+                       return id;
+                   },
+                   adminEditCurrentUser: function () {
+                       return Report.getOwner({id : id}).$promise.then(function(res){
+                            return Person.GetUserAsCurrentUser({id:res.Id}).$promise.then(function(person){
+                                return person;
+                            })
+                       });
+                   }
+               }
+           });
+
+           modalInstance.result.then(function (res) {
+               $scope.gridContainer.grid.dataSource.read();
+           });
        }
 
        /// <summary>
@@ -316,8 +345,10 @@ angular.module("application").controller("AdminAcceptedReportsController", [
            });
 
            modalInstance.result.then(function (res) {
-               debugger;
-               Report.patch({ id: id, status: "Rejected", emailText: res }, function () {
+               if(res == undefined){
+                   res = "Ingen besked.";
+               }
+               Report.patch({ id: id, emailText: res }, function () {
                    $scope.gridContainer.grid.dataSource.read();
                });
            });

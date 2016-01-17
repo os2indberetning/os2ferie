@@ -122,8 +122,17 @@ namespace OS2Indberetning.Controllers
         /// <param name="driveReport"></param>
         /// <returns>The posted report.</returns>
         [EnableQuery]
-        public new IHttpActionResult Post(DriveReport driveReport)
+        public new IHttpActionResult Post(DriveReport driveReport, string emailText)
         {
+            if(CurrentUser.IsAdmin && emailText != null && driveReport.Status == ReportStatus.Accepted)
+            {
+                // An admin is trying to edit an already approved report.
+                    var adminEditResult = _driveService.Create(driveReport);
+                    // CurrentUser is restored after the calculation.
+                    _driveService.SendMailToUserAndApproverOfEditedReport(adminEditResult, emailText, CurrentUser, "redigeret");
+                    return Ok(adminEditResult);
+            }
+
             if (!CurrentUser.Id.Equals(driveReport.PersonId))
             {
                 return StatusCode(HttpStatusCode.Forbidden);
@@ -163,11 +172,19 @@ namespace OS2Indberetning.Controllers
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
-            if (CurrentUser.IsAdmin && emailText != null)
+            if (CurrentUser.IsAdmin && emailText != null && report.Status == ReportStatus.Accepted)
             {
-                // An admin is trying to edit or reject an approved report.
-                _driveService.SendMailToUserAndApproverOfEditedReport(report, emailText, CurrentUser);
-                return base.Patch(key, delta);
+                // An admin is trying to reject an approved report.
+                report.Status = ReportStatus.Rejected;
+                report.Comment = emailText;
+                report.ClosedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                try {
+                    Repo.Save();
+                    _driveService.SendMailToUserAndApproverOfEditedReport(report, emailText, CurrentUser, "afvist");
+                    return Ok();
+                } catch(Exception) {
+                    _logger.Log("Fejl under forsøg på at afvise en allerede godkendt indberetning.", "web");
+                }
             }
 
 

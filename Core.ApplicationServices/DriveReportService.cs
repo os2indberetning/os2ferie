@@ -375,19 +375,43 @@ namespace Core.ApplicationServices
             return leaderOfOrgUnit.Person;
         }
 
-        public void SendMailToUserAndApproverOfEditedReport(DriveReport report, string emailText, Person admin)
+        /// <summary>
+        /// Sends an email to the owner of and person responsible for a report that has been edited or rejected by an admin.
+        /// </summary>
+        /// <param name="report">The edited report</param>
+        /// <param name="emailText">The message to be sent to the owner and responsible leader</param>
+        /// <param name="admin">The admin rejecting or editing</param>
+        /// <param name="action">A string included in the email. Should be "afvist" or "redigeret"</param>
+        public void SendMailToUserAndApproverOfEditedReport(DriveReport report, string emailText, Person admin, string action)
         {
-            var mailContent = "Hej," + Environment.NewLine + Environment.NewLine + 
-            "Jeg, " + admin.FullName + ", har pr. dags dato redigeret/afvist den følgende godkendte kørselsindberetning:" + Environment.NewLine + Environment.NewLine
-            + "Startadresse: " + report.DriveReportPoints.ElementAt(0).ToString() + Environment.NewLine
-            + "Slutadresse: " + report.DriveReportPoints.Last().ToString() + Environment.NewLine
-            + "Afstand: " + report.Distance.ToString().Replace(".",",") + Environment.NewLine
+            var mailContent = "Hej," + Environment.NewLine + Environment.NewLine +
+            "Jeg, " + admin.FullName + ", har pr. dags dato " + action + " den følgende godkendte kørselsindberetning:" + Environment.NewLine + Environment.NewLine;
+
+            mailContent += "Formål: " + report.Purpose + Environment.NewLine;
+
+            if (report.KilometerAllowance != KilometerAllowance.Read)
+            {
+                mailContent += "Startadresse: " + report.DriveReportPoints.ElementAt(0).ToString() + Environment.NewLine
+                + "Slutadresse: " + report.DriveReportPoints.Last().ToString() + Environment.NewLine;
+            }
+
+            mailContent += "Afstand: " + report.Distance.ToString().Replace(".",",") + Environment.NewLine
             + "Kørselsdato: " + FromUnixTime(report.DriveDateTimestamp) + Environment.NewLine + Environment.NewLine
             + "Hvis du mener at dette er en fejl, så kontakt mig da venligst på " + admin.Mail + Environment.NewLine
             + "Med venlig hilsen " + admin.FullName + Environment.NewLine + Environment.NewLine
             + "Besked fra administrator: " + Environment.NewLine + emailText;
 
-            _mailSender.SendMail("joj@it-minds.dk", "En administrator har ændret i din indberetning.", mailContent);
+            if (report.Person.RecieveMail)
+            {
+                _mailSender.SendMail(report.Person.Mail, "En administrator har ændret i din indberetning.", mailContent);
+            }
+
+            if (report.ApprovedBy.RecieveMail)
+            {
+                _mailSender.SendMail(report.ApprovedBy.Mail, "En administrator har ændret i din indberetning.", mailContent);
+            }
+
+
         }
 
         /// <summary>

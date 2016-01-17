@@ -80,6 +80,35 @@ namespace OS2Indberetning.Controllers
             return CurrentUser;
         }
 
+        /// <summary>
+        /// GET API endpoint for user as CurrentUser.
+        /// Sets HomeWorkDistance on each of the users employments.
+        /// Strips CPR-number off.
+        /// </summary>
+        /// <returns>A user with with properties like CurrentUser. Is used when retrieving a user as CurrentUser when an admin tries to edit an approved report.</returns>
+        [EnableQuery(MaxExpansionDepth = 4)]
+        // Disable caching.
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
+        public Person GetUserAsCurrentUser(int id)
+        {
+            var result = Repo.AsQueryable().First(x => x.Id == id);
+
+            var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            var employments = _employmentRepo.AsQueryable().Where(x => x.PersonId == id && (x.EndDateTimestamp == 0 || x.EndDateTimestamp > currentDateTimestamp));
+            var employmentList = employments.ToList();
+
+            result.Employments.Clear();
+            foreach (var employment in employmentList)
+            {
+                result.Employments.Add(employment);
+            }
+
+            _person.AddHomeWorkDistanceToEmployments(result);
+            result.CprNumber = "";
+            result.IsSubstitute = _substituteRepo.AsQueryable().Any(x => x.SubId.Equals(result.Id) && x.StartDateTimestamp < currentDateTimestamp && x.EndDateTimestamp > currentDateTimestamp);
+            return result;
+        }
+
         //GET: odata/Person(5)
         /// <summary>
         /// GET API endpoint for a single person

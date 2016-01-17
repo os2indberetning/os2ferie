@@ -226,6 +226,7 @@
                backdrop: "static",
                windowClass: "app-modal-window-full",
                resolve: {
+                   adminEditCurrentUser : function() {return 0;},
                    ReportId: function () {
                        return id;
                    }

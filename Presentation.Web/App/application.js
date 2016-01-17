@@ -14,6 +14,7 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             templateUrl: "/App/Driving/DrivingView.html",
             controller: "DrivingController",
             resolve: {
+                adminEditCurrentUser : function() {return 0;},
                 ReportId: function () { return -1; },
                 CurrentUser: ["$rootScope", "Person", function ($rootScope, Person) {
                     if ($rootScope.CurrentUser == undefined) {
@@ -33,6 +34,7 @@ angular.module("application").config(["$stateProvider", "$urlRouterProvider", fu
             templateUrl: "/App/Driving/DrivingView.html",
             controller: "DrivingController",
             resolve: {
+                adminEditCurrentUser : function() {return 0;},
                 ReportId: function () { return -1; },
                 CurrentUser: ["$rootScope", "Person", function ($rootScope, Person) {
                     if ($rootScope.CurrentUser == undefined) {

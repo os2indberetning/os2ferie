@@ -1,5 +1,5 @@
 ﻿angular.module("application").service('DriveReport', ["$resource","AddressFormatter", "PersonalAddress", "$modal", "PersonalAddressType", function ($resource, AddressFormatter, PersonalAddress, $modal, PersonalAddressType) {
-    return $resource("/odata/DriveReports(:id)?:query", { id: "@id", query: "@query" }, {
+    return $resource("/odata/DriveReports(:id)?:query&emailText=:emailText", { id: "@id", query: "@query", emailText: "@emailText" }, {
         "get": {
             method: "GET", isArray: false, transformResponse: function (res) {
             return angular.fromJson(res).value[0];
@@ -140,8 +140,10 @@
                 return JSON.stringify(driveReport);
             }
         }, "edit": {
+
             method: "POST",
             isArray: false,
+            url: "/odata/DriveReports(:id)?:query&emailText=:emailText",
             transformRequest: function ($scope) {
 
                 var getKmRate = function () {
@@ -171,10 +173,11 @@
                     driveReport.LicensePlate = "0000000";
                 }
 
+                driveReport.ApprovedById = $scope.latestDriveReport.ApprovedById;
 
-                driveReport.PersonId = $scope.currentUser.Id;
-                driveReport.FullName = $scope.currentUser.FullName;
-                driveReport.Status = "Pending";
+                driveReport.PersonId = $scope.latestDriveReport.PersonId;
+                driveReport.FullName = $scope.latestDriveReport.FullName;
+                driveReport.Status = $scope.latestDriveReport.Status;
                 driveReport.CreatedDateTimestamp = $scope.latestDriveReport.CreatedDateTimestamp;
                 driveReport.EditedDateTimestamp = Math.floor(Date.now() / 1000);
                 driveReport.Comment = "";

@@ -1,7 +1,6 @@
 ﻿angular.module("application").controller("DrivingController", [
-    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "$window", "$modal", "$location",
-    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, $window, $modal, $location) {
-
+    "$scope", "Person", "PersonEmployments", "Rate", "LicensePlate", "PersonalRoute", "DriveReport", "Address", "SmartAdresseSource", "AddressFormatter", "$q", "ReportId", "$timeout", "NotificationService", "PersonalAddress", "$rootScope", "$modalInstance", "$window", "$modal", "$location", "adminEditCurrentUser",
+    function ($scope, Person, PersonEmployments, Rate, LicensePlate, PersonalRoute, DriveReport, Address, SmartAdresseSource, AddressFormatter, $q, ReportId, $timeout, NotificationService, PersonalAddress, $rootScope, $modalInstance, $window, $modal, $location, adminEditCurrentUser) {
 
         $scope.ReadReportCommentHelp = $rootScope.HelpTexts.ReadReportCommentHelp.text;
         $scope.PurposeHelpText = $rootScope.HelpTexts.PurposeHelpText.text;
@@ -132,7 +131,7 @@
             /// </summary>
             /// <param name="report"></param>
             $scope.DriveReport.FourKmRule = {};
-            $scope.DriveReport.FourKmRule.Value = $rootScope.CurrentUser.DistanceFromHomeToBorder.toString().replace(".", ",");
+            $scope.DriveReport.FourKmRule.Value = $scope.currentUser.DistanceFromHomeToBorder.toString().replace(".", ",");
 
 
 
@@ -183,6 +182,7 @@
 
                 firstMapLoad = false;
                 $scope.DriveReport.Purpose = report.Purpose;
+                $scope.DriveReport.Status = report.Status;
                 $scope.DriveReport.FourKmRule.Using = report.FourKmRule;
                 $scope.DriveReport.Date = moment.unix(report.DriveDateTimestamp)._d;
 
@@ -233,11 +233,16 @@
             }
         }
 
+
+        if(adminEditCurrentUser != 0){
+            // adminEditCurrentUser will have a value different from 0 if an admin is currently trying to edit a report.
+            $scope.currentUser = adminEditCurrentUser;
+        } else {
+            $scope.currentUser = $rootScope.CurrentUser;
+        }
+
         // Load all data
-        $scope.currentUser = $rootScope.CurrentUser;
         var currentUser = $scope.currentUser;
-
-
         // Load user's positions.
         angular.forEach(currentUser.Employments, function (value, key) {
             value.PresentationString = value.Position + " - " + value.OrgUnit.LongDescription + " (" + value.EmploymentId + ")";
@@ -734,7 +739,7 @@
             $scope.saveBtnDisabled = true;
             if (isEditingReport) {
                 DriveReport.delete({ id: ReportId }).$promise.then(function () {
-                    DriveReport.edit($scope).$promise.then(function (res) {
+                    DriveReport.edit({ emailText: $scope.emailText },$scope).$promise.then(function (res) {
                         $scope.latestDriveReport = res;
                         NotificationService.AutoFadeNotification("success", "", "Din tjenestekørselsindberetning blev redigeret");
                         $scope.clearReport();
@@ -764,10 +769,30 @@
             if (!$scope.canSubmitDriveReport) {
                 return;
             }
+            if($scope.DriveReport.Status == "Accepted"){
+                // An admin is trying to edit an already approved report.
+                var modalInstance = $modal.open({
+                   templateUrl: '/App/Admin/HTML/Reports/Modal/ConfirmEditApprovedReportTemplate.html',
+                   controller: 'ConfirmEditApprovedReportModalController',
+                   backdrop: "static",
+                });
 
-            if ($rootScope.CurrentUser.DistanceFromHomeToBorder != $scope.DriveReport.FourKmRule.Value && $scope.DriveReport.FourKmRule.Value != "" && $scope.DriveReport.FourKmRule.Value != undefined) {
-                $rootScope.CurrentUser.DistanceFromHomeToBorder = $scope.DriveReport.FourKmRule.Value
-                Person.patch({ id: $rootScope.CurrentUser.Id }, { DistanceFromHomeToBorder: $scope.DriveReport.FourKmRule.Value.toString().replace(",", ".") }).$promise.then(function () {
+               modalInstance.result.then(function (res) {
+                   if(res == undefined){
+                       res = "Ingen besked.";
+                   }
+                   $scope.emailText = res;
+                   $scope.prepHandleSave();
+               });
+            } else {
+                $scope.prepHandleSave();
+            }
+        }
+
+        $scope.prepHandleSave = function(){
+            if ($scope.currentUser.DistanceFromHomeToBorder != $scope.DriveReport.FourKmRule.Value && $scope.DriveReport.FourKmRule.Value != "" && $scope.DriveReport.FourKmRule.Value != undefined) {
+                $scope.currentUser.DistanceFromHomeToBorder = $scope.DriveReport.FourKmRule.Value
+                Person.patch({ id: $scope.currentUser.Id }, { DistanceFromHomeToBorder: $scope.DriveReport.FourKmRule.Value.toString().replace(",", ".") }).$promise.then(function () {
                     handleSave();
                 });
             } else {
