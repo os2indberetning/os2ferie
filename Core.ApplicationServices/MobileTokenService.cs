@@ -64,7 +64,6 @@ namespace Core.ApplicationServices
 
             var dmzToken = new Token
             {
-                Id = createdToken.Id,
                 Status = (int)createdToken.Status,
                 GuId = createdToken.Guid.ToString(),
                 TokenString = createdToken.Token,
