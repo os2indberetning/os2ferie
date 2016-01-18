@@ -169,6 +169,16 @@
                 switch (report.KilometerAllowance) {
                     case "Calculated":
                         $scope.container.KilometerAllowanceDropDown.select(0);
+
+                        if(report.IsFromApp){
+                            //Notify user that editing a calculated report from app has special conditions.
+                            var modalInstance = $modal.open({
+                                templateUrl: '/App/Driving/EditCalculatedAppReportTemplate.html',
+                                controller: 'NoLicensePlateModalController',
+                                backdrop: "static",
+                            });
+                        }
+
                         break;
                     case "Read":
                         $scope.container.KilometerAllowanceDropDown.select(1);

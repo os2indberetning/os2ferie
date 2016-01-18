@@ -348,7 +348,7 @@
            });
 
            modalInstance.result.then(function () {
-               $scope.loadingPromise = Report.patch({ id: id }, {
+               $scope.loadingPromise = Report.patch({ id: id, emailText : "Ingen besked" }, {
                    "Status": "Accepted",
                    "ClosedDateTimestamp": moment().unix(),
                    "ApprovedById": $rootScope.CurrentUser.Id,
@@ -379,7 +379,7 @@
 
                modalInstance.result.then(function (accountNumber) {
                    angular.forEach(checkedReports, function (value, key) {
-                       $scope.loadingPromise = Report.patch({ id: value }, {
+                       $scope.loadingPromise = Report.patch({ id: value, emailText : "Ingen besked" }, {
                            "Status": "Accepted",
                            "ClosedDateTimestamp": moment().unix(),
                            "AccountNumber": accountNumber,
@@ -414,7 +414,7 @@
 
                modalInstance.result.then(function () {
                    angular.forEach(checkedReports, function (value, key) {
-                       $scope.loadingPromise = Report.patch({ id: value }, {
+                       $scope.loadingPromise = Report.patch({ id: value, emailText: "Ingen besked" }, {
                            "Status": "Accepted",
                            "ClosedDateTimestamp": moment().unix(),
                            "ApprovedById": $rootScope.CurrentUser.Id,
@@ -461,7 +461,7 @@
            });
 
            modalInstance.result.then(function (res) {
-               $scope.loadingPromise = Report.patch({ id: id }, {
+               $scope.loadingPromise = Report.patch({ id: id, emailText : "Ingen besked" }, {
                    "Status": "Rejected",
                    "ClosedDateTimestamp": moment().unix(),
                    "Comment": res.Comment,
