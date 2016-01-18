@@ -137,12 +137,13 @@
         /// Handles saving alternative work address.
         /// </summary>
         /// <param name="index"></param>
-        // Both fields empty. Clear.
 
-        if ($scope.alternativeWorkDistances[index].toString().indexOf(".") > -1 || $scope.alternativeWorkDistances[index].toString().indexOf(",") > -1) {
-              // Show popup if distance contains , or .
-              NotificationService.AutoFadeNotification("warning", "", "Afvigende km på ikke indeholde komma eller punktum.");
-              return;
+        if($scope.alternativeWorkDistances[index] != undefined){
+            if ($scope.alternativeWorkDistances[index].toString().indexOf(".") > -1 || $scope.alternativeWorkDistances[index].toString().indexOf(",") > -1) {
+                  // Show popup if distance contains , or .
+                  NotificationService.AutoFadeNotification("warning", "", "Afvigende km på ikke indeholde komma eller punktum.");
+                  return;
+            }
         }
         handleSavingAlternativeAddress(index);
         handleSavingAlternativeDistance(index);
