@@ -9,7 +9,7 @@ using Core.DomainModel;
 using Core.DomainServices;
 using Infrastructure.DataAccess;
 using Infrastructure.DmzDataAccess;
-using Infrastructure.DmzSync.Encryption;
+using Core.DomainServices.Encryption;
 using Infrastructure.DmzSync.Services.Interface;
 using Employment = Core.DmzModel.Employment;
 

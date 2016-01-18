@@ -13,7 +13,7 @@ using Core.DomainServices.RoutingClasses;
 using Infrastructure.AddressServices;
 using Infrastructure.DataAccess;
 using Infrastructure.DmzDataAccess;
-using Infrastructure.DmzSync.Encryption;
+using Core.DomainServices.Encryption;
 using Infrastructure.DmzSync.Services.Interface;
 using DriveReport = Core.DomainModel.DriveReport;
 using Employment = Core.DmzModel.Employment;

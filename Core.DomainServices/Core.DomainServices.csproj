@@ -59,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CachedAddressLaunderer.cs" />
+    <Compile Include="Encryption\Encryptor.cs" />
+    <Compile Include="Encryption\StringCipher.cs" />
     <Compile Include="Example\IExample.cs" />
     <Compile Include="IAddressCoordinates.cs" />
     <Compile Include="IGenericRepository.cs" />
@@ -74,6 +76,10 @@
     <Compile Include="Interfaces\IRoute.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core.DmzModel\Core.DmzModel.csproj">
+      <Project>{108af3eb-0b3f-4943-aef2-de847bfae8a8}</Project>
+      <Name>Core.DmzModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core.DomainModel\Core.DomainModel.csproj">
       <Project>{823928AD-3BB7-4FD8-831F-201D73B80AE0}</Project>
       <Name>Core.DomainModel</Name>

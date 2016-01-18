@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.DmzModel;
 
-namespace Infrastructure.DmzSync.Encryption
+namespace Core.DomainServices.Encryption
 {
     public static class Encryptor
     {

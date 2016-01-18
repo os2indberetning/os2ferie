@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Core.ApplicationServices;
+using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
 using NSubstitute;
@@ -14,6 +15,7 @@ namespace ApplicationServices.Test.MobileTokenServiceTest
 
         private List<MobileToken> list;
         IGenericRepository<MobileToken> repoMock = NSubstitute.Substitute.For<IGenericRepository<MobileToken>>();
+        IGenericRepository<Token> repoTokenMock = NSubstitute.Substitute.For<IGenericRepository<Token>>();
 
         [SetUp]
         public void SetUp()
@@ -32,9 +34,9 @@ namespace ApplicationServices.Test.MobileTokenServiceTest
             repoMock.Insert(new MobileToken())
                 .ReturnsForAnyArgs(x => x.Arg<MobileToken>())
                 .AndDoes(r => list.Add(r.Arg<MobileToken>()));
+            repoTokenMock.Insert(new Token()).ReturnsForAnyArgs(x => x.Arg<Token>());
 
-
-            var service = new MobileTokenService(repoMock);
+            var service = new MobileTokenService(repoMock, repoTokenMock);
 
             var tokenOne = service.Create(token1);
             var tokenTwo = service.Create(token2);
