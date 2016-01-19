@@ -62,6 +62,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                 var masterToken = tokens[i];
                 var dmzToken = new Token
                 {
+                    Id = masterToken.Id,
                     Status = (int)masterToken.Status,
                     GuId = masterToken.Guid.ToString(),
                     TokenString = masterToken.Token,
