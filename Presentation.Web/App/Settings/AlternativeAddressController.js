@@ -121,6 +121,9 @@
     }
 
     var handleSavingAlternativeDistance = function (index) {
+    if($scope.alternativeWorkDistances[index] == ""){
+        ($scope.alternativeWorkDistances[index] = 0;
+    }
         PersonEmployments.patchEmployment({ id: $scope.employments[index].Id },
            {
                WorkDistanceOverride: $scope.alternativeWorkDistances[index],
@@ -145,7 +148,9 @@
                   return;
             }
         }
-        handleSavingAlternativeAddress(index);
+        if(isAddressSet(index)){
+            handleSavingAlternativeAddress(index);
+        }
         handleSavingAlternativeDistance(index);
 
     }
