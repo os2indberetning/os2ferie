@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.DmzModel;
+using System.Security.Cryptography;
 
 namespace Core.DomainServices.Encryption
 {
@@ -37,7 +38,11 @@ namespace Core.DomainServices.Encryption
             catch (FormatException)
             {
                 return profile;
-            } 
+            }
+            catch (CryptographicException)
+            {
+                return profile;
+            }
         }
 
         public static Employment EncryptEmployment(Employment employment)
