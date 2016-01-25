@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.ApplicationServices;
 using Core.ApplicationServices.Logger;
+using Core.ApplicationServices.MailerService.Impl;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
+using Mail.LogMailer;
 using Ninject;
 
 namespace Mail
@@ -33,8 +38,21 @@ namespace Mail
         /// </summary>
         public void RunMailService()
         {
+
+            var logMailer = new LogMailer.LogMailer(new LogParser(), new LogReader(), new MailSender(_logger));
+            try
+            {
+                logMailer.Send();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Kunne ikke sende daglig aktivitet i fejlloggen!");
+                _logger.Log("Error while sending the daily log activity", "mail");
+            }
+            
             var startOfDay = ToUnixTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 00, 00, 00));
             var endOfDay = ToUnixTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59));
+        
             var notifications = _repo.AsQueryable().Where(r => r.DateTimestamp >= startOfDay && r.DateTimestamp <= endOfDay && !r.Notified);
 
             if (notifications.Any())
