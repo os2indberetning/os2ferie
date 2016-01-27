@@ -365,6 +365,10 @@
     <Compile Include="Migrations\201601271351233_AddedAppLoginAndHasAppPasswordToPerson.Designer.cs">
       <DependentUpon>201601271351233_AddedAppLoginAndHasAppPasswordToPerson.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601271405260_MadeHasAppPasswordIgnored.cs" />
+    <Compile Include="Migrations\201601271405260_MadeHasAppPasswordIgnored.Designer.cs">
+      <DependentUpon>201601271405260_MadeHasAppPasswordIgnored.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -604,6 +608,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601271351233_AddedAppLoginAndHasAppPasswordToPerson.resx">
       <DependentUpon>201601271351233_AddedAppLoginAndHasAppPasswordToPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601271405260_MadeHasAppPasswordIgnored.resx">
+      <DependentUpon>201601271405260_MadeHasAppPasswordIgnored.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
