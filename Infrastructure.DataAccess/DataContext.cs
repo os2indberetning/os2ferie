@@ -36,8 +36,8 @@ namespace Infrastructure.DataAccess
         public IDbSet<RateType> RateTypes { get; set; }
         public IDbSet<CachedAddress> CachedAddresses { get; set; }
         public IDbSet<AddressHistory> AddressHistory { get; set; }
-        public IDbSet<TempAddressHistory> TempAddressHistory { get; set; }
-  
+        public IDbSet<AppLogin> AppLogin { get; set; }
+
 
         /**
          * Sets up 
@@ -80,7 +80,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Person>().Property(t => t.CprNumber).IsFixedLength().HasMaxLength(10);
             modelBuilder.Entity<Person>().Property(t => t.FullName).IsRequired();
             modelBuilder.Entity<Person>().Ignore(t => t.IsSubstitute);
-
+            modelBuilder.Entity<Person>().Ignore(t => t.HasAppPassword);
         }
 
         private void ConfigurePropertiesForCachedAddress(DbModelBuilder modelBuilder)

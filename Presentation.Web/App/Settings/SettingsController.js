@@ -21,6 +21,7 @@
 
         var personId = $rootScope.CurrentUser.Id;
         $scope.currentPerson = $rootScope.CurrentUser;
+        debugger;
         $scope.mailAdvice = $scope.currentPerson.RecieveMail;
 
         $scope.showMailNotification = $rootScope.CurrentUser.IsLeader || $rootScope.CurrentUser.IsSubstitute;
