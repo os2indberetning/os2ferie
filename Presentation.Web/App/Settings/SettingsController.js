@@ -82,18 +82,13 @@
 
         $scope.openConfirmDeleteLicenseModal = function (plate) {
             /// <summary>
-            /// Opens confirm delete MobileToken modal.
+            /// Opens confirm delete license modal.
             /// </summary>
             /// <param name="token"></param>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Settings/ConfirmDeleteLicenseModal.html',
-                controller: 'confirmDeleteToken',
+                controller: 'AppLoginModalController',
                 backdrop: 'static',
-                resolve: {
-                    token: function () {
-                        return 0;
-                    }
-                }
             });
 
             modalInstance.result.then(function () {
@@ -523,76 +518,51 @@
             });
         };
 
-        Token.get({ id: personId }, function (data) {
-            $scope.tokens = data.value;
-        }, function () {
-            NotificationService.AutoFadeNotification("danger", "", "Kunne ikke hente tokens");
-        });
-
-        $scope.deleteToken = function (token) {
+        $scope.deleteAppLogin = function () {
             /// <summary>
             /// Deletes MobileToken.
             /// </summary>
             /// <param name="token"></param>
-            var objIndex = $scope.tokens.indexOf(token);
-            $scope.tokens.splice(objIndex, 1);
-
-            Token.delete({ id: token.Id }, function (data) {
-                NotificationService.AutoFadeNotification("success", "", "Token blev slettet");
-            }, function () {
-                $scope.tokens.push(token);
-                NotificationService.AutoFadeNotification("danger", "", "Token blev ikke slettet");
-            });
+            //TODO implement
         }
 
-        $scope.saveToken = function () {
+        $scope.saveAppLogin = function () {
             /// <summary>
             /// Saves MobileToken.
             /// </summary>
-            var newToken = new Token({
-                PersonId: personId,
-                Status: "Created",
-                Description: $scope.newTokenDescription
-            });
-
-            newToken.$save(function (data) {
-                $scope.tokens.push(data);
-                NotificationService.AutoFadeNotification("success", "", "Ny token oprettet");
-                $scope.newTokenDescription = "";
-                $scope.tokenIsCollapsed = !$scope.tokenIsCollapsed;
-            }, function () {
-                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette ny token");
-            });
+            //TODO Implement
         }
 
-        $scope.newToken = function () {
-            $scope.tokenIsCollapsed = !$scope.tokenIsCollapsed;
-        }
 
-        $scope.closeTokenModal = function () {
-            $modalInstance.close({
-
-            });
-        }
-
-        $scope.openConfirmDeleteTokenModal = function (token) {
+        $scope.openConfirmDeleteAppPasswordModal = function () {
             /// <summary>
-            /// Opens confirm delete MobileToken modal.
+            /// Opens confirm delete app login modal.
             /// </summary>
-            /// <param name="token"></param>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Settings/confirmDeleteTokenModal.html',
-                controller: 'confirmDeleteToken',
+                templateUrl: '/App/Settings/confirmDeleteAppPasswordModal.html',
+                controller: 'AppLoginModalController',
                 backdrop: 'static',
-                resolve: {
-                    token: function () {
-                        return token;
-                    }
-                }
             });
 
-            modalInstance.result.then(function (tokenToDelete) {
-                $scope.deleteToken(tokenToDelete);
+            modalInstance.result.then(function () {
+                //TODO implement
+            }, function () {
+
+            });
+        };
+
+        $scope.openConfirmCreateAppPasswordModal = function () {
+            /// <summary>
+            /// Opens confirm create app login modal.
+            /// </summary>
+            var modalInstance = $modal.open({
+                templateUrl: '/App/Settings/confirmCreateAppLoginModal.html',
+                controller: 'AppLoginModalController',
+                backdrop: 'static',
+            });
+
+            modalInstance.result.then(function () {
+                //TODO implement
             }, function () {
 
             });
@@ -631,8 +601,7 @@
             /// Return true if there are unsaved changes on the page. 
             /// </summary>
 
-            if ($scope.newTokenDescription != "" ||
-                $scope.newLicensePlate != "" ||
+            if ($scope.newLicensePlate != "" ||
                 $scope.newLicensePlateDescription != "") {
                 return true;
             }

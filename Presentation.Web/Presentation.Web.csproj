@@ -398,6 +398,7 @@
     <Content Include="App\Services\OrgUnitResource.js" />
     <Content Include="App\Services\RouteContainerResource.js" />
     <Content Include="App\Services\SubstituteResource.js" />
+    <Content Include="App\Settings\confirmCreateAppLoginModal.html" />
     <Content Include="App\Settings\AddressAddModal.html" />
     <Content Include="App\Settings\AlternativeAddressController.js" />
     <Content Include="App\Settings\AlternativeWorkAddressTemplate.html" />
@@ -1226,10 +1227,10 @@
     <Content Include="App\Services\SmartAdresseSource.js" />
     <Content Include="App\Services\TokenResource.js" />
     <Content Include="App\Settings\AddressEditModal.html" />
-    <Content Include="App\Settings\confirmDeleteTokenModal.html" />
+    <Content Include="App\Settings\confirmDeleteAppPasswordModal.html" />
     <Content Include="App\Settings\ModalControllers\AddressEditModalController.js" />
     <Content Include="App\Settings\ModalControllers\RouteEditModalController.js" />
-    <Content Include="App\Settings\ModalControllers\TokenModalController.js" />
+    <Content Include="App\Settings\ModalControllers\AppLoginModalController.js" />
     <Content Include="App\Settings\RouteEditModal.html" />
     <Content Include="App\Settings\SettingsController.js" />
     <Content Include="App\Settings\SettingsView.html" />

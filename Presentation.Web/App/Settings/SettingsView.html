@@ -117,30 +117,14 @@
                             <p class="margin-5">{{currentPerson.Initials}}</p>
                         </div>
                         <div class="col-sm-4">
-                            <p class="margin-5">{{ currentPerson.hasAppPassword }}</p>
+                            <p class="margin-5">{{currentPerson.HasAppPassword === true ? "Ja" : "Nej"}}</p>
                         </div>
-                        <div class="col-md-2 pull-right">
-                            <button class="btn btn-danger pull-right margin-left-5" ng-click="openConfirmDeleteTokenModal(token)">Slet</button>
+                        <div class="col-md-2 pull-right" ng-if="!currentPerson.HasAppPassword">
+                            <button class="btn btn-primary pull-right margin-left-5" ng-click="openConfirmCreateAppPasswordModal()">Opret</button>
                         </div>
-                    </div>
-
-                    <div collapse="tokenIsCollapsed">
-                        <div class="row margin-5">
-                            <div class="col-sm-4"></div>
-                            <div class="col-sm-4 margin-bottom-10">
-                                <input ng-enter="saveToken()" ng-model="newTokenDescription" class="form-control fill-width" placeholder="Beskrivelse" />
-                            </div>
-                            <div class="col-md-2 pull-right">
-                                <button class="btn btn-success pull-right margin-left-5" ng-click="saveToken()">Gem</button>
-                            </div>
+                        <div class="col-md-2 pull-right" ng-if="currentPerson.HasAppPassword">
+                            <button class="btn btn-danger pull-right margin-left-5" ng-click="openConfirmDeleteAppPasswordModal()">Nulstil</button>
                         </div>
-                    </div>
-
-                    <div class="col-md-12 margin-bottom-5">
-
-                        <button class="btn btn-primary pull-right fill-width" ng-click="newToken()"><span ng-if="tokenIsCollapsed">Opret ny token</span><span ng-if="!tokenIsCollapsed">Annuller</span></button>
-
-
                     </div>
 
 
