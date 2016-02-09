@@ -10,6 +10,7 @@ using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
 using Microsoft.Ajax.Utilities;
 using Ninject;
+using Core.ApplicationServices.Logger;
 
 namespace Core.ApplicationServices
 {
@@ -18,12 +19,14 @@ namespace Core.ApplicationServices
         private readonly IGenericRepository<PersonalAddress> _addressRepo;
         private readonly IRoute<RouteInformation> _route;
         private readonly IAddressCoordinates _coordinates;
+        private readonly ILogger _logger;
 
-        public PersonService(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route, IAddressCoordinates coordinates)
+        public PersonService(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route, IAddressCoordinates coordinates, ILogger logger)
         {
             _addressRepo = addressRepo;
             _route = route;
             _coordinates = coordinates;
+            _logger = logger;
         }
 
         /// <summary>
@@ -101,7 +104,17 @@ namespace Core.ApplicationServices
                     };
                     if (homeAddress != null && workAddress != null)
                     {
-                        employment.HomeWorkDistance = _route.GetRoute(DriveReportTransportType.Car, new List<Address>() { homeAddress, workAddress }).Length;
+                        try
+                        {
+                            employment.HomeWorkDistance = _route.GetRoute(DriveReportTransportType.Car, new List<Address>() { homeAddress, workAddress }).Length;
+                        }
+                        catch (AddressCoordinatesException e)
+                        {
+                            // Catch the exception to write the error to the log file.
+                            _logger.Log(person.FullName + " kan ikke logge på, da der er fejl i vedkommendes arbejds- eller hjemmeadresse.", "web");
+                            // Rethrow the exception to allow to front end to display the error aswell.
+                            throw e;
+                        }
                     }
                 }
             }
