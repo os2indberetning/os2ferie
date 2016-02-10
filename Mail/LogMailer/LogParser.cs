@@ -27,7 +27,7 @@ namespace Mail.LogMailer
 
 
                     Console.WriteLine(stringDate);
-                    var date = DateTime.ParseExact(stringDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                    var date = DateTime.ParseExact(stringDate, "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture);
 
                     if (date < fromDate) break;
 
