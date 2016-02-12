@@ -14,5 +14,6 @@ namespace Core.DomainModel
         public virtual Person Person { get; set; }
         public string Password { get; set; }
         public string Salt { get; set; }
+        public string GuId { get; set; }
     }
 }

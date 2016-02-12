@@ -15,4 +15,8 @@ angular.module('application').controller('AppLoginModalController', ["$scope","$
     $scope.cancelDelete = function () {
         $modalInstance.dismiss('cancel');
     };
+
+    $scope.createAppPassword = function () {
+        $modalInstance.close($scope.password);
+    }
 }]);

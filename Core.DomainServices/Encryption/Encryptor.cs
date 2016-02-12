@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.DmzModel;
 using System.Security.Cryptography;
+using Core.DomainModel;
 
 namespace Core.DomainServices.Encryption
 {
@@ -45,7 +46,7 @@ namespace Core.DomainServices.Encryption
             }
         }
 
-        public static Employment EncryptEmployment(Employment employment)
+        public static DmzModel.Employment EncryptEmployment(DmzModel.Employment employment)
         {
             employment.EmploymentPosition = StringCipher.Encrypt(employment.EmploymentPosition, EncryptKey);
             return employment;
@@ -70,6 +71,20 @@ namespace Core.DomainServices.Encryption
             token.GuId = StringCipher.Decrypt(token.GuId, EncryptKey);
             token.TokenString = StringCipher.Decrypt(token.TokenString, EncryptKey);
             return token;
+        }
+
+        public static AppLogin EncryptAppLogin(AppLogin appLogin)
+        {
+            appLogin.GuId = StringCipher.Encrypt(appLogin.GuId, EncryptKey);
+            appLogin.UserName = StringCipher.Encrypt(appLogin.UserName, EncryptKey);
+            return appLogin;
+        }
+
+        public static AppLogin DecryptAppLogin(AppLogin appLogin)
+        {
+            appLogin.GuId = StringCipher.Decrypt(appLogin.GuId, EncryptKey);
+            appLogin.UserName = StringCipher.Decrypt(appLogin.UserName, EncryptKey);
+            return appLogin;
         }
 
     }

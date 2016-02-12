@@ -52,6 +52,7 @@
     <Compile Include="Rate.cs" />
     <Compile Include="Route.cs" />
     <Compile Include="Token.cs" />
+    <Compile Include="UserAuth.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

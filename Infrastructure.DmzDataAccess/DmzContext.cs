@@ -21,6 +21,7 @@ namespace Infrastructure.DmzDataAccess
         public virtual DbSet<Rate> Rates { get; set; }
         public virtual DbSet<Route> Routes { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
+        public virtual DbSet<UserAuth> UserAuths { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

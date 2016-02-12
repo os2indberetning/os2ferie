@@ -1,6 +1,6 @@
 ﻿angular.module("application").controller("SettingController", [
-    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope", "$timeout",
-    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope, $timeout) {
+    "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope", "$timeout", "AppLogin",
+    function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope, $timeout, AppLogin) {
         $scope.gridContainer = {};
         $scope.isCollapsed = true;
         $scope.licenseplates = [];
@@ -518,22 +518,6 @@
             });
         };
 
-        $scope.deleteAppLogin = function () {
-            /// <summary>
-            /// Deletes MobileToken.
-            /// </summary>
-            /// <param name="token"></param>
-            //TODO implement
-        }
-
-        $scope.saveAppLogin = function () {
-            /// <summary>
-            /// Saves MobileToken.
-            /// </summary>
-            //TODO Implement
-        }
-
-
         $scope.openConfirmDeleteAppPasswordModal = function () {
             /// <summary>
             /// Opens confirm delete app login modal.
@@ -545,7 +529,11 @@
             });
 
             modalInstance.result.then(function () {
-                //TODO implement
+                AppLogin.delete({ id: $scope.currentPerson.Id }).$promise.then(function () {
+                    $scope.currentPerson.HasAppPassword = false;
+                    $rootScope.CurrentUser.HasAppPassword = false;
+                    NotificationService.AutoFadeNotification("success", "", "App login blev nulstillet.");
+                });
             }, function () {
 
             });
@@ -561,8 +549,13 @@
                 backdrop: 'static',
             });
 
-            modalInstance.result.then(function () {
-                //TODO implement
+            modalInstance.result.then(function (res) {
+                var appLogin = {Password: res, UserName: $scope.currentPerson.Initials, PersonId: $scope.currentPerson.Id};
+                AppLogin.post(appLogin).$promise.then(function () {
+                    $scope.currentPerson.HasAppPassword = true;
+                    $rootScope.CurrentUser.HasAppPassword = true;
+                    NotificationService.AutoFadeNotification("success", "", "App login blev oprettet.");
+                });
             }, function () {
 
             });

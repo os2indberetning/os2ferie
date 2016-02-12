@@ -74,6 +74,7 @@ namespace Core.ApplicationServices
             kernel.Bind<IAddressLaunderer>().To<AddressLaundering>();
             kernel.Bind<IOrgUnitService>().To<OrgUnitService>();
             kernel.Bind<ILogger>().To<Logger.Logger>();
+            kernel.Bind<IAppLoginService>().To<AppLoginService>();
         }        
     }
 }
