@@ -379,6 +379,7 @@
     <Content Include="App\Driving\ConfirmDiscardChangesController.js" />
     <Content Include="App\Driving\ConfirmDiscardChangesTemplate.html" />
     <Content Include="App\Driving\EditCalculatedAppReportTemplate.html" />
+    <Content Include="App\Filters\FormatKmNumber.js" />
     <Content Include="App\MainMenuController.js" />
     <Content Include="App\MyReports\MyAcceptedReportsController.js" />
     <Content Include="App\MyReports\MyRejectedReportsController.js" />
@@ -2375,7 +2376,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1983</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
