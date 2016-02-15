@@ -220,6 +220,7 @@
            /// Opens edit report modal
            /// </summary>
            /// <param name="id"></param>
+
            var modalInstance = $modal.open({
                templateUrl: '/App/MyReports/EditReportTemplate.html',
                controller: 'DrivingController',
@@ -232,6 +233,8 @@
                    }
                }
            });
+
+           $rootScope.editModalInstance = modalInstance;
 
            modalInstance.result.then(function (res) {
                $scope.gridContainer.grid.dataSource.read();
