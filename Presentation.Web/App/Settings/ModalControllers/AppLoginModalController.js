@@ -6,13 +6,17 @@
 }]);
 
 
-angular.module('application').controller('confirmDeleteToken', ["$scope","$modalInstance","token", function ($scope, $modalInstance, token) {
+angular.module('application').controller('AppLoginModalController', ["$scope","$modalInstance", function ($scope, $modalInstance) {
     
     $scope.confirmDelete = function () {
-        $modalInstance.close(token);
+        $modalInstance.close();
     };
 
     $scope.cancelDelete = function () {
         $modalInstance.dismiss('cancel');
     };
+
+    $scope.createAppPassword = function () {
+        $modalInstance.close($scope.password);
+    }
 }]);

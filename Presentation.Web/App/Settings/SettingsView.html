@@ -99,48 +99,32 @@
         <div class="row setting-area">
             <div class="col-lg-12">
                 <div class="form-group form-inline">
-                    <h3>Mobiltokens til app</h3>
+                    <h3>Adgangskode til app</h3>
 
-                    <label for="">Se eller opret tokens til din mobiltelefon</label>
+                    <label for="">Opret eller nulstil adgangskode til app</label>
                     <span class="info-popup" ng-show="mobileTokenHelpText" popover="{{mobileTokenHelpText}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
                     <div class="row margin-5">
                         <div class="col-sm-4">
-                            <p class="margin-5"><strong>Token</strong></p>
+                            <p class="margin-5"><strong>Brugernavn</strong></p>
                         </div>
                         <div class="col-sm-8">
-                            <p class="margin-5"><strong>Beskrivelse</strong> (f.eks. arbejdstelefon eller telefonnummer)</p>
+                            <p class="margin-5"><strong>Har adgangskode</strong></p>
                         </div>
 
                     </div>
-                    <div class="row margin-5" ng-repeat="token in tokens">
+                    <div class="row margin-5">
                         <div class="col-sm-4">
-                            <p class="margin-5">{{ token.Token }}</p>
+                            <p class="margin-5">{{currentPerson.Initials}}</p>
                         </div>
                         <div class="col-sm-4">
-                            <p class="margin-5">{{ token.Description }}</p>
+                            <p class="margin-5">{{currentPerson.HasAppPassword === true ? "Ja" : "Nej"}}</p>
                         </div>
-                        <div class="col-md-2 pull-right">
-                            <button class="btn btn-danger pull-right margin-left-5" ng-click="openConfirmDeleteTokenModal(token)">Slet</button>
+                        <div class="col-md-2 pull-right" ng-if="!currentPerson.HasAppPassword">
+                            <button class="btn btn-primary pull-right margin-left-5" ng-click="openConfirmCreateAppPasswordModal()">Opret</button>
                         </div>
-                    </div>
-
-                    <div collapse="tokenIsCollapsed">
-                        <div class="row margin-5">
-                            <div class="col-sm-4"></div>
-                            <div class="col-sm-4 margin-bottom-10">
-                                <input ng-enter="saveToken()" ng-model="newTokenDescription" class="form-control fill-width" placeholder="Beskrivelse" />
-                            </div>
-                            <div class="col-md-2 pull-right">
-                                <button class="btn btn-success pull-right margin-left-5" ng-click="saveToken()">Gem</button>
-                            </div>
+                        <div class="col-md-2 pull-right" ng-if="currentPerson.HasAppPassword">
+                            <button class="btn btn-danger pull-right margin-left-5" ng-click="openConfirmDeleteAppPasswordModal()">Nulstil</button>
                         </div>
-                    </div>
-
-                    <div class="col-md-12 margin-bottom-5">
-
-                        <button class="btn btn-primary pull-right fill-width" ng-click="newToken()"><span ng-if="tokenIsCollapsed">Opret ny token</span><span ng-if="!tokenIsCollapsed">Annuller</span></button>
-
-
                     </div>
 
 

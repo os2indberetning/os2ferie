@@ -1,0 +1,21 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Opret app adgangskode</h3>
+</div>
+<div class="modal-body" style="margin-bottom: 45px;">
+
+    <div class="col-md-12">
+        <label for="passwordInput">Indtast adgangskode</label>
+        <input type="password" id="passwordInput" ng-model="password" class="form-control"/>
+    </div>
+
+    <div class="col-md-12">
+        <label for="passwordConfirm">Bekræft adgangskode</label>
+        <input type="password" id="passwordConfirm" ng-model="passwordConfirm" class="form-control"/>
+        <p class="text-danger" ng-if="password != passwordConfirm">De to adgangskoder er ikke ens.</p>
+        <p class="text-danger" ng-if="password.length < 3">Adgangskoden skal være minimum 3 tegn.</p>
+    </div>
+</div>
+<div class="modal-footer">
+    <button disabled ng-disabled="!((password != undefined && password.length > 2) && password == passwordConfirm)" class="btn btn-success pull-left new-token-btn" ng-click="createAppPassword()">Gem</button>
+    <button class="btn btn-danger pull-right close-token-modal" ng-click="cancelDelete()">Luk</button>
+</div>

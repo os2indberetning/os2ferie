@@ -36,8 +36,8 @@ namespace Infrastructure.DataAccess
         public IDbSet<RateType> RateTypes { get; set; }
         public IDbSet<CachedAddress> CachedAddresses { get; set; }
         public IDbSet<AddressHistory> AddressHistory { get; set; }
-        public IDbSet<TempAddressHistory> TempAddressHistory { get; set; }
-  
+        public IDbSet<AppLogin> AppLogin { get; set; }
+
 
         /**
          * Sets up 
@@ -68,6 +68,7 @@ namespace Infrastructure.DataAccess
             ConfigurePropertiesForRateType(modelBuilder);
             ConfigurePropertiesForCachedAddress(modelBuilder);
             ConfigurePropertiesForWorkAddress(modelBuilder);
+            ConfigurePropertiesForAppLogin(modelBuilder);
         }
 
         private void ConfigurePropertiesForPerson(DbModelBuilder modelBuilder)
@@ -80,7 +81,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Person>().Property(t => t.CprNumber).IsFixedLength().HasMaxLength(10);
             modelBuilder.Entity<Person>().Property(t => t.FullName).IsRequired();
             modelBuilder.Entity<Person>().Ignore(t => t.IsSubstitute);
-
+            modelBuilder.Entity<Person>().Ignore(t => t.HasAppPassword);
         }
 
         private void ConfigurePropertiesForCachedAddress(DbModelBuilder modelBuilder)
@@ -212,6 +213,14 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<OrgUnit>().Property(p => p.OrgId).IsRequired();
             modelBuilder.Entity<OrgUnit>().Property(p => p.ShortDescription).IsRequired();
             modelBuilder.Entity<OrgUnit>().Property(p => p.Level).IsRequired();
+        }
+
+        private void ConfigurePropertiesForAppLogin(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AppLogin>().Property(p => p.Password).IsRequired();
+            modelBuilder.Entity<AppLogin>().Property(p => p.PersonId).IsRequired();
+            modelBuilder.Entity<AppLogin>().Property(p => p.Salt).IsRequired();
+            modelBuilder.Entity<AppLogin>().Property(p => p.UserName).IsRequired();
         }
 
         private void ConfigurePropertiesForSubstitute(DbModelBuilder modelBuilder)

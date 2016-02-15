@@ -22,14 +22,16 @@ namespace OS2Indberetning.Controllers
         private readonly IGenericRepository<Employment> _employmentRepo = new GenericRepository<Employment>(new DataContext());
         private readonly IGenericRepository<LicensePlate> _licensePlateRepo = new GenericRepository<LicensePlate>(new DataContext());
         private readonly IGenericRepository<Substitute> _substituteRepo;
+        private readonly IGenericRepository<AppLogin> _appLoginRepo;
 
-        public PersonController(IGenericRepository<Person> repo, IPersonService personService, IGenericRepository<Employment> employmentRepo, IGenericRepository<LicensePlate> licensePlateRepo, IGenericRepository<Substitute> substituteRepo)
+        public PersonController(IGenericRepository<Person> repo, IPersonService personService, IGenericRepository<Employment> employmentRepo, IGenericRepository<LicensePlate> licensePlateRepo, IGenericRepository<Substitute> substituteRepo, IGenericRepository<AppLogin> appLoginRepo)
             : base(repo, repo)
         {
             _person = personService;
             _employmentRepo = employmentRepo;
             _licensePlateRepo = licensePlateRepo;
             _substituteRepo = substituteRepo;
+            _appLoginRepo = appLoginRepo;
         }
 
         // GET: odata/Person
@@ -76,6 +78,7 @@ namespace OS2Indberetning.Controllers
 
             _person.AddHomeWorkDistanceToEmployments(CurrentUser);
             CurrentUser.CprNumber = "";
+            CurrentUser.HasAppPassword = _appLoginRepo.AsQueryable().Any(x => x.PersonId == CurrentUser.Id);
             CurrentUser.IsSubstitute = _substituteRepo.AsQueryable().Any(x => x.SubId.Equals(CurrentUser.Id) && x.StartDateTimestamp < currentDateTimestamp && x.EndDateTimestamp > currentDateTimestamp);
             return CurrentUser;
         }
@@ -105,6 +108,7 @@ namespace OS2Indberetning.Controllers
 
             _person.AddHomeWorkDistanceToEmployments(result);
             result.CprNumber = "";
+            result.HasAppPassword = _appLoginRepo.AsQueryable().Any(x => x.PersonId == result.Id);
             result.IsSubstitute = _substituteRepo.AsQueryable().Any(x => x.SubId.Equals(result.Id) && x.StartDateTimestamp < currentDateTimestamp && x.EndDateTimestamp > currentDateTimestamp);
             return result;
         }

@@ -361,6 +361,26 @@
     <Compile Include="Migrations\201512211341442_diditwork.Designer.cs">
       <DependentUpon>201512211341442_diditwork.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601271351233_AddedAppLoginAndHasAppPasswordToPerson.cs" />
+    <Compile Include="Migrations\201601271351233_AddedAppLoginAndHasAppPasswordToPerson.Designer.cs">
+      <DependentUpon>201601271351233_AddedAppLoginAndHasAppPasswordToPerson.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601271405260_MadeHasAppPasswordIgnored.cs" />
+    <Compile Include="Migrations\201601271405260_MadeHasAppPasswordIgnored.Designer.cs">
+      <DependentUpon>201601271405260_MadeHasAppPasswordIgnored.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602101032087_dunno3.cs" />
+    <Compile Include="Migrations\201602101032087_dunno3.Designer.cs">
+      <DependentUpon>201602101032087_dunno3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602120907025_AddedAppLogin.cs" />
+    <Compile Include="Migrations\201602120907025_AddedAppLogin.Designer.cs">
+      <DependentUpon>201602120907025_AddedAppLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602121150269_AddedGuIdToAppLogin.cs" />
+    <Compile Include="Migrations\201602121150269_AddedGuIdToAppLogin.Designer.cs">
+      <DependentUpon>201602121150269_AddedGuIdToAppLogin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -597,6 +617,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512210915295_RemovedNavigationPropertiesOnDriveReportPoint.resx">
       <DependentUpon>201512210915295_RemovedNavigationPropertiesOnDriveReportPoint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601271351233_AddedAppLoginAndHasAppPasswordToPerson.resx">
+      <DependentUpon>201601271351233_AddedAppLoginAndHasAppPasswordToPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601271405260_MadeHasAppPasswordIgnored.resx">
+      <DependentUpon>201601271405260_MadeHasAppPasswordIgnored.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602101032087_dunno3.resx">
+      <DependentUpon>201602101032087_dunno3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602120907025_AddedAppLogin.resx">
+      <DependentUpon>201602120907025_AddedAppLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602121150269_AddedGuIdToAppLogin.resx">
+      <DependentUpon>201602121150269_AddedGuIdToAppLogin.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -20,6 +20,7 @@ namespace Core.DomainModel
         public bool IsAdmin { get; set; }
         public bool IsSubstitute { get; set; }
         public bool IsActive { get; set; }
+        public bool HasAppPassword { get; set; }
 
         public virtual ICollection<PersonalAddress> PersonalAddresses { get; set; }
         public virtual ICollection<PersonalRoute> PersonalRoutes { get; set; }
