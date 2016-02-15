@@ -380,6 +380,7 @@
     <Content Include="App\Driving\ConfirmDiscardChangesController.js" />
     <Content Include="App\Driving\ConfirmDiscardChangesTemplate.html" />
     <Content Include="App\Driving\EditCalculatedAppReportTemplate.html" />
+    <Content Include="App\Filters\FormatKmNumber.js" />
     <Content Include="App\MainMenuController.js" />
     <Content Include="App\MyReports\MyAcceptedReportsController.js" />
     <Content Include="App\MyReports\MyRejectedReportsController.js" />

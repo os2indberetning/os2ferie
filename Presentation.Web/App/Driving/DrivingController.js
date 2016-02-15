@@ -609,16 +609,6 @@
                                 return;
                             }
 
-                            // Prevents flickering of addresses when loading a report to be edited.
-                            if ($scope.initialEditReportLoad === true) {
-                                $scope.initialEditReportLoad = false;
-                                return;
-                            }
-
-                            if ($scope.IsRoute) {
-                                setNotRoute(false);
-                            }
-
                             mapChanging = true;
                             $scope.DriveReport.Addresses = [];
                             // Load the adresses from the map.
@@ -635,6 +625,18 @@
 
                                 mapChanging = false;
                             });
+
+                            // Prevents flickering of addresses when loading a report to be edited.
+                            if ($scope.initialEditReportLoad === true) {
+                                $scope.initialEditReportLoad = false;
+                                return;
+                            }
+
+                            if ($scope.IsRoute) {
+                                setNotRoute(false);
+                            }
+
+                           
                         }
                     });
                     OS2RouteMap.set($scope.mapStartAddress);

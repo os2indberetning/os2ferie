@@ -225,7 +225,7 @@
                 <p class="text-primary">Kørte kilometer</p>
             </div>
             <div class="col-sm-6 text-right">
-                {{Number(DrivenKMDisplay).toFixed(2).toString().replace(".",",")}} km
+                {{DrivenKMDisplay | FormatKmNumberString}} km
             </div>
         </div>
         <div class="row">
@@ -233,7 +233,7 @@
                 <p class="text-primary">Merkørselsfradrag</p>
             </div>
             <div class="col-sm-6 text-right">
-                {{Number(TransportAllowance).toFixed(2).toString().replace(".",",")}} km
+                {{TransportAllowance | FormatKmNumberString}} km
             </div>
         </div>
         <div class="row">
@@ -242,7 +242,7 @@
             </div>
             <div class="col-sm-6 text-right">
                 <div ng-if="Number(DrivenKMDisplay > Number(TransportAllowance))">
-                    {{ Number(Number(DrivenKMDisplay).toFixed(2) - Number(TransportAllowance).toFixed(2)).toFixed(2).toString().replace(".",",")  }} km
+                    {{ ((DrivenKMDisplay | FormatKmNumber) - (TransportAllowance | FormatKmNumber)) | FormatKmNumberString}} km
                 </div>
                 <div ng-if="Number(DrivenKMDisplay <= Number(TransportAllowance))">
                     0 km
