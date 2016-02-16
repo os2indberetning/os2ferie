@@ -35,12 +35,15 @@
             }
 
             var result = toolTip + roundTrip + globe;
-            var comment = data.UserComment != null ? data.UserComment : "Ingen kommentar angivet";
+            var comment = data.UserComment != null ? data.UserComment : "Ingen kommentar indtastet";
 
             if (data.IsFromApp) {
-                var fromAppTooltip = "<div class='inline margin-left-5'>Indberettet fra mobil app</div><div class='inline margin-right-5 pull-right' kendo-tooltip k-content=\"'" + data.UserComment + "'\"><i class=\"fa fa-2x fa-comment-o\"></i></div>";
+                var fromAppTooltip = "<div class='inline margin-left-5'>Indberettet fra mobil app</div>";
+
+                var commentFromApp = (data.UserComment != null && data.UserComment != "Ingen kommentar indtastet") ? "<div class='inline margin-right-5 pull-right' kendo-tooltip k-content=\"'" + data.UserComment + "'\"><i class=\"fa fa-2x fa-comment-o\"></i></div>" : "";
+
                 if (data.DriveReportPoints.length > 1) {
-                    result = toolTip + roundTrip + fromAppTooltip + globe + edited;
+                    result = toolTip + roundTrip + fromAppTooltip + globe + commentFromApp + edited;
                 } else {
                     // Set road tooltip to just contain "Aflæst manuelt"
                     toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + "Aflæst manuelt" + "'\">" + gridContent + "</div>";
