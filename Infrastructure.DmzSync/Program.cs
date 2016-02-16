@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -28,6 +28,8 @@ namespace Infrastructure.DmzSync
         static void Main(string[] args)
         {
 
+            var logger = NinjectWebKernel.CreateKernel().Get<ILogger>();
+       
             // hacks because of error with Entity Framework.
             // This forces the dmzconnection to use MySql.
             new DataContext();
@@ -45,32 +47,112 @@ namespace Infrastructure.DmzSync
             var rateSync = new RateSyncService(new GenericDmzRepository<Core.DmzModel.Rate>(new DmzContext()),
                 new GenericRepository<Rate>(new DataContext()));
 
-            Console.WriteLine("TokenSyncFromDmz");
-            tokenSync.SyncFromDmz();
 
-            Console.WriteLine("DriveReportsSyncFromDmz");
-            driveSync.SyncFromDmz();
+            try
+            {
+                Console.WriteLine("TokenSyncFromDmz");
+                tokenSync.SyncFromDmz();
 
-            Console.WriteLine("TokenClearDmz");
-            tokenSync.ClearDmz();
+            }
+            catch (Exception)
+            {
+                logger.Log("Failed to sync Tokens from DMZ", "dmz");
+                throw;
+            }
 
-            Console.WriteLine("DriveReportClearDmz");
-            driveSync.ClearDmz();
+            try
+            {
+                Console.WriteLine("DriveReportsSyncFromDmz");
+                driveSync.SyncFromDmz();
+
+            }
+            catch (Exception)
+            {
+                logger.Log("Failed to sync Drive Reports from DMZ", "dmz");
+                throw;
+            }
+
+            try
+            {
+                Console.WriteLine("TokenClearDmz");
+                tokenSync.ClearDmz();
+            }
+            catch (Exception)
+            {
+                logger.Log("Failed to clear Tokens on DMZ", "dmz");
+                throw;
+            }
+
+            try
+            {
+                Console.WriteLine("DriveReportClearDmz");
+                driveSync.ClearDmz();
+
+            }
+            catch (Exception)
+            {
+                logger.Log("Failed to clear Drive Reports on DMZ", "dmz");
+                throw;
+            }
+
+
+            try
+            {
+                Console.WriteLine("PersonClearDmz");
+                personSync.ClearDmz();
+            }
+            catch (Exception)
+            {
+                logger.Log("Failed to clear Persons on DMZ", "dmz");
+                throw;
+            }
+
+            try
+            {
+                Console.WriteLine("RateClearDmz");
+                rateSync.ClearDmz();
+            }
+            catch (Exception)
+            {
+                logger.Log("Failed to clear Rates on DMZ", "dmz");
+                throw;
+            }
+
+            try
+            {
+                Console.WriteLine("PersonSyncToDmz");
+                personSync.SyncToDmz();
+
+            }
+            catch (Exception)
+            {
+                logger.Log("Failed to sync Persons to DMZ", "dmz");
+                throw;
+            }
+
+            try
+            {
+                Console.WriteLine("TokenSyncToDmz");
+                tokenSync.SyncToDmz();
+
+            }
+            catch (Exception)
+            {
+                logger.Log("Failed to sync Tokens to DMZ", "dmz");
+                throw;
+            }
+
+            try
+            {
+                Console.WriteLine("RateSyncToDmz");
+                rateSync.SyncToDmz();
+            }
+            catch (Exception)
+            {
+                logger.Log("Failed to sync Rates to DMZ", "dmz");
+                throw;
+            }
             
-            Console.WriteLine("PersonClearDmz");
-            personSync.ClearDmz();
-            
-            Console.WriteLine("RateClearDmz");
-            rateSync.ClearDmz();
-
-            Console.WriteLine("PersonSyncToDmz");
-            personSync.SyncToDmz();
-
-            Console.WriteLine("TokenSyncToDmz");
-            tokenSync.SyncToDmz();
-
-            Console.WriteLine("RateSyncToDmz");
-            rateSync.SyncToDmz();
 
             Console.WriteLine("Done");
 
