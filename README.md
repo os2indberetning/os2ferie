@@ -1,5 +1,13 @@
 # OS2Indberetning
 
+OS2Indberetning was programmed by IT Minds ApS (http://it-minds.dk) for OS2 - Offentligt digitaliseringsfællesskab (http://os2.eu).
+
+Copyright (c) 2016, OS2 - Offentligt digitaliseringsfællesskab.
+
+OS2Indberetning is free software; you may use, study, modify and distribute it under the terms of version 2.0 of the Mozilla Public License. See the LICENSE file for details. If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+All source code in this and the underlying directories is subject to the terms of the Mozilla Public License, v. 2.0.
+
 ## Opsætning
 
 Tilpasning og opsætning af løsning gøres igennem konfigurationsfiler som ligger i projekternes rodmapper. Herunder gennemgåes de forskellige projekter og de relevante konfigurationsfiler, hvor der skal foretages ændringer.
