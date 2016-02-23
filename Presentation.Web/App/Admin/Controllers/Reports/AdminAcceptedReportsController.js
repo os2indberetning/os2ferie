@@ -324,6 +324,8 @@ angular.module("application").controller("AdminAcceptedReportsController", [
                }
            });
 
+           $rootScope.editModalInstance = modalInstance;
+
            modalInstance.result.then(function (res) {
                $scope.gridContainer.grid.dataSource.read();
            });
