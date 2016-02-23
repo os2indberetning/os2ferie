@@ -36,9 +36,10 @@
 
             var result = toolTip + roundTrip + globe;
             var comment = data.UserComment != null ? data.UserComment : "Ingen kommentar angivet";
+            var commentToolTip = comment != "Ingen kommentar angivet" ? "<div class='inline margin-right-5 pull-right' kendo-tooltip k-content=\"'" + comment + "'\"><i class=\"fa fa-2x fa-comment-o\"></i></div>" : "";
 
             if (data.IsFromApp) {
-                var fromAppTooltip = "<div class='inline margin-left-5'>Indberettet fra mobil app</div><div class='inline margin-right-5 pull-right' kendo-tooltip k-content=\"'" + data.UserComment + "'\"><i class=\"fa fa-2x fa-comment-o\"></i></div>";
+                var fromAppTooltip = "<div class='inline margin-left-5'>Indberettet fra mobil app</div>" + commentToolTip;
                 if (data.DriveReportPoints.length > 1) {
                     result = toolTip + roundTrip + fromAppTooltip + globe + edited;
                 } else {
