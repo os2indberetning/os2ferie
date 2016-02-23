@@ -41,7 +41,7 @@
             if (data.IsFromApp) {
                 var fromAppTooltip = "<div class='inline margin-left-5'>Indberettet fra mobil app</div>" + commentToolTip;
                 if (data.DriveReportPoints.length > 1) {
-                    result = toolTip + roundTrip + fromAppTooltip + globe + edited;
+                    result = toolTip + roundTrip + globe + fromAppTooltip + edited;
                 } else {
                     // Set road tooltip to just contain "Aflæst manuelt"
                     toolTip = "<div class='inline margin-left-5' kendo-tooltip k-content=\"'" + "Aflæst manuelt" + "'\">" + gridContent + "</div>";
