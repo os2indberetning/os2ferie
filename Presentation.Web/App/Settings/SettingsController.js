@@ -313,6 +313,10 @@
                 dataBound: function () {
                     this.expandRow(this.tbody.find("tr.k-master-row").first());
                 },
+                sort: {
+                    field: "Description",
+                    dir: "asc"
+                },
                 columns: [
                     {
                         field: "Description",

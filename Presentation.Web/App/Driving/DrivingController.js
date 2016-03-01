@@ -332,7 +332,15 @@
                 value.PresentationString += value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
                 value.address = value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town;
             });
-            $scope.PersonalAddresses = res;
+
+            $scope.PersonalAddresses = new kendo.data.DataSource({
+                data: res,
+                sort: {
+                    field: "PresentationString",
+                    dir: "asc"
+                }
+            });
+
         }));
 
 
