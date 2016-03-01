@@ -58,7 +58,7 @@
             }
         }
 
-        $scope.$on('4kmClicked', function (event, mass) {
+        $scope.$on('orgSettingsClicked', function (event, mass) {
             $scope.gridContainer.grid.dataSource.read();
         });
 
@@ -91,6 +91,25 @@
                     },
                     total: function (data) {
                         return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
+                    },
+                    model: {
+                        fields: {
+                            OrgId: {
+                                editable: false
+                            },
+                            ShortDescription: {
+                                editable: false
+                            },
+                            LongDescription: {
+                                editable: false
+                            },
+                            HasAccessToFourKmRule: {
+                                editable: false
+                            },
+                            DefaultKilometerAllowance: {
+                                type: "string"
+                            }
+                        }
                     }
                 },
                 pageSize: 20,
@@ -98,7 +117,6 @@
                 serverFiltering: true,
             },
             sortable: true,
-
             pageable: {
                 messages: {
                     display: "{0} - {1} af {2} organisationsenheder", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
@@ -117,6 +135,7 @@
             dataBound: function () {
                 this.expandRow(this.tbody.find("tr.k-master-row").first());
             },
+            editable:true,
             columns: [
                 {
                     field: "OrgId",
@@ -140,9 +159,63 @@
                             return "<input type='checkbox' ng-click='rowChecked(" + data.Id + ", true)'></input>";
                         }
                     }
+                },
+                {
+                    field: "DefaultKilometerAllowance",
+                    title: "Standard kilometeropgørelse",
+                    editor: kilometerAllowanceDropDownEditor,
+                    template: function(data) {
+                        if (data.DefaultKilometerAllowance === "Calculated") {
+                            return "Beregnet";
+                        }
+                        else if (data.DefaultKilometerAllowance === "Read") {
+                            return "Aflæst";
+                        } else if (data.DefaultKilometerAllowance === "CalculatedWithoutExtraDistance") {
+                            return "Beregnet uden merkørsel";
+                        } else {
+                            return "Fejl";
+                        }
+                    }
                 }
-            ]
+            ],
+            
         };
+
+        function kilometerAllowanceDropDownEditor(container, options) {
+
+            var orgId = options.model.Id;
+
+            var allowanceData = [
+                { name: "Beregnet", value: "Calculated" },
+                { name: "Aflæst", value: "Read" },
+                { name: "Beregnet uden merkørsel", value: "CalculatedWithoutExtraDistance" }
+            ];
+
+            var dataSource = new kendo.data.DataSource({
+                data: allowanceData
+            });
+
+            $('<input required data-text-field="name" data-value-field="value" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    autoBind: false,
+                    dataSource: dataSource,
+                    change: function (e) {
+                        
+                        OrgUnit.patch({ id: orgId }, { "DefaultKilometerAllowance": allowanceData[e.sender.selectedIndex].value }).$promise.then(function () {
+                            NotificationService.AutoFadeNotification("success", "", "Opdaterede organisationen");
+
+                            //// Reload CurrentUser to update default kilometerallowance in DrivingController
+                            Person.GetCurrentUser().$promise.then(function (data) {
+                                $rootScope.CurrentUser = data;
+                            });
+                        });
+
+
+                    },
+                });
+
+        }
 
         $scope.rowChecked = function (id, newValue) {
             /// <summary>

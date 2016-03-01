@@ -9,6 +9,7 @@ namespace Core.DomainModel
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public bool HasAccessToFourKmRule { get; set; }
+        public KilometerAllowance DefaultKilometerAllowance { get; set; }
         public virtual WorkAddress Address { get; set; }
         public int AddressId { get; set; }
         public int Level { get; set; }

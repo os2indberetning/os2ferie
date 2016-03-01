@@ -381,6 +381,10 @@
     <Compile Include="Migrations\201602121150269_AddedGuIdToAppLogin.Designer.cs">
       <DependentUpon>201602121150269_AddedGuIdToAppLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603011050474_AddedDefaultKilometerAllowanceToOrg.cs" />
+    <Compile Include="Migrations\201603011050474_AddedDefaultKilometerAllowanceToOrg.Designer.cs">
+      <DependentUpon>201603011050474_AddedDefaultKilometerAllowanceToOrg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -632,6 +636,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201602121150269_AddedGuIdToAppLogin.resx">
       <DependentUpon>201602121150269_AddedGuIdToAppLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603011050474_AddedDefaultKilometerAllowanceToOrg.resx">
+      <DependentUpon>201603011050474_AddedDefaultKilometerAllowanceToOrg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
