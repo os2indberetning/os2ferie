@@ -47,6 +47,8 @@ namespace Infrastructure.DmzSync
             var rateSync = new RateSyncService(new GenericDmzRepository<Core.DmzModel.Rate>(new DmzContext()),
                 new GenericRepository<Rate>(new DataContext()));
 
+            var userSync = new UserAuthSyncService(new GenericRepository<AppLogin>(new DataContext()),
+                new GenericDmzRepository<UserAuth>(new DmzContext()));
 
             try
             {
@@ -139,6 +141,18 @@ namespace Infrastructure.DmzSync
             catch (Exception)
             {
                 logger.Log("Failed to sync Tokens to DMZ", "dmz");
+                throw;
+            }
+
+            try
+            {
+                Console.WriteLine("UserAuthSync");
+                userSync.SyncToDmz();
+
+            }
+            catch (Exception)
+            {
+                logger.Log("Failed to sync UserAuth to DMZ", "dmz");
                 throw;
             }
 
