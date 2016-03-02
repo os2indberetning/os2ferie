@@ -401,15 +401,10 @@ namespace Core.ApplicationServices
             + "Med venlig hilsen " + admin.FullName + Environment.NewLine + Environment.NewLine
             + "Besked fra administrator: " + Environment.NewLine + emailText;
 
-            if (report.Person.RecieveMail)
-            {
-                _mailSender.SendMail(report.Person.Mail, "En administrator har ændret i din indberetning.", mailContent);
-            }
+            _mailSender.SendMail(report.Person.Mail, "En administrator har ændret i din indberetning.", mailContent);
 
-            if (report.ApprovedBy.RecieveMail)
-            {
-                _mailSender.SendMail(report.ApprovedBy.Mail, "En administrator har ændret i din indberetning.", mailContent);
-            }
+            _mailSender.SendMail(report.ApprovedBy.Mail, "En administrator har ændret i en indberetning du har godkendt.", mailContent);
+
 
 
         }
