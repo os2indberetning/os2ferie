@@ -21,7 +21,6 @@
 
         var personId = $rootScope.CurrentUser.Id;
         $scope.currentPerson = $rootScope.CurrentUser;
-        debugger;
         $scope.mailAdvice = $scope.currentPerson.RecieveMail;
 
         $scope.showMailNotification = $rootScope.CurrentUser.IsLeader || $rootScope.CurrentUser.IsSubstitute;
@@ -312,6 +311,10 @@
                 },
                 dataBound: function () {
                     this.expandRow(this.tbody.find("tr.k-master-row").first());
+                },
+                sort: {
+                    field: "Description",
+                    dir: "asc"
                 },
                 columns: [
                     {

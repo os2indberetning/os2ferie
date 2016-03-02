@@ -45,7 +45,7 @@
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div ng-hide="menuCollapse">
                 <div class="navbar-collapse ng-cloak">
-                    <ul class="nav navbar-nav side-nav" style="height: 100% !important; border-right: 1px; border:black">
+                    <ul class="nav navbar-nav side-nav" style="height: 100% !important; border-right: 1px; border: black">
                         <li ui-sref-active="active" class="mainMenuLink">
                             <a ui-sref="driving"><i class="fa fa-car margin-right-10"></i>Indberet tjenestekørsel</a>
                         </li>
@@ -68,7 +68,6 @@
                     </ul>
 
                 </div>
-
             </div>
             <div ng-hide="!menuCollapse">
                 <div class="navbar-collapse ng-cloak">
@@ -94,21 +93,27 @@
 
 
                     </ul>
+
                 </div>
+                
             </div>
+            
             <!-- /.navbar-collapse -->
         </nav>
-
+        
 
         @RenderBody()
 
 
+        <div ng-hide="menuCollapse" class="version-text hidden-xs">@System.Configuration.ConfigurationManager.AppSettings["VERSION"]</div>
 
     </div>
     </div>
     <div class="errors-container">
 
     </div>
+
+    
 
     <!-- REQUIERED LIBRARIES FOR AWS SNIPPET -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

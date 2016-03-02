@@ -20,6 +20,8 @@ namespace Core.DmzModel
 
         public int RateId { get; set; }
 
+        public long? SyncedAt { get; set; }
+
         public virtual Profile Profile { get; set; }
 
         public virtual Rate Rate { get; set; }
