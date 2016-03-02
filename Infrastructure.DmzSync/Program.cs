@@ -87,19 +87,6 @@ namespace Infrastructure.DmzSync
 
             try
             {
-                Console.WriteLine("DriveReportClearDmz");
-                driveSync.ClearDmz();
-
-            }
-            catch (Exception)
-            {
-                logger.Log("Failed to clear Drive Reports on DMZ", "dmz");
-                throw;
-            }
-
-
-            try
-            {
                 Console.WriteLine("PersonClearDmz");
                 personSync.ClearDmz();
             }
