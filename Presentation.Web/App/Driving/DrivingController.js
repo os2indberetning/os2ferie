@@ -322,7 +322,7 @@
                 if (value.Type == "Home") {
                     // Store home address
                     $scope.HomeAddress = value;
-                    value.PresentationString += "Hjemmeadresse : ";
+                    value.PresentationString = "Hjemmeadresse : ";
                 }
                 if (value.Type == "AlternativeHome") {
                     // Overwrite home address if user has alternative home address.
