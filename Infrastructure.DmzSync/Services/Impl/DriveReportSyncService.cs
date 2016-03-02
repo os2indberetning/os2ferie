@@ -51,7 +51,7 @@ namespace Infrastructure.DmzSync.Services.Impl
         /// </summary>
         public void SyncFromDmz()
         {
-            var reports = _dmzDriveReportRepo.AsQueryable().ToList();
+            var reports = _dmzDriveReportRepo.AsQueryable().Where(x => x.SyncedAt == null).ToList();
             var max = reports.Count;
 
             for (var i = 0; i < max; i++)
@@ -65,7 +65,6 @@ namespace Infrastructure.DmzSync.Services.Impl
                 var viaPoints = new List<DriveReportPoint>();
                 for (var j = 0; j < dmzReport.Route.GPSCoordinates.Count; j++)
                 {
-
                     var gpsCoord = dmzReport.Route.GPSCoordinates.ToArray()[j];
                     gpsCoord = Encryptor.DecryptGPSCoordinate(gpsCoord);
 
@@ -139,7 +138,14 @@ namespace Infrastructure.DmzSync.Services.Impl
 
                 newReport.RouteGeometry = GeoService.Encode(points);
 
-                _driveService.Create(newReport);
+                try {
+                    _driveService.Create(newReport);
+                    reports[i].SyncedAt = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                    _dmzDriveReportRepo.Save();
+                } catch(Exception)
+                {
+                    _logger.Log("An unknown error occured while trying to sync a DriveReport belonging to " + reports[i].Profile.FullName, "dmz");
+                }
             }
         }
 
@@ -153,13 +159,12 @@ namespace Infrastructure.DmzSync.Services.Impl
         }
 
         /// <summary>
-        /// Clears all DriveReports from DMZ database.
+        /// Not implemented.
         /// </summary>
         public void ClearDmz()
         {
-            var reports = _dmzDriveReportRepo.AsQueryable().ToList();
-            _dmzDriveReportRepo.DeleteRange(reports);
-            _dmzDriveReportRepo.Save();
+            // After implementing the SyncedAt property on drivereports this method is no longer used.
+            throw new NotImplementedException();
         }
 
     }
