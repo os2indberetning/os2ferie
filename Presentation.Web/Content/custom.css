@@ -454,3 +454,12 @@ li.mainMenuLink.active > a > i.fa {
 .modal-body {
     min-height: 140px;
 }
+
+.version-text {
+    color: #868686; 
+    padding: 5px; 
+    position: fixed;
+    bottom: 0;
+    z-index: 99999;
+    left: 0;
+}
