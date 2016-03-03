@@ -56,9 +56,9 @@ namespace Infrastructure.DmzSync
                 tokenSync.SyncFromDmz();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                logger.Log("Failed to sync Tokens from DMZ", "dmz");
+                logger.Log("Failed to sync Tokens from DMZ", "dmz", ex);
                 throw;
             }
 
@@ -68,9 +68,9 @@ namespace Infrastructure.DmzSync
                 driveSync.SyncFromDmz();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                logger.Log("Failed to sync Drive Reports from DMZ", "dmz");
+                logger.Log("Failed to sync Drive Reports from DMZ", "dmz", ex);
                 throw;
             }
 
@@ -79,9 +79,9 @@ namespace Infrastructure.DmzSync
                 Console.WriteLine("TokenClearDmz");
                 tokenSync.ClearDmz();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                logger.Log("Failed to clear Tokens on DMZ", "dmz");
+                logger.Log("Failed to clear Tokens on DMZ", "dmz", ex);
                 throw;
             }
 
@@ -90,9 +90,9 @@ namespace Infrastructure.DmzSync
                 Console.WriteLine("PersonClearDmz");
                 personSync.ClearDmz();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                logger.Log("Failed to clear Persons on DMZ", "dmz");
+                logger.Log("Failed to clear Persons on DMZ", "dmz", ex);
                 throw;
             }
 
@@ -101,9 +101,9 @@ namespace Infrastructure.DmzSync
                 Console.WriteLine("RateClearDmz");
                 rateSync.ClearDmz();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                logger.Log("Failed to clear Rates on DMZ", "dmz");
+                logger.Log("Failed to clear Rates on DMZ", "dmz", ex);
                 throw;
             }
 
@@ -113,9 +113,9 @@ namespace Infrastructure.DmzSync
                 personSync.SyncToDmz();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                logger.Log("Failed to sync Persons to DMZ", "dmz");
+                logger.Log("Failed to sync Persons to DMZ", "dmz", ex);
                 throw;
             }
 
@@ -125,9 +125,9 @@ namespace Infrastructure.DmzSync
                 tokenSync.SyncToDmz();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                logger.Log("Failed to sync Tokens to DMZ", "dmz");
+                logger.Log("Failed to sync Tokens to DMZ", "dmz", ex);
                 throw;
             }
 
@@ -137,9 +137,9 @@ namespace Infrastructure.DmzSync
                 userSync.SyncToDmz();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                logger.Log("Failed to sync UserAuth to DMZ", "dmz");
+                logger.Log("Failed to sync UserAuth to DMZ", "dmz", ex);
                 throw;
             }
 
@@ -148,9 +148,9 @@ namespace Infrastructure.DmzSync
                 Console.WriteLine("RateSyncToDmz");
                 rateSync.SyncToDmz();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                logger.Log("Failed to sync Rates to DMZ", "dmz");
+                logger.Log("Failed to sync Rates to DMZ", "dmz", ex);
                 throw;
             }
             
