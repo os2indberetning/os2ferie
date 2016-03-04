@@ -10,18 +10,23 @@ namespace Core.ApplicationServices.Logger
 {
     public class Logger : ILogger
     {
-        public void Log(string msg, string fileName, Exception ex = null)
+        public void Log(string msg, string fileName)
         {
             using (var file = new StreamWriter("c://logs//os2eindberetning//" + fileName + ".log", true))
             {
                 var time = DateTime.Now.ToString();
                 file.WriteLine(time + " : " + msg);
+                file.Close();
+            }
+        }
 
-                if (ex != null)
-                {
-                    file.WriteLine(ex);
-                }
-
+        public void Log(string msg, string fileName, Exception ex)
+        {
+            using (var file = new StreamWriter("c://logs//os2eindberetning//" + fileName + ".log", true))
+            {
+                var time = DateTime.Now.ToString();
+                file.WriteLine(time + " : " + msg);
+                if (ex != null) file.WriteLine(ex);
                 file.Close();
             }
         }
