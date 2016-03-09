@@ -19,5 +19,16 @@ namespace Core.ApplicationServices.Logger
                 file.Close();
             }
         }
+
+        public void Log(string msg, string fileName, Exception ex)
+        {
+            using (var file = new StreamWriter("c://logs//os2eindberetning//" + fileName + ".log", true))
+            {
+                var time = DateTime.Now.ToString();
+                file.WriteLine(time + " : " + msg);
+                if (ex != null) file.WriteLine(ex);
+                file.Close();
+            }
+        }
     }
 }
