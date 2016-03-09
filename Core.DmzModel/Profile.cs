@@ -30,6 +30,8 @@ namespace Core.DmzModel
 
         public string HomeLongitude { get; set; }
 
+        public bool IsActive { get; set; }
+
         public virtual ICollection<DriveReport> DriveReports { get; set; }
 
         public virtual ICollection<Employment> Employments { get; set; }
