@@ -124,7 +124,6 @@ namespace OS2Indberetning.Controllers
             }
             catch (Exception e)
             {
-                _logger.Log("Exception doing post of type " + typeof(T), "web");
                 return InternalServerError(e);
             }
         }
@@ -151,7 +150,6 @@ namespace OS2Indberetning.Controllers
             }
             catch (Exception e)
             {
-                _logger.Log("Exception doing patch of type " + typeof(T), "web");
                 return InternalServerError(e);
             }
 
@@ -172,7 +170,6 @@ namespace OS2Indberetning.Controllers
             }
             catch (Exception e)
             {
-                _logger.Log("Exception doing delete", "web");
                 return InternalServerError(e);
             }
             return Ok();

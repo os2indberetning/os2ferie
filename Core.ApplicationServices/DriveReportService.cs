@@ -60,13 +60,11 @@ namespace Core.ApplicationServices
         {
             if (report.PersonId == 0)
             {
-                _logger.Log("Forsøg på at oprette indberetning uden person angivet.", "web");
                 throw new Exception("No person provided");
             }
 
             if (!Validate(report))
             {
-                _logger.Log("Forsøg på at oprette indberetning med ugyldige parametre.", "web");
                 throw new Exception("DriveReport has some invalid parameters");
             }
 

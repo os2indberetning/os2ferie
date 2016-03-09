@@ -97,7 +97,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                         catch (AddressCoordinatesException e)
                         {
                             coordinatesFailed = true;
-                            _logger.Log("Report belonging to " + dmzReport.Profile.FullName + " with purpose \"" + dmzReport.Purpose + "\" had invalid coordinates and was not synced.", "dmz");
+                            _logger.Log("Indberetning tilhørende " + dmzReport.Profile.FullName + " med formål \"" + dmzReport.Purpose + "\" har ugyldige koordinater og blev ikke synkroniseret.", "dmz");
                             break;
                         }
                     }
