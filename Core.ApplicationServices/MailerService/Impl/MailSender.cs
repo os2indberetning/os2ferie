@@ -41,7 +41,6 @@ namespace Core.ApplicationServices.MailerService.Impl
         {
             if (String.IsNullOrWhiteSpace(to))
             {
-                _logger.Log("Email adressen er tom", "mail");
                 return;
             }
             var msg = new MailMessage();
