@@ -14,8 +14,8 @@
            $scope.$broadcast('accountClicked');
        }
 
-       $scope.fourKmClicked = function () {
-           $scope.$broadcast('4kmClicked');
+       $scope.orgSettingsClicked = function () {
+           $scope.$broadcast('orgSettingsClicked');
        }
 
        $scope.adminClicked = function () {

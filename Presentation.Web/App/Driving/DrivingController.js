@@ -63,6 +63,9 @@
             /// Initializes fields for new report.
             /// </summary>
             $scope.DriveReport = new DriveReport();
+
+            $scope.DriveReport.KilometerAllowance = $rootScope.CurrentUser.Employments[0].OrgUnit.DefaultKilometerAllowance;
+
             $scope.DriveReport.Addresses = [];
             $scope.DriveReport.Addresses.push({ Name: "", Personal: "" });
             $scope.DriveReport.Addresses.push({ Name: "", Personal: "" });
