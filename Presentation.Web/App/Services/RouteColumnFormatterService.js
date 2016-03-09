@@ -36,7 +36,12 @@
 
             var result = toolTip + roundTrip + globe;
             var comment = data.UserComment != null ? data.UserComment : "Ingen kommentar angivet";
-            var commentToolTip = comment != "Ingen kommentar angivet" ? "<div class='inline margin-right-5 pull-right' kendo-tooltip k-content=\"'" + comment + "'\"><i class=\"fa fa-2x fa-comment-o\"></i></div>" : "";
+            
+
+            var commentToolTip = "";
+            if(comment != "Ingen kommentar angivet" && comment != "Ingen kommentar indtastet"){
+                commentToolTip =  "<div class='inline margin-right-5 pull-right' kendo-tooltip k-content=\"'" + comment + "'\"><i class=\"fa fa-2x fa-comment-o\"></i></div>";
+            }
 
             if (data.IsFromApp) {
                 var fromAppTooltip = "<div class='inline margin-left-5'>Indberettet fra mobil app</div>" + commentToolTip;
