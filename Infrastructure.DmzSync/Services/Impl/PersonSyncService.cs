@@ -19,12 +19,14 @@ namespace Infrastructure.DmzSync.Services.Impl
     {
         private IGenericRepository<Profile> _dmzProfileRepo;
         private IGenericRepository<Person> _masterPersonRepo;
+        private IGenericRepository<Employment> _masterEmploymentRepo;
         private readonly IPersonService _personService;
 
-        public PersonSyncService(IGenericRepository<Profile> dmzProfileRepo, IGenericRepository<Person> masterPersonRepo, IPersonService personService)
+        public PersonSyncService(IGenericRepository<Profile> dmzProfileRepo, IGenericRepository<Person> masterPersonRepo, IGenericRepository<Employment> masterEmploymentRepo, IPersonService personService)
         {
             _dmzProfileRepo = dmzProfileRepo;
             _masterPersonRepo = masterPersonRepo;
+            _masterEmploymentRepo = masterEmploymentRepo;
             _personService = personService;
         }
 
@@ -44,7 +46,7 @@ namespace Infrastructure.DmzSync.Services.Impl
         public void SyncToDmz()
         {
             var i = 0;
-            var personList = _masterPersonRepo.AsQueryable().Where(x => x.IsActive).ToList();
+            var personList = _masterPersonRepo.AsQueryable().ToList();
             var max = personList.Count;
 
             foreach (var person in personList)  
@@ -55,20 +57,39 @@ namespace Infrastructure.DmzSync.Services.Impl
                     Console.WriteLine("Syncing person " + i + " of " + max);
                 }
 
+                var dmzPerson = _dmzProfileRepo.AsQueryable().FirstOrDefault(x => x.Id == person.Id);
+
                 var homeAddress = _personService.GetHomeAddress(person);
 
                 var profile = new Profile
-                    {
-                        Id = person.Id,
-                        FirstName = person.FirstName,
-                        LastName = person.LastName,
-                        HomeLatitude = homeAddress != null ? homeAddress.Latitude : "0",
-                        HomeLongitude = homeAddress != null ? homeAddress.Longitude : "0",
-                        Initials = person.Initials,
-                        FullName = person.FullName,
-                    };
+                {
+                    Id = person.Id,
+                    FirstName = person.FirstName,
+                    LastName = person.LastName,
+                    HomeLatitude = homeAddress != null ? homeAddress.Latitude : "0",
+                    HomeLongitude = homeAddress != null ? homeAddress.Longitude : "0",
+                    Initials = person.Initials,
+                    FullName = person.FullName,
+                    IsActive = person.IsActive
+                };
+
                 profile = Encryptor.EncryptProfile(profile);
-                _dmzProfileRepo.Insert(profile); 
+
+                if (dmzPerson == null)
+                {
+                    _dmzProfileRepo.Insert(profile);
+                }
+                else
+                {
+                    dmzPerson.FirstName = profile.FirstName;
+                    dmzPerson.LastName = profile.LastName;
+                    dmzPerson.HomeLatitude = profile.HomeLatitude;
+                    dmzPerson.HomeLongitude = profile.HomeLongitude;
+                    dmzPerson.Initials = profile.Initials;
+                    dmzPerson.FullName = profile.FullName;
+                    dmzPerson.IsActive = profile.IsActive;
+                }
+
             }
              _dmzProfileRepo.Save();
             SyncEmployments();
@@ -81,8 +102,7 @@ namespace Infrastructure.DmzSync.Services.Impl
         private void SyncEmployments()
         {
             var i = 0;
-            var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            var personList = _masterPersonRepo.AsQueryable().Where(x => x.IsActive).ToList();
+            var personList = _masterPersonRepo.AsQueryable().ToList();
             var max = personList.Count;
 
             foreach (var person in personList)
@@ -93,34 +113,46 @@ namespace Infrastructure.DmzSync.Services.Impl
                     Console.WriteLine("Syncing employments for person " + i + " of " + max);
                 }
 
-                var employments = new List<Employment>();
+                var pers = _dmzProfileRepo.AsQueryable().First(x => x.Id == person.Id);
+
+                var employments = pers.Employments;
 
                 // Migrate list of employees as the model is not the same in DMZ and OS2.
-                foreach (var masterEmployment in person.Employments.Where(x => x.EndDateTimestamp > currentDateTimestamp || x.EndDateTimestamp == 0))
+                foreach (var masterEmployment in person.Employments)
                 {
-                    var dmzEmployment = new Employment 
+                    var dmzEmployment = employments.FirstOrDefault(x => x.Id == masterEmployment.Id);
+                    
+                    var employment = new Employment
                     {
                         Id = masterEmployment.Id,
                         ProfileId = masterEmployment.PersonId,
-                        EmploymentPosition = masterEmployment.Position + " - " + masterEmployment.OrgUnit.LongDescription,
+                        EmploymentPosition =
+                                masterEmployment.Position + " - " + masterEmployment.OrgUnit.LongDescription,
                     };
-                    dmzEmployment = Encryptor.EncryptEmployment(dmzEmployment);
-                    employments.Add(dmzEmployment);
+
+                    employment = Encryptor.EncryptEmployment(employment);
+
+                    if (dmzEmployment == null)
+                    {
+                        employments.Add(employment);
+                    }
+                    else
+                    {
+                        dmzEmployment.ProfileId = employment.ProfileId;
+                        dmzEmployment.EmploymentPosition = employment.EmploymentPosition;
+                    }
+                    
                 }
-                var pers = _dmzProfileRepo.AsQueryable().First(x => x.Id == person.Id);
-                pers.Employments = employments;
             }
             _dmzProfileRepo.Save();
         }
 
         /// <summary>
-        /// Clears DMZ database of all people.
+        /// Not implemented
         /// </summary>
         public void ClearDmz()
         {
-            var personList = _dmzProfileRepo.AsQueryable().ToList();
-            _dmzProfileRepo.DeleteRange(personList);
-            _dmzProfileRepo.Save();
+            throw new NotImplementedException("This service is no longer used");
         }
 
     }

@@ -46,7 +46,7 @@ namespace Infrastructure.DmzSync.Services.Impl
             var rateList = _masterRateRepo.AsQueryable().Where(x => x.Active && x.Year == currentYear).ToList();
             var max = rateList.Count;
 
-            foreach (var rate in rateList)  
+            foreach (var masterRate in rateList)  
             {
                 i++;
                 if (i%10 == 0)
@@ -54,13 +54,25 @@ namespace Infrastructure.DmzSync.Services.Impl
                     Console.WriteLine("Syncing rate " + i + " of " + max);
                 }
 
-                var dmzRate = new Core.DmzModel.Rate()
-                    {
-                        Id = rate.Id,
-                        Description = rate.Type.Description,
-                        Year = rate.Year.ToString()
-                    };
-                _dmzRateRepo.Insert(dmzRate);
+                var rate = new Core.DmzModel.Rate()
+                {
+                    Id = masterRate.Id,
+                    Description = masterRate.Type.Description,
+                    Year = masterRate.Year.ToString()
+                };
+
+                var dmzRate = _dmzRateRepo.AsQueryable().FirstOrDefault(x => x.Id == rate.Id);
+
+                if (dmzRate == null)
+                {
+                    _dmzRateRepo.Insert(rate);
+                }
+                else
+                {
+                    dmzRate.Description = rate.Description;
+                    dmzRate.Year = rate.Year;
+                }
+                
             }
              _dmzRateRepo.Save();
         }
@@ -71,9 +83,7 @@ namespace Infrastructure.DmzSync.Services.Impl
         /// </summary>
         public void ClearDmz()
         {
-            var rateList = _dmzRateRepo.AsQueryable().ToList();
-            _dmzRateRepo.DeleteRange(rateList);
-            _dmzRateRepo.Save();
+            throw new NotImplementedException("This service is no longer used");
         }
     }
 }
