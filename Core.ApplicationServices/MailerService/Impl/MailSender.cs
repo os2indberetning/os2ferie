@@ -41,7 +41,6 @@ namespace Core.ApplicationServices.MailerService.Impl
         {
             if (String.IsNullOrWhiteSpace(to))
             {
-                _logger.Log("Email adressen er tom", "mail");
                 return;
             }
             var msg = new MailMessage();
@@ -55,7 +54,7 @@ namespace Core.ApplicationServices.MailerService.Impl
             }
             catch (Exception e )
             {
-                _logger.Log("Fejl under afsendelse af mail", "mail");
+                _logger.Log("Fejl under afsendelse af mail", "mail", e);
             }
         }
     }

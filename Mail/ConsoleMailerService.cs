@@ -30,7 +30,6 @@ namespace Mail
             _mailService = mailService;
             _repo = repo;
             _logger = logger;
-            _logger.Log("MailService startet.", "mail");
         }
 
         /// <summary>
@@ -47,10 +46,9 @@ namespace Mail
             catch (Exception e)
             {
                 Console.WriteLine("Kunne ikke sende daglig aktivitet i fejlloggen!");
-                _logger.Log("Error while sending the daily log activity", "mail", e);
+                _logger.Log("Fejl under afsendelse af daglig log aktivitet", "mail", e);
             }
-
-
+            
             var startOfDay = ToUnixTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 00, 00, 00));
             var endOfDay = ToUnixTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59));
         
@@ -59,7 +57,6 @@ namespace Mail
             if (notifications.Any())
             {
                 Console.WriteLine("Forsøger at sende emails.");
-                _logger.Log("Attempting to send emails.", "mail");
                 foreach (var notification in notifications.ToList())
                 {
                     if (notification.Repeat)
@@ -85,7 +82,6 @@ namespace Mail
             {
                 Console.WriteLine("Ingen email-adviseringer fundet! Programmet lukker om 3 sekunder.");
                 Console.WriteLine(Environment.CurrentDirectory);
-                _logger.Log("No mail notifications found.", "mail");
                 Thread.Sleep(3000);
             }
         }
@@ -108,14 +104,14 @@ namespace Mail
                 catch (System.Net.Mail.SmtpException)
                 {
                     Console.WriteLine("Kunne ikke oprette forbindelse til SMTP-Serveren. Forsøger igen...");
-                    _logger.Log("Unable to connect to SMTP-server. Retrying." , "mail");
+                    _logger.Log("Kunne ikke forbinde til SMTP-server." , "mail");
                     AttemptSendMails(service, payRoleDateTime, timesToAttempt - 1);
                 }
             }
             else
             {
                 Console.WriteLine("Alle forsøg fejlede. Programmet lukker om 3 sekunder.");
-                _logger.Log("All attempts failed. Program will shut down in 3 seconds.", "mail");
+                _logger.Log("Alle forsøg på at sende mailadvisering fejlet.", "mail");
                 Thread.Sleep(3000);
 
             }
