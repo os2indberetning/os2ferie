@@ -126,6 +126,8 @@ namespace Infrastructure.DmzSync.Services.Impl
                     {
                         Id = masterEmployment.Id,
                         ProfileId = masterEmployment.PersonId,
+                        StartDateTimestamp = masterEmployment.StartDateTimestamp,
+                        EndDateTimestamp = masterEmployment.EndDateTimestamp,
                         EmploymentPosition =
                                 masterEmployment.Position + " - " + masterEmployment.OrgUnit.LongDescription,
                     };
@@ -139,6 +141,8 @@ namespace Infrastructure.DmzSync.Services.Impl
                     else
                     {
                         dmzEmployment.ProfileId = employment.ProfileId;
+                        dmzEmployment.StartDateTimestamp = masterEmployment.StartDateTimestamp;
+                        dmzEmployment.EndDateTimestamp = masterEmployment.EndDateTimestamp;
                         dmzEmployment.EmploymentPosition = employment.EmploymentPosition;
                     }
                     

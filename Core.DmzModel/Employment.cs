@@ -9,6 +9,10 @@ namespace Core.DmzModel
 
         public string EmploymentPosition { get; set; }
 
+        public long StartDateTimestamp { get; set; }
+
+        public long EndDateTimestamp { get; set; }
+
         public string ManNr { get; set; }
 
         public int ProfileId { get; set; }
