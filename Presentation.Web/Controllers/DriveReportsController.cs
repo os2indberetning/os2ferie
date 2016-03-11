@@ -183,7 +183,7 @@ namespace OS2Indberetning.Controllers
                     _driveService.SendMailToUserAndApproverOfEditedReport(report, emailText, CurrentUser, "afvist");
                     return Ok();
                 } catch(Exception e) {
-                    _logger.Log("Fejl under forsøg på at afvise en allerede godkendt indberetning.", "web", e, 3);
+                    _logger.Log("Fejl under forsøg på at afvise en allerede godkendt indberetning. Rapportens status er ikke ændret.", "web", e, 3);
                 }
             }
 

@@ -47,7 +47,7 @@ namespace OS2Indberetning.Controllers
             }
             catch (Exception e)
             {
-                _logger.Log("Fejl ved generering af fil til KMD", "web",e,1);
+                _logger.Log("Fejl ved generering af fil til KMD. Filen blev ikke genereret.", "web",e,1);
                 return InternalServerError();
             }
         }

@@ -46,7 +46,7 @@ namespace Mail
             catch (Exception e)
             {
                 Console.WriteLine("Kunne ikke sende daglig aktivitet i fejlloggen!");
-                _logger.Log("Fejl under afsendelse af daglig log aktivitet", "mail", e, 2);
+                _logger.Log("Fejl under afsendelse af daglig log aktivitet. Daglig aktivitet ikke udsendt.", "mail", e, 2);
             }
             
             var startOfDay = ToUnixTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 00, 00, 00));
