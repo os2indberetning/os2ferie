@@ -97,7 +97,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                         catch (AddressCoordinatesException e)
                         {
                             coordinatesFailed = true;
-                            _logger.Log("Indberetning tilhørende " + dmzReport.Profile.FullName + " med formål \"" + dmzReport.Purpose + "\" har ugyldige koordinater og blev ikke synkroniseret.", "dmz");
+                            _logger.Log("Indberetning tilhørende " + dmzReport.Profile.FullName + " med formål \"" + dmzReport.Purpose + "\" har ugyldige koordinater og blev ikke synkroniseret.", "dmz", e, 2);
                             break;
                         }
                     }
@@ -142,9 +142,9 @@ namespace Infrastructure.DmzSync.Services.Impl
                     _driveService.Create(newReport);
                     reports[i].SyncedAt = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
                     _dmzDriveReportRepo.Save();
-                } catch(Exception)
+                } catch(Exception e)
                 {
-                    _logger.Log("An unknown error occured while trying to sync a DriveReport belonging to " + reports[i].Profile.FullName, "dmz");
+                    _logger.Log("En ukendt fejl opstod under synkronisering af indberetning tilhørende " + reports[i].Profile.FullName + ". Indberetningen blev ikke synkroniseret.", "dmz", e, 2);
                 }
             }
         }

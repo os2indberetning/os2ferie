@@ -46,7 +46,7 @@ namespace Mail
             catch (Exception e)
             {
                 Console.WriteLine("Kunne ikke sende daglig aktivitet i fejlloggen!");
-                _logger.Log("Fejl under afsendelse af daglig log aktivitet", "mail", e);
+                _logger.Log("Fejl under afsendelse af daglig log aktivitet", "mail", e, 2);
             }
             
             var startOfDay = ToUnixTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 00, 00, 00));
@@ -101,17 +101,17 @@ namespace Mail
                 {
                     service.SendMails(payRoleDateTime);
                 }
-                catch (System.Net.Mail.SmtpException)
+                catch (System.Net.Mail.SmtpException e)
                 {
                     Console.WriteLine("Kunne ikke oprette forbindelse til SMTP-Serveren. Forsøger igen...");
-                    _logger.Log("Kunne ikke forbinde til SMTP-server." , "mail");
+                    _logger.Log("Kunne ikke forbinde til SMTP-server. Mails kan ikke sendes." , "mail", e, 1);
                     AttemptSendMails(service, payRoleDateTime, timesToAttempt - 1);
                 }
             }
             else
             {
                 Console.WriteLine("Alle forsøg fejlede. Programmet lukker om 3 sekunder.");
-                _logger.Log("Alle forsøg på at sende mailadvisering fejlet.", "mail");
+                _logger.Log("Alle forsøg på at sende mailadvisering fejlet.", "mail", 1);
                 Thread.Sleep(3000);
 
             }

@@ -54,7 +54,7 @@ namespace Core.ApplicationServices.MailerService.Impl
             }
             catch (Exception e )
             {
-                _logger.Log("Fejl under afsendelse af mail", "mail", e);
+                _logger.Log("Fejl under afsendelse af mail. Mail er ikke afsendt.", "mail", e, 1);
             }
         }
     }

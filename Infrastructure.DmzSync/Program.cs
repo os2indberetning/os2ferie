@@ -52,7 +52,7 @@ namespace Infrastructure.DmzSync
             }
             catch (Exception ex)
             {
-                logger.Log("Failed to sync Drive Reports from DMZ", "dmz", ex);
+                logger.Log("Fejl under synkronisering af indberetninger fra DMZ. Mobilindberetninger er ikke synkroniserede.", "dmz", ex, 1);
                 throw;
             }
            
@@ -64,7 +64,7 @@ namespace Infrastructure.DmzSync
             }
             catch (Exception ex)
             {
-                logger.Log("Failed to sync Persons to DMZ", "dmz", ex);
+                logger.Log("Fejl under synkronisering af medarbejdere til DMZ. Mobil-app er ikke opdateret med nyeste medarbejderdata.", "dmz", ex, 1);
                 throw;
             }
 
@@ -75,7 +75,7 @@ namespace Infrastructure.DmzSync
             }
             catch (Exception ex)
             {
-                logger.Log("Failed to sync Rates to DMZ", "dmz", ex);
+                logger.Log("Fejl under synkronisering af takster til DMZ. Mobil-app er ikke opdateret med nyeste rater.", "dmz", ex, 1);
                 throw;
             }
             

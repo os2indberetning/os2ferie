@@ -60,7 +60,7 @@ namespace Core.ApplicationServices.MailerService.Impl
 
             foreach (var report in reportsWithNoLeader)
             {
-                _logger.Log(report.Person.FullName + "s indberetning har ingen leder", "web");
+                _logger.Log(report.Person.FullName + "s indberetning har ingen leder. Indberetningen kan derfor ikke godkendes.", "web", 2);
             }
 
             foreach (var driveReport in reports.Where(driveReport => driveReport.ResponsibleLeaderId != null && !string.IsNullOrEmpty(driveReport.ResponsibleLeader.Mail) && driveReport.ResponsibleLeader.RecieveMail))

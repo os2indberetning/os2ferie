@@ -10,5 +10,8 @@ namespace Core.ApplicationServices.Logger
     {
         void Log(string msg, string fileName);
         void Log(string msg, string fileName, Exception ex);
+
+        void Log(string msg, string fileName, Exception ex, int level);
+        void Log(string msg, string fileName, int level);
     }
 }
