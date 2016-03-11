@@ -130,7 +130,17 @@ namespace DBUpdater
         {
             if (!reader.IsDBNull(colIndex))
             {
-                return reader.GetInt16(colIndex);
+                // This if statement was added because Syddjurs changed their datatype on a row from smallint to tinyint, while Favrskov did not.
+                // A tinyint is a byte, which is handled by the first check.
+                // A smallint will be handled by the else statement.
+                if(reader.GetFieldType(colIndex) == typeof(byte)){
+                    var b = reader.GetByte(colIndex);
+                    return Convert.ToInt32(b);
+                }
+                else
+                {
+                    return reader.GetInt16(colIndex);
+                }
             }
             return null;
         }
