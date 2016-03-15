@@ -59,12 +59,14 @@ namespace Mail.LogMailer
             }
 
             // Only send mails if there are any new log messages.
-            if (result != "")
+            if (result == "")
             {
-                foreach (var receiver in receivers)
-                {
-                    _mailSender.SendMail(receiver, "Log", result);
-                }
+                result = "Ingen fejl registreret";
+            }
+
+            foreach (var receiver in receivers)
+            {
+                _mailSender.SendMail(receiver, "Log", result);
             }
             
         
