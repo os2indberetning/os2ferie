@@ -58,7 +58,6 @@ namespace Mail.LogMailer
                 result += "Mail: " + newLine + newLine + mailMessage;
             }
 
-            // Only send mails if there are any new log messages.
             if (result == "")
             {
                 result = "Ingen fejl registreret";
