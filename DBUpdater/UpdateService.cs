@@ -118,6 +118,8 @@ namespace DBUpdater
                 {
                     orgToInsert = _orgRepo.Insert(new OrgUnit());
                     orgToInsert.HasAccessToFourKmRule = false;
+                    orgToInsert.HasAccessToVacation = false;
+                    orgToInsert.DefaultKilometerAllowance = KilometerAllowance.Calculated;
                 }
 
                 orgToInsert.Level = org.Level;

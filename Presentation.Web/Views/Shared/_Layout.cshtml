@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html ng-app="application">
+<html ng-app="app">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" initial-scale=1 />
@@ -23,91 +23,93 @@
 </head>
 <body class="scrollme ng-cloak" ng-cloak="ng-cloak" ng-scrollbar rebuild-on-resize ng-init="menuCollapse = false">
     <div data-checkie data-checkie-min-ie="11">
-    <div id="wrapper" ng-class="{mainMenuCollapse: menuCollapse == true}" ng-controller="MainMenuController">
-        <!-- Navigation -->
-        <nav class="navbar navbar-inverse navbar-fixed-top" style="z-index: 9000001;" role="navigation">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <div class="navbar-brand" ng-click="menuCollapse = !menuCollapse">
-                    <i style="color:white" class="fa fa-bars"></i>
-                    <label href="#" style="color: white">OS2Indberetning</label>
+        <div id="wrapper" ng-class="{mainMenuCollapse: menuCollapse == true}" ng-controller="MainMenuController">
+            <!-- Navigation -->
+            <nav class="navbar navbar-inverse navbar-fixed-top" style="z-index: 9000001;" role="navigation">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <div class="navbar-brand" ng-click="menuCollapse = !menuCollapse">
+                        <i style="color: white" class="fa fa-bars"></i>
+                        <label href="#" style="color: white">OS2Indberetning</label>
 
+                    </div>
+                    <img class="pull-right margin-top-5" src="../../logo.png" alt=""/>
                 </div>
-                <img class="pull-right margin-top-5" src="../../logo.png" alt="" />
-            </div>
-            <!-- Top Menu Items -->
-            <div class="pull-right margin-top-15 margin-right-10">
-                <span style="color: #FFF">
+                <!-- Top Menu Items -->
+                <div class="pull-right margin-top-15 margin-right-10">
+                    <span style="color: #FFF">
                     <a class="informationHelpLink" href="{{helpLink.text}}" target="_blank">Information og vejledning</a> -
                     {{UserName}}
                 </span>
-            </div>
-            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-            <div ng-hide="menuCollapse">
-                <div class="navbar-collapse ng-cloak">
-                    <ul class="nav navbar-nav side-nav" style="height: 100% !important; border-right: 1px; border: black">
-                        <li ui-sref-active="active" class="mainMenuLink">
-                            <a ui-sref="driving"><i class="fa fa-car margin-right-10"></i>Indberet tjenestekørsel</a>
-                        </li>
-                        <li ui-sref-active="active" class="mainMenuLink">
-                            <a ui-sref="myreports"><i class="fa fa-fw fa-table margin-right-10"></i>Mine indberetninger</a>
-                        </li>
-                        <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showApproveReports">
-                            <a ui-sref="approvereports"><i class="fa fa-fw fa-edit margin-right-10"></i>Godkend indberetninger</a>
-                        </li>
-                        <li ui-sref-active="active" class="mainMenuLink">
-                            <a ui-sref="settings"><i class="fa fa-fw fa-cogs margin-right-10"></i>Personlige indstillinger</a>
-                        </li>
-                        <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showAdministration">
-                            <a ui-sref="admin"><i class="fa fa-fw fa-wrench margin-right-10"></i>Administrator</a>
-                        </li>
-                        <li ng-click="menuCollapse = !menuCollapse" ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showAdministration">
-                            <a><i class="fa fa-angle-double-left fa-2x pull-right margin-right-5"></i></a>
-                        </li>
+                </div>
+                <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+                <div ng-hide="menuCollapse">
+                    <div class="navbar-collapse ng-cloak">
+                        <ul class="nav navbar-nav side-nav" style="height: 100% !important; border-right: 1px; border: black">
+                            <li ui-sref-active="active" class="mainMenuLink">
+                                <a ui-sref="driving"><i class="fa fa-car margin-right-10"></i>Indberet tjenestekørsel</a>
+                            </li>
+                            <li ui-sref-active="active" class="mainMenuLink">
+                                <a ui-sref="myreports"><i class="fa fa-fw fa-table margin-right-10"></i>Mine indberetninger</a>
+                            </li>
+                            <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showApproveReports">
+                                <a ui-sref="approvereports"><i class="fa fa-fw fa-edit margin-right-10"></i>Godkend indberetninger</a>
+                            </li>
+                            <li ui-sref-active="active" class="mainMenuLink">
+                                <a ui-sref="settings"><i class="fa fa-fw fa-cogs margin-right-10"></i>Personlige indstillinger</a>
+                            </li>
+                            <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showAdministration">
+                                <a ui-sref="admin"><i class="fa fa-fw fa-wrench margin-right-10"></i>Administrator</a>
+                            </li>
+                            <li ng-click="menuCollapse = !menuCollapse" ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showAdministration">
+                                <a><i class="fa fa-angle-double-left fa-2x pull-right margin-right-5"></i></a>
+                            </li>
 
-                    </ul>
+                        </ul>
+
+                    </div>
+                </div>
+                <div ng-hide="!menuCollapse">
+                    <div class="navbar-collapse ng-cloak">
+                        <ul class="nav navbar-nav side-nav" style="width: 50px !important; overflow: hidden">
+                            <li ui-sref-active="active" class="mainMenuLink">
+                                <a ui-sref="driving"><i class="fa fa-car"></i></a>
+                            </li>
+                            <li ui-sref-active="active" class="mainMenuLink">
+                                <a ui-sref="myreports"><i class="fa fa-fw fa-table"></i></a>
+                            </li>
+                            <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showApproveReports">
+                                <a ui-sref="approvereports"><i class="fa fa-fw fa-edit"></i></a>
+                            </li>
+                            <li ui-sref-active="active" class="mainMenuLink">
+                                <a ui-sref="settings"><i class="fa fa-fw fa-cogs"></i></a>
+                            </li>
+                            <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showAdministration">
+                                <a ui-sref="admin"><i class="fa fa-fw fa-wrench"></i></a>
+                            </li>
+                            <li ng-click="menuCollapse = !menuCollapse" ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showAdministration">
+                                <a><i class="fa fa-angle-double-right fa-2x"></i></a>
+                            </li>
+
+
+                        </ul>
+
+                    </div>
 
                 </div>
-            </div>
-            <div ng-hide="!menuCollapse">
-                <div class="navbar-collapse ng-cloak">
-                    <ul class="nav navbar-nav side-nav" style="width: 50px !important; overflow: hidden">
-                        <li ui-sref-active="active" class="mainMenuLink">
-                            <a ui-sref="driving"><i class="fa fa-car"></i></a>
-                        </li>
-                        <li ui-sref-active="active" class="mainMenuLink">
-                            <a ui-sref="myreports"><i class="fa fa-fw fa-table"></i></a>
-                        </li>
-                        <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showApproveReports">
-                            <a ui-sref="approvereports"><i class="fa fa-fw fa-edit"></i></a>
-                        </li>
-                        <li ui-sref-active="active" class="mainMenuLink">
-                            <a ui-sref="settings"><i class="fa fa-fw fa-cogs"></i></a>
-                        </li>
-                        <li ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showAdministration">
-                            <a ui-sref="admin"><i class="fa fa-fw fa-wrench"></i></a>
-                        </li>
-                        <li ng-click="menuCollapse = !menuCollapse" ui-sref-active="active" class="ng-hide mainMenuLink" ng-hide="!showAdministration">
-                            <a><i class="fa fa-angle-double-right fa-2x"></i></a>
-                        </li>
+
+                <!-- /.navbar-collapse -->
+            </nav>
 
 
-                    </ul>
-
-                </div>
-                
-            </div>
-            
-            <!-- /.navbar-collapse -->
-        </nav>
-        
-
-        @RenderBody()
+            @RenderBody()
 
 
-        <div ng-hide="menuCollapse" class="version-text hidden-xs">@System.Configuration.ConfigurationManager.AppSettings["VERSION"]</div>
+            <div ng-hide="menuCollapse" class="version-text hidden-xs">@System.Configuration.ConfigurationManager.AppSettings["VERSION"]</div>
 
-    </div>
+        </div>
+
+
     </div>
     <div class="errors-container">
 

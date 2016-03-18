@@ -38,6 +38,8 @@ namespace Infrastructure.DataAccess
         public IDbSet<AddressHistory> AddressHistory { get; set; }
         public IDbSet<AppLogin> AppLogin { get; set; }
 
+        public IDbSet<VacationReport> VacationReport { get; set; } 
+
 
         /**
          * Sets up 
@@ -69,6 +71,7 @@ namespace Infrastructure.DataAccess
             ConfigurePropertiesForCachedAddress(modelBuilder);
             ConfigurePropertiesForWorkAddress(modelBuilder);
             ConfigurePropertiesForAppLogin(modelBuilder);
+            ConfigurePropertiesForVacationReport(modelBuilder);
         }
 
         private void ConfigurePropertiesForPerson(DbModelBuilder modelBuilder)
@@ -179,6 +182,12 @@ namespace Infrastructure.DataAccess
 
         private void ConfigurePropertiesForDriveReport(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<DriveReport>().Map(m =>
+            {
+                m.MapInheritedProperties();
+                m.ToTable("Reports");
+            });
+
             modelBuilder.Entity<DriveReport>().Property(p => p.Distance).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.AmountToReimburse).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.Purpose).IsRequired();
@@ -232,6 +241,15 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Substitute>().HasRequired(p => p.Leader).WithMany(p => p.Substitutes);
             modelBuilder.Entity<Substitute>().HasRequired(p => p.Sub).WithMany(p => p.SubstituteLeaders);
             modelBuilder.Entity<Substitute>().HasRequired(p => p.Person).WithMany(p => p.SubstituteFor);
+        }
+
+        public void ConfigurePropertiesForVacationReport(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<VacationReport>().Map(m =>
+            {
+                m.MapInheritedProperties();
+                m.ToTable("VacationReports");
+            });
         }
 
         public class DateTimeOffsetConvention : Convention

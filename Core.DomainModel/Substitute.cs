@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 namespace Core.DomainModel
 {
+
+    public enum SubstituteApplication
+    {
+        Drive,
+        Vacation
+    }
+
     public class Substitute
     {
         public int Id { get; set; }
@@ -19,5 +26,7 @@ namespace Core.DomainModel
         public virtual OrgUnit OrgUnit { get; set; }
         public int? CreatedById { get; set; }
         public virtual Person CreatedBy { get; set; }
+
+        public SubstituteApplication Application { get; set; }
     }
 }

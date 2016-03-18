@@ -385,6 +385,18 @@
     <Compile Include="Migrations\201603011050474_AddedDefaultKilometerAllowanceToOrg.Designer.cs">
       <DependentUpon>201603011050474_AddedDefaultKilometerAllowanceToOrg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603181127527_AddedVacationReportsTable.cs" />
+    <Compile Include="Migrations\201603181127527_AddedVacationReportsTable.Designer.cs">
+      <DependentUpon>201603181127527_AddedVacationReportsTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603181139152_AddedApplicationTypeToSubstitute.cs" />
+    <Compile Include="Migrations\201603181139152_AddedApplicationTypeToSubstitute.Designer.cs">
+      <DependentUpon>201603181139152_AddedApplicationTypeToSubstitute.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603181146229_AddedVacationAccessSettingToOrgUnit.cs" />
+    <Compile Include="Migrations\201603181146229_AddedVacationAccessSettingToOrgUnit.Designer.cs">
+      <DependentUpon>201603181146229_AddedVacationAccessSettingToOrgUnit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -639,6 +651,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603011050474_AddedDefaultKilometerAllowanceToOrg.resx">
       <DependentUpon>201603011050474_AddedDefaultKilometerAllowanceToOrg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603181127527_AddedVacationReportsTable.resx">
+      <DependentUpon>201603181127527_AddedVacationReportsTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603181139152_AddedApplicationTypeToSubstitute.resx">
+      <DependentUpon>201603181139152_AddedApplicationTypeToSubstitute.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603181146229_AddedVacationAccessSettingToOrgUnit.resx">
+      <DependentUpon>201603181146229_AddedVacationAccessSettingToOrgUnit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
