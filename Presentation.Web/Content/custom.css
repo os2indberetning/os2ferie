@@ -464,6 +464,6 @@ li.mainMenuLink.active > a > i.fa {
     padding: 5px; 
     position: fixed;
     bottom: 0;
-    z-index: 99999;
+    z-index: 9000002;
     left: 0;
 }
