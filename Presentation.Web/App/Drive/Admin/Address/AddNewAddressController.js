@@ -30,7 +30,7 @@
             /// </summary>
             /// <param name="id"></param>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Admin/HTML/Address/ConfirmDiscardChangesTemplate.html',
+                templateUrl: '/App/Admin/Address/ConfirmDiscardChangesTemplate.html',
                 controller: 'ConfirmDiscardChangesController',
                 backdrop: "static",
             });

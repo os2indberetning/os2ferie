@@ -19,7 +19,6 @@ namespace Core.DomainModel
         public int? AlternativeWorkAddressId { get; set; }
         public int PersonId { get; set; }
         public virtual Person Person { get; set; }
-        public virtual ICollection<Report> Reports { get; set; }
         public int OrgUnitId { get; set; }
         public virtual OrgUnit OrgUnit { get; set; }
         public long? CostCenter { get; set; }

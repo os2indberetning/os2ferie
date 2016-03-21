@@ -148,7 +148,7 @@
             /// </summary>
             /// <param name="id">Identifies BankAccount to be deleted</param>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Admin/HTML/Account/ConfirmDeleteAccountTemplate.html',
+                templateUrl: '/App/Admin/Account/ConfirmDeleteAccountTemplate.html',
                 controller: 'DeleteAccountController',
                 backdrop: "static",
                 resolve: {

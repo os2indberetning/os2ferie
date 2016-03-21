@@ -283,7 +283,7 @@
            /// </summary>
            /// <param name="routeId"></param>
            var modalInstance = $modal.open({
-               templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
+               templateUrl: '/App/Admin/Reports/Modal/ShowRouteModalTemplate.html',
                controller: 'ShowRouteModalController',
                backdrop: "static",
                resolve: {

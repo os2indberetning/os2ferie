@@ -33,11 +33,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.0.2\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.0.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -397,11 +397,21 @@
     <Compile Include="Migrations\201603181146229_AddedVacationAccessSettingToOrgUnit.Designer.cs">
       <DependentUpon>201603181146229_AddedVacationAccessSettingToOrgUnit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603211642274_MovedDriveReportsTableFromReports.cs" />
+    <Compile Include="Migrations\201603211642274_MovedDriveReportsTableFromReports.Designer.cs">
+      <DependentUpon>201603211642274_MovedDriveReportsTableFromReports.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603212208171_FixedErrorInVacationReports.cs" />
+    <Compile Include="Migrations\201603212208171_FixedErrorInVacationReports.Designer.cs">
+      <DependentUpon>201603212208171_FixedErrorInVacationReports.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="connections.config" />
+    <None Include="CustomSettings.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -660,6 +670,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603181146229_AddedVacationAccessSettingToOrgUnit.resx">
       <DependentUpon>201603181146229_AddedVacationAccessSettingToOrgUnit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603211642274_MovedDriveReportsTableFromReports.resx">
+      <DependentUpon>201603211642274_MovedDriveReportsTableFromReports.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603212208171_FixedErrorInVacationReports.resx">
+      <DependentUpon>201603212208171_FixedErrorInVacationReports.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

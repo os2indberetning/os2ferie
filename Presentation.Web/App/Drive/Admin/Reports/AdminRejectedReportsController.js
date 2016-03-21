@@ -262,7 +262,7 @@ angular.module("app.drive").controller("AdminRejectedReportsController", [
 
        $scope.showRouteModal = function (routeId) {
            var modalInstance = $modal.open({
-               templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
+               templateUrl: '/App/Admin/Reports/Modal/ShowRouteModalTemplate.html',
                controller: 'ShowRouteModalController',
                backdrop: "static",
                resolve: {

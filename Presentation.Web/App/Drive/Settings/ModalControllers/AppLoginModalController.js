@@ -6,7 +6,7 @@
 }]);
 
 
-angular.module('application').controller('AppLoginModalController', ["$scope","$modalInstance", function ($scope, $modalInstance) {
+angular.module('app.drive').controller('AppLoginModalController', ["$scope","$modalInstance", function ($scope, $modalInstance) {
     
     $scope.confirmDelete = function () {
         $modalInstance.close();

@@ -1,27 +1,6 @@
 ﻿angular.module("app.drive").config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/");
 
     $stateProvider
-        .state("drive.default", {
-            url: "/",
-            templateUrl: "/App/Drive/Driving/DrivingView.html",
-            controller: "DrivingController",
-            resolve: {
-                adminEditCurrentUser : function() {return 0;},
-                ReportId: function () { return -1; },
-                CurrentUser: ["$rootScope", "Person", function ($rootScope, Person) {
-                    if ($rootScope.CurrentUser == undefined) {
-                        return Person.GetCurrentUser().$promise.then(function (res) {
-                            $rootScope.CurrentUser = res;
-                        });
-                    } else {
-                        return $rootScope.CurrentUser;
-                    }
-                }],
-                $modalInstance: function () { return -1; }
-
-            }
-        })
         .state("drive.driving", {
             url: "/driving",
             templateUrl: "/App/Drive/Driving/DrivingView.html",
@@ -81,7 +60,7 @@
         .state("drive.settings", {
             url: "/settings",
             templateUrl: "/App/Drive/Settings/SettingsView.html",
-            controller: "SettingController",
+            controller: "SettingsController",
             resolve: {
                 CurrentUser: ["$rootScope", "Person", function ($rootScope, Person) {
                     if ($rootScope.CurrentUser == undefined) {

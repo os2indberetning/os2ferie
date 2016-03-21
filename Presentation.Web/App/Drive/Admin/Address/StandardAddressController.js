@@ -95,7 +95,7 @@
             /// </summary>
             /// <param name="id">Id of address to be edited.</param>
            var modalInstance = $modal.open({
-               templateUrl: '/App/Admin/HTML/Address/EditAddressTemplate.html',
+               templateUrl: '/App/Admin/Address/EditAddressTemplate.html',
                controller: 'EditAddressController',
                backdrop: "static",
                resolve: {
@@ -125,7 +125,7 @@
             /// </summary>
             /// <param name="id">Id of address to be deleted.</param>
            var modalInstance = $modal.open({
-               templateUrl: '/App/Admin/HTML/Address/ConfirmDeleteAddressTemplate.html',
+               templateUrl: '/App/Admin/Address/ConfirmDeleteAddressTemplate.html',
                controller: 'DeleteAddressController',
                backdrop: "static",
                resolve: {
@@ -147,7 +147,7 @@
             /// Opens add new Standard Address modal
             /// </summary>
            var modalInstance = $modal.open({
-               templateUrl: '/App/Admin/HTML/Address/AddNewAddressTemplate.html',
+               templateUrl: '/App/Admin/Address/AddNewAddressTemplate.html',
                controller: 'AddNewAddressController',
                backdrop: "static",
            });

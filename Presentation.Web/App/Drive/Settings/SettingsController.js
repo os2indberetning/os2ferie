@@ -1,4 +1,4 @@
-﻿angular.module("app.drive").controller("DriveSettingController", [
+﻿angular.module("app.drive").controller("SettingsController", [
     "$scope", "$modal", "Person", "LicensePlate", "PersonalRoute", "Point", "Address", "Route", "AddressFormatter", "$http", "NotificationService", "Token", "SmartAdresseSource", "$rootScope", "$timeout", "AppLogin",
     function ($scope, $modal, Person, LicensePlate, Personalroute, Point, Address, Route, AddressFormatter, $http, NotificationService, Token, SmartAdresseSource, $rootScope, $timeout, AppLogin) {
         $scope.gridContainer = {};
@@ -85,7 +85,7 @@
             /// </summary>
             /// <param name="token"></param>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Settings/ConfirmDeleteLicenseModal.html',
+                templateUrl: '/App/Drive/Settings/ConfirmDeleteLicenseModal.html',
                 controller: 'AppLoginModalController',
                 backdrop: 'static',
             });
@@ -383,7 +383,7 @@
             /// </summary>
             /// <param name="id"></param>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Settings/RouteEditModal.html',
+                templateUrl: '/App/Drive/Settings/RouteEditModal.html',
                 controller: 'RouteEditModalInstanceController',
                 backdrop: 'static',
                 resolve: {
@@ -408,7 +408,7 @@
             /// <param name="id"></param>
 
             var modalInstance = $modal.open({
-                templateUrl: '/App/Settings/RouteAddModal.html',
+                templateUrl: '/App/Drive/Settings/RouteAddModal.html',
                 controller: 'RouteEditModalInstanceController',
                 backdrop: 'static',
                 resolve: {
@@ -432,7 +432,7 @@
             /// </summary>
             /// <param name="id"></param>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Settings/RouteDeleteModal.html',
+                templateUrl: '/App/Drive/Settings/RouteDeleteModal.html',
                 controller: 'RouteDeleteModalInstanceController',
                 backdrop: 'static',
                 resolve: {
@@ -455,7 +455,7 @@
             ///Opens add personal address modal. 
             /// </summary>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Settings/AddressAddModal.html',
+                templateUrl: '/App/Drive/Settings/AddressAddModal.html',
                 controller: 'AddressEditModalInstanceController',
                 backdrop: 'static',
                 resolve: {
@@ -479,7 +479,7 @@
             /// </summary>
             /// <param name="id"></param>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Settings/AddressEditModal.html',
+                templateUrl: '/App/Drive/Settings/AddressEditModal.html',
                 controller: 'AddressEditModalInstanceController',
                 backdrop: 'static',
                 resolve: {
@@ -503,7 +503,7 @@
             /// </summary>
             /// <param name="id"></param>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Settings/AddressDeleteModal.html',
+                templateUrl: '/App/Drive/Settings/AddressDeleteModal.html',
                 controller: 'AddressDeleteModalInstanceController',
                 backdrop: 'static',
                 resolve: {
@@ -526,7 +526,7 @@
             /// Opens confirm delete app login modal.
             /// </summary>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Settings/confirmDeleteAppPasswordModal.html',
+                templateUrl: '/App/Drive/Settings/confirmDeleteAppPasswordModal.html',
                 controller: 'AppLoginModalController',
                 backdrop: 'static',
             });
@@ -547,7 +547,7 @@
             /// Opens confirm create app login modal.
             /// </summary>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Settings/confirmCreateAppLoginModal.html',
+                templateUrl: '/App/Drive/Settings/confirmCreateAppLoginModal.html',
                 controller: 'AppLoginModalController',
                 backdrop: 'static',
             });
@@ -580,7 +580,7 @@
         $scope.openAlternativeWorkAddressModal = function () {
 
             var modalInstance = $modal.open({
-                templateUrl: '/App/Settings/AlternativeWorkAddressModal.html',
+                templateUrl: '/App/Drive/Settings/AlternativeWorkAddressModal.html',
                 controller: 'AlternativeWorkAddressModalController',
                 backdrop: 'static',
             });

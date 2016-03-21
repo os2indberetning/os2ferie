@@ -92,7 +92,7 @@
            /// <param name="Id">Id of person</param>
            /// <param name="FullName">FullName of person</param>
            var modalInstance = $modal.open({
-               templateUrl: 'App/Admin/HTML/Administration/Modal/RemoveAdminModalTemplate.html',
+               templateUrl: 'App/Admin/Administration/Modal/RemoveAdminModalTemplate.html',
                controller: 'RemoveAdminModalController',
                backdrop: 'static',
                size: 'lg',
@@ -125,7 +125,7 @@
            }
 
            var modalInstance = $modal.open({
-               templateUrl: 'App/Admin/HTML/Administration/Modal/AddAdminModalTemplate.html',
+               templateUrl: 'App/Admin/Administration/Modal/AddAdminModalTemplate.html',
                controller: 'AddAdminModalController',
                backdrop: 'static',
                size: 'lg',
@@ -152,7 +152,7 @@
            /// Opens confirm generate kmd file modal
            /// </summary>
            var modalInstance = $modal.open({
-               templateUrl: 'App/Admin/HTML/Administration/Modal/ConfirmGenerateFileModalTemplate.html',
+               templateUrl: 'App/Admin/Administration/Modal/ConfirmGenerateFileModalTemplate.html',
                controller: 'GenerateFileModalController',
                backdrop: 'static',
                size: 'lg',

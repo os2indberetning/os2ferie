@@ -12,11 +12,12 @@
 		isAdmin: boolean;
 		isSubstitute: boolean;
 		isActive: boolean;
+		hasAppPassword: boolean;
 		personalAddresses: any[];
 		personalRoutes: any[];
 		licensePlates: any[];
 		mobileTokens: any[];
-		reports: any[];
+		driveReports: any[];
 		employments: any[];
 		substitutes: any[];
 		substituteFor: any[];

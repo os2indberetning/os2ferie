@@ -26,7 +26,7 @@ namespace Core.DomainModel
         public virtual ICollection<PersonalRoute> PersonalRoutes { get; set; }
         public virtual ICollection<LicensePlate> LicensePlates { get; set; }
         public virtual ICollection<MobileToken> MobileTokens { get; set; }
-        public virtual ICollection<Report> Reports { get; set; }
+        public virtual ICollection<DriveReport> DriveReports { get; set; }
         public virtual ICollection<Employment> Employments { get; set; }
 
         public virtual ICollection<Substitute> Substitutes { get; set; }
