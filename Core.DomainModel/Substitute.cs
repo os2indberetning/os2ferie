@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Core.DomainModel
 {
 
-    public enum SubstituteApplication
+    public enum SubstituteType
     {
         Drive,
         Vacation
@@ -27,6 +27,6 @@ namespace Core.DomainModel
         public int? CreatedById { get; set; }
         public virtual Person CreatedBy { get; set; }
 
-        public SubstituteApplication Application { get; set; }
+        public SubstituteType Type { get; set; }
     }
 }

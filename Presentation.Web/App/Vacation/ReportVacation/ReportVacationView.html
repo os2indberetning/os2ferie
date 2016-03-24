@@ -1,0 +1,131 @@
+﻿<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Indberet ferie
+        </h1>
+
+    </div>
+</div>
+
+<div class="row margin-bottom-20">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Vælg start dato: <span ng-show="startDate">{{startDate | date:"MMM d, yyyy"}}</span></h4>
+                <kendo-calendar culture="'da-DK'" ng-model="startDate" k-rebind="endDate"></kendo-calendar>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Tidspunkt for feriestart</h4>
+                <p>Udfyldes kun hvis første feriedag ikke er hele dagen</p>
+                <kendo-time-picker culture="'da-DK'" k-format="'HH:mm'" k-options="timePickerOptions"
+                                   k-ng-model="StartTime"
+                                   style="width: 238px;"></kendo-time-picker>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Vælg slut dato: <span ng-show="endDate">{{endDate | date:"MMM d, yyyy"}}</span></h4>
+                <kendo-calendar culture="'da-DK'" ng-model="endDate" k-rebind="startDate" min="startDate"></kendo-calendar>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Tidspunkt for feriens afslutning</h4>
+                <p>Udfyldes kun hvis sidste feriedag ikke er hele dagen</p>
+                <kendo-time-picker culture="'da-DK'" k-format="'HH:mm'" k-options="timePickerOptions"
+                                   k-ng-model="EndTime"
+                                   style="width: 238px;"></kendo-time-picker>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row margin-bottom-20">
+    <div class="col-lg-6">
+        <div class="form-group">
+            <label for="">Stilling og ansættelsested</label>
+            <select class="fill-width" kendo-drop-down-list="container.PositionDropDown" ng-model="Position" id="" ng-change="employmentChanged()" k-data-source="Employments" k-data-text-field="'PresentationString'" k-data-value-field="'Id'" k-placeholder="'Brugerens stilling(er)'"><option>' '</option></select>
+        </div>
+    </div>
+</div>
+
+<div class="row margin-bottom-10">
+    <div class="col-lg-6">
+        <div class="form-group">
+            <label for="">Vælg ferietype</label>
+            <div class="form-field">
+                <input type="radio" name="VacationType" id="report-type-regular" ng-model="VacationType" value="Regular" class="k-radio">
+                <label style="margin-right: 40px;" class="k-radio-label" for="report-type-regular">Almindelig ferie</label>
+
+                <input type="radio" name="VacationType" id="report-type-sixth" ng-model="VacationType" value="SixthVacationWeek" class="k-radio">
+                <label class="k-radio-label" for="report-type-sixth">6. ferieuge</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row margin-bottom-20">
+    <div class="col-lg-12">
+        <h4>Feriedage i intervallet: {{VacationDays}}</h4>
+    </div>
+</div>
+
+<div class="row margin-bottom-20">
+    <div class="col-lg-6">
+        <div class="k-block k-info-colored" style="padding:5px 15px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4>Feriesaldo</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Aktuel feriesaldo for ferieåret {{VacationYear}}</p>
+                    <ul>
+                        <li>Afholdt ferie: {{HeldVacation}}</li>
+                        <li>Restferie: {{VacationLeft}}</li>
+                    </ul>
+                    <p>Feriesaldoen er feriesaldoen fra lønsystemet, som er den samme som fremgår af din lønseddel</p>
+                    <p>Netto saldo for afholdt og planlagt ferie:</p>
+                    <ul>
+                        <li>Afholdt og planlagt ferie: {{HeldAndPlannedVacation}}</li>
+                        <li>Netto restferie: {{RemainingVacation}}</li>
+                    </ul>
+                    <p>Nettosaldoen udregnes på baggrund af det ferie du allerede har afholdt og den ferie du har indberettet og fået hodkendt.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row margin-bottom-20">
+    <div class="col-lg-12">
+        <h4>Resterende ferie hvis denne indberetning godkendes: {{RemainingVacationIfApproved}}</h4>
+    </div>
+</div>
+
+<div class="row margin-bottom-20">
+    <div class="col-lg-6">
+        <h4>Eventuel bemærkning</h4>
+        <textarea ng-model="Comment" placeholder="Tiljøj bemærkning" class="k-textbox" style="width: 100%; height: 100px;"></textarea>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div>
+            <div class="col-sm-6 pull-left">
+                <button type="button" ng-enter="" ng-click="clearClicked()" class="btn btn-danger">Nulstil</button>
+            </div>
+            <div class="col-sm-6 pull-right">
+                <button type="button" ng-disabled="saveBtnDisabled" ng-enter="" class="btn btn-primary  pull-right" ng-click="Save()">Indberet</button>
+            </div>
+        </div>
+    </div>
+</div>

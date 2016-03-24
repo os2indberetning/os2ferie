@@ -1,0 +1,53 @@
+﻿<div id="wrapper" ng-class="{mainMenuCollapse: menuCollapse == true}" ng-controller="MainMenuController">
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="z-index: 9000001;" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <div class="navbar-brand" ng-click="menuCollapse = !menuCollapse">
+                <i style="color: white" class="fa fa-bars"></i>
+                <label href="#" style="color: white">OS2Indberetning</label>
+            </div>
+            <img class="pull-right margin-top-5" src="../../logo.png" alt="" />
+        </div>
+        <!-- Top Menu Items -->
+        <div class="pull-right margin-top-15 margin-right-10">
+            <span style="color: #FFF">
+                <a class="informationHelpLink" href="{{helpLink.text}}" target="_blank">Information og vejledning</a> -
+                {{UserName}}
+            </span>
+        </div>
+        <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+        <div ng-hide="menuCollapse">
+            <div class="navbar-collapse ng-cloak">
+                <ul class="nav navbar-nav side-nav" style="height: 100% !important; border-right: 1px; border: black">
+                    <li ui-sref-active="active" class="mainMenuLink">
+                        <a ui-sref="vacation.report"><i class="fa fa-plane margin-right-10"></i>Indberet ferie</a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <div ng-hide="!menuCollapse">
+            <div class="navbar-collapse ng-cloak">
+                <ul class="nav navbar-nav side-nav" style="width: 50px !important; overflow: hidden">
+                    <li ui-sref-active="active" class="mainMenuLink">
+                        <a ui-sref="vacation.report"><i class="fa fa-plane"></i></a>
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
+
+        <!-- /.navbar-collapse -->
+    </nav>
+
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div ui-view class="fill-width margin-bottom-30">
+
+
+            </div>
+        </div>
+    </div>
+</div>

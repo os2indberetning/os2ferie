@@ -25,18 +25,20 @@ namespace Infrastructure.DataAccess.Migrations
         
         public override void Down()
         {
-            DropForeignKey("DriveReports", "Employment_Id", "Employments");
+            DropForeignKey("DriveReports", "EmploymentId", "Employments");
             DropForeignKey("DriveReports", "ActualLeaderId", "People");
             DropForeignKey("DriveReports", "ApprovedById", "People");
-            DropForeignKey("DriveReports", "Person_Id", "Employments");
+            DropForeignKey("DriveReports", "Person_Id", "People");
             DropForeignKey("DriveReports", "ResponsibleLeaderId", "People");
+            DropForeignKey("Addresses", "DriveReportId", "DriveReports");
             RenameTable(name: "DriveReports", newName: "Reports");
-            AddForeignKey("Reports", "Employment_Id", "Employments", "Id");
+            AddForeignKey("Reports", "EmploymentId", "Employments", "Id");
             AddForeignKey("Reports", "ActualLeaderId", "People", "Id");
             AddForeignKey("Reports", "ApprovedById", "People", "Id");
             AddForeignKey("Reports", "Person_Id", "People", "Id");
             AddForeignKey("Reports", "ResponsibleLeaderId", "People", "Id");
             AddColumn("Reports", "Discriminator", x => x.String());
+            AddForeignKey("Addresses", "DriveReportId", "Reports", "Id");
         }
     }
 }

@@ -176,7 +176,8 @@ namespace Infrastructure.DataAccess
 
         private void ConfigurePropertiesForDriveReportPoint(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DriveReportPoint>().HasRequired(p => p.DriveReport);
+            modelBuilder.Entity<DriveReportPoint>()
+                .HasRequired(t => t.DriveReport);
         }
 
         private void ConfigurePropertiesForDriveReport(DbModelBuilder modelBuilder)
@@ -201,6 +202,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<DriveReport>().Property(p => p.Status).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.CreatedDateTimestamp).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.Comment).IsRequired();
+
             modelBuilder.Entity<DriveReport>().HasRequired(p => p.Person);
             modelBuilder.Entity<DriveReport>().HasRequired(p => p.Employment);
         }

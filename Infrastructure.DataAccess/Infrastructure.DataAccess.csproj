@@ -405,6 +405,10 @@
     <Compile Include="Migrations\201603212208171_FixedErrorInVacationReports.Designer.cs">
       <DependentUpon>201603212208171_FixedErrorInVacationReports.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603241609169_ChangedSubstituteTypeName.cs" />
+    <Compile Include="Migrations\201603241609169_ChangedSubstituteTypeName.Designer.cs">
+      <DependentUpon>201603241609169_ChangedSubstituteTypeName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -676,6 +680,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603212208171_FixedErrorInVacationReports.resx">
       <DependentUpon>201603212208171_FixedErrorInVacationReports.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603241609169_ChangedSubstituteTypeName.resx">
+      <DependentUpon>201603241609169_ChangedSubstituteTypeName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
