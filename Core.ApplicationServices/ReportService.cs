@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Web.OData;
+using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.Logger;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using Ninject;
 
-namespace Core.ApplicationServices.Interfaces
+namespace Core.ApplicationServices
 {
-    public abstract class BaseReportService<T> : IReportService<T> where T : Report
+    public abstract class ReportService<T> : IReportService<T> where T : Report
     {
 
         private readonly IGenericRepository<OrgUnit> _orgUnitRepository;
@@ -17,15 +18,19 @@ namespace Core.ApplicationServices.Interfaces
         private readonly IGenericRepository<Substitute> _substituteRepository;
         private readonly IMailSender _mailSender;
 
+        private readonly SubstituteType _substituteType;
+
         private readonly ILogger _logger;
 
-        protected BaseReportService(IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository,
-            IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository)
+        protected ReportService(IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository,
+            IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, SubstituteType type = SubstituteType.Drive)
         {
             _orgUnitRepository = orgUnitRepository;
             _employmentRepository = employmentRepository;
             _substituteRepository = substituteRepository;
             _mailSender = mailSender;
+
+            _substituteType = type;
 
             _logger = NinjectWebKernel.CreateKernel().Get<ILogger>();
         }
@@ -60,7 +65,7 @@ namespace Core.ApplicationServices.Interfaces
             }
         }
 
-        public Person GetResponsibleLeaderForReport(T report, SubstituteType type)
+        public Person GetResponsibleLeaderForReport(T report)
         {
             var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
@@ -77,7 +82,7 @@ namespace Core.ApplicationServices.Interfaces
                     .SingleOrDefault(
                         s =>
                             s.PersonId != s.LeaderId && s.PersonId == person.Id &&
-                            s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.Type == type);
+                            s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.Type == _substituteType);
             if (personalApprover != null)
             {
                 return personalApprover.Sub;
@@ -125,7 +130,7 @@ namespace Core.ApplicationServices.Interfaces
             var loopHasFinished = false;
             while (!loopHasFinished)
             {
-                sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.OrgUnitId == orgToCheck.Id && s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.PersonId.Equals(s.LeaderId) && s.Type == type);
+                sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.OrgUnitId == orgToCheck.Id && s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.PersonId.Equals(s.LeaderId) && s.Type == _substituteType);
                 if (sub != null)
                 {
                     if (sub.Sub == null)
@@ -147,7 +152,7 @@ namespace Core.ApplicationServices.Interfaces
             return sub != null ? sub.Sub : leaderOfOrgUnit.Person;
         }
 
-        public Person GetActualLeaderForReport(T report, SubstituteType type)
+        public Person GetActualLeaderForReport(T report)
         {
             var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
@@ -187,7 +192,7 @@ namespace Core.ApplicationServices.Interfaces
                 // This statement will be hit when all orgunits up to (not including) level 0 have been checked for a leader. 
                 // If no actual leader has been found then return the reponsibleleader.
                 // This will happen when members of orgunit 0 try to create a report, as orgunit 0 has no leaders and they are all handled by a substitute.
-                return GetResponsibleLeaderForReport(report, type);
+                return GetResponsibleLeaderForReport(report);
             }
 
             return leaderOfOrgUnit.Person;

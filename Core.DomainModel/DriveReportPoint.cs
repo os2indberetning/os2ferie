@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Core.DomainModel
 {
     public class DriveReportPoint : Address

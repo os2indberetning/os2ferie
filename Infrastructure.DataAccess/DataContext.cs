@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Dynamic;
@@ -37,8 +38,8 @@ namespace Infrastructure.DataAccess
         public IDbSet<CachedAddress> CachedAddresses { get; set; }
         public IDbSet<AddressHistory> AddressHistory { get; set; }
         public IDbSet<AppLogin> AppLogin { get; set; }
-
-        public IDbSet<VacationReport> VacationReport { get; set; } 
+        public IDbSet<VacationReport> VacationReport { get; set; }
+        public IDbSet<VacationBalance> VacationBalance { get; set; }
 
 
         /**
@@ -62,6 +63,7 @@ namespace Infrastructure.DataAccess
             ConfigurePropertiesForFileGenerationSchedule(modelBuilder);
             ConfigurePropertiesForDriveReportPoint(modelBuilder);
             ConfigurePropertiesForDriveReport(modelBuilder);
+            ConfigurePropertiesForReport(modelBuilder);
             ConfigurePropertiesForEmployment(modelBuilder);
             ConfigurePropertiesForOrgUnit(modelBuilder);
             ConfigurePropertiesForSubstitute(modelBuilder);
@@ -71,6 +73,7 @@ namespace Infrastructure.DataAccess
             ConfigurePropertiesForWorkAddress(modelBuilder);
             ConfigurePropertiesForAppLogin(modelBuilder);
             ConfigurePropertiesForVacationReport(modelBuilder);
+            ConfigurePropertiesForVacationBalance(modelBuilder);
         }
 
         private void ConfigurePropertiesForPerson(DbModelBuilder modelBuilder)
@@ -176,8 +179,7 @@ namespace Infrastructure.DataAccess
 
         private void ConfigurePropertiesForDriveReportPoint(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DriveReportPoint>()
-                .HasRequired(t => t.DriveReport);
+            modelBuilder.Entity<DriveReportPoint>().HasRequired(x => x.DriveReport).WithMany(x => x.DriveReportPoints).HasForeignKey(a => a.DriveReportId);
         }
 
         private void ConfigurePropertiesForDriveReport(DbModelBuilder modelBuilder)
@@ -188,6 +190,7 @@ namespace Infrastructure.DataAccess
                 m.ToTable("DriveReports");
             });
 
+            modelBuilder.Entity<DriveReport>().HasKey(p => p.Id);
             modelBuilder.Entity<DriveReport>().Property(p => p.Distance).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.AmountToReimburse).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.Purpose).IsRequired();
@@ -205,6 +208,13 @@ namespace Infrastructure.DataAccess
 
             modelBuilder.Entity<DriveReport>().HasRequired(p => p.Person);
             modelBuilder.Entity<DriveReport>().HasRequired(p => p.Employment);
+        }
+
+        private void ConfigurePropertiesForReport(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Report>()
+            .Property(c => c.Id)
+            .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
         private void ConfigurePropertiesForEmployment(DbModelBuilder modelBuilder)
@@ -254,6 +264,12 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<VacationReport>().Property(p => p.Comment).IsRequired();
             modelBuilder.Entity<VacationReport>().HasRequired(p => p.Person);
             modelBuilder.Entity<VacationReport>().HasRequired(p => p.Employment);
+        }
+
+        public void ConfigurePropertiesForVacationBalance(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<VacationBalance>().HasRequired(p => p.Person);
+            modelBuilder.Entity<VacationBalance>().HasRequired(p => p.Employment);
         }
 
         public class DateTimeOffsetConvention : Convention

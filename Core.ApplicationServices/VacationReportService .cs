@@ -1,34 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
-using System.Globalization;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Web.OData;
-using Core.ApplicationServices.Interfaces;
-using Core.ApplicationServices.MailerService.Impl;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
-using Core.DomainServices.RoutingClasses;
-using Infrastructure.AddressServices;
-using Infrastructure.AddressServices.Routing;
-using Infrastructure.DataAccess;
-using Ninject;
-using OS2Indberetning;
-using Core.ApplicationServices.Logger;
 
 
 namespace Core.ApplicationServices
 {
-    public class VacationReportService : BaseReportService<VacationReport>
+    public class VacationReportService : ReportService<VacationReport>
     {
 
         private readonly IGenericRepository<VacationReport> _reportRepo;
 
-        public VacationReportService(IGenericRepository<VacationReport> reportRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository)
+        public VacationReportService(IGenericRepository<VacationReport> reportRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, SubstituteType.Vacation)
         {
             _reportRepo = reportRepo;
         }
@@ -37,8 +20,8 @@ namespace Core.ApplicationServices
         {
             if (!Validate(report)) throw new Exception("Vacation report has invalid parameters");
 
-            report.ResponsibleLeaderId = GetResponsibleLeaderForReport(report, SubstituteType.Vacation).Id;
-            report.ActualLeaderId = GetActualLeaderForReport(report, SubstituteType.Vacation).Id;
+            report.ResponsibleLeaderId = GetResponsibleLeaderForReport(report).Id;
+            report.ActualLeaderId = GetActualLeaderForReport(report).Id;
 
             if (report.Comment == null) report.Comment = "";
 
@@ -51,11 +34,10 @@ namespace Core.ApplicationServices
 
         public override bool Validate(VacationReport report)
         {
-
             if (report.PersonId == 0) return false;
             if (report.EndTimestamp < report.StartTimestamp) return false;
-            
-
+            if (!report.Employment.OrgUnit.HasAccessToVacation) return false;
+         
             return true;
         }
 

@@ -13,12 +13,12 @@ namespace OS2Indberetning.Controllers.Drive
 {
     public class DriveReportsController : BaseController<DriveReport>
     {
-        private readonly IDriveReportService _driveService;
+        private readonly IReportService<DriveReport> _driveService;
         private readonly IGenericRepository<Employment> _employmentRepo;
 
         private readonly ILogger _logger;
 
-        public DriveReportsController(IGenericRepository<DriveReport> repo, IDriveReportService driveService, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo, ILogger logger)
+        public DriveReportsController(IGenericRepository<DriveReport> repo, IReportService<DriveReport> driveService, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo, ILogger logger)
             : base(repo, personRepo)
         {
             _driveService = driveService;
@@ -205,7 +205,7 @@ namespace OS2Indberetning.Controllers.Drive
             }
 
 
-            _driveService.SendMailIfRejectedReport(key, delta);
+            _driveService.SendMailIfRejectedReport(key, delta, report.Person);
             return base.Patch(key, delta);
         }
 

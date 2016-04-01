@@ -35,7 +35,7 @@ namespace Infrastructure.DmzSync
             new DataContext();
 
             var personSync = new PersonSyncService(new GenericDmzRepository<Profile>(new DmzContext()),
-                new GenericRepository<Person>(new DataContext()), new GenericDmzRepository<Core.DmzModel.Employment>(new DmzContext()),
+                new GenericRepository<Person>(new DataContext()),
                 NinjectWebKernel.CreateKernel().Get<IPersonService>());
 
             var driveSync = new DriveReportSyncService(new GenericDmzRepository<DriveReport>(new DmzContext()),

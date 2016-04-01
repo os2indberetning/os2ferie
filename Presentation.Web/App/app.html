@@ -1,5 +1,5 @@
 ﻿<div class="outer-navbox">
-    <div ng-if="handledState" ng-init="handledState=false" class="middle-navbox">
+    <div ng-if="handledState && loaded" ng-init="handledState=false;loaded=false" class="middle-navbox">
         <div class="navbox-center">
             <h2></h2>
             <h3 style="color: white;">Hej {{CurrentUser.FirstName}}, hvad skal du indberette?</h3>

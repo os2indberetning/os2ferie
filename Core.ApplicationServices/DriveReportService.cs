@@ -1,62 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Web.OData;
 using Core.ApplicationServices.Interfaces;
-using Core.ApplicationServices.MailerService.Impl;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
-using Infrastructure.AddressServices;
-using Infrastructure.AddressServices.Routing;
-using Infrastructure.DataAccess;
 using Ninject;
-using OS2Indberetning;
 using Core.ApplicationServices.Logger;
 
 
 namespace Core.ApplicationServices
 {
-    public class DriveReportService : IDriveReportService
+    public class DriveReportService : ReportService<DriveReport>
     {
         private readonly IRoute<RouteInformation> _route;
         private readonly IGenericRepository<RateType> _rateTypeRepo;
         private readonly IAddressCoordinates _coordinates;
         private readonly IGenericRepository<DriveReport> _driveReportRepository;
         private readonly IReimbursementCalculator _calculator;
-        private readonly IGenericRepository<OrgUnit> _orgUnitRepository;
-        private readonly IGenericRepository<Employment> _employmentRepository;
-        private readonly IGenericRepository<Substitute> _substituteRepository;
         private readonly IMailSender _mailSender;
 
         private readonly ILogger _logger;
 
-        public DriveReportService(IMailSender mailSender, IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IAddressCoordinates coordinates, IRoute<RouteInformation> route, IGenericRepository<RateType> rateTypeRepo)
+        public DriveReportService(IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IAddressCoordinates coordinates, IRoute<RouteInformation> route, IGenericRepository<RateType> rateTypeRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, SubstituteType.Drive)
         {
             _route = route;
             _rateTypeRepo = rateTypeRepo;
             _coordinates = coordinates;
             _calculator = calculator;
-            _orgUnitRepository = orgUnitRepository;
-            _employmentRepository = employmentRepository;
-            _substituteRepository = substituteRepository;
             _mailSender = mailSender;
             _driveReportRepository = driveReportRepository;
             _logger = NinjectWebKernel.CreateKernel().Get<ILogger>();
         }
-
+        
         /// <summary>
         /// Validates report and creates it in the database if it validates.
         /// </summary>
         /// <param name="report">Report to be created.</param>
         /// <returns>Created report.</returns>
-        public DriveReport Create(DriveReport report)
+        public override DriveReport Create(DriveReport report)
         {
             if (report.PersonId == 0)
             {
@@ -172,7 +156,7 @@ namespace Core.ApplicationServices
         /// </summary>
         /// <param name="report">Report to be validated.</param>
         /// <returns>True or false</returns>
-        public bool Validate(DriveReport report)
+        public override bool Validate(DriveReport report)
         {
             // Report does not validate if it is read and distance is less than zero.
             if (report.KilometerAllowance == KilometerAllowance.Read && report.Distance < 0)
@@ -193,194 +177,13 @@ namespace Core.ApplicationServices
         }
 
         /// <summary>
-        /// Is called from DriveReport Patch.
-        /// Sends email to the user associated with the report identified by key, if his/her report has been rejected.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="delta"></param>
-        public void SendMailIfRejectedReport(int key, Delta<DriveReport> delta)
-        {
-            var status = new object();
-            if (delta.TryGetPropertyValue("Status", out status))
-            {
-                if (status.ToString().Equals("Rejected"))
-                {
-                    var report = _driveReportRepository.AsQueryable().FirstOrDefault(r => r.Id == key);
-                    var recipient = "";
-                    if (report != null && !String.IsNullOrEmpty(report.Person.Mail))
-                    {
-                        recipient = report.Person.Mail;
-                    } else
-                    {
-                        _logger.Log("Forsøg på at sende mail om afvist indberetning til " + report.Person.FullName + ", men der findes ingen emailadresse. " + report.Person.FullName + " har derfor ikke modtaget en mailadvisering", "mail", 2);
-                        throw new Exception("Forsøg på at sende mail til person uden emailaddresse");
-                    }
-                    var comment = new object();
-                    if (delta.TryGetPropertyValue("Comment", out comment))
-                    {
-                        _mailSender.SendMail(recipient, "Afvist indberetning",
-                            "Din indberetning er blevet afvist med kommentaren: \n \n" + comment);
-                    }
-                }
-
-            }
-        }
-
-    
-
-        /// <summary>
-        /// Gets the Responsible Leader and sets it for each of the reports in repo.
-        /// </summary>
-        /// <param name="repo"></param>
-        /// <returns>DriveReports with ResponsibleLeader attached</returns>
-        
-
-        /// <summary>
-        /// Gets the ResponsibleLeader for driveReport
-        /// </summary>
-        /// <param name="driveReport"></param>
-        /// <returns>DriveReport with ResponsibleLeader attached</returns>
-        public Person GetResponsibleLeaderForReport(DriveReport driveReport)
-        {
-            var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-          
-            // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
-            var person = _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId).Person;
-
-
-            // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
-            var empl = _employmentRepository.AsQueryable().First(x => x.Id == driveReport.EmploymentId);
-
-            //Fetch personal approver for the person (Person and Leader of the substitute is the same)
-            var personalApprover =
-                _substituteRepository.AsQueryable()
-                    .SingleOrDefault(
-                        s =>
-                            s.PersonId != s.LeaderId && s.PersonId == person.Id &&
-                            s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp);
-            if (personalApprover != null)
-            {
-                return personalApprover.Sub;
-            }
-
-            //Find an org unit where the person is not the leader, and then find the leader of that org unit to attach to the drive report
-            var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == empl.OrgUnitId);
-            var leaderOfOrgUnit =
-                _employmentRepository.AsQueryable().FirstOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader && e.StartDateTimestamp < currentDateTimestamp && (e.EndDateTimestamp > currentDateTimestamp || e.EndDateTimestamp == 0));
-
-            if (orgUnit == null)
-            {
-                return null;
-            }
-
-            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-
-            while ((leaderOfOrgUnit == null && orgUnit.Level > 0) || (leaderOfOrgUnit != null && leaderOfOrgUnit.PersonId == person.Id))
-            {
-                leaderOfOrgUnit = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.ParentId && e.IsLeader &&
-                                                                                            e.StartDateTimestamp < currentTimestamp &&
-                                                                                            (e.EndDateTimestamp == 0 || e.EndDateTimestamp > currentTimestamp)); 
-                orgUnit = orgUnit.Parent;
-            }
-
-
-            if (orgUnit == null)
-            {
-                return null;
-            }
-            if (leaderOfOrgUnit == null)
-            {
-                return null;
-            }
-
-            var leader = leaderOfOrgUnit.Person;
-
-            // Recursively look for substitutes in child orgs, up to the org of the actual leader.
-            // Say the actual leader is leader of orgunit 1 with children 2 and 3. Child 2 has another child 4.
-            // A report comes in for orgUnit 4. Check if leader has a substitute for that org.
-            // If not then check if leader has a substitute for org 2.
-            // If not then return the actual leader.
-            var orgToCheck = empl.OrgUnit;
-            Substitute sub = null;
-            var loopHasFinished = false;
-            while (!loopHasFinished)
-            {
-                sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.OrgUnitId == orgToCheck.Id && s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.PersonId.Equals(s.LeaderId));
-                if (sub != null)
-                {
-                    if(sub.Sub == null)
-                    {
-                        // This is a hack fix for a weird bug that happens, where sometimes the Sub navigation property on a Substitute is null, even though the SubId is not.
-                        sub.Sub = _employmentRepository.AsQueryable().FirstOrDefault(x => x.PersonId == sub.SubId).Person;
-                    }
-                    loopHasFinished = true;
-                }
-                else
-                {
-                    orgToCheck = orgToCheck.Parent;
-                    if (orgToCheck == null || orgToCheck.Id == orgUnit.Parent.Id)
-                    {
-                        loopHasFinished = true;
-                    }
-                }
-            }
-            return sub != null ? sub.Sub : leaderOfOrgUnit.Person;
-        }
-
-        public Person GetActualLeaderForReport(DriveReport driveReport)
-        {
-            var currentDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-
-            // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
-            var person = _employmentRepository.AsQueryable().First(x => x.PersonId == driveReport.PersonId).Person;
-
-            // Fix for bug that sometimes happens when drivereport is from app, where personid is set, but person is not.
-            var empl = _employmentRepository.AsQueryable().First(x => x.Id == driveReport.EmploymentId);
-
-            //Find an org unit where the person is not the leader, and then find the leader of that org unit to attach to the drive report
-            var orgUnit = _orgUnitRepository.AsQueryable().SingleOrDefault(o => o.Id == empl.OrgUnitId);
-            var leaderOfOrgUnit =
-                _employmentRepository.AsQueryable().FirstOrDefault(e => e.OrgUnit.Id == orgUnit.Id && e.IsLeader && e.StartDateTimestamp < currentDateTimestamp && (e.EndDateTimestamp > currentDateTimestamp || e.EndDateTimestamp == 0));
-
-            if (orgUnit == null)
-            {
-                return null;
-            }
-
-            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-
-            while ((leaderOfOrgUnit == null && orgUnit.Level > 0) || (leaderOfOrgUnit != null && leaderOfOrgUnit.PersonId == person.Id))
-            {
-                leaderOfOrgUnit = _employmentRepository.AsQueryable().SingleOrDefault(e => e.OrgUnit.Id == orgUnit.ParentId && e.IsLeader &&
-                                                                                            e.StartDateTimestamp < currentTimestamp &&
-                                                                                            (e.EndDateTimestamp == 0 || e.EndDateTimestamp > currentTimestamp));
-                orgUnit = orgUnit.Parent;
-            }
-
-
-            if (orgUnit == null)
-            {
-                return null;
-            }
-            if (leaderOfOrgUnit == null)
-            {
-                // This statement will be hit when all orgunits up to (not including) level 0 have been checked for a leader. 
-                // If no actual leader has been found then return the reponsibleleader.
-                // This will happen when members of orgunit 0 try to create a report, as orgunit 0 has no leaders and they are all handled by a substitute.
-                return GetResponsibleLeaderForReport(driveReport);
-            }
-
-            return leaderOfOrgUnit.Person;
-        }
-
-        /// <summary>
         /// Sends an email to the owner of and person responsible for a report that has been edited or rejected by an admin.
         /// </summary>
         /// <param name="report">The edited report</param>
         /// <param name="emailText">The message to be sent to the owner and responsible leader</param>
         /// <param name="admin">The admin rejecting or editing</param>
         /// <param name="action">A string included in the email. Should be "afvist" or "redigeret"</param>
-        public void SendMailToUserAndApproverOfEditedReport(DriveReport report, string emailText, Person admin, string action)
+        public override void SendMailToUserAndApproverOfEditedReport(DriveReport report, string emailText, Person admin, string action)
         {
             var mailContent = "Hej," + Environment.NewLine + Environment.NewLine +
             "Jeg, " + admin.FullName + ", har pr. dags dato " + action + " den følgende godkendte kørselsindberetning:" + Environment.NewLine + Environment.NewLine;

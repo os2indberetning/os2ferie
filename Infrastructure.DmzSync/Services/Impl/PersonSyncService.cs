@@ -19,14 +19,12 @@ namespace Infrastructure.DmzSync.Services.Impl
     {
         private IGenericRepository<Profile> _dmzProfileRepo;
         private IGenericRepository<Person> _masterPersonRepo;
-        private IGenericRepository<Employment> _masterEmploymentRepo;
         private readonly IPersonService _personService;
 
-        public PersonSyncService(IGenericRepository<Profile> dmzProfileRepo, IGenericRepository<Person> masterPersonRepo, IGenericRepository<Employment> masterEmploymentRepo, IPersonService personService)
+        public PersonSyncService(IGenericRepository<Profile> dmzProfileRepo, IGenericRepository<Person> masterPersonRepo, IPersonService personService)
         {
             _dmzProfileRepo = dmzProfileRepo;
             _masterPersonRepo = masterPersonRepo;
-            _masterEmploymentRepo = masterEmploymentRepo;
             _personService = personService;
         }
 

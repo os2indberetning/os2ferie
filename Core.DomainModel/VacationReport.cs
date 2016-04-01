@@ -17,6 +17,9 @@ namespace Core.DomainModel
     {
         public long StartTimestamp { get; set; }
         public long EndTimestamp { get; set; }
+        public int VacationYear { get; set; }
+        public int VacationHours { get; set; }
+
         public VacationType VacationType { get; set; }
     }
 }

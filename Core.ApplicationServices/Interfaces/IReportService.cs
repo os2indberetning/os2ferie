@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.OData;
+﻿using System.Web.OData;
 using Core.DomainModel;
 
 namespace Core.ApplicationServices.Interfaces
@@ -13,8 +8,8 @@ namespace Core.ApplicationServices.Interfaces
         T Create(T report);
         void SendMailIfRejectedReport(int key, Delta<T> delta, Person person);
 
-        Person GetResponsibleLeaderForReport(T report, SubstituteType type);
-        Person GetActualLeaderForReport(T report, SubstituteType type);
+        Person GetResponsibleLeaderForReport(T report);
+        Person GetActualLeaderForReport(T report);
         bool Validate(T report);
 
         void SendMailToUserAndApproverOfEditedReport(T report, string emailText, Person admin, string action);

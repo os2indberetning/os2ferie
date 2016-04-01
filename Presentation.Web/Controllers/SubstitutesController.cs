@@ -1,37 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
-using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
-using System.Threading.Tasks;
-using System.Threading;
-using Ninject;
 
 namespace OS2Indberetning.Controllers
 {
     public class SubstitutesController : BaseController<Substitute>
     {
-        private ISubstituteService _sub;
-        private IGenericRepository<DriveReport> _driveRepo;
-        private IDriveReportService _driveService;
+        private readonly ISubstituteService _sub;
         private const long UnlimitedPeriod = 9999999999;
-        private IOrgUnitService _orgService;
+
+
         //GET: odata/Substitutes
-        public SubstitutesController(IGenericRepository<Substitute> repository, ISubstituteService sub, IGenericRepository<Person> personRepo, IGenericRepository<DriveReport> driveRepo, IOrgUnitService orgService, IDriveReportService driveService)
+        public SubstitutesController(IGenericRepository<Substitute> repository, ISubstituteService sub, IGenericRepository<Person> personRepo)
             : base(repository, personRepo)
         {
             _sub = sub;
-            _driveRepo = driveRepo;
-            _orgService = orgService;
-            _driveService = driveService;
-
         }
 
         /// <summary>
@@ -82,27 +70,27 @@ namespace OS2Indberetning.Controllers
         /// Returns forbidden if the current user is not an admin or if the current user is not the leader of the substitute.
         /// Returns BadRequest if a substitute for the same person or OrgUnit already exists in an overlapping time period.
         /// </summary>
-        /// <param name="Substitute">The substitute to be posted</param>
+        /// <param name="substitute">The substitute to be posted</param>
         /// <returns>The posted substitute</returns>
         [EnableQuery]
-        public new IHttpActionResult Post(Substitute Substitute)
+        public new IHttpActionResult Post(Substitute substitute)
         {
-            if (CurrentUser.IsAdmin || CurrentUser.Id.Equals(Substitute.LeaderId))
+            if (CurrentUser.IsAdmin || CurrentUser.Id.Equals(substitute.LeaderId))
             {
-                Substitute.StartDateTimestamp = _sub.GetStartOfDayTimestamp(Substitute.StartDateTimestamp);
-                if (Substitute.EndDateTimestamp != UnlimitedPeriod)
+                substitute.StartDateTimestamp = _sub.GetStartOfDayTimestamp(substitute.StartDateTimestamp);
+                if (substitute.EndDateTimestamp != UnlimitedPeriod)
                 {
-                    Substitute.EndDateTimestamp = _sub.GetEndOfDayTimestamp(Substitute.EndDateTimestamp);
+                    substitute.EndDateTimestamp = _sub.GetEndOfDayTimestamp(substitute.EndDateTimestamp);
                 }
 
                 // Return BadRequest if a sub or personal approver already exists in the time period. Otherwise create the sub or approver.
-                var isAllowed = _sub.CheckIfNewSubIsAllowed(Substitute);
+                var isAllowed = _sub.CheckIfNewSubIsAllowed(substitute);
 
-                var result = isAllowed ? base.Post(Substitute) : BadRequest();
+                var result = isAllowed ? base.Post(substitute) : BadRequest();
 
                 if (isAllowed)
                 {
-                    _sub.UpdateReportsAffectedBySubstitute(Substitute);
+                    _sub.UpdateReportsAffectedBySubstitute(substitute);
                 }
                 return result;
             }

@@ -76,6 +76,7 @@
     <Compile Include="Report.cs" />
     <Compile Include="Substitute.cs" />
     <Compile Include="Example\Product.cs" />
+    <Compile Include="VacationBalance.cs" />
     <Compile Include="VacationReport.cs" />
     <Compile Include="WorkAddress.cs" />
   </ItemGroup>

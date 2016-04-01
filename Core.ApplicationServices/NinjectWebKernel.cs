@@ -65,7 +65,6 @@ namespace Core.ApplicationServices
             kernel.Bind<IMailSender>().To<MailSender>();
             kernel.Bind<IMailService>().To<MailService>();
             kernel.Bind<ISubstituteService>().To<SubstituteService>();
-            kernel.Bind<IDriveReportService>().To<DriveReportService>();
             kernel.Bind<IAddressCoordinates>().To<AddressCoordinates>();
             kernel.Bind<IRoute<RouteInformation>>().To<BestRoute>();
             kernel.Bind<IReimbursementCalculator>().To<ReimbursementCalculator>();
@@ -76,6 +75,7 @@ namespace Core.ApplicationServices
             kernel.Bind<ILogger>().To<Logger.Logger>();
             kernel.Bind<IAppLoginService>().To<AppLoginService>();
             kernel.Bind<IReportService<VacationReport>>().To<VacationReportService>();
+            kernel.Bind<IReportService<DriveReport>>().To<DriveReportService>();
         }        
     }
 }

@@ -97,6 +97,8 @@ namespace OS2Indberetning
             .Function("GetLatestReportForUser")
             .ReturnsFromEntitySet<VacationReport>("VacationReports");
 
+            builder.EntitySet<VacationBalance>("VacationBalance");
+
             builder.EntitySet<DriveReportPoint>("DriveReportPoints");
 
             builder.EntitySet<Employment>("Employments");

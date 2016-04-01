@@ -36,7 +36,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
         private IGenericRepository<Employment> _emplMock;
         private IGenericRepository<OrgUnit> _orgUnitMock;
         private IGenericRepository<Core.DomainModel.Substitute> _subMock;
-        private IDriveReportService _uut;
+        private IReportService<DriveReport> _uut;
         private IReimbursementCalculator _calculatorMock;
         private IGenericRepository<DriveReport> _reportRepoMock;
         private IGenericRepository<RateType> _rateTypeMock;
@@ -89,7 +89,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 Length = 2000
             });
 
-            _uut = new DriveReportService(_mailMock, _reportRepoMock, _calculatorMock, _orgUnitMock, _emplMock, _subMock, _coordinatesMock, _routeMock, _rateTypeMock);
+            _uut = new DriveReportService(_reportRepoMock, _calculatorMock, _coordinatesMock, _routeMock, _rateTypeMock, _mailMock,_orgUnitMock, _emplMock, _subMock);
 
         }
 
@@ -734,18 +734,20 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             delta.TrySetPropertyValue("Status", ReportStatus.Rejected);
             delta.TrySetPropertyValue("Comment", "Afvist, du");
 
+            var person = new Person
+            {
+                Mail = "test@mail.dk",
+                FullName = "TestPerson"
+            };
+
             repoList.Add(new DriveReport
             {
                 Id = 1,
                 Status = ReportStatus.Pending,
-                Person = new Person
-                {
-                    Mail = "test@mail.dk",
-                    FullName = "TestPerson"
-                }
+                Person = person
             });
 
-            _uut.SendMailIfRejectedReport(1, delta);
+            _uut.SendMailIfRejectedReport(1, delta, person);
             _mailMock.Received().SendMail("test@mail.dk","Afvist indberetning","Din indberetning er blevet afvist med kommentaren: \n \n" + "Afvist, du");
         }
 
@@ -757,18 +759,20 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             delta.TrySetPropertyValue("Status", ReportStatus.Rejected);
             delta.TrySetPropertyValue("Comment", "Afvist, du");
 
+            var person = new Person
+            {
+                Mail = "",
+                FullName = "TestPerson"
+            };
+
             repoList.Add(new DriveReport
             {
                 Id = 1,
                 Status = ReportStatus.Pending,
-                Person = new Person
-                {
-                    Mail = "",
-                    FullName = "TestPerson"
-                }
+                Person = person
             });
 
-            Assert.Throws<Exception>(() => _uut.SendMailIfRejectedReport(1, delta));
+            Assert.Throws<Exception>(() => _uut.SendMailIfRejectedReport(1, delta, person));
         }
 
 

@@ -11,7 +11,7 @@ namespace Core.DomainModel
         Invoiced
     }
 
-    public class Report
+    public abstract class Report
     {
         public int Id { get; set; }
         public ReportStatus Status { get; set; }

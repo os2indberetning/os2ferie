@@ -36,7 +36,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
         private IGenericRepository<Employment> _emplMock;
         private IGenericRepository<OrgUnit> _orgUnitMock;
         private IGenericRepository<Core.DomainModel.Substitute> _subMock;
-        private IDriveReportService _uut;
+        private IReportService<DriveReport> _uut;
         private IReimbursementCalculator _calculatorMock;
         private IGenericRepository<DriveReport> _reportRepoMock;
         private IGenericRepository<RateType> _rateTypeMock;
@@ -76,7 +76,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 Length = 2000
             });
 
-            _uut = new DriveReportService(_mailMock, _reportRepoMock, _calculatorMock, _orgUnitMock, _emplMock, _subMock, _coordinatesMock, _routeMock, _rateTypeMock);
+            _uut = new DriveReportService(_reportRepoMock, _calculatorMock, _coordinatesMock, _routeMock, _rateTypeMock, _mailMock, _orgUnitMock, _emplMock, _subMock);
 
         }
 

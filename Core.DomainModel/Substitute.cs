@@ -6,8 +6,9 @@ namespace Core.DomainModel
 
     public enum SubstituteType
     {
-        Drive,
-        Vacation
+        None = -1,
+        Drive = 0,
+        Vacation = 1
     }
 
     public class Substitute

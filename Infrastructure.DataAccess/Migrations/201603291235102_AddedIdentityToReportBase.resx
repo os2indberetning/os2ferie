@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Target" xml:space="preserve">
+    <value>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</value>
+  </data>
+  <data name="DefaultSchema" xml:space="preserve">
+    <value>dbo</value>
+  </data>
+</root>

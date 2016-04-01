@@ -37,10 +37,12 @@ namespace DBUpdater
             foreach (var employment in empls)
             {
                 i++;
+
                 if (i%10 == 0)
                 {
                     Console.WriteLine("Checking employment " + i + " of " + empls.Count);
                 }
+
                 if (!activeHistories.AsQueryable().Any(x => x.EmploymentId == employment.Id))
                 {
                     var homeAddress =
@@ -69,29 +71,36 @@ namespace DBUpdater
         {
             var i = 0;
             var activeHistories = _addressHistoryRepo.AsQueryable().Where(x => x.EndTimestamp == 0).ToList();
+
             foreach (var addressHistory in activeHistories)
             {
                 if (i%10 == 0)
                 {
                     Console.WriteLine("Checking active history " + i + " of " + activeHistories.Count);
                 }
+
                 var homeAddress =
                     _personalAddressRepo.AsQueryable()
                         .FirstOrDefault(
                             x => x.PersonId == addressHistory.Employment.PersonId && x.Type == PersonalAddressType.Home);
+
                 if (homeAddress != addressHistory.HomeAddress ||
                     addressHistory.WorkAddress != addressHistory.Employment.OrgUnit.Address)
                 {
                     // One or two addresses have changed. End the history;
                     addressHistory.EndTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
                 }
+
                 if (i%1000 == 0)
                 {
                     _addressHistoryRepo.Save();
                 }
+
                 i++;
             }
+
             _addressHistoryRepo.Save();
+
         }
 
 

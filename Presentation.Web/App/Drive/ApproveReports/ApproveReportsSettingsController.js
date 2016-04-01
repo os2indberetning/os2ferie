@@ -303,7 +303,7 @@
            /// </summary>
            /// <param name="id">Id of personal approver to delete.</param>
            var modalInstance = $modal.open({
-               templateUrl: 'App/ApproveReports/Modals/ConfirmDeleteApproverModal.html',
+               templateUrl: 'App/Drive/ApproveReports/Modals/ConfirmDeleteApproverModal.html',
                controller: 'ConfirmDeleteApproverModalInstanceController',
                backdrop: 'static',
                size: 'lg',
@@ -336,7 +336,7 @@
            /// </summary>
            /// <param name="id">Id of substitute to delete.</param>
            var modalInstance = $modal.open({
-               templateUrl: 'App/ApproveReports/Modals/ConfirmDeleteSubstituteModal.html',
+               templateUrl: 'App/Drive/ApproveReports/Modals/ConfirmDeleteSubstituteModal.html',
                controller: 'ConfirmDeleteSubstituteModalInstanceController',
                backdrop: 'static',
                size: 'lg',
@@ -370,7 +370,7 @@
            /// </summary>
            /// <param name="id"></param>
            var modalInstance = $modal.open({
-               templateUrl: 'App/ApproveReports/Modals/editSubstituteModal.html',
+               templateUrl: 'App/Drive/ApproveReports/Modals/editSubstituteModal.html',
                controller: 'EditSubstituteModalInstanceController',
                backdrop: 'static',
                size: 'lg',
@@ -403,7 +403,7 @@
            /// </summary>
            /// <param name="id">Id of approver to edit.</param>
            var modalInstance = $modal.open({
-               templateUrl: 'App/ApproveReports/Modals/editApproverModal.html',
+               templateUrl: 'App/Drive/ApproveReports/Modals/editApproverModal.html',
                controller: 'EditApproverModalInstanceController',
                backdrop: 'static',
                size: 'lg',
@@ -435,7 +435,7 @@
            /// Opens create new approver modal.
            /// </summary>
            var modalInstance = $modal.open({
-               templateUrl: 'App/ApproveReports/Modals/newApproverModal.html',
+               templateUrl: 'App/Drive/ApproveReports/Modals/newApproverModal.html',
                controller: 'NewApproverModalInstanceController',
                backdrop: 'static',
                size: 'lg',
@@ -464,7 +464,7 @@
            /// Opens create new substitute modal
            /// </summary>
            var modalInstance = $modal.open({
-               templateUrl: 'App/ApproveReports/Modals/newSubstituteModal.html',
+               templateUrl: 'App/Drive/ApproveReports/Modals/newSubstituteModal.html',
                controller: 'NewSubstituteModalInstanceController',
                backdrop: 'static',
                size: 'lg',
