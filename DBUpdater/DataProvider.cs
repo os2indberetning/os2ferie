@@ -22,8 +22,6 @@ namespace DBUpdater
         {
             var result = new List<Employee>();
 
-           
-
             using (var sqlConnection1 = new SqlConnection(_connectionString))
             {
                 var cmd = new SqlCommand
@@ -61,6 +59,54 @@ namespace DBUpdater
                         Omkostningssted = SafeGetInt64(reader, 16),
                         AnsatForhold = SafeGetString(reader, 17),
                         EkstraCiffer = SafeGetInt16(reader, 18)
+                    };
+                    result.Add(currentRow);
+                }
+            }
+            return result.AsQueryable();
+        }
+
+        public IQueryable<VacationBalance> GetVacationBalanceAsQueryable()
+        {
+            var result = new List<VacationBalance>();
+
+
+
+            using (var sqlConnection1 = new SqlConnection(_connectionString))
+            {
+                var cmd = new SqlCommand
+                {
+                    CommandText = "SELECT * FROM eindberetning.v_FerieSaldo",
+                    CommandType = CommandType.Text,
+                    Connection = sqlConnection1
+                };
+
+                sqlConnection1.Open();
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var currentRow = new VacationBalance
+                    {
+                        KommuneInfo = SafeGetString(reader, 0),
+                        CPR = SafeGetString(reader, 1),
+                        ANS_FORHOLD_NR = SafeGetString(reader, 2),
+                        Afloenningsform = SafeGetString(reader, 3),
+                        Ferieoptjeningsaar = SafeGetString(reader, 4),
+                        DatoForSaldo = SafeGetString(reader, 5),
+                        FerieTimer_MLoen = SafeGetInt32(reader, 6),
+                        EVTFerieDage_MLoen = SafeGetInt32(reader, 7),
+                        FerieTimer_ULoen = SafeGetInt32(reader, 8),
+                        EVTFerieDage_ULoen = SafeGetInt32(reader, 9),
+                        Overfoertetimer = SafeGetInt32(reader, 10),
+                        EvtOverfoertedage = SafeGetInt32(reader, 11),
+                        FERIEFRIDAGSTIMER_SUM = SafeGetInt32(reader, 12),
+                        FerieTimer_MLoenDec = SafeGetDouble(reader, 13),
+                        FerieTimer_ULoenDec = SafeGetDouble(reader,14),
+                        OverfoertetimerDec = SafeGetDouble(reader,15),
+                        FERIEFRIDAGSTIMER_SUMDec = SafeGetDouble(reader, 16),
+                        Opdateringsdato = SafeGetDate(reader, 17)
                     };
                     result.Add(currentRow);
                 }
@@ -159,6 +205,15 @@ namespace DBUpdater
             if (!reader.IsDBNull(colIndex))
             {
                 return reader.GetInt64(colIndex);
+            }
+            return null;
+        }
+
+        private double? SafeGetDouble(SqlDataReader reader, int colIndex)
+        {
+            if (!reader.IsDBNull(colIndex))
+            {
+                return reader.GetSqlDecimal(colIndex).ToDouble();
             }
             return null;
         }

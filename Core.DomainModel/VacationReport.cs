@@ -10,7 +10,8 @@ namespace Core.DomainModel
     public enum VacationType
     {
         Regular,
-        SixthVacationWeek
+        SixthVacationWeek,
+        Other
     }
 
     public class VacationReport : Report

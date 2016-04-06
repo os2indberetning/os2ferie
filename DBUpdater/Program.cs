@@ -17,6 +17,7 @@ using Infrastructure.DataAccess;
 using Ninject;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
 using Core.ApplicationServices.Interfaces;
+using VacationBalance = Core.DomainModel.VacationBalance;
 
 namespace DBUpdater
 {
@@ -38,16 +39,18 @@ namespace DBUpdater
                 ninjectKernel.Get<IMailSender>(),
                 historyService,
                 ninjectKernel.Get<IGenericRepository<DriveReport>>(),
-                ninjectKernel.Get<IDriveReportService>(),
+                ninjectKernel.Get<IReportService<DriveReport>>(),
                 ninjectKernel.Get<ISubstituteService>(),
-                ninjectKernel.Get<IGenericRepository<Substitute>>());
+                ninjectKernel.Get<IGenericRepository<Substitute>>(),
+                ninjectKernel.Get<IGenericRepository<VacationBalance>>());
 
-            service.MigrateOrganisations();
-            service.MigrateEmployees();
-            historyService.UpdateAddressHistories();
-            historyService.CreateNonExistingHistories();
-            service.UpdateLeadersOnExpiredOrActivatedSubstitutes();
-            service.AddLeadersToReportsThatHaveNone();
+            //service.MigrateOrganisations();
+            //service.MigrateEmployees();
+            //historyService.UpdateAddressHistories();
+            //historyService.CreateNonExistingHistories();
+            //service.UpdateLeadersOnExpiredOrActivatedSubstitutes();
+            //service.AddLeadersToReportsThatHaveNone();
+            service.UpdateVacationBalance();
         }
 
 

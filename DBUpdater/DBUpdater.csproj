@@ -71,6 +71,7 @@
     <Compile Include="DataProvider.cs" />
     <Compile Include="IAddressHistoryService.cs" />
     <Compile Include="IDBUpdaterDataProvider.cs" />
+    <Compile Include="Models\VacationBalance.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\Organisation.cs" />
     <Compile Include="Program.cs" />
@@ -81,6 +82,7 @@
     <None Include="App.config" />
     <None Include="connections.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="CustomSettings.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -72,7 +72,7 @@
 
 <div class="row margin-bottom-20">
     <div class="col-lg-12">
-        <h4>Feriedage i intervallet: {{VacationDays}}</h4>
+        <h4>Feriedage i intervallet: {{VacationDaysInPeriod}}</h4>
     </div>
 </div>
 
@@ -88,14 +88,14 @@
                 <div class="col-lg-12">
                     <p>Aktuel feriesaldo for ferieåret {{VacationYear}}</p>
                     <ul>
-                        <li>Afholdt ferie: {{HeldVacation}}</li>
-                        <li>Restferie: {{VacationLeft}}</li>
+                        <li>Afholdt ferie: {{VacationHeld}}</li>
+                        <li>Restferie: {{VacationRemaining}}</li>
                     </ul>
                     <p>Feriesaldoen er feriesaldoen fra lønsystemet, som er den samme som fremgår af din lønseddel</p>
                     <p>Netto saldo for afholdt og planlagt ferie:</p>
                     <ul>
-                        <li>Afholdt og planlagt ferie: {{HeldAndPlannedVacation}}</li>
-                        <li>Netto restferie: {{RemainingVacation}}</li>
+                        <li>Afholdt og planlagt ferie: {{NetHeldAndPlannedVacation}}</li>
+                        <li>Netto restferie: {{NetVacationRemaining}}</li>
                     </ul>
                     <p>Nettosaldoen udregnes på baggrund af det ferie du allerede har afholdt og den ferie du har indberettet og fået godkendt.</p>
                 </div>
@@ -106,7 +106,7 @@
 
 <div class="row margin-bottom-20">
     <div class="col-lg-12">
-        <h4>Resterende ferie hvis denne indberetning godkendes: {{RemainingVacationIfApproved}}</h4>
+        <h4>Resterende ferie hvis denne indberetning godkendes: {{NetVacationRemainingIfApproved | minint}}</h4>
     </div>
 </div>
 

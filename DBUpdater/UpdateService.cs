@@ -17,6 +17,7 @@ using MoreLinq;
 using Ninject;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
 using Core.ApplicationServices.Interfaces;
+using VacationBalance = Core.DomainModel.VacationBalance;
 
 namespace DBUpdater
 {
@@ -34,7 +35,8 @@ namespace DBUpdater
         private readonly IMailSender _mailSender;
         private readonly IAddressHistoryService _historyService;
         private readonly IGenericRepository<DriveReport> _reportRepo;
-        private readonly IDriveReportService _driveService;
+        private readonly IReportService<DriveReport> _driveService;
+        private readonly IGenericRepository<VacationBalance> _vacationRepo;
         private readonly ISubstituteService _subService;
 
         public UpdateService(IGenericRepository<Employment> emplRepo,
@@ -48,9 +50,10 @@ namespace DBUpdater
             IMailSender mailSender,
             IAddressHistoryService historyService,
             IGenericRepository<DriveReport> reportRepo,
-            IDriveReportService driveService,
+            IReportService<DriveReport> driveService,
             ISubstituteService subService,
-            IGenericRepository<Substitute> subRepo)
+            IGenericRepository<Substitute> subRepo,
+            IGenericRepository<VacationBalance> vacationRepo)
         {
             _emplRepo = emplRepo;
             _orgRepo = orgRepo;
@@ -66,7 +69,7 @@ namespace DBUpdater
             _driveService = driveService;
             _subService = subService;
             _subRepo = subRepo;
-            _driveService = driveService;
+            _vacationRepo = vacationRepo;
         }
 
         /// <summary>
@@ -512,6 +515,54 @@ namespace DBUpdater
                 }
             }
             _reportRepo.Save();
+        }
+
+        public void UpdateVacationBalance()
+        {
+            var balances = _dataProvider.GetVacationBalanceAsQueryable().ToList();
+
+            var count = 0;
+
+            foreach (var balance in balances)
+            {
+                var person = _personRepo.AsQueryable().FirstOrDefault(x => x.CprNumber.Equals(balance.CPR));
+                if(person?.Employments == null) continue;
+
+                var vacation = _vacationRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id);
+
+                if (vacation == null)
+                {
+
+                    vacation = new VacationBalance
+                    {
+                        PersonId = person.Id,
+                        EmploymentId = person.Employments.First().Id
+                    };
+                    
+                    var i = balance.FerieTimer_MLoen + balance.Overfoertetimer +
+                            balance.FERIEFRIDAGSTIMER_SUM;
+                    if (i != null)
+                        vacation.TotalVacationHours = (int) i;
+
+                    vacation.Year = DateTime.Parse(balance.DatoForSaldo).Year;
+
+                    _vacationRepo.Insert(vacation);
+
+                }
+
+                vacation.FreeVacationHours = balance.FERIEFRIDAGSTIMER_SUM ?? 0;
+                vacation.TransferredHours = balance.Overfoertetimer ?? 0;
+                vacation.VacationHours = balance.FerieTimer_MLoen ?? 0;
+
+                var updated = balance.Opdateringsdato ?? new DateTime();
+
+                vacation.UpdatedAt = Convert.ToInt64((updated - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds);
+
+                _vacationRepo.Save();
+
+            }
+
+            _vacationRepo.Save();
         }
 
     }
