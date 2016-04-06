@@ -31,9 +31,10 @@ namespace DBUpdater.Test
         private IDbUpdaterDataProvider _dataProvider;
         private IMailSender _mailSenderMock;
         private IGenericRepository<DriveReport> _reportRepo;
-        private IDriveReportService _driveService;
+        private IReportService<DriveReport> _driveService;
         private ISubstituteService _subservice;
         private IGenericRepository<Core.DomainModel.Substitute> _subRepo;
+        private IGenericRepository<Core.DomainModel.VacationBalance> _vacationBalanceRepo;
 
         [SetUp]
         public void SetUp()
@@ -52,6 +53,7 @@ namespace DBUpdater.Test
             _dataProvider = NSubstitute.Substitute.For<IDbUpdaterDataProvider>();
             _workAddressRepoMock = NSubstitute.Substitute.For<IGenericRepository<WorkAddress>>();
             _mailSenderMock = NSubstitute.Substitute.For<IMailSender>();
+            _vacationBalanceRepo = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.VacationBalance>>();
 
             _emplRepoMock.AsQueryable().Returns(emplList.AsQueryable());
 
@@ -59,7 +61,7 @@ namespace DBUpdater.Test
 
             _subRepo = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
             _reportRepo = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
-            _driveService = NSubstitute.Substitute.For<IDriveReportService>();
+            _driveService = NSubstitute.Substitute.For<IReportService<DriveReport>>();
             _subservice = NSubstitute.Substitute.For<ISubstituteService>();
 
 
@@ -85,7 +87,7 @@ namespace DBUpdater.Test
             }.AsQueryable());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-               _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSenderMock, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _driveService, _subservice, _subRepo);
+               _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSenderMock, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _driveService, _subservice, _subRepo, _vacationBalanceRepo);
 
         }
 

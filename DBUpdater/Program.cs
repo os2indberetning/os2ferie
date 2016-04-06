@@ -44,13 +44,13 @@ namespace DBUpdater
                 ninjectKernel.Get<IGenericRepository<Substitute>>(),
                 ninjectKernel.Get<IGenericRepository<VacationBalance>>());
 
-            //service.MigrateOrganisations();
-            //service.MigrateEmployees();
-            //historyService.UpdateAddressHistories();
-            //historyService.CreateNonExistingHistories();
-            //service.UpdateLeadersOnExpiredOrActivatedSubstitutes();
-            //service.AddLeadersToReportsThatHaveNone();
-            service.UpdateVacationBalance();
+            service.MigrateOrganisations();
+            service.MigrateEmployees();
+            historyService.UpdateAddressHistories();
+            historyService.CreateNonExistingHistories();
+            service.UpdateLeadersOnExpiredOrActivatedSubstitutes();
+            service.AddLeadersToReportsThatHaveNone();
+            //service.UpdateVacationBalance();
         }
 
 

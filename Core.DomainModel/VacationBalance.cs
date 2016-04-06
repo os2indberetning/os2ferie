@@ -11,13 +11,13 @@ namespace Core.DomainModel
         public int Id { get; set; }
         public int Year { get; set; }
 
-        // Set at the beginning fo the vacation year
-        public int TotalVacationHours { get; set; }
+        // Not available from OPUS yet
+        public double TotalVacationHours { get; set; }
 
         // From OPUS
-        public int VacationHours { get; set; }
-        public int TransferredHours { get; set; }
-        public int FreeVacationHours { get; set; }
+        public double VacationHours { get; set; }
+        public double TransferredHours { get; set; }
+        public double FreeVacationHours { get; set; }
         public long UpdatedAt { get; set; }
 
 

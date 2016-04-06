@@ -40,7 +40,7 @@
 
        // dates for kendo filter.
        var fromDateFilter = new Date();
-       fromDateFilter.setMonth(fromDateFilter.getMonth() - 3);
+       fromDateFilter.setMonth(fromDateFilter.getMonth() - 12);
        fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
        var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
@@ -155,8 +155,11 @@
            },
            columns: [
            {
-               field: "FullName",
-               title: "Medarbejder"
+                field: "FullName",
+                title: "Medarbejder",
+                template: function (data) {
+                    return data.FullName + " [" + data.Employment.EmploymentId + "]";
+                }
            }, {
                field: "Employment.OrgUnit.LongDescription",
                title: "Org.enhed"
@@ -245,7 +248,7 @@
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
            var from = new Date();
-           from.setMonth(from.getMonth() - 3);
+           from.setMonth(from.getMonth() - 12);
            $scope.dateContainer.toDate = new Date();
            $scope.dateContainer.fromDate = from;
        }

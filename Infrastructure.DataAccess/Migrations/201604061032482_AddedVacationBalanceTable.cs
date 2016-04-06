@@ -3,7 +3,7 @@ namespace Infrastructure.DataAccess.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddedVacationBalance : DbMigration
+    public partial class AddedVacationBalanceTable : DbMigration
     {
         public override void Up()
         {
@@ -13,10 +13,10 @@ namespace Infrastructure.DataAccess.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Year = c.Int(nullable: false),
-                        TotalVacationHours = c.Int(nullable: false),
-                        VacationHours = c.Int(nullable: false),
-                        TransferredHours = c.Int(nullable: false),
-                        FreeVacationHours = c.Int(nullable: false),
+                        TotalVacationHours = c.Double(nullable: false),
+                        VacationHours = c.Double(nullable: false),
+                        TransferredHours = c.Double(nullable: false),
+                        FreeVacationHours = c.Double(nullable: false),
                         UpdatedAt = c.Long(nullable: false),
                         EmploymentId = c.Int(nullable: false),
                         PersonId = c.Int(nullable: false),
@@ -26,7 +26,6 @@ namespace Infrastructure.DataAccess.Migrations
                 .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
                 .Index(t => t.EmploymentId)
                 .Index(t => t.PersonId);
-            
             AddColumn("VacationReports", "VacationYear", c => c.Int(nullable: false));
             AddColumn("VacationReports", "VacationHours", c => c.Int(nullable: false));
         }
@@ -39,7 +38,7 @@ namespace Infrastructure.DataAccess.Migrations
             DropIndex("VacationBalances", new[] { "EmploymentId" });
             DropColumn("VacationReports", "VacationHours");
             DropColumn("VacationReports", "VacationYear");
-            DropTable("VacationBalances");   
+            DropTable("VacationBalances");
         }
     }
 }

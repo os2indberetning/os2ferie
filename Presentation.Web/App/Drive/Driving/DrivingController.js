@@ -542,6 +542,8 @@
                 // Format address objects for OS2RouteMap once received.
                 angular.forEach(data, function (address, value) {
                     mapArray.push({ name: address.streetName + " " + address.streetNumber + ", " + address.zipCode + " " + address.town, lat: address.latitude, lng: address.longitude });
+                    $scope.DriveReport.Addresses[value].Latitude = address.latitude;
+                    $scope.DriveReport.Addresses[value].Longitude = address.longitude;
                 });
                 setMap(mapArray, $scope.transportType);
                 isFormDirty = true;

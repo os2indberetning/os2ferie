@@ -21,7 +21,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
         private List<Substitute> _repo;
         private IGenericRepository<Substitute> _repoMock;
         private IOrgUnitService _orgService;
-        private IDriveReportService _driveService;
+        private IReportService<DriveReport> _driveService;
         private IGenericRepository<DriveReport> _driveRepo;
             
         [SetUp]
@@ -30,7 +30,7 @@ namespace ApplicationServices.Test.SubstituteServiceTest
             _orgService = NSubstitute.Substitute.For<IOrgUnitService>();
             _repoMock = NSubstitute.Substitute.For<IGenericRepository<Substitute>>();
             _driveRepo = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
-            _driveService = NSubstitute.Substitute.For<IDriveReportService>();
+            _driveService = NSubstitute.Substitute.For<IReportService<DriveReport>>();
 
 
             _repo = new List<Substitute>

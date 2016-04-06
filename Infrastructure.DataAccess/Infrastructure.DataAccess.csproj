@@ -409,13 +409,9 @@
     <Compile Include="Migrations\201603241609169_ChangedSubstituteTypeName.Designer.cs">
       <DependentUpon>201603241609169_ChangedSubstituteTypeName.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201603291235102_AddedIdentityToReportBase.cs" />
-    <Compile Include="Migrations\201603291235102_AddedIdentityToReportBase.Designer.cs">
-      <DependentUpon>201603291235102_AddedIdentityToReportBase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201604010810547_AddedVacationBalance.cs" />
-    <Compile Include="Migrations\201604010810547_AddedVacationBalance.Designer.cs">
-      <DependentUpon>201604010810547_AddedVacationBalance.cs</DependentUpon>
+    <Compile Include="Migrations\201604061032482_AddedVacationBalanceTable.cs" />
+    <Compile Include="Migrations\201604061032482_AddedVacationBalanceTable.Designer.cs">
+      <DependentUpon>201604061032482_AddedVacationBalanceTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
@@ -692,11 +688,8 @@
     <EmbeddedResource Include="Migrations\201603241609169_ChangedSubstituteTypeName.resx">
       <DependentUpon>201603241609169_ChangedSubstituteTypeName.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603291235102_AddedIdentityToReportBase.resx">
-      <DependentUpon>201603291235102_AddedIdentityToReportBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201604010810547_AddedVacationBalance.resx">
-      <DependentUpon>201604010810547_AddedVacationBalance.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201604061032482_AddedVacationBalanceTable.resx">
+      <DependentUpon>201604061032482_AddedVacationBalanceTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

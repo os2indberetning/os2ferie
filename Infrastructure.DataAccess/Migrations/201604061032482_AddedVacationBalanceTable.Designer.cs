@@ -7,13 +7,13 @@ namespace Infrastructure.DataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.0-30225")]
-    public sealed partial class AddedIdentityToReportBase : IMigrationMetadata
+    public sealed partial class AddedVacationBalanceTable : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddedIdentityToReportBase));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddedVacationBalanceTable));
         
         string IMigrationMetadata.Id
         {
-            get { return "201603291235102_AddedIdentityToReportBase"; }
+            get { return "201604061032482_AddedVacationBalanceTable"; }
         }
         
         string IMigrationMetadata.Source
