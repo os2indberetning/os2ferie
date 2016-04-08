@@ -1,4 +1,4 @@
-﻿angular.module("app.common").service('OrgUnit', ["$resource", function ($resource) {
+﻿angular.module("app.core").service('OrgUnit', ["$resource", function ($resource) {
     return $resource("/odata/OrgUnits(:id)?:query", { id: "@id"}, {
         "get": { method: "GET", isArray: false },
         "patch": { method: "PATCH", isArray: false },

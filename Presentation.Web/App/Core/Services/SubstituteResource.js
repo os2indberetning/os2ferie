@@ -1,4 +1,4 @@
-﻿angular.module("app.common").service('Substitute', ["$resource", function ($resource) {
+﻿angular.module("app.core").service('Substitute', ["$resource", function ($resource) {
     return $resource("/odata/Substitutes(:id)?:query", { id: "@id", query: "@query" }, {
         "get": {
             method: "GET",

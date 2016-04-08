@@ -1,4 +1,4 @@
-﻿angular.module("app.common").service('Person', ["$resource", "$modal", function ($resource, $modal) {
+﻿angular.module("app.core").service('Person', ["$resource", "$modal", function ($resource, $modal) {
     return $resource("/odata/Person(:id)", { id: "@id" }, {
         "get": {
             method: "GET", isArray: false, transformResponse: function (data) {
@@ -42,7 +42,7 @@
 
                 // If there was an error then open modal.
                 var modalInstance = $modal.open({
-                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    templateUrl: '/App/Core/Services/Error/ServiceError.html',
                     controller: "ServiceErrorController",
                     backdrop: "static",
                     resolve: {
@@ -81,7 +81,7 @@
 
                 // If there was an error then open modal.
                 var modalInstance = $modal.open({
-                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    templateUrl: '/App/Core/Services/Error/ServiceError.html',
                     controller: "ServiceErrorController",
                     backdrop: "static",
                     resolve: {

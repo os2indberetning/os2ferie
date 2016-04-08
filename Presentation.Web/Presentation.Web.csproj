@@ -371,7 +371,7 @@
     <Content Include="App\Drive\Admin\Address\StandardAddressController.js" />
     <Content Include="App\Drive\Admin\Email\View.html" />
     <Content Include="App\Drive\Admin\Rate\View.html" />
-    <Content Include="App\app.js" />
+    <TypeScriptCompile Include="App\app.ts" />
     <Content Include="App\Drive\app.drive.html" />
     <Content Include="App\Drive\app.drive.js" />
     <Content Include="App\Drive\ApproveReports\AcceptedReportsController.js" />
@@ -435,8 +435,8 @@
     <Content Include="App\Drive\ApproveReports\View.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App\Common\Directives\CheckIeDirective.js" />
-    <Content Include="App\Common\Directives\EnterKeypress.js" />
+    <Content Include="App\Core\Directives\CheckIeDirective.js" />
+    <Content Include="App\Core\Directives\EnterKeypress.js" />
     <Content Include="App\Drive\Directives\RouteLoader.js" />
     <Content Include="App\Drive\Driving\ConfirmDiscardChangesController.js" />
     <Content Include="App\Drive\Driving\ConfirmDiscardChangesTemplate.html">
@@ -450,28 +450,37 @@
     <Content Include="App\Drive\MyReports\MyRejectedReportsController.js" />
     <Content Include="App\Drive\MyReports\MyPendingReportsController.js" />
     <Content Include="App\Drive\MyReports\View.html" />
-    <Content Include="App\Common\Services\BankAccountService.js" />
-    <Content Include="App\Common\Services\EmailNotificationResouce.js" />
-    <Content Include="App\Common\Services\Error\ServiceErrorController.js" />
-    <Content Include="App\Common\Services\FileResource.js" />
-    <Content Include="App\Common\Services\HelpTextResource.js" />
-    <Content Include="App\app.routes.js" />
+    <Content Include="App\Core\Services\BankAccountService.js" />
+    <Content Include="App\Core\Services\EmailNotificationResouce.js" />
+    <Content Include="App\Core\Services\Error\ServiceErrorController.js" />
+    <Content Include="App\Core\Services\FileResource.js" />
+    <Content Include="App\Core\Services\HelpTextResource.js" />
+    <TypeScriptCompile Include="App\app.routes.ts" />
     <Content Include="App\Vacation\app.vacation.html" />
-    <Content Include="App\Vacation\app.vacation.js" />
+    <TypeScriptCompile Include="App\Core\Models\VacationBalance.ts" />
+    <TypeScriptCompile Include="App\Core\Models\Employment.ts" />
+    <TypeScriptCompile Include="App\Core\Models\OrgUnit.ts" />
+    <TypeScriptCompile Include="App\Core\Models\Person.ts" />
+    <TypeScriptCompile Include="App\Core\Models\VacationReport.ts" />
+    <TypeScriptCompile Include="App\Core\Models\Report.ts" />
+    <TypeScriptCompile Include="App\Vacation\ApproveReports\ApproveReportsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\Services\VacationBalanceResource.ts" />
+    <TypeScriptCompile Include="App\Vacation\app.vacation.ts" />
     <Content Include="App\Vacation\Filters\MinIntFilter.js" />
-    <Content Include="App\Vacation\ReportVacation\ReportVacationController.js" />
+    <TypeScriptCompile Include="App\Vacation\ReportVacation\ReportVacationController.ts" />
+    <Content Include="App\Vacation\ApproveReports\ApproveReportsView.html" />
     <Content Include="App\Vacation\ReportVacation\ReportVacationView.html" />
-    <Content Include="App\Vacation\app.vacation.routes.js" />
+    <TypeScriptCompile Include="App\Vacation\app.vacation.routes.ts" />
     <Content Include="App\Drive\Services\MkColumnFormatterService.js" />
     <Content Include="App\Drive\Services\AppLoginResource.js" />
     <Content Include="App\Drive\Services\RateTypeResource.js" />
-    <Content Include="App\Common\Services\Error\ServiceError.html" />
-    <Content Include="App\Common\Services\AutocompleteResource.js" />
+    <Content Include="App\Core\Services\Error\ServiceError.html" />
+    <Content Include="App\Core\Services\AutocompleteResource.js" />
     <Content Include="App\Drive\Services\RouteColumnFormatterService.js" />
     <Content Include="App\Drive\Services\StandardAddressResource.js" />
-    <Content Include="App\Common\Services\OrgUnitResource.js" />
+    <Content Include="App\Core\Services\OrgUnitResource.js" />
     <Content Include="App\Drive\Services\RouteContainerResource.js" />
-    <Content Include="App\Common\Services\SubstituteResource.js" />
+    <Content Include="App\Core\Services\SubstituteResource.js" />
     <Content Include="App\Drive\Settings\confirmCreateAppLoginModal.html" />
     <Content Include="App\Drive\Settings\AddressAddModal.html" />
     <Content Include="App\Drive\Settings\AlternativeAddressController.js" />
@@ -484,7 +493,6 @@
     <Content Include="App\Drive\Settings\RouteAddModal.html" />
     <Content Include="App\Drive\Settings\Substitutes\SubstituteController.js" />
     <Content Include="App\Drive\app.drive.routes.js" />
-    <Content Include="App\Vacation\Services\VacationBalanceResource.js" />
     <Content Include="App\Vacation\Services\VacationReportResource.js" />
     <Content Include="Content\angular-busy.min.css" />
     <Content Include="Content\Bootstrap\loading-image.gif" />
@@ -1296,9 +1304,9 @@
     <Content Include="App\Drive\Services\AddressResource.js" />
     <Content Include="App\Drive\Services\DriveReportResource.js" />
     <Content Include="App\Drive\Services\LicensePlateResource.js" />
-    <Content Include="App\Common\Services\NotificationService.js" />
+    <Content Include="App\Core\Services\NotificationService.js" />
     <Content Include="App\Drive\Services\RateResource.js" />
-    <Content Include="App\Common\Services\PersonEmploymentsResource.js" />
+    <Content Include="App\Core\Services\PersonEmploymentsResource.js" />
     <Content Include="App\Drive\Services\PersonalAddressType.js" />
     <Content Include="App\Drive\Services\PersonalRouteResource.js" />
     <Content Include="App\Drive\Services\PersonalAddressResource.js" />
@@ -2404,7 +2412,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App\Drive\ApproveReports\ApproveReportsController.js" />
-    <Content Include="App\Common\Services\PersonResource.js" />
+    <Content Include="App\Core\Services\PersonResource.js" />
     <TypeScriptCompile Include="Scripts\typings\angular-ui\angular-ui-router.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-cookies.d.ts" />
@@ -2415,6 +2423,7 @@
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jasmine\jasmine.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\kendo\kendo.all.another.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\kendo\kendo.all.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\kendo\kendo.all.original.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment-timezone\moment-timezone.d.ts" />
@@ -2439,6 +2448,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
@@ -2447,6 +2457,7 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />

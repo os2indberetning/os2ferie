@@ -1246,6 +1246,14 @@ declare module ng {
         }
     }
 
+    interface IHttpResponseTransformer {
+        (data: any, headersGetter: IHttpHeadersGetter, status: number): any;
+    }
+
+    interface IHttpRequestTransformer {
+        (data: any, headersGetter: IHttpHeadersGetter): any;
+    }
+
     interface IHttpProvider extends IServiceProvider {
         defaults: IHttpProviderDefaults;
         interceptors: any[];

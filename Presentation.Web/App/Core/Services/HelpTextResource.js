@@ -1,4 +1,4 @@
-﻿angular.module("app.common").service("HelpText", ["$resource", function ($resource) {
+﻿angular.module("app.core").service("HelpText", ["$resource", function ($resource) {
     return $resource("/api/HelpText/:id", { id: "@id" }, {
         "get": {
             method: "GET",

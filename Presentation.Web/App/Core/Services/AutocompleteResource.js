@@ -1,4 +1,4 @@
-﻿angular.module("app.common").service("Autocomplete", function () {
+﻿angular.module("app.core").service("Autocomplete", function () {
     return {
         allUsers: function () {
             return {

@@ -23,8 +23,9 @@ namespace OS2Indberetning.Controllers
         private readonly IGenericRepository<LicensePlate> _licensePlateRepo = new GenericRepository<LicensePlate>(new DataContext());
         private readonly IGenericRepository<Substitute> _substituteRepo;
         private readonly IGenericRepository<AppLogin> _appLoginRepo;
+        private readonly IOrgUnitService _orgService;
 
-        public PersonController(IGenericRepository<Person> repo, IPersonService personService, IGenericRepository<Employment> employmentRepo, IGenericRepository<LicensePlate> licensePlateRepo, IGenericRepository<Substitute> substituteRepo, IGenericRepository<AppLogin> appLoginRepo)
+        public PersonController(IGenericRepository<Person> repo, IPersonService personService, IGenericRepository<Employment> employmentRepo, IGenericRepository<LicensePlate> licensePlateRepo, IGenericRepository<Substitute> substituteRepo, IGenericRepository<AppLogin> appLoginRepo, IOrgUnitService orgService)
             : base(repo, repo)
         {
             _person = personService;
@@ -32,6 +33,7 @@ namespace OS2Indberetning.Controllers
             _licensePlateRepo = licensePlateRepo;
             _substituteRepo = substituteRepo;
             _appLoginRepo = appLoginRepo;
+            _orgService = orgService;
         }
 
         // GET: odata/Person
@@ -229,6 +231,34 @@ namespace OS2Indberetning.Controllers
         public IHttpActionResult HasLicensePlate([FromODataUri] int key, ODataActionParameters parameters)
         {
             return Ok(_licensePlateRepo.AsQueryable().Any(x => x.PersonId == key));
+        }
+
+        // GET: odata/Person()/Service.LeadersPeople
+        /// <summary>
+        /// Returns the people where the user is the leader
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        [EnableQuery]
+        [System.Web.Http.HttpGet]
+        public IQueryable<Person> LeadersPeople()
+        {
+            var orgs = _orgService.GetWhereUserIsResponsible(CurrentUser.Id);
+
+            var people = new List<Person>();
+
+            foreach (var org in orgs)
+            {
+
+                foreach (var employment in org.Employments.Where(x => !people.Any(y => y.Id == x.PersonId) && x.PersonId != CurrentUser.Id))
+                {
+                    people.Add(employment.Person);
+                }
+
+            }
+
+            return people.AsQueryable();
         }
     }
 }

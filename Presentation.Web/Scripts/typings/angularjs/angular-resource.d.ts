@@ -46,9 +46,17 @@ declare module ng.resource {
     // Just a reference to facilitate describing new actions
     interface IActionDescriptor {
         method: string;
-        isArray?: boolean;
         params?: any;
+        url?: string;
+        isArray?: boolean;
+        transformRequest?: ng.IHttpRequestTransformer | ng.IHttpRequestTransformer[];
+        transformResponse?: ng.IHttpResponseTransformer | ng.IHttpResponseTransformer[];
         headers?: any;
+        cache?: boolean | ng.ICacheObject;
+        timeout?: number | ng.IPromise<any>;
+        withCredentials?: boolean;
+        responseType?: string;
+        interceptor?: any;
     }
 
     // Baseclass for everyresource with default actions.

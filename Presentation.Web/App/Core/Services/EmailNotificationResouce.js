@@ -1,4 +1,4 @@
-﻿angular.module("app.common").service('EmailNotification', ["$resource", function ($resource) {
+﻿angular.module("app.core").service('EmailNotification', ["$resource", function ($resource) {
     return $resource("/odata/MailNotifications(:id)", { id: "@id" }, {
         "get": { method: "GET", isArray: false, transformResponse: function(data) {
             var res = angular.fromJson(data);
@@ -7,7 +7,7 @@
             }
 
             var modalInstance = $modal.open({
-                templateUrl: '/App/Services/Error/ServiceError.html',
+                templateUrl: '/App/Core/Services/Error/ServiceError.html',
                 controller: "ServiceErrorController",
                 backdrop: "static",
                 resolve: {

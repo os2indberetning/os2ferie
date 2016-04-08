@@ -36,7 +36,7 @@ namespace Core.ApplicationServices
         {
             if (report.PersonId == 0) return false;
             if (report.EndTimestamp < report.StartTimestamp) return false;
-            if (!report.Employment.OrgUnit.HasAccessToVacation) return false;
+            //if (!report.Employment.OrgUnit.HasAccessToVacation) return false;
          
             return true;
         }

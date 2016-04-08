@@ -1,5 +1,5 @@
 ﻿// ng-enter in html to attach eventhandler to clicking enter.
-angular.module("app.common").directive('ngEnter', function () {
+angular.module("app.core").directive('ngEnter', function () {
     return function (scope, element, attrs) {
         element.bind("keydown keypress", function (event) {
             if (event.which === 13) {

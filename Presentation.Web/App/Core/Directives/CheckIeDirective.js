@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app.common', [])
+        .module('app.core', [])
         .directive('checkie', ["$modal",
             function ($modal) {
                 return {

@@ -1,4 +1,4 @@
-﻿angular.module("app.common").controller("ServiceErrorController", [
+﻿angular.module("app.core").controller("ServiceErrorController", [
    "$scope", "$modalInstance", "errorMsg",
    function ($scope, $modalInstance, errorMsg) {
 

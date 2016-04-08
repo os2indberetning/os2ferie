@@ -1,4 +1,4 @@
-﻿angular.module("app.common").service("PersonEmployments", ["$resource", function ($resource) {
+﻿angular.module("app.core").service("PersonEmployments", ["$resource", function ($resource) {
     return $resource("/odata/Person(:id)/Employments?$expand=OrgUnit", { id: "@id" }, {
         "get": {
             method: "GET",
@@ -10,7 +10,7 @@
                 }
 
                 var modalInstance = $modal.open({
-                    templateUrl: '/App/Services/Error/ServiceError.html',
+                    templateUrl: '/App/Core/Services/Error/ServiceError.html',
                     controller: "ServiceErrorController",
                     backdrop: "static",
                     resolve: {

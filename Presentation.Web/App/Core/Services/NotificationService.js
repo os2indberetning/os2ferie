@@ -1,4 +1,4 @@
-﻿angular.module("app.common").factory("NotificationService", [function NotificationService() {
+﻿angular.module("app.core").factory("NotificationService", [function NotificationService() {
     return {
         AutoFadeNotification: function (type, title, message) {
             // Some backwards compatibility.

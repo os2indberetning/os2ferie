@@ -1,0 +1,77 @@
+﻿<script>
+    //Custom View
+    (function ($, undefined) {
+        var kendo = window.kendo,
+            ui = kendo.ui,
+            SchedulerTimelineView = ui.TimelineView,
+            extend = $.extend,
+            NS = ".kendoTimelineYearView";
+
+        var SchedulerTimelineYearView = SchedulerTimelineView.extend({
+            nextDate: function () {
+                var start = this.startDate();
+                return new Date(start.getFullYear(), start.getMonth() + 1);
+            },
+            previousDate: function () {
+                var start = this.startDate();
+                return new Date(start.getFullYear(), start.getMonth() - 1);
+            },
+            calculateDateRange: function () {
+                var selectedDate = this.options.date,
+                    start = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1),
+                    end = kendo.date.previousDay(new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1)),
+                    dates = [];
+
+                while (start <= end) {
+                    dates.push(start);
+                    start = kendo.date.nextDay(start);
+                }
+                this._render(dates);
+            }
+        })
+
+        //extend UI
+        extend(true, ui, {
+            SchedulerTimelineYearView: SchedulerTimelineYearView
+        });
+
+    })(window.kendo.jQuery);
+</script>
+
+<div style="margin: 50px;">
+    <div class="row" style="text-align: center;">
+        <div class="col-lg-10 col-lg-offset-1 margin-bottom-20">
+            <div class="row margin-bottom-20">
+                <div class="col-lg-12">
+                    2016
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-1">Januar</div>
+                <div class="col-lg-1">Februar</div>
+                <div class="col-lg-1">Marts</div>
+                <div class="col-lg-1">April</div>
+                <div class="col-lg-1">Maj</div>
+                <div class="col-lg-1">Juni</div>
+                <div class="col-lg-1">Juli</div>
+                <div class="col-lg-1">August</div>
+                <div class="col-lg-1">September</div>
+                <div class="col-lg-1">Oktober</div>
+                <div class="col-lg-1">November</div>
+                <div class="col-lg-1">December</div>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div kendo-scheduler culture="'da-DK'" k-options="arc.SchdulerOptions">
+                    <span k-event-template class='custom-event'>{{dataItem.title}}</span>
+                    <div k-all-day-event-template class='custom-all-day-event'>{{dataItem.title}}</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

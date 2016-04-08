@@ -1,4 +1,4 @@
-﻿angular.module("app.common").service('BankAccount', ["$resource", function ($resource) {
+﻿angular.module("app.core").service('BankAccount', ["$resource", function ($resource) {
     return $resource("/odata/BankAccounts(:id)", { id: "@id" }, {
         "get": { method: "GET", isArray: false },
         "patch": { method: "PATCH" },
