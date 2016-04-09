@@ -215,6 +215,8 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Report>()
             .Property(c => c.Id)
             .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            modelBuilder.Entity<Report>().HasKey(p => p.Id);
         }
 
         private void ConfigurePropertiesForEmployment(DbModelBuilder modelBuilder)
@@ -259,6 +261,7 @@ namespace Infrastructure.DataAccess
                 m.ToTable("VacationReports");
             });
 
+            modelBuilder.Entity<VacationReport>().HasKey(p => p.Id);
             modelBuilder.Entity<VacationReport>().Property(p => p.Status).IsRequired();
             modelBuilder.Entity<VacationReport>().Property(p => p.CreatedDateTimestamp).IsRequired();
             modelBuilder.Entity<VacationReport>().Property(p => p.Comment).IsRequired();

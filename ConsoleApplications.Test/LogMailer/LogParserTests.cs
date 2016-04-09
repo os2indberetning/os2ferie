@@ -18,7 +18,7 @@ namespace ConsoleApplications.Test.LogMailer
             var logParser = new LogParser();
             var log = new List<string>
             {
-                "28/12/2015 15:21:14 : Exception doing post of type Core.DomainModel.Substitute"
+                "28-12-2015 15:21:14 : Exception doing post of type Core.DomainModel.Substitute"
             };
 
             var date = new DateTime(2015, 12, 28, 0, 0, 0);
@@ -32,7 +32,7 @@ namespace ConsoleApplications.Test.LogMailer
             var logParser = new LogParser();
             var log = new List<string>
             {
-                "22/12/2015 15:21:14 : Exception doing post of type Core.DomainModel.Substitute"
+                "22-12-2015 15:21:14 : Exception doing post of type Core.DomainModel.Substitute"
             };
 
             var date = new DateTime(2015, 12, 28, 0, 0, 0);

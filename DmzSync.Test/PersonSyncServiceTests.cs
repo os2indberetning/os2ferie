@@ -124,13 +124,7 @@ namespace DmzSync.Test
         [Test]
         public void ClearDmz_ShouldCallDeleteRange()
         {
-            _dmzProfileList.Add(new Profile());
-            _dmzProfileList.Add(new Profile());
-            _dmzProfileList.Add(new Profile());
-            var numberOfReceivedCalls = 0;
-            _dmzRepoMock.WhenForAnyArgs(x => x.DeleteRange(_dmzProfileList)).Do(p => numberOfReceivedCalls++);
-            _uut.ClearDmz();
-            Assert.AreEqual(1, numberOfReceivedCalls);
+            Assert.Throws<NotImplementedException>(() => _uut.SyncFromDmz());
         }
 
         [Test]

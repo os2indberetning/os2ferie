@@ -244,8 +244,8 @@ namespace DmzSync.Test
         public void SyncFromDmz_ShouldSetKilometerAllowanceCorrectly()
         {
             _uut.SyncFromDmz();
-            Assert.AreEqual(KilometerAllowance.Read, _masterRepoMock.AsQueryable().ElementAt(0).KilometerAllowance);
-            Assert.AreEqual(KilometerAllowance.Read, _masterRepoMock.AsQueryable().ElementAt(1).KilometerAllowance);
+            Assert.AreEqual(KilometerAllowance.Calculated, _masterRepoMock.AsQueryable().ElementAt(0).KilometerAllowance);
+            Assert.AreEqual(KilometerAllowance.Calculated, _masterRepoMock.AsQueryable().ElementAt(1).KilometerAllowance);
         }
 
         [Test]

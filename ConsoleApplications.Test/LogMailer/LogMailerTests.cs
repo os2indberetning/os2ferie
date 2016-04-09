@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Core.ApplicationServices.MailerService.Interface;
 using Mail.LogMailer;
 using NSubstitute;
 using NUnit.Framework;
-using Core.ApplicationServices;
-using Ninject;
 
-namespace ConsoleApplications.Test.LogMailer
+namespace Mail.Test.LogMailer
 {
     [TestFixture]
     public class LogMailerTests
@@ -38,7 +33,7 @@ namespace ConsoleApplications.Test.LogMailer
             readerSub.Read(Arg.Any<string>())
                 .Returns(new List<string>
                 {
-                    "28/12/2015 15:21:14 : Exception doing post of type Core.DomainModel.Substitute"
+                    "28-12-2015 15:21:14 : Exception doing post of type Core.DomainModel.Substitute"
                 });
 
 
