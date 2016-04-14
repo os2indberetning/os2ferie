@@ -50,7 +50,27 @@
                             }
                         ],
                     }
-                });
+                })
+                .state("vacation.admin", {
+                    url: "/admin",
+                    templateUrl: "/App/Vacation/Admin/AdminView.html",
+                    controller: "Vacation.AdminMenuController",
+                    controllerAs: "ctrl",
+                    resolve: {
+                        CurrentUser: [
+                            "$rootScope", "Person", ($rootScope, Person) => {
+                                if ($rootScope.CurrentUser == undefined) {
+                                    return Person.GetCurrentUser().$promise.then(res => {
+                                        $rootScope.CurrentUser = res;
+                                    });
+                                } else {
+                                    return $rootScope.CurrentUser;
+                                }
+
+                            }
+                        ],
+                    }
+                });;
         }
     }
 

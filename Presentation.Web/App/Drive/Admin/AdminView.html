@@ -33,8 +33,8 @@
                     <div ng-include='"App/Drive/Admin/Reports/View.html"'></div>
                 </tab>
 
-                <tab heading="Stedfortrædere/Godkendere" ng-controller="SubstituteController" ng-click="refreshGrids()">
-                    <div ng-include='"App/Drive/Admin/Substitutes/View.html"'></div>
+                <tab heading="Stedfortrædere/Godkendere" ng-controller="Drive.SubstitutesController as ctrl" ng-click="refreshGrids()">
+                    <div ng-include='"App/Core/Views/AdminSubstitutesView.html"'></div>
                 </tab>
 
                 <tab heading="Adressevask" ng-controller="AddressLaundryController" ng-click="laundryClicked()">

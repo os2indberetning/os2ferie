@@ -187,10 +187,12 @@ namespace OS2Indberetning
             builder.EntitySet<Substitute>("Substitutes");
             builder.EntityType<Substitute>().Collection
                 .Function("Personal")
-                .ReturnsFromEntitySet<Substitute>("Substitutes");
+                .ReturnsFromEntitySet<Substitute>("Substitutes")
+                .Parameter<int>("Type");
             builder.EntityType<Substitute>().Collection
                 .Function("Substitute")
-                .ReturnsFromEntitySet<Substitute>("Substitutes");
+                .ReturnsFromEntitySet<Substitute>("Substitutes")
+                .Parameter<int>("Type");
 
             builder.EntitySet<Rate>("Rates");
             builder.EntityType<Rate>().Collection

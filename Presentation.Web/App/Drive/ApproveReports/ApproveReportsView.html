@@ -45,11 +45,11 @@
                     </div>
                 </div>
             </tab>
-            <tab heading="Stedfortrædere og godkendere" ng-controller="ApproveReportsSettingsController" ng-click="refreshGrids()">
+            <tab heading="Stedfortrædere og godkendere" ng-controller="ApproveReportsSettingsController as ctrl" ng-click="refreshGrids()">
                 <div class="panel panel-default">
 
                     <div class="panel-body">
-                        <div ng-include="'App/Drive/ApproveReports/SettingsView.html'"></div>
+                        <div ng-include="'App/Core/Views/ApproveReportsSettingsView.html'"></div>
 
                     </div>
                 </div>
