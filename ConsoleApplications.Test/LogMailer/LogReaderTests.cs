@@ -14,7 +14,7 @@ namespace Mail.Test.LogMailer
         {
             var logReader = new LogReader();
 
-            var log = logReader.Read("LogMailer/web.log");
+            var log = logReader.Read("LogMailer/test-web.txt");
 
             Assert.AreEqual(6, log.Count());
 
