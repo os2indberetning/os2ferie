@@ -1,7 +1,7 @@
 ﻿module app.core.controllers {
     "use strict";
 
-    import SubstituteType = core.models.SubstituteType;
+    import SubstituteType = app.core.models.SubstituteType;
 
     export class BaseApproveReportsSettingsController {
 
@@ -24,7 +24,7 @@
         personalApprovers: kendo.ui.GridOptions;
         mySubstitutes: kendo.ui.GridOptions;
 
-        constructor(protected $scope, protected Person, protected $rootScope, protected Autocomplete, protected $modal, private substituteType: SubstituteType) {
+        constructor(protected $scope, protected Person, protected $rootScope, protected Autocomplete, protected $modal, protected moment, private substituteType: SubstituteType) {
 
             this.personalApproverHelpText = $rootScope.HelpTexts.PersonalApproverHelpText.text;
             this.personId = $rootScope.CurrentUser.Id;
@@ -48,21 +48,9 @@
                             url: "odata/Substitutes/Service.Substitute(Type=" + this.substituteType + ")?$expand=OrgUnit,Sub,Person,Leader &$filter=PersonId eq " + this.personId,
                             dataType: "json",
                             cache: false
-                        },
-                        parameterMap(options, type) {
-                            var d = kendo.data.transports['odata-v4'].parameterMap(options, type);
-                            return d;
                         }
                     },
-                    pageSize: 20,
-                    schema: {
-                        data(data) {
-                            return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
-                        },
-                        total(data) {
-                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
-                        }
-                    }
+                    pageSize: 20
                 },
                 sortable: true,
                 pageable: {
@@ -104,7 +92,7 @@
                         field: "StartDateTimestamp",
                         title: "Fra",
                         template: (data) => {
-                            var m = moment.unix(data.StartDateTimestamp).toDate();
+                            var m = this.moment.unix(data.StartDateTimestamp).toDate();
                             return m.getDate() + "/" +
                                 (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                 m.getFullYear();
@@ -117,7 +105,7 @@
                             if (data.EndDateTimestamp === this.infinitePeriod) {
                                 return "På ubestemt tid";
                             }
-                            var m = moment.unix(data.EndDateTimestamp).toDate();
+                            var m = this.moment.unix(data.EndDateTimestamp).toDate();
                             return m.getDate() + "/" +
                                 (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                 m.getFullYear();
@@ -143,15 +131,10 @@
                             url: "odata/Substitutes/Service.Personal(Type=" + this.substituteType + ")?$expand=OrgUnit,Sub,Leader,Person&$filter=LeaderId eq " + this.personId,
                             dataType: "json",
                             cache: false
-                        },
-                        parameterMap(options, type) {
-                            var d = kendo.data.transports['odata-v4'].parameterMap(options, type);
-                            return d;
                         }
                     },
                     pageSize: 20
                 },
-
                 sortable: true,
                 pageable: {
                     messages: {
@@ -188,7 +171,7 @@
                         field: "StartDateTimestamp",
                         title: "Fra",
                         template: (data) => {
-                            var m = moment.unix(data.StartDateTimestamp).toDate();
+                            var m = this.moment.unix(data.StartDateTimestamp).toDate();
                             return m.getDate() + "/" +
                                 (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                 m.getFullYear();
@@ -201,7 +184,7 @@
                             if (data.EndDateTimestamp === this.infinitePeriod) {
                                 return "På ubestemt tid";
                             }
-                            var m = moment.unix(data.EndDateTimestamp).toDate();
+                            var m = this.moment.unix(data.EndDateTimestamp).toDate();
                             return m.getDate() + "/" +
                                 (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                                 m.getFullYear();
@@ -227,10 +210,6 @@
                             url: "odata/Substitutes/Service.Substitute(Type=" + this.substituteType + ")?$expand=Sub,Person,Leader,OrgUnit &$filter=PersonId eq LeaderId and SubId eq " + this.personId,
                             dataType: "json",
                             cache: false
-                        },
-                        parameterMap(options, type) {
-                            var d = kendo.data.transports['odata-v4'].parameterMap(options, type);
-                            return d;
                         }
                     },
                     pageSize: 20
@@ -262,13 +241,16 @@
                     {
                         field: "Person.FullName",
                         title: "Stedfortræder for"
-                    }, {
+                    },
+                    {
                         field: "OrgUnit.LongDescription",
                         title: "Organisationsenhed"
-                    }, {
+                    },
+                    {
                         field: "Leader.FullName",
                         title: "Opsat af"
-                    }, {
+                    },
+                    {
                         field: "StartDateTimestamp",
                         title: "Fra",
                         template: (data) => {

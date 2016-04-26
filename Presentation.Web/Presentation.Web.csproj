@@ -22,7 +22,7 @@
     <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
-    <TypeScriptToolsVersion>1.7</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <NuGetPackageImportStamp>bb2330ea</NuGetPackageImportStamp>
@@ -459,7 +459,6 @@
     <TypeScriptCompile Include="App\Core\Controllers\BaseApproveReportSettingsController.ts" />
     <TypeScriptCompile Include="App\Core\Controllers\BaseSubstitutesController.ts" />
     <TypeScriptCompile Include="App\Core\Models\Substitute.ts" />
-    <TypeScriptCompile Include="App\Core\Services\SubstitutesGridService.ts" />
     <TypeScriptCompile Include="App\Vacation\Admin\AdminMenuController.ts" />
     <Content Include="App\Vacation\Admin\AdminView.html" />
     <Content Include="App\Core\Views\AdminSubstitutesView.html" />

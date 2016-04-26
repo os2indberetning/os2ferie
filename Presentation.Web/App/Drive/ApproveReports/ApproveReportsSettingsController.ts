@@ -11,11 +11,12 @@
             "Person",
             "$rootScope",
             "Autocomplete",
-            "$modal"
+            "$modal",
+            "moment"
         ];
 
-        constructor(protected $scope, protected Person, protected $rootScope, protected Autocomplete, protected $modal) {
-            super($scope, Person, $rootScope, Autocomplete, $modal, SubstituteType.Drive);
+        constructor(protected $scope, protected Person, protected $rootScope, protected Autocomplete, protected $modal, protected moment) {
+            super($scope, Person, $rootScope, Autocomplete, $modal, moment, SubstituteType.Drive);
         }
 
     }

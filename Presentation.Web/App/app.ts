@@ -39,7 +39,7 @@
                         $rootScope.loaded = true;
                     });
                 }
-                
+
                 if ($rootScope.HelpTexts == undefined) {
                     HelpText.getAll().$promise.then(res => {
                         $rootScope.helpLink = res.InformationHelpLink;
@@ -48,6 +48,7 @@
                 }
             }
         ]))
+        .constant('moment', moment)
         .constant('angularMomentConfig', momentConfig)
         .value("cgBusyDefaults", cgBusyDefaultsConfig);
 }

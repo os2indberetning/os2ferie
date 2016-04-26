@@ -17,5 +17,5 @@
         "template/popover/popover.html",
         "kendo-ie-fix",
         "angular-loading-bar"]);
-    
+
 }

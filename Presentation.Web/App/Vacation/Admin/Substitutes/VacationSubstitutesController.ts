@@ -1,27 +1,26 @@
 ﻿module app.vacation {
     "use strict";
 
-    import GridService = core.services.SubstitutesGridService;
     import SubstituteType = core.models.SubstituteType;
     import BaseSubstitutesController = core.controllers.BaseSubstitutesController;
 
     class VacationSubstitutesController extends BaseSubstitutesController {
 
-        static $inject = [
+        static $inject: string[] = [
             "$scope",
             "Person",
             "$rootScope",
             "HelpText",
             "Autocomplete",
-            "SubstitutesGridService",
             "$modal",
-            "$timeout"
+            "$timeout",
+            "moment"
         ];
-        
-        constructor(protected $scope, protected Person, protected $rootScope, protected HelpText, protected Autocomplete, protected SubstitutesGridService: GridService, protected $modal, protected $timeout) {
-            super($scope, Person, $rootScope, HelpText, Autocomplete, SubstitutesGridService, $modal, $timeout, SubstituteType.Vacation);
+
+        constructor(protected $scope, protected Person, protected $rootScope, protected HelpText, protected Autocomplete, protected $modal, protected $timeout, protected moment) {
+            super($scope, Person, $rootScope, HelpText, Autocomplete, $modal, $timeout, moment, SubstituteType.Vacation);
         }
-        
+
     }
 
     angular.module("app.vacation").controller("Vacation.SubstitutesController", VacationSubstitutesController);

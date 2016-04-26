@@ -1,5 +1,5 @@
 ﻿module app.vacation {
-    
+
     export class Routes {
         static $inject = [
             "$stateProvider",
@@ -48,7 +48,7 @@
                                 }
 
                             }
-                        ],
+                        ]
                     }
                 })
                 .state("vacation.admin", {
@@ -68,9 +68,9 @@
                                 }
 
                             }
-                        ],
+                        ]
                     }
-                });;
+                });
         }
     }
 

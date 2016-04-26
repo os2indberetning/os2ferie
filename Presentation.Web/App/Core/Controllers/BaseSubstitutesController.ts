@@ -1,10 +1,9 @@
 ﻿module app.core.controllers {
     "use strict";
 
-    import GridService = core.services.SubstitutesGridService;
-    import SubstituteType = core.models.SubstituteType;
+    import SubstituteType = app.core.models.SubstituteType;
 
-    export class BaseSubstitutesController {
+    export abstract class BaseSubstitutesController {
 
         private currentUser;
         private fromDate: number;
@@ -24,7 +23,7 @@
         subInfinitePeriod;
         appInfinitePeriod;
 
-        constructor(protected $scope, protected Person, protected $rootScope, protected HelpText, protected Autocomplete, protected SubstitutesGridService: GridService, protected $modal, protected $timeout, private substituteType: SubstituteType) {
+        constructor(protected $scope, protected Person, protected $rootScope, protected HelpText, protected Autocomplete, protected $modal, protected $timeout, protected moment, private substituteType: SubstituteType) {
             this.currentUser = $scope.CurrentUser;
 
             var date = new Date();
@@ -35,8 +34,186 @@
             this.people = Autocomplete.activeUsers();
             this.orgUnits = Autocomplete.orgUnits();
 
-            this.substitutes = SubstitutesGridService.GetSubstitutesGrid(substituteType, this.fromDate, this.toDate);
-            this.personalApprovers = SubstitutesGridService.GetPersonalApproversGrid(substituteType, this.fromDate, this.toDate);
+            this.substitutes = {
+                dataSource: {
+                    pageSize: 20,
+                    type: "odata-v4",
+                    transport: {
+                        read: {
+                            beforeSend(req) {
+                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
+                            },
+                            url: "odata/Substitutes/Service.Substitute(Type=" + this.substituteType + ")?$expand=OrgUnit,Sub,Person,Leader,CreatedBy",
+                            dataType: "json",
+                            cache: false
+                        }
+                    }
+                },
+                serverPaging: true,
+                serverAggregates: false,
+                serverSorting: true,
+                serverFiltering: true,
+                sortable: true,
+                scrollable: false,
+                filter: [
+                    { field: "StartDateTimestamp", operator: "lte", value: this.toDate },
+                    { field: "EndDateTimestamp", operator: "gte", value: this.fromDate }
+                ],
+                pageable: {
+                    messages: {
+                        display: "{0} - {1} af {2} stedfortrædere", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                        empty: "Ingen stedfortrædere at vise",
+                        page: "Side",
+                        of: "af {0}", //{0} is total amount of pages
+                        itemsPerPage: "stedfortrædere pr. side",
+                        first: "Gå til første side",
+                        previous: "Gå til forrige side",
+                        next: "Gå til næste side",
+                        last: "Gå til sidste side",
+                        refresh: "Genopfrisk"
+                    },
+                    pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
+                },
+                dataBound() {
+                    this.expandRow(this.tbody.find("tr.k-master-row").first());
+                },
+                columns: [
+                    {
+                        field: "Sub.FullName",
+                        title: "Stedfortræder"
+                    },
+                    {
+                        field: "Person.FullName",
+                        title: "Stedfortræder for"
+                    },
+                    {
+                        field: "OrgUnit.LongDescription",
+                        title: "Organisationsenhed"
+                    },
+                    {
+                        field: "Leader.FullName",
+                        title: "Opsat af",
+                        template(data) {
+                            if (data.CreatedBy == undefined) return "<i>Ikke tilgængelig</i>";
+                            return data.CreatedBy.FullName;
+                        }
+                    },
+                    {
+                        field: "StartDateTimestamp",
+                        title: "Fra",
+                        template: (data) => {
+                            var m = this.moment.unix(data.StartDateTimestamp).toDate();
+                            return m.getDate() + "/" +
+                                (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                m.getFullYear();
+                        }
+                    },
+                    {
+                        field: "EndDateTimestamp",
+                        title: "Til",
+                        template: (data) => {
+                            if (data.EndDateTimestamp == 9999999999) {
+                                return "På ubestemt tid";
+                            }
+                            var m = this.moment.unix(data.EndDateTimestamp).toDate();
+                            return m.getDate() + "/" +
+                                (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                m.getFullYear();
+                        }
+                    },
+                    {
+                        title: "Muligheder",
+                        template: (data) => `<a ng-click='subCtrl.openEditSubstitute(${data.Id})'>Rediger</a> | <a ng-click='subCtrl.openDeleteSubstitute(${data.Id})'>Slet</a>`
+                    }
+                ]
+            };
+
+
+            this.personalApprovers = {
+                dataSource: {
+                    pageSize: 20,
+                    type: "odata-v4",
+                    transport: {
+                        read: {
+                            beforeSend(req) {
+                                req.setRequestHeader("Accept", "application/json;odata=fullmetadata");
+                            },
+                            url: "odata/Substitutes/Service.Personal(Type=" + this.substituteType + ")?$expand=OrgUnit,Sub,Leader,Person,CreatedBy",
+                            dataType: "json",
+                            cache: false
+                        }
+                    }
+                },
+                serverPaging: true,
+                serverAggregates: false,
+                serverSorting: true,
+                serverFiltering: true,
+                sortable: true,
+                scrollable: false,
+                pageable: {
+                    messages: {
+                        display: "{0} - {1} af {2} personlige godkendere", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                        empty: "Ingen personlige godkendere at vise",
+                        page: "Side",
+                        of: "af {0}", //{0} is total amount of pages
+                        itemsPerPage: "personlige godkendere pr. side",
+                        first: "Gå til første side",
+                        previous: "Gå til forrige side",
+                        next: "Gå til næste side",
+                        last: "Gå til sidste side",
+                        refresh: "Genopfrisk"
+                    },
+                    pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
+                },
+                dataBound() {
+                    this.expandRow(this.tbody.find("tr.k-master-row").first());
+                },
+                columns: [
+                    {
+                        field: "Sub.FullName",
+                        title: "Godkender"
+                    },
+                    {
+                        field: "Person.FullName",
+                        title: "Godkender for"
+                    },
+                    {
+                        field: "CreatedBy",
+                        title: "Opsat af",
+                        template: (data) => {
+                            if (data.CreatedBy == undefined) return "<i>Ikke tilgængelig</i>";
+                            return data.CreatedBy.FullName;
+                        }
+                    },
+                    {
+                        field: "StartDateTimestamp",
+                        title: "Fra",
+                        template: (data) => {
+                            var m = this.moment.unix(data.StartDateTimestamp).toDate();
+                            return m.getDate() + "/" +
+                                (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                m.getFullYear();
+                        }
+                    },
+                    {
+                        field: "EndDateTimestamp",
+                        title: "Til",
+                        template: (data) => {
+                            if (data.EndDateTimestamp == 9999999999) {
+                                return "På ubestemt tid";
+                            }
+                            var m = this.moment.unix(data.EndDateTimestamp).toDate();
+                            return m.getDate() + "/" +
+                                (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                m.getFullYear();
+                        }
+                    },
+                    {
+                        title: "Muligheder",
+                        template: (data) => `<a ng-click='subCtrl.openEditApprover(${data.Id})'>Rediger</a> | <a ng-click='subCtrl.openDeleteApprover(${data.Id})'>Slet</a>`
+                    }
+                ]
+            }
 
             this.loadInitialDates();
         }

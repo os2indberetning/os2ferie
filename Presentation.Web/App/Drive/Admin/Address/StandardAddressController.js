@@ -9,7 +9,7 @@
             /// </summary>
            $scope.addresses = {
                dataSource: {
-                   type: "odata",
+                   type: "odata-v4",
                    transport: {
                        read: {
                            beforeSend: function (req) {
@@ -18,20 +18,6 @@
                            url: "/odata/Addresses/Service.GetStandard",
                            dataType: "json",
                            cache: false
-                       },
-                       parameterMap: function (options, type) {
-                           var d = kendo.data.transports.odata.parameterMap(options);
-                           delete d.$inlinecount; // <-- remove inlinecount parameter
-                           d.$count = true;
-                           return d;
-                       }
-                   },
-                   schema: {
-                       data: function (data) {
-                           return data.value;
-                       },
-                       total: function (data) {
-                           return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                        }
                    },
                    pageSize: 20,
@@ -59,17 +45,21 @@
                    {
                        field: "StreetName",
                        title: "Vejnavn"
-                   }, {
+                   },
+                   {
                        field: "StreetNumber",
                        title: "Husnummer"
-                   }, {
+                   },
+                   {
                        field: "ZipCode",
                        title: "Postnummer"
-                   }, {
+                   },
+                   {
                        field: "Town",
                        title: "By"
 
-                   }, {
+                   },
+                   {
                        field: "Description",
                        title: "Beskrivelse"
                    },
@@ -78,7 +68,7 @@
                        template: "<a ng-click=editClick(${Id})>Redigér</a> | <a ng-click=deleteClick(${Id})>Slet</a>",
                        title: "Muligheder",
                    }
-               ],
+               ]
            };
        }
 

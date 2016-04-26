@@ -115,29 +115,12 @@ angular.module("app.drive").controller("AdminAcceptedReportsController", [
                type: "odata-v4",
                transport: {
                    read: {
-                       beforeSend: function (req) {
+                       beforeSend: function(req) {
                            req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                        },
                        url: "/odata/DriveReports?status=Accepted &getReportsWhereSubExists=true &$expand=DriveReportPoints,ApprovedBy,Employment($expand=OrgUnit) &$filter=DriveDateTimestamp ge " + fromDateFilter + " and DriveDateTimestamp le " + toDateFilter,
                        dataType: "json",
                        cache: false
-                   },
-                   parameterMap: function (options, type) {
-                       var d = kendo.data.transports.odata.parameterMap(options);
-
-                       delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
-
-                       d.$count = true;
-
-                       return d;
-                   }
-               },
-               schema: {
-                   data: function (data) {
-                       return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
-                   },
-                   total: function (data) {
-                       return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                    }
                },
                pageSize: 20,
@@ -167,77 +150,87 @@ angular.module("app.drive").controller("AdminAcceptedReportsController", [
                },
                pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
            },
-           dataBound: function () {
+           dataBound: function() {
                this.expandRow(this.tbody.find("tr.k-master-row").first());
            },
            columns: [
                {
                    field: "FullName",
                    title: "Medarbejder"
-               }, {
+               },
+               {
                    field: "Employment.OrgUnit.LongDescription",
                    title: "Org.enhed"
-               }, {
+               },
+               {
                    field: "DriveDateTimestamp",
-                   template: function (data) {
+                   template: function(data) {
                        var m = moment.unix(data.DriveDateTimestamp);
                        return m._d.getDate() + "/" +
                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                            m._d.getFullYear();
                    },
                    title: "Dato"
-               }, {
+               },
+               {
                    field: "Purpose",
                    title: "Formål",
-               }, {
+               },
+               {
                    field: "TFCode",
                    title: "Taksttype",
-                   template: function (data) {
+                   template: function(data) {
                        for (var i = 0; i < $scope.rateTypes.length; i++) {
                            if ($scope.rateTypes[i].TFCode == data.TFCode) {
                                return $scope.rateTypes[i].Description;
                            }
                        }
                    }
-               }, {
+               },
+               {
                    title: "Rute",
                    field: "DriveReportPoints",
-                   template: function (data) {
+                   template: function(data) {
                        return RouteColumnFormatter.format(data);
                    }
-               }, {
+               },
+               {
                    field: "Distance",
                    title: "Km",
-                   template: function (data) {
+                   template: function(data) {
                        return data.Distance.toFixed(2).toString().replace('.', ',') + " km";
                    },
                    footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # km"
-               }, {
+               },
+               {
                    field: "AmountToReimburse",
                    title: "Beløb",
-                   template: function (data) {
+                   template: function(data) {
                        return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " kr.";
                    },
                    footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
-               }, {
+               },
+               {
                    field: "KilometerAllowance",
                    title: "MK",
-                   template: function (data) {
+                   template: function(data) {
                        return MkColumnFormatter.format(data);
                    }
-               }, {
+               },
+               {
                    field: "FourKmRule",
                    title: "4 km",
-                   template: function (data) {
+                   template: function(data) {
                        if (data.FourKmRule) {
                            return "<i class='fa fa-check'></i>";
                        }
                        return "";
                    }
-               }, {
+               },
+               {
                    field: "CreatedDateTimestamp",
                    title: "Indberettet",
-                   template: function (data) {
+                   template: function(data) {
                        var m = moment.unix(data.CreatedDateTimestamp);
                        return m._d.getDate() + "/" +
                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
@@ -247,19 +240,21 @@ angular.module("app.drive").controller("AdminAcceptedReportsController", [
                {
                    field: "ClosedDateTimestamp",
                    title: "Godkendt dato",
-                   template: function (data) {
+                   template: function(data) {
                        var m = moment.unix(data.ClosedDateTimestamp);
                        return m._d.getDate() + "/" +
                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
                            m._d.getFullYear();
-                   },
-               }, {
+                   }
+               },
+               {
                    field: "ApprovedBy.FullName",
                    title: "Godkendt af"
-               }, {
+               },
+               {
                    field: "ProcessedDateTimestamp",
                    title: "Overført til udbetaling",
-                   template: function (data) {
+                   template: function(data) {
                        if (data.ProcessedDateTimestamp != 0 && data.ProcessedDateTimestamp != null && data.ProcessedDateTimestamp != undefined) {
                            var m = moment.unix(data.ProcessedDateTimestamp);
                            return m._d.getDate() + "/" +
@@ -268,13 +263,14 @@ angular.module("app.drive").controller("AdminAcceptedReportsController", [
                        }
                        return "";
                    }
-               }, {
+               },
+               {
                    title: "Anden kontering",
                    field: "AccountNumber",
-                   template: function (data) {
+                   template: function(data) {
                        if (data.AccountNumber != null && data.AccountNumber != 0 && data.AccountNumber != undefined) {
                            var returnVal = "";
-                           angular.forEach($scope.bankAccounts, function (value, key) {
+                           angular.forEach($scope.bankAccounts, function(value, key) {
                                if (value.Number == data.AccountNumber) {
                                    returnVal = "Ja " + "<div class='inline' kendo-tooltip k-content=\"'" + value.Description + " - " + value.Number + "'\"> <i class='fa fa-comment-o'></i></div>";
                                }
@@ -285,20 +281,20 @@ angular.module("app.drive").controller("AdminAcceptedReportsController", [
                        }
                    }
                }, {
-                    field: "Id",
-                    title: "Muligheder",
-                    template: function(data){
-                        if(data.Status == "Accepted"){
-                            return "<a ng-click=rejectClick(" + data.Id + ")>Afvis</a> | <a ng-click=editClick(" + data.Id + ")>Rediger</a>";
-                        } else {
-                            // Report has already been invoiced.
-                            return "Er kørt til løn.";
-                        }
-                    }
+                   field: "Id",
+                   title: "Muligheder",
+                   template: function(data) {
+                       if (data.Status == "Accepted") {
+                           return "<a ng-click=rejectClick(" + data.Id + ")>Afvis</a> | <a ng-click=editClick(" + data.Id + ")>Rediger</a>";
+                       } else {
+                           // Report has already been invoiced.
+                           return "Er kørt til løn.";
+                       }
+                   }
                }
            ],
            scrollable: false
-       }
+       };
 
        $scope.editClick = function (id) {
            /// <summary>
