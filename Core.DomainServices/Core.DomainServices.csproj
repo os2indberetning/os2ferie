@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CachedAddressLaunderer.cs" />
+    <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Encryption\Encryptor.cs" />
     <Compile Include="Encryption\StringCipher.cs" />
     <Compile Include="Example\IExample.cs" />

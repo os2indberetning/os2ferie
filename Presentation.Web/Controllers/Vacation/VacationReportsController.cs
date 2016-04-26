@@ -4,6 +4,7 @@ using System.Net;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
+using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.Logger;
 using Core.DomainModel;
@@ -13,12 +14,12 @@ namespace OS2Indberetning.Controllers.Vacation
 {
     public class VacationReportsController : BaseController<VacationReport>
     {
-        private readonly IReportService<VacationReport> _reportService;
+        private readonly IVacationReportService _reportService;
         private readonly IGenericRepository<Employment> _employmentRepo;
 
         private readonly ILogger _logger;
 
-        public VacationReportsController(IGenericRepository<VacationReport> repo, IReportService<VacationReport> reportService, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo, ILogger logger)
+        public VacationReportsController(IGenericRepository<VacationReport> repo, IVacationReportService reportService, IGenericRepository<Person> personRepo, IGenericRepository<Employment> employmentRepo, ILogger logger)
             : base(repo, personRepo)
         {
             _reportService = reportService;
@@ -228,6 +229,40 @@ namespace OS2Indberetning.Controllers.Vacation
                 return NotFound();
             }
             return report.PersonId.Equals(CurrentUser.Id) ? base.Delete(key) : Unauthorized();
+        }
+
+        public IHttpActionResult ApproveReport([FromODataUri] int key, Delta<VacationReport> delta, string emailText)
+        {
+            var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
+
+            if (report == null) return NotFound();
+            if(HasReportAccess(report, CurrentUser)) StatusCode(HttpStatusCode.Forbidden);
+
+            // All good, user has rights to approve the report.
+            
+            return null;
+        }
+
+        public IQueryable<VacationReport> EditApprovdReport([FromODataUri] int key, Delta<VacationReport> delta, string emailText)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<VacationReport> RejectReport([FromODataUri] int key, Delta<VacationReport> delta, string emailText)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool HasReportAccess(VacationReport report, Person person)
+        {
+            var leader = report.ResponsibleLeader;
+
+            if (report.PersonId == person.Id) return false;
+            if (leader == null) return false;
+            if (!person.Id.Equals(leader.Id)) return false;
+            if (report.Status == ReportStatus.Pending) return true;
+            _logger.Log("Forsøg på at redigere indberetning med anden status end afventende. Rapportens status er ikke ændret.", "web", 3);
+            return false;
         }
     }
 }

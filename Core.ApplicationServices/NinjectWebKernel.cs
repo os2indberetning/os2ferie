@@ -15,6 +15,8 @@ using Infrastructure.AddressServices.Interfaces;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
 using Infrastructure.DmzDataAccess;
+using Infrastructure.KMDVacationService;
+using Infrastructure.KMDVacationService.Interfaces;
 using Ninject;
 using Ninject.Web.Common;
 using OS2Indberetning;
@@ -76,6 +78,8 @@ namespace Core.ApplicationServices
             kernel.Bind<IAppLoginService>().To<AppLoginService>();
             kernel.Bind<IReportService<VacationReport>>().To<VacationReportService>();
             kernel.Bind<IReportService<DriveReport>>().To<DriveReportService>();
+            kernel.Bind<IVacationReportService>().To<VacationReportService>();
+            kernel.Bind<IReportAbsence>().To<ReportAbsence>();
         }        
     }
 }

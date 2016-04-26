@@ -61,6 +61,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.AddressServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DmzSync.Test", "DmzSync.Test\DmzSync.Test.csproj", "{2CA4B8F8-39E7-4286-B5A9-6429D37FDBE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.KMDVacationService", "Infrastructure.KMDVacationService\Infrastructure.KMDVacationService.csproj", "{DB308C4D-7CEA-4399-B678-C16673A3EBA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.KMDVacationService.Test", "Infrastructure.KMDVacationService.Test\Infrastructure.KMDVacationService.Test.csproj", "{603D4A79-DCC1-4354-8226-67ECD6CD933E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +139,14 @@ Global
 		{2CA4B8F8-39E7-4286-B5A9-6429D37FDBE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CA4B8F8-39E7-4286-B5A9-6429D37FDBE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CA4B8F8-39E7-4286-B5A9-6429D37FDBE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB308C4D-7CEA-4399-B678-C16673A3EBA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB308C4D-7CEA-4399-B678-C16673A3EBA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB308C4D-7CEA-4399-B678-C16673A3EBA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB308C4D-7CEA-4399-B678-C16673A3EBA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{603D4A79-DCC1-4354-8226-67ECD6CD933E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{603D4A79-DCC1-4354-8226-67ECD6CD933E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{603D4A79-DCC1-4354-8226-67ECD6CD933E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{603D4A79-DCC1-4354-8226-67ECD6CD933E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -151,5 +163,6 @@ Global
 		{90A44ADF-5BCF-47B6-8DD7-F4E069F3942E} = {A9413206-37FE-4261-9223-8E136288075E}
 		{F0C6C478-3A6A-405C-A193-9C498250CF2E} = {38A093DE-ECBD-4C54-9376-E71805D2C06B}
 		{A7C2603A-669B-408D-842F-08DB1E08F166} = {38A093DE-ECBD-4C54-9376-E71805D2C06B}
+		{DB308C4D-7CEA-4399-B678-C16673A3EBA2} = {A9413206-37FE-4261-9223-8E136288075E}
 	EndGlobalSection
 EndGlobal

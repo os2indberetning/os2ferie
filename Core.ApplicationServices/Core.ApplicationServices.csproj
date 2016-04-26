@@ -76,6 +76,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Http, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -170,6 +172,10 @@
     <ProjectReference Include="..\Infrastructure.DmzDataAccess\Infrastructure.DmzDataAccess.csproj">
       <Project>{90a44adf-5bcf-47b6-8dd7-f4e069f3942e}</Project>
       <Name>Infrastructure.DmzDataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure.KMDVacationService\Infrastructure.KMDVacationService.csproj">
+      <Project>{DB308C4D-7CEA-4399-B678-C16673A3EBA2}</Project>
+      <Name>Infrastructure.KMDVacationService</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
