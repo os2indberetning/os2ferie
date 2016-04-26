@@ -18,7 +18,7 @@
 
        // dates for kendo filter.
        var fromDateFilter = new Date();
-       fromDateFilter.setDate(fromDateFilter.getDate() - 365);
+       fromDateFilter.setYear(fromDateFilter.getYear() - 2);
        fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
        var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
@@ -30,150 +30,140 @@
        /// <summary>
        /// Loads current user's pending reports from backend to kendo grid datasource.
        /// </summary>
-       $scope.Reports = {
-           dataSource: {
-               type: "odata-v4",
-               transport: {
-                   read: {
-                       beforeSend: function (req) {
-                           req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
-                       },
-                       url: "/odata/DriveReports?status=Pending &$expand=DriveReportPoints,ResponsibleLeader &$filter=PersonId eq " + personId,
-                       dataType: "json",
-                       cache: false
-                   },
-                   parameterMap: function (options, type) {
-                       var d = kendo.data.transports.odata.parameterMap(options);
+        $scope.Reports = {
+            dataSource: {
+                type: "odata-v4",
+                transport: {
+                    read: {
+                        beforeSend: function(req) {
+                            req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
+                        },
+                        url: "/odata/DriveReports?status=Pending &$expand=DriveReportPoints,ResponsibleLeader &$filter=PersonId eq " + personId,
+                        dataType: "json",
+                        cache: false
+                    }
+                },
+                pageSize: 20,
+                serverPaging: true,
+                serverAggregates: false,
+                serverSorting: true,
+                serverFiltering: true,
+                sort: { field: "DriveDateTimestamp", dir: "desc" },
+                aggregate: [
+                    { field: "Distance", aggregate: "sum" },
+                    { field: "AmountToReimburse", aggregate: "sum" },
+                ]
+            },
+            sortable: true,
+            pageable: {
+                messages: {
+                    display: "{0} - {1} af {2} indberetninger", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                    empty: "Ingen indberetninger at vise",
+                    page: "Side",
+                    of: "af {0}", //{0} is total amount of pages
+                    itemsPerPage: "indberetninger pr. side",
+                    first: "Gå til første side",
+                    previous: "Gå til forrige side",
+                    next: "Gå til næste side",
+                    last: "Gå til sidste side",
+                    refresh: "Genopfrisk"
+                },
+                pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
+            },
+            dataBound: function() {
+                this.expandRow(this.tbody.find("tr.k-master-row").first());
+            },
+            columns: [
+                {
+                    field: "DriveDateTimestamp",
+                    template: function(data) {
+                        var m = moment.unix(data.DriveDateTimestamp);
+                        return m._d.getDate() + "/" +
+                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                            m._d.getFullYear();
+                    },
+                    title: "Dato"
+                },
+                {
+                    field: "Purpose",
+                    template: function(data) {
+                        if (data.Comment != "") {
+                            return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"transparent-background pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                        }
+                        return data.Purpose;
 
-                       delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
-
-                       d.$count = true;
-
-                       return d;
-                   }
-               },
-               schema: {
-                   data: function (data) {
-                       return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
-                   },
-                   total: function (data) {
-                       return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
-                   }
-               },
-               pageSize: 20,
-               serverPaging: true,
-               serverAggregates: false,
-               serverSorting: true,
-               serverFiltering: true,
-               sort: { field: "DriveDateTimestamp", dir: "desc" },
-               aggregate: [
-               { field: "Distance", aggregate: "sum" },
-               { field: "AmountToReimburse", aggregate: "sum" },
-               ]
-           },
-           sortable: true,
-           pageable: {
-               messages: {
-                   display: "{0} - {1} af {2} indberetninger", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
-                   empty: "Ingen indberetninger at vise",
-                   page: "Side",
-                   of: "af {0}", //{0} is total amount of pages
-                   itemsPerPage: "indberetninger pr. side",
-                   first: "Gå til første side",
-                   previous: "Gå til forrige side",
-                   next: "Gå til næste side",
-                   last: "Gå til sidste side",
-                   refresh: "Genopfrisk"
-               },
-               pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
-           },
-           dataBound: function () {
-               this.expandRow(this.tbody.find("tr.k-master-row").first());
-           },
-           columns: [
-               {
-                   field: "DriveDateTimestamp",
-                   template: function (data) {
-                       var m = moment.unix(data.DriveDateTimestamp);
-                       return m._d.getDate() + "/" +
-                           (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                           m._d.getFullYear();
-                   },
-                   title: "Dato"
-               }, {
-                   field: "Purpose",
-                   template: function (data) {
-                       if (data.Comment != "") {
-                           return data.Purpose + "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" + data.Comment + "'\" class=\"transparent-background pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
-                       }
-                       return data.Purpose;
-
-                   },
-                   title: "Formål"
-               }, {
-                   field: "TFCode",
-                   title: "Taksttype",
-                   template: function (data) {
-                       for (var i = 0; i < $scope.rateTypes.length; i++) {
-                           if ($scope.rateTypes[i].TFCode == data.TFCode) {
-                               return $scope.rateTypes[i].Description;
-                           }
-                       }
-                   }
-               }, {
-                   title: "Rute",
-                   field: "DriveReportPoints",
-                   template: function (data) {
-                       return RouteColumnFormatter.format(data);
-                   }
-               }, {
-                   field: "Distance",
-                   title: "Km",
-                   template: function (data) {
-                       return data.Distance.toFixed(2).toString().replace('.', ',') + " km ";
-                   },
-                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # km"
-               }, {
-                   field: "AmountToReimburse",
-                   title: "Beløb",
-                   template: function (data) {
-                       return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " kr.";
-                   },
-                   footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
-               }, {
-                  field: "KilometerAllowance",
-                  title: "MK",
-                  template: function (data) {
-                    return MkColumnFormatter.format(data);
-                  }
-              },{
-                   field: "CreatedDateTimestamp",
-                   template: function (data) {
-                       var m = moment.unix(data.CreatedDateTimestamp);
-                       return m._d.getDate() + "/" +
-                             (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                              m._d.getFullYear();
-                   },
-                   title: "Indberettet"
-               }, {
-                   title: "Godkender",
-                   field: "ResponsibleLeader.FullName",
-                   template: function(data) {
-                       if (data.ResponsibleLeader != 0 && data.ResponsibleLeader != null && data.ResponsibleLeader != undefined) {
+                    },
+                    title: "Formål"
+                },
+                {
+                    field: "TFCode",
+                    title: "Taksttype",
+                    template: function(data) {
+                        for (var i = 0; i < $scope.rateTypes.length; i++) {
+                            if ($scope.rateTypes[i].TFCode == data.TFCode) {
+                                return $scope.rateTypes[i].Description;
+                            }
+                        }
+                    }
+                },
+                {
+                    title: "Rute",
+                    field: "DriveReportPoints",
+                    template: function(data) {
+                        return RouteColumnFormatter.format(data);
+                    }
+                },
+                {
+                    field: "Distance",
+                    title: "Km",
+                    template: function(data) {
+                        return data.Distance.toFixed(2).toString().replace('.', ',') + " km ";
+                    },
+                    footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # km"
+                },
+                {
+                    field: "AmountToReimburse",
+                    title: "Beløb",
+                    template: function(data) {
+                        return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " kr.";
+                    },
+                    footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
+                },
+                {
+                    field: "KilometerAllowance",
+                    title: "MK",
+                    template: function(data) {
+                        return MkColumnFormatter.format(data);
+                    }
+                },
+                {
+                    field: "CreatedDateTimestamp",
+                    template: function(data) {
+                        var m = moment.unix(data.CreatedDateTimestamp);
+                        return m._d.getDate() + "/" +
+                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                            m._d.getFullYear();
+                    },
+                    title: "Indberettet"
+                },
+                {
+                    title: "Godkender",
+                    field: "ResponsibleLeader.FullName",
+                    template: function(data) {
+                        if (data.ResponsibleLeader != 0 && data.ResponsibleLeader != null && data.ResponsibleLeader != undefined) {
                             return data.ResponsibleLeader.FullName;
-                       }
-                       return "";
-                   }
-               }, {
-                   field: "Id",
-                   template: "<a ng-click=deleteClick(${Id})>Slet</a> | <a ng-click=editClick(${Id})>Rediger</a>",
-                   title: "Muligheder"
-               }
-           ],
-           scrollable: false,
-       };
-
-
+                        }
+                        return "";
+                    }
+                },
+                {
+                    field: "Id",
+                    template: (data) => `<a ng-click="deleteClick(${data.Id})">Slet</a> | <a ng-click="editClick(${data.Id})">Rediger</a>`,
+                    title: "Muligheder"
+                }
+            ],
+            scrollable: false
+        };
 
        $scope.loadInitialDates = function () {
            /// <summary>
@@ -181,7 +171,7 @@
            /// </summary>
            // Set initial values for kendo datepickers.
            var from = new Date();
-           from.setDate(from.getDate() - 365);
+           from.setYear(from.getYear() - 2);
 
            $scope.dateContainer.toDate = new Date();
            $scope.dateContainer.fromDate = from;
@@ -198,7 +188,7 @@
            /// </summary>
            /// <param name="id"></param>
            var modalInstance = $modal.open({
-               templateUrl: '/App/MyReports/ConfirmDeleteTemplate.html',
+               templateUrl: '/App/Drive/MyReports/ConfirmDeleteTemplate.html',
                controller: 'ConfirmDeleteReportController',
                backdrop: "static",
                resolve: {
@@ -222,7 +212,7 @@
            /// <param name="id"></param>
 
            var modalInstance = $modal.open({
-               templateUrl: '/App/MyReports/EditReportTemplate.html',
+               templateUrl: '/App/Drive/MyReports/EditReportTemplate.html',
                controller: 'DrivingController',
                backdrop: "static",
                windowClass: "app-modal-window-full",
@@ -295,8 +285,5 @@
                }
            });
        }
-
-
-
    }
 ]);

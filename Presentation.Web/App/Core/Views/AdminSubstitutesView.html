@@ -1,0 +1,81 @@
+﻿<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="pull-left">Stedfortrædere/Godkendere</h2>
+            </div>
+        </div>
+
+        <div class="col-md-12 setting-area">
+            <h2>Stedfortrædere</h2>
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-xs-3 col-lg-3 margin-left-10">
+                        <label>Fra:</label>
+                    </div>
+                    <div class="col-xs-3 col-lg-3">
+                        <label>Til:</label>
+                    </div>
+                    <div class="col-xs-3 col-lg-3">
+                        <label for="subInfinitePeriod">På ubestemt tid:</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-lg-3 margin-left-10">
+                        <input kendo-datepicker culture="'da-DK'" k-options="subCtrl.dateOptions" ng-model="subCtrl.substituteFromDateString" k-ng-model="subCtrl.substituteFromDate" ng-change="subCtrl.dateChanged('substitute')" />
+                    </div>
+                    <div class="col-xs-3 col-lg-3">
+                        <input kendo-datepicker ng-disabled="subCtrl.subInfinitePeriod" culture="'da-DK'" k-options="subCtrl.dateOptions" ng-model="subCtrl.substituteToDateString" k-ng-model="subCtrl.substituteToDate" ng-change="subCtrl.dateChanged('substitute')" />
+                    </div>
+                    <div class="col-xs-2 col-lg-2">
+                        <input type="checkbox" id="subInfinitePeriod" ng-model="subCtrl.subInfinitePeriod" ng-change="subCtrl.dateChanged('substitute')" />
+                    </div>
+                    <div class="col-xs-2 col-lg-2">
+                        <button class="btn btn-danger" ng-click="subCtrl.clearClicked('substitute')">Nulstil søgning</button>
+                    </div>
+                    <div class="col-lg-2 pull-right">
+                        <button type="submit" class="btn btn-primary pull-right margin-right-10" ng-click="subCtrl.createNewSubstitute()">Opret</button>
+                    </div>
+                </div>
+                <div kendo-grid="subCtrl.substituteGrid" class="margin-10 scrollable" options="subCtrl.substitutes"></div>
+            </div>
+        </div>
+        <div class="col-md-12 setting-area">
+            <h2>Personlige godkendere</h2>
+            <div class="row">
+
+                <div class="row">
+                    <div class="col-xs-3 col-lg-3 margin-left-10">
+                        <label>Fra:</label>
+                    </div>
+                    <div class="col-xs-3 col-lg-3">
+                        <label>Til:</label>
+                    </div>
+                    <div class="col-xs-3 col-lg-2">
+                        <label for="appInfinitePeriod">På ubestemt tid:</label>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-lg-3 margin-left-10">
+                        <input kendo-datepicker culture="'da-DK'" k-options="subCtrl.dateOptions" ng-model="subCtrl.approverFromDateString" k-ng-model="subCtrl.approverFromDate" ng-change="subCtrl.dateChanged('approver')" />
+                    </div>
+                    <div class="col-xs-3 col-lg-3">
+                        <input ng-disabled="subCtrl.appInfinitePeriod" kendo-datepicker culture="'da-DK'" k-options="subCtrl.dateOptions" ng-model="subCtrl.approverToDateString" k-ng-model="subCtrl.approverToDate" ng-change="subCtrl.dateChanged('approver')" />
+                    </div>
+                    <div class="col-xs-2 col-lg-2">
+                        <input id="appInfinitePeriod" type="checkbox" ng-model="subCtrl.appInfinitePeriod" ng-change="subCtrl.dateChanged('approver')" />
+                    </div>
+                    <div class="col-xs-2 col-lg-2">
+                        <button class="btn btn-danger" ng-click="subCtrl.clearClicked('approver')">Nulstil søgning</button>
+                    </div>
+                    <div class="col-lg-2 pull-right">
+                        <button type="submit" class="btn btn-primary pull-right margin-right-10" ng-click="subCtrl.createNewApprover()">Opret</button>
+                    </div>
+                </div>
+                <div kendo-grid="subCtrl.approverGrid" class="margin-10 scrollable" options="subCtrl.personalApprovers"></div>
+            </div>
+        </div>
+    </div>
+</div>

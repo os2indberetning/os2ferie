@@ -1,4 +1,4 @@
-﻿angular.module('app.drive').controller('ConfirmDeleteApproverModalInstanceController',
+﻿angular.module('app.core').controller('ConfirmDeleteSubstituteModalInstanceController',
     ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId",
         function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId) {
 
@@ -10,8 +10,7 @@
         $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
 
             $scope.substitute = data.value[0]; // This is bad, but can't change the service
-            $scope.sub = $scope.substitute.Sub;
-            $scope.person = $scope.substitute.Person;
+            $scope.person = $scope.substitute.Sub;
             console.log($scope.substitute);
             $scope.substituteFromDate = new Date($scope.substitute.StartDateTimestamp * 1000).toLocaleDateString();
             if ($scope.substitute.EndDateTimestamp == 9999999999) {
@@ -21,6 +20,7 @@
             }
         });
 
+        
         $scope.orgUnitSelected = function (id) {
             console.log(id);
         }
@@ -32,10 +32,10 @@
             $scope.showSpinner = true;
 
             $scope.loadingPromise = sub.$delete({ id: $scope.substitute.Id }, function (data) {
-                NotificationService.AutoFadeNotification("success", "", "Personlig godkender er blevet slettet");
+                NotificationService.AutoFadeNotification("success", "", "Stedfortræderen blev slettet.");
                 $modalInstance.close();
             }, function () {
-                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke slette personlig godkender");
+                NotificationService.AutoFadeNotification("danger", "", "Kunne ikke slette stedfortræder");
             });
         };
 

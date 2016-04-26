@@ -40,7 +40,7 @@
 
        // dates for kendo filter.
        var fromDateFilter = new Date();
-       fromDateFilter.setMonth(fromDateFilter.getMonth() - 12);
+       fromDateFilter.setYear(fromDateFilter.getYear() - 1);
        fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
        var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
@@ -105,150 +105,154 @@
        /// <summary>
        /// Loads rejected reports from backend to kendo grid datasource.
        /// </summary>
-       $scope.reports = {
-           autoBind: false,
-           dataSource: {
-               type: "odata-v4",
-               transport: {
-                   read: {
-                       url: "/odata/DriveReports?leaderId=" + personId + "&status=Rejected" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints &$filter=DriveDateTimestamp ge " + fromDateFilter + " and DriveDateTimestamp le " + toDateFilter + " and ResponsibleLeaderId eq " + $scope.CurrentUser.Id,
-                       dataType: "json",
-                       cache: false
-                 },
-               },
-               schema: {
-                   data: function (data) {
-
-                       return data.value;
-
-                   },
-               },
-               pageSize: 50,
-               serverPaging: true,
-               serverSorting: true,
-               serverFiltering: true,
-               sort: { field: "DriveDateTimestamp", dir: "desc" },
-               aggregate: [
+        $scope.reports = {
+            autoBind: false,
+            dataSource: {
+                type: "odata-v4",
+                transport: {
+                    read: {
+                        url: "/odata/DriveReports?leaderId=" + personId + "&status=Rejected" + "&getReportsWhereSubExists=" + $scope.checkboxes.showSubbed + " &$expand=Employment($expand=OrgUnit),DriveReportPoints &$filter=DriveDateTimestamp ge " + fromDateFilter + " and DriveDateTimestamp le " + toDateFilter + " and ResponsibleLeaderId eq " + $scope.CurrentUser.Id,
+                        dataType: "json",
+                        cache: false
+                    }
+                },
+                pageSize: 50,
+                serverPaging: true,
+                serverSorting: true,
+                serverFiltering: true,
+                sort: { field: "DriveDateTimestamp", dir: "desc" },
+                aggregate: [
                     { field: "Distance", aggregate: "sum" },
                     { field: "AmountToReimburse", aggregate: "sum" },
-               ]
-           },
-           sortable: true,
-           scrollable: false,
-           pageable: {
-               messages: {
-                   display: "{0} - {1} af {2} indberetninger", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
-                   empty: "Ingen indberetninger at vise",
-                   page: "Side",
-                   of: "af {0}", //{0} is total amount of pages
-                   itemsPerPage: "indberetninger pr. side",
-                   first: "Gå til første side",
-                   previous: "Gå til forrige side",
-                   next: "Gå til næste side",
-                   last: "Gå til sidste side",
-                   refresh: "Genopfrisk"
-               },
-               pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
-           },
-           dataBound: function () {
-               this.expandRow(this.tbody.find("tr.k-master-row").first());
-           },
-           columns: [
-           {
-                field: "FullName",
-                title: "Medarbejder",
-                template: function (data) {
-                    return data.FullName + " [" + data.Employment.EmploymentId + "]";
+                ]
+            },
+            sortable: true,
+            scrollable: false,
+            pageable: {
+                messages: {
+                    display: "{0} - {1} af {2} indberetninger", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                    empty: "Ingen indberetninger at vise",
+                    page: "Side",
+                    of: "af {0}", //{0} is total amount of pages
+                    itemsPerPage: "indberetninger pr. side",
+                    first: "Gå til første side",
+                    previous: "Gå til forrige side",
+                    next: "Gå til næste side",
+                    last: "Gå til sidste side",
+                    refresh: "Genopfrisk"
+                },
+                pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
+            },
+            dataBound: function() {
+                this.expandRow(this.tbody.find("tr.k-master-row").first());
+            },
+            columns: [
+                {
+                    field: "FullName",
+                    title: "Medarbejder",
+                    template: function(data) {
+                        return data.FullName + " [" + data.Employment.EmploymentId + "]";
+                    }
+                },
+                {
+                    field: "Employment.OrgUnit.LongDescription",
+                    title: "Org.enhed"
+                },
+                {
+                    field: "DriveDateTimestamp",
+                    template: function(data) {
+                        var m = moment.unix(data.DriveDateTimestamp);
+                        return m._d.getDate() + "/" +
+                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                            m._d.getFullYear();
+                    },
+                    title: "Dato"
+                },
+                {
+                    field: "Purpose",
+                    title: "Formål",
+                },
+                {
+                    field: "TFCode",
+                    title: "Taksttype",
+                    template: function(data) {
+                        for (var i = 0; i < $scope.rateTypes.length; i++) {
+                            if ($scope.rateTypes[i].TFCode == data.TFCode) {
+                                return $scope.rateTypes[i].Description;
+                            }
+                        }
+                    }
+                },
+                {
+                    title: "Rute",
+                    field: "DriveReportPoints",
+                    template: function(data) {
+                        return RouteColumnFormatter.format(data);
+                    }
+                },
+                {
+                    field: "Distance",
+                    title: "Km",
+                    template: function(data) {
+                        return data.Distance.toFixed(2).toString().replace('.', ',') + " km";
+                    },
+                    footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # km"
+                },
+                {
+                    field: "AmountToReimburse",
+                    title: "Beløb",
+                    template: function(data) {
+                        return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " kr.";
+                    },
+                    footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
+                },
+                {
+                    field: "KilometerAllowance",
+                    title: "MK",
+                    template: function(data) {
+                        return MkColumnFormatter.format(data);
+                    }
+                },
+                {
+                    field: "FourKmRule",
+                    title: "4 km",
+                    template: function(data) {
+                        if (data.FourKmRule) {
+                            return "<i class='fa fa-check'></i>";
+                        }
+                        return "";
+                    }
+                },
+                {
+                    field: "CreatedDateTimestamp",
+                    title: "Indberettet",
+                    template: function(data) {
+                        var m = moment.unix(data.CreatedDateTimestamp);
+                        return m._d.getDate() + "/" +
+                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                            m._d.getFullYear();
+                    },
+                },
+                {
+                    field: "ClosedDateTimestamp",
+                    title: "Afvist dato",
+                    template: function(data) {
+                        var m = moment.unix(data.ClosedDateTimestamp);
+                        var date = m._d.getDate() + "/" +
+                            (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                            m._d.getFullYear();
+
+                        return date + "<div class='inline' kendo-tooltip k-content=\"'" + data.Comment + "'\"> <i class='fa fa-comment-o'></i></div>";
+
+                    }
                 }
-           }, {
-               field: "Employment.OrgUnit.LongDescription",
-               title: "Org.enhed"
-           }, {
-               field: "DriveDateTimestamp",
-               template: function (data) {
-                   var m = moment.unix(data.DriveDateTimestamp);
-                   return m._d.getDate() + "/" +
-                       (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                       m._d.getFullYear();
-               },
-               title: "Dato"
-           }, {
-               field: "Purpose",
-               title: "Formål",
-           }, {
-               field: "TFCode",
-               title: "Taksttype",
-               template: function (data) {
-                   for (var i = 0; i < $scope.rateTypes.length; i++) {
-                       if ($scope.rateTypes[i].TFCode == data.TFCode) {
-                           return $scope.rateTypes[i].Description;
-                       }
-                   }
-               }
-           }, {
-               title: "Rute",
-               field: "DriveReportPoints",
-               template: function (data) {
-                   return RouteColumnFormatter.format(data);
-               }
-           }, {
-               field: "Distance",
-               title: "Km",
-               template: function (data) {
-                   return data.Distance.toFixed(2).toString().replace('.', ',') + " km";
-               },
-               footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # km"
-           }, {
-               field: "AmountToReimburse",
-               title: "Beløb",
-               template: function (data) {
-                   return data.AmountToReimburse.toFixed(2).toString().replace('.', ',') + " kr.";
-               },
-               footerTemplate: "Total: #= kendo.toString(sum, '0.00').replace('.',',') # kr."
-           }, {
-               field: "KilometerAllowance",
-               title: "MK",
-               template: function (data) {
-                   return MkColumnFormatter.format(data);
-               }
-           }, {
-               field: "FourKmRule",
-               title: "4 km",
-               template: function (data) {
-                   if (data.FourKmRule) {
-                       return "<i class='fa fa-check'></i>";
-                   }
-                   return "";
-               }
-           }, {
-               field: "CreatedDateTimestamp",
-               title: "Indberettet",
-               template: function (data) {
-                   var m = moment.unix(data.CreatedDateTimestamp);
-                   return m._d.getDate() + "/" +
-                       (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                       m._d.getFullYear();
-               },
-           }, {
-               field: "ClosedDateTimestamp",
-               title: "Afvist dato",
-               template: function (data) {
-                   var m = moment.unix(data.ClosedDateTimestamp);
-                   var date = m._d.getDate() + "/" +
-                       (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                       m._d.getFullYear();
-
-                   return date + "<div class='inline' kendo-tooltip k-content=\"'" + data.Comment + "'\"> <i class='fa fa-comment-o'></i></div>";
-
-               }
-           }
-           ],
-       };
+            ]
+        };
 
        $scope.loadInitialDates = function () {
            // Set initial values for kendo datepickers.
            var from = new Date();
-           from.setMonth(from.getMonth() - 12);
+           from.setYear(from.getYear() - 1);
            $scope.dateContainer.toDate = new Date();
            $scope.dateContainer.fromDate = from;
        }

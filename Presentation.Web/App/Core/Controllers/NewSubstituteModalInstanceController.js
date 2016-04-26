@@ -1,5 +1,6 @@
-﻿angular.module('app.drive').controller('NewSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "Autocomplete", function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, Autocomplete) {
+﻿angular.module('app.core').controller('NewSubstituteModalInstanceController',
+    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "Autocomplete", "SubstituteType", 
+    function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, Autocomplete, SubstituteType) {
 
         $scope.loadingPromise = null;
 
@@ -30,7 +31,8 @@
                 SubId: $scope.person[0].Id,
                 OrgUnitId: $scope.orgUnit.Id,
                 PersonId: leader.Id,
-                CreatedById: leader.Id
+                CreatedById: leader.Id,
+                Type: SubstituteType === 0 ? "Drive" : "Vacation"
             });
 
             if ($scope.infinitePeriod) {

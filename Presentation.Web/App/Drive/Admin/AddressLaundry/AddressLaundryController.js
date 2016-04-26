@@ -19,98 +19,86 @@
 
        $scope.addressLocalCopy = [];
 
-       $scope.dirtyAddresses = {
-           autoBind: false,
-           dataSource: {
-               type: "odata-v4",
-               transport: {
-                   read: {
-                       beforeSend: function (req) {
-                           req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
-                       },
-                       url: "/odata/Addresses/Service.GetCachedAddresses",
-                       dataType: "json",
-                       cache: false
-                   },
-                   parameterMap: function (options, type) {
-                       var d = kendo.data.transports.odata.parameterMap(options);
-                       delete d.$inlinecount; // <-- remove inlinecount parameter
-                       d.$count = true;
-                       return d;
-                   }
-               },
-               schema: {
-                   data: function (data) {
-                       return data.value;
-                   },
-                   total: function (data) {
-                       return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
-                   }
-               },
-               pageSize: 20,
-               serverPaging: true,
-               serverSorting: true,
-               serverFiltering: true,
-               scrollable: false,
-           },
-           sortable: true,
-           pageable: {
-               messages: {
-                   display: "{0} - {1} af {2} addresser", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
-                   empty: "Ingen addresser at vise",
-                   page: "Side",
-                   of: "af {0}", //{0} is total amount of pages
-                   itemsPerPage: "addresser pr. side",
-                   first: "Gå til første side",
-                   previous: "Gå til forrige side",
-                   next: "Gå til næste side",
-                   last: "Gå til sidste side",
-                   refresh: "Genopfrisk"
-               },
-               pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
-           },
-           scrollable: false,
-           columns: [
-               {
-                   field: "Description",
-                   title: "Beskrivelse",
-               },
-               {
-                   field: "DirtyString",
-                   title: "Beskidt adresse"
-               }, {
-                   title: "Vasket adresse",
-                   template: function (data) {
-                       if (!data.IsDirty) {
-                           return data.StreetName + " " + data.StreetNumber + ", " + data.ZipCode + " " + data.Town;
-                       }
-                       return "Endnu ikke vasket.";
-                   }
-               },
-               {
-                   field: "IsDirty",
-                   title: "Vasket",
-                   template: function (data) {
-                       if (!data.IsDirty) {
-                           return '<i class="fa fa-check"></i>';
-                       }
-                       return "";
-                   }
-               }, {
-                   title: "Ny adresse",
-                   width: 300,
-                   template: function (data) {
-                       return "<input type='text' ng-model='addressLocalCopy[" + data.Id + "]' kendo-auto-complete k-data-text-field=\"'tekst'\" k-data-value-field=\"'tekst'\" k-data-source='SmartAddress' class='form-control fill-width'/>";
-                   }
-               },
-               {
-                   title: "Muligheder",
-                   template: function (data) {
-                       return "<a class='pull-right margin-right-10' ng-click=saveClicked('" + data.Id + "')>Gem</a>"
-                   }
-               }
-           ],
-       };
+        $scope.dirtyAddresses = {
+            autoBind: false,
+            dataSource: {
+                type: "odata-v4",
+                transport: {
+                    read: {
+                        beforeSend: function(req) {
+                            req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
+                        },
+                        url: "/odata/Addresses/Service.GetCachedAddresses",
+                        dataType: "json",
+                        cache: false
+                    }
+                },
+                pageSize: 20,
+                serverPaging: true,
+                serverSorting: true,
+                serverFiltering: true,
+                scrollable: false,
+            },
+            sortable: true,
+            pageable: {
+                messages: {
+                    display: "{0} - {1} af {2} addresser", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                    empty: "Ingen addresser at vise",
+                    page: "Side",
+                    of: "af {0}", //{0} is total amount of pages
+                    itemsPerPage: "addresser pr. side",
+                    first: "Gå til første side",
+                    previous: "Gå til forrige side",
+                    next: "Gå til næste side",
+                    last: "Gå til sidste side",
+                    refresh: "Genopfrisk"
+                },
+                pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
+            },
+            scrollable: false,
+            columns: [
+                {
+                    field: "Description",
+                    title: "Beskrivelse",
+                },
+                {
+                    field: "DirtyString",
+                    title: "Beskidt adresse"
+                },
+                {
+                    title: "Vasket adresse",
+                    template: function(data) {
+                        if (!data.IsDirty) {
+                            return data.StreetName + " " + data.StreetNumber + ", " + data.ZipCode + " " + data.Town;
+                        }
+                        return "Endnu ikke vasket.";
+                    }
+                },
+                {
+                    field: "IsDirty",
+                    title: "Vasket",
+                    template: function(data) {
+                        if (!data.IsDirty) {
+                            return '<i class="fa fa-check"></i>';
+                        }
+                        return "";
+                    }
+                },
+                {
+                    title: "Ny adresse",
+                    width: 300,
+                    template: function(data) {
+                        return "<input type='text' ng-model='addressLocalCopy[" + data.Id + "]' kendo-auto-complete k-data-text-field=\"'tekst'\" k-data-value-field=\"'tekst'\" k-data-source='SmartAddress' class='form-control fill-width'/>";
+                    }
+                },
+                {
+                    title: "Muligheder",
+                    template: function(data) {
+                        return "<a class='pull-right margin-right-10' ng-click=saveClicked('" + data.Id + "')>Gem</a>"
+                    }
+                }
+            ]
+        };
 
        $scope.saveClicked = function (id) {
            /// <summary>

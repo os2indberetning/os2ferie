@@ -30,7 +30,7 @@
             }
         }
 
-        
+
 
         $scope.kmRuleOptions = {
             dataSource: {
@@ -68,30 +68,15 @@
                 type: "odata-v4",
                 transport: {
                     read: {
-                        beforeSend: function (req) {
+                        beforeSend: function(req) {
                             req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                         },
                         url: "/odata/OrgUnits",
                         dataType: "json",
                         cache: false
-                    },
-                    parameterMap: function (options, type) {
-                        var d = kendo.data.transports.odata.parameterMap(options);
-
-                        delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
-
-                        d.$count = true;
-
-                        return d;
                     }
                 },
                 schema: {
-                    data: function (data) {
-                        return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
-                    },
-                    total: function (data) {
-                        return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
-                    },
                     model: {
                         fields: {
                             OrgId: {
@@ -114,7 +99,7 @@
                 },
                 pageSize: 20,
                 serverPaging: true,
-                serverFiltering: true,
+                serverFiltering: true
             },
             sortable: true,
             pageable: {
@@ -132,10 +117,10 @@
                 },
                 pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
             },
-            dataBound: function () {
+            dataBound: function() {
                 this.expandRow(this.tbody.find("tr.k-master-row").first());
             },
-            editable:true,
+            editable: true,
             columns: [
                 {
                     field: "OrgId",
@@ -152,7 +137,7 @@
                 {
                     field: "HasAccessToFourKmRule",
                     title: "Kan benytte 4 km-regel",
-                    template: function (data) {
+                    template: function(data) {
                         if (data.HasAccessToFourKmRule) {
                             return "<input type='checkbox' ng-click='rowChecked(" + data.Id + ", false)' checked></input>";
                         } else {
@@ -167,8 +152,7 @@
                     template: function(data) {
                         if (data.DefaultKilometerAllowance === "Calculated") {
                             return "Beregnet";
-                        }
-                        else if (data.DefaultKilometerAllowance === "Read") {
+                        } else if (data.DefaultKilometerAllowance === "Read") {
                             return "Aflæst";
                         } else if (data.DefaultKilometerAllowance === "CalculatedWithoutExtraDistance") {
                             return "Beregnet uden merkørsel";
@@ -177,8 +161,7 @@
                         }
                     }
                 }
-            ],
-            
+            ]
         };
 
         function kilometerAllowanceDropDownEditor(container, options) {
@@ -201,7 +184,7 @@
                     autoBind: false,
                     dataSource: dataSource,
                     change: function (e) {
-                        
+
                         OrgUnit.patch({ id: orgId }, { "DefaultKilometerAllowance": allowanceData[e.sender.selectedIndex].value }).$promise.then(function () {
                             NotificationService.AutoFadeNotification("success", "", "Opdaterede organisationen");
 
