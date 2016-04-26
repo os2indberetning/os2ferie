@@ -1,12 +1,12 @@
 ﻿module app.drive {
     "use strict";
-    
+
     import BaseApproveReportsSettingsController = app.core.controllers.BaseApproveReportsSettingsController;
     import SubstituteType = app.core.models.SubstituteType;
 
     class DriveApproveReportsSettingsController extends BaseApproveReportsSettingsController {
 
-        static $inject = [
+        static $inject: string[] = [
             "$scope",
             "Person",
             "$rootScope",

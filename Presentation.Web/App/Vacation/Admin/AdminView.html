@@ -5,27 +5,9 @@
                 Administrator
             </h1>
             <tabset class="nav nav-pills" justified="false">
-
-                <!--<tab heading="Emailadviseringer" ng-controller="Vacation.EmailNotificationController" ng-click="amc.EmailClicked()">
-                    <div ng-include='"App/Vacation/Admin/Email/View.html"'></div>
-                </tab>
-
-                <tab heading="Afdelings-indstillinger" ng-controller="Vacation.OrgUnitController" ng-click="amc.OrgSettingsClicked()">
-                    <div ng-include='"App/Vacation/Admin/OrgUnit/View.html"'></div>
-                </tab>
-
-                <tab heading="Administration" ng-controller="Vacation.AdministrationController" ng-click="amc.AdminClicked()">
-                    <div ng-include='"App/Vacation/Admin/Administration/View.html"'></div>
-                </tab>
-
-                <tab heading="Indberetninger" ng-controller="Vacation.AdminPendingReportsController" ng-click="amc.ReportsClicked()">
-                    <div ng-include='"App/Vacation/Admin/Reports/View.html"'></div>
-                </tab>-->
-
-                <tab heading="Stedfortrædere/Godkendere" ng-controller="Vacation.SubstitutesController as ctrl" ng-click="ctrl.RefreshGrids()">
+                <tab heading="Stedfortrædere/Godkendere" ng-controller="Vacation.SubstitutesController as subCtrl" ng-click="subCtrl.refreshGrids()">
                     <div ng-include='"App/Core/Views/AdminSubstitutesView.html"'></div>
                 </tab>
-                
             </tabset>
         </div>
     </div>

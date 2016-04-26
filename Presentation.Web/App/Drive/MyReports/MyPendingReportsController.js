@@ -18,7 +18,7 @@
 
        // dates for kendo filter.
        var fromDateFilter = new Date();
-       fromDateFilter.setDate(fromDateFilter.getDate() - (365*2));
+       fromDateFilter.setYear(fromDateFilter.getYear() - 2);
        fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
        var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
@@ -43,21 +43,8 @@
                        cache: false
                    },
                    parameterMap: function (options, type) {
-                       var d = kendo.data.transports.odata.parameterMap(options);
-
-                       delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
-
-                       d.$count = true;
-
+                       var d = kendo.data.transports['odata-v4'].parameterMap(options, type);
                        return d;
-                   }
-               },
-               schema: {
-                   data: function (data) {
-                       return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
-                   },
-                   total: function (data) {
-                       return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                    }
                },
                pageSize: 20,
@@ -166,14 +153,12 @@
                    }
                }, {
                    field: "Id",
-                   template: "<a ng-click=deleteClick(${Id})>Slet</a> | <a ng-click=editClick(${Id})>Rediger</a>",
+                   template: (data) => `<a ng-click="deleteClick(${data.Id})">Slet</a> | <a ng-click="editClick(${data.Id})">Rediger</a>`,
                    title: "Muligheder"
                }
            ],
-           scrollable: false,
+           scrollable: false
        };
-
-
 
        $scope.loadInitialDates = function () {
            /// <summary>
@@ -181,7 +166,7 @@
            /// </summary>
            // Set initial values for kendo datepickers.
            var from = new Date();
-           from.setDate(from.getDate() - (365*2));
+           from.setYear(from.getYear() - 2);
 
            $scope.dateContainer.toDate = new Date();
            $scope.dateContainer.fromDate = from;
@@ -198,7 +183,7 @@
            /// </summary>
            /// <param name="id"></param>
            var modalInstance = $modal.open({
-               templateUrl: '/App/MyReports/ConfirmDeleteTemplate.html',
+               templateUrl: '/App/Drive/MyReports/ConfirmDeleteTemplate.html',
                controller: 'ConfirmDeleteReportController',
                backdrop: "static",
                resolve: {
@@ -222,7 +207,7 @@
            /// <param name="id"></param>
 
            var modalInstance = $modal.open({
-               templateUrl: '/App/MyReports/EditReportTemplate.html',
+               templateUrl: '/App/Drive/MyReports/EditReportTemplate.html',
                controller: 'DrivingController',
                backdrop: "static",
                windowClass: "app-modal-window-full",
@@ -295,8 +280,5 @@
                }
            });
        }
-
-
-
    }
 ]);

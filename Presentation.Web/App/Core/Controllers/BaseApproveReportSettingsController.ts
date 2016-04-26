@@ -1,118 +1,350 @@
 ﻿module app.core.controllers {
     "use strict";
 
-    import SubstituteType = app.core.models.SubstituteType;
+    import SubstituteType = core.models.SubstituteType;
 
     export class BaseApproveReportsSettingsController {
 
-        private InfinitePeriod = 9999999999;
-        private PersonId;
+        private infinitePeriod = 9999999999;
+        private personId;
 
-        CollapseSubstitute = false;
-        CollapsePersonalApprover = false;
-        OrgUnits = [];
-        People = [];
-        CurrentPerson = {}
-        PersonalApproverHelpText;
+        collapseSubstitute = false;
+        collapsePersonalApprover = false;
+        orgUnits = [];
+        people = [];
+        currentPerson = {}
+        personalApproverHelpText;
 
-        SubstituteOrgUnit = "";
-        ShowSubstituteSettings;
-
-        MySubstitutesGrid;
-        SubstituteGrid;
-        PersonalApproverGrid;
+        substituteOrgUnit = "";
+        showSubstituteSettings;
+        substitutes: kendo.ui.GridOptions;
+        mySubstitutesGrid: kendo.ui.Grid;
+        substituteGrid: kendo.ui.Grid;
+        personalApproverGrid: kendo.ui.Grid;
+        personalApprovers: kendo.ui.GridOptions;
+        mySubstitutes: kendo.ui.GridOptions;
 
         constructor(protected $scope, protected Person, protected $rootScope, protected Autocomplete, protected $modal, private substituteType: SubstituteType) {
 
-            this.PersonalApproverHelpText = $rootScope.HelpTexts.PersonalApproverHelpText.text;
-            this.PersonId = $rootScope.CurrentUser.Id;
+            this.personalApproverHelpText = $rootScope.HelpTexts.PersonalApproverHelpText.text;
+            this.personId = $rootScope.CurrentUser.Id;
 
-            this.CurrentPerson = $rootScope.CurrentUser;
+            this.currentPerson = $rootScope.CurrentUser;
 
-            this.People = Autocomplete.activeUsers();
-            this.OrgUnits = Autocomplete.orgUnits();
+            this.people = Autocomplete.activeUsers();
+            this.orgUnits = Autocomplete.orgUnits();
 
-            this.ShowSubstituteSettings = $rootScope.CurrentUser.IsLeader;
+            this.showSubstituteSettings = $rootScope.CurrentUser.IsLeader;
+
+            this.substitutes = {
+                autoBind: false,
+                dataSource: {
+                    type: "odata-v4",
+                    transport: {
+                        read: {
+                            beforeSend(req) {
+                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
+                            },
+                            url: "odata/Substitutes/Service.Substitute(Type=" + this.substituteType + ")?$expand=OrgUnit,Sub,Person,Leader &$filter=PersonId eq " + this.personId,
+                            dataType: "json",
+                            cache: false
+                        },
+                        parameterMap(options, type) {
+                            var d = kendo.data.transports['odata-v4'].parameterMap(options, type);
+                            return d;
+                        }
+                    },
+                    pageSize: 20,
+                    schema: {
+                        data(data) {
+                            return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
+                        },
+                        total(data) {
+                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
+                        }
+                    }
+                },
+                sortable: true,
+                pageable: {
+                    messages: {
+                        display: "{0} - {1} af {2} ", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                        empty: "Ingen stedfortrædere at vise",
+                        page: "Side",
+                        of: "af {0}", //{0} is total amount of pages
+                        itemsPerPage: "stedfortrædere pr. side",
+                        first: "Gå til første side",
+                        previous: "Gå til forrige side",
+                        next: "Gå til næste side",
+                        last: "Gå til sidste side",
+                        refresh: "Genopfrisk"
+                    },
+                    pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
+                },
+                dataBound() {
+                    this.expandRow(this.tbody.find("tr.k-master-row").first());
+                },
+                columns: [
+                    {
+                        field: "Sub.FullName",
+                        title: "Stedfortræder"
+                    },
+                    {
+                        field: "Person.FullName",
+                        title: "Stedfortræder for"
+                    },
+                    {
+                        field: "OrgUnit.LongDescription",
+                        title: "Organisationsenhed"
+                    },
+                    {
+                        field: "Leader.FullName",
+                        title: "Opsat af"
+                    },
+                    {
+                        field: "StartDateTimestamp",
+                        title: "Fra",
+                        template: (data) => {
+                            var m = moment.unix(data.StartDateTimestamp).toDate();
+                            return m.getDate() + "/" +
+                                (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                m.getFullYear();
+                        }
+                    },
+                    {
+                        title: "Til",
+                        field: "EndDateTimestamp",
+                        template: (data) => {
+                            if (data.EndDateTimestamp === this.infinitePeriod) {
+                                return "På ubestemt tid";
+                            }
+                            var m = moment.unix(data.EndDateTimestamp).toDate();
+                            return m.getDate() + "/" +
+                                (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                m.getFullYear();
+                        }
+                    },
+                    {
+                        title: "Muligheder",
+                        template: (data) => `<a ng-click='arsCtrl.openEditSubstitute(${data.Id})'>Rediger</a> | <a ng-click='arsCtrl.openDeleteSubstitute(${data.Id})'>Slet</a>`
+                    }
+                ],
+                scrollable: false
+            };
+
+            this.personalApprovers = {
+                autoBind: false,
+                dataSource: {
+                    type: "odata-v4",
+                    transport: {
+                        read: {
+                            beforeSend(req) {
+                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
+                            },
+                            url: "odata/Substitutes/Service.Personal(Type=" + this.substituteType + ")?$expand=OrgUnit,Sub,Leader,Person&$filter=LeaderId eq " + this.personId,
+                            dataType: "json",
+                            cache: false
+                        },
+                        parameterMap(options, type) {
+                            var d = kendo.data.transports['odata-v4'].parameterMap(options, type);
+                            return d;
+                        }
+                    },
+                    pageSize: 20
+                },
+
+                sortable: true,
+                pageable: {
+                    messages: {
+                        display: "{0} - {1} af {2} ", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                        empty: "Ingen personlige godkendere at vise",
+                        page: "Side",
+                        of: "af {0}", //{0} is total amount of pages
+                        itemsPerPage: "personlige godkendere pr. side",
+                        first: "Gå til første side",
+                        previous: "Gå til forrige side",
+                        next: "Gå til næste side",
+                        last: "Gå til sidste side",
+                        refresh: "Genopfrisk"
+                    },
+                    pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
+                },
+                dataBound() {
+                    this.expandRow(this.tbody.find("tr.k-master-row").first());
+                },
+                columns: [
+                    {
+                        field: "Sub.FullName",
+                        title: "Godkender"
+                    },
+                    {
+                        field: "Person.FullName",
+                        title: "Godkender for"
+                    },
+                    {
+                        field: "Leader.FullName",
+                        title: "Opsat af"
+                    },
+                    {
+                        field: "StartDateTimestamp",
+                        title: "Fra",
+                        template: (data) => {
+                            var m = moment.unix(data.StartDateTimestamp).toDate();
+                            return m.getDate() + "/" +
+                                (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                m.getFullYear();
+                        }
+                    },
+                    {
+                        field: "EndDateTimestamp",
+                        title: "Til",
+                        template: (data) => {
+                            if (data.EndDateTimestamp === this.infinitePeriod) {
+                                return "På ubestemt tid";
+                            }
+                            var m = moment.unix(data.EndDateTimestamp).toDate();
+                            return m.getDate() + "/" +
+                                (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                m.getFullYear();
+                        }
+                    },
+                    {
+                        title: "Muligheder",
+                        template: (data) => `<a ng-click='arsCtrl.openEditApprover(${data.Id})'>Rediger</a> | <a ng-click='arsCtrl.openDeleteApprover(${data.Id})'>Slet</a>`
+                    }
+                ],
+                scrollable: false
+            };
+
+            this.mySubstitutes = {
+                autoBind: false,
+                dataSource: {
+                    type: "odata-v4",
+                    transport: {
+                        read: {
+                            beforeSend(req) {
+                                req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
+                            },
+                            url: "odata/Substitutes/Service.Substitute(Type=" + this.substituteType + ")?$expand=Sub,Person,Leader,OrgUnit &$filter=PersonId eq LeaderId and SubId eq " + this.personId,
+                            dataType: "json",
+                            cache: false
+                        },
+                        parameterMap(options, type) {
+                            var d = kendo.data.transports['odata-v4'].parameterMap(options, type);
+                            return d;
+                        }
+                    },
+                    pageSize: 20
+                },
+                sortable: true,
+                pageable: {
+                    messages: {
+                        display: "{0} - {1} af {2} ", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
+                        empty: "Ingen stedfortrædere at vise",
+                        page: "Side",
+                        of: "af {0}", //{0} is total amount of pages
+                        itemsPerPage: "stedfortrædere pr. side",
+                        first: "Gå til første side",
+                        previous: "Gå til forrige side",
+                        next: "Gå til næste side",
+                        last: "Gå til sidste side",
+                        refresh: "Genopfrisk"
+                    },
+                    pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
+                },
+                dataBound() {
+                    this.expandRow(this.tbody.find("tr.k-master-row").first());
+                },
+                columns: [
+                    {
+                        field: "Sub.FullName",
+                        title: "Stedfortræder"
+                    },
+                    {
+                        field: "Person.FullName",
+                        title: "Stedfortræder for"
+                    }, {
+                        field: "OrgUnit.LongDescription",
+                        title: "Organisationsenhed"
+                    }, {
+                        field: "Leader.FullName",
+                        title: "Opsat af"
+                    }, {
+                        field: "StartDateTimestamp",
+                        title: "Fra",
+                        template: (data) => {
+                            var m = moment.unix(data.StartDateTimestamp).toDate();
+                            return m.getDate() + "/" +
+                                (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                m.getFullYear();
+                        }
+                    },
+                    {
+                        title: "Til",
+                        field: "EndDateTimestamp",
+                        template: (data) => {
+                            if (data.EndDateTimestamp === this.infinitePeriod) {
+                                return "På ubestemt tid";
+                            }
+                            var m = moment.unix(data.EndDateTimestamp).toDate();
+                            return m.getDate() + "/" +
+                                (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
+                                m.getFullYear();
+                        }
+                    }
+                ],
+                scrollable: false
+            };
+
         }
 
-        RefreshGrids() {
-            this.SubstituteGrid.dataSource.read();
-            this.MySubstitutesGrid.dataSource.read();
-            this.PersonalApproverGrid.dataSource.read();
+        refreshGrids() {
+            this.substituteGrid.dataSource.read();
+            this.mySubstitutesGrid.dataSource.read();
+            this.personalApproverGrid.dataSource.read();
         }
 
-        OpenDeleteApprover(id) {
-            var this_ = this;
+        openDeleteApprover(id) {
+
             var modalInstance = this.$modal.open({
                 templateUrl: 'App/Core/Views/Modals/ConfirmDeleteApproverModal.html',
                 controller: 'ConfirmDeleteApproverModalInstanceController',
                 backdrop: 'static',
                 size: 'lg',
                 resolve: {
-                    persons() {
-                        return this_.People;
-                    },
-                    orgUnits() {
-                        return this_.OrgUnits;
-                    },
-                    leader() {
-                        return this_.CurrentPerson;
-                    },
-                    substituteId() {
-                        return id;
-                    },
-                    SubstituteType() {
-                        return this_.substituteType;
-                    }
+                    persons: () => this.people,
+                    orgUnits: () => this.orgUnits,
+                    leader: () => this.currentPerson,
+                    substituteId: () => id,
+                    SubstituteType: () => this.substituteType
                 }
             });
 
             modalInstance.result.then(() => {
-                this.RefreshGrids();
-            }, () => {
-
+                this.refreshGrids();
             });
         }
 
-        OpenDeleteSubstitute(id) {
-            var this_ = this;
-            /// <summary>
-            /// Opens delete substitute modal.
-            /// </summary>
-            /// <param name="id">Id of substitute to delete.</param>
+        openDeleteSubstitute(id) {
             var modalInstance = this.$modal.open({
                 templateUrl: 'App/Core/Views/Modals/ConfirmDeleteSubstituteModal.html',
                 controller: 'ConfirmDeleteSubstituteModalInstanceController',
                 backdrop: 'static',
                 size: 'lg',
                 resolve: {
-                    persons() {
-                        return this_.People;
-                    },
-                    orgUnits() {
-                        return this_.OrgUnits;
-                    },
-                    leader() {
-                        return this_.CurrentPerson;
-                    },
-                    substituteId() {
-                        return id;
-                    },
-                    SubstituteType() {
-                        return this_.substituteType;
-                    }
+                    persons: () => this.people,
+                    orgUnits: () => this.orgUnits,
+                    leader: () => this.currentPerson,
+                    substituteId: () => id,
+                    SubstituteType: () => this.substituteType
                 }
             });
 
             modalInstance.result.then(() => {
-                this.RefreshGrids();
-            }, () => {
-
+                this.refreshGrids();
             });
         }
 
-        OpenEditSubstitute(id) {
-            var this_ = this;
+        openEditSubstitute(id) {
             /// <summary>
             /// Opens edit substitute modal
             /// </summary>
@@ -123,33 +355,20 @@
                 backdrop: 'static',
                 size: 'lg',
                 resolve: {
-                    persons() {
-                        return this_.People;
-                    },
-                    orgUnits() {
-                        return this_.OrgUnits;
-                    },
-                    leader() {
-                        return this_.CurrentPerson;
-                    },
-                    substituteId() {
-                        return id;
-                    },
-                    SubstituteType() {
-                        return this_.substituteType;
-                    }
+                    persons: () => this.people,
+                    orgUnits: () => this.orgUnits,
+                    leader: () => this.currentPerson,
+                    substituteId: () => id,
+                    SubstituteType: () => this.substituteType
                 }
             });
 
             modalInstance.result.then(() => {
-                this.RefreshGrids();
-            }, () => {
-
+                this.refreshGrids();
             });
         }
 
-        OpenEditApprover(id) {
-            var this_ = this;
+        openEditApprover(id) {
             /// <summary>
             /// Opens edit approver modal
             /// </summary>
@@ -160,64 +379,39 @@
                 backdrop: 'static',
                 size: 'lg',
                 resolve: {
-                    persons() {
-                        return this_.People;
-                    },
-                    orgUnits() {
-                        return this_.OrgUnits;
-                    },
-                    leader() {
-                        return this_.CurrentPerson;
-                    },
-                    substituteId() {
-                        return id;
-                    },
-                    SubstituteType() {
-                        return this_.substituteType;
-                    }
+                    persons: () => this.people,
+                    orgUnits: () => this.orgUnits,
+                    leader: () => this.currentPerson,
+                    substituteId: () => id,
+                    SubstituteType: () => this.substituteType
                 }
             });
 
             modalInstance.result.then(() => {
-                this.RefreshGrids();
-            }, () => {
-
+                this.refreshGrids();
             });
         }
 
-        CreateNewApprover() {
-            var this_ = this;
-
+        createNewApprover() {
             var modalInstance = this.$modal.open({
                 templateUrl: 'App/Core/Views/Modals/newApproverModal.html',
                 controller: 'NewApproverModalInstanceController',
                 backdrop: 'static',
                 size: 'lg',
                 resolve: {
-                    persons() {
-                        return this_.People;
-                    },
-                    orgUnits() {
-                        return this_.OrgUnits;
-                    },
-                    leader() {
-                        return this_.CurrentPerson;
-                    },
-                    SubstituteType() {
-                        return this_.substituteType;
-                    }
+                    persons: () => this.people,
+                    orgUnits: () => this.orgUnits,
+                    leader: () => this.currentPerson,
+                    SubstituteType: () => this.substituteType
                 }
             });
 
             modalInstance.result.then(() => {
-                this.RefreshGrids();
-            }, () => {
-
+                this.refreshGrids();
             });
         }
 
-        CreateNewSubstitute() {
-            var this_ = this;
+        createNewSubstitute() {
             /// <summary>
             /// Opens create new substitute modal
             /// </summary>
@@ -227,300 +421,16 @@
                 backdrop: 'static',
                 size: 'lg',
                 resolve: {
-                    persons() {
-                        return this_.People;
-                    },
-                    orgUnits() {
-                        return this_.OrgUnits;
-                    },
-                    leader() {
-                        return this_.CurrentPerson;
-                    },
-                    SubstituteType() {
-                        return this_.substituteType;
-                    }
+                    persons: () => this.people,
+                    orgUnits: () => this.orgUnits,
+                    leader: () => this.currentPerson,
+                    SubstituteType: () => this.substituteType
                 }
             });
 
             modalInstance.result.then(() => {
-                this.RefreshGrids();
-            }, () => {
-
+                this.refreshGrids();
             });
-        }
-
-        Substitutes = {
-            autoBind: false,
-            dataSource: {
-                type: "odata",
-                transport: {
-                    read: {
-                        beforeSend(req) {
-                            req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
-                        },
-                        url: "odata/Substitutes/Service.Substitute(Type=" + this.substituteType +")?$expand=OrgUnit,Sub,Person,Leader &$filter=PersonId eq " + this.PersonId,
-                        dataType: "json",
-                        cache: false
-                    },
-                    parameterMap(options, type) {
-                        var d = kendo.data.transports.odata.parameterMap(options, type);
-
-                        delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
-
-                        d.$count = true;
-
-                        return d;
-                    }
-                },
-                pageSize: 20,
-                schema: {
-                    data(data) {
-                        return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
-                    },
-                    total(data) {
-                        return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
-                    }
-                }
-            },
-            sortable: true,
-            pageable: {
-                messages: {
-                    display: "{0} - {1} af {2} ", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
-                    empty: "Ingen stedfortrædere at vise",
-                    page: "Side",
-                    of: "af {0}", //{0} is total amount of pages
-                    itemsPerPage: "stedfortrædere pr. side",
-                    first: "Gå til første side",
-                    previous: "Gå til forrige side",
-                    next: "Gå til næste side",
-                    last: "Gå til sidste side",
-                    refresh: "Genopfrisk",
-                },
-                pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
-            },
-            dataBound() {
-                this.expandRow(this.tbody.find("tr.k-master-row").first());
-            },
-            columns: [{
-                field: "Sub.FullName",
-                title: "Stedfortræder"
-            },
-                {
-                    field: "Person.FullName",
-                    title: "Stedfortræder for"
-                }, {
-                    field: "OrgUnit.LongDescription",
-                    title: "Organisationsenhed",
-                }, {
-                    field: "Leader.FullName",
-                    title: "Opsat af"
-                }, {
-                    field: "StartDateTimestamp",
-                    title: "Fra",
-                    template(data) {
-                        var m = moment.unix(data.StartDateTimestamp).toDate();
-                        return m.getDate() + "/" +
-                            (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                            m.getFullYear();
-                    }
-            }, {
-                    title: "Til",
-                    field: "EndDateTimestamp",
-                    template(data) {
-                        if (data.EndDateTimestamp === this.InfinitePeriod) {
-                            return "På ubestemt tid";
-                        }
-                        var m = moment.unix(data.EndDateTimestamp).toDate();
-                        return m.getDate() + "/" +
-                            (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                            m.getFullYear();
-                    }
-            }, {
-                    title: "Muligheder",
-                    template: "<a ng-click='ctrl.OpenEditSubstitute(${Id})'>Rediger</a> | <a ng-click='ctrl.OpenDeleteSubstitute(${Id})'>Slet</a>"
-                }],
-            scrollable: false
-        };
-
-        PersonalApprovers = {
-            autoBind: false,
-            dataSource: {
-                type: "odata",
-                transport: {
-                    read: {
-                        beforeSend(req) {
-                            req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
-                        },
-                        url: "odata/Substitutes/Service.Personal(Type=" + this.substituteType +")?$expand=OrgUnit,Sub,Leader,Person&$filter=LeaderId eq " + this.PersonId,
-                        dataType: "json",
-                        cache: false
-                    },
-                    parameterMap(options, type) {
-                        var d = kendo.data.transports.odata.parameterMap(options, type);
-
-                        delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
-
-                        d.$count = true;
-
-                        return d;
-                    }
-                },
-                pageSize: 20,
-                schema: {
-                    data(data) {
-                        return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
-                    },
-                    total(data) {
-                        return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
-                    }
-                },
-            },
-
-            sortable: true,
-            pageable: {
-                messages: {
-                    display: "{0} - {1} af {2} ", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
-                    empty: "Ingen personlige godkendere at vise",
-                    page: "Side",
-                    of: "af {0}", //{0} is total amount of pages
-                    itemsPerPage: "personlige godkendere pr. side",
-                    first: "Gå til første side",
-                    previous: "Gå til forrige side",
-                    next: "Gå til næste side",
-                    last: "Gå til sidste side",
-                    refresh: "Genopfrisk",
-                },
-                pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
-            },
-            dataBound() {
-                this.expandRow(this.tbody.find("tr.k-master-row").first());
-            },
-            columns: [{
-                field: "Sub.FullName",
-                title: "Godkender"
-            }, {
-                    field: "Person.FullName",
-                    title: "Godkender for"
-                }, {
-                    field: "Leader.FullName",
-                    title: "Opsat af"
-                }, {
-                    field: "StartDateTimestamp",
-                    title: "Fra",
-                    template(data) {
-                        var m = moment.unix(data.StartDateTimestamp).toDate();
-                        return m.getDate() + "/" +
-                            (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                            m.getFullYear();
-                    },
-                }, {
-                    field: "EndDateTimestamp",
-                    title: "Til",
-                    template(data) {
-                        if (data.EndDateTimestamp === this.InfinitePeriod) {
-                            return "På ubestemt tid";
-                        }
-                        var m = moment.unix(data.EndDateTimestamp).toDate();
-                        return m.getDate() + "/" +
-                            (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                            m.getFullYear();
-                    },
-                }, {
-                    title: "Muligheder",
-                    template: "<a ng-click='ctrl.OpenEditApprover(${Id})'>Rediger</a> | <a ng-click='ctrl.OpenDeleteApprover(${Id})'>Slet</a>"
-                }],
-            scrollable: false
-        };
-
-        MySubstitutes = {
-            autoBind: false,
-            dataSource: {
-                type: "odata",
-                transport: {
-                    read: {
-                        beforeSend(req) {
-                            req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
-                        },
-                        url: "odata/Substitutes(Type=" + this.substituteType +")?$expand=Sub,Person,Leader,OrgUnit &$filter=PersonId eq LeaderId and SubId eq " + this.PersonId,
-                        dataType: "json",
-                        cache: false
-                    },
-                    parameterMap(options, type) {
-                        var d = kendo.data.transports.odata.parameterMap(options, type);
-
-                        delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
-
-                        d.$count = true;
-
-                        return d;
-                    }
-                },
-                pageSize: 20,
-                schema: {
-                    data(data) {
-                        return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
-                    },
-                    total(data) {
-                        return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
-                    }
-                }
-            },
-            sortable: true,
-            pageable: {
-                messages: {
-                    display: "{0} - {1} af {2} ", //{0} is the index of the first record on the page, {1} - index of the last record on the page, {2} is the total amount of records
-                    empty: "Ingen stedfortrædere at vise",
-                    page: "Side",
-                    of: "af {0}", //{0} is total amount of pages
-                    itemsPerPage: "stedfortrædere pr. side",
-                    first: "Gå til første side",
-                    previous: "Gå til forrige side",
-                    next: "Gå til næste side",
-                    last: "Gå til sidste side",
-                    refresh: "Genopfrisk",
-                },
-                pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200],
-            },
-            dataBound() {
-                this.expandRow(this.tbody.find("tr.k-master-row").first());
-            },
-            columns: [
-                {
-                    field: "Sub.FullName",
-                    title: "Stedfortræder"
-                },
-                {
-                    field: "Person.FullName",
-                    title: "Stedfortræder for"
-                }, {
-                    field: "OrgUnit.LongDescription",
-                    title: "Organisationsenhed",
-                }, {
-                    field: "Leader.FullName",
-                    title: "Opsat af"
-                }, {
-                    field: "StartDateTimestamp",
-                    title: "Fra",
-                    template(data) {
-                        var m = moment.unix(data.StartDateTimestamp).toDate();
-                        return m.getDate() + "/" +
-                            (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                            m.getFullYear();
-                    }
-            }, {
-                    title: "Til",
-                    field: "EndDateTimestamp",
-                    template(data) {
-                        if (data.EndDateTimestamp === this.InfinitePeriod) {
-                            return "På ubestemt tid";
-                        }
-                        var m = moment.unix(data.EndDateTimestamp).toDate();
-                        return m.getDate() + "/" +
-                            (m.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                            m.getFullYear();
-                    }
-            }],
-            scrollable: false
         }
     }
 }

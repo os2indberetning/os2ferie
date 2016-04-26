@@ -3,37 +3,37 @@
 
     class AdminMenuController {
 
-        static $inject = [
+        static $inject: string[] = [
             "$scope",
             "Person",
             "$rootScope",
             "HelpText"
         ];
 
-        private _currentUser;
+        private currentUser;
 
         constructor(private $scope, private Person, private $rootScope, private HelpText) {
 
-            this._currentUser = $scope.CurrentUser;
+            this.currentUser = $scope.CurrentUser;
         }
 
-        OrgSettingsClicked() {
+        orgSettingsClicked() {
             this.$scope.$broadcast("Vacation.OrgSettingsClicked");
         }
 
-        AdminClicked() {
+        adminClicked() {
             this.$scope.$broadcast("Vacation.AdministrationClicked");
         }
 
-        ReportsClicked() {
+        reportsClicked() {
             this.$scope.$broadcast("Vacation.ReportsClicked");
         }
 
-        AccountClicked() {
+        accountClicked() {
             this.$scope.$broadcast("Vacation.AccountClicked");
         }
 
-        EmailClicked() {
+        emailClicked() {
             this.$scope.$broadcast("Vacation.EmailClicked");
         }
     }

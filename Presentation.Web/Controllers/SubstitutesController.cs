@@ -178,10 +178,10 @@ namespace OS2Indberetning.Controllers
         /// <returns></returns>
         [EnableQuery]
         [HttpGet]
-        public IHttpActionResult Personal(int Type = 0)
+        public IHttpActionResult Personal(int type = 0)
         {
             //PersonId != LeaderId means it is a Personal Approver.
-            var res = Repo.AsQueryable().Where(x => x.Person.Id != x.LeaderId && x.Type == (SubstituteType)Type);
+            var res = Repo.AsQueryable().Where(x => x.Person.Id != x.LeaderId && x.Type == (SubstituteType)type);
             _sub.ScrubCprFromPersons(res);
             return Ok(res);
         }
@@ -193,10 +193,10 @@ namespace OS2Indberetning.Controllers
         /// <returns></returns>
         [EnableQuery]
         [HttpGet]
-        public IHttpActionResult Substitute(int Type = 0)
+        public IHttpActionResult Substitute(int type = 0)
         {
             //PersonId == LeaderId means it is a Substitute
-            var res = Repo.AsQueryable().Where(x => x.Person.Id == x.LeaderId && x.Type == (SubstituteType)Type);
+            var res = Repo.AsQueryable().Where(x => x.Person.Id == x.LeaderId && x.Type == (SubstituteType)type);
             _sub.ScrubCprFromPersons(res);
             return Ok(res);
         }

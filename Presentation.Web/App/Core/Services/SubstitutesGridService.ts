@@ -2,7 +2,7 @@
     import SubstituteType = app.core.models.SubstituteType;
 
     export class SubstitutesGridService {
-        
+
         GetSubstitutesGrid(SubstituteType: SubstituteType, FromDate, ToDate) {
             return {
                 dataSource: {
@@ -20,7 +20,7 @@
                         parameterMap(options, type) {
                             var d = kendo.data.transports.odata.parameterMap(options, type);
 
-                            delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
+                            delete d.$inlinecount; // <-- remove inlinecount parameter
 
                             d.$count = true;
 
@@ -106,7 +106,7 @@
                     },
                     {
                         title: "Muligheder",
-                        template: "<a ng-click='ctrl.OpenEditSubstitute(${Id})'>Rediger</a> | <a ng-click='ctrl.OpenDeleteSubstitute(${Id})'>Slet</a>"
+                        template: "<a ng-click='subCtrl.openEditSubstitute(${Id})'>Rediger</a> | <a ng-click='subCtrl.openDeleteSubstitute(${Id})'>Slet</a>"
                     }
                 ]
             };
@@ -129,7 +129,7 @@
                         parameterMap(options, type) {
                             var d = kendo.data.transports.odata.parameterMap(options, type);
 
-                            delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
+                            delete d.$inlinecount; // <-- remove inlinecount parameter
 
                             d.$count = true;
 
@@ -206,7 +206,7 @@
                 },
                     {
                         title: "Muligheder",
-                        template: "<a ng-click='ctrl.OpenEditApprover(${Id})'>Rediger</a> | <a ng-click='ctrl.OpenDeleteApprover(${Id})'>Slet</a>"
+                        template: "<a ng-click='subCtrl.openEditApprover(${Id})'>Rediger</a> | <a ng-click='subCtrl.openDeleteApprover(${Id})'>Slet</a>"
                     }]
             }
         }

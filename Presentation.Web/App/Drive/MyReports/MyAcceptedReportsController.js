@@ -18,7 +18,7 @@ angular.module("app.drive").controller("MyAcceptedReportsController", [
 
        // dates for kendo filter.
        var fromDateFilter = new Date();
-       fromDateFilter.setMonth(fromDateFilter.getMonth() - 12);
+       fromDateFilter.setYear(fromDateFilter.getYear() - 1);
        fromDateFilter = $scope.getStartOfDayStamp(fromDateFilter);
        var toDateFilter = $scope.getEndOfDayStamp(new Date());
 
@@ -45,7 +45,7 @@ angular.module("app.drive").controller("MyAcceptedReportsController", [
                    parameterMap: function (options, type) {
                        var d = kendo.data.transports.odata.parameterMap(options);
 
-                       delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
+                       delete d.$inlinecount; // <-- remove inlinecount parameter
 
                        d.$count = true;
 
@@ -209,7 +209,7 @@ angular.module("app.drive").controller("MyAcceptedReportsController", [
            /// </summary>
            // Set initial values for kendo datepickers.
            var from = new Date();
-           from.setMonth(from.getMonth() - 12);
+           from.setYear(from.getYear() - 1);
 
            $scope.dateContainer.toDate = new Date();
            $scope.dateContainer.fromDate = from;

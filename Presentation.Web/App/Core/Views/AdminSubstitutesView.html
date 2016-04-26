@@ -23,22 +23,22 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-3 col-lg-3 margin-left-10">
-                        <input kendo-datepicker culture="'da-DK'" k-options="ctrl.DateOptions" ng-model="ctrl.substituteFromDateString" k-ng-model="ctrl.SubstituteFromDate" ng-change="ctrl.DateChanged('substitute')" />
+                        <input kendo-datepicker culture="'da-DK'" k-options="subCtrl.dateOptions" ng-model="subCtrl.substituteFromDateString" k-ng-model="subCtrl.substituteFromDate" ng-change="subCtrl.dateChanged('substitute')" />
                     </div>
                     <div class="col-xs-3 col-lg-3">
-                        <input kendo-datepicker ng-disabled="container.subInfinitePeriod" culture="'da-DK'" k-options="ctrl.DateOptions" ng-model="ctrl.substituteToDateString" k-ng-model="ctrl.SubstituteToDate" ng-change="ctrl.DateChanged('substitute')" />
+                        <input kendo-datepicker ng-disabled="subCtrl.subInfinitePeriod" culture="'da-DK'" k-options="subCtrl.dateOptions" ng-model="subCtrl.substituteToDateString" k-ng-model="subCtrl.substituteToDate" ng-change="subCtrl.dateChanged('substitute')" />
                     </div>
                     <div class="col-xs-2 col-lg-2">
-                        <input type="checkbox" id="subInfinitePeriod" ng-model="container.subInfinitePeriod" ng-change="ctrl.DateChanged('substitute')" />
+                        <input type="checkbox" id="subInfinitePeriod" ng-model="subCtrl.subInfinitePeriod" ng-change="subCtrl.dateChanged('substitute')" />
                     </div>
                     <div class="col-xs-2 col-lg-2">
-                        <button class="btn btn-danger" ng-click="ctrl.ClearClicked('substitute')">Nulstil søgning</button>
+                        <button class="btn btn-danger" ng-click="subCtrl.clearClicked('substitute')">Nulstil søgning</button>
                     </div>
                     <div class="col-lg-2 pull-right">
-                        <button type="submit" class="btn btn-primary pull-right margin-right-10" ng-click="ctrl.CreateNewSubstitute()">Opret</button>
+                        <button type="submit" class="btn btn-primary pull-right margin-right-10" ng-click="subCtrl.createNewSubstitute()">Opret</button>
                     </div>
                 </div>
-                <div kendo-grid="ctrl.SubstituteGrid" class="margin-10 ctrlrollable" options="ctrl.Substitutes"></div>
+                <div kendo-grid="subCtrl.substituteGrid" class="margin-10 scrollable" options="subCtrl.substitutes"></div>
             </div>
         </div>
         <div class="col-md-12 setting-area">
@@ -59,22 +59,22 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-3 col-lg-3 margin-left-10">
-                        <input kendo-datepicker culture="'da-DK'" k-options="ctrl.DateOptions" ng-model="ctrl.approverFromDateString" k-ng-model="ctrl.ApproverFromDate" ng-change="ctrl.DateChanged('approver')" />
+                        <input kendo-datepicker culture="'da-DK'" k-options="subCtrl.dateOptions" ng-model="subCtrl.approverFromDateString" k-ng-model="subCtrl.approverFromDate" ng-change="subCtrl.dateChanged('approver')" />
                     </div>
                     <div class="col-xs-3 col-lg-3">
-                        <input ng-disabled="container.appInfinitePeriod" kendo-datepicker culture="'da-DK'" k-options="ctrl.DateOptions" ng-model="ctrl.approverToDateString" k-ng-model="ctrl.ApproverToDate" ng-change="ctrl.DateChanged('approver')" />
+                        <input ng-disabled="subCtrl.appInfinitePeriod" kendo-datepicker culture="'da-DK'" k-options="subCtrl.dateOptions" ng-model="subCtrl.approverToDateString" k-ng-model="subCtrl.approverToDate" ng-change="subCtrl.dateChanged('approver')" />
                     </div>
                     <div class="col-xs-2 col-lg-2">
-                        <input id="appInfinitePeriod" type="checkbox" ng-model="container.appInfinitePeriod" ng-change="ctrl.DateChanged('approver')" />
+                        <input id="appInfinitePeriod" type="checkbox" ng-model="subCtrl.appInfinitePeriod" ng-change="subCtrl.dateChanged('approver')" />
                     </div>
                     <div class="col-xs-2 col-lg-2">
-                        <button class="btn btn-danger" ng-click="ctrl.ClearClicked('approver')">Nulstil søgning</button>
+                        <button class="btn btn-danger" ng-click="subCtrl.clearClicked('approver')">Nulstil søgning</button>
                     </div>
                     <div class="col-lg-2 pull-right">
-                        <button type="submit" class="btn btn-primary pull-right margin-right-10" ng-click="ctrl.CreateNewApprover()">Opret</button>
+                        <button type="submit" class="btn btn-primary pull-right margin-right-10" ng-click="subCtrl.createNewApprover()">Opret</button>
                     </div>
                 </div>
-                <div kendo-grid="ctrl.ApproverGrid" class="margin-10 scrollable" options="ctrl.PersonalApprovers"></div>
+                <div kendo-grid="subCtrl.approverGrid" class="margin-10 scrollable" options="subCtrl.personalApprovers"></div>
             </div>
         </div>
     </div>

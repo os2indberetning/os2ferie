@@ -59,7 +59,7 @@ namespace OS2Indberetning
             .Action("SetCoordinatesOnAddressList")
             .ReturnsFromEntitySet<Address>("Addresses");
 
-            
+
 
             builder.EntityType<Address>().Collection
             .Function("GetPersonalAndStandard")
@@ -141,7 +141,7 @@ namespace OS2Indberetning
             builder.EntityType<Person>().Collection
                 .Function("LeadersPeople")
                 .ReturnsFromEntitySet<Person>("Person");
-        
+
             builder.EntitySet<PersonalAddress>("PersonalAddresses");
 
             builder.EntityType<PersonalAddress>().Collection
