@@ -79,6 +79,7 @@ namespace Core.ApplicationServices
                     // Id has to be different. Otherwise it will return true when trying to patch a sub
                     // Because a substitute already exists in the period, however that is the same sub we are trying to change.
                     x.Id != newSub.Id &&
+                    x.Type == newSub.Type &&
                     ((newSub.StartDateTimestamp >= x.StartDateTimestamp && newSub.StartDateTimestamp <= x.EndDateTimestamp) ||
                     (newSub.StartDateTimestamp <= x.StartDateTimestamp && newSub.EndDateTimestamp >= x.StartDateTimestamp))))
                 {
@@ -92,6 +93,7 @@ namespace Core.ApplicationServices
                     // Id has to be different. Otherwise it will return true when trying to patch a sub
                     // Because a substitute already exists in the period, however that is the same sub we are trying to change.
                     x.Id != newSub.Id &&
+                    x.Type == newSub.Type &&
                     ((newSub.StartDateTimestamp >= x.StartDateTimestamp && newSub.StartDateTimestamp <= x.EndDateTimestamp) ||
                     (newSub.StartDateTimestamp <= x.StartDateTimestamp && newSub.EndDateTimestamp >= x.StartDateTimestamp))))
                 {

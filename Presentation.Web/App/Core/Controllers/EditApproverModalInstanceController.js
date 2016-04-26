@@ -1,6 +1,6 @@
-﻿angular.module('app.drive').controller('EditApproverModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId","Autocomplete",
-        function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId,Autocomplete) {
+﻿angular.module('app.core').controller('EditApproverModalInstanceController',
+    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId","Autocomplete","SubstituteType",
+        function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId,Autocomplete, SubstituteType) {
 
             $scope.persons = persons;
             $scope.orgUnits = orgUnits;
@@ -59,7 +59,8 @@
                     SubId: $scope.approver.Id,
                     OrgUnitId: 1,
                     PersonId: $scope.target.Id,
-                    CreatedById: leader.Id
+                    CreatedById: leader.Id,
+                    Type: SubstituteType === 0 ? "Drive" : "Vacation"
                 });
 
                 if ($scope.infinitePeriod) {

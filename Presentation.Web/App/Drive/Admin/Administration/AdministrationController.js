@@ -23,34 +23,20 @@
        $scope.admins = {
            autoBind: false,
            dataSource: {
-               type: "odata",
+               type: "odata-v4",
                transport: {
                    read: {
-                       beforeSend: function (req) {
+                       beforeSend: function(req) {
                            req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                        },
                        url: "/odata/Person?$filter=IsAdmin",
                        dataType: "json",
                        cache: false
-                   },
-                   parameterMap: function (options, type) {
-                       var d = kendo.data.transports.odata.parameterMap(options);
-                       delete d.$inlinecount; // <-- remove inlinecount parameter
-                       d.$count = true;
-                       return d;
-                   }
-               },
-               schema: {
-                   data: function (data) {
-                       return data.value;
-                   },
-                   total: function (data) {
-                       return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                    }
                },
                pageSize: 20,
                serverPaging: true,
-               serverSorting: true,
+               serverSorting: true
            },
            sortable: true,
            pageable: {
@@ -73,16 +59,18 @@
                {
                    field: "FullName",
                    title: "Medarbejder"
-               }, {
+               },
+               {
                    field: "Mail",
                    title: "Email"
-               }, {
+               },
+               {
                    title: "Muligheder",
-                   template: function (data) {
+                   template: function(data) {
                        return "<a ng-click='removeAdmin(" + data.Id + ",\"" + data.FullName + "\")'>Slet</a>";
                    }
                }
-           ],
+           ]
        };
 
        $scope.removeAdmin = function (Id, FullName) {

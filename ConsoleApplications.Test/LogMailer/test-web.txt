@@ -1,0 +1,6 @@
+01-03-2016 09:14:53 : Gyldig domænebruger ikke fundet (DESKTOP-PQKQ5Q2\Jimmi Agerskov)
+01-03-2016 14:40:38 : Heidi Søndergaard Huber [hshu] kan ikke logge på, da der er fejl i vedkommendes arbejds- eller hjemmeadresse.
+21-03-2016 20:52:49 : [Niveau 3] - AD-bruger ikke fundet i databasen (DESKTOP-PQKQ5Q2\Jimmi Agerskov). DESKTOP-PQKQ5Q2\Jimmi Agerskov har derfor ikke kunnet logge på.
+29-03-2016 14:48:05 : [Niveau 1] - Jon Badstue Pedersen [jbp] kan ikke logge på, da der er fejl i vedkommendes arbejds- eller hjemmeadresse.
+29-03-2016 14:48:05 : [Niveau 1] - Jon Badstue Pedersen [jbp] kan ikke logge på, da der er fejl i vedkommendes arbejds- eller hjemmeadresse.
+04-04-2016 13:03:34 : [Niveau 3] - AD-bruger ikke fundet i databasen (DESKTOP-PQKQ5Q2\Jimmi Agerskov). DESKTOP-PQKQ5Q2\Jimmi Agerskov har derfor ikke kunnet logge på.
