@@ -572,3 +572,7 @@ li.mainMenuLink.active > a > i.fa {
     left: 1px;
 }
 
+.pending-vacation-listgroup {
+    max-height: 600px;
+    overflow-y: auto;
+}
