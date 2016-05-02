@@ -11,7 +11,7 @@ namespace Infrastructure.DataAccess.Migrations
                 "VacationReports",
                 c => new
                     {
-                        Id = c.Int(nullable: false),
+                        Id = c.Int(nullable: false, identity: true),
                         Status = c.Int(nullable: false),
                         CreatedDateTimestamp = c.Long(nullable: false),
                         EditedDateTimestamp = c.Long(nullable: false),
@@ -27,7 +27,7 @@ namespace Infrastructure.DataAccess.Migrations
                         EndTimestamp = c.Long(nullable: false),
                         VacationType = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.Id)                
+                .PrimaryKey(t => t.Id)           
                 .ForeignKey("People", t => t.ApprovedById)
                 .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
                 .ForeignKey("Employments", t => t.EmploymentId, cascadeDelete: true)

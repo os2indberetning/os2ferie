@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Mail.LogMailer;
 using NUnit.Framework;
 
-namespace ConsoleApplications.Test.LogMailer
+namespace Mail.Test.LogMailer
 {
     [TestFixture]
     public class LogReaderTests
@@ -18,7 +14,7 @@ namespace ConsoleApplications.Test.LogMailer
         {
             var logReader = new LogReader();
 
-            var log = logReader.Read("LogMailer/web.log");
+            var log = logReader.Read("LogMailer/test-web.txt");
 
             Assert.AreEqual(6, log.Count());
 

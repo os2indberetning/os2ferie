@@ -1,5 +1,6 @@
-﻿angular.module('app.drive').controller('EditSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "substituteId", function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, substituteId) {
+﻿angular.module('app.core').controller('EditSubstituteModalInstanceController',
+    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "substituteId", "SubstituteType", 
+    function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, substituteId, SubstituteType) {
 
         $scope.container = {};
 
@@ -43,7 +44,8 @@
                 EndDateTimestamp: Math.floor($scope.substituteToDate.getTime() / 1000),
                 SubId: $scope.person[0].Id,
                 OrgUnitId: $scope.orgUnit.Id,
-                CreatedById: leader.Id
+                CreatedById: leader.Id,
+                Type: SubstituteType === 0 ? "Drive" : "Vacation"
             });
 
             if ($scope.infinitePeriod) {

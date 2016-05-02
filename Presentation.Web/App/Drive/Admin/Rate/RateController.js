@@ -15,29 +15,15 @@
         $scope.rates = {
             autoBind: false,
             dataSource: {
-                type: "odata",
+                type: "odata-v4",
                 transport: {
                     read: {
-                        beforeSend: function (req) {
+                        beforeSend: function(req) {
                             req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                         },
                         url: "/odata/Rates?$expand=Type&$filter=Active eq true",
                         dataType: "json",
                         cache: false
-                    },
-                    parameterMap: function (options, type) {
-                        var d = kendo.data.transports.odata.parameterMap(options);
-                        delete d.$inlinecount; // <-- remove inlinecount parameter
-                        d.$count = true;
-                        return d;
-                    }
-                },
-                schema: {
-                    data: function (data) {
-                        return data.value;
-                    },
-                    total: function (data) {
-                        return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                     }
                 },
                 pageSize: 20,
@@ -65,22 +51,24 @@
                 {
                     field: "Year",
                     title: "År"
-                }, {
+                },
+                {
                     field: "KmRate",
                     title: "Takst",
                     template: "${KmRate} ører pr/km"
-                }, {
+                },
+                {
                     field: "Type.TFCode",
                     title: "TF kode",
                 },
                 {
                     field: "Type",
                     title: "Type",
-                    template: function (data) {
+                    template: function(data) {
                         return data.Type.Description;
                     }
                 }
-            ],
+            ]
         };
 
         $scope.updateRatesGrid = function () {

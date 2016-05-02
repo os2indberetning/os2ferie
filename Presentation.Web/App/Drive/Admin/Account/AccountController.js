@@ -35,7 +35,7 @@
         $scope.accounts = {
             autoBind: false,
             dataSource: {
-                type: "odata",
+                type: "odata-v4",
                 transport: {
                     read: {
                         beforeSend: function (req) {
@@ -44,20 +44,6 @@
                         url: "/odata/BankAccounts",
                         dataType: "json",
                         cache: false
-                    },
-                    parameterMap: function (options, type) {
-                        var d = kendo.data.transports.odata.parameterMap(options);
-                        delete d.$inlinecount; // <-- remove inlinecount parameter
-                        d.$count = true;
-                        return d;
-                    }
-                },
-                schema: {
-                    data: function (data) {
-                        return data.value;
-                    },
-                    total: function (data) {
-                        return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                     }
                 },
                 pageSize: 20,
@@ -92,18 +78,21 @@
                         //return data.Type;
                         return "Kontonummer";
                     }
-                }, {
+                },
+                {
                     field: "Number",
-                    title: "Kontonummer",
-                }, {
+                    title: "Kontonummer"
+                },
+                {
                     field: "Description",
-                    title: "Beskrivelse",
-                }, {
+                    title: "Beskrivelse"
+                },
+                {
                     field: "Id",
                     template: "<a ng-click=deleteAccountClick(${Id})>Slet</a>",
-                    title: "Muligheder",
+                    title: "Muligheder"
                 }
-            ],
+            ]
         };
 
         $scope.updateAccountGrid = function () {

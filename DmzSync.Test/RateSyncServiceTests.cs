@@ -35,6 +35,7 @@ namespace DmzSync.Test
             _dmzRepoMock = NSubstitute.Substitute.For<IGenericRepository<Core.DmzModel.Rate>>();
             _masterRepoMock = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Rate>>();
             _dmzRepoMock.WhenForAnyArgs(x => x.Insert(new Core.DmzModel.Rate())).Do(p => _dmzRateList.Add(p.Arg<Core.DmzModel.Rate>()));
+            _dmzRepoMock.AsQueryable().Returns(_dmzRateList.AsQueryable());
             _uut = new RateSyncService(_dmzRepoMock,_masterRepoMock);
         }
 
@@ -47,10 +48,7 @@ namespace DmzSync.Test
         [Test]
         public void ClearDmz_ShouldCallDeleteRange()
         {
-            var numberOfReceivedCalls = 0;
-            _dmzRepoMock.WhenForAnyArgs(x => x.DeleteRange(_dmzRateList)).Do(p => numberOfReceivedCalls++);
-            _uut.ClearDmz();
-            Assert.AreEqual(1, numberOfReceivedCalls);
+            Assert.Throws<NotImplementedException>(() => _uut.SyncFromDmz());
         }
 
         [Test]
@@ -62,21 +60,21 @@ namespace DmzSync.Test
                 {
                     Active = true,
                     Id = 1,
-                    Year = 2015,
+                    Year = DateTime.Now.Year,
                     Type = new RateType(){Description = "TEST"}
                 },
                 new Core.DomainModel.Rate()
                 {
                     Active = true,
                     Id = 2,
-                    Year = 2015,
+                    Year = DateTime.Now.Year,
                     Type = new RateType(){Description = "TEST"}
                 },
                 new Core.DomainModel.Rate()
                 {
                     Active = false,
                     Id = 3,
-                    Year = 2015,
+                    Year = DateTime.Now.Year,
                     Type = new RateType(){Description = "TEST"}
                 }
 

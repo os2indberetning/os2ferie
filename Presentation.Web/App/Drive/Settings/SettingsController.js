@@ -33,7 +33,7 @@
 
 
 
-        
+
 
         //Load licenseplates
         $scope.licenseplates = $rootScope.CurrentUser.LicensePlates;
@@ -152,29 +152,12 @@
                     type: "odata-v4",
                     transport: {
                         read: {
-                            beforeSend: function (req) {
+                            beforeSend: function(req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
                             url: "odata/PersonalRoutes()?$filter=PersonId eq " + id + "&$expand=Points",
                             dataType: "json",
                             cache: false
-                        },
-                        parameterMap: function (options, type) {
-                            var d = kendo.data.transports.odata.parameterMap(options);
-
-                            delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
-
-                            d.$count = true;
-
-                            return d;
-                        }
-                    },
-                    schema: {
-                        data: function (data) {
-                            return data.value; // <-- The result is just the data, it doesn't need to be unpacked.
-                        },
-                        total: function (data) {
-                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                         }
                     },
                     pageSize: 20,
@@ -197,19 +180,20 @@
                     },
                     pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
                 },
-                dataBound: function () {
+                dataBound: function() {
                     this.expandRow(this.tbody.find("tr.k-master-row").first());
                 },
                 columns: [
                     {
                         field: "Description",
                         title: "Beskrivelse"
-                    }, {
+                    },
+                    {
                         field: "Points",
-                        template: function (data) {
+                        template: function(data) {
                             var temp = [];
 
-                            angular.forEach(data.Points, function (value, key) {
+                            angular.forEach(data.Points, function(value, key) {
                                 if (value.PreviousPointId == undefined) {
                                     this.push(value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town);
                                 }
@@ -219,12 +203,13 @@
                             return temp;
                         },
                         title: "Fra"
-                    }, {
+                    },
+                    {
                         field: "Points",
-                        template: function (data) {
+                        template: function(data) {
                             var temp = [];
 
-                            angular.forEach(data.Points, function (value, key) {
+                            angular.forEach(data.Points, function(value, key) {
                                 if (value.NextPointId == null) {
                                     this.push(value.StreetName + " " + value.StreetNumber + ", " + value.ZipCode + " " + value.Town);
                                 }
@@ -234,14 +219,15 @@
                             return temp;
                         },
                         title: "Til"
-                    }, {
+                    },
+                    {
                         title: "Via",
                         field: "Points",
                         width: 50,
-                        template: function (data) {
+                        template: function(data) {
                             var tooltipContent = "";
                             var gridContent = data.Points.length - 2;
-                            angular.forEach(data.Points, function (point, key) {
+                            angular.forEach(data.Points, function(point, key) {
                                 if (key != 0 && key != data.Points.length - 1) {
                                     tooltipContent += point.StreetName + " " + point.StreetNumber + ", " + point.ZipCode + " " + point.Town + "<br/>";
                                 }
@@ -261,32 +247,15 @@
 
             $scope.personalAddresses = {
                 dataSource: {
-                    type: "odata",
+                    type: "odata-v4",
                     transport: {
                         read: {
-                            beforeSend: function (req) {
+                            beforeSend: function(req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
                             url: "odata/PersonalAddresses()?$filter=PersonId eq " + personId + " and Type ne Core.DomainModel.PersonalAddressType'OldHome'",
                             dataType: "json",
                             cache: false
-                        },
-                        parameterMap: function (options, type) {
-                            var d = kendo.data.transports.odata.parameterMap(options);
-
-                            delete d.$inlinecount; // <-- remove inlinecount parameter                                                        
-
-                            d.$count = true;
-
-                            return d;
-                        }
-                    },
-                    schema: {
-                        data: function (data) {
-                            return data.value;
-                        },
-                        total: function (data) {
-                            return data['@odata.count']; // <-- The total items count is the data length, there is no .Count to unpack.
                         }
                     },
                     pageSize: 5,
@@ -309,7 +278,7 @@
                     },
                     pageSizes: [5, 10, 20, 30, 40, 50, 100, 150, 200]
                 },
-                dataBound: function () {
+                dataBound: function() {
                     this.expandRow(this.tbody.find("tr.k-master-row").first());
                 },
                 sort: {
@@ -320,21 +289,23 @@
                     {
                         field: "Description",
                         title: "Beskrivelse",
-                        template: function (data) {
+                        template: function(data) {
                             if (data.Type == "Home") {
                                 return "Hjemmeadresse";
                             } else return data.Description;
                         }
-                    }, {
+                    },
+                    {
                         field: "Id",
-                        template: function (data) {
+                        template: function(data) {
                             return (data.StreetName + " " + data.StreetNumber + ", " + data.ZipCode + " " + data.Town);
                         },
                         title: "Adresse"
-                    }, {
+                    },
+                    {
                         field: "Id",
                         title: "Muligheder",
-                        template: function (data) {
+                        template: function(data) {
                             if (data.Type == "Standard") {
                                 return "<a ng-click='openAddressEditModal(" + data.Id + ")'>Rediger</a> | <a ng-click='openAddressDeleteModal(" + data.Id + ")'>Slet</a>";
                             }
@@ -452,7 +423,7 @@
 
         $scope.openAddressAddModal = function () {
             /// <summary>
-            ///Opens add personal address modal. 
+            ///Opens add personal address modal.
             /// </summary>
             var modalInstance = $modal.open({
                 templateUrl: '/App/Drive/Settings/AddressAddModal.html',
@@ -594,7 +565,7 @@
 
         var checkShouldPrompt = function () {
             /// <summary>
-            /// Return true if there are unsaved changes on the page. 
+            /// Return true if there are unsaved changes on the page.
             /// </summary>
 
             if ($scope.newLicensePlate != "" ||

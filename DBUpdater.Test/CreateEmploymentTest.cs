@@ -113,7 +113,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).IsLeader.Equals(true));
             Assert.That(res.ElementAt(0).Position.Equals("Udvikler"));
             Assert.That(res.ElementAt(0).StartDateTimestamp.Equals(1430179200));
-            Assert.That(res.ElementAt(0).EndDateTimestamp.Equals(1431388800));
+            Assert.That(res.ElementAt(0).EndDateTimestamp.Equals(1431475200));
             Assert.That(res.ElementAt(0).PersonId.Equals(1));
             Assert.That(res.ElementAt(0).EmploymentType.Equals(1));
 
