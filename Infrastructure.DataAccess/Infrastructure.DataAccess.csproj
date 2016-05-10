@@ -413,6 +413,10 @@
     <Compile Include="Migrations\201604061032482_AddedVacationBalanceTable.Designer.cs">
       <DependentUpon>201604061032482_AddedVacationBalanceTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604261240174_AddedTimeToVacationReport.cs" />
+    <Compile Include="Migrations\201604261240174_AddedTimeToVacationReport.Designer.cs">
+      <DependentUpon>201604261240174_AddedTimeToVacationReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -690,6 +694,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604061032482_AddedVacationBalanceTable.resx">
       <DependentUpon>201604061032482_AddedVacationBalanceTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604261240174_AddedTimeToVacationReport.resx">
+      <DependentUpon>201604261240174_AddedTimeToVacationReport.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

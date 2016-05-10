@@ -49,7 +49,7 @@ namespace OS2Indberetning.Controllers.Vacation
             {
                 if (reportStatus == ReportStatus.Accepted)
                 {
-                    // If accepted reports are requested, then return accepted and invoiced. 
+                    // If accepted reports are requested, then return accepted and invoiced.
                     // Invoiced reports are accepted reports that have been processed for payment.
                     // So they are still accepted reports.
                     queryable =
@@ -120,7 +120,7 @@ namespace OS2Indberetning.Controllers.Vacation
         [EnableQuery]
         public new IHttpActionResult Post(VacationReport vacationReport, string emailText)
         {
-            if(CurrentUser.IsAdmin && emailText != null && vacationReport.Status == ReportStatus.Accepted)
+                if(CurrentUser.IsAdmin && emailText != null && vacationReport.Status == ReportStatus.Accepted)
             {
                 // An admin is trying to edit an already approved report.
                     var adminEditResult = _reportService.Create(vacationReport);
@@ -239,7 +239,8 @@ namespace OS2Indberetning.Controllers.Vacation
             if(HasReportAccess(report, CurrentUser)) StatusCode(HttpStatusCode.Forbidden);
 
             // All good, user has rights to approve the report.
-            
+            _reportService.ApproveReport(report, CurrentUser, emailText);
+
             return null;
         }
 

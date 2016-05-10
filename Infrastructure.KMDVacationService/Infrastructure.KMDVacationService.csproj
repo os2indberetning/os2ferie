@@ -43,12 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builder.cs" />
+    <Compile Include="KMDAbsenceExceptions.cs" />
+    <Compile Include="Interfaces\IKMDAbsenceReportBuilder.cs" />
+    <Compile Include="KMDAbsenceReportBuilder.cs" />
     <Compile Include="EmployeeLookup.cs" />
-    <Compile Include="Interfaces\IReportAbsence.cs" />
-    <Compile Include="Models\AbsenceObject.cs" />
+    <Compile Include="Interfaces\IKMDAbsenceService.cs" />
+    <Compile Include="Models\KMDAbsenceReport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportAbsence.cs" />
+    <Compile Include="KMDAbsenceService.cs" />
     <Compile Include="Service References\KMD_FerieService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

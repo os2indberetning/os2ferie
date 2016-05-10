@@ -17,16 +17,15 @@ namespace Core.ApplicationServices
 
     public class VacationReportService : ReportService<VacationReport>, IVacationReportService
     {
-
         private readonly IGenericRepository<VacationReport> _reportRepo;
-        private readonly IReportAbsence _reportAbsence;
-        private readonly ILogger _logger;
+        private readonly IKMDAbsenceService _absenceService;
+        private readonly IKMDAbsenceReportBuilder _absenceBuilder;
 
-        public VacationReportService(IGenericRepository<VacationReport> reportRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IReportAbsence reportAbsence, ILogger logger) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, SubstituteType.Vacation)
+        public VacationReportService(IGenericRepository<VacationReport> reportRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IKMDAbsenceService absenceService, IKMDAbsenceReportBuilder absenceBuilder) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, SubstituteType.Vacation)
         {
             _reportRepo = reportRepo;
-            _reportAbsence = reportAbsence;
-            _logger = logger;
+            _absenceService = absenceService;
+            _absenceBuilder = absenceBuilder;
         }
 
         public override VacationReport Create(VacationReport report)
@@ -49,14 +48,45 @@ namespace Core.ApplicationServices
         {
             if (report.PersonId == 0) return false;
             if (report.EndTimestamp < report.StartTimestamp) return false;
+            if (report.StartTime > report.EndTime &&
+                report.StartTimestamp.ToDateTime().Date == report.EndTimestamp.ToDateTime().Date) return false;
             //if (!report.Employment.OrgUnit.HasAccessToVacation) return false;
-         
+
             return true;
         }
 
         public override void SendMailToUserAndApproverOfEditedReport(VacationReport report, string emailText, Person admin, string action)
         {
-            throw new NotImplementedException();
+            var mailContent = "Hej," + Environment.NewLine + Environment.NewLine +
+            "Jeg, " + admin.FullName + ", har pr. dags dato " + action + " den følgende godkendte ferieindberetning:" + Environment.NewLine + Environment.NewLine;
+
+
+            mailContent += "Feriestart: " + report.StartTimestamp.ToDateTime().ToString("dd/MM/yyyy");
+
+            if (report.StartTime != null)
+                mailContent += " - " + report.StartTime?.ToString("hh:mm");
+
+            mailContent += Environment.NewLine + "Ferieafslutning: " + report.EndTimestamp.ToDateTime().ToString("dd/MM/yyyy");
+
+            if (report.EndTime != null)
+                mailContent += " - " + report.EndTime?.ToString("hh:mm");
+
+            mailContent += Environment.NewLine + "Ferietype: " +
+                           (report.VacationType == VacationType.Regular
+                               ? "Almindelig ferie"
+                               : "6. ferieuge");
+
+            if (report.Comment != null)
+                mailContent += Environment.NewLine + "Kommentar: " + report.Comment;
+
+            mailContent += Environment.NewLine + Environment.NewLine
+            + "Hvis du mener at dette er en fejl, så kontakt mig da venligst på " + admin.Mail + Environment.NewLine
+            + "Med venlig hilsen " + admin.FullName + Environment.NewLine + Environment.NewLine
+            + "Besked fra administrator: " + Environment.NewLine + emailText;
+
+            _mailSender.SendMail(report.Person.Mail, "En administrator har ændret i din indberetning.", mailContent);
+
+            _mailSender.SendMail(report.ApprovedBy.Mail, "En administrator har ændret i en indberetning du har godkendt.", mailContent);
         }
 
         public void ApproveReport(VacationReport report, Person approver, string emailText)
@@ -77,16 +107,20 @@ namespace Core.ApplicationServices
                 throw;
             }
 
-            
+            var absenceReport = _absenceBuilder.Create(report);
 
-            
-
-            //var response = _reportAbsence.Set_Absence_Plus()
+            try
+            {
+                _absenceService.ReportAbsence(absenceReport);
+            }
+            catch (KMDSetAbsenceFailedException)
+            {
+                _logger.Log("Forsøg på at sende ferie til KMDs service fejlede.", "web", 1);
+                throw;
+            }
 
             report.ProcessedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             _reportRepo.Save();
-
-
 
         }
     }

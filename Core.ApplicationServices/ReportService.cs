@@ -13,14 +13,14 @@ namespace Core.ApplicationServices
     public abstract class ReportService<T> : IReportService<T> where T : Report
     {
 
-        private readonly IGenericRepository<OrgUnit> _orgUnitRepository;
-        private readonly IGenericRepository<Employment> _employmentRepository;
-        private readonly IGenericRepository<Substitute> _substituteRepository;
-        private readonly IMailSender _mailSender;
+        protected readonly IGenericRepository<OrgUnit> _orgUnitRepository;
+        protected readonly IGenericRepository<Employment> _employmentRepository;
+        protected readonly IGenericRepository<Substitute> _substituteRepository;
+        protected readonly IMailSender _mailSender;
 
-        private readonly SubstituteType _substituteType;
+        protected readonly SubstituteType _substituteType;
 
-        private readonly ILogger _logger;
+        protected readonly ILogger _logger;
 
         protected ReportService(IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository,
             IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, SubstituteType type = SubstituteType.Drive)
@@ -189,7 +189,7 @@ namespace Core.ApplicationServices
             }
             if (leaderOfOrgUnit == null)
             {
-                // This statement will be hit when all orgunits up to (not including) level 0 have been checked for a leader. 
+                // This statement will be hit when all orgunits up to (not including) level 0 have been checked for a leader.
                 // If no actual leader has been found then return the reponsibleleader.
                 // This will happen when members of orgunit 0 try to create a report, as orgunit 0 has no leaders and they are all handled by a substitute.
                 return GetResponsibleLeaderForReport(report);

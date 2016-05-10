@@ -24,7 +24,7 @@ using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
 
 namespace Core.ApplicationServices
 {
-    public static class NinjectWebKernel 
+    public static class NinjectWebKernel
     {
         /// <summary>
         /// Creates the kernel that will manage your application.
@@ -79,7 +79,8 @@ namespace Core.ApplicationServices
             kernel.Bind<IReportService<VacationReport>>().To<VacationReportService>();
             kernel.Bind<IReportService<DriveReport>>().To<DriveReportService>();
             kernel.Bind<IVacationReportService>().To<VacationReportService>();
-            kernel.Bind<IReportAbsence>().To<ReportAbsence>();
-        }        
+            kernel.Bind<IKMDAbsenceService>().To<KMDAbsenceService>();
+            kernel.Bind<IKMDAbsenceReportBuilder>().To<KMDAbsenceReportBuilder>();
+        }
     }
 }

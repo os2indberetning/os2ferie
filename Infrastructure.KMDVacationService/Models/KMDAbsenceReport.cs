@@ -13,9 +13,27 @@ namespace Infrastructure.KMDVacationService.Models
         Create,
         Edit,
         Delete
-    }       
+    }
 
-    public class AbsenceObject
+    public static class OperationExtension
+    {
+        public static string AsString(this Operation operation)
+        {
+            switch (operation)
+            {
+                case Operation.Create:
+                    return "INS";
+                case Operation.Edit:
+                    return "MOD";
+                case Operation.Delete:
+                    return "DEL";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(operation), operation, null);
+            }
+        }
+    }
+
+    public class KMDAbsenceReport
     {
         public DateTime StartDate { get; set; }
         public DateTime? OldStartDate { get; set; }
@@ -29,26 +47,7 @@ namespace Infrastructure.KMDVacationService.Models
         public Operation Operation { get; set; }
         public int EmploymentId { get; set; }
         public VacationType Type { get; set; }
-        public VacationType OldType { get; set; }
+        public VacationType? OldType { get; set; }
 
-        public AbsenceObject Copy()
-        {
-            return new AbsenceObject
-            {
-                StartTime = StartTime,
-                OldStartDate = OldStartDate,
-                OldStartTime = OldStartTime,
-                OldEndDate = OldEndDate,
-                OldEndTime = OldEndTime,
-                EndTime = EndTime,
-                EndDate = EndDate,
-                StartDate = StartDate,
-                ExtraData = ExtraData,
-                Operation = Operation,
-                Type = Type,
-                OldType = OldType,
-                EmploymentId = EmploymentId
-            };
-        }
     }
 }

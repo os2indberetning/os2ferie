@@ -131,7 +131,7 @@ namespace DBUpdater
                 orgToInsert.OrgId = org.LOSOrgId;
 
                 var addressChanged = false;
-               
+
                 if(workAddress != orgToInsert.Address)
                 {
                     addressChanged = true;
@@ -150,7 +150,7 @@ namespace DBUpdater
                 {
                     workAddress.OrgUnitId = orgToInsert.Id;
                 }
-            
+
             }
 
             Console.WriteLine("Done migrating organisations.");
@@ -284,8 +284,8 @@ namespace DBUpdater
             var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.OrgUnitId == orgUnit.Id && x.EmploymentId == empl.MaNr);
 
             //It is ok that we do not save after inserting untill
-            //we are done as we loop over employments from the view, and 
-            //two view employments will not share an employment in the db. 
+            //we are done as we loop over employments from the view, and
+            //two view employments will not share an employment in the db.
             if (employment == null)
             {
                 employment = _emplRepo.Insert(new Employment());
@@ -380,7 +380,7 @@ namespace DBUpdater
                     {
                         addr.Type = PersonalAddressType.OldHome;;
                     }
-                    
+
                     // Update actual current home address.
                     _personalAddressRepo.Insert(launderedAddress);
                     _personalAddressRepo.Save();
@@ -493,7 +493,7 @@ namespace DBUpdater
             foreach(var sub in affectedSubstitutes)
             {
                 _subService.UpdateReportsAffectedBySubstitute(sub);
-            } 
+            }
         }
 
         public void AddLeadersToReportsThatHaveNone()
@@ -519,47 +519,57 @@ namespace DBUpdater
 
         public void UpdateVacationBalance()
         {
-            var balances = _dataProvider.GetVacationBalanceAsQueryable().ToList();
 
-            var count = 0;
+            Console.WriteLine("Adding vacation balance to employers");
+
+            var i = 0;
+
+            var balances = _dataProvider.GetVacationBalanceAsQueryable().ToList();
 
             foreach (var balance in balances)
             {
+                i++;
+                Console.WriteLine("Vacation balance " + i + " of " + balances.Count);
+
                 var person = _personRepo.AsQueryable().FirstOrDefault(x => x.CprNumber.Equals(balance.CPR));
-                if(person?.Employments == null) continue;
 
-                var vacation = _vacationRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id);
+                var vacationYear = int.Parse(balance.Ferieoptjeningsaar) + 1;
 
-                if (vacation == null)
+                if (person == null) continue;
+
+                var ans_forhold_nr = int.Parse(balance.ANS_FORHOLD_NR);
+
+                var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.ExtraNumber == ans_forhold_nr);
+
+                if (employment == null) continue;
+
+                var vacation = _vacationRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.EmploymentId == employment.Id && x.Year == vacationYear);
+
+                var isNewBalance = vacation == null;
+
+                if (isNewBalance)
                 {
-
                     vacation = new VacationBalance
                     {
                         PersonId = person.Id,
-                        EmploymentId = person.Employments.First().Id
+                        EmploymentId = employment.Id,
+                        Year = vacationYear
                     };
-                    
-                    var i = balance.FerieTimer_MLoen + balance.Overfoertetimer +
-                            balance.FERIEFRIDAGSTIMER_SUM;
-                    if (i != null)
-                        vacation.TotalVacationHours = (int) i;
-
-                    vacation.Year = DateTime.Parse(balance.DatoForSaldo).Year;
 
                     _vacationRepo.Insert(vacation);
-
                 }
 
-                vacation.FreeVacationHours = balance.FERIEFRIDAGSTIMER_SUM ?? 0;
-                vacation.TransferredHours = balance.Overfoertetimer ?? 0;
-                vacation.VacationHours = balance.FerieTimer_MLoen ?? 0;
+                vacation.FreeVacationHours = balance.FERIEFRIDAGSTIMER_SUMDec ?? 0;
+                vacation.TransferredHours = balance.OverfoertetimerDec ?? 0;
+                vacation.VacationHours = balance.FerieTimer_MLoenDec ?? 0;
 
                 var updated = balance.Opdateringsdato ?? new DateTime();
 
                 vacation.UpdatedAt = Convert.ToInt64((updated - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds);
 
+                if (i % 100 != 0) continue;
+                Console.WriteLine("Saving to database");
                 _vacationRepo.Save();
-
             }
 
             _vacationRepo.Save();
