@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width" initial-scale=1 />
     <title>OS2Indberetning</title>
 
-
-
-
-
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
     <link rel="stylesheet" href="//os2routemap.cdn.septima.dk/1.1.0/css/leaflet-routing-machine.css" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
@@ -60,10 +56,10 @@
     <script>
         angular.module("app").constant("EnabledApplications", "@System.Configuration.ConfigurationManager.AppSettings["ENABLED_APPLICATIONS"]");
     </script>
+    <script src="../../Scripts/kendo/cultures/kendo.culture.da-DK.min.js"></script>
 
-
-
-
+    <script type="text/javascript">
+        kendo.culture("da-DK");
+    </script>
 </body>
-
 </html>

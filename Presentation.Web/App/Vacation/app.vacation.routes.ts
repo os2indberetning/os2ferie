@@ -34,8 +34,8 @@
                 .state("vacation.approvereports", {
                     url: "/approve-reports",
                     templateUrl: "/App/Vacation/ApproveReports/ApproveReportsView.html",
-                    controller: "Vacation.ApproveReportsController",
-                    controllerAs: "ctrl",
+                    controller: "Vacation.ApproveVacationController",
+                    controllerAs: "avc",
                     resolve: {
                         CurrentUser: [
                             "$rootScope", "Person", ($rootScope, Person) => {
@@ -50,6 +50,12 @@
                             }
                         ]
                     }
+                })
+                .state("vacation.approvereports.responsevacation", {
+                    url: "/response",
+                    templateUrl: "/App/Vacation/ApproveReports/Modal/VacationInfoModal.html",
+                    controller: app.vacation.VacationResponseController,
+                    controllerAs: "vrc"
                 })
                 .state("vacation.admin", {
                     url: "/admin",

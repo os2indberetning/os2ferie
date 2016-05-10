@@ -576,3 +576,8 @@ li.mainMenuLink.active > a > i.fa {
     max-height: 600px;
     overflow-y: auto;
 }
+
+.k-scheduler-timelineMonthview > tbody > tr:nth-child(1) .k-scheduler-table tr:nth-child(2) {
+    display: none;
+}
+

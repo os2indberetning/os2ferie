@@ -470,10 +470,12 @@
     <TypeScriptCompile Include="App\Core\Models\VacationReport.ts" />
     <TypeScriptCompile Include="App\Core\Models\Report.ts" />
     <TypeScriptCompile Include="App\Vacation\Admin\Substitutes\VacationSubstitutesController.ts" />
-    <TypeScriptCompile Include="App\Vacation\ApproveReports\ApproveReportsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\ApproveReports\ApproveVacationController.ts" />
     <TypeScriptCompile Include="App\app.routes.ts" />
+    <TypeScriptCompile Include="App\Vacation\ApproveReports\Modal\VacationResponseController.ts" />
     <TypeScriptCompile Include="App\Vacation\Services\VacationBalanceResource.ts" />
     <TypeScriptCompile Include="App\Vacation\app.vacation.ts" />
+    <Content Include="App\Vacation\ApproveReports\Modal\VacationInfoModal.html" />
     <Content Include="App\Vacation\Filters\MinIntFilter.js" />
     <TypeScriptCompile Include="App\Vacation\ReportVacation\ReportVacationController.ts" />
     <Content Include="App\Vacation\ApproveReports\ApproveReportsView.html" />
