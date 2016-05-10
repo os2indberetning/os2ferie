@@ -45,7 +45,7 @@
                     templateUrl: '/App/Vacation/app.vacation.html',
                     controller: [
                         '$scope', '$state', ($scope, $state) => {
-                            $state.go('vacation.admin');
+                            $state.go('vacation.report');
                         }
                     ]
                 });

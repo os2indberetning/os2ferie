@@ -51,11 +51,49 @@
                         ]
                     }
                 })
+                .state("vacation.approvereportssettings", {
+                    url: "/approve-reports",
+                    templateUrl: "/App/Core/Views/ApproveReportsSettingsView.html",
+                    controller: "Vacation.ApproveVacationReportsSettingsController",
+                    controllerAs: "arsCtrl",
+                    resolve: {
+                        CurrentUser: [
+                            "$rootScope", "Person", ($rootScope, Person) => {
+                                if ($rootScope.CurrentUser == undefined) {
+                                    return Person.GetCurrentUser().$promise.then(res => {
+                                        $rootScope.CurrentUser = res;
+                                    });
+                                } else {
+                                    return $rootScope.CurrentUser;
+                                }
+
+                            }
+                        ]
+                    }
+                })
                 .state("vacation.admin", {
                     url: "/admin",
                     templateUrl: "/App/Vacation/Admin/AdminView.html",
                     controller: "Vacation.AdminMenuController",
                     controllerAs: "ctrl",
+                    resolve: {
+                        CurrentUser: [
+                            "$rootScope", "Person", ($rootScope, Person) => {
+                                if ($rootScope.CurrentUser == undefined) {
+                                    return Person.GetCurrentUser().$promise.then(res => {
+                                        $rootScope.CurrentUser = res;
+                                    });
+                                } else {
+                                    return $rootScope.CurrentUser;
+                                }
+
+                            }
+                        ]
+                    }
+                })
+                .state("vacation.myreports", {
+                    url: "/approve-reports",
+                    templateUrl: "/App/Vacation/MyVacationReports/MyVacationReportsView.html",
                     resolve: {
                         CurrentUser: [
                             "$rootScope", "Person", ($rootScope, Person) => {
