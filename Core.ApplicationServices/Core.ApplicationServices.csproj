@@ -106,6 +106,7 @@
     <Compile Include="ApplicationAccessService.cs" />
     <Compile Include="AppLoginService.cs" />
     <Compile Include="Interfaces\IApplicationAccessService.cs" />
+    <Compile Include="Interfaces\IVacationReportService.cs" />
     <Compile Include="ReportService.cs" />
     <Compile Include="Interfaces\IReportService.cs" />
     <Compile Include="VacationReportService .cs" />

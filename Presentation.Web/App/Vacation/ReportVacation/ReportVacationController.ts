@@ -4,9 +4,9 @@
     import VacationBalanceResource = vacation.resources.IVacationBalanceResource;
     import Balance = core.models.VacationBalance;
     import Report = core.models.VacationReport;
+    import Employment = app.core.models.Employment;
 
     class ReportVacationController {
-
         static $inject = [
             "$scope",
             "Person",
@@ -19,7 +19,7 @@
             "$modalInstance"
         ];
 
-        vacationBalances: Array<Balance>;
+        vacationBalances: Balance[];
         vacationBalance: Balance;
         hasVacationBalance: Boolean;
         vacationDaysInPeriod: number;
@@ -33,10 +33,10 @@
         endDate: Date;
         startTime: Date;
         endTime: Date;
-        employments;
+        employments: Employment[];
         vacationType;
         comment: String;
-        position;
+        position: number;
         saveButtenDisabled = true;
 
         private maxEndDate: Date;
@@ -100,11 +100,9 @@
             this.vacationType = undefined;
         }
 
-        timePickerOptions = {
-
+        timePickerOptions: kendo.ui.TimePickerOptions = {
             interval: 15,
             value: new Date(2000, 0, 1, 0, 0, 0, 0)
-
         }
 
         positionUpdated() {
@@ -119,7 +117,6 @@
                     }
                 }
             }
-
         }
 
         saveReport() {
@@ -128,7 +125,7 @@
 
             report.StartTimestamp = Math.floor((new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate()).getTime()) / 1000);
             report.EndTimestamp = Math.floor((new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate()).getTime()) / 1000);
-            report.EmploymentId = parseInt(this.position);
+            report.EmploymentId = this.position;
             report.Comment = this.comment;
 
             report.PersonId = this.currentUser.Id;
@@ -154,7 +151,7 @@
             }, () => {
                 this.saveButtenDisabled = false;
                 this.NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under oprettelsen af din ferieindberetning.");
-            });;
+            });
         }
 
         clearReport() {

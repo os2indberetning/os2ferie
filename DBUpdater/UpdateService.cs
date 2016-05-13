@@ -526,6 +526,7 @@ namespace DBUpdater
 
             var balances = _dataProvider.GetVacationBalanceAsQueryable().ToList();
 
+
             foreach (var balance in balances)
             {
                 i++;
@@ -533,14 +534,26 @@ namespace DBUpdater
 
                 var person = _personRepo.AsQueryable().FirstOrDefault(x => x.CprNumber.Equals(balance.CPR));
 
-                var vacationYear = int.Parse(balance.Ferieoptjeningsaar) + 1;
-
+                // The person is not stored in our database, so abort
+                // In theory, this should never happen, since we sync people before vacation
                 if (person == null) continue;
 
-                var ans_forhold_nr = int.Parse(balance.ANS_FORHOLD_NR);
+                int vacationYear;
+
+                if (!int.TryParse(balance.Ferieoptjeningsaar, out vacationYear)) continue;
+
+                // The year the vacation is earned is stored in the database
+                // But we're interested in the year the vacation is held, which is a year later
+                vacationYear += 1;
+
+                int ans_forhold_nr;
+
+                if (!int.TryParse(balance.ANS_FORHOLD_NR, out ans_forhold_nr)) continue;
 
                 var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.ExtraNumber == ans_forhold_nr);
 
+                // The person's employment is not stored in our database, so abort
+                // Also not likely to happen, but better safe than sorry.
                 if (employment == null) continue;
 
                 var vacation = _vacationRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.EmploymentId == employment.Id && x.Year == vacationYear);

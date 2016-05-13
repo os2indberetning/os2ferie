@@ -23,7 +23,7 @@ namespace Core.ApplicationServices
         protected readonly ILogger _logger;
 
         protected ReportService(IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository,
-            IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, SubstituteType type = SubstituteType.Drive)
+            IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, ILogger logger, SubstituteType type = SubstituteType.Drive)
         {
             _orgUnitRepository = orgUnitRepository;
             _employmentRepository = employmentRepository;
@@ -32,7 +32,7 @@ namespace Core.ApplicationServices
 
             _substituteType = type;
 
-            _logger = NinjectWebKernel.CreateKernel().Get<ILogger>();
+            _logger = logger;
         }
 
         public abstract T Create(T report);

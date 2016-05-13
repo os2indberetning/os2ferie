@@ -4,24 +4,18 @@ using Core.ApplicationServices.Logger;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
+using Core.DomainServices.Interfaces;
 using Infrastructure.KMDVacationService;
-using Infrastructure.KMDVacationService.Interfaces;
-
 
 namespace Core.ApplicationServices
 {
-    public interface IVacationReportService : IReportService<VacationReport>
-    {
-        void ApproveReport(VacationReport report, Person approver, string emailText);
-    }
-
     public class VacationReportService : ReportService<VacationReport>, IVacationReportService
     {
         private readonly IGenericRepository<VacationReport> _reportRepo;
         private readonly IKMDAbsenceService _absenceService;
         private readonly IKMDAbsenceReportBuilder _absenceBuilder;
 
-        public VacationReportService(IGenericRepository<VacationReport> reportRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IKMDAbsenceService absenceService, IKMDAbsenceReportBuilder absenceBuilder) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, SubstituteType.Vacation)
+        public VacationReportService(IGenericRepository<VacationReport> reportRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IKMDAbsenceService absenceService, IKMDAbsenceReportBuilder absenceBuilder, ILogger logger) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, logger, SubstituteType.Vacation)
         {
             _reportRepo = reportRepo;
             _absenceService = absenceService;
@@ -91,7 +85,6 @@ namespace Core.ApplicationServices
 
         public void ApproveReport(VacationReport report, Person approver, string emailText)
         {
-
             report.Status = ReportStatus.Accepted;
             report.Comment = emailText;
             report.ClosedDateTimestamp = (DateTime.UtcNow.ToTimestamp());
@@ -121,7 +114,6 @@ namespace Core.ApplicationServices
 
             report.ProcessedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             _reportRepo.Save();
-
         }
     }
 }

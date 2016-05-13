@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.OData;
 using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
+using Core.ApplicationServices.Logger;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
@@ -23,7 +24,7 @@ using Substitute = NSubstitute.Substitute;
 namespace ApplicationServices.Test.DriveReportServiceTest
 {
     [TestFixture] //TODO rewrite tests, did not catch that the person was always set as responsible leader
-    /** Things to test: 
+    /** Things to test:
      *      person is an employee
      *      person is a leader (approver is leader of next level
      *      Person is leader on two levels
@@ -44,6 +45,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
         private IAddressCoordinates _coordinatesMock;
         private IMailSender _mailMock;
         private List<DriveReport> repoList;
+        private ILogger _loggerMock;
 
         [SetUp]
         public void SetUp()
@@ -59,6 +61,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
             _subMock = Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
             _mailMock = Substitute.For<IMailSender>();
             _reportRepoMock = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
+            _loggerMock = NSubstitute.Substitute.For<ILogger>();
 
             _reportRepoMock.Insert(new DriveReport()).ReturnsForAnyArgs(x => x.Arg<DriveReport>()).AndDoes(x => repoList.Add(x.Arg<DriveReport>())).AndDoes(x => x.Arg<DriveReport>().Id = idCounter).AndDoes(x => idCounter++);
             _reportRepoMock.AsQueryable().ReturnsForAnyArgs(repoList.AsQueryable());
@@ -76,7 +79,7 @@ namespace ApplicationServices.Test.DriveReportServiceTest
                 Length = 2000
             });
 
-            _uut = new DriveReportService(_reportRepoMock, _calculatorMock, _coordinatesMock, _routeMock, _rateTypeMock, _mailMock, _orgUnitMock, _emplMock, _subMock);
+            _uut = new DriveReportService(_reportRepoMock, _calculatorMock, _coordinatesMock, _routeMock, _rateTypeMock, _mailMock, _orgUnitMock, _emplMock, _subMock, _loggerMock);
 
         }
 
@@ -526,6 +529,6 @@ namespace ApplicationServices.Test.DriveReportServiceTest
         }
 
 
-       
+
     }
 }

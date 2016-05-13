@@ -12,7 +12,6 @@
     angular.module('app.vacation')
         .factory('VacationBalanceResource', [
             '$resource', ($resource: ng.resource.IResourceService): IVacationBalanceResource => {
-
                 var getAction: ng.resource.IActionDescriptor = {
                     method: "GET",
                     isArray: true,
@@ -33,7 +32,6 @@
                     get: getAction,
                     query: queryAction
                 });
-
             }
         ]);
 }

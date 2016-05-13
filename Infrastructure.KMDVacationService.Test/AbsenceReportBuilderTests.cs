@@ -2,7 +2,7 @@
 using System.Linq;
 using Core.DomainModel;
 using Core.DomainServices;
-using Infrastructure.KMDVacationService.Models;
+using Core.DomainServices.KMDAbsenceModels;
 using NUnit.Framework;
 
 namespace Infrastructure.KMDVacationService.Test
@@ -10,10 +10,10 @@ namespace Infrastructure.KMDVacationService.Test
     [TestFixture]
     public class AbsenceReportBuilderTests
     {
-        [Test]
-        public void Create_PeriodWithoutTimeReport_Returns1Report()
+
+        public VacationReport CreateReportWithoutTime()
         {
-            var report = new VacationReport
+            return new VacationReport
             {
                 Employment = new Employment
                 {
@@ -23,6 +23,58 @@ namespace Infrastructure.KMDVacationService.Test
                 EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
                 VacationType = VacationType.Regular
             };
+        }
+
+        public VacationReport CreateReportWithStartTime()
+        {
+            return new VacationReport
+            {
+                Employment = new Employment
+                {
+                    EmploymentId = 134123
+                },
+                StartTime = new TimeSpan(0, 10, 0, 0),
+                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
+                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
+                VacationType = VacationType.Regular
+            };
+        }
+
+        public VacationReport CreateReportWithEndTime()
+        {
+            return new VacationReport
+            {
+                Employment = new Employment
+                {
+                    EmploymentId = 134123
+                },
+                EndTime = new TimeSpan(0, 14, 0, 0),
+                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
+                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
+                VacationType = VacationType.Regular
+            };
+        }
+
+        public VacationReport CreateReportWithTime()
+        {
+            return new VacationReport
+            {
+                Employment = new Employment
+                {
+                    EmploymentId = 134123
+                },
+                EndTime = new TimeSpan(0, 14, 0, 0),
+                StartTime = new TimeSpan(0, 10, 0, 0),
+                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
+                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
+                VacationType = VacationType.Regular
+            };
+        }
+
+        [Test]
+        public void Create_PeriodWithoutTimeReport_Returns1Report()
+        {
+            var report = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -34,16 +86,7 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Create_Report_ReturnsCreateOperation()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -55,16 +98,7 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Create_PeriodWithoutTimeReport_SetsOperationToCreate()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -76,16 +110,7 @@ namespace Infrastructure.KMDVacationService.Test
 
         public void Create_PeriodWithoutTimeReport_TimeIsNull()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -98,18 +123,9 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Create_SameDayWithTimeReport_Returns1Report()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                StartTime = new TimeSpan(0, 10, 0, 0),
-                EndTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTime = new TimeSpan(0, 14, 0, 0),
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithTime();
+            report.StartTimestamp = new DateTime(2016, 10, 10).ToTimestamp();
+            report.EndTimestamp = new DateTime(2016, 10, 10).ToTimestamp();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -121,18 +137,9 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Create_SameDayWithTimeReport_SetsTime()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                StartTime = new TimeSpan(0, 10, 0, 0),
-                EndTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTime = new TimeSpan(0, 14, 0, 0),
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithTime();
+            report.StartTimestamp = new DateTime(2016, 10, 10).ToTimestamp();
+            report.EndTimestamp = new DateTime(2016, 10, 10).ToTimestamp();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -146,18 +153,7 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Create_SameDayWithTimeReport_StartAndEndDateAreEqual()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                StartTime = new TimeSpan(0, 10, 0, 0),
-                EndTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTime = new TimeSpan(0, 14, 0, 0),
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -170,18 +166,7 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Create_PeriodeWithEndTimeReport_Returns2Reports()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                StartTime = null,
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                EndTime = new TimeSpan(0, 14, 0, 0),
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithEndTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -194,18 +179,7 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Create_PeriodeWithStartTimeReport_Returns2Reports()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                StartTime = new TimeSpan(0, 14, 0, 0),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                EndTime = null,
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithStartTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -217,18 +191,7 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Create_PeriodeWithStartAndEndTimeReport_Returns3Reports()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                StartTime = new TimeSpan(0, 14, 0, 0),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                EndTime = new TimeSpan(0, 10, 0, 0),
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -240,18 +203,7 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Create_PeriodeWithStartAndEndTimeReport_EndAbsenceHasEndTimeSet()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                StartTime = new TimeSpan(0, 14, 0, 0),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                EndTime = new TimeSpan(0, 10, 0, 0),
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -265,18 +217,7 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Create_PeriodeWithStartAndEndTimeReport_EndAbsenceHasStartTimeSet()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                StartTime = new TimeSpan(0, 14, 0, 0),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                EndTime = new TimeSpan(0, 10, 0, 0),
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -290,18 +231,7 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Create_PeriodeWithStartAndEndTimeReport_CenterAbsencePeriodIsDecremented()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                StartTime = new TimeSpan(0, 14, 0, 0),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                EndTime = new TimeSpan(0, 10, 0, 0),
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -315,16 +245,7 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Delete_Report_OperationIsDelete()
         {
-            var report = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var report = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -336,28 +257,8 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Edit_NewReportWithoutStartTime_Returns2Reports()
         {
-            var oldReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTime = new TimeSpan(10, 0, 0),
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
-
-            var newReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 22).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var oldReport = CreateReportWithStartTime();
+            var newReport = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -369,28 +270,8 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Edit_NewReportWithoutStartTime_OldStartTimeIsDeleted()
         {
-            var oldReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTime = new TimeSpan(10, 0, 0),
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
-
-            var newReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 22).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var oldReport = CreateReportWithStartTime();
+            var newReport = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -402,28 +283,8 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Edit_NewReportWithoutStartTime_BasePeriodOperationIsEdited()
         {
-            var oldReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTime = new TimeSpan(10, 0, 0),
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
-
-            var newReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 22).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var oldReport = CreateReportWithStartTime();
+            var newReport = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -435,28 +296,8 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Edit_NewReportWithoutEndTime_Returns2Reports()
         {
-            var oldReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                EndTime = new TimeSpan(14, 0, 0),
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
-
-            var newReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 22).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var oldReport = CreateReportWithEndTime();
+            var newReport = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -468,28 +309,8 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Edit_NewReportWithoutEndTime_OldEndTimeIsDeleted()
         {
-            var oldReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                EndTime = new TimeSpan(14, 0, 0),
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
-
-            var newReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 22).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var oldReport = CreateReportWithEndTime();
+            var newReport = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -501,28 +322,8 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Edit_NewReportWithoutEndTime_BasePeriodOperationIsEdited()
         {
-            var oldReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                EndTime = new TimeSpan(14, 0, 0),
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
-
-            var newReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 22).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var oldReport = CreateReportWithEndTime();
+            var newReport = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -534,27 +335,8 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Edit_OnlyBasePeriodEdited_BasePeriodOperationIsEdited()
         {
-            var oldReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
-
-            var newReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 22).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var oldReport = CreateReportWithoutTime();
+            var newReport = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -566,27 +348,8 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Edit_OnlyBasePeriodEdited_Returns1Report()
         {
-            var oldReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
-
-            var newReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 22).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var oldReport = CreateReportWithoutTime();
+            var newReport = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -599,29 +362,8 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Edit_NewReportWithoutTimes_Returns3Reports()
         {
-            var oldReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTime = new TimeSpan(10, 0, 0),
-                EndTime = new TimeSpan(14, 0, 0),
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
-
-            var newReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 22).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var oldReport = CreateReportWithTime();
+            var newReport = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -633,29 +375,8 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Edit_NewReportWithoutTimes_DeletesStarTimeReport()
         {
-            var oldReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTime = new TimeSpan(10, 0, 0),
-                EndTime = new TimeSpan(14, 0, 0),
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
-
-            var newReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 22).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var oldReport = CreateReportWithTime();
+            var newReport = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -667,29 +388,8 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Edit_NewReportWithoutTimes_DeletesEndTimeReport()
         {
-            var oldReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTime = new TimeSpan(10, 0, 0),
-                EndTime = new TimeSpan(14, 0, 0),
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
-
-            var newReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 22).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var oldReport = CreateReportWithTime();
+            var newReport = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 
@@ -701,29 +401,8 @@ namespace Infrastructure.KMDVacationService.Test
         [Test]
         public void Edit_NewReportWithoutTimes_EditsBaseReport()
         {
-            var oldReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTime = new TimeSpan(10, 0, 0),
-                EndTime = new TimeSpan(14, 0, 0),
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 20).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
-
-            var newReport = new VacationReport
-            {
-                Employment = new Employment
-                {
-                    EmploymentId = 134123
-                },
-                StartTimestamp = new DateTime(2016, 4, 16).ToTimestamp(),
-                EndTimestamp = new DateTime(2016, 4, 22).ToTimestamp(),
-                VacationType = VacationType.Regular
-            };
+            var oldReport = CreateReportWithTime();
+            var newReport = CreateReportWithoutTime();
 
             var builder = new KMDAbsenceReportBuilder();
 

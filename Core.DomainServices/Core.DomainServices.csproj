@@ -62,7 +62,11 @@
     <Compile Include="IAddressCoordinates.cs" />
     <Compile Include="IGenericRepository.cs" />
     <Compile Include="Interfaces\IAddressLaunderer.cs" />
+    <Compile Include="Interfaces\IKMDAbsenceReportBuilder.cs" />
+    <Compile Include="Interfaces\IKMDAbsenceService.cs" />
     <Compile Include="IRoute.cs" />
+    <Compile Include="KMDAbsenceModels\KMDAbsenceReport.cs" />
+    <Compile Include="KMDAbsenceModels\Operation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingClasses\Coordinates.cs" />
     <Compile Include="RoutingClasses\Exceptions.cs" />
