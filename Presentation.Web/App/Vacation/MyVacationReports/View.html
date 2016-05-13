@@ -1,35 +1,15 @@
 ﻿<div class="container-fluid">
     <div class="row">
         <div class="col-sm-4 col-xs-4 col-lg-3 margin-right-5">
-            <label>Ferie fra</label>
+            <label>Ferieår:</label>
         </div>
-        <div class="col-sm-4 col-xs-4 col-lg-3 margin-right-5">
-            <label>Ferie til</label>
-        </div>
-
-
     </div>
 </div>
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-4 col-lg-3 to-front">
-            <input kendo-datepicker culture="'da-DK'" k-options="mvrCtrl.dateOptions" ng-model="mvrCtrltrl.toDateString" k-ng-model="mvrCtrl.fromDate" ng-change="mvrCtrl.dateChanged()" />
+            <input kendo-datepicker culture="'da-DK'" k-options="mvrCtrl.dateOptions" ng-model="mvrCtrl.vacationYear" k-ng-model="mvrCtrl.vacationYear" ng-change="mvrCtrl.searchClicked()" />
         </div>
-        <div class="col-xs-4 col-lg-3 to-front">
-            <input kendo-datepicker culture="'da-DK'" k-options="mvrCtrl.dateOptions" ng-model="mvrCtrltrl.fromDateString" k-ng-model="mvrCtrl.toDate" ng-change="mvrCtrl.dateChanged()" />
-        </div>
-
-        <div class="col-lg-2">
-            <button class="btn btn-primary fill-width" ng-click="mvrCtrl.searchClicked()">Søg</button>
-        </div>
-
-        <div class="col-xs-2 col-lg-2">
-            <button class="btn btn-danger" ng-click="mvrCtrl.clearClicked()">Nulstil søgning</button>
-        </div>
-
-        <!--<div class="col-xs-2 col-lg-2">
-            <span ng-show="tableSortHelp" class="info-popup pull-right margin-5" popover="{{tableSortHelp}}" popover-trigger="mouseenter"><i class="fa fa-question"></i></span>
-        </div>-->
     </div>
 
     <div kendo-grid="mvrCtrl.vacationReportsGrid" class="margin-top-10 scrollable" options="mvrCtrl.vacationReportsOptions"></div>

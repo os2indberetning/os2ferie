@@ -35,6 +35,15 @@ namespace Core.ApplicationServices
             report.ResponsibleLeaderId = GetResponsibleLeaderForReport(report).Id;
             report.ActualLeaderId = GetActualLeaderForReport(report).Id;
 
+            var startDateTime = report.StartTimestamp.ToDateTime();
+
+            report.VacationYear = startDateTime.Year;
+
+            if (startDateTime.Date < new DateTime(report.VacationYear, 5, 1))
+            {
+                report.VacationYear--;
+            }
+
             if (report.Comment == null) report.Comment = "";
 
             _reportRepo.Insert(report);

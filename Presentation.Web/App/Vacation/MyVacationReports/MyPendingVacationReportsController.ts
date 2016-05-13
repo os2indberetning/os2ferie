@@ -32,7 +32,7 @@
                                 req.setRequestHeader("Accept", "application/json;odata=fullmetadata");
                             },
                             url:
-                            `/odata/VacationReports?status=${this.ReportStatus}&$expand=ResponsibleLeader &$filter=PersonId eq ${this.personId}`,
+                            `/odata/VacationReports?status=${this.ReportStatus}&$expand=ResponsibleLeader &$filter=PersonId eq ${this.personId} and VacationYear eq ${this.vacationYear}`,
                             dataType: "json",
                             cache: false
                         }

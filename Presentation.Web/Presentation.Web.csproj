@@ -470,13 +470,23 @@
     <TypeScriptCompile Include="App\Core\Models\VacationReport.ts" />
     <TypeScriptCompile Include="App\Core\Models\Report.ts" />
     <TypeScriptCompile Include="App\Vacation\Admin\Substitutes\VacationSubstitutesController.ts" />
+    <TypeScriptCompile Include="App\Vacation\ApproveReportsSettings\ApproveReportsSettingsController.ts" />
     <TypeScriptCompile Include="App\Vacation\ApproveReports\ApproveReportsController.ts" />
     <TypeScriptCompile Include="App\app.routes.ts" />
+    <TypeScriptCompile Include="App\Vacation\MyVacationReports\BaseMyVacationReportsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyRejectedVacationReportsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyApprovedVacationReportsController.ts" />
     <TypeScriptCompile Include="App\Vacation\Services\VacationBalanceResource.ts" />
     <TypeScriptCompile Include="App\Vacation\app.vacation.ts" />
     <Content Include="App\Vacation\Filters\MinIntFilter.js" />
     <TypeScriptCompile Include="App\Vacation\ReportVacation\ReportVacationController.ts" />
     <Content Include="App\Vacation\ApproveReports\ApproveReportsView.html" />
+    <Content Include="App\Vacation\MyVacationReports\ConfirmDeleteVacationReportController.js" />
+    <Content Include="App\Vacation\MyVacationReports\ConfirmDeleteVacationReportTemplate.html" />
+    <Content Include="App\Vacation\MyVacationReports\EditVacationReportTemplate.html" />
+    <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyPendingVacationReportsController.ts" />
+    <Content Include="App\Vacation\MyVacationReports\MyVacationReportsView.html" />
+    <Content Include="App\Vacation\MyVacationReports\View.html" />
     <Content Include="App\Vacation\ReportVacation\ReportVacationView.html" />
     <TypeScriptCompile Include="App\Vacation\app.vacation.routes.ts" />
     <Content Include="App\Drive\Services\MkColumnFormatterService.js" />
@@ -780,6 +790,7 @@
     <Content Include="Content\loading-bar.css" />
     <Content Include="Content\loading-bar.min.css" />
     <Content Include="Content\pnotify.custom.min.css" />
+    <Content Include="Content\private.css" />
     <Content Include="Content\simple-sidebar.css" />
     <Content Include="Content\Themes\SbAdmin\css\bootstrap-rtl.css" />
     <Content Include="Content\Themes\SbAdmin\css\bootstrap-rtl.min.css" />
@@ -791,6 +802,7 @@
     <Content Include="fonts\fontawesome-webfont.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="logo.png" />
     <Content Include="Scripts\angular-busy.min.js" />
     <Content Include="Scripts\kendo-ie-fix.js" />
     <Content Include="Scripts\kendo\angular.min.js" />
