@@ -116,17 +116,18 @@ namespace OS2Indberetning.Controllers.Vacation
         /// Returns forbidden if the user associated with the posted report is not the current user.
         /// </summary>
         /// <param name="vacationReport"></param>
+        /// <param name="emailText">The message to be sent to the owner of a report an admin has rejected or edited.</param>
         /// <returns>The posted report.</returns>
         [EnableQuery]
-        public new IHttpActionResult Post(VacationReport vacationReport, string emailText)
+        public IHttpActionResult Post(VacationReport vacationReport, string emailText)
         {
-                if(CurrentUser.IsAdmin && emailText != null && vacationReport.Status == ReportStatus.Accepted)
+            if(CurrentUser.IsAdmin && emailText != null && vacationReport.Status == ReportStatus.Accepted)
             {
                 // An admin is trying to edit an already approved report.
-                    var adminEditResult = _reportService.Create(vacationReport);
-                    // CurrentUser is restored after the calculation.
-                    _reportService.SendMailToUserAndApproverOfEditedReport(adminEditResult, emailText, CurrentUser, "redigeret");
-                    return Ok(adminEditResult);
+                var adminEditResult = _reportService.Create(vacationReport);
+                // CurrentUser is restored after the calculation.
+                _reportService.SendMailToUserAndApproverOfEditedReport(adminEditResult, emailText, CurrentUser, "redigeret");
+                return Ok(adminEditResult);
             }
 
             if (!CurrentUser.Id.Equals(vacationReport.PersonId))
