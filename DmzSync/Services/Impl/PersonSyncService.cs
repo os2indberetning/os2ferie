@@ -1,27 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Core.ApplicationServices.Interfaces;
 using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
-using Infrastructure.DataAccess;
-using Infrastructure.DmzDataAccess;
 using Core.DomainServices.Encryption;
-using Infrastructure.DmzSync.Services.Interface;
+using DmzSync.Services.Interface;
 using Employment = Core.DmzModel.Employment;
 
-namespace Infrastructure.DmzSync.Services.Impl
+namespace DmzSync.Services.Impl
 {
     public class PersonSyncService : ISyncService
     {
-        private IGenericRepository<Profile> _dmzProfileRepo;
+        private IGenericDmzRepository<Profile> _dmzProfileRepo;
         private IGenericRepository<Person> _masterPersonRepo;
         private readonly IPersonService _personService;
 
-        public PersonSyncService(IGenericRepository<Profile> dmzProfileRepo, IGenericRepository<Person> masterPersonRepo, IPersonService personService)
+        public PersonSyncService(IGenericDmzRepository<Profile> dmzProfileRepo, IGenericRepository<Person> masterPersonRepo, IPersonService personService)
         {
             _dmzProfileRepo = dmzProfileRepo;
             _masterPersonRepo = masterPersonRepo;
@@ -47,7 +42,7 @@ namespace Infrastructure.DmzSync.Services.Impl
             var personList = _masterPersonRepo.AsQueryable().ToList();
             var max = personList.Count;
 
-            foreach (var person in personList)  
+            foreach (var person in personList)
             {
                 i++;
                 if (i%10 == 0)
@@ -119,7 +114,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                 foreach (var masterEmployment in person.Employments)
                 {
                     var dmzEmployment = employments.FirstOrDefault(x => x.Id == masterEmployment.Id);
-                    
+
                     var employment = new Employment
                     {
                         Id = masterEmployment.Id,
@@ -143,7 +138,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                         dmzEmployment.EndDateTimestamp = masterEmployment.EndDateTimestamp;
                         dmzEmployment.EmploymentPosition = employment.EmploymentPosition;
                     }
-                    
+
                 }
             }
             _dmzProfileRepo.Save();

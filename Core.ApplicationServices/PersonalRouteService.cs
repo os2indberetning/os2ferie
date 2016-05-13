@@ -1,22 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Web.OData;
+﻿using System.Linq;
 using Core.ApplicationServices.Interfaces;
-using Core.ApplicationServices.MailerService.Impl;
-using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
-using Core.DomainServices.RoutingClasses;
-using Infrastructure.AddressServices;
-using Infrastructure.AddressServices.Routing;
-using Infrastructure.DataAccess;
-using Ninject;
-using OS2Indberetning;
-
 
 namespace Core.ApplicationServices
 {
@@ -54,7 +39,7 @@ namespace Core.ApplicationServices
 
                 if (i == route.Points.Count - 1)
                 {
-                    // last element   
+                    // last element
                     currentPoint.PreviousPointId = createdRoute.Points.ElementAt(i - 1).Id;
                 }
                 else if (i == 0)

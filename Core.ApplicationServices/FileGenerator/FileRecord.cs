@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.Text;
 using Core.DomainModel;
-using Microsoft.Ajax.Utilities;
 
 namespace Core.ApplicationServices.FileGenerator
 {

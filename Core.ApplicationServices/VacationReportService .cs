@@ -5,7 +5,6 @@ using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.Interfaces;
-using Infrastructure.KMDVacationService;
 
 namespace Core.ApplicationServices
 {
@@ -90,28 +89,11 @@ namespace Core.ApplicationServices
             report.ClosedDateTimestamp = (DateTime.UtcNow.ToTimestamp());
             report.ApprovedById = approver.Id;
 
-            try
-            {
-                _reportRepo.Save();
-            }
-            catch (Exception)
-            {
-                _logger.Log("Forsøg på at godkende ferieindberetning fejlede. Rapporten er ikke godkendt.", "web", 3);
-                throw;
-            }
+            _reportRepo.Save();
 
             var absenceReport = _absenceBuilder.Create(report);
 
-            try
-            {
-                _absenceService.ReportAbsence(absenceReport);
-            }
-            catch (KMDSetAbsenceFailedException)
-            {
-                _logger.Log("Forsøg på at sende ferie til KMDs service fejlede.", "web", 1);
-                throw;
-            }
-
+            _absenceService.ReportAbsence(absenceReport);
             report.ProcessedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             _reportRepo.Save();
         }

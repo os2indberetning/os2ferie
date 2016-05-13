@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core.DomainModel;
 using Core.DomainServices.Interfaces;
-using Core.DomainServices.KMDAbsenceModels;
 
 namespace Infrastructure.KMDVacationService
 {
@@ -22,7 +21,7 @@ namespace Infrastructure.KMDVacationService
                         report.OldStartDate?.ToString("yyyy-MM-dd"), report.StartTime?.ToString("hhmm"),
                         report.OldStartTime?.ToString("hhmm"), report.EndDate.ToString("yyyy-MM-dd"),
                         report.OldEndDate?.ToString("yyyy-MM-dd"), report.EndTime?.ToString("hhmm"),
-                        report.OldEndTime?.ToString("hhmm"), report.ExtraData, report.Operation.AsString(),
+                        report.OldEndTime?.ToString("hhmm"), report.ExtraData, report.KmdAbsenceOperation.AsString(),
                         report.EmploymentId.ToString(), report.Type == VacationType.Regular ? "FE" : "6F",
                         report.Type == VacationType.Regular ? "FE" : "6F"
                         );

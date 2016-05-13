@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.Linq;
 using Core.DomainModel;
-using Core.DomainServices;
-using Infrastructure.AddressServices;
-using Infrastructure.AddressServices.Routing;
-using Infrastructure.DataAccess;
-
 
 namespace Core.ApplicationServices
 {

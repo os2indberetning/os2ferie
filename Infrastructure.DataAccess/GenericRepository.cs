@@ -1,8 +1,6 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
@@ -35,7 +33,7 @@ namespace Infrastructure.DataAccess
                 {
                     var navProperty = propertyInfo.GetValue(entity);
                     _context.Set(propertyInfo.GetType()).Attach(navProperty);
-                }                
+                }
                 else if (propertyInfo.PropertyType.IsGenericType)
                 {
                     if (propertyInfo.GetValue(entity) == null)
@@ -46,7 +44,7 @@ namespace Infrastructure.DataAccess
                     if (collection == null)
                     {
                         continue;
-                    }   
+                    }
                     foreach (var obj in collection)
                     {
                         if (GetPrimaryKeyValue(obj) == 0) //If ID == 0; This is a new object and should be added
@@ -125,7 +123,7 @@ namespace Infrastructure.DataAccess
             IEnumerable<dynamic> keyMembers = getKeyMenbers(t);
 
             var primaryKeyName = keyMembers.Select(k => (string)k.Name).First();
-            
+
             return (int)t.GetProperty(primaryKeyName).GetValue(obj);
         }
 
@@ -144,7 +142,7 @@ namespace Infrastructure.DataAccess
             dynamic objectSet = method.Invoke(objectContext, null);
 
             return objectSet.EntitySet.ElementType.KeyMembers;
-        } 
+        }
 
         public PropertyInfo GetPrimaryKeyProperty()
         {

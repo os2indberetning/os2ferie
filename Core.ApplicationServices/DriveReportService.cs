@@ -7,9 +7,7 @@ using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
-using Ninject;
 using Core.ApplicationServices.Logger;
-
 
 namespace Core.ApplicationServices
 {

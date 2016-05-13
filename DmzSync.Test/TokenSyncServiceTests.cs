@@ -9,8 +9,8 @@ using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.Encryption;
-using Infrastructure.DmzSync.Services.Impl;
-using Infrastructure.DmzSync.Services.Interface;
+using DmzSync.Services.Impl;
+using DmzSync.Services.Interface;
 using NSubstitute;
 using NUnit.Framework;
 

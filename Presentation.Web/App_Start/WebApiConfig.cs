@@ -33,12 +33,8 @@ namespace OS2Indberetning
 
             config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-
             config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-
-
         }
 
         public static Microsoft.OData.Edm.IEdmModel GetModel()
@@ -46,8 +42,6 @@ namespace OS2Indberetning
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
 
             builder.EntitySet<TestReport>("TestReports");
-            //var test = builder.EntityType<TestReport>();
-            //test.Ignore(report => report.DateTimeTest);
 
             builder.EntitySet<Address>("Addresses");
 
@@ -58,8 +52,6 @@ namespace OS2Indberetning
             builder.EntityType<Address>().Collection
             .Action("SetCoordinatesOnAddressList")
             .ReturnsFromEntitySet<Address>("Addresses");
-
-
 
             builder.EntityType<Address>().Collection
             .Function("GetPersonalAndStandard")
@@ -76,10 +68,6 @@ namespace OS2Indberetning
             builder.EntityType<Address>().Collection
            .Action("AttemptCleanCachedAddress")
            .ReturnsFromEntitySet<Address>("Addresses");
-
-
-
-
 
             builder.EntityType<Address>().Collection
                 .Function("GetMapStart")
@@ -109,10 +97,6 @@ namespace OS2Indberetning
 
             builder.EntitySet<LicensePlate>("LicensePlates");
 
-            //var lType = builder.EntityType<LicensePlate>();
-            //lType.Ignore(l => l.Person);
-
-
             builder.EntitySet<MailNotificationSchedule>("MailNotifications");
 
             builder.EntitySet<RateType>("RateTypes");
@@ -121,14 +105,11 @@ namespace OS2Indberetning
 
             builder.EntitySet<OrgUnit>("OrgUnits");
 
-
             builder.EntitySet<AppLogin>("AppLogin");
 
             builder.EntitySet<Person>("Person");
             var pType = builder.EntityType<Person>();
             pType.HasKey(p => p.Id);
-            //pType.Ignore(p => p.LicensePlates);
-
 
             builder.EntityType<Person>().Collection
            .Function("GetCurrentUser")
@@ -152,13 +133,9 @@ namespace OS2Indberetning
             .Function("GetRealHome")
             .ReturnsFromEntitySet<PersonalAddress>("PersonalAddresses");
 
-
-
-
             builder.EntityType<PersonalAddress>().Collection
             .Function("GetAlternativeHome")
             .ReturnsFromEntitySet<PersonalAddress>("PersonalAddresses");
-
 
             builder.EntityType<OrgUnit>().Collection
             .Function("GetLeaderOfOrg")
@@ -168,21 +145,17 @@ namespace OS2Indberetning
             .Function("GetWhereUserIsResponsible")
             .ReturnsFromEntitySet<OrgUnit>("OrgUnits");
 
-
             builder.EntitySet<PersonalRoute>("PersonalRoutes");
 
             builder.EntitySet<Point>("Points");
 
             builder.EntitySet<Report>("Reports");
 
-
-
             builder.EntitySet<BankAccount>("BankAccounts");
 
             builder.EntitySet<Person>("Person");
             builder.EntityType<Person>()
                 .Action("HasLicensePlate");
-
 
             builder.EntitySet<Substitute>("Substitutes");
             builder.EntityType<Substitute>().Collection
@@ -207,3 +180,15 @@ namespace OS2Indberetning
 }
 
 
+public static class PrimitivePropertyConfigurationExtensions
+{
+    public static PrimitivePropertyConfiguration AsDate(this PrimitivePropertyConfiguration property)
+    {
+        return null;
+    }
+
+    public static PrimitivePropertyConfiguration AsTimeOfDay(this PrimitivePropertyConfiguration property)
+    {
+        return null;
+    }
+}

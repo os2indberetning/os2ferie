@@ -2,7 +2,6 @@
 using System.Linq;
 using Core.DomainModel;
 using Core.DomainServices;
-using Core.DomainServices.KMDAbsenceModels;
 using NUnit.Framework;
 
 namespace Infrastructure.KMDVacationService.Test
@@ -92,7 +91,7 @@ namespace Infrastructure.KMDVacationService.Test
 
             var list = builder.Create(report);
 
-            Assert.AreEqual(Operation.Create, list.First().Operation);
+            Assert.AreEqual(KMDAbsenceOperation.Create, list.First().KmdAbsenceOperation);
         }
 
         [Test]
@@ -105,7 +104,7 @@ namespace Infrastructure.KMDVacationService.Test
             var list = builder.Create(report);
             var absence = list.First();
 
-            Assert.AreEqual(Operation.Create, absence.Operation);
+            Assert.AreEqual(KMDAbsenceOperation.Create, absence.KmdAbsenceOperation);
         }
 
         public void Create_PeriodWithoutTimeReport_TimeIsNull()
@@ -251,7 +250,7 @@ namespace Infrastructure.KMDVacationService.Test
 
             var list = builder.Delete(report);
 
-            Assert.AreEqual(Operation.Delete, list.First().Operation);
+            Assert.AreEqual(KMDAbsenceOperation.Delete, list.First().KmdAbsenceOperation);
         }
 
         [Test]
@@ -264,7 +263,7 @@ namespace Infrastructure.KMDVacationService.Test
 
             var list = builder.Edit(oldReport, newReport);
 
-            Assert.AreEqual(Operation.Delete, list.First().Operation);
+            Assert.AreEqual(KMDAbsenceOperation.Delete, list.First().KmdAbsenceOperation);
         }
 
         [Test]
@@ -277,7 +276,7 @@ namespace Infrastructure.KMDVacationService.Test
 
             var list = builder.Edit(oldReport, newReport);
 
-            Assert.AreEqual(Operation.Delete, list.First().Operation);
+            Assert.AreEqual(KMDAbsenceOperation.Delete, list.First().KmdAbsenceOperation);
         }
 
         [Test]
@@ -290,7 +289,7 @@ namespace Infrastructure.KMDVacationService.Test
 
             var list = builder.Edit(oldReport, newReport);
 
-            Assert.AreEqual(Operation.Edit, list.Last().Operation);
+            Assert.AreEqual(KMDAbsenceOperation.Edit, list.Last().KmdAbsenceOperation);
         }
 
         [Test]
@@ -316,7 +315,7 @@ namespace Infrastructure.KMDVacationService.Test
 
             var list = builder.Edit(oldReport, newReport);
 
-            Assert.AreEqual(Operation.Delete, list.Last().Operation);
+            Assert.AreEqual(KMDAbsenceOperation.Delete, list.Last().KmdAbsenceOperation);
         }
 
         [Test]
@@ -329,7 +328,7 @@ namespace Infrastructure.KMDVacationService.Test
 
             var list = builder.Edit(oldReport, newReport);
 
-            Assert.AreEqual(Operation.Edit, list.First().Operation);
+            Assert.AreEqual(KMDAbsenceOperation.Edit, list.First().KmdAbsenceOperation);
         }
 
         [Test]
@@ -342,7 +341,7 @@ namespace Infrastructure.KMDVacationService.Test
 
             var list = builder.Edit(oldReport, newReport);
 
-            Assert.AreEqual(Operation.Edit, list.First().Operation);
+            Assert.AreEqual(KMDAbsenceOperation.Edit, list.First().KmdAbsenceOperation);
         }
 
         [Test]
@@ -382,7 +381,7 @@ namespace Infrastructure.KMDVacationService.Test
 
             var list = builder.Edit(oldReport, newReport);
 
-            Assert.AreEqual(Operation.Delete, list.First().Operation);
+            Assert.AreEqual(KMDAbsenceOperation.Delete, list.First().KmdAbsenceOperation);
         }
 
         [Test]
@@ -395,7 +394,7 @@ namespace Infrastructure.KMDVacationService.Test
 
             var list = builder.Edit(oldReport, newReport);
 
-            Assert.AreEqual(Operation.Delete, list.Last().Operation);
+            Assert.AreEqual(KMDAbsenceOperation.Delete, list.Last().KmdAbsenceOperation);
         }
 
         [Test]
@@ -408,7 +407,7 @@ namespace Infrastructure.KMDVacationService.Test
 
             var list = builder.Edit(oldReport, newReport);
 
-            Assert.AreEqual(Operation.Edit, list[1].Operation);
+            Assert.AreEqual(KMDAbsenceOperation.Edit, list[1].KmdAbsenceOperation);
         }
 
     }

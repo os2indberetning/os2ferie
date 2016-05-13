@@ -1,29 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.Logger;
-using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
-using Core.DomainServices.RoutingClasses;
-using Infrastructure.AddressServices;
-using Infrastructure.DataAccess;
-using Infrastructure.DmzDataAccess;
 using Core.DomainServices.Encryption;
-using Infrastructure.DmzSync.Services.Interface;
-using DriveReport = Core.DomainModel.DriveReport;
-using Employment = Core.DmzModel.Employment;
+using Core.DomainServices.RoutingClasses;
+using DmzSync.Services.Interface;
+using Infrastructure.AddressServices;
 using Rate = Core.DomainModel.Rate;
 
-namespace Infrastructure.DmzSync.Services.Impl
+namespace DmzSync.Services.Impl
 {
     public class DriveReportSyncService : ISyncService
     {
-        private IGenericRepository<Core.DmzModel.DriveReport> _dmzDriveReportRepo;
+        private readonly IGenericDmzRepository<Core.DmzModel.DriveReport> _dmzDriveReportRepo;
         private IGenericRepository<Core.DomainModel.DriveReport> _masterDriveReportRepo;
         private readonly IGenericRepository<Rate> _rateRepo;
         private readonly IGenericRepository<LicensePlate> _licensePlateRepo;
@@ -33,7 +25,7 @@ namespace Infrastructure.DmzSync.Services.Impl
         private readonly IGenericRepository<Core.DomainModel.Employment> _emplRepo;
         private readonly ILogger _logger;
 
-        public DriveReportSyncService(IGenericRepository<Core.DmzModel.DriveReport> dmzDriveReportRepo, IGenericRepository<Core.DomainModel.DriveReport> masterDriveReportRepo, IGenericRepository<Core.DomainModel.Rate> rateRepo, IGenericRepository<LicensePlate> licensePlateRepo, IDriveReportService driveService, IRoute<RouteInformation> routeService, IAddressCoordinates coordinates, IGenericRepository<Core.DomainModel.Employment> emplRepo, ILogger logger)
+        public DriveReportSyncService(IGenericDmzRepository<Core.DmzModel.DriveReport> dmzDriveReportRepo, IGenericRepository<Core.DomainModel.DriveReport> masterDriveReportRepo, IGenericRepository<Core.DomainModel.Rate> rateRepo, IGenericRepository<LicensePlate> licensePlateRepo, IDriveReportService driveService, IRoute<RouteInformation> routeService, IAddressCoordinates coordinates, IGenericRepository<Core.DomainModel.Employment> emplRepo, ILogger logger)
         {
             _dmzDriveReportRepo = dmzDriveReportRepo;
             _masterDriveReportRepo = masterDriveReportRepo;
@@ -117,7 +109,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                     IsFromApp = true,
                     Distance = dmzReport.Route.TotalDistance,
                     KilometerAllowance = dmzReport.Route.GPSCoordinates.Count > 0 ? KilometerAllowance.Calculated : KilometerAllowance.Read,
-                // Date might not be correct. Depends which culture is delivered from app. 
+                // Date might not be correct. Depends which culture is delivered from app.
                 // https://msdn.microsoft.com/en-us/library/cc165448.aspx
                 DriveDateTimestamp = (Int32)(Convert.ToDateTime(dmzReport.Date).Subtract(new DateTime(1970, 1, 1)).TotalSeconds),
                     CreatedDateTimestamp = (Int32)(Convert.ToDateTime(dmzReport.Date).Subtract(new DateTime(1970, 1, 1)).TotalSeconds),

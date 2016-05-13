@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Core.DomainModel;
-using Core.DomainServices.KMDAbsenceModels;
 
 namespace Core.DomainServices.Interfaces
 {

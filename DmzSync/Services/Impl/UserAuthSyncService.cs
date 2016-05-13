@@ -3,11 +3,10 @@ using System.Linq;
 using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
-using Infrastructure.DmzDataAccess;
 using Core.DomainServices.Encryption;
-using Infrastructure.DmzSync.Services.Interface;
+using DmzSync.Services.Interface;
 
-namespace Infrastructure.DmzSync.Services.Impl
+namespace DmzSync.Services.Impl
 {
     public class UserAuthSyncService : ISyncService
     {

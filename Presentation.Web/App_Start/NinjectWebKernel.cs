@@ -1,8 +1,8 @@
 using System;
-using System.ComponentModel;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
+using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.Logger;
 using Core.ApplicationServices.MailerService.Impl;
@@ -15,14 +15,12 @@ using Infrastructure.AddressServices;
 using Infrastructure.AddressServices.Interfaces;
 using Infrastructure.AddressServices.Routing;
 using Infrastructure.DataAccess;
-using Infrastructure.DmzDataAccess;
 using Infrastructure.KMDVacationService;
 using Ninject;
 using Ninject.Web.Common;
-using OS2Indberetning;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
 
-namespace Core.ApplicationServices
+namespace OS2Indberetning
 {
     public static class NinjectWebKernel
     {
@@ -74,7 +72,7 @@ namespace Core.ApplicationServices
             kernel.Bind<IPersonalRouteService>().To<PersonalRouteService>();
             kernel.Bind<IAddressLaunderer>().To<AddressLaundering>();
             kernel.Bind<IOrgUnitService>().To<OrgUnitService>();
-            kernel.Bind<ILogger>().To<Logger.Logger>();
+            kernel.Bind<ILogger>().To<Core.ApplicationServices.Logger.Logger>();
             kernel.Bind<IAppLoginService>().To<AppLoginService>();
             kernel.Bind<IReportService<VacationReport>>().To<VacationReportService>();
             kernel.Bind<IReportService<DriveReport>>().To<DriveReportService>();

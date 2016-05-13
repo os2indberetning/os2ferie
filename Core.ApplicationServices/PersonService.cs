@@ -1,15 +1,9 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Web.OData.Routing;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
-using Microsoft.Ajax.Utilities;
-using Ninject;
 using Core.ApplicationServices.Logger;
 
 namespace Core.ApplicationServices
@@ -68,7 +62,7 @@ namespace Core.ApplicationServices
             var home = _addressRepo.AsQueryable()
                     .FirstOrDefault(x => x.PersonId == person.Id && x.Type == PersonalAddressType.Home);
 
-            if (home != null) { 
+            if (home != null) {
                 AddCoordinatesToAddressIfNonExisting(home);
             }
 
@@ -139,7 +133,7 @@ namespace Core.ApplicationServices
             }
             catch (AddressCoordinatesException ade)
             {
-                
+
             }
         }
     }

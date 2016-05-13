@@ -1,8 +1,8 @@
-﻿using Core.DomainServices.RoutingClasses;
+﻿using Core.DomainModel;
+using Core.DomainServices.RoutingClasses;
 using NUnit.Framework;
-using Core.DomainModel;
 
-namespace Infrastructure.AddressServices.Tests
+namespace Infrastructure.AddressServices.Test
 {
     [TestFixture]
     public class AddressLaunderingTests

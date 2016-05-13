@@ -1,7 +1,6 @@
 ﻿using System;
-using Core.DomainModel;
 
-namespace Core.DomainServices.KMDAbsenceModels
+namespace Core.DomainModel
 {
     public class KMDAbsenceReport
     {
@@ -14,7 +13,7 @@ namespace Core.DomainServices.KMDAbsenceModels
         public TimeSpan? EndTime { get; set; }
         public TimeSpan? OldEndTime { get; set; }
         public string ExtraData { get; set; }
-        public Operation Operation { get; set; }
+        public KMDAbsenceOperation KmdAbsenceOperation { get; set; }
         public int EmploymentId { get; set; }
         public VacationType Type { get; set; }
         public VacationType? OldType { get; set; }

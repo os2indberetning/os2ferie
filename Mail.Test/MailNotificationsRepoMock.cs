@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Core.DomainModel;
 using Presentation.Web.Test.Controllers;
 
-namespace ConsoleApplications.Test.Mailer
+namespace Mail.Test
 {
     public class MailNotificationsRepoMock : GenericRepositoryMock<MailNotificationSchedule>
     {
