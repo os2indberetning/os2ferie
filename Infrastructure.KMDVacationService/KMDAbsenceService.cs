@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using Core.DomainModel;
-using Infrastructure.KMDVacationService.Interfaces;
-using Infrastructure.KMDVacationService.Models;
+using Core.DomainServices.Interfaces;
 
 namespace Infrastructure.KMDVacationService
 {
     public class KMDAbsenceService : IKMDAbsenceService
     {
 
-        public void ReportAbsence(List<KMDAbsenceReport> absenceReports)
+        public void ReportAbsence(IList<KMDAbsenceReport> absenceReports)
         {
 
             using (var webService = new KMD_FerieService.LPT_VACAB_Service_OutClient("HTTPS_Port"))
@@ -22,13 +21,15 @@ namespace Infrastructure.KMDVacationService
                         report.OldStartDate?.ToString("yyyy-MM-dd"), report.StartTime?.ToString("hhmm"),
                         report.OldStartTime?.ToString("hhmm"), report.EndDate.ToString("yyyy-MM-dd"),
                         report.OldEndDate?.ToString("yyyy-MM-dd"), report.EndTime?.ToString("hhmm"),
-                        report.OldEndTime?.ToString("hhmm"), report.ExtraData, report.Operation.AsString(),
+                        report.OldEndTime?.ToString("hhmm"), report.ExtraData, report.KmdAbsenceOperation.AsString(),
                         report.EmploymentId.ToString(), report.Type == VacationType.Regular ? "FE" : "6F",
                         report.Type == VacationType.Regular ? "FE" : "6F"
                         );
 
-                    if(response.TYPE == "") continue;
+                    // If TYPE is empty, it succeeded
+                    if (response.TYPE == "") continue;
 
+                    // Error occurred, cast exception containing error message.
                     throw new KMDSetAbsenceFailedException(response.MESSAGE);
                 }
 

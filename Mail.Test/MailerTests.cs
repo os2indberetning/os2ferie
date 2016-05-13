@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Linq;
-using ConsoleApplications.Test.Mailer;
 using Core.ApplicationServices.Logger;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
-using Mail;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace ConsoleApplications.Test
+namespace Mail.Test
 {
     [TestFixture]
     public class MailerTests
@@ -76,8 +74,6 @@ namespace ConsoleApplications.Test
             Assert.AreEqual(preLength+2,repoMock.AsQueryable().ToList().Count);
         }
 
-
-
         [Test]
         public void RunMailService_NotificationWithRepeat_ShouldCall_SendMails_AndAddNewNotification()
         {
@@ -108,7 +104,7 @@ namespace ConsoleApplications.Test
         [Test]
         public void RunMailService_NoNotificationsForToday_ShouldNotCall_SendMails()
         {
-   
+
             var mailSub = NSubstitute.Substitute.For<IMailService>();
             repoMock.noti1 = new MailNotificationSchedule()
             {
@@ -156,7 +152,7 @@ namespace ConsoleApplications.Test
 
 
 
-       
+
 
         public long ToUnixTime(DateTime date)
         {

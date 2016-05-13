@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Net;
 using System.Net.Mail;
 using Core.ApplicationServices.MailerService.Interface;
-using Ninject;
 using Core.ApplicationServices.Logger;
 
 namespace Core.ApplicationServices.MailerService.Impl

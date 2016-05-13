@@ -1,26 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core.ApplicationServices.Interfaces;
-using Core.DmzModel;
-using Core.DomainModel;
 using Core.DomainServices;
-using Infrastructure.DataAccess;
-using Infrastructure.DmzDataAccess;
-using Core.DomainServices.Encryption;
-using Infrastructure.DmzSync.Services.Interface;
-using Employment = Core.DmzModel.Employment;
+using DmzSync.Services.Interface;
+using Rate = Core.DmzModel.Rate;
 
-namespace Infrastructure.DmzSync.Services.Impl
+namespace DmzSync.Services.Impl
 {
     public class RateSyncService : ISyncService
     {
-        private IGenericRepository<Core.DmzModel.Rate> _dmzRateRepo;
+        private IGenericDmzRepository<Core.DmzModel.Rate> _dmzRateRepo;
         private IGenericRepository<Core.DomainModel.Rate> _masterRateRepo;
 
-        public RateSyncService(IGenericRepository<Core.DmzModel.Rate> dmzRateRepo, IGenericRepository<Core.DomainModel.Rate> masterRateRepo)
+        public RateSyncService(IGenericDmzRepository<Rate> dmzRateRepo, IGenericRepository<Core.DomainModel.Rate> masterRateRepo)
         {
             _dmzRateRepo = dmzRateRepo;
             _masterRateRepo = masterRateRepo;
@@ -46,7 +37,7 @@ namespace Infrastructure.DmzSync.Services.Impl
             var rateList = _masterRateRepo.AsQueryable().Where(x => x.Active && x.Year == currentYear).ToList();
             var max = rateList.Count;
 
-            foreach (var masterRate in rateList)  
+            foreach (var masterRate in rateList)
             {
                 i++;
                 if (i%10 == 0)
@@ -72,7 +63,7 @@ namespace Infrastructure.DmzSync.Services.Impl
                     dmzRate.Description = rate.Description;
                     dmzRate.Year = rate.Year;
                 }
-                
+
             }
              _dmzRateRepo.Save();
         }

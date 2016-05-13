@@ -1,50 +1,50 @@
 ﻿using System.Collections.Generic;
 using Core.DomainModel;
-using Infrastructure.KMDVacationService.Models;
 using Core.DomainServices;
-using Infrastructure.KMDVacationService.Interfaces;
+using Core.DomainServices.Interfaces;
 
 namespace Infrastructure.KMDVacationService
 {
     public class KMDAbsenceReportBuilder : IKMDAbsenceReportBuilder
     {
-        public List<KMDAbsenceReport> Create(VacationReport report)
+        public IList<KMDAbsenceReport> Create(VacationReport report)
         {
-            return Build(report, Operation.Create);
+            return Build(report, KMDAbsenceOperation.Create);
         }
 
-        public List<KMDAbsenceReport> Delete(VacationReport report)
+        public IList<KMDAbsenceReport> Delete(VacationReport report)
         {
-            return Build(report, Operation.Delete);
+            return Build(report, KMDAbsenceOperation.Delete);
         }
-        public List<KMDAbsenceReport> Edit(VacationReport oldReport, VacationReport newReport)
+
+        public IList<KMDAbsenceReport> Edit(VacationReport oldReport, VacationReport newReport)
         {
             var list = new List<KMDAbsenceReport>();
 
-            var oldStartsWithHalfDay = oldReport.StartTime != null;
-            var newStartsWithHalfDay = newReport.StartTime != null;
+            var oldStartIsWithHalfDay = oldReport.StartTime != null;
+            var newStartIsWithHalfDay = newReport.StartTime != null;
 
-            if (oldStartsWithHalfDay && !newStartsWithHalfDay)
+            if (oldStartIsWithHalfDay && !newStartIsWithHalfDay)
             {
                 // We have to delete the old absence
-                var absence = BuildStart(oldReport, Operation.Delete);
+                var absence = BuildStart(oldReport, KMDAbsenceOperation.Delete);
                 list.Add(absence);
             }
-            else if (!oldStartsWithHalfDay && newStartsWithHalfDay)
+            else if (!oldStartIsWithHalfDay && newStartIsWithHalfDay)
             {
-                var absence = BuildStart(newReport, Operation.Create);
+                var absence = BuildStart(newReport, KMDAbsenceOperation.Create);
                 list.Add(absence);
             }
-            else if(oldStartsWithHalfDay)
+            else if(oldStartIsWithHalfDay)
             {
-                var oldStartAbsence = BuildStart(oldReport, Operation.Create);
-                var newStartAbsence = BuildStart(newReport, Operation.Edit);
+                var oldStartAbsence = BuildStart(oldReport, KMDAbsenceOperation.Create);
+                var newStartAbsence = BuildStart(newReport, KMDAbsenceOperation.Edit);
                 UpdateAbsence(oldStartAbsence, newStartAbsence);
                 list.Add(newStartAbsence);
             }
 
-            var oldCenterAbsence = BuildCenter(oldReport, Operation.Create);
-            var newCenterAbsence = BuildCenter(newReport, Operation.Edit);
+            var oldCenterAbsence = BuildCenter(oldReport, KMDAbsenceOperation.Create);
+            var newCenterAbsence = BuildCenter(newReport, KMDAbsenceOperation.Edit);
             UpdateAbsence(oldCenterAbsence, newCenterAbsence);
             list.Add(newCenterAbsence);
 
@@ -55,18 +55,18 @@ namespace Infrastructure.KMDVacationService
             if (oldEndsWithHalfDay && !newEndsWithHalfDay)
             {
                 // We have to delete the old absence
-                var absence = BuildEnd(oldReport, Operation.Delete);
+                var absence = BuildEnd(oldReport, KMDAbsenceOperation.Delete);
                 list.Add(absence);
             }
             else if (!oldEndsWithHalfDay && newEndsWithHalfDay)
             {
-                var absence = BuildEnd(newReport, Operation.Create);
+                var absence = BuildEnd(newReport, KMDAbsenceOperation.Create);
                 list.Add(absence);
             }
             else if (oldEndsWithHalfDay)
             {
-                var oldEndAbsence = BuildEnd(oldReport, Operation.Create);
-                var newEndAbsence = BuildEnd(newReport, Operation.Edit);
+                var oldEndAbsence = BuildEnd(oldReport, KMDAbsenceOperation.Create);
+                var newEndAbsence = BuildEnd(newReport, KMDAbsenceOperation.Edit);
                 UpdateAbsence(oldEndAbsence, newEndAbsence);
                 list.Add(newEndAbsence);
             }
@@ -83,7 +83,7 @@ namespace Infrastructure.KMDVacationService
             newReport.OldType = oldReport.Type;
         }
 
-        private KMDAbsenceReport BuildBase(VacationReport report, Operation operation)
+        private KMDAbsenceReport BuildBase(VacationReport report, KMDAbsenceOperation kmdAbsenceOperation)
         {
             var startDate = report.StartTimestamp.ToDateTime();
             var endDate = report.EndTimestamp.ToDateTime();
@@ -91,18 +91,18 @@ namespace Infrastructure.KMDVacationService
             return new KMDAbsenceReport
             {
                 EmploymentId = report.Employment.EmploymentId,
-                Operation = operation,
+                KmdAbsenceOperation = kmdAbsenceOperation,
                 Type = report.VacationType,
                 StartDate = startDate,
                 EndDate = endDate
             };
         }
 
-        private KMDAbsenceReport BuildCenter(VacationReport report, Operation operation)
+        private KMDAbsenceReport BuildCenter(VacationReport report, KMDAbsenceOperation kmdAbsenceOperation)
         {
-            var absence = BuildBase(report, operation);
+            var absence = BuildBase(report, kmdAbsenceOperation);
 
-            if(report.StartTime != null)
+            if (report.StartTime != null)
                 absence.StartDate = absence.StartDate.AddDays(1);
 
             if (report.EndTime != null)
@@ -111,9 +111,9 @@ namespace Infrastructure.KMDVacationService
             return absence;
         }
 
-        private KMDAbsenceReport BuildStart(VacationReport report, Operation operation)
+        private KMDAbsenceReport BuildStart(VacationReport report, KMDAbsenceOperation kmdAbsenceOperation)
         {
-            var absence = BuildBase(report, operation);
+            var absence = BuildBase(report, kmdAbsenceOperation);
 
             absence.StartDate = absence.StartDate;
             absence.EndDate = absence.StartDate;
@@ -123,9 +123,9 @@ namespace Infrastructure.KMDVacationService
             return absence;
         }
 
-        private KMDAbsenceReport BuildEnd(VacationReport report, Operation operation)
+        private KMDAbsenceReport BuildEnd(VacationReport report, KMDAbsenceOperation kmdAbsenceOperation)
         {
-            var absence = BuildBase(report, operation);
+            var absence = BuildBase(report, kmdAbsenceOperation);
 
             absence.StartDate = absence.EndDate;
             absence.EndDate = absence.EndDate;
@@ -135,11 +135,11 @@ namespace Infrastructure.KMDVacationService
             return absence;
         }
 
-        private List<KMDAbsenceReport> Build(VacationReport report, Operation operation)
+        private IList<KMDAbsenceReport> Build(VacationReport report, KMDAbsenceOperation kmdAbsenceOperation)
         {
             var list = new List<KMDAbsenceReport>();
 
-            var baseAbsence = BuildBase(report, operation);
+            var baseAbsence = BuildBase(report, kmdAbsenceOperation);
 
             var sameDay = baseAbsence.StartDate.Date == baseAbsence.EndDate.Date;
 
@@ -154,18 +154,17 @@ namespace Infrastructure.KMDVacationService
 
             if (report.StartTime != null)
             {
-                list.Add(BuildStart(report, operation));
+                list.Add(BuildStart(report, kmdAbsenceOperation));
             }
 
-            list.Add(BuildCenter(report, operation));
+            list.Add(BuildCenter(report, kmdAbsenceOperation));
 
             if (report.EndTime != null)
             {
-                list.Add(BuildEnd(report, operation));
+                list.Add(BuildEnd(report, kmdAbsenceOperation));
             }
 
             return list;
         }
-
     }
 }

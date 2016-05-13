@@ -10,7 +10,7 @@ using Core.DomainServices;
 
 namespace Infrastructure.DmzDataAccess
 {
-    public class GenericDmzRepository<T> : IGenericRepository<T> where T : class
+    public class GenericDmzRepository<T> : IGenericDmzRepository<T> where T : class
     {
         private readonly DbSet<T> _dbSet;
         private readonly DmzContext _context;
@@ -33,7 +33,7 @@ namespace Infrastructure.DmzDataAccess
                 {
                     var navProperty = propertyInfo.GetValue(entity);
                     _context.Set(propertyInfo.GetType()).Attach(navProperty);
-                }                
+                }
                 else if (propertyInfo.PropertyType.IsGenericType)
                 {
                     if (propertyInfo.GetValue(entity) == null)
@@ -44,7 +44,7 @@ namespace Infrastructure.DmzDataAccess
                     if (collection == null)
                     {
                         continue;
-                    }   
+                    }
                     foreach (var obj in collection)
                     {
                         if (GetPrimaryKeyValue(obj) == 0) //If ID == 0; This is a new object and should be added
@@ -123,7 +123,7 @@ namespace Infrastructure.DmzDataAccess
             IEnumerable<dynamic> keyMembers = getKeyMenbers(t);
 
             var primaryKeyName = keyMembers.Select(k => (string)k.Name).First();
-            
+
             return (int)t.GetProperty(primaryKeyName).GetValue(obj);
         }
 
@@ -142,7 +142,7 @@ namespace Infrastructure.DmzDataAccess
             dynamic objectSet = method.Invoke(objectContext, null);
 
             return objectSet.EntitySet.ElementType.KeyMembers;
-        } 
+        }
 
         public PropertyInfo GetPrimaryKeyProperty()
         {

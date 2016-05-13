@@ -9,8 +9,8 @@ using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.Encryption;
-using Infrastructure.DmzSync.Services.Impl;
-using Infrastructure.DmzSync.Services.Interface;
+using DmzSync.Services.Impl;
+using DmzSync.Services.Interface;
 using NSubstitute;
 using NUnit.Framework;
 using Rate = Core.DmzModel.Rate;
@@ -22,8 +22,8 @@ namespace DmzSync.Test
     {
 
         private ISyncService _uut;
-        private IGenericRepository<Core.DomainModel.Rate> _masterRepoMock; 
-        private IGenericRepository<Core.DmzModel.Rate> _dmzRepoMock;
+        private IGenericRepository<Core.DomainModel.Rate> _masterRepoMock;
+        private IGenericDmzRepository<Core.DmzModel.Rate> _dmzRepoMock;
         private List<Core.DmzModel.Rate> _dmzRateList;
         private List<Core.DomainModel.Rate> _masterRateList;
 
@@ -32,7 +32,7 @@ namespace DmzSync.Test
         {
             _dmzRateList = new List<Rate>();
             _masterRateList = new List<Core.DomainModel.Rate>();
-            _dmzRepoMock = NSubstitute.Substitute.For<IGenericRepository<Core.DmzModel.Rate>>();
+            _dmzRepoMock = NSubstitute.Substitute.For<IGenericDmzRepository<Core.DmzModel.Rate>>();
             _masterRepoMock = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Rate>>();
             _dmzRepoMock.WhenForAnyArgs(x => x.Insert(new Core.DmzModel.Rate())).Do(p => _dmzRateList.Add(p.Arg<Core.DmzModel.Rate>()));
             _dmzRepoMock.AsQueryable().Returns(_dmzRateList.AsQueryable());

@@ -32,22 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WebActivatorEx">
-      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressDTO.cs" />
@@ -59,9 +46,11 @@
     <Compile Include="DriveReport.cs" />
     <Compile Include="Employment.cs" />
     <Compile Include="FileGenerationSchedule.cs" />
+    <Compile Include="KMDAbsenceReport.cs" />
     <Compile Include="LicensePlate.cs" />
     <Compile Include="MailNotificationSchedule.cs" />
     <Compile Include="MobileToken.cs" />
+    <Compile Include="KMDAbsenceOperation.cs" />
     <Compile Include="OrgUnit.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="PersonalAddress.cs" />
@@ -90,9 +79,6 @@
     <TypeScriptCompile Include="Person.cs.d.ts">
       <DependentUpon>Person.cs</DependentUpon>
     </TypeScriptCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

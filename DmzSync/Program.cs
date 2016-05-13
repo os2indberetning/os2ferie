@@ -1,35 +1,25 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.Logger;
 using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
-using Infrastructure.AddressServices;
-using Infrastructure.DmzDataAccess;
+using DmzSync.Services.Impl;
 using Infrastructure.DataAccess;
-using Core.DomainServices.Encryption;
-using Infrastructure.DmzSync.Services.Impl;
+using Infrastructure.DmzDataAccess;
 using Ninject;
 using DriveReport = Core.DmzModel.DriveReport;
 using Rate = Core.DomainModel.Rate;
 
-
-namespace Infrastructure.DmzSync
+namespace DmzSync
 {
     class Program
     {
         static void Main(string[] args)
         {
-
             var logger = NinjectWebKernel.CreateKernel().Get<ILogger>();
-       
+
             // hacks because of error with Entity Framework.
             // This forces the dmzconnection to use MySql.
             new DataContext();
@@ -55,7 +45,7 @@ namespace Infrastructure.DmzSync
                 logger.Log("Fejl under synkronisering af indberetninger fra DMZ. Mobilindberetninger er ikke synkroniserede.", "dmz", ex, 1);
                 throw;
             }
-           
+
             try
             {
                 Console.WriteLine("PersonSyncToDmz");
@@ -78,12 +68,8 @@ namespace Infrastructure.DmzSync
                 logger.Log("Fejl under synkronisering af takster til DMZ. Mobil-app er ikke opdateret med nyeste rater.", "dmz", ex, 1);
                 throw;
             }
-            
 
             Console.WriteLine("Done");
-
-
-
         }
     }
 }

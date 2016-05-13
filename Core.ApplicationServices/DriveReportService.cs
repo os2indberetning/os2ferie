@@ -7,9 +7,7 @@ using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
-using Ninject;
 using Core.ApplicationServices.Logger;
-
 
 namespace Core.ApplicationServices
 {
@@ -21,7 +19,7 @@ namespace Core.ApplicationServices
         private readonly IGenericRepository<DriveReport> _driveReportRepository;
         private readonly IReimbursementCalculator _calculator;
 
-        public DriveReportService(IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IAddressCoordinates coordinates, IRoute<RouteInformation> route, IGenericRepository<RateType> rateTypeRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, SubstituteType.Drive)
+        public DriveReportService(IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IAddressCoordinates coordinates, IRoute<RouteInformation> route, IGenericRepository<RateType> rateTypeRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, ILogger logger) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, logger, SubstituteType.Drive)
         {
             _route = route;
             _rateTypeRepo = rateTypeRepo;

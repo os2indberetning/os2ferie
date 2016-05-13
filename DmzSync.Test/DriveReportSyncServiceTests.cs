@@ -8,8 +8,8 @@ using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
 using Core.DomainServices.Encryption;
-using Infrastructure.DmzSync.Services.Impl;
-using Infrastructure.DmzSync.Services.Interface;
+using DmzSync.Services.Impl;
+using DmzSync.Services.Interface;
 using NSubstitute;
 using NUnit.Framework;
 using DriveReport = Core.DmzModel.DriveReport;
@@ -23,24 +23,24 @@ namespace DmzSync.Test
     {
 
         private ISyncService _uut;
-        private IGenericRepository<Core.DomainModel.DriveReport> _masterRepoMock; 
-        private IGenericRepository<Rate> _rateRepoMock; 
-        private IGenericRepository<LicensePlate> _licensePlateRepoMock; 
-        private IGenericRepository<Employment> _emplRepo; 
-        private ILogger _logger; 
-        private IGenericRepository<Core.DmzModel.DriveReport> _dmzRepoMock;
+        private IGenericRepository<Core.DomainModel.DriveReport> _masterRepoMock;
+        private IGenericRepository<Rate> _rateRepoMock;
+        private IGenericRepository<LicensePlate> _licensePlateRepoMock;
+        private IGenericRepository<Employment> _emplRepo;
+        private ILogger _logger;
+        private IGenericDmzRepository<Core.DmzModel.DriveReport> _dmzRepoMock;
         private List<Core.DmzModel.DriveReport> _dmzReportList = new List<Core.DmzModel.DriveReport>();
         private List<Core.DomainModel.DriveReport> _masterReportList = new List<Core.DomainModel.DriveReport>();
         private IDriveReportService _driveReportServiceMock;
         private IRoute<RouteInformation> _routeMock;
         private IAddressCoordinates _coordinatesMock;
-            
+
         [SetUp]
         public void SetUp()
         {
             _emplRepo = NSubstitute.Substitute.For<IGenericRepository<Employment>>();
             _logger = NSubstitute.Substitute.For<ILogger>();
-            _dmzRepoMock = NSubstitute.Substitute.For<IGenericRepository<Core.DmzModel.DriveReport>>();
+            _dmzRepoMock = NSubstitute.Substitute.For<IGenericDmzRepository<Core.DmzModel.DriveReport>>();
             _coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
             _masterRepoMock = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.DriveReport>>();
             _driveReportServiceMock = NSubstitute.Substitute.For<IDriveReportService>();
@@ -64,8 +64,8 @@ namespace DmzSync.Test
 
             _dmzRepoMock.WhenForAnyArgs(x => x.Delete(new Core.DmzModel.DriveReport())).Do(p => _dmzReportList.Remove(p.Arg<Core.DmzModel.DriveReport>()));
 
-         
             _driveReportServiceMock.WhenForAnyArgs(x => x.Create(new Core.DomainModel.DriveReport())).Do(rep => _masterReportList.Add(rep.Arg<Core.DomainModel.DriveReport>()));
+
             _dmzRepoMock.WhenForAnyArgs(x => x.Insert(new Core.DmzModel.DriveReport())).Do(t => _dmzReportList.Add(t.Arg<Core.DmzModel.DriveReport>()));
 
             _rateRepoMock.AsQueryable().ReturnsForAnyArgs(new List<Rate>()
