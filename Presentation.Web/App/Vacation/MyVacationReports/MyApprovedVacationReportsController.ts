@@ -69,22 +69,14 @@
                         title: "Feriestart",
                         template: data => {
                             const m = this.moment.utc(data.StartTimestamp, 'X');
-                            return m._d.getDate() +
-                                "/" +
-                                (m._d.getMonth() + 1) +
-                                "/" + // +1 because getMonth is zero indexed.
-                                m._d.getFullYear();
+                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
                         }
                     },
                     {
                         title: "Ferieafslutning",
                         template: data => {
                             const m = this.moment.utc(data.EndTimestamp, 'X');
-                            return m._d.getDate() +
-                                "/" +
-                                (m._d.getMonth() + 1) +
-                                "/" + // +1 because getMonth is zero indexed.
-                                m._d.getFullYear();
+                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
                         }
                     },
                     {
@@ -109,11 +101,7 @@
                         field: "CreatedDateTimestamp",
                         template: data => {
                             var m = this.moment.utc(data.CreatedDateTimestamp, 'X');
-                            return m._d.getDate() +
-                                "/" +
-                                (m._d.getMonth() + 1) +
-                                "/" + // +1 because getMonth is zero indexed.
-                                m._d.getFullYear();
+                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
                         },
                         title: "Indberettet"
                     },
@@ -122,9 +110,7 @@
                         title: "Godkendelsesdato",
                         template: data => {
                             var m = this.moment.utc(data.ClosedDateTimestamp, 'X');
-                            return m._d.getDate() + "/" +
-                                (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                                m._d.getFullYear();
+                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
                         }
                     },
                     {
@@ -133,9 +119,7 @@
                         template: data => {
                             if (data.ProcessedDateTimestamp != 0 && data.ProcessedDateTimestamp != null && data.ProcessedDateTimestamp != undefined) {
                                 var m = this.moment.utc(data.ProcessedDateTimestamp, 'X');
-                                return m._d.getDate() + "/" +
-                                    (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                                    m._d.getFullYear();
+                                return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
                             }
                             return "";
                         }
@@ -147,14 +131,12 @@
                 ],
                 scrollable: false
             };
-
         }
 
         getVacationReportsUrl() {
             return `/odata/VacationReports?status=${this
                 .ReportStatus}&$expand=ResponsibleLeader,ApprovedBy &$filter=PersonId eq ${this.personId}`;
         }
-
     }
 
     angular.module("app.vacation").controller("Vacation.MyApprovedVacationReportsController", MyApprovedVacationReportsController);

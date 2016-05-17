@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core.DomainModel;
+﻿using Core.DomainModel;
 
 namespace Core.ApplicationServices.Interfaces
 {
@@ -11,6 +6,5 @@ namespace Core.ApplicationServices.Interfaces
     {
         void PrepareReport(VacationReport report);
         void ApproveReport(VacationReport report, Person approver, string emailText);
-        VacationReport EditReport(VacationReport report);
     }
 }

@@ -1,8 +1,8 @@
 ﻿module app.drive {
     "use strict";
 
-    import BaseApproveReportsSettingsController = app.core.controllers.BaseApproveReportsSettingsController;
-    import SubstituteType = app.core.models.SubstituteType;
+    import BaseApproveReportsSettingsController = core.controllers.BaseApproveReportsSettingsController;
+    import SubstituteType = core.models.SubstituteType;
 
     class ApproveVacationReportsSettingsController extends BaseApproveReportsSettingsController {
 
@@ -21,5 +21,5 @@
 
     }
 
-    angular.module("app.drive").controller("Vacation.ApproveVacationReportsSettingsController", ApproveVacationReportsSettingsController);
+    angular.module("app.drive").controller("ApproveVacationReportsSettingsController", ApproveVacationReportsSettingsController);
 }

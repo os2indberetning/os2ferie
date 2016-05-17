@@ -53,7 +53,7 @@
                 .state("vacation.approvereportssettings", {
                     url: "/approve-reports-settings",
                     templateUrl: "/App/Core/Views/ApproveReportsSettingsView.html",
-                    controller: "Vacation.ApproveVacationReportsSettingsController",
+                    controller: "ApproveVacationReportsSettingsController",
                     controllerAs: "arsCtrl",
                     resolve: {
                         CurrentUser: [

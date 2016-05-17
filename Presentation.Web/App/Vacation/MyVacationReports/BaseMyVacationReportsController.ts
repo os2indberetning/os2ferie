@@ -19,38 +19,22 @@
 
             // Set personId. The value on $rootScope is set in resolve in application.js
             this.personId = $rootScope.CurrentUser.Id;
-            this.loadInitialDates();
+            this.loadInitialDate();
         }
-
-        protected abstract getVacationReportsUrl();
 
         refreshGrid() {
             /// <summary>
             /// Refreshes kendo grid datasource.
             /// </summary>
+            // Use timeout in case grid is undefined on load.
             this.$timeout(() => {
                 this.vacationReportsGrid.dataSource.transport.options.read.url = this.getVacationReportsUrl();
                 this.vacationReportsGrid.dataSource.read();
             });
         }
 
-        loadInitialDates() {
-            /// <summary>
-            /// Sets initial date filters.
-            /// </summary>
-            // Set initial values for kendo datepickers.
-            // date for kendo filter.
-            let currentDate = this.moment();
-
-            if (this.moment().isBefore(`${this.vacationYear}-05-01`)) {
-                currentDate = currentDate.subtract({'year':1});
-            }
-
-            this.vacationYear = currentDate.toDate();
-        }
-
         deleteClick = (id) => {
-            var modalInstance = this.$modal.open({
+            this.$modal.open({
                 templateUrl: '/App/Vacation/MyVacationReports/ConfirmDeleteVacationReportTemplate.html',
                 controller: 'ConfirmDeleteVacationReportController as cdvrCtrl',
                 backdrop: "static",
@@ -59,14 +43,11 @@
                         return id;
                     }
                 }
-            });
-
-            modalInstance.result.then(() => {
+            }).result.then(() => {
                 this.VacationReport.delete({ id: id }, () => {
                     this.refreshGrid();
                 });
             });
-
         }
 
         editClick = (id) => {
@@ -74,7 +55,7 @@
             /// Opens edit report modal
             /// </summary>
             /// <param name="id"></param>
-            var modalInstance = this.$modal.open({
+            this.$modal.open({
                 templateUrl: '/App/Vacation/MyVacationReports/EditVacationReportTemplate.html',
                 controller: 'ReportVacationController as rvc',
                 backdrop: "static",
@@ -84,15 +65,13 @@
                         return id;
                     }
                 }
-            });
-
-            modalInstance.result.then(() => {
+            }).result.then(() => {
                 this.refreshGrid();
             });
         }
 
         clearClicked() {
-            this.loadInitialDates();
+            this.loadInitialDate();
             this.refreshGrid();
         }
 
@@ -102,5 +81,23 @@
             start: "decade",
             depth: "decade"
         };
+
+        private loadInitialDate() {
+            /// <summary>
+            /// Sets initial date filters.
+            /// </summary>
+            // Set initial values for kendo datepickers.
+            // date for kendo filter.
+            let currentDate = this.moment();
+
+            // Vacation year changes every year on the 1th of May
+            if (this.moment().isBefore(`${this.vacationYear}-05-01`)) {
+                currentDate = currentDate.subtract({ 'year': 1 });
+            }
+
+            this.vacationYear = currentDate.toDate();
+        }
+
+        protected abstract getVacationReportsUrl();
     }
 }

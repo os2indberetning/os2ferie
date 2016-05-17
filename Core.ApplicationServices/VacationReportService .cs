@@ -45,7 +45,6 @@ namespace Core.ApplicationServices
             PrepareReport(report);
 
             _reportRepo.Insert(report);
-
             _reportRepo.Save();
 
             return report;
@@ -57,7 +56,7 @@ namespace Core.ApplicationServices
             if (report.EndTimestamp < report.StartTimestamp) return false;
             if (report.StartTime > report.EndTime &&
                 report.StartTimestamp.ToDateTime().Date == report.EndTimestamp.ToDateTime().Date) return false;
-            //if (!report.Employment.OrgUnit.HasAccessToVacation) return false;
+            //if (!report.Employment.OrgUnit.HasAccessToVacation) return false; // TODO Fetch employment and check rights
 
             return true;
         }
@@ -110,11 +109,6 @@ namespace Core.ApplicationServices
             _absenceService.ReportAbsence(absenceReport);
             report.ProcessedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             _reportRepo.Save();
-        }
-
-        public VacationReport EditReport(VacationReport report)
-        {
-            throw new NotImplementedException();
         }
     }
 }

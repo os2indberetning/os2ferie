@@ -137,14 +137,12 @@
                 ],
                 scrollable: false
             };
-
         }
 
         getVacationReportsUrl() {
             return `/odata/VacationReports?status=${this
                 .ReportStatus}&$expand=ApprovedBy($select=FullName) &$filter=PersonId eq ${this.personId}`;
         }
-
     }
 
     angular.module("app.vacation").controller("Vacation.MyRejectedVacationReportsController", MyRejectedVacationReportsController);

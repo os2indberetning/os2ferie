@@ -68,22 +68,14 @@
                         title: "Feriestart",
                         template: data => {
                             const m = this.moment.utc(data.StartTimestamp, 'X');
-                            return m._d.getDate() +
-                                "/" +
-                                (m._d.getMonth() + 1) +
-                                "/" + // +1 because getMonth is zero indexed.
-                                m._d.getFullYear();
+                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
                         }
                     },
                     {
                         title: "Ferieafslutning",
                         template: data => {
                             const m = this.moment.utc(data.EndTimestamp, 'X');
-                            return m._d.getDate() +
-                                "/" +
-                                (m._d.getMonth() + 1) +
-                                "/" + // +1 because getMonth is zero indexed.
-                                m._d.getFullYear();
+                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
                         }
                     },
                     {
@@ -108,11 +100,7 @@
                         field: "CreatedDateTimestamp",
                         template: data => {
                             var m = this.moment.utc(data.CreatedDateTimestamp, 'X');
-                            return m._d.getDate() +
-                                "/" +
-                                (m._d.getMonth() + 1) +
-                                "/" + // +1 because getMonth is zero indexed.
-                                m._d.getFullYear();
+                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
                         },
                         title: "Indberettet"
                     },
@@ -137,7 +125,6 @@
                 ],
                 scrollable: false
             };
-
         }
 
         getVacationReportsUrl() {
@@ -145,7 +132,6 @@
                 .ReportStatus}&$expand=ResponsibleLeader &$filter=PersonId eq ${this.personId} and VacationYear eq ${
                 this.vacationYear.getFullYear()}`;
         }
-
     }
 
     angular.module("app.vacation").controller("Vacation.MyPendingVacationReportsController", MyPendingVacationReportsController);

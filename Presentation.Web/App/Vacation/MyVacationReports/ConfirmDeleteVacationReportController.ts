@@ -22,7 +22,6 @@
             this.$modalInstance.dismiss('cancel');
             this.NotificationService.AutoFadeNotification("warning", "", "Sletning af indberetningen blev annulleret.");
         }
-
     }
 
     angular.module("app.vacation").controller("ConfirmDeleteVacationReportController", ConfirmDeleteVacationReportController);
