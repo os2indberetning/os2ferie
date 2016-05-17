@@ -95,18 +95,18 @@ namespace DBUpdater
                         SalaryKind = SafeGetString(reader, 3),
                         VacationEarnedYear = SafeGetString(reader, 4),
                         BalanceDate = SafeGetString(reader, 5),
-                        VacationHours_WithPay = SafeGetInt32(reader, 6),
-                        PossibleVacationDays_WithPay = SafeGetInt32(reader, 7),
-                        VacationHours_WithoutPay = SafeGetInt32(reader, 8),
-                        PossibleVacationDays_WithoutPay = SafeGetInt32(reader, 9),
+                        VacationHoursWithPay = SafeGetInt32(reader, 6),
+                        PossibleVacationDaysWithPay = SafeGetInt32(reader, 7),
+                        VacationHoursWithoutPay = SafeGetInt32(reader, 8),
+                        PossibleVacationDaysWithoutPay = SafeGetInt32(reader, 9),
                         TransferredVacationHours = SafeGetInt32(reader, 10),
                         PossibleTransferredVacationDays = SafeGetInt32(reader, 11),
-                        FreeVacationHours_Total = SafeGetInt32(reader, 12),
-                        VacationHours_WithPayDec = SafeGetDouble(reader, 13),
-                        VacationHours_WithoutPayDec = SafeGetDouble(reader,14),
+                        FreeVacationHoursTotal = SafeGetInt32(reader, 12),
+                        VacationHoursWithPayDec = SafeGetDouble(reader, 13),
+                        VacationHoursWithoutPayDec = SafeGetDouble(reader,14),
                         TransferredVacationHoursDec = SafeGetDouble(reader,15),
-                        FreeVacationHours_TotalDec = SafeGetDouble(reader, 16),
-                        OpdateDate = SafeGetDate(reader, 17)
+                        FreeVacationHoursTotalDec = SafeGetDouble(reader, 16),
+                        UpdateDate = SafeGetDate(reader, 17)
                     };
                     result.Add(currentRow);
                 }
