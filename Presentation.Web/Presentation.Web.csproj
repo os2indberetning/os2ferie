@@ -144,12 +144,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -244,6 +244,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\NinjectDependencyScope.cs" />
+    <Compile Include="App_Start\NinjectWebKernel.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -2448,9 +2450,17 @@
       <Project>{3a54fd98-5ecf-47c1-98c1-d827cfeba317}</Project>
       <Name>Core.DomainServices</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Infrastructure.AddressServices\Infrastructure.AddressServices.csproj">
+      <Project>{720A3483-F089-4A45-830B-CED59F8CD1E7}</Project>
+      <Name>Infrastructure.AddressServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Infrastructure.DataAccess\Infrastructure.DataAccess.csproj">
       <Project>{9914db94-e465-4751-939c-8121c30ac945}</Project>
       <Name>Infrastructure.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure.KMDVacationService\Infrastructure.KMDVacationService.csproj">
+      <Project>{DB308C4D-7CEA-4399-B678-C16673A3EBA2}</Project>
+      <Name>Infrastructure.KMDVacationService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

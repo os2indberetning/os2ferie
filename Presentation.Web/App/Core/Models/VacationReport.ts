@@ -10,6 +10,8 @@
     export class VacationReport extends Report {
         StartTimestamp: number;
         EndTimestamp: number;
+        StartTime: string;
+        EndTime: string;
         VacationYear: number;
         VacationHours: number;
         VacationType: VacationType;

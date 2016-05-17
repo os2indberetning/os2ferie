@@ -1,20 +1,12 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using DBUpdater.Models;
 using Infrastructure.AddressServices.Interfaces;
 using MoreLinq;
-using Ninject;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
 using Core.ApplicationServices.Interfaces;
 using VacationBalance = Core.DomainModel.VacationBalance;
@@ -131,7 +123,7 @@ namespace DBUpdater
                 orgToInsert.OrgId = org.LOSOrgId;
 
                 var addressChanged = false;
-               
+
                 if(workAddress != orgToInsert.Address)
                 {
                     addressChanged = true;
@@ -150,7 +142,7 @@ namespace DBUpdater
                 {
                     workAddress.OrgUnitId = orgToInsert.Id;
                 }
-            
+
             }
 
             Console.WriteLine("Done migrating organisations.");
@@ -284,8 +276,8 @@ namespace DBUpdater
             var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.OrgUnitId == orgUnit.Id && x.EmploymentId == empl.MaNr);
 
             //It is ok that we do not save after inserting untill
-            //we are done as we loop over employments from the view, and 
-            //two view employments will not share an employment in the db. 
+            //we are done as we loop over employments from the view, and
+            //two view employments will not share an employment in the db.
             if (employment == null)
             {
                 employment = _emplRepo.Insert(new Employment());
@@ -380,7 +372,7 @@ namespace DBUpdater
                     {
                         addr.Type = PersonalAddressType.OldHome;;
                     }
-                    
+
                     // Update actual current home address.
                     _personalAddressRepo.Insert(launderedAddress);
                     _personalAddressRepo.Save();
@@ -493,7 +485,7 @@ namespace DBUpdater
             foreach(var sub in affectedSubstitutes)
             {
                 _subService.UpdateReportsAffectedBySubstitute(sub);
-            } 
+            }
         }
 
         public void AddLeadersToReportsThatHaveNone()
@@ -519,47 +511,70 @@ namespace DBUpdater
 
         public void UpdateVacationBalance()
         {
+
+            Console.WriteLine("Adding vacation balance to employers");
+
+            var i = 0;
+
             var balances = _dataProvider.GetVacationBalanceAsQueryable().ToList();
 
-            var count = 0;
 
             foreach (var balance in balances)
             {
-                var person = _personRepo.AsQueryable().FirstOrDefault(x => x.CprNumber.Equals(balance.CPR));
-                if(person?.Employments == null) continue;
+                i++;
+                Console.WriteLine("Vacation balance " + i + " of " + balances.Count);
 
-                var vacation = _vacationRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id);
+                var person = _personRepo.AsQueryable().FirstOrDefault(x => x.CprNumber.Equals(balance.SocialSecurityNumber));
 
-                if (vacation == null)
+                // The person is not stored in our database, so abort
+                // In theory, this should never happen, since we sync people before vacation
+                if (person == null) continue;
+
+                int vacationYear;
+
+                if (!int.TryParse(balance.VacationEarnedYear, out vacationYear)) continue;
+
+                // The year the vacation is earned is stored in the database
+                // But we're interested in the year the vacation is held, which is a year later
+                vacationYear += 1;
+
+                int employmentRelationshipNumber;
+
+                if (!int.TryParse(balance.EmploymentRelationshipNumber, out employmentRelationshipNumber)) continue;
+
+                var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.ExtraNumber == employmentRelationshipNumber);
+
+                // The person's employment is not stored in our database, so abort
+                // Also not likely to happen, but better safe than sorry.
+                if (employment == null) continue;
+
+                var vacation = _vacationRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.EmploymentId == employment.Id && x.Year == vacationYear);
+
+                var isNewBalance = vacation == null;
+
+                if (isNewBalance)
                 {
-
                     vacation = new VacationBalance
                     {
                         PersonId = person.Id,
-                        EmploymentId = person.Employments.First().Id
+                        EmploymentId = employment.Id,
+                        Year = vacationYear
                     };
-                    
-                    var i = balance.FerieTimer_MLoen + balance.Overfoertetimer +
-                            balance.FERIEFRIDAGSTIMER_SUM;
-                    if (i != null)
-                        vacation.TotalVacationHours = (int) i;
-
-                    vacation.Year = DateTime.Parse(balance.DatoForSaldo).Year;
 
                     _vacationRepo.Insert(vacation);
-
                 }
 
-                vacation.FreeVacationHours = balance.FERIEFRIDAGSTIMER_SUM ?? 0;
-                vacation.TransferredHours = balance.Overfoertetimer ?? 0;
-                vacation.VacationHours = balance.FerieTimer_MLoen ?? 0;
+                vacation.FreeVacationHours = balance.FreeVacationHoursTotalDec ?? 0;
+                vacation.TransferredHours = balance.TransferredVacationHoursDec ?? 0;
+                vacation.VacationHours = balance.VacationHoursWithPayDec ?? 0;
 
-                var updated = balance.Opdateringsdato ?? new DateTime();
+                var updated = balance.UpdateDate ?? new DateTime();
 
                 vacation.UpdatedAt = Convert.ToInt64((updated - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds);
 
+                if (i % 100 != 0) continue;
+                Console.WriteLine("Saving to database");
                 _vacationRepo.Save();
-
             }
 
             _vacationRepo.Save();

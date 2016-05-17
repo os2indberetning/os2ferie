@@ -20,8 +20,11 @@ namespace OS2Indberetning.Controllers.Vacation
         [EnableQuery]
         public IQueryable<VacationBalance> Get(ODataQueryOptions<VacationBalance> queryOptions)
         {
-            var queryable = GetQueryable(queryOptions).Where(x => x.PersonId == CurrentUser.Id);
-            
+            var currentYear = Repo.AsQueryable().Max(y => y.Year);
+            var queryable =
+                GetQueryable(queryOptions)
+                    .Where(x => x.PersonId == CurrentUser.Id && x.Year == currentYear);
+
             return queryable;
         }
 

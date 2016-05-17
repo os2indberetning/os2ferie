@@ -451,17 +451,13 @@ li.mainMenuLink.active > a > i.fa {
     z-index: 1000;
 }
 
-.top-of-all {
-    z-index: 9000000;
-}
-
 .modal-body {
     min-height: 140px;
 }
 
 .version-text {
-    color: #868686; 
-    padding: 5px; 
+    color: #868686;
+    padding: 5px;
     position: fixed;
     bottom: 0;
     z-index: 9000002;
@@ -469,7 +465,7 @@ li.mainMenuLink.active > a > i.fa {
 }
 
 .navbox {
-    background-color: #484747;
+    background-color: rgba(255,255,255,0.15);
     -webkit-backface-visibility: initial;
     backface-visibility: initial;
 }
@@ -498,7 +494,7 @@ li.mainMenuLink.active > a > i.fa {
 
 .navbox-tiles .tile {
     display: block;
-    background-color: #3498db;
+    background-color: rgba(0,0,0,0.2);
     width: 47.146%;
     height: 0;
     padding-bottom: 46%;

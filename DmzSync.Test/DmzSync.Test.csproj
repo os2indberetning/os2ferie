@@ -74,9 +74,13 @@
       <Project>{3A54FD98-5ECF-47C1-98C1-D827CFEBA317}</Project>
       <Name>Core.DomainServices</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Infrastructure.DmzSync\Infrastructure.DmzSync.csproj">
+    <ProjectReference Include="..\DmzSync\DmzSync.csproj">
       <Project>{537CFCE9-FC15-46C0-A706-92CA40CF2C0C}</Project>
-      <Name>Infrastructure.DmzSync</Name>
+      <Name>DmzSync</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure.DmzDataAccess\Infrastructure.DmzDataAccess.csproj">
+      <Project>{90A44ADF-5BCF-47B6-8DD7-F4E069F3942E}</Project>
+      <Name>Infrastructure.DmzDataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

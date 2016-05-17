@@ -7,9 +7,7 @@ using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.RoutingClasses;
-using Ninject;
 using Core.ApplicationServices.Logger;
-
 
 namespace Core.ApplicationServices
 {
@@ -20,21 +18,16 @@ namespace Core.ApplicationServices
         private readonly IAddressCoordinates _coordinates;
         private readonly IGenericRepository<DriveReport> _driveReportRepository;
         private readonly IReimbursementCalculator _calculator;
-        private readonly IMailSender _mailSender;
 
-        private readonly ILogger _logger;
-
-        public DriveReportService(IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IAddressCoordinates coordinates, IRoute<RouteInformation> route, IGenericRepository<RateType> rateTypeRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, SubstituteType.Drive)
+        public DriveReportService(IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IAddressCoordinates coordinates, IRoute<RouteInformation> route, IGenericRepository<RateType> rateTypeRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, ILogger logger) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, logger, SubstituteType.Drive)
         {
             _route = route;
             _rateTypeRepo = rateTypeRepo;
             _coordinates = coordinates;
             _calculator = calculator;
-            _mailSender = mailSender;
             _driveReportRepository = driveReportRepository;
-            _logger = NinjectWebKernel.CreateKernel().Get<ILogger>();
         }
-        
+
         /// <summary>
         /// Validates report and creates it in the database if it validates.
         /// </summary>
@@ -110,7 +103,7 @@ namespace Core.ApplicationServices
             var createdReport = _driveReportRepository.Insert(report);
             createdReport.ResponsibleLeaderId = GetResponsibleLeaderForReport(report).Id;
             createdReport.ActualLeaderId = GetActualLeaderForReport(report).Id;
-            
+
             _driveReportRepository.Save();
 
             // If the report is calculated or from an app, then we would like to store the points.
@@ -125,7 +118,7 @@ namespace Core.ApplicationServices
 
                         if (i == report.DriveReportPoints.Count - 1)
                         {
-                            // last element   
+                            // last element
                             currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
                         }
                         else if (i == 0)
