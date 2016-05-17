@@ -8,6 +8,10 @@
             method: "POST",
             isArray: false
         },
+        "update": {
+            method: "PUT",
+            isArray: false
+        },
         "getLatest": {
             method: "GET",
             isArray: false,

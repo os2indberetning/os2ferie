@@ -89,13 +89,10 @@
                         }
                     },
                     {
-                        field: "Comment",
                         template: data => {
                             if (data.Comment != "") {
-                                return data.Purpose +
-                                    "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" +
-                                    data.Comment +
-                                    "'\" class=\"transparent-background pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                                return `<button kendo-tooltip k-position="'right'" k-content="'${data.Comment
+                                    }'" class="transparent-background pull-right no-border"><i class="fa fa-comment-o"></i></button>`;
                             }
                             return "<i>Ingen kommantar angivet</i>";
 

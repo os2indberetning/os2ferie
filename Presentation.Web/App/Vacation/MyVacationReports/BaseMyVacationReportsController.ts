@@ -5,7 +5,7 @@
 
         vacationReportsGrid: kendo.ui.Grid;
         vacationReportsOptions: kendo.ui.GridOptions;
-        vacationYear: number;
+        vacationYear: Date;
         personId: number;
 
         constructor(
@@ -19,7 +19,6 @@
 
             // Set personId. The value on $rootScope is set in resolve in application.js
             this.personId = $rootScope.CurrentUser.Id;
-
             this.loadInitialDates();
         }
 
@@ -27,7 +26,9 @@
             /// <summary>
             /// Refreshes kendo grid datasource.
             /// </summary>
-            this.vacationReportsGrid.refresh();
+            this.$timeout(() => {
+                this.vacationReportsGrid.dataSource.read();
+            });
         }
 
         loadInitialDates() {
@@ -36,11 +37,33 @@
             /// </summary>
             // Set initial values for kendo datepickers.
             // date for kendo filter.
-            this.vacationYear = this.moment().year();
+            let currentDate = this.moment();
 
             if (this.moment().isBefore(`${this.vacationYear}-05-01`)) {
-                this.vacationYear--;
+                currentDate = currentDate.subtract({'year':1});
             }
+
+            this.vacationYear = currentDate.toDate();
+        }
+
+        deleteClick = (id) => {
+            var modalInstance = this.$modal.open({
+                templateUrl: '/App/Vacation/MyVacationReports/ConfirmDeleteVacationReportTemplate.html',
+                controller: 'ConfirmDeleteVacationReportController as cdvrCtrl',
+                backdrop: "static",
+                resolve: {
+                    itemId: () => {
+                        return id;
+                    }
+                }
+            });
+
+            modalInstance.result.then(() => {
+                this.VacationReport.delete({ id: id }, () => {
+                    this.refreshGrid();
+                });
+            });
+
         }
 
         editClick = (id) => {
@@ -54,29 +77,21 @@
                 backdrop: "static",
                 windowClass: "app-modal-window-full",
                 resolve: {
-                    adminEditCurrentUser() {
-                        return 0;
-                    },
-                    ReportId: () => {
+                    vacationReportId: () => {
                         return id;
                     }
                 }
             });
 
             modalInstance.result.then(() => {
-                this.vacationReportsGrid.refresh();
+                this.refreshGrid();
             });
         }
 
         clearClicked() {
             this.loadInitialDates();
-            this.searchClicked();
+            this.refreshGrid();
         }
-
-        searchClicked() {
-            this.vacationReportsGrid.dataSource.read();
-        }
-
 
         // Format for datepickers.
         dateOptions: kendo.ui.DatePickerOptions = {
@@ -84,6 +99,5 @@
             start: "decade",
             depth: "decade"
         };
-
     }
 }

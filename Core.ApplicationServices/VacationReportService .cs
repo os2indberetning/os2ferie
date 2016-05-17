@@ -21,7 +21,7 @@ namespace Core.ApplicationServices
             _absenceBuilder = absenceBuilder;
         }
 
-        public override VacationReport Create(VacationReport report)
+        public void PrepareReport(VacationReport report)
         {
             if (!Validate(report)) throw new Exception("Vacation report has invalid parameters");
 
@@ -38,6 +38,11 @@ namespace Core.ApplicationServices
             }
 
             if (report.Comment == null) report.Comment = "";
+        }
+
+        public override VacationReport Create(VacationReport report)
+        {
+            PrepareReport(report);
 
             _reportRepo.Insert(report);
 
@@ -105,6 +110,11 @@ namespace Core.ApplicationServices
             _absenceService.ReportAbsence(absenceReport);
             report.ProcessedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             _reportRepo.Save();
+        }
+
+        public VacationReport EditReport(VacationReport report)
+        {
+            throw new NotImplementedException();
         }
     }
 }

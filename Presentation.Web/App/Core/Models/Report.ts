@@ -13,7 +13,7 @@
         Status: ReportStatus;
         CreatedDateTimestamp: number;
         EditedDateTimestamp: number;
-        Commenct: string;
+        Comment: string;
         ClosedDateTimestamp: number;
         ProcessedDateTimestamp: number;
         ApprovedBy: Person;

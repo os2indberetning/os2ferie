@@ -32,7 +32,7 @@
                                 req.setRequestHeader("Accept", "application/json;odata=fullmetadata");
                             },
                             url:
-                            `/odata/VacationReports?status=${this.ReportStatus}&$expand=ResponsibleLeader &$filter=PersonId eq ${this.personId} and VacationYear eq ${this.vacationYear}`,
+                            `/odata/VacationReports?status=${this.ReportStatus}&$expand=ResponsibleLeader &$filter=PersonId eq ${this.personId} and VacationYear eq ${this.vacationYear.getFullYear()}`,
                             dataType: "json",
                             cache: false
                         }
@@ -87,13 +87,10 @@
                         }
                     },
                     {
-                        field: "Comment",
                         template: data => {
                             if (data.Comment != "") {
-                                return data.Purpose +
-                                    "<button kendo-tooltip k-position=\"'right'\" k-content=\"'" +
-                                    data.Comment +
-                                    "'\" class=\"transparent-background pull-right no-border\"><i class=\"fa fa-comment-o\"></i></button>";
+                                return `<button kendo-tooltip k-position="'right'" k-content="'${data.Comment
+                                    }'" class="transparent-background pull-right no-border"><i class="fa fa-comment-o"></i></button>`;
                             }
                             return "<i>Ingen kommantar angivet</i>";
 

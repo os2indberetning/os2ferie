@@ -14,8 +14,7 @@
                     controller: "ReportVacationController",
                     controllerAs: "rvc",
                     resolve: {
-                        adminEditCurrentUser() { return 0; },
-                        ReportId() { return -1; },
+                        vacationReportId () { return 0; },
                         CurrentUser: [
                             "$rootScope", "Person", ($rootScope, Person) => {
                                 if ($rootScope.CurrentUser == undefined) {
@@ -52,7 +51,7 @@
                     }
                 })
                 .state("vacation.approvereportssettings", {
-                    url: "/approve-reports",
+                    url: "/approve-reports-settings",
                     templateUrl: "/App/Core/Views/ApproveReportsSettingsView.html",
                     controller: "Vacation.ApproveVacationReportsSettingsController",
                     controllerAs: "arsCtrl",
@@ -92,7 +91,7 @@
                     }
                 })
                 .state("vacation.myreports", {
-                    url: "/approve-reports",
+                    url: "/myreports",
                     templateUrl: "/App/Vacation/MyVacationReports/MyVacationReportsView.html",
                     resolve: {
                         CurrentUser: [

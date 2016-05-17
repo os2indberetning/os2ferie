@@ -4,7 +4,7 @@
     import VacationBalanceResource = vacation.resources.IVacationBalanceResource;
     import Balance = core.models.VacationBalance;
     import Report = core.models.VacationReport;
-    import Employment = app.core.models.Employment;
+    import Employment = core.models.Employment;
 
     class ReportVacationController {
         static $inject = [
@@ -16,7 +16,8 @@
             "VacationBalanceResource",
             "moment",
             "$modal",
-            "$modalInstance"
+            "$modalInstance",
+            "vacationReportId"
         ];
 
         vacationBalances: Balance[];
@@ -28,6 +29,8 @@
         vacationEndsOnFullDay = true;
 
         vacationReport: Report;
+
+        isEditingReport: boolean;
 
         startDate: Date;
         endDate: Date;
@@ -42,9 +45,11 @@
         private maxEndDate: Date;
         private currentUser;
 
-        constructor(private $scope, private Person, private $rootScope, private VacationReport, private NotificationService, private VacationBalanceResource: VacationBalanceResource, private moment, private $modal, private $modalInstance) {
+        constructor(private $scope, private Person, private $rootScope, private VacationReport, private NotificationService, private VacationBalanceResource: VacationBalanceResource, private moment, private $modal, private $modalInstance, private vacationReportId) {
 
             this.currentUser = $scope.CurrentUser;
+
+            this.isEditingReport = vacationReportId !== 0;
 
             VacationBalanceResource.query().$promise.then(data => {
                 this.vacationBalances = data;
@@ -61,11 +66,7 @@
             this.vacationDaysInPeriod = 0;
 
             this.$scope.$watch(() => { return this.startDate }, () => {
-                if (this.startDate > this.endDate) {
-                    this.endDate = this.startDate;
-                } else {
-                    this.calculateVacationPeriod(this.startDate, this.endDate);
-                }
+                this.updateCalendarRange();
             });
 
             this.$scope.$watch(() => { return this.endDate }, () => {
@@ -83,21 +84,60 @@
             this.initializeReport();
         }
 
+        private updateCalendarRange() {
+            if (this.startDate > this.endDate) {
+                this.endDate = this.startDate;
+            } else {
+                this.calculateVacationPeriod(this.startDate, this.endDate);
+            }
+        }
+
         private calculateVacationPeriod(start, end) {
             this.vacationDaysInPeriod = Math.abs(end - start) / 1000 / 60 / 60;
-            // this.netVacationRemainingIfApproved = this.netVacationRemaining - this.vacationDaysInPeriod;
         }
 
         private initializeReport() {
-            this.startDate = new Date();
-            this.endDate = new Date();
-            this.maxEndDate = new Date();
-            this.comment = undefined;
-            this.vacationStartsOnFullDay = true;
-            this.vacationEndsOnFullDay = true;
-            this.startTime = new Date(2000, 0, 1, 0, 0, 0, 0); // Only time is relevant, date is ignored by kendo
-            this.endTime = new Date(2000, 0, 1, 0, 0, 0, 0);
-            this.vacationType = undefined;
+            if (!this.isEditingReport) {
+                this.startDate = new Date();
+                this.endDate = new Date();
+                this.maxEndDate = new Date();
+                this.comment = undefined;
+                this.vacationStartsOnFullDay = true;
+                this.vacationEndsOnFullDay = true;
+                this.startTime = new Date(2000, 0, 1, 0, 0, 0, 0); // Only time is relevant, date is ignored by kendo
+                this.endTime = new Date(2000, 0, 1, 0, 0, 0, 0);
+                this.vacationType = undefined;
+            } else {
+                var report = this.VacationReport.get({ id: this.vacationReportId }, () => {
+                    console.log(report);
+
+                    this.startDate = this.moment.utc(report.StartTimestamp, "X").toDate();
+                    this.endDate = this.moment.utc(report.EndTimestamp, "X").toDate();
+
+                    this.vacationStartsOnFullDay = report.StartTime == null;
+                    this.vacationEndsOnFullDay = report.EndTime == null;
+
+                    if (!this.vacationStartsOnFullDay) {
+                        const date = new Date();
+                        const duration = this.moment.duration(report.StartTime);
+                        date.setHours(duration.hours());
+                        date.setMinutes(duration.minutes());
+                        this.startTime = date;
+                    }
+
+                    if (!this.vacationEndsOnFullDay) {
+                        const date = new Date();
+                        const duration = this.moment.duration(report.EndTime);
+                        date.setHours(duration.hours());
+                        date.setMinutes(duration.minutes());
+                        this.endTime = date;
+                    }
+
+                    this.comment = report.Comment;
+                    this.vacationType = report.VacationType;
+                    this.position = report.EmploymentId;
+                });
+            }
         }
 
         timePickerOptions: kendo.ui.TimePickerOptions = {
@@ -120,8 +160,7 @@
         }
 
         saveReport() {
-            var report = new this.VacationReport();
-
+            const report = new this.VacationReport();
 
             report.StartTimestamp = Math.floor((new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate()).getTime()) / 1000);
             report.EndTimestamp = Math.floor((new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate()).getTime()) / 1000);
@@ -135,23 +174,49 @@
 
             if (!this.vacationStartsOnFullDay) {
                 report.StartTime = `P0DT${this.startTime.getHours()}H${this.startTime.getMinutes()}M0S`;
+            } else {
+                report.StartTime = null;
             }
 
             if (!this.vacationEndsOnFullDay) {
                 report.EndTime = `P0DT${this.endTime.getHours()}H${this.endTime.getMinutes()}M0S`;
+            } else {
+                report.EndTime = null;
             }
 
-            report.$save(res => {
-                this.$scope.latestDriveReport = res;
+            if (this.isEditingReport) {
+                report.Id = this.vacationReportId;
 
-                this.NotificationService.AutoFadeNotification("success", "", "Din indberetning er sendt til godkendelse.");
+                report.$update({id: this.vacationReportId},() => {
+                    this.NotificationService
+                        .AutoFadeNotification("success", "", "Din indberetning er blevet rédigeret.");
+                    this.$modalInstance.close();
+                },
+                    () => {
+                        this.saveButtenDisabled = false;
+                        this.NotificationService
+                            .AutoFadeNotification("danger",
+                            "",
+                            "Der opstod en fejl under rédigering af din ferieindberetning.");
+                    });
 
-                this.clearReport();
-                this.saveButtenDisabled = false;
-            }, () => {
-                this.saveButtenDisabled = false;
-                this.NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under oprettelsen af din ferieindberetning.");
-            });
+            } else {
+                report.$save(() => {
+                    this.NotificationService
+                        .AutoFadeNotification("success", "", "Din indberetning er sendt til godkendelse.");
+
+                    this.clearReport();
+                    this.saveButtenDisabled = false;
+                },
+                () => {
+                    this.saveButtenDisabled = false;
+                    this.NotificationService
+                        .AutoFadeNotification("danger",
+                            "",
+                            "Der opstod en fejl under oprettelsen af din ferieindberetning.");
+                });
+            }
+
         }
 
         clearReport() {
