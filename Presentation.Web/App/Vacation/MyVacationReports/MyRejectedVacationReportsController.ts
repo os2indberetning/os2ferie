@@ -33,8 +33,7 @@
                             beforeSend(req) {
                                 req.setRequestHeader("Accept", "application/json;odata=fullmetadata");
                             },
-                            url:
-                            `/odata/VacationReports?status=${this.ReportStatus}&$expand=ApprovedBy($select=FullName) &$filter=PersonId eq ${this.personId}`,
+                            url: this.getVacationReportsUrl(),
                             dataType: "json",
                             cache: false
                         }
@@ -139,6 +138,11 @@
                 scrollable: false
             };
 
+        }
+
+        getVacationReportsUrl() {
+            return `/odata/VacationReports?status=${this
+                .ReportStatus}&$expand=ApprovedBy($select=FullName) &$filter=PersonId eq ${this.personId}`;
         }
 
     }

@@ -24,6 +24,7 @@
             super($modal, $rootScope, VacationReport, $timeout, Person, moment, "Pending");
 
             this.vacationReportsOptions = {
+                autoBind: false,
                 dataSource: {
                     type: "odata-v4",
                     transport: {
@@ -31,8 +32,7 @@
                             beforeSend(req) {
                                 req.setRequestHeader("Accept", "application/json;odata=fullmetadata");
                             },
-                            url:
-                            `/odata/VacationReports?status=${this.ReportStatus}&$expand=ResponsibleLeader &$filter=PersonId eq ${this.personId} and VacationYear eq ${this.vacationYear.getFullYear()}`,
+                            url: this.getVacationReportsUrl(),
                             dataType: "json",
                             cache: false
                         }
@@ -138,6 +138,12 @@
                 scrollable: false
             };
 
+        }
+
+        getVacationReportsUrl() {
+            return `/odata/VacationReports?status=${this
+                .ReportStatus}&$expand=ResponsibleLeader &$filter=PersonId eq ${this.personId} and VacationYear eq ${
+                this.vacationYear.getFullYear()}`;
         }
 
     }

@@ -3,7 +3,7 @@
 
     export abstract class BaseMyVacationReportsController {
 
-        vacationReportsGrid: kendo.ui.Grid;
+        vacationReportsGrid; // Kendo typing is missing some parameters that this controller is using
         vacationReportsOptions: kendo.ui.GridOptions;
         vacationYear: Date;
         personId: number;
@@ -22,11 +22,14 @@
             this.loadInitialDates();
         }
 
+        protected abstract getVacationReportsUrl();
+
         refreshGrid() {
             /// <summary>
             /// Refreshes kendo grid datasource.
             /// </summary>
             this.$timeout(() => {
+                this.vacationReportsGrid.dataSource.transport.options.read.url = this.getVacationReportsUrl();
                 this.vacationReportsGrid.dataSource.read();
             });
         }
