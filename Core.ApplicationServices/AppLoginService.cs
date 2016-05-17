@@ -87,8 +87,8 @@ namespace Core.ApplicationServices
 
         public void RemoveFromDmz(int personId)
         {
-            var rows = _dmzUserRepository.AsQueryable().Where(x => x.ProfileId == personId).ToList();
-            _dmzUserRepository.DeleteRange(rows);
+            var users = _dmzUserRepository.AsQueryable().Where(x => x.ProfileId == personId).ToList();
+            _dmzUserRepository.DeleteRange(users);
             _dmzUserRepository.Save();
         }
     }

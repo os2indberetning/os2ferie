@@ -1,20 +1,12 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Core.ApplicationServices.MailerService.Interface;
 using Core.DomainModel;
 using Core.DomainServices;
 using DBUpdater.Models;
 using Infrastructure.AddressServices.Interfaces;
 using MoreLinq;
-using Ninject;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
 using Core.ApplicationServices.Interfaces;
 using VacationBalance = Core.DomainModel.VacationBalance;
@@ -546,11 +538,11 @@ namespace DBUpdater
                 // But we're interested in the year the vacation is held, which is a year later
                 vacationYear += 1;
 
-                int ans_forhold_nr;
+                int employmentRelationshipNumber;
 
-                if (!int.TryParse(balance.EmploymentRelationshipNumber, out ans_forhold_nr)) continue;
+                if (!int.TryParse(balance.EmploymentRelationshipNumber, out employmentRelationshipNumber)) continue;
 
-                var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.ExtraNumber == ans_forhold_nr);
+                var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.ExtraNumber == employmentRelationshipNumber);
 
                 // The person's employment is not stored in our database, so abort
                 // Also not likely to happen, but better safe than sorry.
@@ -572,11 +564,11 @@ namespace DBUpdater
                     _vacationRepo.Insert(vacation);
                 }
 
-                vacation.FreeVacationHours = balance.FreeVacationHours_TotalDec ?? 0;
+                vacation.FreeVacationHours = balance.FreeVacationHoursTotalDec ?? 0;
                 vacation.TransferredHours = balance.TransferredVacationHoursDec ?? 0;
-                vacation.VacationHours = balance.VacationHours_WithPayDec ?? 0;
+                vacation.VacationHours = balance.VacationHoursWithPayDec ?? 0;
 
-                var updated = balance.OpdateDate ?? new DateTime();
+                var updated = balance.UpdateDate ?? new DateTime();
 
                 vacation.UpdatedAt = Convert.ToInt64((updated - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds);
 
