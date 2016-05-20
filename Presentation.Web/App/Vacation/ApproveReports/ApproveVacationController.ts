@@ -23,18 +23,18 @@
                 views: [
                     {
                         type: "timelineMonth",
-                        title: "Month",
-                        majorTick: 1440,
+                        title: "Måned",
                         minorTickCount: 1,
                         columnWidth: 25,
-                        dateHeaderTemplate: "<span class='k-link k-nav-day' style=>#=kendo.toString(date, 'dd')#</span>"
-                    },
+                        dateHeaderTemplate: "<span class='k-link k-nav-day' style=>#=kendo.toString(date, 'dd')#</span>",
+                        //slotTemplate: "<div style='background:#=changeColorforWeekend(date)#; height: 100%;width: 100%; padding: 0;'></div>",
+                        workWeekStart: 0,
+                        workWeekEnd: 5
+                    }
                 ],
-                editable: false,
                 dataBinding: function (e) {
                     var scheduler = this;
 
-                    //scheduler.toolbar.remove();
                     if (scheduler._selectedViewName != "kendo.ui.SchedulerTimelineYearView") return;
 
                     var ele = scheduler.wrapper.find(".k-scheduler-timelineMonthview > tbody:first-child > tr:first-child tbody >tr:nth-child(2)");
@@ -43,26 +43,36 @@
                 dateHeaderTemplate: kendo.template("<strong>#=kendo.toString(date, 'd')#</strong>"),
                 height: 600,
                 timezone: "Etc/UTC",
-                selectable: true,
-                change: function (e) {
-                    if (e.events != 0) {
+                //This is kendo's save event. Label has been changed to 'Gem' in in "edit" event below.
+                save: function (e) {
 
-                        // TODO: Insert data that is needed for modal
-                        var obj = {
-                            
-                        }
-
-                        self.$state.go("vacation.approvereports.responsevacation");
+                    this.VacationReport.$approve({ id: e.event.id }, () => {
                         
-                        var modalInstance = self.$modal.open({
-                            templateUrl: 'VacationInfoModal.html',
-                            controller: 'Vacation.VacationResponseController',
-                            size: 'sm'
-                        });
+                    })
+                    
+                    //this.$http.patch();
+                    console.log("[save] e");
+                    console.log(e);
+                },
+                editable: {
+                    template: $("#customEditorTemplate").html()
+                },
+                edit: function (e: any) {
+                    var container = e.container;
+                    var personName = e.event.Person.FullName.split("[")[0];
 
-                        console.log("e:");
-                        console.log(e);
-                    }
+                    container.find("[data-container-for=title]").append("<p class='k-edit-label modal-personName'>" + personName + "</p>");
+                    container.find("[data-container-for=start]").append("<p class='k-edit-label'>" + moment(e.event.start).format("DD.MM.YYYY") + "</p>");
+                    container.find("[data-container-for=end]").append("<p class='k-edit-label'>" + moment(e.event.end).format("DD.MM.YYYY") + "</p>");
+
+                    //Setting up some final css.
+                    $(".modal-personName").width("70%").css("text-align", "left");
+
+                    //Removal of unused buttons, and change of names.
+                    $(".k-scheduler-delete").remove();
+                    $(".k-scheduler-update").html("Gem");
+                    $(".k-scheduler-cancel").html("Afbryd");
+                    $(".k-window-title").remove();
                 },
                 dataSource: {
                     autoBind: false,
@@ -70,15 +80,14 @@
                     batch: true,
                     transport: {
                         read: {
-                            url: `/odata/VacationReports()?$expand=Person($select=FullName) &$filter=StartTimestamp ge ${this.startMonth.getTime().toString().substring(0, 10)} and StartTimestamp le ${this.startNextMonth.getTime().toString().substring(0, 10)}`,
+                            url: `/odata/VacationReports()?$expand=Person($select=FullName)`,
                             dataType: "json",
                             cache: false
                         }
                     },
+                    serverFiltering: true,
                     schema: {
-                        data: function (data) {
-                            return data.value;
-                        },
+                        data: data => data.value,
                         model: {
                             fields: {
                                 id: { type: "number", from: "Id" },
@@ -155,11 +164,6 @@
 
         scheduler: kendo.ui.Scheduler;
         schedulerOptions: kendo.ui.SchedulerOptions;
-        startupDate = new Date();
-
-        //Used to sort vacation reports
-        startMonth = new Date(this.startupDate.getFullYear(), this.startupDate.getMonth(), 1);
-        startNextMonth = new Date(this.startupDate.getFullYear(), this.startupDate.getMonth() + 1, 1);
 
         pendingVacations = [];
 
@@ -167,7 +171,7 @@
             this.$http.get("/odata/VacationReports()?status=Pending &$expand=Person($select=FullName)").then((response: ng.IHttpPromiseCallbackArg<any>) => {
                 //Sort of objects for Pending Vacation Reports
                 response.data.value.sort(function (a, b) { return (a.StartTimestamp > b.StartTimestamp) ? 1 : ((b.StartTimestamp > a.StartTimestamp) ? -1 : 0); });
-                
+
                 angular.forEach(response.data.value, (value, key) => {
                     var startTime = Number(value.StartTimestamp.toString() + "000");
                     var endTime = Number(value.EndTimestamp.toString() + "000");
@@ -185,6 +189,11 @@
                     this.pendingVacations.push(obj);
                 });
             });
+        };
+
+        goToDate(time) {
+            time = Number(time);
+            this.scheduler.date(new Date(time));
         };
     }
     angular.module("app.vacation").controller("Vacation.ApproveVacationController", ApproveVacationController);

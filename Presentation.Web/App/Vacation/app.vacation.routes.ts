@@ -46,16 +46,9 @@
                                 } else {
                                     return $rootScope.CurrentUser;
                                 }
-
                             }
                         ]
                     }
-                })
-                .state("vacation.approvereports.responsevacation", {
-                    url: "/response",
-                    templateUrl: "/App/Vacation/ApproveReports/Modal/VacationInfoModal.html",
-                    controller: app.vacation.VacationResponseController,
-                    controllerAs: "vrc"
                 })
                 .state("vacation.admin", {
                     url: "/admin",

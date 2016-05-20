@@ -8,11 +8,56 @@
                 </div>
                 <div class="col-lg-2">
                     <div id="pendingVacationsList" class="list-group pending-vacation-listgroup">
-                        <b class="list-group-item  list-group-item-info">Pending Vacation Reports</b>
-                        <a id="{{pV.key}}" class="list-group-item" ng-repeat="pV in avc.pendingVacations" ng-click="avc.goToDate(pV.startTime)">{{pV.firstName}} <br/> {{pV.dateFrom}} - {{pV.dateTo}}</a>
+                        <b class="list-group-item  list-group-item-info">Afventende ferie rapporter</b>
+                        <a id="{{pV.key}}" class="list-group-item" ng-repeat="pV in avc.pendingVacations" ng-click="avc.goToDate(pV.startTime)">{{pV.firstName}} <br /> {{pV.dateFrom}} - {{pV.dateTo}}</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!--<script>
+    function changeColorforWeekend(date){
+        if (date.getDay() === 5) {
+            return "#ff3300";
+        }
+        if (date.getDay() === 6) {
+            return "#ff3300";
+        }
+    };
+</script>-->
+<!-- Custom modal for approving vacation reports -->
+<script id="customEditorTemplate" type="text/x-kendo-template">
+    <div class="k-edit-label"><label for="title">Navn</label></div>
+    <div data-container-for="title" class="k-edit-field">
+    </div>
+
+    <div class="k-edit-label"><label for="start">Start</label></div>
+    <div data-container-for="start" class="k-edit-field">
+    </div>
+
+    <div class="k-edit-label"><label for="end">Slut</label></div>
+    <div data-container-for="end" class="k-edit-field">
+    </div>
+
+    <span class="k-widget k-dropdown k-header" unselectable="on" role="listbox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-owns="" aria-disabled="false" aria-readonly="false" aria-busy="false" style="margin-left: 3%">
+        <span unselectable="on" class="k-dropdown-wrap k-state-default k-state-hover">
+            <span unselectable="on" class="k-input">Pending</span>
+            <span unselectable="on" class="k-select">
+                <span unselectable="on" class="k-icon k-i-arrow-s">select</span>
+            </span>
+        </span>
+        <select data-bind="value:status" data-role="dropdownlist" style="display: none;">
+            <option value="Pending" selected="selected">Pending</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+    </span>
+
+    <div class="k-edit-label"><label for="status">Status</label></div>
+    <div data-container-for="status" class="k-edit-field">
+    </div>
+
+
+</script>

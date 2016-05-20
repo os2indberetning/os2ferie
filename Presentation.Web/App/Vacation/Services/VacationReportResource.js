@@ -1,9 +1,12 @@
 ﻿angular.module("app.vacation").service('VacationReport', ["$resource", function ($resource) {
     return $resource("/odata/VacationReports(:id)?:query&emailText=:emailText", { id: "@id", query: "@query", emailText: "@emailText" }, {
         "get": {
-            method: "GET", isArray: false, transformResponse: function (res) {
-            return angular.fromJson(res).value[0];
-        } },
+            method: "GET",
+            isArray: false,
+            transformResponse: function (res) {
+                return angular.fromJson(res).value[0];
+            }
+        },
         "create": {
             method: "POST",
             isArray: false
