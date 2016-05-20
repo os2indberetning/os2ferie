@@ -17,16 +17,6 @@
     </div>
 </div>
 
-<!--<script>
-    function changeColorforWeekend(date){
-        if (date.getDay() === 5) {
-            return "#ff3300";
-        }
-        if (date.getDay() === 6) {
-            return "#ff3300";
-        }
-    };
-</script>-->
 <!-- Custom modal for approving vacation reports -->
 <script id="customEditorTemplate" type="text/x-kendo-template">
     <div class="k-edit-label"><label for="title">Navn</label></div>
@@ -48,7 +38,7 @@
                 <span unselectable="on" class="k-icon k-i-arrow-s">select</span>
             </span>
         </span>
-        <select data-bind="value:status" data-role="dropdownlist" style="display: none;">
+        <select class="ngHide" data-bind="value:status" data-role="dropdownlist">
             <option value="Pending" selected="selected">Pending</option>
             <option value="Accepted">Accepted</option>
             <option value="Rejected">Rejected</option>
@@ -58,6 +48,4 @@
     <div class="k-edit-label"><label for="status">Status</label></div>
     <div data-container-for="status" class="k-edit-field">
     </div>
-
-
 </script>

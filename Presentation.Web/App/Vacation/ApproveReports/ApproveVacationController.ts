@@ -15,7 +15,6 @@
         ];
 
         constructor(private $scope, private $rootScope, private VacationReport, private NotificationService, private $http: ng.IHttpService, private $modal, private moment: moment.MomentStatic, private $state: ng.ui.IStateService) {
-            this._currentUser = $scope.CurrentUser; //TODO: Remove?
             this.readPendingVacations();
             var self = this;
 
@@ -27,7 +26,6 @@
                         minorTickCount: 1,
                         columnWidth: 25,
                         dateHeaderTemplate: "<span class='k-link k-nav-day' style=>#=kendo.toString(date, 'dd')#</span>",
-                        //slotTemplate: "<div style='background:#=changeColorforWeekend(date)#; height: 100%;width: 100%; padding: 0;'></div>",
                         workWeekStart: 0,
                         workWeekEnd: 5
                     }
