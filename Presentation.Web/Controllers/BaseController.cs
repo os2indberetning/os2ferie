@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
-using System.Net.Http;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.OData;
 using System.Web.OData.Query;
-using System.Web.Routing;
-using Core.ApplicationServices;
 using Core.ApplicationServices.Logger;
 using Core.DomainModel;
-using Core.DomainModel.Example;
 using Core.DomainServices;
 using Ninject;
 using Expression = System.Linq.Expressions.Expression;
@@ -39,23 +33,27 @@ namespace OS2Indberetning.Controllers
             base.Initialize(requestContext);
 
 #if DEBUG
-            string[] httpUser = @"syddjursnet\sigyji".Split('\\'); // Fissirul Lehmann - administrator
+            var httpUser = @"syddjursnet\penyme".Split('\\'); // Fissirul Lehmann - administrator
 #else
-                string[] httpUser = User.Identity.Name.Split('\\');                
+            var httpUser = User.Identity.Name.Split('\\');
 #endif
 
             if (httpUser.Length == 2 && String.Equals(httpUser[0], ConfigurationManager.AppSettings["PROTECTED_AD_DOMAIN"], StringComparison.CurrentCultureIgnoreCase))
             {
                 var initials = httpUser[1].ToLower();
+
                 // DEBUG ON PRODUCTION. Set petsoe = lky
-                if (initials == "itmind" || initials == "jaoj" || initials == "mraitm") { initials = "sigyji"; }
+                if (initials == "itmind" || initials == "jaoj" || initials == "mraitm") { initials = "penyme"; }
+
                 // END DEBUG
                 CurrentUser = _personRepo.AsQueryable().FirstOrDefault(p => p.Initials.ToLower().Equals(initials));
+
                 if (CurrentUser == null)
                 {
                     _logger.Log("AD-bruger ikke fundet i databasen (" + User.Identity.Name + "). " + User.Identity.Name + " har derfor ikke kunnet logge på.", "web", 3);
                     throw new UnauthorizedAccessException("AD-bruger ikke fundet i databasen.");
                 }
+
                 if (!CurrentUser.IsActive)
                 {
                     _logger.Log("Inaktiv bruger forsøgte at logge ind (" + User.Identity.Name + "). " + User.Identity.Name + " har derfor ikke kunnet logge på.", "web", 3);
@@ -81,10 +79,10 @@ namespace OS2Indberetning.Controllers
 
         protected IQueryable<T> GetQueryable(ODataQueryOptions<T> queryOptions)
         {
-            if (queryOptions.Filter != null) { 
+            if (queryOptions.Filter != null) {
                 return (IQueryable<T>)queryOptions.Filter.ApplyTo(Repo.AsQueryable(), new ODataQuerySettings());
             }
-            return Repo.AsQueryable();        
+            return Repo.AsQueryable();
         }
 
         protected IQueryable<T> GetQueryable(int key, ODataQueryOptions<T> queryOptions)
@@ -99,7 +97,7 @@ namespace OS2Indberetning.Controllers
             {
                 return (IQueryable<T>) queryOptions.Filter.ApplyTo(result.AsQueryable(), new ODataQuerySettings());
             }
-            return result.AsQueryable();        
+            return result.AsQueryable();
         }
 
         protected IHttpActionResult Put(int key, Delta<T> delta)

@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Dynamic;
 using Core.DomainModel;
-
 
 namespace Infrastructure.DataAccess
 {
-
     [DbConfigurationType(typeof(MySql.Data.Entity.MySqlEFConfiguration))]
     public class DataContext : DbContext
     {
@@ -33,7 +29,7 @@ namespace Infrastructure.DataAccess
         public IDbSet<Employment> Employments { get; set; }
         public IDbSet<OrgUnit> OrgUnits { get; set; }
         public IDbSet<Substitute> Substitutes { get; set; }
-        public IDbSet<BankAccount> BankAccounts { get; set; } 
+        public IDbSet<BankAccount> BankAccounts { get; set; }
         public IDbSet<RateType> RateTypes { get; set; }
         public IDbSet<CachedAddress> CachedAddresses { get; set; }
         public IDbSet<AddressHistory> AddressHistory { get; set; }
@@ -41,13 +37,13 @@ namespace Infrastructure.DataAccess
         public IDbSet<VacationReport> VacationReport { get; set; }
         public IDbSet<VacationBalance> VacationBalance { get; set; }
 
-
-        /**
-         * Sets up 
-         */
+        /// <summary>
+        /// Set up
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);           
+            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Conventions.Add(new DateTimeOffsetConvention());
 
@@ -101,7 +97,7 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<Address>().Property(p => p.ZipCode).IsRequired();
             modelBuilder.Entity<Address>().Property(p => p.Town).IsRequired();
             modelBuilder.Entity<Address>().Property(p => p.Longitude).IsRequired();
-            modelBuilder.Entity<Address>().Property(p => p.Latitude).IsRequired();      
+            modelBuilder.Entity<Address>().Property(p => p.Latitude).IsRequired();
         }
 
         private void ConfigurePropertiesForWorkAddress(DbModelBuilder modelBuilder)
@@ -168,7 +164,6 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.DateTimestamp).IsRequired();
             modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.Notified).IsRequired();
             modelBuilder.Entity<MailNotificationSchedule>().Property(p => p.Repeat).IsRequired();
-            
         }
 
         private void ConfigurePropertiesForFileGenerationSchedule(DbModelBuilder modelBuilder)
@@ -201,11 +196,9 @@ namespace Infrastructure.DataAccess
             modelBuilder.Entity<DriveReport>().Property(p => p.EndsAtHome).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.TFCode).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.IsFromApp).IsRequired();
-
             modelBuilder.Entity<DriveReport>().Property(p => p.Status).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.CreatedDateTimestamp).IsRequired();
             modelBuilder.Entity<DriveReport>().Property(p => p.Comment).IsRequired();
-
             modelBuilder.Entity<DriveReport>().HasRequired(p => p.Person);
             modelBuilder.Entity<DriveReport>().HasRequired(p => p.Employment);
         }

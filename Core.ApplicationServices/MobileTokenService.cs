@@ -5,17 +5,18 @@ using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.Encryption;
 using IMobileTokenService = Core.ApplicationServices.Interfaces.IMobileTokenService;
-using Infrastructure.DmzDataAccess;
 
 namespace Core.ApplicationServices
 {
     public class MobileTokenService : IMobileTokenService
     {
         private readonly IGenericRepository<MobileToken> _repo;
+        private readonly IGenericDmzRepository<Token> _tokenRepo;
 
-        public MobileTokenService(IGenericRepository<MobileToken> repo)
+        public MobileTokenService(IGenericRepository<MobileToken> repo, IGenericDmzRepository<Token> tokenRepo)
         {
             _repo = repo;
+            _tokenRepo = tokenRepo;
         }
 
         /// <summary>
@@ -54,13 +55,11 @@ namespace Core.ApplicationServices
             if (token.Status == MobileTokenStatus.Activated)
             {
                 token.StatusToPresent = "Aktiveret";
-            }            
+            }
 
             var createdToken = _repo.Insert(token);
 
             _repo.Save();
-
-            var _dmzTokenRepo = new GenericDmzRepository<Token>(new DmzContext());
 
             var dmzToken = new Token
             {
@@ -70,8 +69,8 @@ namespace Core.ApplicationServices
                 ProfileId = createdToken.PersonId,
             };
             dmzToken = Encryptor.EncryptToken(dmzToken);
-            _dmzTokenRepo.Insert(dmzToken);
-            _dmzTokenRepo.Save();
+            _tokenRepo.Insert(dmzToken);
+            _tokenRepo.Save();
 
             return createdToken;
         }

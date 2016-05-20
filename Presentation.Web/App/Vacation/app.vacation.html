@@ -1,6 +1,6 @@
 ﻿<div id="wrapper" ng-class="{mainMenuCollapse: menuCollapse == true}">
     <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" style="z-index: 9000001;" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <div class="navbar-brand" ng-click="menuCollapse = !menuCollapse">
@@ -26,11 +26,11 @@
                     <li ui-sref-active="active" class="mainMenuLink">
                         <a ui-sref="vacation.myreports"><i class="fa fa-fw fa-table margin-right-10"></i>Mine indberetninger</a>
                     </li>
-                    <li ui-sref-active="active" class="mainMenuLink">
+                    <li ui-sref-active="active" class="mainMenuLink" ng-hide="!showApproveReports">
                         <a ui-sref="vacation.approvereports"><i class="fa fa-fw fa-edit margin-right-10"></i>Godkend indberetninger</a>
                     </li>
-                    <li ui-sref-active="active" class="mainMenuLink">
-                        <a ui-sref="vacation.settings"><i class="fa fa-fw fa-cogs margin-right-10"></i>Personlige indstillinger</a>
+                    <li ui-sref-active="active" class="mainMenuLink" ng-hide="!showApproveReports">
+                        <a ui-sref="vacation.approvereportssettings"><i class="fa fa-fw fa-users margin-right-10"></i>Stedfortrædere</a>
                     </li>
                     <li ui-sref-active="active" class="mainMenuLink">
                         <a ui-sref="vacation.admin"><i class="fa fa-fw fa-wrench margin-right-10"></i>Administrator</a>
@@ -51,11 +51,11 @@
                     <li ui-sref-active="active" class="mainMenuLink">
                         <a ui-sref="vacation.myreports"><i class="fa fa-fw fa-table"></i></a>
                     </li>
-                    <li ui-sref-active="active" class="mainMenuLink">
+                    <li ui-sref-active="active" class="mainMenuLink" ng-hide="!showApproveReports">
                         <a ui-sref="vacation.approvereports"><i class="fa fa-fw fa-edit"></i></a>
                     </li>
-                    <li ui-sref-active="active" class="mainMenuLink">
-                        <a ui-sref="vacation.settings"><i class="fa fa-fw fa-cogs"></i></a>
+                    <li ui-sref-active="active" class="mainMenuLink" ng-hide="!showApproveReports">
+                        <a ui-sref="vacation.approvereportssettings"><i class="fa fa-fw fa-users margin-right-10"></i></a>
                     </li>
                     <li ui-sref-active="active" class="mainMenuLink">
                         <a ui-sref="vacation.admin"><i class="fa fa-fw fa-wrench"></i></a>

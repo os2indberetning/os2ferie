@@ -1,18 +1,24 @@
 ﻿using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices.Encryption;
-using Infrastructure.DmzDataAccess;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using Core.DomainServices;
 
 namespace Core.ApplicationServices
 {
     public class AppLoginService : IAppLoginService
     {
+        private readonly IGenericDmzRepository<UserAuth> _dmzUserRepository;
+
+        public AppLoginService(IGenericDmzRepository<UserAuth> dmzUserRepository)
+        {
+            _dmzUserRepository = dmzUserRepository;
+        }
+
+
         /// <summary>
         /// Generates salt and hashes password
         /// </summary>
@@ -50,7 +56,7 @@ namespace Core.ApplicationServices
         {
             StringBuilder Sb = new StringBuilder();
 
-            using (SHA256 hash = SHA256Managed.Create())
+            using (SHA256 hash = SHA256.Create())
             {
                 Encoding enc = Encoding.UTF8;
                 Byte[] result = hash.ComputeHash(enc.GetBytes(salt + password));
@@ -64,8 +70,6 @@ namespace Core.ApplicationServices
 
         public AppLogin SyncToDmz(AppLogin appLogin)
         {
-            var _dmzAuthRepo = new GenericDmzRepository<UserAuth>(new DmzContext());
-
             var encryptedLogin = Encryptor.EncryptAppLogin(appLogin);
             var dmzLogin = new UserAuth
             {
@@ -75,19 +79,17 @@ namespace Core.ApplicationServices
                 ProfileId = encryptedLogin.PersonId,
                 Salt = encryptedLogin.Salt
             };
-            _dmzAuthRepo.Insert(dmzLogin);
-            _dmzAuthRepo.Save();
+            _dmzUserRepository.Insert(dmzLogin);
+            _dmzUserRepository.Save();
 
             return encryptedLogin;
         }
 
         public void RemoveFromDmz(int personId)
         {
-            var _dmzAuthRepo = new GenericDmzRepository<UserAuth>(new DmzContext());
-
-            var rows = _dmzAuthRepo.AsQueryable().Where(x => x.ProfileId == personId).ToList();
-            _dmzAuthRepo.DeleteRange(rows);
-            _dmzAuthRepo.Save();
+            var users = _dmzUserRepository.AsQueryable().Where(x => x.ProfileId == personId).ToList();
+            _dmzUserRepository.DeleteRange(users);
+            _dmzUserRepository.Save();
         }
     }
 }

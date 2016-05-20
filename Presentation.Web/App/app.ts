@@ -10,7 +10,9 @@
     }
 
     var momentConfig = {
-        preprocess: 'utc',
+        preprocess: (data) => {
+            return moment.unix(data);
+        },
         timezone: 'Europe/Copenhagen'
     }
 
@@ -19,7 +21,8 @@
         "ui.router",
         "ui.bootstrap",
         "ui.bootstrap.tooltip",
-        "ngResource", "angularMoment",
+        "ngResource",
+        "angularMoment",
         "cgBusy",
         "app.drive",
         "app.vacation"])

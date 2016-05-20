@@ -1,135 +1,165 @@
 ﻿module app.vacation {
     "use strict";
 
-    import VacationBalanceResource = app.vacation.resources.IVacationBalanceResource;
-    import IVacationBalance = app.vacation.resources.IVacationBalance;
+    import VacationBalanceResource = vacation.resources.IVacationBalanceResource;
+    import Balance = core.models.VacationBalance;
+    import Report = core.models.VacationReport;
+    import Employment = app.core.models.Employment;
 
     class ReportVacationController {
-        
         static $inject = [
             "$scope",
             "Person",
             "$rootScope",
             "VacationReport",
             "NotificationService",
-            "VacationBalanceResource"
+            "VacationBalanceResource",
+            "moment",
+            "$modal",
+            "$modalInstance"
         ];
 
-        VacationRemaining = 0;
-        VacationHeld = 0;
-        VacationYear = "";
-        NetVacationRemaining = 0;
-        NetVacationRemainingIfApproved = 0;
-        NetHeldAndPlannedVacation = 0;
-        VacationDaysInPeriod = 0;
-        StartDate: Date;
-        EndDate: Date;
-        StartTime: Date;
-        EndTime: Date;
-        Employments;
-        VacationType;
-        Comment;
-        Position;
-        SaveButtenDisabled = true;
+        vacationBalances: Balance[];
+        vacationBalance: Balance;
+        hasVacationBalance: Boolean;
+        vacationDaysInPeriod: number;
 
-        private _maxEndDate: Date;
-        private _currentUser;
+        vacationStartsOnFullDay = true;
+        vacationEndsOnFullDay = true;
 
-        constructor(private $scope, private Person, private $rootScope, private VacationReport, private NotificationService, private VacationBalance: VacationBalanceResource) {
+        vacationReport: Report;
 
-            this._currentUser = $scope.CurrentUser;
+        startDate: Date;
+        endDate: Date;
+        startTime: Date;
+        endTime: Date;
+        employments: Employment[];
+        vacationType;
+        comment: String;
+        position: number;
+        saveButtenDisabled = true;
 
-            VacationBalance.get().$promise.then(data => {
-                var first: IVacationBalance = data[0];
-                this.VacationRemaining = (first.FreeVacationHours + first.TransferredHours + first.VacationHours);
-                this.VacationHeld = first.TotalVacationHours - this.VacationRemaining;
-                this.VacationYear = first.Year + "/" + (first.Year + 1);
+        private maxEndDate: Date;
+        private currentUser;
 
-                this.NetVacationRemaining = this.VacationRemaining;
-                this.NetVacationRemainingIfApproved = this.VacationRemaining;
-                this.NetHeldAndPlannedVacation = this.VacationHeld;
+        constructor(private $scope, private Person, private $rootScope, private VacationReport, private NotificationService, private VacationBalanceResource: VacationBalanceResource, private moment, private $modal, private $modalInstance) {
+
+            this.currentUser = $scope.CurrentUser;
+
+            VacationBalanceResource.query().$promise.then(data => {
+                this.vacationBalances = data;
+
+                if (this.vacationBalances.length > 0) {
+                    this.positionUpdated();
+                    this.hasVacationBalance = true;
+                } else {
+                    this.hasVacationBalance = false;
+                }
 
             });
 
+            this.vacationDaysInPeriod = 0;
 
-            this.VacationDaysInPeriod = 0;
-
-
-            this.StartDate = new Date();
-            this.EndDate = new Date();
-            this._maxEndDate = new Date();
-
-            this.StartTime = new Date(2000, 0, 1, 0, 0, 0, 0);
-            this.EndTime = new Date(2000, 0, 1, 0, 0, 0, 0);
-
-
-            this.$scope.$watch(() => { return this.StartDate }, (newValue, oldValue) => {
-                if (this.StartDate > this.EndDate) {
-                    this.EndDate = this.StartDate;
+            this.$scope.$watch(() => { return this.startDate }, () => {
+                if (this.startDate > this.endDate) {
+                    this.endDate = this.startDate;
                 } else {
-                    this._calculateVacationPeriod(this.StartDate, this.EndDate);
+                    this.calculateVacationPeriod(this.startDate, this.endDate);
                 }
             });
 
-            this.$scope.$watch(() => { return this.EndDate }, (newValue, oldValue) => {
-                this._calculateVacationPeriod(this.StartDate, this.EndDate);
+            this.$scope.$watch(() => { return this.endDate }, () => {
+                this.calculateVacationPeriod(this.startDate, this.endDate);
             });
 
 
-            
+            this.employments = [];
 
-            this.Employments = [];
-
-            angular.forEach(this._currentUser.Employments, (value, key) => {
+            angular.forEach(this.currentUser.Employments, (value) => {
                 value.PresentationString = value.Position + " - " + value.OrgUnit.LongDescription + " (" + value.EmploymentId + ")";
-
-                if (value.OrgUnit.HasAccessToVacation) this.Employments.push(value);
-
+                if (value.OrgUnit.HasAccessToVacation) this.employments.push(value);
             });
+
+            this.initializeReport();
         }
 
-        private _calculateVacationPeriod(start, end) {
-            this.VacationDaysInPeriod = Math.abs(end - start) / 1000 / 60 / 60;
-
-            this.NetVacationRemainingIfApproved = this.NetVacationRemaining - this.VacationDaysInPeriod;
-
+        private calculateVacationPeriod(start, end) {
+            this.vacationDaysInPeriod = Math.abs(end - start) / 1000 / 60 / 60;
+            // this.netVacationRemainingIfApproved = this.netVacationRemaining - this.vacationDaysInPeriod;
         }
 
-        TimePickerOptions = {
-            
+        private initializeReport() {
+            this.startDate = new Date();
+            this.endDate = new Date();
+            this.maxEndDate = new Date();
+            this.comment = undefined;
+            this.vacationStartsOnFullDay = true;
+            this.vacationEndsOnFullDay = true;
+            this.startTime = new Date(2000, 0, 1, 0, 0, 0, 0); // Only time is relevant, date is ignored by kendo
+            this.endTime = new Date(2000, 0, 1, 0, 0, 0, 0);
+            this.vacationType = undefined;
+        }
+
+        timePickerOptions: kendo.ui.TimePickerOptions = {
             interval: 15,
             value: new Date(2000, 0, 1, 0, 0, 0, 0)
-            
         }
 
-        SaveReport() {
+        positionUpdated() {
+            const selectedPostion = this.position;
+            const vacationBalances = this.vacationBalances;
+            for (let v in vacationBalances) {
+                if (vacationBalances.hasOwnProperty(v)) {
+                    const vb = vacationBalances[v];
+
+                    if (vb.EmploymentId == selectedPostion) {
+                        this.vacationBalance = vb;
+                    }
+                }
+            }
+        }
+
+        saveReport() {
             var report = new this.VacationReport();
 
-            report.StartTimestamp = Math.floor(this.StartDate.getTime() / 1000);
-            report.EndTimestamp = Math.floor(this.EndDate.getTime() / 1000);
-            report.EmploymentId = this.Position;
-            report.Comment = this.Comment;
 
-            report.PersonId = this._currentUser.Id;
+            report.StartTimestamp = Math.floor((new Date(this.startDate.getFullYear(), this.startDate.getMonth(), this.startDate.getDate()).getTime()) / 1000);
+            report.EndTimestamp = Math.floor((new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate()).getTime()) / 1000);
+            report.EmploymentId = this.position;
+            report.Comment = this.comment;
+
+            report.PersonId = this.currentUser.Id;
             report.Status = "Pending";
             report.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
-            report.VacationType = this.VacationType;
+            report.VacationType = this.vacationType;
+
+            if (!this.vacationStartsOnFullDay) {
+                report.StartTime = `P0DT${this.startTime.getHours()}H${this.startTime.getMinutes()}M0S`;
+            }
+
+            if (!this.vacationEndsOnFullDay) {
+                report.EndTime = `P0DT${this.endTime.getHours()}H${this.endTime.getMinutes()}M0S`;
+            }
 
             report.$save(res => {
                 this.$scope.latestDriveReport = res;
 
                 this.NotificationService.AutoFadeNotification("success", "", "Din indberetning er sendt til godkendelse.");
 
-                this.ClearReport();
-                this.SaveButtenDisabled = false;
+                this.clearReport();
+                this.saveButtenDisabled = false;
             }, () => {
-                this.SaveButtenDisabled = false;
+                this.saveButtenDisabled = false;
                 this.NotificationService.AutoFadeNotification("danger", "", "Der opstod en fejl under oprettelsen af din ferieindberetning.");
-            });;
+            });
         }
 
-        ClearReport() {
-            
+        clearReport() {
+            this.initializeReport();
+        }
+
+        closeModalWindow() {
+            this.$modalInstance.dismiss();
         }
 
     }

@@ -89,24 +89,24 @@ namespace DBUpdater
                 {
                     var currentRow = new VacationBalance
                     {
-                        KommuneInfo = SafeGetString(reader, 0),
-                        CPR = SafeGetString(reader, 1),
-                        ANS_FORHOLD_NR = SafeGetString(reader, 2),
-                        Afloenningsform = SafeGetString(reader, 3),
-                        Ferieoptjeningsaar = SafeGetString(reader, 4),
-                        DatoForSaldo = SafeGetString(reader, 5),
-                        FerieTimer_MLoen = SafeGetInt32(reader, 6),
-                        EVTFerieDage_MLoen = SafeGetInt32(reader, 7),
-                        FerieTimer_ULoen = SafeGetInt32(reader, 8),
-                        EVTFerieDage_ULoen = SafeGetInt32(reader, 9),
-                        Overfoertetimer = SafeGetInt32(reader, 10),
-                        EvtOverfoertedage = SafeGetInt32(reader, 11),
-                        FERIEFRIDAGSTIMER_SUM = SafeGetInt32(reader, 12),
-                        FerieTimer_MLoenDec = SafeGetDouble(reader, 13),
-                        FerieTimer_ULoenDec = SafeGetDouble(reader,14),
-                        OverfoertetimerDec = SafeGetDouble(reader,15),
-                        FERIEFRIDAGSTIMER_SUMDec = SafeGetDouble(reader, 16),
-                        Opdateringsdato = SafeGetDate(reader, 17)
+                        MunicipalityInfo = SafeGetString(reader, 0),
+                        SocialSecurityNumber = SafeGetString(reader, 1),
+                        EmploymentRelationshipNumber = SafeGetString(reader, 2),
+                        SalaryKind = SafeGetString(reader, 3),
+                        VacationEarnedYear = SafeGetString(reader, 4),
+                        BalanceDate = SafeGetString(reader, 5),
+                        VacationHoursWithPay = SafeGetInt32(reader, 6),
+                        PossibleVacationDaysWithPay = SafeGetInt32(reader, 7),
+                        VacationHoursWithoutPay = SafeGetInt32(reader, 8),
+                        PossibleVacationDaysWithoutPay = SafeGetInt32(reader, 9),
+                        TransferredVacationHours = SafeGetInt32(reader, 10),
+                        PossibleTransferredVacationDays = SafeGetInt32(reader, 11),
+                        FreeVacationHoursTotal = SafeGetInt32(reader, 12),
+                        VacationHoursWithPayDec = SafeGetDouble(reader, 13),
+                        VacationHoursWithoutPayDec = SafeGetDouble(reader,14),
+                        TransferredVacationHoursDec = SafeGetDouble(reader,15),
+                        FreeVacationHoursTotalDec = SafeGetDouble(reader, 16),
+                        UpdateDate = SafeGetDate(reader, 17)
                     };
                     result.Add(currentRow);
                 }

@@ -6,8 +6,8 @@ using Core.DmzModel;
 using Core.DomainModel;
 using Core.DomainServices;
 using Core.DomainServices.Encryption;
-using Infrastructure.DmzSync.Services.Impl;
-using Infrastructure.DmzSync.Services.Interface;
+using DmzSync.Services.Impl;
+using DmzSync.Services.Interface;
 using NSubstitute;
 using NUnit.Framework;
 using Employment = Core.DomainModel.Employment;
@@ -20,7 +20,7 @@ namespace DmzSync.Test
 
         private ISyncService _uut;
         private IGenericRepository<Person> _masterRepoMock;
-        private IGenericRepository<Profile> _dmzRepoMock;
+        private IGenericDmzRepository<Profile> _dmzRepoMock;
         private List<Profile> _dmzProfileList = new List<Profile>();
         private List<Person> _masterPersonList = new List<Person>();
         private IPersonService _personServiceMock;
@@ -28,7 +28,7 @@ namespace DmzSync.Test
         [SetUp]
         public void SetUp()
         {
-            _dmzRepoMock = NSubstitute.Substitute.For<IGenericRepository<Profile>>();
+            _dmzRepoMock = NSubstitute.Substitute.For<IGenericDmzRepository<Profile>>();
             _masterRepoMock = NSubstitute.Substitute.For<IGenericRepository<Person>>();
             _personServiceMock = NSubstitute.Substitute.For<IPersonService>();
 
