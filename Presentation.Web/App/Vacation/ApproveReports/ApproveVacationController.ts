@@ -9,12 +9,11 @@
             "VacationReport",
             "NotificationService",
             "$http",
-            "$modal",
             "moment",
             "$state"
         ];
 
-        constructor(private $scope, private $rootScope, private VacationReport, private NotificationService, private $http: ng.IHttpService, private $modal, private moment: moment.MomentStatic, private $state: ng.ui.IStateService) {
+        constructor(private $scope, private $rootScope, private VacationReport, private NotificationService, private $http: ng.IHttpService, private moment: moment.MomentStatic, private $state: ng.ui.IStateService) {
             this.readPendingVacations();
             var self = this;
 
