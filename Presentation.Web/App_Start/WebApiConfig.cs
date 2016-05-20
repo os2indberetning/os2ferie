@@ -82,8 +82,14 @@ namespace OS2Indberetning
             builder.EntitySet<VacationReport>("VacationReports");
 
             builder.EntityType<VacationReport>().Collection
-            .Function("GetLatestReportForUser")
-            .ReturnsFromEntitySet<VacationReport>("VacationReports");
+                .Function("ApproveReport")
+                .ReturnsFromEntitySet<VacationReport>("VacationReports")
+                .Parameter<int>("Key");
+
+            builder.EntityType<VacationReport>().Collection
+                .Function("RejectReport")
+                .ReturnsFromEntitySet<VacationReport>("VacationReports")
+                .Parameter<int>("Key");
 
             builder.EntitySet<VacationBalance>("VacationBalance");
 

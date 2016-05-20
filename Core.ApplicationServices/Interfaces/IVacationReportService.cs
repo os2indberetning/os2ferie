@@ -6,5 +6,6 @@ namespace Core.ApplicationServices.Interfaces
     {
         void PrepareReport(VacationReport report);
         void ApproveReport(VacationReport report, Person approver, string emailText);
+        void RejectReport(VacationReport report, Person approver, string emailText);
     }
 }

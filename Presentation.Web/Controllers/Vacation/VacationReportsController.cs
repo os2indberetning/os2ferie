@@ -250,7 +250,9 @@ namespace OS2Indberetning.Controllers.Vacation
             return report.PersonId.Equals(CurrentUser.Id) ? base.Delete(key) : Unauthorized();
         }
 
-        public IHttpActionResult ApproveReport([FromODataUri] int key, Delta<VacationReport> delta, string emailText)
+        [EnableQuery]
+        [HttpGet]
+        public IHttpActionResult ApproveReport(int key = 0)
         {
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
 
@@ -258,19 +260,28 @@ namespace OS2Indberetning.Controllers.Vacation
             if(HasReportAccess(report, CurrentUser)) StatusCode(HttpStatusCode.Forbidden);
 
             // All good, user has rights to approve the report.
-            _reportService.ApproveReport(report, CurrentUser, emailText);
+            _reportService.ApproveReport(report, CurrentUser, "");
 
             return Ok(report);
         }
 
-        public IQueryable<VacationReport> EditApprovdReport([FromODataUri] int key, Delta<VacationReport> delta, string emailText)
+        public IHttpActionResult EditApprovdReport([FromODataUri] int key, Delta<VacationReport> delta, string emailText)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<VacationReport> RejectReport([FromODataUri] int key, Delta<VacationReport> delta, string emailText)
+        [EnableQuery]
+        [HttpGet]
+        public IHttpActionResult RejectReport(int key = 0)
         {
-            throw new NotImplementedException();
+            var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
+
+            if (report == null) return NotFound();
+            if (HasReportAccess(report, CurrentUser)) StatusCode(HttpStatusCode.Forbidden);
+
+            _reportService.RejectReport(report, CurrentUser, "");
+
+            return Ok(report);
         }
 
         private bool HasReportAccess(VacationReport report, Person person)

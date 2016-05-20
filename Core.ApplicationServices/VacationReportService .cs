@@ -106,7 +106,27 @@ namespace Core.ApplicationServices
 
             var absenceReport = _absenceBuilder.Create(report);
 
+#if !DEBUG
             _absenceService.ReportAbsence(absenceReport);
+#endif
+            report.ProcessedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            _reportRepo.Save();
+        }
+
+        public void RejectReport(VacationReport report, Person approver, string emailText)
+        {
+            report.Status = ReportStatus.Rejected;
+            report.Comment = emailText;
+            report.ClosedDateTimestamp = (DateTime.UtcNow.ToTimestamp());
+            report.ApprovedById = approver.Id;
+
+            _reportRepo.Save();
+
+            var absenceReport = _absenceBuilder.Create(report);
+
+#if !DEBUG
+            _absenceService.ReportAbsence(absenceReport);
+#endif
             report.ProcessedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             _reportRepo.Save();
         }

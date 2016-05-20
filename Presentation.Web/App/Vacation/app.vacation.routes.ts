@@ -33,8 +33,8 @@
                 {
                     url: "/approve-reports",
                     templateUrl: "/App/Vacation/ApproveReports/ApproveReportsView.html",
-                    controller: "ApproveReportsController",
-                    controllerAs: "arc",
+                    controller: "Vacation.ApproveVacationController",
+                    controllerAs: "avc",
                     resolve: {
                         CurrentUser: [
                             "$rootScope", "Person", ($rootScope, Person) => {
