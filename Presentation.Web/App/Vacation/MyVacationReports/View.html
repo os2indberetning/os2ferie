@@ -1,0 +1,15 @@
+﻿<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-4 col-xs-4 col-lg-3 margin-right-5">
+            <label>Ferieår:</label>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-4 col-lg-3 to-front">
+            <input kendo-datepicker culture="'da-DK'" k-options="mvrCtrl.dateOptions" ng-model="mvrCtrol.vacationYearString" k-ng-model="mvrCtrl.vacationYear" k-on-change="mvrCtrl.refreshGrid()" />
+        </div>
+    </div>
+    <div kendo-grid="mvrCtrl.vacationReportsGrid" class="margin-top-10 scrollable" options="mvrCtrl.vacationReportsOptions"></div>
+</div>

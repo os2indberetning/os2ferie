@@ -29,7 +29,9 @@ namespace OS2Indberetning
                 .Include("~/Scripts/loading-bar.min.js")
                 .Include("~/Scripts/pnotify.custom.min.js")
                 .Include("~/Scripts/linq.min.js")
-                .Include("~/Scripts/angular-busy.min.js"));
+                .Include("~/Scripts/angular-busy.min.js")
+                .Include("~/Scripts/angular-ui-router-tabs.js")
+                .Include("~/Scripts/angular-sanitize.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/loading-bar.min.css",

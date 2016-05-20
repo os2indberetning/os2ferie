@@ -93,7 +93,7 @@ namespace OS2Indberetning.Controllers.Vacation
         /// <param name="key"></param>
         /// <param name="queryOptions"></param>
         /// <returns>A single DriveReport</returns>
-        public IHttpActionResult GetDriveReport([FromODataUri] int key, ODataQueryOptions<VacationReport> queryOptions)
+        public IHttpActionResult GetVacationReport([FromODataUri] int key, ODataQueryOptions<VacationReport> queryOptions)
         {
             return Ok(GetQueryable(key, queryOptions));
         }
@@ -107,7 +107,26 @@ namespace OS2Indberetning.Controllers.Vacation
         /// <returns></returns>
         public new IHttpActionResult Put([FromODataUri] int key, Delta<VacationReport> delta)
         {
-            return base.Put(key, delta);
+            var report = Repo.AsQueryable().FirstOrDefault(x => x.Id == key);
+
+            if (report == null) return StatusCode(HttpStatusCode.NotFound);
+            if (CurrentUser.Id != report.PersonId) return StatusCode(HttpStatusCode.Forbidden);
+
+            var newReport = delta.GetEntity();
+
+            _reportService.PrepareReport(newReport);
+
+            try
+            {
+                delta.Patch(report);
+                Repo.Save();
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+
+            return Updated(report);
         }
 
         // POST: odata/VacationReports
@@ -140,10 +159,9 @@ namespace OS2Indberetning.Controllers.Vacation
             return Ok(result);
         }
 
-        // PATCH: odata/DriveReports(5)
+        // PATCH: odata/VacationReports(5)
         /// <summary>
-        /// PATCH API endpoint for drivereports.
-        /// Returns forbidden if a user is trying to patch his/her own report or if the user is not the responsible leader for the report.
+        /// PATCH API endpoint for vacationreports.
         /// Also returns forbidden if the report to be patched has a status other than pending.
         /// </summary>
         /// <param name="key"></param>
@@ -152,7 +170,7 @@ namespace OS2Indberetning.Controllers.Vacation
         /// <returns></returns>
         [EnableQuery]
         [AcceptVerbs("PATCH", "MERGE")]
-        public new IHttpActionResult Patch([FromODataUri] int key, Delta<VacationReport> delta, string emailText)
+        public IHttpActionResult Patch([FromODataUri] int key, Delta<VacationReport> delta, string emailText)
         {
 
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
