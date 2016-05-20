@@ -1,26 +1,26 @@
 ﻿<div class="container-fluid">
     <div class="row">
-        <div class="col-xs-6 col-lg-6 top-of-all">
+        <div class="col-xs-6 col-lg-6 to-front">
             <label>Kørselsdato fra</label>
             <div class="fill-width">
                 <input kendo-datepicker class="fill-width" culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.fromDateString" k-ng-model="dateContainer.fromDate" />
             </div>
         </div>
-        <div class="col-xs-6 col-lg-6 top-of-all">
+        <div class="col-xs-6 col-lg-6 to-front">
             <label>Medarbejder</label>
             <input ng-enter="" type="text" kendo-auto-complete="gridContainer.peopleAutoComplete" k-options="personAutoCompleteOptions" ng-model="person.chosenPerson" k-placeholder="'Indtast medarbejder'" k-data-source="people" k-data-value-field="'FullName'" k-data-text-field="'FullName'" class="form-control fill-width margin-bottom-10" />
         </div>
-        <div class="col-xs-6 col-lg-6 top-of-all">
+        <div class="col-xs-6 col-lg-6 to-front">
             <label>Kørselsdato til</label>
             <div class="fill-width">
                 <input kendo-datepicker class="fill-width" culture="'da-DK'" k-options="dateOptions" ng-model="dateContainer.toDateString" k-ng-model="dateContainer.toDate" />
             </div>
         </div>
-        <div class="col-xs-6 col-lg-6 top-of-all">
+        <div class="col-xs-6 col-lg-6 to-front">
             <label>Organisation</label>
             <input ng-enter="" type="text" kendo-auto-complete="gridContainer.orgAutoComplete" k-options="orgUnitAutoCompleteOptions" ng-model="orgUnit.chosenUnit" k-placeholder="'Indtast beskrivelse'" k-data-source="orgUnits" k-data-value-field="'LongDescription'" k-data-text-field="'LongDescription'" class="form-control fill-width margin-bottom-10" />
         </div>
-        <div class="col-lg-6 pull-right top-of-all">
+        <div class="col-lg-6 pull-right to-front">
 
             <div class="col-lg-3 pull-right">
                 <button class="btn btn-danger pull-right" ng-click="clearClicked()">Nulstil søgning</button>
@@ -39,6 +39,6 @@
             <input id="showSubsCheckBox" ng-change="showSubsChanged()" type="checkbox" ng-model="checkboxes.showSubbed" />
         </div>
     </div>
-    
+
     <div kendo-grid="gridContainer.grid" class="margin-top-10 scrollable" options="reports"></div>
 </div>

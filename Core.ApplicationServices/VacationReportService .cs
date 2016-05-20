@@ -21,17 +21,30 @@ namespace Core.ApplicationServices
             _absenceBuilder = absenceBuilder;
         }
 
-        public override VacationReport Create(VacationReport report)
+        public void PrepareReport(VacationReport report)
         {
             if (!Validate(report)) throw new Exception("Vacation report has invalid parameters");
 
             report.ResponsibleLeaderId = GetResponsibleLeaderForReport(report).Id;
             report.ActualLeaderId = GetActualLeaderForReport(report).Id;
 
+            var startDateTime = report.StartTimestamp.ToDateTime();
+
+            report.VacationYear = startDateTime.Year;
+
+            if (startDateTime.Date < new DateTime(report.VacationYear, 5, 1))
+            {
+                report.VacationYear--;
+            }
+
             if (report.Comment == null) report.Comment = "";
+        }
+
+        public override VacationReport Create(VacationReport report)
+        {
+            PrepareReport(report);
 
             _reportRepo.Insert(report);
-
             _reportRepo.Save();
 
             return report;
@@ -43,7 +56,7 @@ namespace Core.ApplicationServices
             if (report.EndTimestamp < report.StartTimestamp) return false;
             if (report.StartTime > report.EndTime &&
                 report.StartTimestamp.ToDateTime().Date == report.EndTimestamp.ToDateTime().Date) return false;
-            //if (!report.Employment.OrgUnit.HasAccessToVacation) return false;
+            //if (!report.Employment.OrgUnit.HasAccessToVacation) return false; // TODO Fetch employment and check rights
 
             return true;
         }

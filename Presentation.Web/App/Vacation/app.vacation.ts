@@ -1,7 +1,8 @@
 ﻿module app.vacation {
     "use strict";
 
-    angular.module('app.vacation', [
+    angular.module('app.vacation',
+    [
         "app.core",
         "kendo.directives",
         "ui.router",
@@ -16,6 +17,7 @@
         "angularMoment",
         "template/popover/popover.html",
         "kendo-ie-fix",
-        "angular-loading-bar"]);
-
+        "angular-loading-bar",
+        "ui.router.tabs"
+    ]);
 }
