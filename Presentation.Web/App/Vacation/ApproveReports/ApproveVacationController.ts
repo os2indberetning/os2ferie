@@ -46,13 +46,11 @@
                     var report = new this.VacationReport();
 
                     if (e.event.status == "Accepted") {
-                        console.log("[save] Accepted");
                         report.$approve({ id: e.event.id }, () => {
                             location.reload();
                         });
                     }
                     else if (e.event.status == "Rejected") {
-                        console.log("[save] Rejected");
                         report.$reject({ id: e.event.id }, () => {
                             location.reload();
                         });
