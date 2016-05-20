@@ -28,27 +28,23 @@
                 });
 
             if (isDriveEnabled) {
-                $stateProvider.state('drive', {
-                    url: '/drive',
-                    templateUrl: '/App/Drive/app.drive.html',
-                    controller: [
-                        '$scope', '$state', ($scope, $state) => {
-                            $state.go('drive.driving');
-                        }
-                    ]
-                });
+                $stateProvider.state("drive", {
+                    url: "/drive",
+                    templateUrl: "/App/Drive/app.drive.html",
+                    abstract: true
+                } as ng.ui.IState);
+
+                $urlRouterProvider.when("/drive", "/drive/driving");
             }
 
             if (isVacationEnabled) {
-                $stateProvider.state('vacation', {
-                    url: '/vacation',
-                    templateUrl: '/App/Vacation/app.vacation.html',
-                    controller: [
-                        '$scope', '$state', ($scope, $state) => {
-                            $state.go('vacation.report');
-                        }
-                    ]
-                });
+                $stateProvider.state("vacation", {
+                    url: "/vacation",
+                    templateUrl: "/App/Vacation/app.vacation.html",
+                    abstract: true
+                } as ng.ui.IState);
+
+                $urlRouterProvider.when("/vacation", "/vacation/report");
             }
 
             $urlRouterProvider.otherwise("/");
@@ -64,8 +60,6 @@
                 }
                 return path;
             });
-
-
         }
     }
 

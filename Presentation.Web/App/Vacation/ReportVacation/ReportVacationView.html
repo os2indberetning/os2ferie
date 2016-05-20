@@ -7,54 +7,57 @@
 </div>
 
 <div class="row margin-bottom-20">
-    <div class="col-md-6">
+    <div class="col-md-12 col-lg-6 col-sm-12">
         <div class="row">
-            <div class="col-md-12">
-                <h4>Vælg start dato: <span ng-show="rvc.startDate">{{rvc.startDate | date:"MMM d, yyyy"}}</span></h4>
-                <kendo-calendar culture="'da-DK'" ng-model="rvc.startDate" k-rebind="endDate"></kendo-calendar>
+            <div class="col-md-6 col-sm-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Vælg start dato: <span ng-show="rvc.startDate">{{rvc.startDate | date:"MMM d, yyyy"}}</span></h4>
+                        <kendo-calendar culture="'da-DK'" ng-model="rvc.startDate" k-rebind="endDate" min="rvc.mimimumVacationStartDate"></kendo-calendar>
+                    </div>
+                </div>
+                <div class="row margin-top-15">
+                    <div class="col-md-12">
+                        <label class="">
+                            <input type="checkbox" ng-model="rvc.vacationStartsOnFullDay" ng-true-value="false" ng-false-value="true" />
+                            Ferien starter starter midt på dagen:
+                        </label>
+                    </div>
+                </div>
+                <div class="row" ng-hide="rvc.vacationStartsOnFullDay">
+                    <div class="col-md-12">
+                        <h4>Tidspunkt for feriestart</h4>
+                        <p>Udfyldes kun hvis første feriedag ikke er hele dagen</p>
+                        <kendo-time-picker culture="'da-DK'" k-format="'HH:mm'" k-options="rvc.timePickerOptions"
+                                           k-ng-model="rvc.startTime"
+                                           style="width: 238px;"></kendo-time-picker>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row margin-top-15">
-            <div class="col-md-12">
-                <label class="">
-                    <input type="checkbox" ng-model="rvc.vacationStartsOnFullDay" ng-true-value="false" ng-false-value="true"/>
-                    Ferien starter ikke med en hel dag
-                </label>
-            </div>
-        </div>
-        <div class="row" ng-hide="rvc.vacationStartsOnFullDay">
-            <div class="col-md-12">
-                <h4>Tidspunkt for feriestart</h4>
-                <p>Udfyldes kun hvis første feriedag ikke er hele dagen</p>
-                <kendo-time-picker culture="'da-DK'" k-format="'HH:mm'" k-options="rvc.timePickerOptions"
-                                   k-ng-model="rvc.startTime"
-                                   style="width: 238px;"></kendo-time-picker>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <div class="row">
-            <div class="col-md-12">
-                <h4>Vælg slut dato: <span ng-show="rvc.endDate">{{rvc.endDate | date:"MMM d, yyyy"}}</span></h4>
-                <kendo-calendar culture="'da-DK'" ng-model="rvc.endDate" k-rebind="rvc.startDate" min="rvc.startDate"></kendo-calendar>
-            </div>
-        </div>
-        <div class="row margin-top-15">
-            <div class="col-md-12">
-                <label class="">
-                    <input type="checkbox" ng-model="rvc.vacationEndsOnFullDay" ng-true-value="false" ng-false-value="true" />
-                    Ferien starter ikke med en hel dag
-                </label>
-            </div>
-        </div>
-        <div class="row" ng-hide="rvc.vacationEndsOnFullDay">
-            <div class="col-md-12">
-                <h4>Tidspunkt for feriens afslutning</h4>
-                <p>Udfyldes kun hvis sidste feriedag ikke er hele dagen</p>
-                <kendo-time-picker culture="'da-DK'" k-format="'HH:mm'" k-options="rvc.timePickerOptions"
-                                   k-ng-model="rvc.endTime"
-                                   style="width: 238px;"></kendo-time-picker>
+            <div class="col-md-6 col-sm-6 pull-right">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Vælg slut dato: <span ng-show="rvc.endDate">{{rvc.endDate | date:"MMM d, yyyy"}}</span></h4>
+                        <kendo-calendar culture="'da-DK'" ng-model="rvc.endDate" k-rebind="rvc.startDate" min="rvc.startDate"></kendo-calendar>
+                    </div>
+                </div>
+                <div class="row margin-top-15">
+                    <div class="col-md-12">
+                        <label class="">
+                            <input type="checkbox" ng-model="rvc.vacationEndsOnFullDay" ng-true-value="false" ng-false-value="true" />
+                            Ferien slutter midt på dagen
+                        </label>
+                    </div>
+                </div>
+                <div class="row" ng-hide="rvc.vacationEndsOnFullDay">
+                    <div class="col-md-12">
+                        <h4>Tidspunkt for feriens afslutning</h4>
+                        <p>Udfyldes kun hvis sidste feriedag ikke er hele dagen</p>
+                        <kendo-time-picker culture="'da-DK'" k-format="'HH:mm'" k-options="rvc.timePickerOptions"
+                                            k-ng-model="rvc.endTime"
+                                            style="width: 238px;"></kendo-time-picker>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

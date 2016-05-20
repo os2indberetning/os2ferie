@@ -1,7 +1,9 @@
 ﻿module app.vacation {
     "use strict";
 
-    class MyRejectedVacationReportsController extends BaseMyVacationReportsController {
+    import Person = core.models.Person;
+
+    class MyApprovedVacationReportsController extends BaseMyVacationReportsController {
 
         static $inject: string[] = [
             "$scope",
@@ -10,19 +12,21 @@
             "VacationReport",
             "$timeout",
             "Person",
-            "moment"
+            "moment",
+            "$state"
         ];
 
         constructor(
             protected $scope,
-            protected $modal,
+            protected $modal: angular.ui.bootstrap.IModalService,
             protected $rootScope,
             protected VacationReport,
-            protected $timeout,
-            protected Person,
-            protected moment) {
+            protected $timeout: ng.ITimeoutService,
+            protected Person: Person,
+            protected moment: moment.MomentStatic,
+            protected $state: ng.ui.IStateService) {
 
-            super($modal, $rootScope, VacationReport, $timeout, Person, moment, "Rejected");
+            super($scope, $modal, $rootScope, VacationReport, $timeout, Person, moment, $state);
 
             this.vacationReportsOptions = {
                 autoBind: false,
@@ -30,9 +34,6 @@
                     type: "odata-v4",
                     transport: {
                         read: {
-                            beforeSend(req) {
-                                req.setRequestHeader("Accept", "application/json;odata=fullmetadata");
-                            },
                             url: this.getVacationReportsUrl(),
                             dataType: "json",
                             cache: false
@@ -69,32 +70,23 @@
                         title: "Feriestart",
                         template: data => {
                             const m = this.moment.utc(data.StartTimestamp, 'X');
-                            return m._d.getDate() +
-                                "/" +
-                                (m._d.getMonth() + 1) +
-                                "/" + // +1 because getMonth is zero indexed.
-                                m._d.getFullYear();
+                            return m.format("L");
                         }
                     },
                     {
                         title: "Ferieafslutning",
                         template: data => {
                             const m = this.moment.utc(data.EndTimestamp, 'X');
-                            return m._d.getDate() +
-                                "/" +
-                                (m._d.getMonth() + 1) +
-                                "/" + // +1 because getMonth is zero indexed.
-                                m._d.getFullYear();
+                            return m.format("L");
                         }
                     },
                     {
                         template: data => {
                             if (data.Comment != "") {
-                                return `<button kendo-tooltip k-position="'right'" k-content="'${data.Comment
-                                    }'" class="transparent-background pull-right no-border"><i class="fa fa-comment-o"></i></button>`;
+                                return `<button kendo-tooltip k-position="'right'" k-content="'${data.Comment}'" class="transparent-background pull-right no-border">
+                                        <i class="fa fa-comment-o"></i></button>`;
                             }
                             return "<i>Ingen kommantar angivet</i>";
-
                         },
                         title: "Kommentar"
                     },
@@ -109,30 +101,32 @@
                         field: "CreatedDateTimestamp",
                         template: data => {
                             var m = this.moment.utc(data.CreatedDateTimestamp, 'X');
-                            return m._d.getDate() +
-                                "/" +
-                                (m._d.getMonth() + 1) +
-                                "/" + // +1 because getMonth is zero indexed.
-                                m._d.getFullYear();
+                            return m.format("L");
                         },
                         title: "Indberettet"
                     },
                     {
                         field: "ClosedDateTimestamp",
-                        title: "Afvist dato",
+                        title: "Godkendelsesdato",
                         template: data => {
-                            var m = moment.utc(data.ClosedDateTimestamp, 'X');
-                            var date = m._d.getDate() + "/" +
-                                (m._d.getMonth() + 1) + "/" + // +1 because getMonth is zero indexed.
-                                m._d.getFullYear();
-                            return date;
-
-                        },
+                            var m = this.moment.utc(data.ClosedDateTimestamp, 'X');
+                            return m.format("L");
+                        }
+                    },
+                    {
+                        field: "ProcessedDateTimestamp",
+                        title: "Afsendt til løn",
+                        template: data => {
+                            if (data.ProcessedDateTimestamp != 0 && data.ProcessedDateTimestamp != null && data.ProcessedDateTimestamp != undefined) {
+                                const m = this.moment.utc(data.ProcessedDateTimestamp, 'X');
+                                return m.format("L");
+                            }
+                            return "";
+                        }
                     },
                     {
                         field: "ApprovedBy.FullName",
-                        title: "Afvist af",
-                        template: data => (data.ApprovedBy.FullName)
+                        title: "Godkendt af"
                     }
                 ],
                 scrollable: false
@@ -140,10 +134,9 @@
         }
 
         getVacationReportsUrl() {
-            return `/odata/VacationReports?status=${this
-                .ReportStatus}&$expand=ApprovedBy($select=FullName) &$filter=PersonId eq ${this.personId}`;
+            return `/odata/VacationReports?status=Accepted&$expand=ResponsibleLeader,ApprovedBy &$filter=PersonId eq ${this.personId}`;
         }
     }
 
-    angular.module("app.vacation").controller("Vacation.MyRejectedVacationReportsController", MyRejectedVacationReportsController);
+    angular.module("app.vacation").controller("MyApprovedVacationReportsController", MyApprovedVacationReportsController);
 }

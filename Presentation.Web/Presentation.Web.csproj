@@ -85,8 +85,9 @@
     <Reference Include="Microsoft.OData.Core">
       <HintPath>..\packages\Microsoft.OData.Core.6.5.0\lib\portable-net40+sl5+wp8+win8+wpa\Microsoft.OData.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.OData.Edm">
-      <HintPath>..\packages\Microsoft.OData.Edm.6.5.0\lib\portable-net40+sl5+wp8+win8+wpa\Microsoft.OData.Edm.dll</HintPath>
+    <Reference Include="Microsoft.OData.Edm, Version=6.15.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OData.Edm.6.15.0\lib\portable-net45+win+wpa81\Microsoft.OData.Edm.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -411,6 +412,8 @@
     <Content Include="App\Drive\ApproveReports\Modals\ConfirmApproveWithAccountTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <TypeScriptCompile Include="App\Core\Interfaces\KendoGrid.d.ts" />
+    <TypeScriptCompile Include="App\Core\Interfaces\NotificationService.d.ts" />
     <TypeScriptCompile Include="App\Drive\ApproveReports\ApproveReportsSettingsController.ts" />
     <Content Include="App\Core\Views\Modals\NewApproverModal.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -477,8 +480,9 @@
     <TypeScriptCompile Include="App\app.routes.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\BaseMyVacationReportsController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\ConfirmDeleteVacationReportController.ts" />
-    <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyRejectedVacationReportsController.ts" />
-    <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyApprovedVacationReportsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyVacationReportsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyRejectedVacationReports\MyRejectedVacationReportsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyApprovedVacationReports\MyApprovedVacationReportsController.ts" />
     <TypeScriptCompile Include="App\Vacation\Services\VacationBalanceResource.ts" />
     <TypeScriptCompile Include="App\Vacation\app.vacation.ts" />
     <Content Include="App\Vacation\Filters\MinIntFilter.js" />
@@ -486,7 +490,10 @@
     <Content Include="App\Vacation\ApproveReports\ApproveReportsView.html" />
     <Content Include="App\Vacation\MyVacationReports\ConfirmDeleteVacationReportTemplate.html" />
     <Content Include="App\Vacation\MyVacationReports\EditVacationReportTemplate.html" />
-    <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyPendingVacationReportsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyPendingVacationReports\MyPendingVacationReportsController.ts" />
+    <Content Include="App\Vacation\MyVacationReports\MyApprovedVacationReports\MyApprovedVacationReportsView.html" />
+    <Content Include="App\Vacation\MyVacationReports\MyPendingVacationReports\MyPendingVacationReportsView.html" />
+    <Content Include="App\Vacation\MyVacationReports\MyRejectedVacationReports\MyRejectedVacationReportsView.html" />
     <Content Include="App\Vacation\MyVacationReports\MyVacationReportsView.html" />
     <Content Include="App\Vacation\MyVacationReports\View.html" />
     <Content Include="App\Vacation\ReportVacation\ReportVacationView.html" />
@@ -806,6 +813,7 @@
     </Content>
     <Content Include="logo.png" />
     <Content Include="Scripts\angular-busy.min.js" />
+    <Content Include="Scripts\angular-ui-router-tabs.js" />
     <Content Include="Scripts\kendo-ie-fix.js" />
     <Content Include="Scripts\kendo\angular.min.js" />
     <Content Include="Scripts\kendo\cultures\kendo.culture.af-ZA.min.js" />
@@ -2435,6 +2443,7 @@
   <ItemGroup>
     <Content Include="App\Drive\ApproveReports\ApproveReportsController.js" />
     <Content Include="App\Core\Services\PersonResource.js" />
+    <TypeScriptCompile Include="Scripts\typings\angular-ui\angular-ui-bootstrap.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angular-ui\angular-ui-router.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-cookies.d.ts" />

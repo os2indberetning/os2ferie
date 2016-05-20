@@ -5,6 +5,8 @@
     import Balance = core.models.VacationBalance;
     import Report = core.models.VacationReport;
     import Employment = core.models.Employment;
+    import Person = core.models.Person;
+    import NotificationService = core.interfaces.NotificationService;
 
     class ReportVacationController {
         static $inject = [
@@ -24,14 +26,11 @@
         vacationBalance: Balance;
         hasVacationBalance: Boolean;
         vacationDaysInPeriod: number;
-
         vacationStartsOnFullDay = true;
         vacationEndsOnFullDay = true;
-
         vacationReport: Report;
-
         isEditingReport: boolean;
-
+        mimimumVacationStartDate = new Date(2016, 4, 1); // Can't report vacation before the system was launched. Might be changed later.
         startDate: Date;
         endDate: Date;
         startTime: Date;
@@ -43,9 +42,19 @@
         saveButtenDisabled = true;
 
         private maxEndDate: Date;
-        private currentUser;
+        private currentUser: Person;
 
-        constructor(private $scope, private Person, private $rootScope, private VacationReport, private NotificationService, private VacationBalanceResource: VacationBalanceResource, private moment, private $modal, private $modalInstance, private vacationReportId) {
+        constructor(
+            private $scope,
+            private Person: Person,
+            private $rootScope,
+            private VacationReport, // TODO Make $resource class
+            private NotificationService: NotificationService,
+            private VacationBalanceResource: VacationBalanceResource,
+            private moment: moment.MomentStatic,
+            private $modal: angular.ui.bootstrap.IModalService,
+            private $modalInstance: angular.ui.bootstrap.IModalServiceInstance,
+            private vacationReportId: number) {
 
             this.currentUser = $scope.CurrentUser;
 
@@ -69,14 +78,9 @@
                 this.updateCalendarRange();
             });
 
-            this.$scope.$watch(() => { return this.endDate }, () => {
-                this.calculateVacationPeriod(this.startDate, this.endDate);
-            });
-
-
             this.employments = [];
 
-            angular.forEach(this.currentUser.Employments, (value) => {
+            angular.forEach(this.currentUser.Employments, (value: any) => {
                 value.PresentationString = value.Position + " - " + value.OrgUnit.LongDescription + " (" + value.EmploymentId + ")";
                 if (value.OrgUnit.HasAccessToVacation) this.employments.push(value);
             });
@@ -87,13 +91,7 @@
         private updateCalendarRange() {
             if (this.startDate > this.endDate) {
                 this.endDate = this.startDate;
-            } else {
-                this.calculateVacationPeriod(this.startDate, this.endDate);
             }
-        }
-
-        private calculateVacationPeriod(start, end) {
-            this.vacationDaysInPeriod = Math.abs(end - start) / 1000 / 60 / 60;
         }
 
         private initializeReport() {
@@ -166,7 +164,6 @@
             report.EndTimestamp = Math.floor((new Date(this.endDate.getFullYear(), this.endDate.getMonth(), this.endDate.getDate()).getTime()) / 1000);
             report.EmploymentId = this.position;
             report.Comment = this.comment;
-
             report.PersonId = this.currentUser.Id;
             report.Status = "Pending";
             report.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
@@ -226,7 +223,6 @@
         closeModalWindow() {
             this.$modalInstance.dismiss();
         }
-
     }
 
     angular.module("app.vacation").controller("ReportVacationController", ReportVacationController);

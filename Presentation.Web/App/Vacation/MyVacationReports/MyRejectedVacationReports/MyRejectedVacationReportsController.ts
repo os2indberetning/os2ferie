@@ -1,7 +1,9 @@
 ﻿module app.vacation {
     "use strict";
 
-    class MyApprovedVacationReportsController extends BaseMyVacationReportsController {
+    import Person = core.models.Person;
+
+    class MyRejectedVacationReportsController extends BaseMyVacationReportsController {
 
         static $inject: string[] = [
             "$scope",
@@ -10,19 +12,21 @@
             "VacationReport",
             "$timeout",
             "Person",
-            "moment"
+            "moment",
+            "$state"
         ];
 
         constructor(
             protected $scope,
-            protected $modal,
+            protected $modal: angular.ui.bootstrap.IModalService,
             protected $rootScope,
             protected VacationReport,
-            protected $timeout,
-            protected Person,
-            protected moment) {
+            protected $timeout: ng.ITimeoutService,
+            protected Person: Person,
+            protected moment: moment.MomentStatic,
+            protected $state: ng.ui.IStateService) {
 
-            super($modal, $rootScope, VacationReport, $timeout, Person, moment, "Accepted");
+            super($scope, $modal, $rootScope, VacationReport, $timeout, Person, moment, $state);
 
             this.vacationReportsOptions = {
                 autoBind: false,
@@ -30,9 +34,6 @@
                     type: "odata-v4",
                     transport: {
                         read: {
-                            beforeSend(req) {
-                                req.setRequestHeader("Accept", "application/json;odata=fullmetadata");
-                            },
                             url: this.getVacationReportsUrl(),
                             dataType: "json",
                             cache: false
@@ -69,14 +70,14 @@
                         title: "Feriestart",
                         template: data => {
                             const m = this.moment.utc(data.StartTimestamp, 'X');
-                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
+                            return m.format("L");
                         }
                     },
                     {
                         title: "Ferieafslutning",
                         template: data => {
                             const m = this.moment.utc(data.EndTimestamp, 'X');
-                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
+                            return m.format("L");
                         }
                     },
                     {
@@ -100,33 +101,23 @@
                     {
                         field: "CreatedDateTimestamp",
                         template: data => {
-                            var m = this.moment.utc(data.CreatedDateTimestamp, 'X');
-                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
+                            const m = this.moment.utc(data.CreatedDateTimestamp, 'X');
+                            return m.format("L");
                         },
                         title: "Indberettet"
                     },
                     {
                         field: "ClosedDateTimestamp",
-                        title: "Godkendelsesdato",
+                        title: "Afvist dato",
                         template: data => {
-                            var m = this.moment.utc(data.ClosedDateTimestamp, 'X');
-                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
-                        }
-                    },
-                    {
-                        field: "ProcessedDateTimestamp",
-                        title: "Afsendt til løn",
-                        template: data => {
-                            if (data.ProcessedDateTimestamp != 0 && data.ProcessedDateTimestamp != null && data.ProcessedDateTimestamp != undefined) {
-                                var m = this.moment.utc(data.ProcessedDateTimestamp, 'X');
-                                return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
-                            }
-                            return "";
+                            const m = moment.utc(data.ClosedDateTimestamp, 'X');
+                            return m.format("L");
                         }
                     },
                     {
                         field: "ApprovedBy.FullName",
-                        title: "Godkendt af"
+                        title: "Afvist af",
+                        template: data => (data.ApprovedBy.FullName)
                     }
                 ],
                 scrollable: false
@@ -134,10 +125,9 @@
         }
 
         getVacationReportsUrl() {
-            return `/odata/VacationReports?status=${this
-                .ReportStatus}&$expand=ResponsibleLeader,ApprovedBy &$filter=PersonId eq ${this.personId}`;
+            return `/odata/VacationReports?status=Rejected&$expand=ApprovedBy($select=FullName) &$filter=PersonId eq ${this.personId}`;
         }
     }
 
-    angular.module("app.vacation").controller("Vacation.MyApprovedVacationReportsController", MyApprovedVacationReportsController);
+    angular.module("app.vacation").controller("MyRejectedVacationReportsController", MyRejectedVacationReportsController);
 }

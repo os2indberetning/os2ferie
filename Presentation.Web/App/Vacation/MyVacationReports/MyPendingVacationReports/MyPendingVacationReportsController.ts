@@ -1,6 +1,8 @@
 ﻿module app.vacation {
     "use strict";
 
+    import Person = core.models.Person;
+
     class MyPendingVacationReportsController extends BaseMyVacationReportsController {
 
         static $inject: string[] = [
@@ -10,18 +12,21 @@
             "VacationReport",
             "$timeout",
             "Person",
-            "moment"
+            "moment",
+            "$state"
         ];
 
         constructor(
             protected $scope,
-            protected $modal,
+            protected $modal: angular.ui.bootstrap.IModalService,
             protected $rootScope,
             protected VacationReport,
-            protected $timeout,
-            protected Person,
-            protected moment) {
-            super($modal, $rootScope, VacationReport, $timeout, Person, moment, "Pending");
+            protected $timeout: ng.ITimeoutService,
+            protected Person: Person,
+            protected moment: moment.MomentStatic,
+            protected $state: ng.ui.IStateService) {
+
+            super($scope, $modal, $rootScope, VacationReport, $timeout, Person, moment, $state);
 
             this.vacationReportsOptions = {
                 autoBind: false,
@@ -29,9 +34,6 @@
                     type: "odata-v4",
                     transport: {
                         read: {
-                            beforeSend(req) {
-                                req.setRequestHeader("Accept", "application/json;odata=fullmetadata");
-                            },
                             url: this.getVacationReportsUrl(),
                             dataType: "json",
                             cache: false
@@ -68,14 +70,14 @@
                         title: "Feriestart",
                         template: data => {
                             const m = this.moment.utc(data.StartTimestamp, 'X');
-                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
+                            return m.format("L");
                         }
                     },
                     {
                         title: "Ferieafslutning",
                         template: data => {
                             const m = this.moment.utc(data.EndTimestamp, 'X');
-                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
+                            return m.format("L");
                         }
                     },
                     {
@@ -99,8 +101,8 @@
                     {
                         field: "CreatedDateTimestamp",
                         template: data => {
-                            var m = this.moment.utc(data.CreatedDateTimestamp, 'X');
-                            return `${m._d.getDate()}/${m._d.getMonth() + 1}/${m._d.getFullYear()}`;
+                            const m = this.moment.utc(data.CreatedDateTimestamp, 'X');
+                            return m.format("L");
                         },
                         title: "Indberettet"
                     },
@@ -128,11 +130,10 @@
         }
 
         getVacationReportsUrl() {
-            return `/odata/VacationReports?status=${this
-                .ReportStatus}&$expand=ResponsibleLeader &$filter=PersonId eq ${this.personId} and VacationYear eq ${
+            return `/odata/VacationReports?status=Pending&$expand=ResponsibleLeader &$filter=PersonId eq ${this.personId} and VacationYear eq ${
                 this.vacationYear.getFullYear()}`;
         }
     }
 
-    angular.module("app.vacation").controller("Vacation.MyPendingVacationReportsController", MyPendingVacationReportsController);
+    angular.module("app.vacation").controller("MyPendingVacationReportsController", MyPendingVacationReportsController);
 }

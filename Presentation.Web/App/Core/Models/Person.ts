@@ -15,6 +15,7 @@
         IsSubstitute: boolean;
         IsActive: boolean;
         HasAppPassword: boolean;
+        Employments: Employment[];
 
         //TODO Missing naviation properties
     }

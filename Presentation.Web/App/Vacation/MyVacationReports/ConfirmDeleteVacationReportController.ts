@@ -1,6 +1,8 @@
 ﻿module app.vacation {
     "use strict";
 
+    import NotificationService = core.interfaces.NotificationService;
+
     class ConfirmDeleteVacationReportController {
 
         static $inject: string[] = [
@@ -9,7 +11,9 @@
             "NotificationService"
         ];
 
-        constructor(private $modalInstance, public itemId, private NotificationService) {
+        constructor(private $modalInstance: angular.ui.bootstrap.IModalServiceInstance,
+            public itemId: number,
+            private NotificationService: NotificationService) {
             this.itemId = itemId;
         }
 
