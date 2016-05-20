@@ -42,15 +42,21 @@
                 height: 600,
                 timezone: "Etc/UTC",
                 //This is kendo's save event. Label has been changed to 'Gem' in in "edit" event below.
-                save: function (e) {
+                save: (e: any) => {
+                    var report = new this.VacationReport();
 
-                    this.VacationReport.$approve({ id: e.event.id }, () => {
-                        
-                    })
-                    
-                    //this.$http.patch();
-                    console.log("[save] e");
-                    console.log(e);
+                    if (e.event.status == "Accepted") {
+                        console.log("[save] Accepted");
+                        report.$approve({ id: e.event.id }, () => {
+                            location.reload();
+                        });
+                    }
+                    else if (e.event.status == "Rejected") {
+                        console.log("[save] Rejected");
+                        report.$reject({ id: e.event.id }, () => {
+                            location.reload();
+                        });
+                    }
                 },
                 editable: {
                     template: $("#customEditorTemplate").html()

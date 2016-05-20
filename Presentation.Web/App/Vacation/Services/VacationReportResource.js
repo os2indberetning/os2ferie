@@ -12,14 +12,19 @@
             isArray: false
         },
         "approve": {
-            url: 'asda',
-            method: 'PATCH',
-
+            method: "GET",
+            isArray: false,
+            url: "/odata/VacationReports/Service.ApproveReport(Key=:id)"
+        },
+        "reject": {
+            method: "GET",
+            isArray: false,
+            url: "/odata/VacationReports/Service.RejectReport(Key=:id)"
         },
         "getLatest": {
             method: "GET",
             isArray: false,
-            url: "/odata/VacationReport/Service.GetLatestReportForUser?personId=:id",
+            url: "/odata/VacationReports/Service.GetLatestReportForUser?personId=:id",
             transformResponse: function (data) {
                 var res = angular.fromJson(data);
                 return res;

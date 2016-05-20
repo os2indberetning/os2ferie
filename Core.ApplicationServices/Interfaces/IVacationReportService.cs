@@ -10,5 +10,6 @@ namespace Core.ApplicationServices.Interfaces
     public interface IVacationReportService : IReportService<VacationReport>
     {
         void ApproveReport(VacationReport report, Person approver, string emailText);
+        void RejectReport(VacationReport report, Person approver, string emailText);
     }
 }
