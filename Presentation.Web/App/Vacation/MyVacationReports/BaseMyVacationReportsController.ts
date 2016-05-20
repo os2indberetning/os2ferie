@@ -59,10 +59,6 @@
             });
         }
 
-        editClick = (id) => {
-            this.$state.go(".edit", { vacationReportId: id });
-        }
-
         clearClicked() {
             this.loadInitialDate();
             this.refreshGrid();

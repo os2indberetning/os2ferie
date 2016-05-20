@@ -120,8 +120,7 @@
                     },
                     {
                         field: "Id",
-                        template: (data) => `<a ng-click="mvrCtrl.deleteClick(${data.Id})">Slet</a> | <a ng-click="mvrCtrl.editClick(${
-                            data.Id})">Rediger</a>`,
+                        template: (data) => `<a ng-click="mvrCtrl.deleteClick(${data.Id})">Slet</a> | <a ui-sref=".edit({vacationReportId:${data.Id}})">Rediger</a>`,
                         title: "Muligheder"
                     }
                 ],

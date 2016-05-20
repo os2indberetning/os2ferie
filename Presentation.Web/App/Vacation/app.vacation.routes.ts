@@ -12,12 +12,9 @@
                 {
                     url: "/report",
                     templateUrl: "/App/Vacation/ReportVacation/ReportVacationView.html",
-                    controller: "ReportVacationController",
+                    controller: "CreateReportVacationController",
                     controllerAs: "rvc",
                     resolve: {
-                        vacationReportId () {
-                            return 0;
-                        },
                         CurrentUser: [
                             "$rootScope", "Person", ($rootScope, Person) => {
                                 if ($rootScope.CurrentUser == undefined) {
@@ -29,10 +26,7 @@
                                     return $rootScope.CurrentUser;
                                 }
                             }
-                        ],
-                        $modalInstance() {
-                            return -1;
-                        }
+                        ]
                     }
                 })
                 .state("vacation.approvereports",
@@ -134,7 +128,7 @@
                         "$state", "$modal", "$stateParams", ($state, $modal, $stateParams) => {
                             $modal.open({
                                     templateUrl: '/App/Vacation/MyVacationReports/EditVacationReportTemplate.html',
-                                    controller: 'ReportVacationController as rvc',
+                                    controller: 'EditReportVacationController as rvc',
                                     backdrop: "static",
                                     windowClass: "app-modal-window-full",
                                     resolve: {

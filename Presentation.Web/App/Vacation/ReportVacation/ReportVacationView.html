@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h4>Vælg start dato: <span ng-show="rvc.startDate">{{rvc.startDate | date:"MMM d, yyyy"}}</span></h4>
-                        <kendo-calendar culture="'da-DK'" ng-model="rvc.startDate" k-rebind="endDate" min="rvc.mimimumVacationStartDate"></kendo-calendar>
+                        <kendo-calendar ng-model="rvc.startDate" k-rebind="endDate" min="rvc.mimimumVacationStartDate"></kendo-calendar>
                     </div>
                 </div>
                 <div class="row margin-top-15">
@@ -28,7 +28,7 @@
                     <div class="col-md-12">
                         <h4>Tidspunkt for feriestart</h4>
                         <p>Udfyldes kun hvis første feriedag ikke er hele dagen</p>
-                        <kendo-time-picker culture="'da-DK'" k-format="'HH:mm'" k-options="rvc.timePickerOptions"
+                        <kendo-time-picker k-format="'HH:mm'" k-options="rvc.timePickerOptions"
                                            k-ng-model="rvc.startTime"
                                            style="width: 238px;"></kendo-time-picker>
                     </div>
@@ -38,7 +38,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h4>Vælg slut dato: <span ng-show="rvc.endDate">{{rvc.endDate | date:"MMM d, yyyy"}}</span></h4>
-                        <kendo-calendar culture="'da-DK'" ng-model="rvc.endDate" k-rebind="rvc.startDate" min="rvc.startDate"></kendo-calendar>
+                        <kendo-calendar ng-model="rvc.endDate" k-rebind="rvc.startDate" min="rvc.startDate"></kendo-calendar>
                     </div>
                 </div>
                 <div class="row margin-top-15">
@@ -53,7 +53,7 @@
                     <div class="col-md-12">
                         <h4>Tidspunkt for feriens afslutning</h4>
                         <p>Udfyldes kun hvis sidste feriedag ikke er hele dagen</p>
-                        <kendo-time-picker culture="'da-DK'" k-format="'HH:mm'" k-options="rvc.timePickerOptions"
+                        <kendo-time-picker k-format="'HH:mm'" k-options="rvc.timePickerOptions"
                                             k-ng-model="rvc.endTime"
                                             style="width: 238px;"></kendo-time-picker>
                     </div>

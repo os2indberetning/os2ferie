@@ -483,10 +483,12 @@
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyVacationReportsController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyRejectedVacationReports\MyRejectedVacationReportsController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyApprovedVacationReports\MyApprovedVacationReportsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\ReportVacation\BaseReportVacationController.ts" />
+    <TypeScriptCompile Include="App\Vacation\ReportVacation\EditReportVacationController .ts" />
     <TypeScriptCompile Include="App\Vacation\Services\VacationBalanceResource.ts" />
     <TypeScriptCompile Include="App\Vacation\app.vacation.ts" />
     <Content Include="App\Vacation\Filters\MinIntFilter.js" />
-    <TypeScriptCompile Include="App\Vacation\ReportVacation\ReportVacationController.ts" />
+    <TypeScriptCompile Include="App\Vacation\ReportVacation\CreateReportVacationController.ts" />
     <Content Include="App\Vacation\ApproveReports\ApproveReportsView.html" />
     <Content Include="App\Vacation\MyVacationReports\ConfirmDeleteVacationReportTemplate.html" />
     <Content Include="App\Vacation\MyVacationReports\EditVacationReportTemplate.html" />
