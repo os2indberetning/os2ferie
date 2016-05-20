@@ -11,6 +11,11 @@
             method: "POST",
             isArray: false
         },
+        "approve": {
+            url: 'asda',
+            method: 'PATCH',
+
+        },
         "getLatest": {
             method: "GET",
             isArray: false,
