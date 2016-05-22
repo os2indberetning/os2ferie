@@ -7,6 +7,7 @@
 
         private infinitePeriod = 9999999999;
         private personId;
+        private isGridLoaded = false;
 
         collapseSubstitute = false;
         collapsePersonalApprover = false;
@@ -277,16 +278,23 @@
                 scrollable: false
             };
 
+            this.$scope.$on("kendoRendered",
+                () => {
+                    if (!this.isGridLoaded) {
+                        this.isGridLoaded = true;
+                        this.refreshGrids();
+                    }
+                });
         }
 
         refreshGrids() {
+            if (!this.isGridLoaded) return;
             this.substituteGrid.dataSource.read();
             this.mySubstitutesGrid.dataSource.read();
             this.personalApproverGrid.dataSource.read();
         }
 
         openDeleteApprover(id) {
-
             var modalInstance = this.$modal.open({
                 templateUrl: 'App/Core/Views/Modals/ConfirmDeleteApproverModal.html',
                 controller: 'ConfirmDeleteApproverModalInstanceController',

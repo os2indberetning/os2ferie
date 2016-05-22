@@ -10,7 +10,8 @@
         vacationReportsOptions: kendo.ui.GridOptions;
         vacationYear: Date;
         personId: number;
-        isGridLoaded = false;
+
+        private isGridLoaded = false;
 
         constructor(
             protected $scope,

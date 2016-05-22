@@ -75,14 +75,8 @@
         saveReport() {
             const report = new this.VacationReport();
 
-            report.StartTimestamp = Math.floor((new Date(this.startDate.getFullYear(),
-                    this.startDate.getMonth(),
-                    this.startDate.getDate()).getTime()) /
-                1000);
-            report.EndTimestamp = Math.floor((new Date(this.endDate.getFullYear(),
-                    this.endDate.getMonth(),
-                    this.endDate.getDate()).getTime()) /
-                1000);
+            report.StartTimestamp = this.moment(this.startDate).unix();
+            report.EndTimestamp = this.moment(this.endDate).unix();
             report.EmploymentId = this.position;
             report.Comment = this.comment;
             report.PersonId = this.currentUser.Id;
