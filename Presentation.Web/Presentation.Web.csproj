@@ -282,7 +282,7 @@
     <Compile Include="Controllers\Drive\CoordinateController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MailNotificationsController.cs" />
-    <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\Drive\FileController.cs" />
     <Compile Include="Controllers\EmploymentController.cs" />
     <Compile Include="Controllers\ManifestController.cs" />
     <Compile Include="Controllers\Drive\AppLoginController.cs" />

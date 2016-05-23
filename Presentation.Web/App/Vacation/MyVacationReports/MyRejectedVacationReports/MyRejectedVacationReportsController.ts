@@ -124,7 +124,8 @@
         }
 
         getVacationReportsUrl() {
-            return `/odata/VacationReports?status=Rejected&$expand=ApprovedBy($select=FullName) &$filter=PersonId eq ${this.personId}`;
+            return `/odata/VacationReports?status=Rejected&$expand=ApprovedBy($select=FullName) &$filter=PersonId eq ${this.personId} and VacationYear eq ${
+                this.vacationYear}`;
         }
     }
 

@@ -129,7 +129,7 @@
 
         getVacationReportsUrl() {
             return `/odata/VacationReports?status=Pending&$expand=ResponsibleLeader &$filter=PersonId eq ${this.personId} and VacationYear eq ${
-                this.vacationYear.getFullYear()}`;
+                this.vacationYear}`;
         }
     }
 

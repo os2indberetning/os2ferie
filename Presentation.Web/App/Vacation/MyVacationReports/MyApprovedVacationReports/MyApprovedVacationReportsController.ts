@@ -134,7 +134,8 @@
         }
 
         getVacationReportsUrl() {
-            return `/odata/VacationReports?status=Accepted&$expand=ResponsibleLeader,ApprovedBy &$filter=PersonId eq ${this.personId}`;
+            return `/odata/VacationReports?status=Accepted&$expand=ResponsibleLeader,ApprovedBy &$filter=PersonId eq ${this.personId} and VacationYear eq ${
+                this.vacationYear}`;
         }
     }
 
