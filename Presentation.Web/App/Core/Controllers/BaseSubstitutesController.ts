@@ -372,8 +372,8 @@
         createNewSubstitute() {
             var modalInstance = this.$modal.open({
                 // Change these
-                templateUrl: 'App/Core/Views/Modals/NewSubstituteModal.html',
-                controller: 'NewSubstituteModalInstanceController',
+                templateUrl: 'App/Core/Views/Modals/AdminNewSubstituteModal.html',
+                controller: 'AdminNewSubstituteModalInstanceController',
                 backdrop: 'static',
                 size: 'lg',
                 resolve: {

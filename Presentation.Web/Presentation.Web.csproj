@@ -323,6 +323,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App\app.html" />
+    <Content Include="App\Core\Controllers\AdminNewSubstituteModalInstanceController.js" />
+    <Content Include="App\Core\Views\Modals\AdminNewSubstituteModal.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App\Drive\Admin\AdminMenuController.js" />
     <Content Include="App\Drive\Admin\AddressLaundry\AddressLaundryController.js" />
     <Content Include="App\Drive\Admin\Administration\AdministrationController.js" />
@@ -339,7 +343,6 @@
     <Content Include="App\Drive\Admin\Reports\Modal\ConfirmRejectApprovedReportModalController.js" />
     <Content Include="App\Drive\Admin\Reports\Modal\ConfirmEditApprovedReportModalController.js" />
     <Content Include="App\Drive\Admin\Reports\Modal\ShowRouteModalController.js" />
-    <Content Include="App\Drive\Admin\Substitutes\Modals\AdminNewSubstituteModalInstanceController.js" />
     <Content Include="App\Drive\Admin\AddressLaundry\AddressLaundryView.html" />
     <Content Include="App\Drive\Admin\Address\ConfirmDiscardChangesTemplate.html" />
     <Content Include="App\Drive\Admin\Reports\Modal\ConfirmRejectApprovedReportTemplate.html" />
@@ -352,7 +355,6 @@
     <Content Include="App\Drive\Admin\OrgUnit\View.html" />
     <Content Include="App\Drive\Admin\Reports\InnerView.html" />
     <Content Include="App\Drive\Admin\Reports\View.html" />
-    <Content Include="App\Drive\Admin\Substitutes\Modals\newSubstituteModal.html" />
     <Content Include="App\Drive\Admin\Substitutes\View.html" />
     <Content Include="App\Drive\Admin\Account\ConfirmDeleteAccountTemplate.html" />
     <Content Include="App\Drive\Admin\Account\View.html" />
@@ -487,7 +489,6 @@
     <TypeScriptCompile Include="App\Vacation\ReportVacation\EditReportVacationController .ts" />
     <TypeScriptCompile Include="App\Vacation\Services\VacationBalanceResource.ts" />
     <TypeScriptCompile Include="App\Vacation\app.vacation.ts" />
-    <Content Include="App\Vacation\Filters\MinIntFilter.js" />
     <TypeScriptCompile Include="App\Vacation\ReportVacation\CreateReportVacationController.ts" />
     <Content Include="App\Vacation\ApproveReports\ApproveReportsView.html" />
     <Content Include="App\Vacation\MyVacationReports\ConfirmDeleteVacationReportTemplate.html" />

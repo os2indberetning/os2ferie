@@ -1,5 +1,5 @@
 ﻿angular.module('app.core').controller('EditSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "substituteId", "SubstituteType", 
+    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "substituteId", "SubstituteType",
     function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, substituteId, SubstituteType) {
 
         $scope.container = {};
@@ -53,12 +53,13 @@
             }
 
             $scope.showSpinner = true;
-            
+
             $scope.loadingPromise = sub.$patch({ id: $scope.substitute.Id }, function (data) {
                 NotificationService.AutoFadeNotification("success", "", "Stedfortræder blev gemt");
                 $modalInstance.close();
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "", "Kunne ikke gemme stedfortræder (Du kan ikke oprette 2 stedfortrædere for samme organisation i samme periode)");
+                $scope.showSpinner = false;
             });
         };
 

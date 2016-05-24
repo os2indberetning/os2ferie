@@ -1,6 +1,6 @@
-﻿angular.module('app.drive').controller('AdminNewSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "$timeout", "persons", "Autocomplete", "leader",
-        function ($scope, $modalInstance, OrgUnit, leader, Substitute, Person, NotificationService, $timeout, persons, Autocomplete, leader) {
+﻿angular.module('app.core').controller('AdminNewSubstituteModalInstanceController',
+    ["$scope", "$modalInstance", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "$timeout", "persons", "Autocomplete", "leader", "SubstituteType",
+        function ($scope, $modalInstance, OrgUnit, leader, Substitute, Person, NotificationService, $timeout, persons, Autocomplete, leader, SubstituteType) {
 
             $scope.persons = persons;
 
@@ -85,7 +85,8 @@
                     SubId: $scope.person[0].Id,
                     OrgUnitId: $scope.orgUnit.Id,
                     PersonId: $scope.personFor[0].Id,
-                    CreatedById: leader.Id
+                    CreatedById: leader.Id,
+                    Type: SubstituteType === 0 ? "Drive" : "Vacation"
                 });
 
                 if ($scope.infinitePeriod) {
@@ -99,6 +100,7 @@
                     $modalInstance.close();
                 }, function () {
                     NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette stedfortræder (Du kan ikke oprette 2 stedfortrædere for samme organisation i samme periode)");
+                    $scope.showSpinner = false;
                 });
             };
 
@@ -106,3 +108,4 @@
                 $modalInstance.dismiss('cancel');
             };
         }]);
+
