@@ -122,7 +122,7 @@ namespace Core.ApplicationServices
 
             _reportRepo.Save();
 
-            var absenceReport = _absenceBuilder.Create(report);
+            var absenceReport = _absenceBuilder.Delete(report);
 
 #if !DEBUG
             _absenceService.ReportAbsence(absenceReport);

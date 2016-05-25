@@ -286,11 +286,11 @@ namespace OS2Indberetning.Controllers.Vacation
 
         private bool HasReportAccess(VacationReport report, Person person)
         {
-            var leader = report.ResponsibleLeader;
+            var leader = report.ResponsibleLeaderId;
 
             if (report.PersonId == person.Id) return false;
             if (leader == null) return false;
-            if (!person.Id.Equals(leader.Id)) return false;
+            if (!person.Id.Equals(leader)) return false;
             if (report.Status == ReportStatus.Pending) return true;
             _logger.Log("Forsøg på at redigere indberetning med anden status end afventende. Rapportens status er ikke ændret.", "web", 3);
             return false;
