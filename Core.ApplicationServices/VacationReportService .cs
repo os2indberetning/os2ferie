@@ -10,13 +10,11 @@ namespace Core.ApplicationServices
 {
     public class VacationReportService : ReportService<VacationReport>, IVacationReportService
     {
-        private readonly IGenericRepository<VacationReport> _reportRepo;
         private readonly IKMDAbsenceService _absenceService;
         private readonly IKMDAbsenceReportBuilder _absenceBuilder;
 
-        public VacationReportService(IGenericRepository<VacationReport> reportRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IKMDAbsenceService absenceService, IKMDAbsenceReportBuilder absenceBuilder, ILogger logger) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, logger, SubstituteType.Vacation)
+        public VacationReportService(IGenericRepository<VacationReport> reportRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IKMDAbsenceService absenceService, IKMDAbsenceReportBuilder absenceBuilder, ILogger logger) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, logger, reportRepo, SubstituteType.Vacation)
         {
-            _reportRepo = reportRepo;
             _absenceService = absenceService;
             _absenceBuilder = absenceBuilder;
         }
@@ -40,7 +38,7 @@ namespace Core.ApplicationServices
             if (report.Comment == null) report.Comment = "";
         }
 
-        public override VacationReport Create(VacationReport report)
+        public new VacationReport Create(VacationReport report)
         {
             PrepareReport(report);
 
@@ -50,7 +48,7 @@ namespace Core.ApplicationServices
             return report;
         }
 
-        public override bool Validate(VacationReport report)
+        public new bool Validate(VacationReport report)
         {
             if (report.PersonId == 0) return false;
             if (report.EndTimestamp < report.StartTimestamp) return false;
@@ -61,7 +59,7 @@ namespace Core.ApplicationServices
             return true;
         }
 
-        public override void SendMailToUserAndApproverOfEditedReport(VacationReport report, string emailText, Person admin, string action)
+        public new void SendMailToUserAndApproverOfEditedReport(VacationReport report, string emailText, Person admin, string action)
         {
             var mailContent = "Hej," + Environment.NewLine + Environment.NewLine +
             "Jeg, " + admin.FullName + ", har pr. dags dato " + action + " den følgende godkendte ferieindberetning:" + Environment.NewLine + Environment.NewLine;
@@ -121,13 +119,12 @@ namespace Core.ApplicationServices
             report.ApprovedById = approver.Id;
 
             _reportRepo.Save();
-
-            var absenceReport = _absenceBuilder.Delete(report);
-
 #if !DEBUG
+            if (report.ProcessedDateTimestamp == 0) return;
+            var absenceReport = _absenceBuilder.Delete(report);
             _absenceService.ReportAbsence(absenceReport);
 #endif
-            report.ProcessedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            report.ProcessedDateTimestamp = 0;
             _reportRepo.Save();
         }
     }

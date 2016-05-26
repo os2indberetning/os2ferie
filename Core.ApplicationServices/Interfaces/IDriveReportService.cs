@@ -8,15 +8,7 @@ using Core.DomainModel;
 
 namespace Core.ApplicationServices.Interfaces
 {
-    public interface IDriveReportService
+    public interface IDriveReportService : IReportService<DriveReport>
     {
-        DriveReport Create(DriveReport report);
-        void SendMailIfRejectedReport(int key, Delta<DriveReport> delta);
-
-        Person GetResponsibleLeaderForReport(DriveReport driveReport);
-        Person GetActualLeaderForReport(DriveReport driveReport);
-        bool Validate(DriveReport report);
-
-        void SendMailToUserAndApproverOfEditedReport(DriveReport report, string emailText, Person admin, string action);
     }
 }

@@ -9,20 +9,21 @@ using Core.DomainServices;
 
 namespace Core.ApplicationServices
 {
-    public abstract class ReportService<T> : IReportService<T> where T : Report
+    public class ReportService<T> : IReportService<T> where T : Report
     {
 
         protected readonly IGenericRepository<OrgUnit> _orgUnitRepository;
         protected readonly IGenericRepository<Employment> _employmentRepository;
         protected readonly IGenericRepository<Substitute> _substituteRepository;
         protected readonly IMailSender _mailSender;
+        protected readonly IGenericRepository<T> _reportRepo;
 
         protected readonly SubstituteType _substituteType;
 
         protected readonly ILogger _logger;
 
         protected ReportService(IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository,
-            IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, ILogger logger, SubstituteType type = SubstituteType.Drive)
+            IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, ILogger logger, IGenericRepository<T> reportRepo, SubstituteType type = SubstituteType.Drive)
         {
             _orgUnitRepository = orgUnitRepository;
             _employmentRepository = employmentRepository;
@@ -32,13 +33,45 @@ namespace Core.ApplicationServices
             _substituteType = type;
 
             _logger = logger;
+            _reportRepo = reportRepo;
         }
 
-        public abstract T Create(T report);
+        public T Create(T report)
+        {
+            if (!Validate(report)) throw new Exception("Vacation report has invalid parameters");
+            report.ResponsibleLeaderId = GetResponsibleLeaderForReport(report).Id;
+            report.ActualLeaderId = GetActualLeaderForReport(report).Id;
+            _reportRepo.Insert(report);
+            _reportRepo.Save();
 
-        public abstract bool Validate(T report);
+            return report;
+        }
 
-        public abstract void SendMailToUserAndApproverOfEditedReport(T report, string emailText, Person admin, string action);
+
+
+        public bool Validate(T report)
+        {
+            if (report.PersonId == 0) return false;
+            return true;
+        }
+
+        public void SendMailToUserAndApproverOfEditedReport(T report, string emailText, Person admin, string action)
+        {
+            var mailContent = "Hej," + Environment.NewLine + Environment.NewLine +
+            "Jeg, " + admin.FullName + ", har pr. dags dato " + action + " den følgende godkendte indberetning:" + Environment.NewLine + Environment.NewLine;
+
+            if (report.Comment != null)
+                mailContent += Environment.NewLine + "Kommentar: " + report.Comment;
+
+            mailContent += Environment.NewLine + Environment.NewLine
+            + "Hvis du mener at dette er en fejl, så kontakt mig da venligst på " + admin.Mail + Environment.NewLine
+            + "Med venlig hilsen " + admin.FullName + Environment.NewLine + Environment.NewLine
+            + "Besked fra administrator: " + Environment.NewLine + emailText;
+
+            _mailSender.SendMail(report.Person.Mail, "En administrator har ændret i din indberetning.", mailContent);
+
+            _mailSender.SendMail(report.ApprovedBy.Mail, "En administrator har ændret i en indberetning du har godkendt.", mailContent);
+        }
 
         public void SendMailIfRejectedReport(int key, Delta<T> delta, Person person)
         {

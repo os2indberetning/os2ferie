@@ -26,8 +26,8 @@ namespace DBUpdater
         private readonly IDbUpdaterDataProvider _dataProvider;
         private readonly IMailSender _mailSender;
         private readonly IAddressHistoryService _historyService;
-        private readonly IGenericRepository<DriveReport> _reportRepo;
-        private readonly IReportService<DriveReport> _driveService;
+        private readonly IGenericRepository<Report> _reportRepo;
+        private readonly IReportService<Report> _reportService;
         private readonly IGenericRepository<VacationBalance> _vacationRepo;
         private readonly ISubstituteService _subService;
 
@@ -41,8 +41,8 @@ namespace DBUpdater
             IDbUpdaterDataProvider dataProvider,
             IMailSender mailSender,
             IAddressHistoryService historyService,
-            IGenericRepository<DriveReport> reportRepo,
-            IReportService<DriveReport> driveService,
+            IGenericRepository<Report> reportRepo,
+            IReportService<Report> reportService,
             ISubstituteService subService,
             IGenericRepository<Substitute> subRepo,
             IGenericRepository<VacationBalance> vacationRepo)
@@ -58,7 +58,7 @@ namespace DBUpdater
             _mailSender = mailSender;
             _historyService = historyService;
             _reportRepo = reportRepo;
-            _driveService = driveService;
+            _reportService = reportService;
             _subService = subService;
             _subRepo = subRepo;
             _vacationRepo = vacationRepo;
@@ -457,8 +457,8 @@ namespace DBUpdater
                     Console.WriteLine("Updating leaders on report " + i + " of " + max);
                 }
                 i++;
-                report.ResponsibleLeaderId = _driveService.GetResponsibleLeaderForReport(report).Id;
-                report.ActualLeaderId = _driveService.GetActualLeaderForReport(report).Id;
+                report.ResponsibleLeaderId = _reportService.GetResponsibleLeaderForReport(report).Id;
+                report.ActualLeaderId = _reportService.GetActualLeaderForReport(report).Id;
                 if (i % 1000 == 0)
                 {
                     Console.WriteLine("Saving to database");
@@ -498,8 +498,8 @@ namespace DBUpdater
             {
                 i++;
                 Console.WriteLine("Adding leaders to report " + i + " of " + reports.Count);
-                report.ResponsibleLeaderId = _driveService.GetResponsibleLeaderForReport(report).Id;
-                report.ActualLeaderId = _driveService.GetActualLeaderForReport(report).Id;
+                report.ResponsibleLeaderId = _reportService.GetResponsibleLeaderForReport(report).Id;
+                report.ActualLeaderId = _reportService.GetActualLeaderForReport(report).Id;
                 if (i % 100 == 0)
                 {
                     Console.WriteLine("Saving to database");

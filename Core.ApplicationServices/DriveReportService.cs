@@ -11,21 +11,19 @@ using Core.ApplicationServices.Logger;
 
 namespace Core.ApplicationServices
 {
-    public class DriveReportService : ReportService<DriveReport>
+    public class DriveReportService : ReportService<DriveReport>, IDriveReportService
     {
         private readonly IRoute<RouteInformation> _route;
         private readonly IGenericRepository<RateType> _rateTypeRepo;
         private readonly IAddressCoordinates _coordinates;
-        private readonly IGenericRepository<DriveReport> _driveReportRepository;
         private readonly IReimbursementCalculator _calculator;
 
-        public DriveReportService(IGenericRepository<DriveReport> driveReportRepository, IReimbursementCalculator calculator, IAddressCoordinates coordinates, IRoute<RouteInformation> route, IGenericRepository<RateType> rateTypeRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, ILogger logger) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, logger, SubstituteType.Drive)
+        public DriveReportService(IGenericRepository<DriveReport> reportRepo, IReimbursementCalculator calculator, IAddressCoordinates coordinates, IRoute<RouteInformation> route, IGenericRepository<RateType> rateTypeRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, ILogger logger) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, logger, reportRepo, SubstituteType.Drive)
         {
             _route = route;
             _rateTypeRepo = rateTypeRepo;
             _coordinates = coordinates;
             _calculator = calculator;
-            _driveReportRepository = driveReportRepository;
         }
 
         /// <summary>
@@ -33,7 +31,7 @@ namespace Core.ApplicationServices
         /// </summary>
         /// <param name="report">Report to be created.</param>
         /// <returns>Created report.</returns>
-        public override DriveReport Create(DriveReport report)
+        public new DriveReport Create(DriveReport report)
         {
             if (report.PersonId == 0)
             {
@@ -93,18 +91,15 @@ namespace Core.ApplicationServices
                 }
             }
 
-
-
-
             // Round off Distance and AmountToReimburse to two decimals.
             report.Distance = Convert.ToDouble(report.Distance.ToString("0.##", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
             report.AmountToReimburse = Convert.ToDouble(report.AmountToReimburse.ToString("0.##", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
 
-            var createdReport = _driveReportRepository.Insert(report);
+            var createdReport = _reportRepo.Insert(report);
             createdReport.ResponsibleLeaderId = GetResponsibleLeaderForReport(report).Id;
             createdReport.ActualLeaderId = GetActualLeaderForReport(report).Id;
 
-            _driveReportRepository.Save();
+            _reportRepo.Save();
 
             // If the report is calculated or from an app, then we would like to store the points.
             if (report.KilometerAllowance != KilometerAllowance.Read || report.IsFromApp)
@@ -133,13 +128,9 @@ namespace Core.ApplicationServices
                             currentPoint.PreviousPointId = createdReport.DriveReportPoints.ElementAt(i - 1).Id;
                         }
                     }
-                    _driveReportRepository.Save();
+                    _reportRepo.Save();
                 }
             }
-
-
-
-            //AddFullName(report);
 
             return report;
         }
@@ -149,7 +140,7 @@ namespace Core.ApplicationServices
         /// </summary>
         /// <param name="report">Report to be validated.</param>
         /// <returns>True or false</returns>
-        public override bool Validate(DriveReport report)
+        public new bool Validate(DriveReport report)
         {
             // Report does not validate if it is read and distance is less than zero.
             if (report.KilometerAllowance == KilometerAllowance.Read && report.Distance < 0)
@@ -176,7 +167,7 @@ namespace Core.ApplicationServices
         /// <param name="emailText">The message to be sent to the owner and responsible leader</param>
         /// <param name="admin">The admin rejecting or editing</param>
         /// <param name="action">A string included in the email. Should be "afvist" or "redigeret"</param>
-        public override void SendMailToUserAndApproverOfEditedReport(DriveReport report, string emailText, Person admin, string action)
+        public new void SendMailToUserAndApproverOfEditedReport(DriveReport report, string emailText, Person admin, string action)
         {
             var mailContent = "Hej," + Environment.NewLine + Environment.NewLine +
             "Jeg, " + admin.FullName + ", har pr. dags dato " + action + " den følgende godkendte kørselsindberetning:" + Environment.NewLine + Environment.NewLine;
@@ -198,9 +189,6 @@ namespace Core.ApplicationServices
             _mailSender.SendMail(report.Person.Mail, "En administrator har ændret i din indberetning.", mailContent);
 
             _mailSender.SendMail(report.ApprovedBy.Mail, "En administrator har ændret i en indberetning du har godkendt.", mailContent);
-
-
-
         }
 
         /// <summary>
