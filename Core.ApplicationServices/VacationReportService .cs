@@ -100,8 +100,6 @@ namespace Core.ApplicationServices
             report.ClosedDateTimestamp = (DateTime.UtcNow.ToTimestamp());
             report.ApprovedById = approver.Id;
 
-            _reportRepo.Save();
-
             var absenceReport = _absenceBuilder.Create(report);
 
 #if !DEBUG
@@ -118,7 +116,6 @@ namespace Core.ApplicationServices
             report.ClosedDateTimestamp = (DateTime.UtcNow.ToTimestamp());
             report.ApprovedById = approver.Id;
 
-            _reportRepo.Save();
 #if !DEBUG
             if (report.ProcessedDateTimestamp == 0) return;
             var absenceReport = _absenceBuilder.Delete(report);

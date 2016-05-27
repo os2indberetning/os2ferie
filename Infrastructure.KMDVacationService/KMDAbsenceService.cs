@@ -9,10 +9,9 @@ namespace Infrastructure.KMDVacationService
 
         public void ReportAbsence(IList<KMDAbsenceReport> absenceReports)
         {
-
             using (var webService = new KMD_FerieService.LPT_VACAB_Service_OutClient("HTTPS_Port"))
             {
-                webService.ClientCredentials?.ClientCertificate.SetCertificate(System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser, System.Security.Cryptography.X509Certificates.StoreName.My, System.Security.Cryptography.X509Certificates.X509FindType.FindBySubjectName, "Skanderborg kommune - Sysint");
+                webService.ClientCredentials.ClientCertificate.SetCertificate(System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine, System.Security.Cryptography.X509Certificates.StoreName.My, System.Security.Cryptography.X509Certificates.X509FindType.FindBySubjectName, "Skanderborg kommune - Sysint");
 
                 foreach (var report in absenceReports)
                 {
