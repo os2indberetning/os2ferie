@@ -7,11 +7,9 @@ namespace Core.ApplicationServices.Interfaces
     {
         T Create(T report);
         void SendMailIfRejectedReport(int key, Delta<T> delta, Person person);
-
         Person GetResponsibleLeaderForReport(T report);
         Person GetActualLeaderForReport(T report);
         bool Validate(T report);
-
         void SendMailToUserAndApproverOfEditedReport(T report, string emailText, Person admin, string action);
     }
 }

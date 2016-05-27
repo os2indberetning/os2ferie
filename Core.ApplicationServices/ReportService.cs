@@ -11,27 +11,22 @@ namespace Core.ApplicationServices
 {
     public class ReportService<T> : IReportService<T> where T : Report
     {
-
         protected readonly IGenericRepository<OrgUnit> _orgUnitRepository;
         protected readonly IGenericRepository<Employment> _employmentRepository;
         protected readonly IGenericRepository<Substitute> _substituteRepository;
         protected readonly IMailSender _mailSender;
         protected readonly IGenericRepository<T> _reportRepo;
-
         protected readonly SubstituteType _substituteType;
-
         protected readonly ILogger _logger;
 
-        protected ReportService(IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository,
+        public ReportService(IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository,
             IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, ILogger logger, IGenericRepository<T> reportRepo, SubstituteType type = SubstituteType.Drive)
         {
             _orgUnitRepository = orgUnitRepository;
             _employmentRepository = employmentRepository;
             _substituteRepository = substituteRepository;
             _mailSender = mailSender;
-
             _substituteType = type;
-
             _logger = logger;
             _reportRepo = reportRepo;
         }
@@ -46,8 +41,6 @@ namespace Core.ApplicationServices
 
             return report;
         }
-
-
 
         public bool Validate(T report)
         {

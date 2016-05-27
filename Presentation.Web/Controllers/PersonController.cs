@@ -246,13 +246,13 @@ namespace OS2Indberetning.Controllers
         [System.Web.Http.HttpGet]
         public IQueryable<Person> LeadersPeople()
         {
-            var people = _reportRepo.AsQueryable().Where(x => x.ResponsibleLeaderId == CurrentUser.Id && x.Status == ReportStatus.Pending).Select(x => x.Person).ToList();
+            var people = _reportRepo.AsQueryable().Where(x => x.ResponsibleLeaderId == CurrentUser.Id && x.Status == ReportStatus.Pending).Select(x => x.Person).Distinct().ToList();
 
             var orgs = _orgService.GetWhereUserIsResponsible(CurrentUser.Id);
 
             foreach (var org in orgs)
             {
-                foreach (var person in org.Employments.Where(x => people.All(y => y.Id != x.PersonId) && x.PersonId != CurrentUser.Id && !people.Contains(x.Person)).Select(x => x.Person))
+                foreach (var person in org.Employments.Where(x => people.All(y => y.Id != x.PersonId) && x.PersonId != CurrentUser.Id).Select(x => x.Person))
                 {
                     people.Add(person);
                 }
