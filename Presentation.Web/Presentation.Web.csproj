@@ -324,9 +324,7 @@
   <ItemGroup>
     <Content Include="App\app.html" />
     <Content Include="App\Core\Controllers\AdminNewSubstituteModalInstanceController.js" />
-    <Content Include="App\Core\Views\Modals\AdminNewSubstituteModal.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="App\Core\Views\Modals\AdminNewSubstituteModal.html" />
     <Content Include="App\Drive\Admin\AdminMenuController.js" />
     <Content Include="App\Drive\Admin\AddressLaundry\AddressLaundryController.js" />
     <Content Include="App\Drive\Admin\Administration\AdministrationController.js" />
