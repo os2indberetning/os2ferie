@@ -1,5 +1,5 @@
 ﻿angular.module('app.core').controller('NewSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "Autocomplete", "SubstituteType", 
+    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "Autocomplete", "SubstituteType",
     function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, Autocomplete, SubstituteType) {
 
         $scope.loadingPromise = null;
@@ -11,7 +11,7 @@
         $scope.orgUnits = $scope.orgUnits = OrgUnit.getWhereUserIsLeader({ id: leader.Id }, function() {
             $scope.orgUnit = $scope.orgUnits[0];
         });
-        
+
         $scope.autoCompleteOptions = {
             filter: "contains"
         };
@@ -46,6 +46,7 @@
                 $modalInstance.close();
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette stedfortræder");
+                $scope.showSpinner = false;
             });
         };
 

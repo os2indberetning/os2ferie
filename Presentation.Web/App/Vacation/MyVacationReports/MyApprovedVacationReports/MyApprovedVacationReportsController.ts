@@ -69,14 +69,14 @@
                     {
                         title: "Feriestart",
                         template: data => {
-                            const m = this.moment.utc(data.StartTimestamp, 'X');
+                            const m = this.moment.unix(data.StartTimestamp);
                             return m.format("L");
                         }
                     },
                     {
                         title: "Ferieafslutning",
                         template: data => {
-                            const m = this.moment.utc(data.EndTimestamp, 'X');
+                            const m = this.moment.unix(data.EndTimestamp);
                             return m.format("L");
                         }
                     },
@@ -86,7 +86,7 @@
                                 return `<button kendo-tooltip k-position="'right'" k-content="'${data.Comment}'" class="transparent-background pull-right no-border">
                                         <i class="fa fa-comment-o"></i></button>`;
                             }
-                            return "<i>Ingen kommantar angivet</i>";
+                            return "<i>Ingen kommentar angivet</i>";
                         },
                         title: "Kommentar"
                     },
@@ -100,7 +100,7 @@
                     {
                         field: "CreatedDateTimestamp",
                         template: data => {
-                            var m = this.moment.utc(data.CreatedDateTimestamp, 'X');
+                            var m = this.moment.unix(data.CreatedDateTimestamp);
                             return m.format("L");
                         },
                         title: "Indberettet"
@@ -109,7 +109,7 @@
                         field: "ClosedDateTimestamp",
                         title: "Godkendelsesdato",
                         template: data => {
-                            var m = this.moment.utc(data.ClosedDateTimestamp, 'X');
+                            var m = this.moment.unix(data.ClosedDateTimestamp);
                             return m.format("L");
                         }
                     },
@@ -118,7 +118,7 @@
                         title: "Afsendt til løn",
                         template: data => {
                             if (data.ProcessedDateTimestamp != 0 && data.ProcessedDateTimestamp != null && data.ProcessedDateTimestamp != undefined) {
-                                const m = this.moment.utc(data.ProcessedDateTimestamp, 'X');
+                                const m = this.moment.unix(data.ProcessedDateTimestamp);
                                 return m.format("L");
                             }
                             return "";
@@ -134,7 +134,8 @@
         }
 
         getVacationReportsUrl() {
-            return `/odata/VacationReports?status=Accepted&$expand=ResponsibleLeader,ApprovedBy &$filter=PersonId eq ${this.personId}`;
+            return `/odata/VacationReports?status=Accepted&$expand=ResponsibleLeader,ApprovedBy &$filter=PersonId eq ${this.personId} and VacationYear eq ${
+                this.vacationYear}`;
         }
     }
 

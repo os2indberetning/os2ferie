@@ -9,7 +9,7 @@
                     <label>Vælg stedfortræder:</label>
                 </div>
                 <div class="col-md-6">
-                    <input class="form-control pull-right fill-width" kendo-auto-complete k-options="autoCompleteOptions" k-data-source="persons" k-ng-model="person" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+                    <input class="form-control pull-right fill-width" kendo-auto-complete k-options="autoCompleteOptions" k-data-source="persons" k-ng-model="person" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'"/>
                 </div>
             </div>
 
@@ -21,7 +21,7 @@
                     <label>Stedfortræder for:</label>
                 </div>
                 <div class="col-md-5">
-                    <input k-options="personForOptions" ng-model="personForString" class="form-control pull-right fill-width" kendo-auto-complete k-data-source="leaders" k-ng-model="personFor" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'" />
+                    <input k-options="personForOptions" ng-model="personForString" class="form-control pull-right fill-width" kendo-auto-complete k-data-source="leaders" k-ng-model="personFor" k-data-text-field="'FullName'" k-placeholder="'Indtast navn'"/>
                 </div>
                 <button class="btn btn-default" ng-click="clearSelections()" title="Nulstil valgt stedfortræder for og organisation.">X</button>
             </div>
@@ -45,7 +45,7 @@
                     <label>Fra:</label>
                 </div>
                 <div class="col-md-6">
-                    <input class="fill-width pull-right" k-format="'dd/MM/yyyy'" kendo-datepicker k-options="dateOptions" k-ng-model="substituteFromDate" />
+                    <input class="fill-width pull-right" k-format="'dd/MM/yyyy'" kendo-datepicker k-options="dateOptions" k-ng-model="substituteFromDate"/>
                 </div>
             </div>
 
@@ -56,7 +56,7 @@
                     <label>Til:</label>
                 </div>
                 <div class="col-md-6">
-                    <input ng-disabled="infinitePeriod" class="fill-width pull-right" k-format="'dd/MM/yyyy'" kendo-datepicker k-options="dateOptions" k-ng-model="substituteToDate" />
+                    <input ng-disabled="infinitePeriod" class="fill-width pull-right" k-format="'dd/MM/yyyy'" kendo-datepicker k-options="dateOptions" k-ng-model="substituteToDate"/>
                 </div>
             </div>
 
@@ -67,7 +67,7 @@
                     <label>På ubestemt tid:</label>
                 </div>
                 <div class="col-md-6">
-                    <input class="pull-right" type="checkbox" ng-model="infinitePeriod" />
+                    <input class="pull-right" type="checkbox" ng-model="infinitePeriod"/>
                 </div>
             </div>
 

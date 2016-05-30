@@ -69,14 +69,14 @@
                     {
                         title: "Feriestart",
                         template: data => {
-                            const m = this.moment.utc(data.StartTimestamp, 'X');
+                            const m = this.moment.unix(data.StartTimestamp);
                             return m.format("L");
                         }
                     },
                     {
                         title: "Ferieafslutning",
                         template: data => {
-                            const m = this.moment.utc(data.EndTimestamp, 'X');
+                            const m = this.moment.unix(data.EndTimestamp);
                             return m.format("L");
                         }
                     },
@@ -86,8 +86,7 @@
                                 return `<button kendo-tooltip k-position="'right'" k-content="'${data.Comment
                                     }'" class="transparent-background pull-right no-border"><i class="fa fa-comment-o"></i></button>`;
                             }
-                            return "<i>Ingen kommantar angivet</i>";
-
+                            return "<i>Ingen kommentar angivet</i>";
                         },
                         title: "Kommentar"
                     },
@@ -101,7 +100,7 @@
                     {
                         field: "CreatedDateTimestamp",
                         template: data => {
-                            const m = this.moment.utc(data.CreatedDateTimestamp, 'X');
+                            const m = this.moment.unix(data.CreatedDateTimestamp);
                             return m.format("L");
                         },
                         title: "Indberettet"
@@ -110,7 +109,7 @@
                         field: "ClosedDateTimestamp",
                         title: "Afvist dato",
                         template: data => {
-                            const m = moment.utc(data.ClosedDateTimestamp, 'X');
+                            const m = moment.unix(data.ClosedDateTimestamp);
                             return m.format("L");
                         }
                     },
@@ -125,7 +124,8 @@
         }
 
         getVacationReportsUrl() {
-            return `/odata/VacationReports?status=Rejected&$expand=ApprovedBy($select=FullName) &$filter=PersonId eq ${this.personId}`;
+            return `/odata/VacationReports?status=Rejected&$expand=ApprovedBy($select=FullName) &$filter=PersonId eq ${this.personId} and VacationYear eq ${
+                this.vacationYear}`;
         }
     }
 

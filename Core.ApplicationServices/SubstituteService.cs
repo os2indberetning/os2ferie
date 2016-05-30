@@ -11,10 +11,10 @@ namespace Core.ApplicationServices
     {
         private readonly IGenericRepository<Substitute> _subRepo;
         private readonly IOrgUnitService _orgService;
-        private readonly IReportService<DriveReport> _reportService;
-        private readonly IGenericRepository<DriveReport> _reportRepo;
+        private readonly IReportService<Report> _reportService;
+        private readonly IGenericRepository<Report> _reportRepo;
 
-        public SubstituteService(IGenericRepository<Substitute> subRepo, IOrgUnitService orgService, IReportService<DriveReport> reportService, IGenericRepository<DriveReport> reportRepo)
+        public SubstituteService(IGenericRepository<Substitute> subRepo, IOrgUnitService orgService, IReportService<Report> reportService, IGenericRepository<Report> reportRepo)
         {
             _subRepo = subRepo;
             _orgService = orgService;

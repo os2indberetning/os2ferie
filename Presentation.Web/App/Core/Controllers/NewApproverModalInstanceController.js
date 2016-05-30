@@ -1,5 +1,5 @@
 ﻿angular.module('app.core').controller('NewApproverModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService","Autocomplete", "SubstituteType", 
+    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService","Autocomplete", "SubstituteType",
     function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService,Autocomplete, SubstituteType) {
 
         $scope.loadingPromise = null;
@@ -14,9 +14,9 @@
             filter: "contains"
         };
 
-        $scope.personsWithoutLeader = Autocomplete.activeUsersWithoutLeader(leader.Id); 
+        $scope.personsWithoutLeader = Autocomplete.activeUsersWithoutLeader(leader.Id);
 
-    
+
         $scope.saveNewApprover = function () {
             if ($scope.approver == undefined) {
                 NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en godkender");
@@ -27,7 +27,7 @@
                 NotificationService.AutoFadeNotification("danger", "", "Du skal vælge en ansat");
                 return;
             }
-            
+
 
 
             var sub = new Substitute({
@@ -52,6 +52,7 @@
                 $modalInstance.close();
             }, function () {
                 NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette godkender (Du kan ikke oprette 2 godkendere for samme person i samme periode)");
+                $scope.showSpinner = false;
             });
         };
 

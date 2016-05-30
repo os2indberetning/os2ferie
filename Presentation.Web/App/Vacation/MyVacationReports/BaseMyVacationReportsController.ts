@@ -8,9 +8,12 @@
 
         vacationReportsGrid: KendoGrid; // Kendo typing is missing some parameters that this controller is using
         vacationReportsOptions: kendo.ui.GridOptions;
-        vacationYear: Date;
+        vacationYear: number;
         personId: number;
-        isGridLoaded = false;
+
+        vacationYears = [];
+
+        private isGridLoaded = false;
 
         constructor(
             protected $scope,
@@ -79,7 +82,18 @@
                 currentDate = currentDate.subtract('year', 1);
             }
 
-            this.vacationYear = currentDate.toDate();
+            this.vacationYear = currentDate.year();
+
+            const minYear = Math.max(2016, this.vacationYear - 5); // Can't show vacation before 2016
+            const maxYear = this.vacationYear + 5;
+
+            for (let i = minYear; i < maxYear; i++) {
+                this.vacationYears.push({
+                    Year: i,
+                    YearString: `${i}/${i + 1}`
+                });
+            }
+
         }
 
         protected abstract getVacationReportsUrl();

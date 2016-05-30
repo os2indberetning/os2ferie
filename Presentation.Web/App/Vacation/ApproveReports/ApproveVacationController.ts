@@ -1,6 +1,8 @@
 ﻿module app.vacation {
     "use strict";
 
+    import NotificationService = core.interfaces.NotificationService;
+
     class ApproveVacationController {
 
         static $inject = [
@@ -10,10 +12,10 @@
             "NotificationService",
             "$http",
             "moment",
-            "$state"
+            "$state",
         ];
 
-        constructor(private $scope, private $rootScope, private VacationReport, private NotificationService, private $http: ng.IHttpService, private moment: moment.MomentStatic, private $state: ng.ui.IStateService) {
+        constructor(private $scope, private $rootScope, private VacationReport, private NotificationService: NotificationService, private $http: ng.IHttpService, private moment: moment.MomentStatic, private $state: ng.ui.IStateService) {
             this.readPendingVacations();
             var self = this;
 
@@ -38,7 +40,6 @@
                     ele.hide();
                 },
                 dateHeaderTemplate: kendo.template("<strong>#=kendo.toString(date, 'd')#</strong>"),
-                height: 600,
                 timezone: "Etc/UTC",
                 //This is kendo's save event. Label has been changed to 'Gem' in in "edit" event below.
                 save: (e: any) => {
@@ -81,7 +82,7 @@
                     batch: true,
                     transport: {
                         read: {
-                            url: `/odata/VacationReports()?$expand=Person($select=FullName)`,
+                            url: `/odata/VacationReports()?$expand=Person($select=FullName)&$filter=ResponsibleLeaderId eq ${this.$rootScope.CurrentUser.Id}`,
                             dataType: "json",
                             cache: false
                         }
@@ -169,7 +170,7 @@
         pendingVacations = [];
 
         readPendingVacations() {
-            this.$http.get("/odata/VacationReports()?status=Pending &$expand=Person($select=FullName)").then((response: ng.IHttpPromiseCallbackArg<any>) => {
+            this.$http.get(`/odata/VacationReports()?status=Pending &$expand=Person($select=FullName)&$filter=ResponsibleLeaderId eq ${this.$rootScope.CurrentUser.Id}`).then((response: ng.IHttpPromiseCallbackArg<any>) => {
                 //Sort of objects for Pending Vacation Reports
                 response.data.value.sort(function (a, b) { return (a.StartTimestamp > b.StartTimestamp) ? 1 : ((b.StartTimestamp > a.StartTimestamp) ? -1 : 0); });
 

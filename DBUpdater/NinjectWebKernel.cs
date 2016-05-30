@@ -76,9 +76,11 @@ namespace DBUpdater
             kernel.Bind<IOrgUnitService>().To<OrgUnitService>();
             kernel.Bind<ILogger>().To<Core.ApplicationServices.Logger.Logger>();
             kernel.Bind<IAppLoginService>().To<AppLoginService>();
+            kernel.Bind<IReportService<Report>>().To<ReportService<Report>>();
             kernel.Bind<IReportService<VacationReport>>().To<VacationReportService>();
             kernel.Bind<IReportService<DriveReport>>().To<DriveReportService>();
             kernel.Bind<IVacationReportService>().To<VacationReportService>();
+            kernel.Bind<IDriveReportService>().To<DriveReportService>();
             kernel.Bind<IKMDAbsenceService>().To<KMDAbsenceService>();
             kernel.Bind<IKMDAbsenceReportBuilder>().To<KMDAbsenceReportBuilder>();
             kernel.Bind<IAddressHistoryService>().To<AddressHistoryService>();

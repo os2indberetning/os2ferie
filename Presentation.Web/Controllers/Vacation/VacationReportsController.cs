@@ -257,10 +257,23 @@ namespace OS2Indberetning.Controllers.Vacation
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
 
             if (report == null) return NotFound();
-            if(HasReportAccess(report, CurrentUser)) StatusCode(HttpStatusCode.Forbidden);
-
+            if (HasReportAccess(report, CurrentUser)) StatusCode(HttpStatusCode.Forbidden);
+            if (report.Status == ReportStatus.Accepted) StatusCode(HttpStatusCode.BadRequest);
             // All good, user has rights to approve the report.
-            _reportService.ApproveReport(report, CurrentUser, "");
+            try
+            {
+                _reportService.ApproveReport(report, CurrentUser, "");
+            }
+            catch(Infrastructure.KMDVacationService.KMDSetAbsenceFailedException ex)
+            {
+                _logger.Log("Fejl fra KMD's ferie snitflade:", "web", ex, 1);
+                throw;
+            }
+            catch(Exception ex)
+            {
+                _logger.Log("Fejl under godkend ferieindberetning", "web", ex, 1);
+                throw;
+            }
 
             return Ok(report);
         }
@@ -278,7 +291,7 @@ namespace OS2Indberetning.Controllers.Vacation
 
             if (report == null) return NotFound();
             if (HasReportAccess(report, CurrentUser)) StatusCode(HttpStatusCode.Forbidden);
-
+            
             _reportService.RejectReport(report, CurrentUser, "");
 
             return Ok(report);
@@ -286,12 +299,11 @@ namespace OS2Indberetning.Controllers.Vacation
 
         private bool HasReportAccess(VacationReport report, Person person)
         {
-            var leader = report.ResponsibleLeader;
+            var leader = report.ResponsibleLeaderId;
 
             if (report.PersonId == person.Id) return false;
             if (leader == null) return false;
-            if (!person.Id.Equals(leader.Id)) return false;
-            if (report.Status == ReportStatus.Pending) return true;
+            if (person.Id.Equals(leader)) return true;
             _logger.Log("Forsøg på at redigere indberetning med anden status end afventende. Rapportens status er ikke ændret.", "web", 3);
             return false;
         }

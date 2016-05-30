@@ -27,8 +27,8 @@ namespace DBUpdater.Test
         private IGenericRepository<Person> _personRepoMock;
         private IGenericRepository<CachedAddress> _cachedAddressRepoMock;
         private IGenericRepository<PersonalAddress> _personalAddressRepoMock;
-        private IGenericRepository<DriveReport> _reportRepo;
-        private IReportService<DriveReport> _driveService;
+        private IGenericRepository<Report> _reportRepo;
+        private IReportService<Report> _reportService;
         private ISubstituteService _subservice;
         private IGenericRepository<Core.DomainModel.Substitute> _subRepo;
         private IAddressLaunderer _actualLaunderer;
@@ -67,14 +67,14 @@ namespace DBUpdater.Test
             _cachedAddressRepoMock.AsQueryable().Returns(cachedAddressList.AsQueryable());
 
             _subRepo = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
-            _reportRepo = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
-            _driveService = NSubstitute.Substitute.For<IReportService<DriveReport>>();
+            _reportRepo = NSubstitute.Substitute.For<IGenericRepository<Report>>();
+            _reportService = NSubstitute.Substitute.For<IReportService<Report>>();
             _subservice = NSubstitute.Substitute.For<ISubstituteService>();
 
             _actualLaunderer.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-                _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(),_reportRepo,_driveService, _subservice, _subRepo, _vacationBalanceRepo);
+                _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(),_reportRepo,_reportService, _subservice, _subRepo, _vacationBalanceRepo);
 
         }
 
@@ -118,7 +118,7 @@ namespace DBUpdater.Test
             Assert.That(res.ElementAt(0).Level.Equals(0));
             Assert.That(res.ElementAt(0).ParentId.Equals(null));
             Assert.That(res.ElementAt(0).HasAccessToFourKmRule.Equals(false));
-            
+
             Assert.That(res.ElementAt(1).LongDescription.Equals("Erslev Slagter"));
             Assert.That(res.ElementAt(1).ShortDescription.Equals("ES"));
             Assert.That(res.ElementAt(1).OrgId.Equals(2));

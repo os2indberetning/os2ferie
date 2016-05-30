@@ -158,7 +158,9 @@
                 },
                 {
                     field: "Id",
-                    template: (data) => `<a ng-click="deleteClick(${data.Id})">Slet</a> | <a ng-click="editClick(${data.Id})">Rediger</a>`,
+                    template: function(data) {
+                        return '<a ng-click="deleteClick("' + data.Id + '">Slet</a> | <a ng-click="editClick(' + data.Id + '">Rediger</a>';
+                    } ,
                     title: "Muligheder"
                 }
             ],

@@ -21,7 +21,7 @@
                     $scope.approver = this.dataItem(e.item.index());
                 }
             }
-          
+
 
             $scope.substitute = Substitute.get({ id: substituteId }, function (data) {
 
@@ -74,6 +74,7 @@
                     $modalInstance.close();
                 }, function () {
                     NotificationService.AutoFadeNotification("danger", "", "Kunne ikke oprette godkender");
+                    $scope.showSpinner = false;
                 });
             };
 

@@ -21,6 +21,10 @@
             isArray: false,
             url: "/odata/VacationReports/Service.RejectReport(Key=:id)"
         },
+        "update": {
+            method: "PUT",
+            isArray: false
+        },
         "getLatest": {
             method: "GET",
             isArray: false,

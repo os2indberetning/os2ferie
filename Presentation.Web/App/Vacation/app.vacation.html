@@ -32,7 +32,7 @@
                     <li ui-sref-active="active" class="mainMenuLink" ng-hide="!showApproveReports">
                         <a ui-sref="vacation.approvereportssettings"><i class="fa fa-fw fa-users margin-right-10"></i>Stedfortrædere</a>
                     </li>
-                    <li ui-sref-active="active" class="mainMenuLink">
+                    <li ui-sref-active="active" class="mainMenuLink" ng-hide="!showAdministration">
                         <a ui-sref="vacation.admin"><i class="fa fa-fw fa-wrench margin-right-10"></i>Administrator</a>
                     </li>
                     <li ng-click="menuCollapse = !menuCollapse" ui-sref-active="active" class="mainMenuLink" ng-hide="!showAdministration">
@@ -57,7 +57,7 @@
                     <li ui-sref-active="active" class="mainMenuLink" ng-hide="!showApproveReports">
                         <a ui-sref="vacation.approvereportssettings"><i class="fa fa-fw fa-users margin-right-10"></i></a>
                     </li>
-                    <li ui-sref-active="active" class="mainMenuLink">
+                    <li ui-sref-active="active" class="mainMenuLink" ng-hide="!showAdministration">
                         <a ui-sref="vacation.admin"><i class="fa fa-fw fa-wrench"></i></a>
                     </li>
                     <li ng-click="menuCollapse = !menuCollapse" ui-sref-active="active" class="mainMenuLink" ng-hide="!showAdministration">
