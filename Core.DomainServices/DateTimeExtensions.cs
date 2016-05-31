@@ -10,16 +10,14 @@ namespace Core.DomainServices
     {
         public static DateTime ToDateTime(this long unixTimeStamp)
         {
-            // Unix timestamp is seconds past epoch
             System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp);
             return dtDateTime;
         }
 
-        // If saving to database, remember to use DateTime.UtcNow
         public static long ToTimestamp(this DateTime date)
         {
-            return (long) date.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            return (long) date.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         }
 
     }

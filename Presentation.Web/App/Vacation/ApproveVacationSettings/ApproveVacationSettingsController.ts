@@ -4,7 +4,7 @@
     import BaseApproveReportsSettingsController = core.controllers.BaseApproveReportsSettingsController;
     import SubstituteType = core.models.SubstituteType;
 
-    class ApproveVacationReportsSettingsController extends BaseApproveReportsSettingsController {
+    class ApproveVacationSettingsController extends BaseApproveReportsSettingsController {
 
         static $inject: string[] = [
             "$scope",
@@ -21,5 +21,5 @@
 
     }
 
-    angular.module("app.drive").controller("ApproveVacationReportsSettingsController", ApproveVacationReportsSettingsController);
+    angular.module("app.drive").controller("ApproveVacationSettingsController", ApproveVacationSettingsController);
 }

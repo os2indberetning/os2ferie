@@ -12,11 +12,21 @@
             "NotificationService",
             "$http",
             "moment",
-            "$state",
+            "$state"
         ];
+
+        private _maxEndDate: Date;
+        private _currentUser;
+
+        scheduler: kendo.ui.Scheduler;
+        schedulerOptions: kendo.ui.SchedulerOptions;
+
+        pendingVacations = [];
 
         constructor(private $scope, private $rootScope, private VacationReport, private NotificationService: NotificationService, private $http: ng.IHttpService, private moment: moment.MomentStatic, private $state: ng.ui.IStateService) {
             this.readPendingVacations();
+
+            // Why is this used?
             var self = this;
 
             this.schedulerOptions = {
@@ -47,25 +57,26 @@
 
                     if (e.event.status == "Accepted") {
                         report.$approve({ id: e.event.id }, () => {
-                            location.reload();
+                            this.refresh();
                         });
                     }
                     else if (e.event.status == "Rejected") {
                         report.$reject({ id: e.event.id }, () => {
-                            location.reload();
+                            this.refresh();
                         });
                     }
                 },
                 editable: {
                     template: $("#customEditorTemplate").html()
                 },
-                edit: function (e: any) {
+                edit: (e: any) => {
                     var container = e.container;
                     var personName = e.event.Person.FullName.split("[")[0];
 
                     container.find("[data-container-for=title]").append("<p class='k-edit-label modal-personName'>" + personName + "</p>");
                     container.find("[data-container-for=start]").append("<p class='k-edit-label'>" + moment(e.event.start).format("DD.MM.YYYY") + "</p>");
                     container.find("[data-container-for=end]").append("<p class='k-edit-label'>" + moment(e.event.end).format("DD.MM.YYYY") + "</p>");
+                    container.find("[data-container-for=comment]").append("<p class='k-edit-label fill-width force-text-left'>" + (e.event.description === "" ? "<i>Ingen angivet</i>" : e.event.description) + "</p>");
 
                     //Setting up some final css.
                     $(".modal-personName").width("70%").css("text-align", "left");
@@ -161,18 +172,13 @@
             }
         }
 
-        private _maxEndDate: Date;
-        private _currentUser;
-
-        scheduler: kendo.ui.Scheduler;
-        schedulerOptions: kendo.ui.SchedulerOptions;
-
-        pendingVacations = [];
-
         readPendingVacations() {
+            // TODO Change this to use Resource instead
             this.$http.get(`/odata/VacationReports()?status=Pending &$expand=Person($select=FullName)&$filter=ResponsibleLeaderId eq ${this.$rootScope.CurrentUser.Id}`).then((response: ng.IHttpPromiseCallbackArg<any>) => {
                 //Sort of objects for Pending Vacation Reports
-                response.data.value.sort(function (a, b) { return (a.StartTimestamp > b.StartTimestamp) ? 1 : ((b.StartTimestamp > a.StartTimestamp) ? -1 : 0); });
+                response.data.value.sort((a, b) => ((a.StartTimestamp > b.StartTimestamp) ? 1 : ((b.StartTimestamp > a.StartTimestamp) ? -1 : 0)));
+
+                this.pendingVacations = [];
 
                 angular.forEach(response.data.value, (value, key) => {
                     var startTime = Number(value.StartTimestamp.toString() + "000");
@@ -187,7 +193,7 @@
                         firstName: value.Person.FullName.split("[")[0],
                         dateFrom: dateFrom,
                         dateTo: dateTo
-                    };
+                };
                     this.pendingVacations.push(obj);
                 });
             });
@@ -197,6 +203,13 @@
             time = Number(time);
             this.scheduler.date(new Date(time));
         };
+
+        private refresh() {
+            this.readPendingVacations();
+            this.scheduler.dataSource.read();
+        }
+
     }
-    angular.module("app.vacation").controller("Vacation.ApproveVacationController", ApproveVacationController);
+
+    angular.module("app.vacation").controller("ApproveVacationController", ApproveVacationController);
 }

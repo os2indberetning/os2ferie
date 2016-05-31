@@ -32,8 +32,8 @@
                 .state("vacation.approvereports",
                 {
                     url: "/approve-reports",
-                    templateUrl: "/App/Vacation/ApproveReports/ApproveReportsView.html",
-                    controller: "Vacation.ApproveVacationController",
+                    templateUrl: "/App/Vacation/ApproveVacation/ApproveVacationView.html",
+                    controller: "ApproveVacationController",
                     controllerAs: "avc",
                     resolve: {
                         CurrentUser: [
@@ -54,7 +54,7 @@
                 {
                     url: "/approve-reports-settings",
                     templateUrl: "/App/Core/Views/ApproveReportsSettingsView.html",
-                    controller: "ApproveVacationReportsSettingsController",
+                    controller: "ApproveVacationSettingsController",
                     controllerAs: "arsCtrl",
                     resolve: {
                         CurrentUser: [
