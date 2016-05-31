@@ -36,17 +36,19 @@
                         title: "Måned",
                         minorTickCount: 1,
                         columnWidth: 25,
-                        dateHeaderTemplate: "<span class='k-link k-nav-day' style=>#=kendo.toString(date, 'dd')#</span>",
+                        dateHeaderTemplate:
+                            "<span class='k-link k-nav-day' style=>#=kendo.toString(date, 'dd')#</span>",
                         workWeekStart: 0,
                         workWeekEnd: 5
                     }
                 ],
-                dataBinding: function (e) {
+                dataBinding: function(e) {
                     var scheduler = this;
 
                     if (scheduler._selectedViewName != "kendo.ui.SchedulerTimelineYearView") return;
 
-                    var ele = scheduler.wrapper.find(".k-scheduler-timelineMonthview > tbody:first-child > tr:first-child tbody >tr:nth-child(2)");
+                    var ele = scheduler.wrapper
+                        .find(".k-scheduler-timelineMonthview > tbody:first-child > tr:first-child tbody >tr:nth-child(2)");
                     ele.hide();
                 },
                 dateHeaderTemplate: kendo.template("<strong>#=kendo.toString(date, 'd')#</strong>"),
@@ -56,12 +58,13 @@
                     var report = new this.VacationReport();
 
                     if (e.event.status == "Accepted") {
-                        report.$approve({ id: e.event.id }, () => {
+                        report.$approve({ id: e.event.id },
+                        () => {
                             this.refresh();
                         });
-                    }
-                    else if (e.event.status == "Rejected") {
-                        report.$reject({ id: e.event.id }, () => {
+                    } else if (e.event.status == "Rejected") {
+                        report.$reject({ id: e.event.id },
+                        () => {
                             this.refresh();
                         });
                     }
@@ -73,10 +76,16 @@
                     var container = e.container;
                     var personName = e.event.Person.FullName.split("[")[0];
 
-                    container.find("[data-container-for=title]").append("<p class='k-edit-label modal-personName'>" + personName + "</p>");
-                    container.find("[data-container-for=start]").append("<p class='k-edit-label'>" + moment(e.event.start).format("DD.MM.YYYY") + "</p>");
-                    container.find("[data-container-for=end]").append("<p class='k-edit-label'>" + moment(e.event.end).format("DD.MM.YYYY") + "</p>");
-                    container.find("[data-container-for=comment]").append("<p class='k-edit-label fill-width force-text-left'>" + (e.event.description === "" ? "<i>Ingen angivet</i>" : e.event.description) + "</p>");
+                    container.find("[data-container-for=title]")
+                        .append("<p class='k-edit-label modal-personName'>" + personName + "</p>");
+                    container.find("[data-container-for=start]")
+                        .append("<p class='k-edit-label'>" + moment(e.event.start).format("DD.MM.YYYY") + "</p>");
+                    container.find("[data-container-for=end]")
+                        .append("<p class='k-edit-label'>" + moment(e.event.end).format("DD.MM.YYYY") + "</p>");
+                    container.find("[data-container-for=comment]")
+                        .append("<p class='k-edit-label fill-width force-text-left'>" +
+                            (e.event.description === "" ? "<i>Ingen angivet</i>" : e.event.description) +
+                            "</p>");
 
                     //Setting up some final css.
                     $(".modal-personName").width("70%").css("text-align", "left");
@@ -93,14 +102,41 @@
                     batch: true,
                     transport: {
                         read: {
-                            url: `/odata/VacationReports()?$expand=Person($select=FullName)&$filter=ResponsibleLeaderId eq ${this.$rootScope.CurrentUser.Id}`,
+                            url:
+                                `/odata/VacationReports()?$expand=Person($select=FullName)&$filter=ResponsibleLeaderId eq ${this.$rootScope.CurrentUser.Id}`,
                             dataType: "json",
                             cache: false
                         }
                     },
                     serverFiltering: true,
                     schema: {
-                        data: data => data.value,
+                        data: data => {
+                            var events = [];
+
+                            angular.forEach(data.value,
+                                (value, key) => {
+
+                                    const startsOnFullDay = value.StartTime == null;
+                                    const endsOnFullDay = value.EndTime == null;
+
+                                    if (!startsOnFullDay) {
+                                        const duration = this.moment.duration(value.StartTime);
+                                        value.StartTimestamp += duration.asSeconds();
+                                    }
+
+                                    if (!endsOnFullDay) {
+                                        const duration = this.moment.duration(value.EndTime);
+                                        value.EndTimestamp += duration.asSeconds();
+                                    } else {
+                                        // Add 86400/24 hours to enddate
+                                        value.EndTimestamp += 86400;
+                                    }
+
+                                    events.push(value);
+                                });
+
+                            return events;
+                        },
                         model: {
                             fields: {
                                 id: { type: "number", from: "Id" },
