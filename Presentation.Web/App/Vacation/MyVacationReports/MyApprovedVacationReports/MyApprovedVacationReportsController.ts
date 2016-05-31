@@ -2,6 +2,7 @@
     "use strict";
 
     import Person = core.models.Person;
+    import NotificationService = app.core.interfaces.NotificationService;
 
     class MyApprovedVacationReportsController extends BaseMyVacationReportsController {
 
@@ -13,7 +14,8 @@
             "$timeout",
             "Person",
             "moment",
-            "$state"
+            "$state",
+            "NotificationService"
         ];
 
         constructor(
@@ -24,9 +26,10 @@
             protected $timeout: ng.ITimeoutService,
             protected Person: Person,
             protected moment: moment.MomentStatic,
-            protected $state: ng.ui.IStateService) {
+            protected $state: ng.ui.IStateService,
+            protected NotificationService: NotificationService) {
 
-            super($scope, $modal, $rootScope, VacationReport, $timeout, Person, moment, $state);
+            super($scope, $modal, $rootScope, VacationReport, $timeout, Person, moment, $state, NotificationService);
 
             this.vacationReportsOptions = {
                 autoBind: false,
@@ -127,6 +130,11 @@
                     {
                         field: "ApprovedBy.FullName",
                         title: "Godkendt af"
+                    },
+                    {
+                        field: "Id",
+                        template: (data) => `<a ng-click="mvrCtrl.deleteClick(${data.Id})">Slet</a> | <a ui-sref=".edit({vacationReportId:${data.Id}})">Rediger</a>`,
+                        title: "Muligheder"
                     }
                 ],
                 scrollable: false

@@ -42,8 +42,6 @@
 
             var report = this.VacationReport.get({ id: this.vacationReportId },
             () => {
-                console.log(report);
-
                 this.startDate = this.moment.utc(report.StartTimestamp, "X").toDate();
                 this.endDate = this.moment.utc(report.EndTimestamp, "X").toDate();
 

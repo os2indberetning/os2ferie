@@ -3,6 +3,7 @@
 
     import KendoGrid = core.interfaces.KendoGrid;
     import Person = core.models.Person;
+    import NotificationService = app.core.interfaces.NotificationService;
 
     export abstract class BaseMyVacationReportsController {
 
@@ -23,7 +24,8 @@
             protected $timeout: ng.ITimeoutService,
             protected Person: Person,
             protected moment: moment.MomentStatic,
-            protected $state: ng.ui.IStateService) {
+            protected $state: ng.ui.IStateService,
+            protected NotificationService: NotificationService) {
 
             this.loadInitialDate();
 
@@ -57,7 +59,11 @@
                 }
             }).result.then(() => {
                 this.VacationReport.delete({ id: id }, () => {
+                    this.NotificationService.AutoFadeNotification("success", "", "Indberetningen blev slettet.");
                     this.refreshGrid();
+                }, () =>
+                {
+                    this.NotificationService.AutoFadeNotification("error", "", "Fejl under sletning af indberetning.");
                 });
             });
         }

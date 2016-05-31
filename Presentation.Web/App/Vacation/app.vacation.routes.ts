@@ -153,6 +153,31 @@
                     controller: 'MyApprovedVacationReportsController',
                     controllerAs: 'mvrCtrl'
                 })
+                .state("vacation.myreports.approved.edit",
+                {
+                    url: "/modal/:vacationReportId",
+                    onEnter: [
+                        "$state", "$modal", "$stateParams", ($state, $modal, $stateParams) => {
+                            $modal.open({
+                                templateUrl: '/App/Vacation/MyVacationReports/EditVacationReportTemplate.html',
+                                controller: 'EditReportVacationController as rvc',
+                                backdrop: "static",
+                                windowClass: "app-modal-window-full",
+                                resolve: {
+                                    vacationReportId: () => {
+                                        return $stateParams.vacationReportId;
+                                    }
+                                }
+                            })
+                                .result.then(() => {
+                                    $state.go("^", null, { reload: true });
+                                },
+                                () => {
+                                    $state.go("^");
+                                });
+                        }
+                    ]
+                })
                 .state("vacation.myreports.rejected",
                 {
                     url: "/rejected",
