@@ -55,6 +55,7 @@
                 timezone: "Etc/UTC",
                 //This is kendo's save event. Label has been changed to 'Gem' in in "edit" event below.
                 save: (e: any) => {
+                    e.preventDefault();
                     var report = new this.VacationReport();
 
                     if (e.event.status == "Accepted") {
@@ -70,7 +71,11 @@
                     }
                 },
                 editable: {
-                    template: $("#customEditorTemplate").html()
+                    template: $("#customEditorTemplate").html(),
+                    update: true,
+                    move: false,
+                    destroy: false,
+                    resize: false
                 },
                 edit: (e: any) => {
                     var container = e.container;
