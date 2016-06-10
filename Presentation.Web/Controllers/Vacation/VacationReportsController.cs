@@ -112,19 +112,7 @@ namespace OS2Indberetning.Controllers.Vacation
             if (report == null) return StatusCode(HttpStatusCode.NotFound);
             if (CurrentUser.Id != report.PersonId) return StatusCode(HttpStatusCode.Forbidden);
 
-            var newReport = delta.GetEntity();
-
-            _reportService.PrepareReport(newReport);
-
-            try
-            {
-                delta.Patch(report);
-                Repo.Save();
-            }
-            catch (Exception e)
-            {
-                return InternalServerError(e);
-            }
+            _reportService.Edit(delta);
 
             return Updated(report);
         }
@@ -238,16 +226,18 @@ namespace OS2Indberetning.Controllers.Vacation
         /// <returns></returns>
         public new IHttpActionResult Delete([FromODataUri] int key)
         {
-            if (CurrentUser.IsAdmin)
-            {
-                return base.Delete(key);
-            }
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id.Equals(key));
+
             if (report == null)
             {
                 return NotFound();
             }
-            return report.PersonId.Equals(CurrentUser.Id) ? base.Delete(key) : Unauthorized();
+
+            if(!report.PersonId.Equals(CurrentUser.Id) || !CurrentUser.IsAdmin) return Unauthorized();
+
+            _reportService.Delete(key);
+
+            return Ok();
         }
 
         [EnableQuery]
@@ -291,7 +281,7 @@ namespace OS2Indberetning.Controllers.Vacation
 
             if (report == null) return NotFound();
             if (HasReportAccess(report, CurrentUser)) StatusCode(HttpStatusCode.Forbidden);
-            
+
             _reportService.RejectReport(report, CurrentUser, "");
 
             return Ok(report);

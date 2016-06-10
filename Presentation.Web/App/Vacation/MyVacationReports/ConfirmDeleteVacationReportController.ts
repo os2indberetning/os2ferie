@@ -19,7 +19,6 @@
 
         confirmDelete() {
             this.$modalInstance.close(this.itemId);
-            this.NotificationService.AutoFadeNotification("success", "", "Indberetningen blev slettet.");
         }
 
         cancel() {

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Web.OData;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.Logger;
 using Core.ApplicationServices.MailerService.Interface;
@@ -36,6 +38,9 @@ namespace Core.ApplicationServices
             }
 
             if (report.Comment == null) report.Comment = "";
+
+            report.ProcessedDateTimestamp = 0;
+            report.Status = ReportStatus.Pending;
         }
 
         public new VacationReport Create(VacationReport report)
@@ -46,6 +51,43 @@ namespace Core.ApplicationServices
             _reportRepo.Save();
 
             return report;
+        }
+
+        public VacationReport Edit(Delta<VacationReport> delta)
+        {
+            var newReport = delta.GetEntity();
+
+            var report = _reportRepo.AsQueryable().First(x => x.Id == newReport.Id);
+
+#if !DEBUG
+            if (report.Status == ReportStatus.Accepted)
+            {
+                var absenceReport = _absenceBuilder.Delete(report);
+                _absenceService.ReportAbsence(absenceReport);
+            }
+#endif
+
+            PrepareReport(newReport);
+
+            delta.Patch(report);
+            _reportRepo.Save();
+
+            return newReport;
+        }
+
+        public void Delete(int id)
+        {
+            var report = _reportRepo.AsQueryable().First(x => x.Id == id);
+
+#if !DEBUG
+            if (report.Status == ReportStatus.Accepted)
+            {
+                var absenceReport = _absenceBuilder.Delete(report);
+                _absenceService.ReportAbsence(absenceReport);
+            }
+#endif
+            _reportRepo.Delete(report);
+            _reportRepo.Save();
         }
 
         public new bool Validate(VacationReport report)
