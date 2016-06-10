@@ -81,8 +81,6 @@ a {
     margin: 15px;
 }
 
-
-
 .no-border {
     border: none;
 }
@@ -575,4 +573,8 @@ li.mainMenuLink.active > a > i.fa {
 
 .k-scheduler-timelineMonthview > tbody > tr:nth-child(1) .k-scheduler-table tr:nth-child(2) {
     display: none;
+}
+
+.force-text-left {
+    text-align: left !important;
 }

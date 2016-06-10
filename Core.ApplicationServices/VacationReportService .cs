@@ -29,6 +29,10 @@ namespace Core.ApplicationServices
             report.ActualLeaderId = GetActualLeaderForReport(report).Id;
 
             var startDateTime = report.StartTimestamp.ToDateTime();
+            var endDate = report.EndTimestamp.ToDateTime().Date;
+
+            report.EndTimestamp = endDate.ToTimestamp();
+            report.StartTimestamp = startDateTime.Date.ToTimestamp();
 
             report.VacationYear = startDateTime.Year;
 
