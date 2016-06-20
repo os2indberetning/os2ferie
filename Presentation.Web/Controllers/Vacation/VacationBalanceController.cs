@@ -23,7 +23,7 @@ namespace OS2Indberetning.Controllers.Vacation
             var currentYear = Repo.AsQueryable().Max(y => y.Year);
             var queryable =
                 GetQueryable(queryOptions)
-                    .Where(x => x.PersonId == CurrentUser.Id && x.Year == currentYear);
+                    .Where(x => x.PersonId == CurrentUser.Id && x.Year == currentYear && x.Employment.EndDateTimestamp == 0);
 
             return queryable;
         }

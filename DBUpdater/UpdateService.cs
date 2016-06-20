@@ -542,7 +542,7 @@ namespace DBUpdater
 
                 if (!int.TryParse(balance.EmploymentRelationshipNumber, out employmentRelationshipNumber)) continue;
 
-                var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.ExtraNumber == employmentRelationshipNumber);
+                var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.ExtraNumber == employmentRelationshipNumber && x.EndDateTimestamp == 0);
 
                 // The person's employment is not stored in our database, so abort
                 // Also not likely to happen, but better safe than sorry.
