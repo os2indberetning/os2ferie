@@ -233,7 +233,7 @@ namespace OS2Indberetning.Controllers.Vacation
                 return NotFound();
             }
 
-            if(!report.PersonId.Equals(CurrentUser.Id) || !CurrentUser.IsAdmin) return Unauthorized();
+            if(!report.PersonId.Equals(CurrentUser.Id) && !CurrentUser.IsAdmin) return Unauthorized();
 
             _reportService.Delete(key);
 
