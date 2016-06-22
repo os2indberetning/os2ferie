@@ -81,12 +81,43 @@
                     var container = e.container;
                     var personName = e.event.Person.FullName.split("[")[0];
 
+                    var value = e.event;
+                    var endDateTimestamp = e.event.end;
+
+                    const startsOnFullDay = value.StartTime == null;
+                    const endsOnFullDay = value.EndTime == null;
+
+                    var startTimeFormat = null;
+
+                    if (!startsOnFullDay) {
+                        startTimeFormat = moment((moment.duration(value.StartTime) as any)._data).format('HH:mm');
+                    }
+
+                    var endTimeFormat = null;
+
+                    if (!endsOnFullDay) {
+                        endTimeFormat = moment((moment.duration(value.EndTime) as any)._data).format('HH:mm');
+                    }
+
+                    if (startsOnFullDay && endsOnFullDay) {
+                        endDateTimestamp -= 86400;
+                    }
+
                     container.find("[data-container-for=title]")
                         .append("<p class='k-edit-label modal-personName'>" + personName + "</p>");
+
                     container.find("[data-container-for=start]")
-                        .append("<p class='k-edit-label'>" + moment(e.event.start).format("DD.MM.YYYY") + "</p>");
+                        .append(`<p class='k-edit-label fill-width force-text-left'>
+                            ${moment(e.event.start).format("DD.MM.YYYY")} ` +
+                            (startTimeFormat != null ? ` kl. ${startTimeFormat}` : ``) +
+                            `</p>`);
+
                     container.find("[data-container-for=end]")
-                        .append("<p class='k-edit-label'>" + moment(e.event.end).format("DD.MM.YYYY") + "</p>");
+                        .append(`<p class='k-edit-label fill-width force-text-left'>
+                            ${moment(endDateTimestamp).format("DD.MM.YYYY")} ` +
+                            (endTimeFormat != null ? ` kl. ${endTimeFormat}` : ``) +
+                            `</p>`);
+
                     container.find("[data-container-for=comment]")
                         .append("<p class='k-edit-label fill-width force-text-left'>" +
                             (e.event.description === "" ? "<i>Ingen angivet</i>" : e.event.description) +
