@@ -24,6 +24,7 @@
         "ngResource",
         "angularMoment",
         "cgBusy",
+        "app.core",
         "app.drive",
         "app.vacation"])
         .config([
@@ -32,16 +33,11 @@
             }
         ])
         .run(([
-            'Person', '$rootScope', "HelpText", (Person, $rootScope, HelpText) => {
-                if ($rootScope.CurrentUser == undefined) {
-                    $rootScope.CurrentUser = Person.GetCurrentUser().$promise.then(res => {
-                        $rootScope.CurrentUser = res;
-                        $rootScope.showAdministration = res.IsAdmin;
-                        $rootScope.showApproveReports = res.IsLeader || res.IsSubstitute;
-                        $rootScope.UserName = res.FullName;
-                        $rootScope.loaded = true;
-                    });
-                }
+            "Person", "$rootScope", "HelpText", '$state', '$stateParams',
+            'Authorization', 'Principal', (Person, $rootScope, HelpText, $state, $stateParams,
+                Authorization, Principal) => {
+
+                $rootScope.hasAccess = true;
 
                 if ($rootScope.HelpTexts == undefined) {
                     HelpText.getAll().$promise.then(res => {
@@ -49,6 +45,20 @@
                         $rootScope.HelpTexts = res;
                     });
                 }
+
+                $rootScope.$on('$stateChangeStart',
+                    (event, toState, toStateParams) => {
+                        // track the state the user wants to go to;
+                        // authorization service needs this
+                        $rootScope.toState = toState;
+                        $rootScope.toStateParams = toStateParams;
+
+                        // if the principal is resolved, do an
+                        // authorization check immediately. otherwise,
+                        // it'll be done when the state is resolved.
+                        if (Principal.isIdentityResolved())
+                            Authorization.authorize();
+                    });
             }
         ]))
         .constant('moment', moment)
