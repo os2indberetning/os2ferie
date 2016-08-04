@@ -2,51 +2,45 @@
     "use strict";
 
     export class routes {
-        static $inject = ["$stateProvider", "$urlRouterProvider", "EnabledApplications"];
+        static $inject = ["$stateProvider", "$urlRouterProvider"];
 
-        static init($stateProvider: ng.ui.IStateProvider, $urlRouterProvider: ng.ui.IUrlRouterProvider, EnabledApplications) {
-
-            var isDriveEnabled = EnabledApplications.toLowerCase().indexOf("drive") > -1;
-            var isVacationEnabled = EnabledApplications.toLowerCase().indexOf("vacation") > -1;
+        static init($stateProvider: ng.ui.IStateProvider, $urlRouterProvider: ng.ui.IUrlRouterProvider) {
 
             $stateProvider.
                 state('default', {
                     url: '/',
                     templateUrl: '/App/app.html',
-                    controller: [
-                        '$scope', '$state', ($scope, $state) => {
-
-                            if (isDriveEnabled && isVacationEnabled) {
-                                $scope.handledState = true;
-                                return;
-                            }
-
-                            if (isDriveEnabled) $state.go('drive');
-                            if (isVacationEnabled) $state.go('vacation');
-                        }
-                    ]
+                    resolve: {
+                        authorize: ['Authorization',
+                            Authorization => Authorization.authorize()
+                        ]
+                    }
                 });
 
-            if (isDriveEnabled) {
-                $stateProvider.state("drive", {
-                    url: "/drive",
-                    templateUrl: "/App/Drive/app.drive.html",
-                    abstract: true
-                } as ng.ui.IState);
+            $stateProvider.state("drive", {
+                url: "/drive",
+                templateUrl: "/App/Drive/app.drive.html",
+                abstract: true,
+                resolve: {
+                    authorize: ['Authorization',
+                        Authorization => Authorization.authorize()
+                    ]
+                }
+            } as ng.ui.IState);
 
-                $urlRouterProvider.when("/drive", "/drive/driving");
-            }
+            $stateProvider.state("vacation", {
+                url: "/vacation",
+                templateUrl: "/App/Vacation/app.vacation.html",
+                abstract: true,
+                resolve: {
+                    authorize: ['Authorization',
+                        Authorization => Authorization.authorize()
+                    ]
+                }
+            } as ng.ui.IState);
 
-            if (isVacationEnabled) {
-                $stateProvider.state("vacation", {
-                    url: "/vacation",
-                    templateUrl: "/App/Vacation/app.vacation.html",
-                    abstract: true
-                } as ng.ui.IState);
-
-                $urlRouterProvider.when("/vacation", "/vacation/report");
-            }
-
+            $urlRouterProvider.when("/drive", "/drive/driving");
+            $urlRouterProvider.when("/vacation", "/vacation/report");
             $urlRouterProvider.otherwise("/");
 
             $urlRouterProvider.rule(($injector, $location) => {

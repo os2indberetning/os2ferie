@@ -2,32 +2,17 @@
 
     export class Routes {
         static $inject = [
-            "$stateProvider",
-            "$urlRouterProvider"
+            "$stateProvider"
         ];
 
-        static init($stateProvider: ng.ui.IStateProvider, $urlRouterProvider: ng.ui.IUrlRouterProvider) {
+        static init($stateProvider: ng.ui.IStateProvider) {
             $stateProvider
                 .state("vacation.report",
                 {
                     url: "/report",
                     templateUrl: "/App/Vacation/ReportVacation/ReportVacationView.html",
                     controller: "CreateReportVacationController",
-                    controllerAs: "rvc",
-                    resolve: {
-                        CurrentUser: [
-                            "$rootScope", "Person", ($rootScope, Person) => {
-                                if ($rootScope.CurrentUser == undefined) {
-                                    return Person.GetCurrentUser()
-                                        .$promise.then(res => {
-                                            $rootScope.CurrentUser = res;
-                                        });
-                                } else {
-                                    return $rootScope.CurrentUser;
-                                }
-                            }
-                        ]
-                    }
+                    controllerAs: "rvc"
                 })
                 .state("vacation.approvereports",
                 {
@@ -35,19 +20,8 @@
                     templateUrl: "/App/Vacation/ApproveVacation/ApproveVacationView.html",
                     controller: "ApproveVacationController",
                     controllerAs: "avc",
-                    resolve: {
-                        CurrentUser: [
-                            "$rootScope", "Person", ($rootScope, Person) => {
-                                if ($rootScope.CurrentUser == undefined) {
-                                    return Person.GetCurrentUser()
-                                        .$promise.then(res => {
-                                            $rootScope.CurrentUser = res;
-                                        });
-                                } else {
-                                    return $rootScope.CurrentUser;
-                                }
-                            }
-                        ]
+                    data: {
+                        roles: ['Approver']
                     }
                 })
                 .state("vacation.approvereportssettings",
@@ -56,19 +30,8 @@
                     templateUrl: "/App/Core/Views/ApproveReportsSettingsView.html",
                     controller: "ApproveVacationSettingsController",
                     controllerAs: "arsCtrl",
-                    resolve: {
-                        CurrentUser: [
-                            "$rootScope", "Person", ($rootScope, Person) => {
-                                if ($rootScope.CurrentUser == undefined) {
-                                    return Person.GetCurrentUser()
-                                        .$promise.then(res => {
-                                            $rootScope.CurrentUser = res;
-                                        });
-                                } else {
-                                    return $rootScope.CurrentUser;
-                                }
-                            }
-                        ]
+                    data: {
+                        roles: ['Approver']
                     }
                 })
                 .state("vacation.admin",
@@ -77,19 +40,8 @@
                     templateUrl: "/App/Vacation/Admin/AdminView.html",
                     controller: "Vacation.AdminMenuController",
                     controllerAs: "ctrl",
-                    resolve: {
-                        CurrentUser: [
-                            "$rootScope", "Person", ($rootScope, Person) => {
-                                if ($rootScope.CurrentUser == undefined) {
-                                    return Person.GetCurrentUser()
-                                        .$promise.then(res => {
-                                            $rootScope.CurrentUser = res;
-                                        });
-                                } else {
-                                    return $rootScope.CurrentUser;
-                                }
-                            }
-                        ]
+                    data: {
+                        roles: ['Admin']
                     }
                 })
                 .state("vacation.myreports",
@@ -97,21 +49,7 @@
                     url: "/myreports",
                     controller: 'MyVacationReportsController',
                     controllerAs: 'mvrc',
-                    templateUrl: "/App/Vacation/MyVacationReports/MyVacationReportsView.html",
-                    resolve: {
-                        CurrentUser: [
-                            "$rootScope", "Person", ($rootScope, Person) => {
-                                if ($rootScope.CurrentUser == undefined) {
-                                    return Person.GetCurrentUser()
-                                        .$promise.then(res => {
-                                            $rootScope.CurrentUser = res;
-                                        });
-                                } else {
-                                    return $rootScope.CurrentUser;
-                                }
-                            }
-                        ]
-                    }
+                    templateUrl: "/App/Vacation/MyVacationReports/MyVacationReportsView.html"
                 })
                 .state("vacation.myreports.pending",
                 {

@@ -414,6 +414,8 @@
     </Content>
     <TypeScriptCompile Include="App\Core\Interfaces\KendoGrid.d.ts" />
     <TypeScriptCompile Include="App\Core\Interfaces\NotificationService.d.ts" />
+    <TypeScriptCompile Include="App\Core\Services\Authorization.ts" />
+    <TypeScriptCompile Include="App\Core\Services\Principal.ts" />
     <TypeScriptCompile Include="App\Drive\ApproveReports\ApproveReportsSettingsController.ts" />
     <Content Include="App\Core\Views\Modals\NewApproverModal.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
