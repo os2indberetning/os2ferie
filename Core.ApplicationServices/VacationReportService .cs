@@ -142,7 +142,6 @@ namespace Core.ApplicationServices
         public void ApproveReport(VacationReport report, Person approver, string emailText)
         {
             report.Status = ReportStatus.Accepted;
-            report.Comment = emailText;
             report.ClosedDateTimestamp = (DateTime.UtcNow.ToTimestamp());
             report.ApprovedById = approver.Id;
 
