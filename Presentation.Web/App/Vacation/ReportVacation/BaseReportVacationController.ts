@@ -24,7 +24,7 @@
         endTime: Date;
         employments: Employment[];
         vacationType;
-        comment: String;
+        purpose: String;
         position: number;
         saveButtenDisabled = true;
         isEditingVacation = false;

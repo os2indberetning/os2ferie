@@ -26,9 +26,13 @@ namespace DBUpdater
         private readonly IDbUpdaterDataProvider _dataProvider;
         private readonly IMailSender _mailSender;
         private readonly IAddressHistoryService _historyService;
-        private readonly IGenericRepository<Report> _reportRepo;
-        private readonly IReportService<Report> _reportService;
-        private readonly IGenericRepository<VacationBalance> _vacationRepo;
+
+        private readonly IGenericRepository<VacationReport> _vacationReportRepo;
+        private readonly IGenericRepository<DriveReport> _driveReportRepo;
+        private readonly IDriveReportService _driveReportService;
+        private readonly IVacationReportService _vacationReportService;
+
+        private readonly IGenericRepository<VacationBalance> _vacationBalanceRepo;
         private readonly ISubstituteService _subService;
 
         public UpdateService(IGenericRepository<Employment> emplRepo,
@@ -41,11 +45,13 @@ namespace DBUpdater
             IDbUpdaterDataProvider dataProvider,
             IMailSender mailSender,
             IAddressHistoryService historyService,
-            IGenericRepository<Report> reportRepo,
-            IReportService<Report> reportService,
+            IGenericRepository<VacationReport> vacationReportRepo,
+            IGenericRepository<DriveReport> driveReportRepo,
+            IVacationReportService vacationReportService,
+            IDriveReportService driveReportService,
             ISubstituteService subService,
             IGenericRepository<Substitute> subRepo,
-            IGenericRepository<VacationBalance> vacationRepo)
+            IGenericRepository<VacationBalance> vacationBalanceRepo)
         {
             _emplRepo = emplRepo;
             _orgRepo = orgRepo;
@@ -57,11 +63,13 @@ namespace DBUpdater
             _dataProvider = dataProvider;
             _mailSender = mailSender;
             _historyService = historyService;
-            _reportRepo = reportRepo;
-            _reportService = reportService;
+            _vacationReportRepo = vacationReportRepo;
+            _driveReportRepo = driveReportRepo;
+            _vacationReportService = vacationReportService;
+            _driveReportService = driveReportService;
             _subService = subService;
             _subRepo = subRepo;
-            _vacationRepo = vacationRepo;
+            _vacationBalanceRepo = vacationBalanceRepo;
         }
 
         /// <summary>
@@ -446,27 +454,59 @@ namespace DBUpdater
 
         public void UpdateLeadersOnAllReports()
         {
-            var i = 0;
+           UpdateLeadersOnVacationReports();
+            UpdateLeadersOnDriveReports();
+        }
 
-            var reports = _reportRepo.AsQueryable().Where(x => x.Employment.OrgUnit.Level > 1).ToList();
-            var max = reports.Count();
+        private void UpdateLeadersOnVacationReports() {
+
+            Console.WriteLine("Updating leaders on vacation report: ");
+            var reports = _vacationReportRepo.AsQueryable().Where(x => x.Employment.OrgUnit.Level > 1).ToList();
+            var i = 0;
+            var max = reports.Count;
             foreach (var report in reports)
             {
                 if (i % 100 == 0)
                 {
-                    Console.WriteLine("Updating leaders on report " + i + " of " + max);
+                    Console.WriteLine("at " + i + " of " + max);
                 }
                 i++;
-                report.ResponsibleLeaderId = _reportService.GetResponsibleLeaderForReport(report).Id;
-                report.ActualLeaderId = _reportService.GetActualLeaderForReport(report).Id;
+                report.ResponsibleLeaderId = _vacationReportService.GetResponsibleLeaderForReport(report).Id;
+                report.ActualLeaderId = _vacationReportService.GetActualLeaderForReport(report).Id;
                 if (i % 1000 == 0)
                 {
                     Console.WriteLine("Saving to database");
-                    _reportRepo.Save();
+                    _vacationReportRepo.Save();
                 }
             }
             Console.WriteLine("Saving to database");
-            _reportRepo.Save();
+            _vacationReportRepo.Save();
+        }
+
+        private void UpdateLeadersOnDriveReports()
+        {
+
+            Console.WriteLine("Updating leaders on vacation report: ");
+            var reports = _driveReportRepo.AsQueryable().Where(x => x.Employment.OrgUnit.Level > 1).ToList();
+            var i = 0;
+            var max = reports.Count;
+            foreach (var report in reports)
+            {
+                if (i % 100 == 0)
+                {
+                    Console.WriteLine("at " + i + " of " + max);
+                }
+                i++;
+                report.ResponsibleLeaderId = _driveReportService.GetResponsibleLeaderForReport(report).Id;
+                report.ActualLeaderId = _driveReportService.GetActualLeaderForReport(report).Id;
+                if (i % 1000 == 0)
+                {
+                    Console.WriteLine("Saving to database");
+                    _driveReportRepo.Save();
+                }
+            }
+            Console.WriteLine("Saving to database");
+            _driveReportRepo.Save();
         }
 
         /// <summary>
@@ -474,6 +514,7 @@ namespace DBUpdater
         /// </summary>
         public void UpdateLeadersOnExpiredOrActivatedSubstitutes()
         {
+            // TODO Find something more generic for updating drive and vacation reports.
             var yesterdayTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(1))).TotalSeconds;
             var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
@@ -491,22 +532,41 @@ namespace DBUpdater
         public void AddLeadersToReportsThatHaveNone()
         {
             // Fail-safe as some reports for unknown reasons have not had a leader attached
-            Console.WriteLine("Adding leaders to reports that have none");
+            // TODO Find something more generic for updating drive and vacation reports.
+            Console.WriteLine("Adding leaders to drive reports that have none");
             var i = 0;
-            var reports = _reportRepo.AsQueryable().Where(r => r.ResponsibleLeader == null || r.ActualLeader == null).ToList();
-            foreach (var report in reports)
+            var driveReports = _driveReportRepo.AsQueryable().Where(r => r.ResponsibleLeader == null || r.ActualLeader == null).ToList();
+            foreach (var report in driveReports)
             {
                 i++;
-                Console.WriteLine("Adding leaders to report " + i + " of " + reports.Count);
-                report.ResponsibleLeaderId = _reportService.GetResponsibleLeaderForReport(report).Id;
-                report.ActualLeaderId = _reportService.GetActualLeaderForReport(report).Id;
+                Console.WriteLine("Adding leaders to drive report " + i + " of " + driveReports.Count);
+                report.ResponsibleLeaderId = _driveReportService.GetResponsibleLeaderForReport(report).Id;
+                report.ActualLeaderId = _driveReportService.GetActualLeaderForReport(report).Id;
                 if (i % 100 == 0)
                 {
                     Console.WriteLine("Saving to database");
-                    _reportRepo.Save();
+                    _driveReportRepo.Save();
                 }
             }
-            _reportRepo.Save();
+            _driveReportRepo.Save();
+
+            // Fail-safe as some reports for unknown reasons have not had a leader attached
+            Console.WriteLine("Adding leaders to drive reports that have none");
+            i = 0;
+            var vacationReports = _vacationReportRepo.AsQueryable().Where(r => r.ResponsibleLeader == null || r.ActualLeader == null).ToList();
+            foreach (var report in vacationReports)
+            {
+                i++;
+                Console.WriteLine("Adding leaders to drive report " + i + " of " + vacationReports.Count);
+                report.ResponsibleLeaderId = _vacationReportService.GetResponsibleLeaderForReport(report).Id;
+                report.ActualLeaderId = _vacationReportService.GetActualLeaderForReport(report).Id;
+                if (i % 100 == 0)
+                {
+                    Console.WriteLine("Saving to database");
+                    _vacationReportRepo.Save();
+                }
+            }
+            _vacationReportRepo.Save();
         }
 
         public void UpdateVacationBalance()
@@ -548,7 +608,7 @@ namespace DBUpdater
                 // Also not likely to happen, but better safe than sorry.
                 if (employment == null) continue;
 
-                var vacation = _vacationRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.EmploymentId == employment.Id && x.Year == vacationYear);
+                var vacation = _vacationBalanceRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.EmploymentId == employment.Id && x.Year == vacationYear);
 
                 var isNewBalance = vacation == null;
 
@@ -561,7 +621,7 @@ namespace DBUpdater
                         Year = vacationYear
                     };
 
-                    _vacationRepo.Insert(vacation);
+                    _vacationBalanceRepo.Insert(vacation);
                 }
 
                 vacation.FreeVacationHours = balance.FreeVacationHoursTotalDec ?? 0;
@@ -574,10 +634,10 @@ namespace DBUpdater
 
                 if (i % 100 != 0) continue;
                 Console.WriteLine("Saving to database");
-                _vacationRepo.Save();
+                _vacationBalanceRepo.Save();
             }
 
-            _vacationRepo.Save();
+            _vacationBalanceRepo.Save();
         }
 
     }

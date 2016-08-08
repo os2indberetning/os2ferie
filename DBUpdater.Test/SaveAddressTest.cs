@@ -30,8 +30,10 @@ namespace DBUpdater.Test
         private IDbUpdaterDataProvider _dataProviderMock;
         private IGenericRepository<WorkAddress> _workAddressRepoMock;
         private IMailSender _mailSenderMock;
-        private IGenericRepository<Report> _reportRepo;
-        private IReportService<Report> _reportService;
+        private IDriveReportService _driveReportService;
+        private IVacationReportService _vacationReportService;
+        private IGenericRepository<DriveReport> _driveReportRepo;
+        private IGenericRepository<VacationReport> _vacationReportRepo;
         private ISubstituteService _subservice;
         private IGenericRepository<Core.DomainModel.Substitute> _subRepo;
         private IAddressLaunderer _actualLaunderer;
@@ -72,8 +74,10 @@ namespace DBUpdater.Test
 
 
             _subRepo = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.Substitute>>();
-            _reportRepo = NSubstitute.Substitute.For<IGenericRepository<Report>>();
-            _reportService = NSubstitute.Substitute.For<IReportService<Report>>();
+            _driveReportRepo = NSubstitute.Substitute.For<IGenericRepository<DriveReport>>();
+            _vacationReportRepo = NSubstitute.Substitute.For<IGenericRepository<VacationReport>>();
+            _driveReportService = NSubstitute.Substitute.For<IDriveReportService>();
+            _vacationReportService = NSubstitute.Substitute.For<IVacationReportService>();
             _subservice = NSubstitute.Substitute.For<ISubstituteService>();
             _vacationBalanceRepo = NSubstitute.Substitute.For<IGenericRepository<Core.DomainModel.VacationBalance>>();
 
@@ -106,7 +110,7 @@ namespace DBUpdater.Test
             _actualLaundererMock.Launder(new Address()).ReturnsForAnyArgs(x => x.Arg<CachedAddress>());
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-           _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _reportService, _subservice, _subRepo, _vacationBalanceRepo);
+           _personalAddressRepoMock, _actualLaunderer, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _vacationReportRepo, _driveReportRepo, _vacationReportService, _driveReportService, _subservice, _subRepo, _vacationBalanceRepo);
 
             _orgUnitRepoMock.AsQueryable().ReturnsForAnyArgs(new List<OrgUnit>()
             {
@@ -183,7 +187,7 @@ namespace DBUpdater.Test
             });
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _reportService, _subservice, _subRepo, _vacationBalanceRepo);
+           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _vacationReportRepo, _driveReportRepo, _vacationReportService, _driveReportService, _subservice, _subRepo, _vacationBalanceRepo);
 
 
             _uut.UpdateHomeAddress(empl,1);
@@ -218,7 +222,7 @@ namespace DBUpdater.Test
             });
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _reportService, _subservice, _subRepo, _vacationBalanceRepo);
+           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _vacationReportRepo, _driveReportRepo, _vacationReportService, _driveReportService, _subservice, _subRepo, _vacationBalanceRepo);
 
 
             _uut.UpdateHomeAddress(empl, 1);
@@ -253,7 +257,7 @@ namespace DBUpdater.Test
             });
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _reportService, _subservice, _subRepo, _vacationBalanceRepo);
+           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _vacationReportRepo, _driveReportRepo, _vacationReportService, _driveReportService, _subservice, _subRepo, _vacationBalanceRepo);
 
 
             _uut.UpdateHomeAddress(empl, 1);
@@ -343,7 +347,7 @@ namespace DBUpdater.Test
             });
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _reportService, _subservice, _subRepo, _vacationBalanceRepo);
+           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _vacationReportRepo, _driveReportRepo, _vacationReportService, _driveReportService, _subservice, _subRepo, _vacationBalanceRepo);
 
             _uut.UpdateHomeAddress(empl, 1);
 
@@ -382,7 +386,7 @@ namespace DBUpdater.Test
             });
 
             _uut = new UpdateService(_emplRepoMock, _orgUnitRepoMock, _personRepoMock, _cachedAddressRepoMock,
-           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _reportRepo, _reportService, _subservice, _subRepo, _vacationBalanceRepo);
+           _personalAddressRepoMock, _actualLaundererMock, _coordinates, _dataProvider, _mailSender, NSubstitute.Substitute.For<IAddressHistoryService>(), _vacationReportRepo, _driveReportRepo, _vacationReportService, _driveReportService, _subservice, _subRepo, _vacationBalanceRepo);
 
 
             _uut.UpdateHomeAddress(empl, 1);

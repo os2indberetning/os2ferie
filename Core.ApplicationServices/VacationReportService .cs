@@ -29,9 +29,9 @@ namespace Core.ApplicationServices
             report.ActualLeaderId = GetActualLeaderForReport(report).Id;
 
             var startDateTime = report.StartTimestamp.ToDateTime();
-            var endDate = report.EndTimestamp.ToDateTime().Date;
+            var endDateTime = report.EndTimestamp.ToDateTime();
 
-            report.EndTimestamp = endDate.ToTimestamp();
+            report.EndTimestamp = report.EndTimestamp.ToDateTime().Date.ToTimestamp();
             report.StartTimestamp = startDateTime.Date.ToTimestamp();
 
             report.VacationYear = startDateTime.Year;
@@ -41,7 +41,52 @@ namespace Core.ApplicationServices
                 report.VacationYear--;
             }
 
+            // a.start < b.end && b.start < a.end;
+            var colidingReports = _reportRepo.AsQueryable()
+                .Where(
+                    x =>
+                        x.PersonId == report.PersonId && x.Status != ReportStatus.Rejected &&
+                        x.StartTimestamp <= report.EndTimestamp && report.StartTimestamp <= x.EndTimestamp);
+
+            if (colidingReports.Any())
+            {
+                var colides = false;
+                foreach (var colidingReport in colidingReports)
+                {
+
+                    var colideStartDatetime = colidingReport.StartTimestamp.ToDateTime();
+                    if (colideStartDatetime.Date == startDateTime.Date)
+                    {
+                        if (!report.StartTime.HasValue || !colidingReport.StartTime.HasValue)
+                        {
+                            colides = true;
+                            break;
+                        }
+
+                        if (TimeSpan.Compare(colidingReport.StartTime.Value, report.StartTime.Value) != 1)
+                        {
+                            colides = true;
+                            break;
+                        }
+                    }
+
+                    var colideÉndDatetime = colidingReport.EndTimestamp.ToDateTime();
+                    if (colideÉndDatetime.Date != endDateTime.Date) continue;
+                    if (!report.EndTime.HasValue || !colidingReport.EndTime.HasValue)
+                    {
+                        colides = true;
+                        break;
+                    }
+
+                    if (TimeSpan.Compare(report.EndTime.Value, colidingReport.EndTime.Value) != 1) continue;
+                    colides = true;
+                    break;
+                }
+                if (colides) throw new Exception("Coliding report");
+            }
+
             if (report.Comment == null) report.Comment = "";
+            if (report.Purpose == null) report.Purpose = "";
 
             report.ProcessedDateTimestamp = 0;
             report.Status = ReportStatus.Pending;
@@ -50,46 +95,28 @@ namespace Core.ApplicationServices
         public new VacationReport Create(VacationReport report)
         {
             PrepareReport(report);
-
             _reportRepo.Insert(report);
             _reportRepo.Save();
-
             return report;
         }
 
         public VacationReport Edit(Delta<VacationReport> delta)
         {
             var newReport = delta.GetEntity();
-
             var report = _reportRepo.AsQueryable().First(x => x.Id == newReport.Id);
-
-#if !DEBUG
-            if (report.Status == ReportStatus.Accepted)
-            {
-                var absenceReport = _absenceBuilder.Delete(report);
-                _absenceService.ReportAbsence(absenceReport);
-            }
-#endif
-
             PrepareReport(newReport);
-
+            DeleteReport(report);
             delta.Patch(report);
             _reportRepo.Save();
-
+            SendMailIfUserEditedAprovedReport(newReport, "redigeret");
             return newReport;
         }
 
         public void Delete(int id)
         {
             var report = _reportRepo.AsQueryable().First(x => x.Id == id);
-
-#if !DEBUG
-            if (report.Status == ReportStatus.Accepted)
-            {
-                var absenceReport = _absenceBuilder.Delete(report);
-                _absenceService.ReportAbsence(absenceReport);
-            }
-#endif
+            DeleteReport(report);
+            SendMailIfUserEditedAprovedReport(report, "slettet");
             _reportRepo.Delete(report);
             _reportRepo.Save();
         }
@@ -100,9 +127,41 @@ namespace Core.ApplicationServices
             if (report.EndTimestamp < report.StartTimestamp) return false;
             if (report.StartTime > report.EndTime &&
                 report.StartTimestamp.ToDateTime().Date == report.EndTimestamp.ToDateTime().Date) return false;
-            //if (!report.Employment.OrgUnit.HasAccessToVacation) return false; // TODO Fetch employment and check rights
+            if (!_employmentRepository.AsQueryable().First(x => x.Id == report.EmploymentId).OrgUnit.HasAccessToVacation)
+                return false;
 
             return true;
+        }
+
+        public void SendMailIfUserEditedAprovedReport(VacationReport report, string action)
+        {
+            var mailContent = "Hej," + Environment.NewLine + Environment.NewLine +
+                              "Jeg," + report.Person.FullName + " har pr. dags dato " + action + " den følgende godkendte ferieindberetning:" +
+                              Environment.NewLine + Environment.NewLine;
+
+            mailContent += "Feriestart: " + report.StartTimestamp.ToDateTime().ToString("dd/MM/yyyy");
+
+            if (report.StartTime != null)
+                mailContent += " - " + report.StartTime?.ToString("hh:mm");
+
+            mailContent += Environment.NewLine + "Ferieafslutning: " + report.EndTimestamp.ToDateTime().ToString("dd/MM/yyyy");
+
+            if (report.EndTime != null)
+                mailContent += " - " + report.EndTime?.ToString("hh:mm");
+
+            mailContent += Environment.NewLine + "Ferietype: " +
+                           (report.VacationType == VacationType.Regular
+                               ? "Almindelig ferie"
+                               : "6. ferieuge");
+
+            if (report.Purpose != null)
+                mailContent += Environment.NewLine + "Bemærkning: " + report.Purpose;
+
+            mailContent += Environment.NewLine + Environment.NewLine
+                           + "Med venlig hilsen " + report.Person.FullName + Environment.NewLine + Environment.NewLine;
+
+
+            _mailSender.SendMail(report.ApprovedBy.Mail, "En medarbejder har ændret i en indberetning du har godkendt.", mailContent);
         }
 
         public new void SendMailToUserAndApproverOfEditedReport(VacationReport report, string emailText, Person admin, string action)
@@ -126,8 +185,8 @@ namespace Core.ApplicationServices
                                ? "Almindelig ferie"
                                : "6. ferieuge");
 
-            if (report.Comment != null)
-                mailContent += Environment.NewLine + "Kommentar: " + report.Comment;
+            if (report.Purpose != null)
+                mailContent += Environment.NewLine + "Bemærkning: " + report.Purpose;
 
             mailContent += Environment.NewLine + Environment.NewLine
             + "Hvis du mener at dette er en fejl, så kontakt mig da venligst på " + admin.Mail + Environment.NewLine
@@ -139,35 +198,57 @@ namespace Core.ApplicationServices
             _mailSender.SendMail(report.ApprovedBy.Mail, "En administrator har ændret i en indberetning du har godkendt.", mailContent);
         }
 
-        public void ApproveReport(VacationReport report, Person approver, string emailText)
+        public void SendMailIfRejectedReport(VacationReport report)
+        {
+
+            if (report.Status != ReportStatus.Rejected) return;
+            if (string.IsNullOrEmpty(report.Person.Mail))
+            {
+                _logger.Log(
+                    "Forsøg på at sende mail om afvist indberetning til " + report.Person.FullName +
+                    ", men der findes ingen emailadresse. " + report.Person.FullName +
+                    " har derfor ikke modtaget en mailadvisering", "mail", 2);
+                throw new Exception("Forsøg på at sende mail til person uden emailaddresse");
+            }
+
+            var recipient = report.Person.Mail;
+
+            _mailSender.SendMail(recipient, "Afvist indberetning",
+                "Din indberetning er blevet afvist med kommentaren: \n \n" + report.Comment);
+        }
+
+        public void ApproveReport(VacationReport report, Person approver)
         {
             report.Status = ReportStatus.Accepted;
             report.ClosedDateTimestamp = (DateTime.UtcNow.ToTimestamp());
             report.ApprovedById = approver.Id;
 
-            var absenceReport = _absenceBuilder.Create(report);
-
 #if !DEBUG
+            var absenceReport = _absenceBuilder.Create(report);
             _absenceService.ReportAbsence(absenceReport);
 #endif
+
             report.ProcessedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             _reportRepo.Save();
         }
 
-        public void RejectReport(VacationReport report, Person approver, string emailText)
+        public void RejectReport(VacationReport report, Person approver)
         {
             report.Status = ReportStatus.Rejected;
-            report.Comment = emailText;
             report.ClosedDateTimestamp = (DateTime.UtcNow.ToTimestamp());
             report.ApprovedById = approver.Id;
+            DeleteReport(report);
+            _reportRepo.Save();
+        }
 
+        public void DeleteReport(VacationReport report)
+        {
 #if !DEBUG
             if (report.ProcessedDateTimestamp == 0) return;
             var absenceReport = _absenceBuilder.Delete(report);
             _absenceService.ReportAbsence(absenceReport);
 #endif
             report.ProcessedDateTimestamp = 0;
-            _reportRepo.Save();
         }
     }
 }

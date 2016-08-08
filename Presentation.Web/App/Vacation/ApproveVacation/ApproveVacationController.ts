@@ -118,7 +118,7 @@
                             (endTimeFormat != null ? ` kl. ${endTimeFormat}` : ``) +
                             `</p>`);
 
-                    container.find("[data-container-for=comment]")
+                    container.find("[data-container-for=purpose]")
                         .append("<p class='k-edit-label fill-width force-text-left'>" +
                             (e.event.description === "" ? "<i>Ingen angivet</i>" : e.event.description) +
                             "</p>");
@@ -190,7 +190,7 @@
                                     parse: data => self.moment.unix(data).toDate()
                                 },
                                 personId: { from: "PersonId" },
-                                description: { from: "Comment" },
+                                description: { from: "Purpose" },
                                 status: { from: "Status" }
                             }
                         }

@@ -4,7 +4,6 @@ using System.Net;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
-using Core.ApplicationServices;
 using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.Logger;
 using Core.DomainModel;
@@ -178,11 +177,9 @@ namespace OS2Indberetning.Controllers.Vacation
             if (CurrentUser.IsAdmin && emailText != null && report.Status == ReportStatus.Accepted)
             {
                 // An admin is trying to reject an approved report.
-                report.Status = ReportStatus.Rejected;
-                report.Comment = emailText;
-                report.ClosedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
                 try {
-                    Repo.Save();
+                    _reportService.DeleteReport(report);
                     _reportService.SendMailToUserAndApproverOfEditedReport(report, emailText, CurrentUser, "afvist");
                     return Ok();
                 } catch(Exception e) {
@@ -252,7 +249,7 @@ namespace OS2Indberetning.Controllers.Vacation
             // All good, user has rights to approve the report.
             try
             {
-                _reportService.ApproveReport(report, CurrentUser, "");
+                _reportService.ApproveReport(report, CurrentUser);
             }
             catch(Infrastructure.KMDVacationService.KMDSetAbsenceFailedException ex)
             {
@@ -268,10 +265,6 @@ namespace OS2Indberetning.Controllers.Vacation
             return Ok(report);
         }
 
-        public IHttpActionResult EditApprovdReport([FromODataUri] int key, Delta<VacationReport> delta, string emailText)
-        {
-            throw new NotImplementedException();
-        }
 
         [EnableQuery]
         [HttpGet]
@@ -282,7 +275,8 @@ namespace OS2Indberetning.Controllers.Vacation
             if (report == null) return NotFound();
             if (HasReportAccess(report, CurrentUser)) StatusCode(HttpStatusCode.Forbidden);
 
-            _reportService.RejectReport(report, CurrentUser, "");
+            _reportService.RejectReport(report, CurrentUser);
+            _reportService.SendMailIfRejectedReport(report);
 
             return Ok(report);
         }

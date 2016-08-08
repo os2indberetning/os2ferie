@@ -17,6 +17,8 @@ namespace Core.DomainModel
         public ReportStatus Status { get; set; }
         public long CreatedDateTimestamp { get; set; }
         public long EditedDateTimestamp { get; set; }
+
+        // Leader or admin comment when rejecting a report.
         public String Comment { get; set; }
         public long ClosedDateTimestamp { get; set; }
         public long ProcessedDateTimestamp { get; set; }
