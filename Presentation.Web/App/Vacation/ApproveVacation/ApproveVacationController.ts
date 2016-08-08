@@ -231,7 +231,7 @@
                             type: "odata-v4",
                             transport: {
                                 read: {
-                                    url: "/odata/Person/Service.LeadersPeople",
+                                    url: "/odata/Person/Service.LeadersPeople(Type=1)",
                                     dataType: "json",
                                     cache: false
                                 }

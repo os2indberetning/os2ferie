@@ -127,7 +127,8 @@ namespace OS2Indberetning
 
             builder.EntityType<Person>().Collection
                 .Function("LeadersPeople")
-                .ReturnsFromEntitySet<Person>("Person");
+                .ReturnsFromEntitySet<Person>("Person")
+                .Parameter<int>("Type");
 
             builder.EntitySet<PersonalAddress>("PersonalAddresses");
 

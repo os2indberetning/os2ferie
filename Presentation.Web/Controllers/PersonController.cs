@@ -239,26 +239,56 @@ namespace OS2Indberetning.Controllers
         /// <summary>
         /// Returns the people where the user is the leader
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="parameters"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
         [EnableQuery]
         [System.Web.Http.HttpGet]
-        public IQueryable<Person> LeadersPeople()
+        public IHttpActionResult LeadersPeople(int type = 1)
         {
-            var people = _reportRepo.AsQueryable().Where(x => x.ResponsibleLeaderId == CurrentUser.Id && x.Status == ReportStatus.Pending).Select(x => x.Person).Distinct().ToList();
+            var subsituteType = (SubstituteType)type;
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
+            var substitutes = _substituteRepo.AsQueryable().Where(x => x.PersonId == x.LeaderId && x.SubId == CurrentUser.Id && x.EndDateTimestamp >= currentTimestamp && x.Type == subsituteType).Distinct();
+            var personalApproving = _substituteRepo.AsQueryable().Where(x => x.PersonId != x.LeaderId && x.SubId == CurrentUser.Id && x.EndDateTimestamp >= currentTimestamp && x.Type == subsituteType).Select(x => x.Person);
             var orgs = _orgService.GetWhereUserIsResponsible(CurrentUser.Id);
+
+            foreach (var sub in substitutes)
+            {
+                orgs.AddRange(_orgService.GetWhereUserIsResponsible(sub.PersonId));
+            }
+
+            var people = _reportRepo.AsQueryable().Where(x => x.ResponsibleLeaderId == CurrentUser.Id && x.Status == ReportStatus.Pending).Select(x => x.Person).Distinct().ToList();
 
             foreach (var org in orgs)
             {
-                foreach (var person in org.Employments.Where(x => people.All(y => y.Id != x.PersonId) && x.PersonId != CurrentUser.Id).Select(x => x.Person))
+                foreach (var person in org.Employments.Where(x => (x.EndDateTimestamp == 0 || x.EndDateTimestamp >= currentTimestamp) && people.All(y => y.Id != x.PersonId) && x.PersonId != CurrentUser.Id).Select(x => x.Person))
                 {
                     people.Add(person);
                 }
+
+                var leadersIds = _orgService.GetIdsOfLeadersInImmediateChildOrgs(org.Id);
+
+                foreach(var leaderId in leadersIds)
+                {
+                    var leader = Repo.AsQueryable().FirstOrDefault(x => x.Id == leaderId);
+                    if (leader != null && !people.Contains(leader))
+                    {
+                        people.Add(leader);
+                    }
+                }
             }
 
-            return people.AsQueryable();
+            foreach(var subbing in personalApproving)
+            {
+                if (!people.Contains(subbing))
+                {
+                    people.Add(subbing);
+                }
+            }
+
+            people.RemoveAll(x => x.Employments.All(y => y.EndDateTimestamp <= currentTimestamp && y.EndDateTimestamp != 0));
+
+            return Ok(people.AsQueryable());
         }
     }
 }
