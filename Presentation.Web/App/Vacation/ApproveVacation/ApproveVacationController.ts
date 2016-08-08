@@ -36,22 +36,22 @@
                         title: "Måned",
                         minorTickCount: 1,
                         columnWidth: 25,
-                        dateHeaderTemplate:
-                            "<span class='k-link k-nav-day' style=>#=kendo.toString(date, 'dd')#</span>",
+                        dateHeaderTemplate: (obj) => {
+                            var date: Date = obj.date;
+                            var momentDate = moment(date);
+                            var day = date.getDate();
+                            var week = momentDate.format('W');
+
+                            var header = ``;
+
+                            if (momentDate.weekday() === 0) header += `<span style="font-size:10px;">${week}</span>`;
+
+                            return header + `<br>${day}`;
+                        },
                         workWeekStart: 0,
                         workWeekEnd: 5
                     }
                 ],
-                dataBinding: function(e) {
-                    var scheduler = this;
-
-                    if (scheduler._selectedViewName != "kendo.ui.SchedulerTimelineYearView") return;
-
-                    var ele = scheduler.wrapper
-                        .find(".k-scheduler-timelineMonthview > tbody:first-child > tr:first-child tbody >tr:nth-child(2)");
-                    ele.hide();
-                },
-                dateHeaderTemplate: kendo.template("<strong>#=kendo.toString(date, 'd')#</strong>"),
                 timezone: "Etc/UTC",
                 //This is kendo's save event. Label has been changed to 'Gem' in in "edit" event below.
                 save: (e: any) => {
