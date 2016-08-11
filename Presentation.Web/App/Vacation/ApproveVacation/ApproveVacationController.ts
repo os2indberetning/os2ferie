@@ -37,15 +37,11 @@
                         minorTickCount: 1,
                         columnWidth: 25,
                         dateHeaderTemplate: (obj) => {
-                            var date: Date = obj.date;
-                            var momentDate = moment(date);
-                            var day = date.getDate();
-                            var week = momentDate.format('W');
-
+                            var date = moment(obj.date);7
+                            var day = date.date();
+                            var week = date.format('W');
                             var header = ``;
-
-                            if (momentDate.weekday() === 0) header += `<span style="font-size:10px;">${week}</span>`;
-
+                            if (date.weekday() === 0) header += `<span style="font-size:10px;">${week}</span>`;
                             return header + `<br>${day}`;
                         },
                         workWeekStart: 0,

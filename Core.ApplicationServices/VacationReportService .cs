@@ -53,7 +53,7 @@ namespace Core.ApplicationServices
                 var colides = false;
                 foreach (var colidingReport in colidingReports)
                 {
-
+                    if (colidingReport.Id == report.Id) continue;
                     var colideStartDatetime = colidingReport.StartTimestamp.ToDateTime();
                     if (colideStartDatetime.Date == startDateTime.Date)
                     {
@@ -105,19 +105,24 @@ namespace Core.ApplicationServices
             var newReport = delta.GetEntity();
             var report = _reportRepo.AsQueryable().First(x => x.Id == newReport.Id);
             PrepareReport(newReport);
-            DeleteReport(report);
+            if (report.ProcessedDateTimestamp != 0)
+            {
+                DeleteReport(report);
+                SendMailIfUserEditedAprovedReport(newReport, "redigeret");
+            }
             delta.Patch(report);
             _reportRepo.Save();
-            SendMailIfUserEditedAprovedReport(newReport, "redigeret");
             return newReport;
         }
 
         public void Delete(int id)
         {
             var report = _reportRepo.AsQueryable().First(x => x.Id == id);
-            DeleteReport(report);
-            SendMailIfUserEditedAprovedReport(report, "slettet");
-            _reportRepo.Delete(report);
+            if (report.ProcessedDateTimestamp != 0)
+            {
+                DeleteReport(report);
+                SendMailIfUserEditedAprovedReport(report, "slettet");
+            }
             _reportRepo.Save();
         }
 
