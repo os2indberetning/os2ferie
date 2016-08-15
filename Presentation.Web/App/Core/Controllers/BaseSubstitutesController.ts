@@ -1,7 +1,7 @@
 ﻿module app.core.controllers {
     "use strict";
 
-    import SubstituteType = app.core.models.SubstituteType;
+    import ReportType = app.core.models.ReportType;
 
     export abstract class BaseSubstitutesController {
 
@@ -23,7 +23,7 @@
         subInfinitePeriod;
         appInfinitePeriod;
 
-        constructor(protected $scope, protected Person, protected $rootScope, protected HelpText, protected Autocomplete, protected $modal, protected $timeout, protected moment, private substituteType: SubstituteType) {
+        constructor(protected $scope, protected Person, protected $rootScope, protected HelpText, protected Autocomplete, protected $modal, protected $timeout, protected moment, private reportType: ReportType) {
             this.currentUser = $scope.CurrentUser;
 
             var date = new Date();
@@ -43,7 +43,7 @@
                             beforeSend(req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
-                            url: "odata/Substitutes/Service.Substitute(Type=" + this.substituteType + ")?$expand=OrgUnit,Sub,Person,Leader,CreatedBy",
+                            url: "odata/Substitutes/Service.Substitute(Type=" + this.reportType + ")?$expand=OrgUnit,Sub,Person,Leader,CreatedBy",
                             dataType: "json",
                             cache: false
                         }
@@ -138,7 +138,7 @@
                             beforeSend(req) {
                                 req.setRequestHeader("Accept", "application/json;odata=fullmetadata");
                             },
-                            url: "odata/Substitutes/Service.Personal(Type=" + this.substituteType + ")?$expand=OrgUnit,Sub,Leader,Person,CreatedBy",
+                            url: "odata/Substitutes/Service.Personal(Type=" + this.reportType + ")?$expand=OrgUnit,Sub,Leader,Person,CreatedBy",
                             dataType: "json",
                             cache: false
                         }
@@ -321,7 +321,7 @@
                     orgUnits: () => this.orgUnits,
                     leader: () => this.currentUser,
                     substituteId: () => id,
-                    SubstituteType: () => this.substituteType
+                    ReportType: () => this.reportType
                 }
             });
 
@@ -342,7 +342,7 @@
                     orgUnits: () => this.orgUnits,
                     leader: () => this.currentUser,
                     substituteId: () => id,
-                    SubstituteType: () => this.substituteType
+                    ReportType: () => this.reportType
                 }
             }).result.then(() => {
                 this.approverGrid.dataSource.read();
@@ -360,7 +360,7 @@
                     persons: () => this.people,
                     orgUnits: () => this.orgUnits,
                     leader: () => this.currentUser,
-                    SubstituteType: () => this.substituteType
+                    ReportType: () => this.reportType
                 }
             });
 
@@ -380,7 +380,7 @@
                     persons: () => this.people,
                     orgUnits: () => this.orgUnits,
                     leader: () => this.currentUser,
-                    SubstituteType: () => this.substituteType
+                    ReportType: () => this.reportType
                 }
             });
 
@@ -403,7 +403,7 @@
                     orgUnits: () => this.orgUnits,
                     leader: () => this.currentUser,
                     substituteId: () => id,
-                    SubstituteType: () => this.substituteType
+                    ReportType: () => this.reportType
                 }
             });
 
@@ -424,7 +424,7 @@
                     orgUnits: () => this.orgUnits,
                     leader: () => this.currentUser,
                     substituteId: () => id,
-                    SubstituteType: () => this.substituteType
+                    ReportType: () => this.reportType
                 }
             });
 

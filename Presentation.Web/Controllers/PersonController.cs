@@ -245,7 +245,7 @@ namespace OS2Indberetning.Controllers
         [System.Web.Http.HttpGet]
         public IHttpActionResult LeadersPeople(int type = 1)
         {
-            var subsituteType = (SubstituteType)type;
+            var subsituteType = (ReportType)type;
             var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
             var substitutes = _substituteRepo.AsQueryable().Where(x => x.PersonId == x.LeaderId && x.SubId == CurrentUser.Id && x.EndDateTimestamp >= currentTimestamp && x.Type == subsituteType).Distinct();

@@ -2,7 +2,7 @@
     "use strict";
 
     import BaseApproveReportsSettingsController = app.core.controllers.BaseApproveReportsSettingsController;
-    import SubstituteType = app.core.models.SubstituteType;
+    import ReportType = app.core.models.ReportType;
 
     class DriveApproveReportsSettingsController extends BaseApproveReportsSettingsController {
 
@@ -16,7 +16,7 @@
         ];
 
         constructor(protected $scope, protected Person, protected $rootScope, protected Autocomplete, protected $modal, protected moment) {
-            super($scope, Person, $rootScope, Autocomplete, $modal, moment, SubstituteType.Drive);
+            super($scope, Person, $rootScope, Autocomplete, $modal, moment, ReportType.Drive);
         }
 
     }

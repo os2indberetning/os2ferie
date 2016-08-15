@@ -16,17 +16,15 @@ namespace Core.ApplicationServices
         protected readonly IGenericRepository<Substitute> _substituteRepository;
         protected readonly IMailSender _mailSender;
         protected readonly IGenericRepository<T> _reportRepo;
-        protected readonly SubstituteType _substituteType;
         protected readonly ILogger _logger;
 
         public ReportService(IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository,
-            IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, ILogger logger, IGenericRepository<T> reportRepo, SubstituteType type = SubstituteType.Drive)
+            IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, ILogger logger, IGenericRepository<T> reportRepo)
         {
             _orgUnitRepository = orgUnitRepository;
             _employmentRepository = employmentRepository;
             _substituteRepository = substituteRepository;
             _mailSender = mailSender;
-            _substituteType = type;
             _logger = logger;
             _reportRepo = reportRepo;
         }
@@ -107,7 +105,7 @@ namespace Core.ApplicationServices
                     .SingleOrDefault(
                         s =>
                             s.PersonId != s.LeaderId && s.PersonId == person.Id &&
-                            s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.Type == _substituteType);
+                            s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.Type == report.ReportType);
             if (personalApprover != null)
             {
                 return personalApprover.Sub;
@@ -155,7 +153,7 @@ namespace Core.ApplicationServices
             var loopHasFinished = false;
             while (!loopHasFinished)
             {
-                sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.OrgUnitId == orgToCheck.Id && s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.PersonId.Equals(s.LeaderId) && s.Type == _substituteType);
+                sub = _substituteRepository.AsQueryable().SingleOrDefault(s => s.OrgUnitId == orgToCheck.Id && s.PersonId == leader.Id && s.StartDateTimestamp < currentDateTimestamp && s.EndDateTimestamp > currentDateTimestamp && s.PersonId.Equals(s.LeaderId) && s.Type == report.ReportType);
                 if (sub != null)
                 {
                     if (sub.Sub == null)

@@ -1,7 +1,7 @@
 ﻿module app.core.controllers {
     "use strict";
 
-    import SubstituteType = app.core.models.SubstituteType;
+    import ReportType = app.core.models.ReportType;
 
     export class BaseApproveReportsSettingsController {
 
@@ -25,7 +25,7 @@
         personalApprovers: kendo.ui.GridOptions;
         mySubstitutes: kendo.ui.GridOptions;
 
-        constructor(protected $scope, protected Person, protected $rootScope, protected Autocomplete, protected $modal, protected moment, private substituteType: SubstituteType) {
+        constructor(protected $scope, protected Person, protected $rootScope, protected Autocomplete, protected $modal, protected moment, private reportType: ReportType) {
 
             this.personalApproverHelpText = $rootScope.HelpTexts.PersonalApproverHelpText.text;
             this.personId = $rootScope.CurrentUser.Id;
@@ -46,7 +46,7 @@
                             beforeSend(req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
-                            url: "odata/Substitutes/Service.Substitute(Type=" + this.substituteType + ")?$expand=OrgUnit,Sub,Person,Leader &$filter=PersonId eq " + this.personId,
+                            url: "odata/Substitutes/Service.Substitute(Type=" + this.reportType + ")?$expand=OrgUnit,Sub,Person,Leader &$filter=PersonId eq " + this.personId,
                             dataType: "json",
                             cache: false
                         }
@@ -129,7 +129,7 @@
                             beforeSend(req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
-                            url: "odata/Substitutes/Service.Personal(Type=" + this.substituteType + ")?$expand=OrgUnit,Sub,Leader,Person&$filter=LeaderId eq " + this.personId,
+                            url: "odata/Substitutes/Service.Personal(Type=" + this.reportType + ")?$expand=OrgUnit,Sub,Leader,Person&$filter=LeaderId eq " + this.personId,
                             dataType: "json",
                             cache: false
                         }
@@ -208,7 +208,7 @@
                             beforeSend(req) {
                                 req.setRequestHeader('Accept', 'application/json;odata=fullmetadata');
                             },
-                            url: "odata/Substitutes/Service.Substitute(Type=" + this.substituteType + ")?$expand=Sub,Person,Leader,OrgUnit &$filter=PersonId eq LeaderId and SubId eq " + this.personId,
+                            url: "odata/Substitutes/Service.Substitute(Type=" + this.reportType + ")?$expand=Sub,Person,Leader,OrgUnit &$filter=PersonId eq LeaderId and SubId eq " + this.personId,
                             dataType: "json",
                             cache: false
                         }
@@ -305,7 +305,7 @@
                     orgUnits: () => this.orgUnits,
                     leader: () => this.currentPerson,
                     substituteId: () => id,
-                    SubstituteType: () => this.substituteType
+                    ReportType: () => this.reportType
                 }
             });
 
@@ -325,7 +325,7 @@
                     orgUnits: () => this.orgUnits,
                     leader: () => this.currentPerson,
                     substituteId: () => id,
-                    SubstituteType: () => this.substituteType
+                    ReportType: () => this.reportType
                 }
             });
 
@@ -349,7 +349,7 @@
                     orgUnits: () => this.orgUnits,
                     leader: () => this.currentPerson,
                     substituteId: () => id,
-                    SubstituteType: () => this.substituteType
+                    ReportType: () => this.reportType
                 }
             });
 
@@ -373,7 +373,7 @@
                     orgUnits: () => this.orgUnits,
                     leader: () => this.currentPerson,
                     substituteId: () => id,
-                    SubstituteType: () => this.substituteType
+                    ReportType: () => this.reportType
                 }
             });
 
@@ -392,7 +392,7 @@
                     persons: () => this.people,
                     orgUnits: () => this.orgUnits,
                     leader: () => this.currentPerson,
-                    SubstituteType: () => this.substituteType
+                    ReportType: () => this.reportType
                 }
             });
 
@@ -414,7 +414,7 @@
                     persons: () => this.people,
                     orgUnits: () => this.orgUnits,
                     leader: () => this.currentPerson,
-                    SubstituteType: () => this.substituteType
+                    ReportType: () => this.reportType
                 }
             });
 

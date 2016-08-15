@@ -11,21 +11,16 @@ namespace Core.ApplicationServices
     {
         private readonly IGenericRepository<Substitute> _subRepo;
         private readonly IOrgUnitService _orgService;
-        private readonly IVacationReportService _vacationReportService;
-        private readonly IDriveReportService _driveReportService;
-        private readonly IGenericRepository<DriveReport> _driveReportRepo;
-        private readonly IGenericRepository<VacationReport> _vacationReportRepo;
+        private readonly IReportService<Report> _reportService;
+        private readonly IGenericRepository<Report> _reportRepo;
 
         public SubstituteService(IGenericRepository<Substitute> subRepo, IOrgUnitService orgService,
-            IGenericRepository<VacationReport> vacationReportRepo, IGenericRepository<DriveReport> driveReportRepo,
-            IDriveReportService driveReportService, IVacationReportService vacationReportService)
+            IGenericRepository<Report> reportRepo, IReportService<Report> reportService)
         {
             _subRepo = subRepo;
             _orgService = orgService;
-            _driveReportService = driveReportService;
-            _vacationReportService = vacationReportService;
-            _driveReportRepo = driveReportRepo;
-            _vacationReportRepo = vacationReportRepo;
+            _reportService = reportService;
+            _reportRepo = reportRepo;
         }
 
         /// <summary>
@@ -111,7 +106,6 @@ namespace Core.ApplicationServices
 
         public void UpdateReportsAffectedBySubstitute(Substitute sub)
         {
-            // TODO Find something more generic for updating drive and vacation reports.
             if (sub.LeaderId == sub.PersonId)
             {
                 // Substitute is a substitute - Not a Personal Approver.
@@ -120,54 +114,28 @@ namespace Core.ApplicationServices
                 orgIds.Add(sub.OrgUnitId);
                 orgIds.AddRange(_orgService.GetChildOrgsWithoutLeader(sub.OrgUnitId).Select(x => x.Id));
                 var idsOfLeadersOfImmediateChildOrgs = _orgService.GetIdsOfLeadersInImmediateChildOrgs(sub.OrgUnitId);
-                if (sub.Type == SubstituteType.Vacation)
+
+                var reportsForLeadersOfImmediateChildOrgs = _reportRepo.AsQueryable().Where(rep => idsOfLeadersOfImmediateChildOrgs.Contains(rep.PersonId)).ToList();
+                var reports = _reportRepo.AsQueryable().Where(rep => orgIds.Contains(rep.Employment.OrgUnitId)).ToList();
+                reports.AddRange(reportsForLeadersOfImmediateChildOrgs);
+                foreach (var report in reports)
                 {
-                    var reportsForLeadersOfImmediateChildOrgs = _vacationReportRepo.AsQueryable().Where(rep => idsOfLeadersOfImmediateChildOrgs.Contains(rep.PersonId)).ToList();
-                    var reports = _vacationReportRepo.AsQueryable().Where(rep => orgIds.Contains(rep.Employment.OrgUnitId)).ToList();
-                    reports.AddRange(reportsForLeadersOfImmediateChildOrgs);
-                    foreach (var report in reports)
-                    {
-                        report.ResponsibleLeaderId = _vacationReportService.GetResponsibleLeaderForReport(report).Id;
-                    }
-                    _vacationReportRepo.Save();
+                    report.ResponsibleLeaderId = _reportService.GetResponsibleLeaderForReport(report).Id;
                 }
-                else
-                {
-                    var reportsForLeadersOfImmediateChildOrgs = _driveReportRepo.AsQueryable().Where(rep => idsOfLeadersOfImmediateChildOrgs.Contains(rep.PersonId)).ToList();
-                    var reports = _driveReportRepo.AsQueryable().Where(rep => orgIds.Contains(rep.Employment.OrgUnitId)).ToList();
-                    reports.AddRange(reportsForLeadersOfImmediateChildOrgs);
-                    foreach (var report in reports)
-                    {
-                        report.ResponsibleLeaderId = _driveReportService.GetResponsibleLeaderForReport(report).Id;
-                    }
-                    _vacationReportRepo.Save();
-                }
+                _reportRepo.Save();
+
             }
             else
             {
                 // Substitute is a personal approver
                 // Select reports to be updated based on PersonId on report
-                if (sub.Type == SubstituteType.Vacation)
+                var reports2 =
+                    _reportRepo.AsQueryable().Where(rep => rep.PersonId == sub.PersonId).ToList();
+                foreach (var report in reports2)
                 {
-                    var reports2 =
-                        _vacationReportRepo.AsQueryable().Where(rep => rep.PersonId == sub.PersonId).ToList();
-                    foreach (var report in reports2)
-                    {
-                        report.ResponsibleLeaderId = _vacationReportService.GetResponsibleLeaderForReport(report).Id;
-                    }
-                    _vacationReportRepo.Save();
+                    report.ResponsibleLeaderId = _reportService.GetResponsibleLeaderForReport(report).Id;
                 }
-                else
-                {
-                    var reports2 =
-                        _driveReportRepo.AsQueryable().Where(rep => rep.PersonId == sub.PersonId).ToList();
-                    foreach (var report in reports2)
-                    {
-                        report.ResponsibleLeaderId = _driveReportService.GetResponsibleLeaderForReport(report).Id;
-                    }
-                _driveReportRepo.Save();
-                }
-
+                _reportRepo.Save();
             }
         }
 

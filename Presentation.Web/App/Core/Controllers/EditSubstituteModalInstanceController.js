@@ -1,6 +1,6 @@
 ﻿angular.module('app.core').controller('EditSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "substituteId", "SubstituteType",
-    function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, substituteId, SubstituteType) {
+    ["$scope", "$modalInstance", "persons", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "substituteId", "ReportType",
+    function ($scope, $modalInstance, persons, OrgUnit, leader, Substitute, Person, NotificationService, substituteId, ReportType) {
 
         $scope.container = {};
 
@@ -45,7 +45,7 @@
                 SubId: $scope.person[0].Id,
                 OrgUnitId: $scope.orgUnit.Id,
                 CreatedById: leader.Id,
-                Type: SubstituteType === 0 ? "Drive" : "Vacation"
+                Type: ReportType === 0 ? "Drive" : "Vacation"
             });
 
             if ($scope.infinitePeriod) {
