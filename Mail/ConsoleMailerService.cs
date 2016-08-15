@@ -75,7 +75,6 @@ namespace Mail
                 }
 
 
-
                 _repo.Save();
             }
             else
@@ -85,8 +84,6 @@ namespace Mail
                 Thread.Sleep(3000);
             }
         }
-
-
 
         /// <summary>
         /// Attempts to send mails to leaders with pending reports to be approved.

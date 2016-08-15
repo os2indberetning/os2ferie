@@ -1,6 +1,6 @@
 ﻿angular.module('app.core').controller('AdminNewSubstituteModalInstanceController',
-    ["$scope", "$modalInstance", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "$timeout", "persons", "Autocomplete", "leader", "SubstituteType",
-        function ($scope, $modalInstance, OrgUnit, leader, Substitute, Person, NotificationService, $timeout, persons, Autocomplete, leader, SubstituteType) {
+    ["$scope", "$modalInstance", "OrgUnit", "leader", "Substitute", "Person", "NotificationService", "$timeout", "persons", "Autocomplete", "leader", "ReportType",
+        function ($scope, $modalInstance, OrgUnit, leader, Substitute, Person, NotificationService, $timeout, persons, Autocomplete, leader, ReportType) {
 
             $scope.persons = persons;
 
@@ -86,7 +86,7 @@
                     OrgUnitId: $scope.orgUnit.Id,
                     PersonId: $scope.personFor[0].Id,
                     CreatedById: leader.Id,
-                    Type: SubstituteType === 0 ? "Drive" : "Vacation"
+                    Type: ReportType === 0 ? "Drive" : "Vacation"
                 });
 
                 if ($scope.infinitePeriod) {
@@ -108,4 +108,3 @@
                 $modalInstance.dismiss('cancel');
             };
         }]);
-

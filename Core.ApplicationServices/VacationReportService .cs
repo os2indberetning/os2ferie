@@ -15,7 +15,7 @@ namespace Core.ApplicationServices
         private readonly IKMDAbsenceService _absenceService;
         private readonly IKMDAbsenceReportBuilder _absenceBuilder;
 
-        public VacationReportService(IGenericRepository<VacationReport> reportRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IKMDAbsenceService absenceService, IKMDAbsenceReportBuilder absenceBuilder, ILogger logger) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, logger, reportRepo, SubstituteType.Vacation)
+        public VacationReportService(IGenericRepository<VacationReport> reportRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, IKMDAbsenceService absenceService, IKMDAbsenceReportBuilder absenceBuilder, ILogger logger) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, logger, reportRepo)
         {
             _absenceService = absenceService;
             _absenceBuilder = absenceBuilder;
@@ -29,7 +29,6 @@ namespace Core.ApplicationServices
             report.ActualLeaderId = GetActualLeaderForReport(report).Id;
 
             var startDateTime = report.StartTimestamp.ToDateTime();
-            var endDateTime = report.EndTimestamp.ToDateTime();
 
             report.EndTimestamp = report.EndTimestamp.ToDateTime().Date.ToTimestamp();
             report.StartTimestamp = startDateTime.Date.ToTimestamp();
@@ -41,12 +40,13 @@ namespace Core.ApplicationServices
                 report.VacationYear--;
             }
 
-            // a.start < b.end && b.start < a.end;
+            // a.start <= b.end && b.start <= a.end;
             var colidingReports = _reportRepo.AsQueryable()
                 .Where(
                     x =>
                         x.PersonId == report.PersonId && x.Status != ReportStatus.Rejected &&
-                        x.StartTimestamp <= report.EndTimestamp && report.StartTimestamp <= x.EndTimestamp);
+                        x.StartTimestamp < report.EndTimestamp && report.StartTimestamp < x.EndTimestamp ||
+                        x.StartTimestamp == report.StartTimestamp || x.EndTimestamp == report.EndTimestamp);
 
             if (colidingReports.Any())
             {
@@ -54,31 +54,21 @@ namespace Core.ApplicationServices
                 foreach (var colidingReport in colidingReports)
                 {
                     if (colidingReport.Id == report.Id) continue;
-                    var colideStartDatetime = colidingReport.StartTimestamp.ToDateTime();
-                    if (colideStartDatetime.Date == startDateTime.Date)
-                    {
-                        if (!report.StartTime.HasValue || !colidingReport.StartTime.HasValue)
-                        {
-                            colides = true;
-                            break;
-                        }
 
-                        if (TimeSpan.Compare(colidingReport.StartTime.Value, report.StartTime.Value) != 1)
-                        {
-                            colides = true;
-                            break;
-                        }
-                    }
+                    var colideStartTotal = (double) colidingReport.StartTimestamp;
+                    var colideEndTotal = (double) colidingReport.EndTimestamp;
 
-                    var colideÉndDatetime = colidingReport.EndTimestamp.ToDateTime();
-                    if (colideÉndDatetime.Date != endDateTime.Date) continue;
-                    if (!report.EndTime.HasValue || !colidingReport.EndTime.HasValue)
-                    {
-                        colides = true;
-                        break;
-                    }
+                    if (colidingReport.StartTime.HasValue) colideStartTotal += colidingReport.StartTime.Value.TotalSeconds;
+                    if (colidingReport.EndTime.HasValue) colideEndTotal += colidingReport.EndTime.Value.TotalSeconds;
 
-                    if (TimeSpan.Compare(report.EndTime.Value, colidingReport.EndTime.Value) != 1) continue;
+                    var reportStartTotal = (double) report.StartTimestamp;
+                    var reportEndTotal = (double) report.EndTimestamp;
+
+                    if (report.StartTime.HasValue) reportStartTotal += report.StartTime.Value.TotalSeconds;
+                    if (report.EndTime.HasValue) reportEndTotal += report.EndTime.Value.TotalSeconds;
+
+                    if (!(reportStartTotal < colideEndTotal) || !(colideStartTotal < reportEndTotal)) continue;
+
                     colides = true;
                     break;
                 }
@@ -123,6 +113,7 @@ namespace Core.ApplicationServices
                 DeleteReport(report);
                 SendMailIfUserEditedAprovedReport(report, "slettet");
             }
+            _reportRepo.Delete(report);
             _reportRepo.Save();
         }
 

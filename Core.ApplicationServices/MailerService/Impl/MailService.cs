@@ -13,18 +13,14 @@ namespace Core.ApplicationServices.MailerService.Impl
 {
     public class MailService : IMailService
     {
-        private readonly IGenericRepository<DriveReport> _driveRepo;
-        private readonly IGenericRepository<Substitute> _subRepo;
+        private readonly IGenericRepository<Report> _reportRepo;
         private readonly IMailSender _mailSender;
-        private readonly IDriveReportService _driveReportService;
         private readonly ILogger _logger;
 
-        public MailService(IGenericRepository<DriveReport> driveRepo, IGenericRepository<Substitute> subRepo, IMailSender mailSender, IDriveReportService driveReportService, ILogger logger)
+        public MailService(IGenericRepository<Report> reportRepo, IMailSender mailSender,  ILogger logger)
         {
-            _driveRepo = driveRepo;
-            _subRepo = subRepo;
+            _reportRepo = reportRepo;
             _mailSender = mailSender;
-            _driveReportService = driveReportService;
             _logger = logger;
         }
 
@@ -33,14 +29,26 @@ namespace Core.ApplicationServices.MailerService.Impl
         /// </summary>
         public void SendMails(DateTime payRoleDateTime)
         {
-            var mailAddresses = GetLeadersWithPendingReportsMails();
+            var reports = GetLeadersWithPendingReportsMails();
 
-            var mailBody = ConfigurationManager.AppSettings["PROTECTED_MAIL_BODY"];
-            mailBody = mailBody.Replace("####", payRoleDateTime.ToString("dd-MM-yyyy"));
+            var driveBody = ConfigurationManager.AppSettings["PROTECTED_MAIL_BODY_DRIVE"];
+            driveBody = driveBody.Replace("####", payRoleDateTime.ToString("dd-MM-yyyy"));
 
-            foreach (var mailAddress in mailAddresses)
+            foreach (var report in reports)
             {
-                _mailSender.SendMail(mailAddress, ConfigurationManager.AppSettings["PROTECTED_MAIL_SUBJECT"], mailBody);
+                switch (report.ReportType)
+                {
+                    case ReportType.Drive:
+                        _mailSender.SendMail(report.ResponsibleLeader.Mail, ConfigurationManager.AppSettings["PROTECTED_MAIL_SUBJECT_DRIVE"], driveBody);
+                        break;
+                    case ReportType.Vacation:
+                        _mailSender.SendMail(report.ResponsibleLeader.Mail, ConfigurationManager.AppSettings["PROTECTED_MAIL_SUBJECT_VACATION"], ConfigurationManager.AppSettings["PROTECTED_MAIL_BODY_VACATION"]);
+                        break;
+                    default:
+                        _logger.Log("Kunne ikke finde typen af rapport: " + report.Id, "web");
+                        break;
+                }
+
             }
 
         }
@@ -49,25 +57,18 @@ namespace Core.ApplicationServices.MailerService.Impl
         /// Gets the email address of all leaders that have pending reports to be approved.
         /// </summary>
         /// <returns>List of email addresses.</returns>
-        public IEnumerable<string> GetLeadersWithPendingReportsMails()
+        public IEnumerable<Report> GetLeadersWithPendingReportsMails()
         {
-            var approverEmails = new HashSet<String>();
+            var reports = _reportRepo.AsQueryable().Where(r => r.Status == ReportStatus.Pending).ToList();
 
-            var reports = _driveRepo.AsQueryable().Where(r => r.Status == ReportStatus.Pending).ToList();
-
-            var reportsWithNoLeader = reports.Where(driveReport => driveReport.ResponsibleLeader == null);
+            var reportsWithNoLeader = reports.Where(report => report.ResponsibleLeader == null);
 
             foreach (var report in reportsWithNoLeader)
             {
                 _logger.Log(report.Person.FullName + "s indberetning har ingen leder. Indberetningen kan derfor ikke godkendes.", "web", 2);
             }
 
-            foreach (var driveReport in reports.Where(driveReport => driveReport.ResponsibleLeaderId != null && !string.IsNullOrEmpty(driveReport.ResponsibleLeader.Mail) && driveReport.ResponsibleLeader.RecieveMail))
-            {
-                approverEmails.Add(driveReport.ResponsibleLeader.Mail);
-            }
-
-            return approverEmails;
+            return reports.Where(report => report.ResponsibleLeaderId != null && !string.IsNullOrEmpty(report.ResponsibleLeader.Mail) && report.ResponsibleLeader.RecieveMail);
         }
     }
 }

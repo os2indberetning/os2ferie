@@ -1,6 +1,6 @@
 ﻿angular.module('app.core').controller('EditApproverModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId","Autocomplete","SubstituteType",
-        function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId,Autocomplete, SubstituteType) {
+    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService", "substituteId","Autocomplete","ReportType",
+        function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService, substituteId,Autocomplete, ReportType) {
 
             $scope.persons = persons;
             $scope.orgUnits = orgUnits;
@@ -60,7 +60,7 @@
                     OrgUnitId: 1,
                     PersonId: $scope.target.Id,
                     CreatedById: leader.Id,
-                    Type: SubstituteType === 0 ? "Drive" : "Vacation"
+                    Type: ReportType === 0 ? "Drive" : "Vacation"
                 });
 
                 if ($scope.infinitePeriod) {
