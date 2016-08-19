@@ -44,9 +44,8 @@ namespace Core.ApplicationServices
             var colidingReports = _reportRepo.AsQueryable()
                 .Where(
                     x =>
-                        x.PersonId == report.PersonId && x.Status != ReportStatus.Rejected &&
-                        x.StartTimestamp < report.EndTimestamp && report.StartTimestamp < x.EndTimestamp ||
-                        x.StartTimestamp == report.StartTimestamp || x.EndTimestamp == report.EndTimestamp);
+                        x.PersonId == report.PersonId && x.Status != ReportStatus.Rejected && ((x.StartTimestamp < report.EndTimestamp && report.StartTimestamp < x.EndTimestamp) ||
+                        x.StartTimestamp == report.StartTimestamp || x.EndTimestamp == report.EndTimestamp));
 
             if (colidingReports.Any())
             {
@@ -54,6 +53,13 @@ namespace Core.ApplicationServices
                 foreach (var colidingReport in colidingReports)
                 {
                     if (colidingReport.Id == report.Id) continue;
+
+                    if ((colidingReport.StartTimestamp == report.StartTimestamp && (!colidingReport.StartTime.HasValue || !report.StartTime.HasValue)) ||
+                        (colidingReport.EndTimestamp == report.EndTimestamp && (!colidingReport.EndTime.HasValue || !report.EndTime.HasValue)))
+                    {
+                        colides = true;
+                        break;
+                    }
 
                     var colideStartTotal = (double) colidingReport.StartTimestamp;
                     var colideEndTotal = (double) colidingReport.EndTimestamp;

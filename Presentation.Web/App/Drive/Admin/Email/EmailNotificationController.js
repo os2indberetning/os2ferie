@@ -111,7 +111,7 @@
             /// </summary>
             /// <param name="id">Id of MailNotification to edit</param>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Admin/Email/EditMailNotificationTemplate.html',
+                templateUrl: '/App/Drive/Admin/Email/EditMailNotificationTemplate.html',
                 controller: 'EditMailNotificationController',
                 backdrop: "static",
                 resolve: {
@@ -142,7 +142,7 @@
             /// </summary>
             /// <param name="id">Id of MailNotification to delete</param>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Admin/Email/ConfirmDeleteMailNotificationTemplate.html',
+                templateUrl: '/App/Drive/Admin/Email/ConfirmDeleteMailNotificationTemplate.html',
                 controller: 'DeleteMailNotificationController',
                 backdrop: "static",
                 resolve: {
@@ -164,7 +164,7 @@
             /// Opens add new MailNotification modal
             /// </summary>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Admin/Email/AddNewMailNotificationTemplate.html',
+                templateUrl: '/App/Drive/Admin/Email/AddNewMailNotificationTemplate.html',
                 controller: 'AddNewMailNotificationController',
                 backdrop: "static",
             });

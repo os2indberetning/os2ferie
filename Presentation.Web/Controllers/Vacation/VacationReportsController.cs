@@ -177,7 +177,6 @@ namespace OS2Indberetning.Controllers.Vacation
             if (CurrentUser.IsAdmin && emailText != null && report.Status == ReportStatus.Accepted)
             {
                 // An admin is trying to reject an approved report.
-
                 try {
                     _reportService.DeleteReport(report);
                     _reportService.SendMailToUserAndApproverOfEditedReport(report, emailText, CurrentUser, "afvist");
@@ -208,8 +207,7 @@ namespace OS2Indberetning.Controllers.Vacation
                 _logger.Log("Forsøg på at redigere indberetning med anden status end afventende. Rapportens status er ikke ændret.", "web", 3);
                 return StatusCode(HttpStatusCode.Forbidden);
             }
-
-            // TODO Test this
+            
             _reportService.SendMailIfRejectedReport(key, delta, report.Person);
             return base.Patch(key, delta);
         }

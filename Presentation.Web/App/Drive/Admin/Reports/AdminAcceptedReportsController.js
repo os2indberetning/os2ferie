@@ -302,7 +302,7 @@ angular.module("app.drive").controller("AdminAcceptedReportsController", [
            /// </summary>
            /// <param name="id"></param>
            var modalInstance = $modal.open({
-               templateUrl: '/App/MyReports/EditReportTemplate.html',
+               templateUrl: '/App/Drive/MyReports/EditReportTemplate.html',
                controller: 'DrivingController',
                backdrop: "static",
                windowClass: "app-modal-window-full",
@@ -332,7 +332,7 @@ angular.module("app.drive").controller("AdminAcceptedReportsController", [
        /// </summary>
        $scope.rejectClick = function (id) {
            var modalInstance = $modal.open({
-               templateUrl: '/App/Admin/Reports/Modal/ConfirmRejectApprovedReportTemplate.html',
+               templateUrl: '/App/Drive/Admin/Reports/Modal/ConfirmRejectApprovedReportTemplate.html',
                controller: 'ConfirmRejectApprovedReportModalController',
                backdrop: "static",
                resolve: {
@@ -380,7 +380,7 @@ angular.module("app.drive").controller("AdminAcceptedReportsController", [
            /// </summary>
            /// <param name="routeId"></param>
            var modalInstance = $modal.open({
-               templateUrl: '/App/Admin/Reports/Modal/ShowRouteModalTemplate.html',
+               templateUrl: '/App/Drive/Admin/Reports/Modal/ShowRouteModalTemplate.html',
                controller: 'ShowRouteModalController',
                backdrop: "static",
                resolve: {
