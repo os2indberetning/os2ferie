@@ -1,17 +1,22 @@
-﻿<div style="margin: 50px;">
-    <div class="row" style="text-align: center;">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="col-lg-10">
-                    <div kendo-scheduler="avc.scheduler" k-options="avc.schedulerOptions">
-                    </div>
+﻿<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Godkend indberetninger
+        </h1>
+    </div>
+</div>
+<div class="row" style="text-align: center;">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-lg-10">
+                <div kendo-scheduler="avc.scheduler" k-options="avc.schedulerOptions">
                 </div>
-                <div class="col-lg-2">
-                    <div id="pendingVacationsList" class="list-group pending-vacation-listgroup">
-                        <b class="list-group-item  list-group-item-info">Afventende ferie rapporter</b>
-                        <i class="list-group-item" ng-hide="avc.pendingVacations.length">Ingen afventende indberetninger</i>
-                        <a id="{{pV.key}}" class="list-group-item" ng-repeat="pV in avc.pendingVacations" ng-click="avc.goToDate(pV.startTime)">{{pV.firstName}} <br /> {{pV.dateFrom}} - {{pV.dateTo}}</a>
-                    </div>
+            </div>
+            <div class="col-lg-2">
+                <div id="pendingVacationsList" class="list-group pending-vacation-listgroup">
+                    <b class="list-group-item  list-group-item-info">Afventende ferie rapporter</b>
+                    <i class="list-group-item" ng-hide="avc.pendingVacations.length">Ingen afventende indberetninger</i>
+                    <a id="{{pV.key}}" class="list-group-item" ng-repeat="pV in avc.pendingVacations" ng-click="avc.goToDate(pV.startTime)">{{pV.firstName}} <br /> {{pV.dateFrom}} - {{pV.dateTo}}</a>
                 </div>
             </div>
         </div>
