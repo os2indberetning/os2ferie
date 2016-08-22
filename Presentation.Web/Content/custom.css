@@ -587,3 +587,24 @@ li.mainMenuLink.active > a > i.fa {
 .schedule-vacation-template {
     height: 100%;
 }
+
+.week-number-calendar {
+    margin: 33px 0px 0px 0px;
+    padding: 0px;
+    float: left;
+    width: inherit;
+    border-right: none;
+}
+
+.week-number-calendar .k-link {
+    cursor: default;
+}
+
+.calendar-week-empty {
+    display: block;
+    overflow: hidden;
+    min-height: 1.8333em;
+    line-height: 1.8333em;
+    padding: 0 .45em 0 .1em;
+    cursor: default;
+}
