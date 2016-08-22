@@ -38,9 +38,10 @@
             private $modalInstance,
             private $modal,
             public report) {
-
+            
             this.name = report.Person.FullName.split("[")[0];
             this.purpose = report.description;
+
             const startsOnFullDay = report.StartTime == null;
             const endsOnFullDay = report.EndTime == null;
 
@@ -50,8 +51,8 @@
                 this.startTime = "Hele dagen";
             }
 
-            this.start = moment(report.StartTimestamp).format("DD.MM.YYYY");
-            this.end = moment(report.EndTimeStamp).format("DD.MM.YYYY");
+            this.start = moment(report.start).format("DD.MM.YYYY");
+            this.end = moment(report.end).format("DD.MM.YYYY");
 
             if (!endsOnFullDay) {
                 this.endTime = "Til kl. " + moment((moment.duration(report.EndTime) as any)._data).format('HH:mm');
@@ -59,7 +60,7 @@
                 this.endTime = "Hele dagen";
             }
 
-            this.type = report.VacationType === "Regular" ? "Almindelig ferie" : "6. ferieuge";
+            this.type = report.type === "Regular" ? "Almindelig ferie" : "6. ferieuge";
 
             switch (this.report.status) {
                 case "Accepted":
