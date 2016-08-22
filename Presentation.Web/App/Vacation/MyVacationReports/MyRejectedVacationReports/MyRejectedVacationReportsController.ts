@@ -109,6 +109,17 @@
                         title: "Indberettet"
                     },
                     {
+                        field: "Comment",
+                        title: "Begrundelse",
+                        template: data => {
+                            if (data.Comment != "") {
+                                return `<button kendo-tooltip k-position="'right'" k-content="'${data.Comment
+                                    }'" class="transparent-background pull-right no-border"><i class="fa fa-comment-o"></i></button>`;
+                            }
+                            return "<i>Ingen begrundelse angivet</i>";
+                        }
+                    },
+                    {
                         field: "ClosedDateTimestamp",
                         title: "Afvist dato",
                         template: data => {

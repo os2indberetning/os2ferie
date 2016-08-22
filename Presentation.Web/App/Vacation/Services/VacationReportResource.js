@@ -19,7 +19,7 @@
         "reject": {
             method: "GET",
             isArray: false,
-            url: "/odata/VacationReports/Service.RejectReport(Key=:id)"
+            url: "/odata/VacationReports/Service.RejectReport(Key=:id)?comment=:comment"
         },
         "update": {
             method: "PUT",

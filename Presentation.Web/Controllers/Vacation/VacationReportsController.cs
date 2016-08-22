@@ -266,14 +266,14 @@ namespace OS2Indberetning.Controllers.Vacation
 
         [EnableQuery]
         [HttpGet]
-        public IHttpActionResult RejectReport(int key = 0)
+        public IHttpActionResult RejectReport(int key, string comment = "")
         {
             var report = Repo.AsQueryable().SingleOrDefault(x => x.Id == key);
 
             if (report == null) return NotFound();
             if (HasReportAccess(report, CurrentUser)) StatusCode(HttpStatusCode.Forbidden);
 
-            _reportService.RejectReport(report, CurrentUser);
+            _reportService.RejectReport(report, CurrentUser, comment);
             _reportService.SendMailIfRejectedReport(report);
 
             return Ok(report);

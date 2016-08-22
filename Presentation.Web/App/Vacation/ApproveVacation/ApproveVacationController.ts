@@ -12,7 +12,8 @@
             "NotificationService",
             "$http",
             "moment",
-            "$state"
+            "$state",
+            "$modal"
         ];
 
         private _maxEndDate: Date;
@@ -23,7 +24,7 @@
 
         pendingVacations = [];
 
-        constructor(private $scope, private $rootScope, private VacationReport, private NotificationService: NotificationService, private $http: ng.IHttpService, private moment: moment.MomentStatic, private $state: ng.ui.IStateService) {
+        constructor(private $scope, private $rootScope, private VacationReport, private NotificationService: NotificationService, private $http: ng.IHttpService, private moment: moment.MomentStatic, private $state: ng.ui.IStateService, private $modal) {
             this.readPendingVacations();
 
             // Why is this used?
@@ -37,7 +38,7 @@
                         minorTickCount: 1,
                         columnWidth: 25,
                         dateHeaderTemplate: (obj) => {
-                            var date = moment(obj.date);7
+                            var date = moment(obj.date);
                             var day = date.date();
                             var week = date.format('W');
                             var header = ``;
@@ -52,81 +53,29 @@
                 //This is kendo's save event. Label has been changed to 'Gem' in in "edit" event below.
                 save: (e: any) => {
                     e.preventDefault();
-                    var report = new this.VacationReport();
-
-                    if (e.event.status == "Accepted") {
-                        report.$approve({ id: e.event.id },
-                        () => {
-                            this.refresh();
-                        });
-                    } else if (e.event.status == "Rejected") {
-                        report.$reject({ id: e.event.id },
-                        () => {
-                            this.refresh();
-                        });
-                    }
                 },
+                eventTemplate: kendo.template(`<div class="schedule-vacation-template #if(type!='Regular'){#vacation-sixthweek#}#"></div>`),
                 editable: {
-                    template: $("#customEditorTemplate").html(),
                     update: true,
                     move: false,
                     destroy: false,
-                    resize: false
+                    resize: false,
+                    confirmation: false
                 },
                 edit: (e: any) => {
-                    var container = e.container;
-                    var personName = e.event.Person.FullName.split("[")[0];
-
-                    var value = e.event;
-                    var endDateTimestamp = e.event.end;
-
-                    const startsOnFullDay = value.StartTime == null;
-                    const endsOnFullDay = value.EndTime == null;
-
-                    var startTimeFormat = null;
-
-                    if (!startsOnFullDay) {
-                        startTimeFormat = moment((moment.duration(value.StartTime) as any)._data).format('HH:mm');
-                    }
-
-                    var endTimeFormat = null;
-
-                    if (!endsOnFullDay) {
-                        endTimeFormat = moment((moment.duration(value.EndTime) as any)._data).format('HH:mm');
-                    }
-
-                    if (startsOnFullDay && endsOnFullDay) {
-                        endDateTimestamp -= 86400;
-                    }
-
-                    container.find("[data-container-for=title]")
-                        .append("<p class='k-edit-label modal-personName'>" + personName + "</p>");
-
-                    container.find("[data-container-for=start]")
-                        .append(`<p class='k-edit-label fill-width force-text-left'>
-                            ${moment(e.event.start).format("DD.MM.YYYY")} ` +
-                            (startTimeFormat != null ? ` kl. ${startTimeFormat}` : ``) +
-                            `</p>`);
-
-                    container.find("[data-container-for=end]")
-                        .append(`<p class='k-edit-label fill-width force-text-left'>
-                            ${moment(endDateTimestamp).format("DD.MM.YYYY")} ` +
-                            (endTimeFormat != null ? ` kl. ${endTimeFormat}` : ``) +
-                            `</p>`);
-
-                    container.find("[data-container-for=purpose]")
-                        .append("<p class='k-edit-label fill-width force-text-left'>" +
-                            (e.event.description === "" ? "<i>Ingen angivet</i>" : e.event.description) +
-                            "</p>");
-
-                    //Setting up some final css.
-                    $(".modal-personName").width("70%").css("text-align", "left");
-
-                    //Removal of unused buttons, and change of names.
-                    $(".k-scheduler-delete").remove();
-                    $(".k-scheduler-update").html("Gem");
-                    $(".k-scheduler-cancel").html("Afbryd");
-                    $(".k-window-title").remove();
+                    e.preventDefault();
+                    $modal.open({
+                        templateUrl: '/App/Vacation/ApproveVacation/ShowVacationReportView.html',
+                        controller: 'ShowVacationReportController as svrc',
+                        backdrop: "static",
+                        resolve: {
+                            report() {
+                                return e.event;
+                            }
+                        }
+                    }).result.then(() => {
+                        this.refresh();
+                    });
                 },
                 dataSource: {
                     autoBind: false,
@@ -161,8 +110,11 @@
                                         value.EndTimestamp += duration.asSeconds();
                                     } else {
                                         // Add 86400/24 hours to enddate
-                                        value.EndTimestamp += 86400;
+                                        // value.EndTimestamp += 86400;
+                                        value.isAllDay = true;
                                     }
+
+                                    value.type = value.VacationType === "Regular" ? "Almindelig ferie" : "6. ferieuge";
 
                                     events.push(value);
                                 });
@@ -187,7 +139,8 @@
                                 },
                                 personId: { from: "PersonId" },
                                 description: { from: "Purpose" },
-                                status: { from: "Status" }
+                                status: { from: "Status" },
+                                type: { from: "VacationType"}
                             }
                         }
                     }
@@ -200,23 +153,24 @@
                     {
                         field: "status",
                         dataSource: [
-                            {
+                                {
                                 text: "Pending",
                                 value: "Pending",
-                                color: "#6eb3fa"
+                                color: "#337ab7"
                             },
                             {
                                 text: "Accepted",
                                 value: "Accepted",
-                                color: "#19BF19"
+                                color: "#5cb85c"
                             },
                             {
                                 text: "Rejected",
                                 value: "Rejected",
-                                color: "#CB0101"
+                                color: "#d9534f"
                             }
                         ]
                     },
+
                     {
                         field: "personId",
                         name: "People",
@@ -236,7 +190,7 @@
                     }
 
                 ],
-                footer: false,
+                footer: false
             }
         }
 

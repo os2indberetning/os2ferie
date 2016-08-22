@@ -222,8 +222,8 @@ namespace Core.ApplicationServices
 
             var recipient = report.Person.Mail;
 
-            _mailSender.SendMail(recipient, "Afvist indberetning",
-                "Din indberetning er blevet afvist med kommentaren: \n \n" + report.Comment);
+            _mailSender.SendMail(recipient, "Afvist ferieindberetning",
+                "Din ferieindberetning er blevet afvist med kommentaren: \n \n" + report.Comment);
         }
 
         public void ApproveReport(VacationReport report, Person approver)
@@ -241,10 +241,11 @@ namespace Core.ApplicationServices
             _reportRepo.Save();
         }
 
-        public void RejectReport(VacationReport report, Person approver)
+        public void RejectReport(VacationReport report, Person approver, string comment)
         {
             report.Status = ReportStatus.Rejected;
             report.ClosedDateTimestamp = (DateTime.UtcNow.ToTimestamp());
+            report.Comment = comment;
             report.ApprovedById = approver.Id;
             DeleteReport(report);
             _reportRepo.Save();
