@@ -83,7 +83,7 @@ namespace OS2Indberetning.Controllers
             _person.AddHomeWorkDistanceToEmployments(CurrentUser);
             CurrentUser.CprNumber = "";
             CurrentUser.HasAppPassword = _appLoginRepo.AsQueryable().Any(x => x.PersonId == CurrentUser.Id);
-            CurrentUser.IsSubstitute = _substituteRepo.AsQueryable().Any(x => x.SubId.Equals(CurrentUser.Id) && x.StartDateTimestamp < currentDateTimestamp && x.EndDateTimestamp > currentDateTimestamp);
+            CurrentUser.IsSubstitute = _substituteRepo.AsQueryable().Any(x => x.SubId.Equals(CurrentUser.Id) && x.StartDateTimestamp < currentDateTimestamp && x.EndDateTimestamp > currentDateTimestamp) || _reportRepo.AsQueryable().Any(x => x.ResponsibleLeaderId == CurrentUser.Id && x.Status == ReportStatus.Pending);
             return CurrentUser;
         }
 

@@ -28,6 +28,8 @@ namespace Mail.LogMailer
 
             var configvalue = ConfigurationManager.AppSettings["PROTECTED_DailyErrorLogMail"];
 
+            if (configvalue == null) return;
+
             configvalue = Regex.Replace(configvalue, @"\s+", "");
 
             var receivers = configvalue.Split(',');
