@@ -38,7 +38,7 @@
             private $modalInstance,
             private $modal,
             public report) {
-            
+
             this.name = report.Person.FullName.split("[")[0];
             this.purpose = report.description;
 
@@ -51,14 +51,15 @@
                 this.startTime = "Hele dagen";
             }
 
-            this.start = moment(report.start).format("DD.MM.YYYY");
-            this.end = moment(report.end).format("DD.MM.YYYY");
-
             if (!endsOnFullDay) {
                 this.endTime = "Til kl. " + moment((moment.duration(report.EndTime) as any)._data).format('HH:mm');
             } else {
                 this.endTime = "Hele dagen";
+                report.end -= 86400;
             }
+
+            this.start = moment(report.start).format("DD.MM.YYYY");
+            this.end = moment(report.end).format("DD.MM.YYYY");
 
             this.type = report.type === "Regular" ? "Almindelig ferie" : "6. ferieuge";
 

@@ -44,7 +44,7 @@ namespace Core.ApplicationServices
             var colidingReports = _reportRepo.AsQueryable()
                 .Where(
                     x =>
-                        x.PersonId == report.PersonId && x.Status != ReportStatus.Rejected && ((x.StartTimestamp < report.EndTimestamp && report.StartTimestamp < x.EndTimestamp) ||
+                        x.PersonId == report.PersonId && x.Status != ReportStatus.Rejected && ((x.StartTimestamp < report.EndTimestamp + 86400 && report.StartTimestamp < x.EndTimestamp + 86400) ||
                         x.StartTimestamp == report.StartTimestamp || x.EndTimestamp == report.EndTimestamp));
 
             if (colidingReports.Any())
@@ -54,24 +54,31 @@ namespace Core.ApplicationServices
                 {
                     if (colidingReport.Id == report.Id) continue;
 
-                    if ((colidingReport.StartTimestamp == report.StartTimestamp && (!colidingReport.StartTime.HasValue || !report.StartTime.HasValue)) ||
-                        (colidingReport.EndTimestamp == report.EndTimestamp && (!colidingReport.EndTime.HasValue || !report.EndTime.HasValue)))
-                    {
-                        colides = true;
-                        break;
-                    }
-
                     var colideStartTotal = (double) colidingReport.StartTimestamp;
                     var colideEndTotal = (double) colidingReport.EndTimestamp;
 
                     if (colidingReport.StartTime.HasValue) colideStartTotal += colidingReport.StartTime.Value.TotalSeconds;
-                    if (colidingReport.EndTime.HasValue) colideEndTotal += colidingReport.EndTime.Value.TotalSeconds;
+                    if (colidingReport.EndTime.HasValue)
+                    {
+                        colideEndTotal += colidingReport.EndTime.Value.TotalSeconds;
+                    }
+                    else if (colidingReport.EndTimestamp == report.StartTimestamp)
+                    {
+                        colideEndTotal += 86400;
+                    }
 
                     var reportStartTotal = (double) report.StartTimestamp;
                     var reportEndTotal = (double) report.EndTimestamp;
 
                     if (report.StartTime.HasValue) reportStartTotal += report.StartTime.Value.TotalSeconds;
-                    if (report.EndTime.HasValue) reportEndTotal += report.EndTime.Value.TotalSeconds;
+                    if (report.EndTime.HasValue)
+                    {
+                        reportEndTotal += report.EndTime.Value.TotalSeconds;
+                    }
+                    else if (report.EndTimestamp == colidingReport.StartTimestamp)
+                    {
+                        reportEndTotal += 86400;
+                    }
 
                     if (!(reportStartTotal < colideEndTotal) || !(colideStartTotal < reportEndTotal)) continue;
 
@@ -136,8 +143,8 @@ namespace Core.ApplicationServices
             if (report.EndTimestamp < report.StartTimestamp) return false;
             if (report.StartTime > report.EndTime &&
                 report.StartTimestamp.ToDateTime().Date == report.EndTimestamp.ToDateTime().Date) return false;
-            if (!_employmentRepository.AsQueryable().First(x => x.Id == report.EmploymentId).OrgUnit.HasAccessToVacation)
-                return false;
+            if (!_employmentRepository.AsQueryable().First(x => x.Id == report.EmploymentId).OrgUnit.HasAccessToVacation) return false;
+            if (report.StartTimestamp == report.EndTimestamp && report.StartTime.HasValue && report.EndTime.HasValue && report.StartTime.Value == report.EndTime.Value) return false;
 
             return true;
         }

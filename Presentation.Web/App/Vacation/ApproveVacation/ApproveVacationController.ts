@@ -110,8 +110,8 @@
                                         value.EndTimestamp += duration.asSeconds();
                                     } else {
                                         // Add 86400/24 hours to enddate
-                                        // value.EndTimestamp += 86400;
-                                        value.isAllDay = true;
+                                        value.EndTimestamp += 86400;
+                                        //value.isAllDay = true;
                                     }
 
                                     value.type = value.VacationType === "Regular" ? "Almindelig ferie" : "6. ferieuge";
