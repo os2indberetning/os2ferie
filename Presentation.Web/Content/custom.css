@@ -578,3 +578,33 @@ li.mainMenuLink.active > a > i.fa {
 .force-text-left {
     text-align: left !important;
 }
+
+.vacation-sixthweek {
+    /* background: repeating-linear-gradient(45deg, transparent, transparent 7px, rgba(0, 0, 0, 0.10) 4px, rgba(0, 0, 0, 0.10) 12px); */
+    background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0, 0, 0, 0.10) 10px, rgba(0, 0, 0, 0.10) 20px);
+}
+
+.schedule-vacation-template {
+    height: 100%;
+}
+
+.week-number-calendar {
+    margin: 33px 0px 0px 0px;
+    padding: 0px;
+    float: left;
+    width: inherit;
+    border-right: none;
+}
+
+.week-number-calendar .k-link {
+    cursor: default;
+}
+
+.calendar-week-empty {
+    display: block;
+    overflow: hidden;
+    min-height: 1.8333em;
+    line-height: 1.8333em;
+    padding: 0 .45em 0 .1em;
+    cursor: default;
+}

@@ -1,59 +1,24 @@
-﻿<div style="margin: 50px;">
-    <div class="row" style="text-align: center;">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="col-lg-10">
-                    <div kendo-scheduler="avc.scheduler" k-options="avc.schedulerOptions">
-                    </div>
+﻿<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Godkend indberetninger
+        </h1>
+    </div>
+</div>
+<div class="row" style="text-align: center;">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-lg-10">
+                <div kendo-scheduler="avc.scheduler" k-options="avc.schedulerOptions">
                 </div>
-                <div class="col-lg-2">
-                    <div id="pendingVacationsList" class="list-group pending-vacation-listgroup">
-                        <b class="list-group-item  list-group-item-info">Afventende ferie rapporter</b>
-                        <i class="list-group-item" ng-hide="avc.pendingVacations.length">Ingen afventende indberetninger</i>
-                        <a id="{{pV.key}}" class="list-group-item" ng-repeat="pV in avc.pendingVacations" ng-click="avc.goToDate(pV.startTime)">{{pV.firstName}} <br /> {{pV.dateFrom}} - {{pV.dateTo}}</a>
-                    </div>
+            </div>
+            <div class="col-lg-2">
+                <div id="pendingVacationsList" class="list-group pending-vacation-listgroup">
+                    <b class="list-group-item  list-group-item-info">Afventende ferieindberetning</b>
+                    <i class="list-group-item" ng-hide="avc.pendingVacations.length">Ingen afventende ferieindberetning</i>
+                    <a id="{{pV.key}}" class="list-group-item" ng-repeat="pV in avc.pendingVacations" ng-click="avc.goToDate(pV.startTime)">{{pV.firstName}} <br /> {{pV.dateFrom}} - {{pV.dateTo}}</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Custom modal for approving vacation reports -->
-<script id="customEditorTemplate" type="text/x-kendo-template">
-    <div class="k-edit-label">
-        <label for="title">Navn</label>
-    </div>
-    <div data-container-for="title" class="k-edit-field"></div>
-
-    <div class="k-edit-label">
-        <label for="start">Start</label>
-    </div>
-    <div data-container-for="start" class="k-edit-field"></div>
-    <div class="k-edit-label">
-        <label for="end">Slut</label>
-    </div>
-    <div data-container-for="end" class="k-edit-field"></div>
-
-    <div class="k-edit-label">
-        <label for="title">Kommentar</label>
-    </div>
-    <div data-container-for="comment" class="k-edit-field"></div>
-
-        <span class="k-widget k-dropdown k-header" unselectable="on" role="listbox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-owns="" aria-disabled="false" aria-readonly="false" aria-busy="false" style="margin-left: 3%">
-            <span unselectable="on" class="k-dropdown-wrap k-state-default k-state-hover">
-                <span unselectable="on" class="k-input">Pending</span>
-                <span unselectable="on" class="k-select">
-                    <span unselectable="on" class="k-icon k-i-arrow-s">select</span>
-                </span>
-            </span>
-            <select data-bind="value:status" data-role="dropdownlist">
-                <option value="Pending" selected="selected">Afventer</option>
-                <option value="Accepted">Godkend</option>
-                <option value="Rejected">Afvis</option>
-            </select>
-        </span>
-
-        <div class="k-edit-label"><label for="status">Status</label></div>
-        <div data-container-for="status" class="k-edit-field">
-        </div>
-</script>

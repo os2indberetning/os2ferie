@@ -85,13 +85,13 @@
                     },
                     {
                         template: data => {
-                            if (data.Comment != "") {
-                                return `<button kendo-tooltip k-position="'right'" k-content="'${data.Comment
+                            if (data.Purpose != "") {
+                                return `<button kendo-tooltip k-position="'right'" k-content="'${data.Purpose
                                     }'" class="transparent-background pull-right no-border"><i class="fa fa-comment-o"></i></button>`;
                             }
-                            return "<i>Ingen kommentar angivet</i>";
+                            return "<i>Ingen bemærkning angivet</i>";
                         },
-                        title: "Kommentar"
+                        title: "Bemærkning"
                     },
                     {
                         title: "Ferietype",
@@ -107,6 +107,17 @@
                             return m.format("L");
                         },
                         title: "Indberettet"
+                    },
+                    {
+                        field: "Comment",
+                        title: "Begrundelse",
+                        template: data => {
+                            if (data.Comment != "") {
+                                return `<button kendo-tooltip k-position="'right'" k-content="'${data.Comment
+                                    }'" class="transparent-background pull-right no-border"><i class="fa fa-comment-o"></i></button>`;
+                            }
+                            return "<i>Ingen begrundelse angivet</i>";
+                        }
                     },
                     {
                         field: "ClosedDateTimestamp",

@@ -8,6 +8,12 @@
         Invoiced
     }
 
+    export enum ReportType {
+        Unknown = -1,
+        Drive = 0,
+        Vacation = 1
+    }
+
     export class Report {
         Id: number;
         Status: ReportStatus;
@@ -24,6 +30,5 @@
         ResponsibleLeaderId: number;
         ResponsibleLeader: Person;
         ActualLeaderId: number;
-
     }
 }

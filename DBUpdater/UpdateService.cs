@@ -26,9 +26,11 @@ namespace DBUpdater
         private readonly IDbUpdaterDataProvider _dataProvider;
         private readonly IMailSender _mailSender;
         private readonly IAddressHistoryService _historyService;
+
         private readonly IGenericRepository<Report> _reportRepo;
         private readonly IReportService<Report> _reportService;
-        private readonly IGenericRepository<VacationBalance> _vacationRepo;
+
+        private readonly IGenericRepository<VacationBalance> _vacationBalanceRepo;
         private readonly ISubstituteService _subService;
 
         public UpdateService(IGenericRepository<Employment> emplRepo,
@@ -45,7 +47,7 @@ namespace DBUpdater
             IReportService<Report> reportService,
             ISubstituteService subService,
             IGenericRepository<Substitute> subRepo,
-            IGenericRepository<VacationBalance> vacationRepo)
+            IGenericRepository<VacationBalance> vacationBalanceRepo)
         {
             _emplRepo = emplRepo;
             _orgRepo = orgRepo;
@@ -61,7 +63,7 @@ namespace DBUpdater
             _reportService = reportService;
             _subService = subService;
             _subRepo = subRepo;
-            _vacationRepo = vacationRepo;
+            _vacationBalanceRepo = vacationBalanceRepo;
         }
 
         /// <summary>
@@ -446,15 +448,15 @@ namespace DBUpdater
 
         public void UpdateLeadersOnAllReports()
         {
-            var i = 0;
-
+            Console.WriteLine("Updating leaders on reports:");
             var reports = _reportRepo.AsQueryable().Where(x => x.Employment.OrgUnit.Level > 1).ToList();
-            var max = reports.Count();
+            var i = 0;
+            var max = reports.Count;
             foreach (var report in reports)
             {
                 if (i % 100 == 0)
                 {
-                    Console.WriteLine("Updating leaders on report " + i + " of " + max);
+                    Console.WriteLine("at " + i + " of " + max);
                 }
                 i++;
                 report.ResponsibleLeaderId = _reportService.GetResponsibleLeaderForReport(report).Id;
@@ -474,6 +476,7 @@ namespace DBUpdater
         /// </summary>
         public void UpdateLeadersOnExpiredOrActivatedSubstitutes()
         {
+            // TODO Find something more generic for updating drive and vacation reports.
             var yesterdayTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1).AddDays(1))).TotalSeconds;
             var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
@@ -491,13 +494,13 @@ namespace DBUpdater
         public void AddLeadersToReportsThatHaveNone()
         {
             // Fail-safe as some reports for unknown reasons have not had a leader attached
-            Console.WriteLine("Adding leaders to reports that have none");
+            Console.WriteLine("Adding leaders to drive reports that have none");
             var i = 0;
             var reports = _reportRepo.AsQueryable().Where(r => r.ResponsibleLeader == null || r.ActualLeader == null).ToList();
             foreach (var report in reports)
             {
                 i++;
-                Console.WriteLine("Adding leaders to report " + i + " of " + reports.Count);
+                Console.WriteLine("Adding leaders to  report " + i + " of " + reports.Count);
                 report.ResponsibleLeaderId = _reportService.GetResponsibleLeaderForReport(report).Id;
                 report.ActualLeaderId = _reportService.GetActualLeaderForReport(report).Id;
                 if (i % 100 == 0)
@@ -548,7 +551,7 @@ namespace DBUpdater
                 // Also not likely to happen, but better safe than sorry.
                 if (employment == null) continue;
 
-                var vacation = _vacationRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.EmploymentId == employment.Id && x.Year == vacationYear);
+                var vacation = _vacationBalanceRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.EmploymentId == employment.Id && x.Year == vacationYear);
 
                 var isNewBalance = vacation == null;
 
@@ -561,7 +564,7 @@ namespace DBUpdater
                         Year = vacationYear
                     };
 
-                    _vacationRepo.Insert(vacation);
+                    _vacationBalanceRepo.Insert(vacation);
                 }
 
                 vacation.FreeVacationHours = balance.FreeVacationHoursTotalDec ?? 0;
@@ -574,10 +577,10 @@ namespace DBUpdater
 
                 if (i % 100 != 0) continue;
                 Console.WriteLine("Saving to database");
-                _vacationRepo.Save();
+                _vacationBalanceRepo.Save();
             }
 
-            _vacationRepo.Save();
+            _vacationBalanceRepo.Save();
         }
 
     }

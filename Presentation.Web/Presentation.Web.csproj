@@ -416,7 +416,6 @@
     <TypeScriptCompile Include="App\Core\Interfaces\NotificationService.d.ts" />
     <TypeScriptCompile Include="App\Core\Services\Authorization.ts" />
     <TypeScriptCompile Include="App\Core\Services\Principal.ts" />
-    <TypeScriptCompile Include="App\Drive\ApproveReports\ApproveReportsSettingsController.ts" />
     <Content Include="App\Core\Views\Modals\NewApproverModal.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -425,7 +424,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App\Core\Controllers\NewSubstituteModalInstanceController.js" />
-    <Content Include="App\Drive\ApproveReports\Modals\RejectController.js" />
+    <Content Include="App\Core\Controllers\RejectReportModalInstanceController.js" />
     <Content Include="App\Drive\ApproveReports\Modals\AcceptController.js" />
     <Content Include="App\Drive\ApproveReports\ApproveReportsView.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -433,7 +432,7 @@
     <Content Include="App\Drive\ApproveReports\Modals\ConfirmApproveTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App\Drive\ApproveReports\Modals\ConfirmRejectTemplate.html">
+    <Content Include="App\Core\Views\Modals\ConfirmRejectReport.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App\Core\Views\ApproveReportsSettingsView.html">
@@ -466,6 +465,8 @@
     <TypeScriptCompile Include="App\Core\Controllers\BaseApproveReportSettingsController.ts" />
     <TypeScriptCompile Include="App\Core\Controllers\BaseSubstitutesController.ts" />
     <TypeScriptCompile Include="App\Core\Models\Substitute.ts" />
+    <TypeScriptCompile Include="App\Drive\ApproveReports\ApproveReportsSettingsController.ts" />
+    <TypeScriptCompile Include="App\Drive\Settings\Substitutes\SubstitutesController.ts" />
     <TypeScriptCompile Include="App\Vacation\Admin\AdminMenuController.ts" />
     <Content Include="App\Vacation\Admin\AdminView.html" />
     <Content Include="App\Core\Views\AdminSubstitutesView.html" />
@@ -480,6 +481,7 @@
     <TypeScriptCompile Include="App\Vacation\ApproveVacationSettings\ApproveVacationSettingsController.ts" />
     <TypeScriptCompile Include="App\Vacation\ApproveVacation\ApproveVacationController.ts" />
     <TypeScriptCompile Include="App\app.routes.ts" />
+    <TypeScriptCompile Include="App\Vacation\ApproveVacation\ShowVacationReportController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\BaseMyVacationReportsController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\ConfirmDeleteVacationReportController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyVacationReportsController.ts" />
@@ -491,6 +493,7 @@
     <TypeScriptCompile Include="App\Vacation\app.vacation.ts" />
     <TypeScriptCompile Include="App\Vacation\ReportVacation\CreateReportVacationController.ts" />
     <Content Include="App\Vacation\ApproveVacation\ApproveVacationView.html" />
+    <Content Include="App\Vacation\ApproveVacation\ShowVacationReportView.html" />
     <Content Include="App\Vacation\MyVacationReports\ConfirmDeleteVacationReportTemplate.html" />
     <Content Include="App\Vacation\MyVacationReports\EditVacationReportTemplate.html" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyPendingVacationReports\MyPendingVacationReportsController.ts" />
@@ -521,7 +524,6 @@
     <Content Include="App\Drive\Settings\AddressDeleteModal.html" />
     <Content Include="App\Drive\Settings\RouteDeleteModal.html" />
     <Content Include="App\Drive\Settings\RouteAddModal.html" />
-    <TypeScriptCompile Include="App\Drive\Settings\Substitutes\SubstitutesController.ts" />
     <Content Include="App\Drive\app.drive.routes.js" />
     <Content Include="App\Vacation\Services\VacationReportResource.js" />
     <Content Include="Content\angular-busy.min.css" />

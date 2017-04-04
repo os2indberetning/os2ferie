@@ -343,7 +343,7 @@
            /// </summary>
            /// <param name="id"></param>
            var modalInstance = $modal.open({
-               templateUrl: '/App/ApproveReports/Modals/ConfirmApproveTemplate.html',
+               templateUrl: '/App/Drive/ApproveReports/Modals/ConfirmApproveTemplate.html',
                controller: 'AcceptController',
                backdrop: "static",
                resolve: {
@@ -373,7 +373,7 @@
                NotificationService.AutoFadeNotification("danger", "", "Ingen indberetninger er markerede!");
            } else {
                var modalInstance = $modal.open({
-                   templateUrl: '/App/ApproveReports/Modals/ConfirmApproveSelectedWithAccountTemplate.html',
+                   templateUrl: '/App/Drive/ApproveReports/Modals/ConfirmApproveSelectedWithAccountTemplate.html',
                    controller: 'AcceptWithAccountController',
                    backdrop: "static",
                    resolve: {
@@ -408,7 +408,7 @@
                NotificationService.AutoFadeNotification("danger", "", "Ingen indberetninger er markerede!");
            } else {
                var modalInstance = $modal.open({
-                   templateUrl: '/App/ApproveReports/Modals/ConfirmApproveSelectedTemplate.html',
+                   templateUrl: '/App/Drive/ApproveReports/Modals/ConfirmApproveSelectedTemplate.html',
                    controller: 'AcceptController',
                    backdrop: "static",
                    resolve: {
@@ -440,7 +440,7 @@
            /// </summary>
            /// <param name="routeId"></param>
            var modalInstance = $modal.open({
-               templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
+               templateUrl: '/App/Drive/Admin/Reports/Modal/ShowRouteModalTemplate.html',
                controller: 'ShowRouteModalController',
                backdrop: "static",
                resolve: {
@@ -457,8 +457,8 @@
            /// </summary>
            /// <param name="id"></param>
            var modalInstance = $modal.open({
-               templateUrl: '/App/ApproveReports/Modals/ConfirmRejectTemplate.html',
-               controller: 'RejectController',
+               templateUrl: '/App/Core/Views/Modals/ConfirmRejectReport.html',
+               controller: 'RejectReportModalInstanceController',
                backdrop: "static",
                resolve: {
                    itemId: function () {
@@ -475,7 +475,7 @@
                    "ApprovedById": $rootScope.CurrentUser.Id,
                }, function () {
                    $scope.gridContainer.grid.dataSource.read();
-
+                   NotificationService.AutoFadeNotification("success", "", "Indberetningen blev afvist.");
                }).$promise;
            });
        }
@@ -484,14 +484,11 @@
            $scope.gridContainer.grid.dataSource.read();
        }
 
-
-
        $scope.loadInitialDates();
 
        // Format for datepickers.
        $scope.dateOptions = {
-           format: "dd/MM/yyyy",
-
+           format: "dd/MM/yyyy"
        };
 
        $scope.person.chosenPerson = "";

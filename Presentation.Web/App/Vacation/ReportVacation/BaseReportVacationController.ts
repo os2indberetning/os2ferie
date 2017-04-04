@@ -24,10 +24,14 @@
         endTime: Date;
         employments: Employment[];
         vacationType;
-        comment: String;
+        purpose: String;
         position: number;
         saveButtenDisabled = true;
         isEditingVacation = false;
+        startWeeks: number[] = [];
+        endWeeks: number[] = [];
+        startCalendarOptions: kendo.ui.CalendarOptions;
+        endCalendarOptions: kendo.ui.CalendarOptions;
 
         protected maxEndDate: Date;
         protected currentUser: Person;
@@ -55,6 +59,32 @@
 
             });
 
+            this.startCalendarOptions = {
+                month: {
+                    empty: '<a class="k-link disable-k-link"></a>'
+                },
+                navigate: (current) => {
+                    var value = current.sender.current();
+                    if (value != undefined) {
+                        this.startWeeks = this.updateWeeks(value);
+                        this.$scope.$apply();
+                    }
+                }
+            };
+
+            this.endCalendarOptions = {
+                month: {
+                    empty: '<span class="calendar-week-empty"> </span>'
+                },
+                navigate: (current) => {
+                    var value = current.sender.current();
+                    if (value != undefined) {
+                        this.endWeeks = this.updateWeeks(value);
+                        this.$scope.$apply();
+                    }
+                }
+            };
+
             this.vacationDaysInPeriod = 0;
 
             this.$scope.$watch(() => { return this.startDate }, () => {
@@ -67,6 +97,31 @@
                 value.PresentationString = value.Position + " - " + value.OrgUnit.LongDescription + " (" + value.EmploymentId + ")";
                 if (value.OrgUnit.HasAccessToVacation) this.employments.push(value);
             });
+        }
+
+        private updateWeeks(currentDate: Date): number[] {
+            var m = moment(currentDate);
+            var firstOfMonth = m.clone().startOf('month'),
+                currentWeek = firstOfMonth.clone().day(0),
+                output = [];
+
+            if (firstOfMonth.isoWeekday() === 1) {
+                output.push(currentWeek.isoWeek());
+            }
+
+            while (output.length < 6) {
+                currentWeek.add(7, "d");
+                output.push(currentWeek.isoWeek());
+            }
+
+            return output;
+        }
+
+        private sameMonth(a, b, other) {
+            if (a.month() !== b.month()) {
+                return other;
+            }
+            return a.date();
         }
 
         private updateCalendarRange() {

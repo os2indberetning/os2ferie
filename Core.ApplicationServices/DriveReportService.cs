@@ -18,7 +18,7 @@ namespace Core.ApplicationServices
         private readonly IAddressCoordinates _coordinates;
         private readonly IReimbursementCalculator _calculator;
 
-        public DriveReportService(IGenericRepository<DriveReport> reportRepo, IReimbursementCalculator calculator, IAddressCoordinates coordinates, IRoute<RouteInformation> route, IGenericRepository<RateType> rateTypeRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, ILogger logger) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, logger, reportRepo, SubstituteType.Drive)
+        public DriveReportService(IGenericRepository<DriveReport> reportRepo, IReimbursementCalculator calculator, IAddressCoordinates coordinates, IRoute<RouteInformation> route, IGenericRepository<RateType> rateTypeRepo, IMailSender mailSender, IGenericRepository<OrgUnit> orgUnitRepository, IGenericRepository<Employment> employmentRepository, IGenericRepository<Substitute> substituteRepository, ILogger logger) : base(mailSender, orgUnitRepository, employmentRepository, substituteRepository, logger, reportRepo)
         {
             _route = route;
             _rateTypeRepo = rateTypeRepo;

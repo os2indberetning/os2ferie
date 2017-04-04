@@ -17,13 +17,11 @@ namespace Core.DomainModel
     {
         public long StartTimestamp { get; set; }
         public TimeSpan? StartTime { get; set; }
-
         public long EndTimestamp { get; set; }
         public TimeSpan? EndTime { get; set; }
-
+        public string Purpose { get; set; }
         public int VacationYear { get; set; }
         public int VacationHours { get; set; }
-
         public VacationType VacationType { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿angular.module('app.core').controller('NewApproverModalInstanceController',
-    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService","Autocomplete", "SubstituteType",
-    function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService,Autocomplete, SubstituteType) {
+    ["$scope", "$modalInstance", "persons", "orgUnits", "leader", "Substitute", "Person", "NotificationService","Autocomplete", "ReportType",
+    function ($scope, $modalInstance, persons, orgUnits, leader, Substitute, Person, NotificationService,Autocomplete, ReportType) {
 
         $scope.loadingPromise = null;
 
@@ -38,7 +38,7 @@
                 OrgUnitId: 1,
                 PersonId: $scope.target[0].Id,
                 CreatedById: leader.Id,
-                Type: SubstituteType === 0 ? "Drive" : "Vacation"
+                Type: ReportType === 0 ? "Drive" : "Vacation"
             });
 
             if ($scope.infinitePeriod) {

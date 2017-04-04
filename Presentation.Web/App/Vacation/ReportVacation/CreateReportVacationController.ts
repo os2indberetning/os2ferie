@@ -35,7 +35,7 @@
             this.startDate = new Date();
             this.endDate = new Date();
             this.maxEndDate = new Date();
-            this.comment = undefined;
+            this.purpose = undefined;
             this.vacationStartsOnFullDay = true;
             this.vacationEndsOnFullDay = true;
             this.startTime = new Date(2000, 0, 1, 0, 0, 0, 0); // Only time is relevant, date is ignored by kendo
@@ -49,7 +49,7 @@
             report.StartTimestamp = this.moment(this.startDate).unix();
             report.EndTimestamp = this.moment(this.endDate).unix();
             report.EmploymentId = this.position;
-            report.Comment = this.comment;
+            report.Purpose = this.purpose;
             report.PersonId = this.currentUser.Id;
             report.Status = "Pending";
             report.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
@@ -79,7 +79,7 @@
                 this.NotificationService
                     .AutoFadeNotification("danger",
                         "",
-                        "Der opstod en fejl under oprettelsen af din ferieindberetning.");
+                        "Der opstod en fejl under oprettelsen af din ferieindberetning (Holder du allerede ferie i den valgte periode?).");
             });
         }
     }

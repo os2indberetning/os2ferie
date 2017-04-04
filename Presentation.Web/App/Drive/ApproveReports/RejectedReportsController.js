@@ -263,7 +263,7 @@
 
        $scope.showRouteModal = function (routeId) {
            var modalInstance = $modal.open({
-               templateUrl: '/App/Admin/HTML/Reports/Modal/ShowRouteModalTemplate.html',
+               templateUrl: '/App/Drive/Admin/Reports/Modal/ShowRouteModalTemplate.html',
                controller: 'ShowRouteModalController',
                backdrop: "static",
                resolve: {

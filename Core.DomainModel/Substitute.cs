@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Core.DomainModel
+﻿namespace Core.DomainModel
 {
-
-    public enum SubstituteType
-    {
-        None = -1,
-        Drive = 0,
-        Vacation = 1
-    }
-
     public class Substitute
     {
         public int Id { get; set; }
@@ -28,6 +17,6 @@ namespace Core.DomainModel
         public int? CreatedById { get; set; }
         public virtual Person CreatedBy { get; set; }
 
-        public SubstituteType Type { get; set; }
+        public ReportType Type { get; set; }
     }
 }

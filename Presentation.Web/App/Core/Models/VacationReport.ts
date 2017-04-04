@@ -12,6 +12,7 @@
         EndTimestamp: number;
         StartTime: string;
         EndTime: string;
+        purpose: string;
         VacationYear: number;
         VacationHours: number;
         VacationType: VacationType;

@@ -1,0 +1,82 @@
+﻿<div cg-busy="svrc.loadingPromise">
+    <div class="modal-header">
+        <h3 class="modal-title">Ferieindberetning: {{svrc.status}}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <label>Navn:</label>
+                </div>
+
+                <div class="col-md-9 col-sm-12">
+                    {{svrc.name}}
+                </div>
+            </div>
+
+            <div class="seperator"></div>
+
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <label>Feriestart:</label>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                    {{svrc.start}} - {{svrc.startTime}}
+                </div>
+            </div>
+
+            <div class="seperator"></div>
+
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <label>Ferieafslutning:</label>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                    {{svrc.end}} - {{svrc.endTime}}
+                </div>
+            </div>
+
+            <div class="seperator"></div>
+
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <label>Type:</label>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                    {{svrc.type}}
+                </div>
+            </div>
+
+            <div class="seperator"></div>
+
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <label>Bemærkning:</label>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                    <div ng-if="svrc.purpose != ''">{{svrc.purpose}}</div>
+                    <div ng-if="svrc.purpose == ''"><i>Ingen bemærkning</i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="seperator"></div>
+
+
+            <div class="row" ng-if="svrc.report.status == 'Rejected' && svrc.report.Comment != ''">
+                <div class="col-md-3 col-sm-12">
+                    <label>Begrundelse for afvisning:</label>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                    {{svrc.report.Comment}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger pull-left" style="margin: 5px" ng-click="svrc.reject()" ng-hide="svrc.report.status == 'Rejected'">Afvis</button>
+        <button class="btn btn-primary pull-right" style="margin: 5px" ng-click="svrc.close()">Annuller</button>
+        <button class="btn btn-success pull-right" style="margin: 5px" ng-click="svrc.approve()" ng-hide="svrc.report.status == 'Rejected' || svrc.report.status == 'Accepted'">Godkend</button>
+    </div>
+</div>
