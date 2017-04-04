@@ -115,12 +115,12 @@ namespace Core.ApplicationServices
                 orgIds.AddRange(_orgService.GetChildOrgsWithoutLeader(sub.OrgUnitId).Select(x => x.Id));
                 var idsOfLeadersOfImmediateChildOrgs = _orgService.GetIdsOfLeadersInImmediateChildOrgs(sub.OrgUnitId);
 
-                var reportsForLeadersOfImmediateChildOrgs = _reportRepo.AsQueryable().Where(rep => idsOfLeadersOfImmediateChildOrgs.Contains(rep.PersonId)).ToList();
-                var reports = _reportRepo.AsQueryable().Where(rep => orgIds.Contains(rep.Employment.OrgUnitId)).ToList();
-                reports.AddRange(reportsForLeadersOfImmediateChildOrgs);
+                var reports = _reportRepo.AsNoTracking().Where(rep => orgIds.Contains(rep.Employment.OrgUnitId) || idsOfLeadersOfImmediateChildOrgs.Contains(rep.PersonId)).ToList();
                 foreach (var report in reports)
                 {
+                    if (report.ReportType != sub.Type) continue;
                     report.ResponsibleLeaderId = _reportService.GetResponsibleLeaderForReport(report).Id;
+                    _reportRepo.Patch(report);
                 }
                 _reportRepo.Save();
 
@@ -130,14 +130,15 @@ namespace Core.ApplicationServices
                 // Substitute is a personal approver
                 // Select reports to be updated based on PersonId on report
                 var reports2 =
-                    _reportRepo.AsQueryable().Where(rep => rep.PersonId == sub.PersonId).ToList();
-                foreach (var report in reports2)
+                    _reportRepo.AsNoTracking().Where(rep => rep.PersonId == sub.PersonId).ToList();
+                foreach (var report in reports2.AsEnumerable())
                 {
+                    if (report.ReportType != sub.Type) continue;
                     report.ResponsibleLeaderId = _reportService.GetResponsibleLeaderForReport(report).Id;
+                    _reportRepo.Patch(report);
                 }
                 _reportRepo.Save();
             }
         }
-
     }
 }

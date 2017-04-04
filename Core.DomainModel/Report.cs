@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 namespace Core.DomainModel
 {
@@ -45,12 +44,11 @@ namespace Core.DomainModel
         {
             get
             {
-                var type = GetType().BaseType;
-                if (type == typeof(DriveReport))
+                if (this is DriveReport)
                 {
                     return ReportType.Drive;
                 }
-                if (type == typeof(VacationReport))
+                if (this is VacationReport)
                 {
                     return ReportType.Vacation;
                 }

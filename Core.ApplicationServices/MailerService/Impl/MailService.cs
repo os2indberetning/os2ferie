@@ -39,7 +39,7 @@ namespace Core.ApplicationServices.MailerService.Impl
                 switch (report.ReportType)
                 {
                     case ReportType.Drive:
-                        _mailSender.SendMail(report.ResponsibleLeader.Mail, ConfigurationManager.AppSettings["PROTECTED_MAIL_SUBJECT_DRIVE"], driveBody);
+                        // _mailSender.SendMail(report.ResponsibleLeader.Mail, ConfigurationManager.AppSettings["PROTECTED_MAIL_SUBJECT_DRIVE"], driveBody);
                         break;
                     case ReportType.Vacation:
                         _mailSender.SendMail(report.ResponsibleLeader.Mail, ConfigurationManager.AppSettings["PROTECTED_MAIL_SUBJECT_VACATION"], ConfigurationManager.AppSettings["PROTECTED_MAIL_BODY_VACATION"]);
@@ -59,7 +59,7 @@ namespace Core.ApplicationServices.MailerService.Impl
         /// <returns>List of email addresses.</returns>
         public IEnumerable<Report> GetLeadersWithPendingReportsMails()
         {
-            var reports = _reportRepo.AsQueryable().Where(r => r.Status == ReportStatus.Pending).ToList();
+            var reports = _reportRepo.AsNoTracking().Where(r => r.Status == ReportStatus.Pending).ToList();
 
             var reportsWithNoLeader = reports.Where(report => report.ResponsibleLeader == null);
 

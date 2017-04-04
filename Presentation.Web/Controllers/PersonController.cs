@@ -248,16 +248,16 @@ namespace OS2Indberetning.Controllers
             var subsituteType = (ReportType)type;
             var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
-            var substitutes = _substituteRepo.AsQueryable().Where(x => x.PersonId == x.LeaderId && x.SubId == CurrentUser.Id && x.EndDateTimestamp >= currentTimestamp && x.Type == subsituteType).Distinct();
-            var personalApproving = _substituteRepo.AsQueryable().Where(x => x.PersonId != x.LeaderId && x.SubId == CurrentUser.Id && x.EndDateTimestamp >= currentTimestamp && x.Type == subsituteType).Select(x => x.Person);
-            var orgs = _orgService.GetWhereUserIsResponsible(CurrentUser.Id);
+            var substitutes = _substituteRepo.AsQueryable().Where(x => x.PersonId == x.LeaderId && x.SubId == CurrentUser.Id && x.EndDateTimestamp >= currentTimestamp && x.Type == subsituteType).Distinct().ToList();
+            var personalApproving = _substituteRepo.AsQueryable().Where(x => x.PersonId != x.LeaderId && x.SubId == CurrentUser.Id && x.EndDateTimestamp >= currentTimestamp && x.Type == subsituteType).Select(x => x.Person).ToList();
+            var orgs = _orgService.GetWhereUserIsResponsible(CurrentUser.Id).ToList();
 
             foreach (var sub in substitutes)
             {
                 orgs.AddRange(_orgService.GetWhereUserIsResponsible(sub.PersonId));
             }
 
-            var people = _reportRepo.AsQueryable().Where(x => x.ResponsibleLeaderId == CurrentUser.Id && x.Status == ReportStatus.Pending).Select(x => x.Person).Distinct().ToList();
+            var people = _reportRepo.AsNoTracking().Where(x => x.ResponsibleLeaderId == CurrentUser.Id && x.Status == ReportStatus.Pending).Select(x => x.Person).Distinct().ToList();
 
             foreach (var org in orgs)
             {
