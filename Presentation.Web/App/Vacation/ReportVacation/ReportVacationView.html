@@ -145,12 +145,36 @@
         <div class="form-group">
             <label for="">Vælg ferietype</label>
             <div class="form-field">
-                <input type="radio" name="VacationType" id="report-type-regular" ng-model="rvc.vacationType" value="Regular" class="k-radio">
+                <input type="radio" name="VacationType" id="report-type-regular" ng-model="rvc.vacationType" value="Regular" class="k-radio" />
                 <label style="margin-right: 40px;" class="k-radio-label" for="report-type-regular">Almindelig ferie</label>
 
-                <input type="radio" name="VacationType" id="report-type-sixth" ng-model="rvc.vacationType" value="SixthVacationWeek" class="k-radio">
+                <input type="radio" name="VacationType" id="report-type-sixth" ng-model="rvc.vacationType" value="SixthVacationWeek" class="k-radio" />
                 <label class="k-radio-label" for="report-type-sixth">6. ferieuge</label>
+
+                <input type="radio" name="VacationType" id="report-type-care" ng-model="rvc.vacationType" value="Care" class="k-radio" />
+                <label class="k-radio-label" for="report-type-care">Omsorgsdage</label>
+
+                <input type="radio" name="VacationType" id="report-type-senior" ng-model="rvc.vacationType" value="Senior" class="k-radio" />
+                <label class="k-radio-label" for="report-type-senior">Seniordage</label>
+
+                <input type="radio" name="VacationType" id="report-type-optional" ng-model="rvc.vacationType" value="Optional" class="k-radio" />
+                <label class="k-radio-label" for="report-type-optional">Valgfri</label>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="row margin-bottom-10">
+    <div class="col-lg-6" ng-show="rvc.vacationType === 'Care'">
+        <div class="form-group">
+            <label class="k-label-top" for="report-type-care-cpr">Cpr-nr. for barn</label>
+            <input type="text" class="form-control" id="report-type-care-cpr" ng-model="rvc.careTypeCpr" placeholder="Cpr-nr. for barn" />
+        </div>
+    </div>
+    <div class="col-lg-6" ng-show="rvc.vacationType === 'Optional'">
+        <div class="form-group">
+            <label class="k-label-top" for="report-type-optional-text">Ferie type</label>
+            <input type="text" class="form-control" id="report-type-optional-text" ng-model="rvc.optionalTypeText" placeholder="Ferie type" />
         </div>
     </div>
 </div>
