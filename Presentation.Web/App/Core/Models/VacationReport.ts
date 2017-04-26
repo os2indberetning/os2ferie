@@ -4,6 +4,9 @@
     export enum VacationType {
         Regular,
         SixthVacationWeek,
+        Care,
+        Senior,
+        Optional,
         Other
     }
 
@@ -12,7 +15,9 @@
         EndTimestamp: number;
         StartTime: string;
         EndTime: string;
-        purpose: string;
+        Purpose: string;
+        CareCpr: number;
+        OptionalText: string;
         VacationYear: number;
         VacationHours: number;
         VacationType: VacationType;
