@@ -25,6 +25,8 @@
         employments: Employment[];
         vacationType;
         purpose: String;
+        careCpr: number;
+        optionalText: String;
         position: number;
         saveButtenDisabled = true;
         isEditingVacation = false;

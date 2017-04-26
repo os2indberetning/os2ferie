@@ -36,6 +36,8 @@
             this.endDate = new Date();
             this.maxEndDate = new Date();
             this.purpose = undefined;
+            this.careCpr = undefined;
+            this.optionalText = undefined;
             this.vacationStartsOnFullDay = true;
             this.vacationEndsOnFullDay = true;
             this.startTime = new Date(2000, 0, 1, 0, 0, 0, 0); // Only time is relevant, date is ignored by kendo
@@ -65,6 +67,18 @@
                 report.EndTime = `P0DT${this.endTime.getHours()}H${this.endTime.getMinutes()}M0S`;
             } else {
                 report.EndTime = null;
+            }
+
+            if (this.vacationType === 'Care') {
+                report.CareCpr = this.careCpr;
+            } else {
+                report.CareCpr = null;
+            }
+
+            if (this.vacationType === 'Optional') {
+                report.OptionalText = this.optionalText;
+            } else {
+                report.OptionalText = null;
             }
 
             report.$save(() => {
