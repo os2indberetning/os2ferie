@@ -16,7 +16,7 @@
         StartTime: string;
         EndTime: string;
         Purpose: string;
-        CareCpr: number;
+        CareCpr: string;
         OptionalText: string;
         VacationYear: number;
         VacationHours: number;
