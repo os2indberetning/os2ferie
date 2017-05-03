@@ -56,6 +56,8 @@
             report.Status = "Pending";
             report.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
             report.VacationType = this.vacationType;
+            report.CareCpr = this.careCpr;
+            report.OptionalText = this.optionalText;
 
             if (!this.vacationStartsOnFullDay) {
                 report.StartTime = `P0DT${this.startTime.getHours()}H${this.startTime.getMinutes()}M0S`;
@@ -67,18 +69,6 @@
                 report.EndTime = `P0DT${this.endTime.getHours()}H${this.endTime.getMinutes()}M0S`;
             } else {
                 report.EndTime = null;
-            }
-
-            if (this.vacationType === 'Care') {
-                report.CareCpr = this.careCpr;
-            } else {
-                report.CareCpr = null;
-            }
-
-            if (this.vacationType === 'Optional') {
-                report.OptionalText = this.optionalText;
-            } else {
-                report.OptionalText = null;
             }
 
             report.$save(() => {
