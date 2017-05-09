@@ -35,7 +35,8 @@ namespace Core.ApplicationServices
 
             report.VacationYear = startDateTime.Year;
 
-            if (startDateTime.Date < new DateTime(report.VacationYear, 5, 1))
+            if (startDateTime.Date < new DateTime(report.VacationYear, 5, 1)
+                && (report.VacationType != VacationType.Care || report.VacationType != VacationType.Senior))
             {
                 report.VacationYear--;
             }
@@ -90,6 +91,8 @@ namespace Core.ApplicationServices
 
             if (report.Comment == null) report.Comment = "";
             if (report.Purpose == null) report.Purpose = "";
+            if (report.CareCpr == null) report.CareCpr = "";
+            if (report.OptionalText == null) report.OptionalText = "";
 
             report.ProcessedDateTimestamp = 0;
             report.Status = ReportStatus.Pending;
@@ -165,10 +168,31 @@ namespace Core.ApplicationServices
             if (report.EndTime != null)
                 mailContent += " - " + report.EndTime?.ToString("hh:mm");
 
-            mailContent += Environment.NewLine + "Ferietype: " +
-                           (report.VacationType == VacationType.Regular
-                               ? "Almindelig ferie"
-                               : "6. ferieuge");
+            string vacationType;
+
+            switch (report.VacationType)
+            {
+                case VacationType.Care:
+                    vacationType = "Omsorgsdage";
+                    break;
+                case VacationType.Optional:
+                    vacationType = "Valgfri ferie";
+                    break;
+                case VacationType.Regular:
+                    vacationType = "Almindelig ferie";
+                    break;
+                case VacationType.Senior:
+                    vacationType = "Seniordage";
+                    break;
+                case VacationType.SixthVacationWeek:
+                    vacationType = "6. ferieuge";
+                    break;
+                default:
+                    vacationType = "Andet";
+                    break;
+            }
+
+            mailContent += Environment.NewLine + "Ferietype: " + vacationType;
 
             if (report.Purpose != null)
                 mailContent += Environment.NewLine + "Bemærkning: " + report.Purpose;
@@ -196,10 +220,31 @@ namespace Core.ApplicationServices
             if (report.EndTime != null)
                 mailContent += " - " + report.EndTime?.ToString("hh:mm");
 
-            mailContent += Environment.NewLine + "Ferietype: " +
-                           (report.VacationType == VacationType.Regular
-                               ? "Almindelig ferie"
-                               : "6. ferieuge");
+            string vacationType;
+
+            switch (report.VacationType)
+            {
+                case VacationType.Care:
+                    vacationType = "Omsorgsdage";
+                    break;
+                case VacationType.Optional:
+                    vacationType = "Valgfri ferie";
+                    break;
+                case VacationType.Regular:
+                    vacationType = "Almindelig ferie";
+                    break;
+                case VacationType.Senior:
+                    vacationType = "Seniordage";
+                    break;
+                case VacationType.SixthVacationWeek:
+                    vacationType = "6. ferieuge";
+                    break;
+                default:
+                    vacationType = "Andet";
+                    break;
+            }
+
+            mailContent += Environment.NewLine + "Ferietype: " + vacationType;
 
             if (report.Purpose != null)
                 mailContent += Environment.NewLine + "Bemærkning: " + report.Purpose;

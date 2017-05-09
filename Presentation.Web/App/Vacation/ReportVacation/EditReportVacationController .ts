@@ -65,6 +65,8 @@
                 }
 
                 this.purpose = report.Purpose;
+                this.careCpr = report.CareCpr;
+                this.optionalText = report.OptionalText;
                 this.vacationType = report.VacationType;
                 this.position = report.EmploymentId;
             });
@@ -77,6 +79,8 @@
             report.EndTimestamp = this.moment(this.endDate).unix();
             report.EmploymentId = this.position;
             report.Purpose = this.purpose;
+            report.CareCpr = this.careCpr;
+            report.OptionalText = this.optionalText;
             report.PersonId = this.currentUser.Id;
             report.Status = "Pending";
             report.CreatedDateTimestamp = Math.floor(Date.now() / 1000);

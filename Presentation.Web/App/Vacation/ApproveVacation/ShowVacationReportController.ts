@@ -61,7 +61,26 @@
             this.start = moment(report.start).format("DD.MM.YYYY");
             this.end = moment(report.end).format("DD.MM.YYYY");
 
-            this.type = report.type === "Regular" ? "Almindelig ferie" : "6. ferieuge";
+            switch (report.type) {
+                case "Care":
+                    this.type = "Omsorgsdage";
+                    break;
+                case "Optional":
+                    this.type = "Valgfri ferie";
+                    break;
+                case "Regular":
+                    this.type = "Almindelig Ferie";
+                    break;
+                case "Senior":
+                    this.type = "Seniordage";
+                    break;
+                case "SixthVacationWeek":
+                    this.type = "6. ferieuge";
+                    break;
+                default:
+                    this.type = "Andet";
+                    break;
+            }
 
             switch (this.report.status) {
                 case "Accepted":

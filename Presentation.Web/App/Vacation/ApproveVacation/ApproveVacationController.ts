@@ -54,7 +54,7 @@
                 save: (e: any) => {
                     e.preventDefault();
                 },
-                eventTemplate: kendo.template(`<div class="schedule-vacation-template #if(type!='Regular'){#vacation-sixthweek#}#"></div>`),
+                eventTemplate: kendo.template(`<div class="schedule-vacation-template vacation-#= type.toLowerCase()#"></div>`),
                 editable: {
                     update: true,
                     move: false,
@@ -114,8 +114,27 @@
                                         //value.isAllDay = true;
                                     }
 
-                                    value.type = value.VacationType === "Regular" ? "Almindelig ferie" : "6. ferieuge";
-
+                                    switch (value.VacationType) {
+                                        case "Care":
+                                            value.type = "Omsorgsdage";
+                                            break;
+                                        case "Optional":
+                                            value.type = "Valgfri ferie";
+                                            break;
+                                        case "Regular":
+                                            value.type = "Almindelig Ferie";
+                                            break;
+                                        case "Senior":
+                                            value.type = "Seniordage";
+                                            break;
+                                        case "SixthVacationWeek":
+                                            value.type = "6. ferieuge";
+                                            break;
+                                        default:
+                                            value.type = "Andet";
+                                            break;
+                                    }
+                                    
                                     events.push(value);
                                 });
 
