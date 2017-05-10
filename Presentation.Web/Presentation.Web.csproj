@@ -478,8 +478,9 @@
     <TypeScriptCompile Include="App\Core\Models\VacationReport.ts" />
     <TypeScriptCompile Include="App\Core\Models\Report.ts" />
     <TypeScriptCompile Include="App\Vacation\Admin\Substitutes\VacationSubstitutesController.ts" />
-    <TypeScriptCompile Include="App\Vacation\ApproveVacationSettings\ApproveVacationSettingsController.ts" />
     <TypeScriptCompile Include="App\Vacation\ApproveVacation\ApproveVacationController.ts" />
+    <TypeScriptCompile Include="App\Vacation\ApproveVacation\ApproveVacationSettings\ApproveVacationSettingsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\ApproveVacation\ApproveVacationPending\ApproveVacationPendingController.ts" />
     <TypeScriptCompile Include="App\app.routes.ts" />
     <TypeScriptCompile Include="App\Vacation\ApproveVacation\ShowVacationReportController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\BaseMyVacationReportsController.ts" />
@@ -492,6 +493,7 @@
     <TypeScriptCompile Include="App\Vacation\Services\VacationBalanceResource.ts" />
     <TypeScriptCompile Include="App\Vacation\app.vacation.ts" />
     <TypeScriptCompile Include="App\Vacation\ReportVacation\CreateReportVacationController.ts" />
+    <Content Include="App\Vacation\ApproveVacation\ApproveVacationPending\ApproveVacationPendingView.html" />
     <Content Include="App\Vacation\ApproveVacation\ApproveVacationView.html" />
     <Content Include="App\Vacation\ApproveVacation\ShowVacationReportView.html" />
     <Content Include="App\Vacation\MyVacationReports\ConfirmDeleteVacationReportTemplate.html" />

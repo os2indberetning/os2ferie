@@ -14,19 +14,29 @@
                     controller: "CreateReportVacationController",
                     controllerAs: "rvc"
                 })
-                .state("vacation.approvereports",
+                .state("vacation.approve",
                 {
-                    url: "/approve-reports",
+                    url: "/approve",
                     templateUrl: "/App/Vacation/ApproveVacation/ApproveVacationView.html",
                     controller: "ApproveVacationController",
-                    controllerAs: "avc",
+                    controllerAs: "avCtrl",
                     data: {
                         roles: ['Approver']
                     }
                 })
-                .state("vacation.approvereportssettings",
+                .state("vacation.approve.pending",
                 {
-                    url: "/approve-reports-settings",
+                    url: "/pending",
+                    templateUrl: "/App/Vacation/ApproveVacation/ApproveVacationPending/ApproveVacationPendingView.html",
+                    controller: "ApproveVacationPendingController",
+                    controllerAs: "avpCtrl",
+                    data: {
+                        roles: ['Approver']
+                    }
+                })
+                .state("vacation.approve.settings",
+                {
+                    url: "/settings",
                     templateUrl: "/App/Core/Views/ApproveReportsSettingsView.html",
                     controller: "ApproveVacationSettingsController",
                     controllerAs: "arsCtrl",
