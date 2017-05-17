@@ -24,9 +24,18 @@
 
         pendingVacations = [];
 
-        constructor(private $scope, private $rootScope, private VacationReport, private NotificationService: NotificationService, private $http: ng.IHttpService, private moment: moment.MomentStatic, private $state: ng.ui.IStateService, private $modal) {
-            this.readPendingVacations();
+        constructor(
+            private $scope,
+            private $rootScope,
+            private VacationReport,
+            private NotificationService: NotificationService,
+            private $http: ng.IHttpService,
+            private moment: moment.MomentStatic,
+            private $state: ng.ui.IStateService,
+            private $modal) {
 
+            this.readPendingVacations();
+            
             // Why is this used?
             var self = this;
 
@@ -249,7 +258,6 @@
             this.readPendingVacations();
             this.scheduler.dataSource.read();
         }
-
     }
 
     angular.module("app.vacation").controller("ApproveVacationPendingController", ApproveVacationPendingController);

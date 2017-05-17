@@ -34,6 +34,16 @@
                         roles: ['Approver']
                     }
                 })
+                .state("vacation.approve.balance",
+                {
+                    url: "/balance",
+                    templateUrl: "/App/Vacation/ApproveVacation/ApproveVacationBalance/ApproveVacationBalanceView.html",
+                    controller: "ApproveVacationBalanceController",
+                    controllerAs: "avbCtrl",
+                    data: {
+                        roles: ['Approver']
+                    }
+                })
                 .state("vacation.approve.settings",
                 {
                     url: "/settings",

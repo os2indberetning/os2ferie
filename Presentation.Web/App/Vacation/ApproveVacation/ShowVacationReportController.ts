@@ -2,7 +2,9 @@
     "use strict";
 
     import NotificationService = core.interfaces.NotificationService;
+    import VacationBalanceResource = vacation.resources.IVacationBalanceResource;
     import VacationReport = core.models.VacationReport;
+    import Balance = core.models.VacationBalance;
 
     class ShowVacationReportController {
 
@@ -11,6 +13,7 @@
             "$rootScope",
             "VacationReport",
             "NotificationService",
+            "VacationBalanceResource",
             "moment",
             "$state",
             "$modalInstance",
@@ -26,6 +29,13 @@
         purpose: string;
         type: string;
         status: string;
+        id: number;
+        vacationBalance: Balance;
+        vacationHours: number;
+        vacationMinutes: number;
+        freeVacationHours: number;
+        freeVacationMinutes: number;
+        payDeduction: string;
 
         loadingPromise;
 
@@ -33,11 +43,20 @@
             private $rootScope,
             private VacationReport,
             private NotificationService: NotificationService,
+            private VacationBalanceResource: VacationBalanceResource,
             private moment: moment.MomentStatic,
             private $state: ng.ui.IStateService,
             private $modalInstance,
             private $modal,
             public report) {
+
+            this.id = report.personId;
+
+            VacationBalanceResource.query({ id: this.id }).$promise.then(data => {
+                this.vacationBalance = data[0];
+                this.calculateBalance();
+                this.calculatePayDeduction();
+            })
 
             this.name = report.Person.FullName.split("[")[0];
             this.purpose = report.description;
@@ -130,6 +149,47 @@
                         this.$modalInstance.close();
                     });
             });
+        }
+
+        calculateBalance() {
+            var totalVacation = this.vacationBalance.VacationHours + this.vacationBalance.TransferredHours;
+            this.vacationHours = Math.floor(totalVacation);
+            this.vacationMinutes = Math.round((totalVacation - this.vacationHours) * 60);
+            this.freeVacationHours = Math.floor(this.vacationBalance.FreeVacationHours);
+            this.freeVacationMinutes = Math.round((this.vacationBalance.FreeVacationHours - this.freeVacationHours) * 60);
+        }
+
+        calculatePayDeduction() {
+            var payDeduction = false;
+            if (this.report.status === "Pending") {
+                var totalVacationHours = this.calculateTotalVacationHours();
+                switch (this.report.type) {
+                    case "Care":
+                        break;
+                    case "Optional":
+                        break;
+                    case "Regular":
+                        payDeduction = totalVacationHours > (this.vacationBalance.VacationHours + this.vacationBalance.TransferredHours);
+                        break;
+                    case "Senior":
+                        break;
+                    case "SixthVacationWeek":
+                        payDeduction = totalVacationHours > this.vacationBalance.FreeVacationHours;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (payDeduction) {
+                this.payDeduction = "Ja";
+            } else {
+                this.payDeduction = "Nej";
+            }
+        }
+
+        private calculateTotalVacationHours(): number {
+            return this.report.VacationHours;
         }
     }
 

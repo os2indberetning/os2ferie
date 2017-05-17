@@ -14,6 +14,10 @@
                     route: 'vacation.approve.pending'
                 },
                 {
+                    heading: 'Ferie saldo',
+                    route: 'vacation.approve.balance'
+                },
+                {
                     heading: 'Stedfortrædere',
                     route: 'vacation.approve.settings'
                 }
