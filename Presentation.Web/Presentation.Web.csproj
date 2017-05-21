@@ -305,13 +305,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <None Include="connections.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="CustomSettings.config">
+    <Content Include="connections.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </None>
+    </Content>
+    <Content Include="CustomSettings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="manifest.appCache" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -2423,7 +2424,7 @@
     <Content Include="Scripts\kendo\kendo.view.min.js.map" />
     <Content Include="Scripts\kendo\kendo.web.min.js.map" />
     <Content Include="Scripts\kendo\kendo.window.min.js.map" />
-    <None Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Jasmine\SpecRunner.cshtml" />
     <Content Include="Scripts\version.json" />
