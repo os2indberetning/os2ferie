@@ -15,36 +15,6 @@
             </div>
 
             <div class="seperator"></div>
-
-            <div class="row">
-                <div class="col-md-3 col-sm-12">
-                    <label>Restferie:</label>
-                    </div>
-                <div class="col-md-9 col-sm-12">
-                    {{svrc.vacationHours}} timer {{svrc.vacationMinutes}} minutter
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 col-sm-12">
-                    <label>Rest 6. ferieuge:</label>
-                </div>
-                <div class="col-md-9 col-sm-12">
-                    {{svrc.freeVacationHours}} timer {{svrc.freeVacationMinutes}} minutter
-                </div>
-            </div>
-
-            <div class="seperator"></div>
-
-            <div class="row">
-                <div class="col-md-3 col-sm-12">
-                    <label>Resultere i løntræk:</label>
-                </div>
-                <div class="col-md-9 col-sm-12">
-                    {{svrc.payDeduction}}
-                </div>
-            </div>
-
-            <div class="seperator"></div>
             
             <div class="row">
                 <div class="col-md-3 col-sm-12">
@@ -87,6 +57,37 @@
                     <div ng-if="svrc.purpose != ''">{{svrc.purpose}}</div>
                     <div ng-if="svrc.purpose == ''"><i>Ingen bemærkning</i>
                     </div>
+                </div>
+            </div>
+
+            <div class="seperator"></div>
+
+            <div class="row" ng-if="svrc.report.type != 'SixthVacationWeek'">
+                <div class="col-md-3 col-sm-12">
+                    <label>Restferie:</label>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                    {{svrc.vacationHours}} timer {{svrc.vacationMinutes}} minutter
+                </div>
+            </div>
+
+            <div class="row" ng-if="svrc.report.type =='SixthVacationWeek'">
+                <div class="col-md-3 col-sm-12">
+                    <label>Rest 6. ferieuge:</label>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                    {{svrc.freeVacationHours}} timer {{svrc.freeVacationMinutes}} minutter
+                </div>
+            </div>
+
+            <div class="seperator"></div>
+
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <label>Resulterer i løntræk:</label>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                    {{svrc.payDeduction}}
                 </div>
             </div>
 

@@ -39,6 +39,8 @@
 
         loadingPromise;
 
+        vacationTime: number;
+
         constructor(private $scope,
             private $rootScope,
             private VacationReport,
@@ -63,6 +65,8 @@
 
             const startsOnFullDay = report.StartTime == null;
             const endsOnFullDay = report.EndTime == null;
+
+            this.vacationTime = moment(report.end).diff(moment(report.start), 'days') * 7.5;
 
             if (!startsOnFullDay) {
                 this.startTime = "Fra kl. " + moment((moment.duration(report.StartTime) as any)._data).format('HH:mm');
@@ -169,12 +173,14 @@
                     case "Optional":
                         break;
                     case "Regular":
-                        payDeduction = totalVacationHours > (this.vacationBalance.VacationHours + this.vacationBalance.TransferredHours);
+                        payDeduction = totalVacationHours < this.vacationTime;
+                        console.log(totalVacationHours);
+                        console.log(this.vacationTime);
                         break;
                     case "Senior":
                         break;
                     case "SixthVacationWeek":
-                        payDeduction = totalVacationHours > this.vacationBalance.FreeVacationHours;
+                        payDeduction = totalVacationHours < this.vacationTime;
                         break;
                     default:
                         break;
