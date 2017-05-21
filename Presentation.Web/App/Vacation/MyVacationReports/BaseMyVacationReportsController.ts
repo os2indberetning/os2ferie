@@ -82,13 +82,12 @@
 
         private loadInitialDate() {
             let currentDate = this.moment();
+            this.vacationYear = currentDate.year();
 
             // Vacation year changes every year on the 1th of May
             if (this.moment().isBefore(`${this.vacationYear}-05-01`)) {
                 currentDate = currentDate.subtract('year', 1);
             }
-
-            this.vacationYear = currentDate.year();
 
             const minYear = Math.max(2016, this.vacationYear - 5); // Can't show vacation before 2016
             const maxYear = this.vacationYear + 5;

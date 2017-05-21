@@ -1,4 +1,4 @@
-﻿module app.drive {
+﻿module app.vacation {
     "use strict";
 
     import BaseApproveReportsSettingsController = core.controllers.BaseApproveReportsSettingsController;
@@ -21,5 +21,5 @@
 
     }
 
-    angular.module("app.drive").controller("ApproveVacationSettingsController", ApproveVacationSettingsController);
+    angular.module("app.vacation").controller("ApproveVacationSettingsController", ApproveVacationSettingsController);
 }

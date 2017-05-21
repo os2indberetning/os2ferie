@@ -116,8 +116,8 @@
                             <div ng-if="rvc.hasVacationBalance">
                                 <p>Aktuel feriesaldo for ferieåret {{rvc.vacationBalance.Year}}/{{rvc.vacationBalance.Year + 1}}. Saldoen er for den valgte stilling</p>
                                 <ul>
-                                    <li>Restferie: {{rvc.vacationBalance.VacationHours + rvc.vacationBalance.TransferredHours}} timer</li>
-                                    <li>Rest 6. ferieuge: {{rvc.vacationBalance.FreeVacationHours}} timer</li>
+                                    <li>Restferie: {{rvc.vacationHours}} timer {{rvc.vacationMinutes}} minutter</li>
+                                    <li>Rest 6. ferieuge: {{rvc.freeVacationHours}} timer {{rvc.freeVacationMinutes}} minutter</li>
                                 </ul>
                                 <p>Feriesaldoen hentes fra lønsystemet og opdateres én gang om ugen</p>
                                 <p>Senest opdateret: {{rvc.vacationBalance.UpdatedAt | amUtc |amLocal | amDateFormat: 'DD/MM/YYYY'}}</p>
