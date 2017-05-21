@@ -8,6 +8,10 @@
                 <tab heading="Stedfortrædere/Godkendere" ng-controller="Vacation.SubstitutesController as subCtrl" ng-click="subCtrl.refreshGrids()">
                     <div ng-include='"App/Core/Views/AdminSubstitutesView.html"'></div>
                 </tab>
+
+                <tab heading="Emailadviseringer" ng-controller="EmailNotificationController" ng-click="emailClicked()">
+                    <div ng-include='"App/Core/Views/EmailNotificationView.html"'></div>
+                </tab>
             </tabset>
         </div>
     </div>

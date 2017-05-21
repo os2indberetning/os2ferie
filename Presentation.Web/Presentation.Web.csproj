@@ -357,22 +357,22 @@
     <Content Include="App\Drive\Admin\Account\ConfirmDeleteAccountTemplate.html" />
     <Content Include="App\Drive\Admin\Account\View.html" />
     <Content Include="App\Drive\Admin\Address\View.html" />
-    <Content Include="App\Drive\Admin\Email\AddNewMailNotificationTemplate.html" />
-    <Content Include="App\Drive\Admin\Email\AddNewMailNotificationController.js" />
+    <Content Include="App\Core\Views\Modals\AddNewMailNotificationTemplate.html" />
+    <Content Include="App\Core\Controllers\AddNewMailNotificationController.js" />
     <Content Include="App\Drive\Admin\AdminView.html" />
     <Content Include="App\Drive\Admin\Address\AddNewAddressController.js" />
-    <Content Include="App\Drive\Admin\Email\ConfirmDeleteMailNotificationTemplate.html" />
-    <Content Include="App\Drive\Admin\Email\DeleteMailNotificationController.js" />
-    <Content Include="App\Drive\Admin\Email\EditMailNotificationTemplate.html" />
-    <Content Include="App\Drive\Admin\Email\EditMailNotificationController.js" />
+    <Content Include="App\Core\Views\Modals\ConfirmDeleteMailNotificationTemplate.html" />
+    <Content Include="App\Core\Controllers\DeleteMailNotificationController.js" />
+    <Content Include="App\Core\Views\Modals\EditMailNotificationTemplate.html" />
+    <Content Include="App\Core\Controllers\EditMailNotificationController.js" />
     <Content Include="App\Drive\Admin\Address\EditAddressController.js" />
     <Content Include="App\Drive\Admin\Address\AddNewAddressTemplate.html" />
     <Content Include="App\Drive\Admin\Address\EditAddressTemplate.html" />
     <Content Include="App\Drive\Admin\Address\ConfirmDeleteAddressTemplate.html" />
     <Content Include="App\Drive\Admin\Address\DeleteAddressController.js" />
-    <Content Include="App\Drive\Admin\Email\EmailNotificationController.js" />
+    <Content Include="App\Core\Controllers\EmailNotificationController.js" />
     <Content Include="App\Drive\Admin\Address\StandardAddressController.js" />
-    <Content Include="App\Drive\Admin\Email\View.html" />
+    <Content Include="App\Core\Views\EmailNotificationView.html" />
     <Content Include="App\Drive\Admin\Rate\View.html" />
     <TypeScriptCompile Include="App\app.ts" />
     <Content Include="App\Drive\app.drive.html" />
@@ -2434,6 +2434,7 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App\Drive\Admin\Email\" />
     <Folder Include="App_Data\" />
     <Folder Include="Views\Manifest\" />
   </ItemGroup>

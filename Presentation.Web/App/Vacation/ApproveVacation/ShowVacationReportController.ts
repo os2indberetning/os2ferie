@@ -174,8 +174,6 @@
                         break;
                     case "Regular":
                         payDeduction = totalVacationHours < this.vacationTime;
-                        console.log(totalVacationHours);
-                        console.log(this.vacationTime);
                         break;
                     case "Senior":
                         break;
