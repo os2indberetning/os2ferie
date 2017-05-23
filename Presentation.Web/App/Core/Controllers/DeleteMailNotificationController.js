@@ -1,4 +1,4 @@
-﻿angular.module("app.drive").controller("DeleteMailNotificationController", [
+﻿angular.module("app.core").controller("DeleteMailNotificationController", [
     "$scope", "$modalInstance", "itemId", "NotificationService",
     function ($scope, $modalInstance, itemId, NotificationService) {
 

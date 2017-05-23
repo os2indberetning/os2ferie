@@ -250,7 +250,8 @@ namespace OS2Indberetning.Controllers
 
             var substitutes = _substituteRepo.AsQueryable().Where(x => x.PersonId == x.LeaderId && x.SubId == CurrentUser.Id && x.EndDateTimestamp >= currentTimestamp && x.Type == subsituteType).Distinct().ToList();
             var personalApproving = _substituteRepo.AsQueryable().Where(x => x.PersonId != x.LeaderId && x.SubId == CurrentUser.Id && x.EndDateTimestamp >= currentTimestamp && x.Type == subsituteType).Select(x => x.Person).ToList();
-            var orgs = _orgService.GetWhereUserIsResponsible(CurrentUser.Id).ToList();
+            var orgs = _orgService.GetWhereUserIsResponsible(CurrentUser.Id).Where(x => subsituteType == ReportType.Vacation && x.HasAccessToVacation).ToList();
+
 
             foreach (var sub in substitutes)
             {
@@ -288,7 +289,7 @@ namespace OS2Indberetning.Controllers
 
             people.RemoveAll(x => x.Employments.All(y => y.EndDateTimestamp <= currentTimestamp && y.EndDateTimestamp != 0));
 
-            return Ok(people.AsQueryable());
+            return Ok(people.GroupBy(p => p.Id).Select(g => g.First()).AsQueryable());
         }
     }
 }

@@ -96,8 +96,20 @@
                     {
                         title: "Ferietype",
                         template: data => {
-                            return data.VacationType === "Regular" ?
-                                "Almindelig ferie" : "6. ferieuge";
+                            switch (data.VacationType) {
+                                case "Care":
+                                    return "Omsorgsdage";
+                                case "Optional":
+                                    return "Valgfri ferie";
+                                case "Regular":
+                                    return "Almindelig Ferie";
+                                case "Senior":
+                                    return "Seniordage";
+                                case "SixthVacationWeek":
+                                    return "6. ferieuge";
+                                default:
+                                    return "Andet";
+                            }
                         }
                     },
                     {

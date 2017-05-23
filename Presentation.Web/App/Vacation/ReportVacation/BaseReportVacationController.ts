@@ -25,6 +25,8 @@
         employments: Employment[];
         vacationType;
         purpose: String;
+        careCpr: String;
+        optionalText: String;
         position: number;
         saveButtenDisabled = true;
         isEditingVacation = false;
@@ -32,6 +34,10 @@
         endWeeks: number[] = [];
         startCalendarOptions: kendo.ui.CalendarOptions;
         endCalendarOptions: kendo.ui.CalendarOptions;
+        vacationHours: number;
+        vacationMinutes: number;
+        freeVacationHours: number;
+        freeVacationMinutes: number;
 
         protected maxEndDate: Date;
         protected currentUser: Person;
@@ -49,6 +55,7 @@
 
             VacationBalanceResource.query().$promise.then(data => {
                 this.vacationBalances = data;
+                this.calculateBalance();
 
                 if (this.vacationBalances.length > 0) {
                     this.positionUpdated();
@@ -155,6 +162,14 @@
 
         clearReport() {
             this.initializeReport();
+        }
+
+        calculateBalance() {
+            var totalVacation = this.vacationBalances[0].VacationHours + this.vacationBalances[0].TransferredHours;
+            this.vacationHours = Math.floor(totalVacation);
+            this.vacationMinutes = Math.round((totalVacation - this.vacationHours) * 60);
+            this.freeVacationHours = Math.floor(this.vacationBalances[0].FreeVacationHours);
+            this.freeVacationMinutes = Math.round((this.vacationBalances[0].FreeVacationHours - this.freeVacationHours) * 60);
         }
     }
 }
