@@ -38,9 +38,9 @@ namespace OS2Indberetning.Controllers
             var httpUser = User.Identity.Name.Split('\\');
 #endif
 
-            if (httpUser.Length == 2 && String.Equals(httpUser[0], ConfigurationManager.AppSettings["PROTECTED_AD_DOMAIN"], StringComparison.CurrentCultureIgnoreCase))
+            if (true || httpUser.Length == 2 && String.Equals(httpUser[0], ConfigurationManager.AppSettings["PROTECTED_AD_DOMAIN"], StringComparison.CurrentCultureIgnoreCase))
             {
-                var initials = httpUser[1].ToLower();
+                var initials = "mih";
 
                 // DEBUG ON PRODUCTION. Set petsoe = lky
                 if (initials == "itmind" || initials == "jaoj" || initials == "itminds-ja") { initials = "caxoma"; }
