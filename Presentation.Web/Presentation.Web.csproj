@@ -305,6 +305,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Content Include="App\Vacation\Overview\VacationOverviewView.html" />
     <Content Include="connections.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -490,6 +491,7 @@
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyVacationReportsController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyRejectedVacationReports\MyRejectedVacationReportsController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyApprovedVacationReports\MyApprovedVacationReportsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\Overview\VacationOverviewController.ts" />
     <TypeScriptCompile Include="App\Vacation\ReportVacation\BaseReportVacationController.ts" />
     <TypeScriptCompile Include="App\Vacation\ReportVacation\EditReportVacationController .ts" />
     <TypeScriptCompile Include="App\Vacation\Services\VacationBalanceResource.ts" />

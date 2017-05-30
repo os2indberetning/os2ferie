@@ -580,28 +580,29 @@ li.mainMenuLink.active > a > i.fa {
 }
 
 .vacation-care {
-    background: linear-gradient(#EE2269 67%, transparent 33%);
+    /*background: linear-gradient(#EE2269 67%, transparent 33%);*/
 }
 
 .vacation-optional {
-    background: linear-gradient(#000000 67%, transparent 33%);
+    /*background: linear-gradient(#000000 67%, transparent 33%);*/
 }
 
 .vacation-regular {
-    background: linear-gradient(#FFE4E1 67%, transparent 33%);
+    /*background: linear-gradient(#FFE4E1 67%, transparent 33%);*/
     /*background: linear-gradient(#1BA8E0 67%, transparent 33%);*/
 }
 
 .vacation-senior {
-    background: linear-gradient(#EF8403 67%, transparent 33%);
+    /*background: linear-gradient(#EF8403 67%, transparent 33%);*/
 }
 
 .vacation-sixthvacationweek {
-    background: linear-gradient(#006B6C 67%, transparent 33%);
+    /*background: linear-gradient(#006B6C 67%, transparent 33%);*/
 }
 
 .schedule-vacation-template {
     height: 100%;
+    line-height: 25px;
 }
 
 .week-number-calendar {

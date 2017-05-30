@@ -2,8 +2,10 @@
     "use strict";
 
     import NotificationService = core.interfaces.NotificationService;
+    import Employment = core.models.Employment;
+    import Person = core.models.Person;
 
-    class ApproveVacationPendingController {
+    class VacationOverviewController {
 
         static $inject = [
             "$scope",
@@ -18,10 +20,12 @@
 
         private _maxEndDate: Date;
         private _currentUser;
+        private currentUser: Person;
 
         scheduler: kendo.ui.Scheduler;
         schedulerOptions: kendo.ui.SchedulerOptions;
-
+        employments: Employment[];
+        chosenEmployment: Employment;
         pendingVacations = [];
 
         constructor(
@@ -33,8 +37,16 @@
             private moment: moment.MomentStatic,
             private $state: ng.ui.IStateService,
             private $modal) {
+            
+            this.currentUser = $scope.CurrentUser;
+            this.employments = [];
 
-            this.readPendingVacations();
+            angular.forEach(this.currentUser.Employments, (value: any) => {
+                value.PresentationString = value.Position + " - " + value.OrgUnit.LongDescription + " (" + value.EmploymentId + ")";
+                if (value.OrgUnit.HasAccessToVacation) this.employments.push(value);
+            });
+
+            this.chosenEmployment = this.employments[0];
             
             // Why is this used?
             var self = this;
@@ -73,18 +85,18 @@
                 },
                 edit: (e: any) => {
                     e.preventDefault();
-                    $modal.open({
-                        templateUrl: '/App/Vacation/ApproveVacation/ShowVacationReportView.html',
-                        controller: 'ShowVacationReportController as svrc',
-                        backdrop: "static",
-                        resolve: {
-                            report() {
-                                return e.event;
-                            }
-                        }
-                    }).result.then(() => {
-                        this.refresh();
-                    });
+                    //$modal.open({
+                    //    templateUrl: '/App/Vacation/ApproveVacation/ShowVacationReportView.html',
+                    //    controller: 'ShowVacationReportController as svrc',
+                    //    backdrop: "static",
+                    //    resolve: {
+                    //        report() {
+                    //            return e.event;
+                    //        }
+                    //    }
+                    //}).result.then(() => {
+                    //    this.refresh();
+                    //});
                 },
                 dataSource: {
                     autoBind: false,
@@ -93,7 +105,7 @@
                     transport: {
                         read: {
                             url:
-                                `/odata/VacationReports()?$expand=Person($select=FullName)&$filter=ResponsibleLeaderId eq ${this.$rootScope.CurrentUser.Id}`,
+                            `/odata/VacationReports()?$expand=Person($select=FullName)&$filter=Person/Employments/any(e:e/OrgUnitId eq ${this.chosenEmployment.OrgUnit.Id})`,
                             dataType: "json",
                             cache: false
                         }
@@ -105,7 +117,7 @@
 
                             angular.forEach(data.value,
                                 (value, key) => {
-
+                                
                                     const startsOnFullDay = value.StartTime == null;
                                     const endsOnFullDay = value.EndTime == null;
 
@@ -144,7 +156,10 @@
                                             break;
                                     }
                                     
-                                    events.push(value);
+                                    if (value.Status != 'Rejected') {
+                                        events.push(value);
+                                    }
+
                                 });
 
                             return events;
@@ -209,7 +224,7 @@
                             type: "odata-v4",
                             transport: {
                                 read: {
-                                    url: "/odata/Person/Service.LeadersPeople(Type=1)",
+                                    url: `/odata/Person/Service.PeopleInMyOrganisation(Id=${this.chosenEmployment.Id})`,
                                     dataType: "json",
                                     cache: false
                                 }
@@ -221,44 +236,16 @@
                 footer: false
             }
         }
-
-        readPendingVacations() {
-            // TODO Change this to use Resource instead
-            this.$http.get(`/odata/VacationReports()?status=Pending &$expand=Person($select=FullName)&$filter=ResponsibleLeaderId eq ${this.$rootScope.CurrentUser.Id}`).then((response: ng.IHttpPromiseCallbackArg<any>) => {
-                //Sort of objects for Pending Vacation Reports
-                response.data.value.sort((a, b) => ((a.StartTimestamp > b.StartTimestamp) ? 1 : ((b.StartTimestamp > a.StartTimestamp) ? -1 : 0)));
-
-                this.pendingVacations = [];
-
-                angular.forEach(response.data.value, (value, key) => {
-                    var startTime = Number(value.StartTimestamp.toString() + "000");
-                    var endTime = Number(value.EndTimestamp.toString() + "000");
-
-                    var dateFrom = this.moment(startTime).format("DD.MM.YYYY");
-                    var dateTo = this.moment(endTime).format("DD.MM.YYYY");
-
-                    var obj = {
-                        key: key,
-                        startTime: startTime,
-                        firstName: value.Person.FullName.split("[")[0],
-                        dateFrom: dateFrom,
-                        dateTo: dateTo
-                };
-                    this.pendingVacations.push(obj);
-                });
-            });
-        };
-
+        
         goToDate(time) {
             time = Number(time);
             this.scheduler.date(new Date(time));
         };
 
         private refresh() {
-            this.readPendingVacations();
             this.scheduler.dataSource.read();
         }
     }
 
-    angular.module("app.vacation").controller("ApproveVacationPendingController", ApproveVacationPendingController);
+    angular.module("app.vacation").controller("VacationOverviewController", VacationOverviewController);
 }

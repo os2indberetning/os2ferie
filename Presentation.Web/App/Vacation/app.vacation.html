@@ -26,6 +26,9 @@
                     <li ui-sref-active="active" class="mainMenuLink">
                         <a ui-sref="vacation.myreports.pending"><i class="fa fa-fw fa-table margin-right-10"></i>Mine indberetninger</a>
                     </li>
+                    <li ui-sref-active="active" class="mainMenuLink" ng-hide="showApproveReports">
+                        <a ui-sref="vacation.overview"><i class="fa fa-fw fa-edit margin-right-10"></i>Overblik</a>
+                    </li>
                     <li ui-sref-active="active" class="mainMenuLink" ng-hide="!showApproveReports">
                         <a ui-sref="vacation.approve.pending"><i class="fa fa-fw fa-edit margin-right-10"></i>Godkend indberetninger</a>
                     </li>

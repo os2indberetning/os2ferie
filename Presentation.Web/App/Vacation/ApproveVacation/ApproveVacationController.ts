@@ -10,11 +10,11 @@
         constructor() {
             this.tabData = [
                 {
-                    heading: 'Godkend',
+                    heading: 'Overblik',
                     route: 'vacation.approve.pending'
                 },
                 {
-                    heading: 'Ferie saldo',
+                    heading: 'Feriesaldo',
                     route: 'vacation.approve.balance'
                 },
                 {

@@ -130,6 +130,11 @@ namespace OS2Indberetning
                 .ReturnsFromEntitySet<Person>("Person")
                 .Parameter<int>("Type");
 
+            builder.EntityType<Person>().Collection
+                .Function("PeopleInMyOrganisation")
+                .ReturnsFromEntitySet<Person>("Person")
+                .Parameter<int>("Id");
+
             builder.EntitySet<PersonalAddress>("PersonalAddresses");
 
             builder.EntityType<PersonalAddress>().Collection

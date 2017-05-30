@@ -291,5 +291,24 @@ namespace OS2Indberetning.Controllers
 
             return Ok(people.GroupBy(p => p.Id).Select(g => g.First()).AsQueryable());
         }
+
+        // GET: odata/Person()/Service.PeopleInMyOrganisation
+        /// <summary>
+        /// Returns the people in the same organisation as the given employment.
+        /// </summary>
+        /// <param name="id">Id of the employment</param>
+        /// <returns></returns>
+        [EnableQuery]
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult PeopleInMyOrganisation(int id)
+        {
+            var empl = _employmentRepo.AsQueryable().First(x => x.Id == id);
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
+            var people = _employmentRepo.AsQueryable().Where(x => (x.OrgUnitId == empl.OrgUnitId) && (x.EndDateTimestamp == 0 || x.EndDateTimestamp >= currentTimestamp)).Select(x => x.Person);
+            
+            return Ok(people);
+        }
+
     }
 }
