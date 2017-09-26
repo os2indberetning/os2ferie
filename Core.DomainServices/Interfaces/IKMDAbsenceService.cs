@@ -5,6 +5,7 @@ namespace Core.DomainServices.Interfaces
 {
     public interface IKMDAbsenceService
     {
-        void ReportAbsence(IList<KMDAbsenceReport> absenceReports);
+        void SetAbsence(IList<KMDAbsenceReport> absenceReports);
+        List<Child> GetChildren(Employment employment);
     }
 }

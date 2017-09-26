@@ -1,7 +1,7 @@
 ﻿<div class="panel panel-default">
     <div class="col-lg-12">
         <h2 class="inline pull-left">
-            Godkend indberetninger
+            Overblik
         </h2>
     </div>
     <div class="panel-body">
@@ -13,8 +13,8 @@
                 </div>
                 <div class="col-lg-2">
                     <div id="pendingVacationsList" class="list-group pending-vacation-listgroup">
-                        <b class="list-group-item  list-group-item-info">Afventende ferieindberetning</b>
-                        <i class="list-group-item" ng-hide="avpCtrl.pendingVacations.length">Ingen afventende ferieindberetning</i>
+                        <b class="list-group-item  list-group-item-info">Afventende indberetning</b>
+                        <i class="list-group-item" ng-hide="avpCtrl.pendingVacations.length">Ingen afventende indberetning</i>
                         <a id="{{pV.key}}" class="list-group-item" ng-repeat="pV in avpCtrl.pendingVacations" ng-click="avpCtrl.goToDate(pV.startTime)">{{pV.firstName}} <br /> {{pV.dateFrom}} - {{pV.dateTo}}</a>
                     </div>
                 </div>

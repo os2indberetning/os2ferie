@@ -8,6 +8,7 @@ using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
 using Microsoft.Ajax.Utilities;
+using System.Collections.Generic;
 
 namespace OS2Indberetning.Controllers
 {
@@ -116,5 +117,48 @@ namespace OS2Indberetning.Controllers
         {
             return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
+
+
+        //POST: odata/OrgUnits/Service.SetVacationAccess(Id=1)?value=true&recursive=false
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        /// 
+        [EnableQuery]
+        [HttpGet]
+        public IHttpActionResult SetVacationAccess(int key, bool value = false, bool recursive = false)
+        {
+            var org = Repo.AsQueryable().Where(x => x.Id == key).First();
+
+            if (recursive)
+            {
+                var orgs = new Stack<OrgUnit>();
+                orgs.Push(org);
+
+                while (orgs.Any())
+                {
+                    var o = orgs.Pop();
+                    o.HasAccessToVacation = value;
+
+                    var children = Repo.AsQueryable().Where(x => x.ParentId == o.Id);
+
+                    foreach(var child in children)
+                    {
+                        orgs.Push(child);
+                    }
+                }
+            }
+            else
+            {
+                org.HasAccessToVacation = value;
+            }
+
+            Repo.Save();
+
+            return StatusCode(HttpStatusCode.OK);
+        }
+
     }
 }

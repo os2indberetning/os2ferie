@@ -27,6 +27,7 @@
         startTime: string;
         endTime: string;
         purpose: string;
+        optionalText: string;
         type: string;
         status: string;
         id: number;
@@ -54,8 +55,8 @@
 
             this.id = report.personId;
 
-            VacationBalanceResource.query({ id: this.id }).$promise.then(data => {
-                this.vacationBalance = data[0];
+            VacationBalanceResource.forEmployment({ id: report.EmploymentId }).$promise.then(data => {
+                this.vacationBalance = data;
                 this.calculateBalance();
                 this.calculatePayDeduction();
             })
@@ -78,7 +79,6 @@
                 this.endTime = "Til kl. " + moment((moment.duration(report.EndTime) as any)._data).format('HH:mm');
             } else {
                 this.endTime = "Hele dagen";
-                report.end -= 86400;
             }
 
             this.start = moment(report.start).format("DD.MM.YYYY");
@@ -87,9 +87,11 @@
             switch (report.type) {
                 case "Care":
                     this.type = "Omsorgsdage";
+                    this.optionalText = report.OptionalText;
                     break;
                 case "Optional":
-                    this.type = "Valgfri ferie";
+                    this.type = "Andet fravær";
+                    this.optionalText = report.OptionalText;
                     break;
                 case "Regular":
                     this.type = "Almindelig Ferie";
@@ -132,7 +134,18 @@
                 () => {
                     this.NotificationService.AutoFadeNotification("success", "", "Indberetningen blev godkendt.");
                     this.$modalInstance.close();
-                });
+                },
+                (err) => {
+                    console.log(err);
+                    if (err.data.error.message == null) {
+                        this.NotificationService.AutoFadeNotification("danger", "", "Der skete en ukendt fejl");
+                    }
+                    else {
+                        var message = err.data.error.message;
+                        this.NotificationService.AutoFadeNotification("danger", "", message);
+                    }
+                }
+            );
         }
 
         reject() {

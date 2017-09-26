@@ -14,6 +14,7 @@ using Core.DomainModel;
 using Core.DomainServices;
 using Ninject;
 using Expression = System.Linq.Expressions.Expression;
+using System.Net.Http;
 
 namespace OS2Indberetning.Controllers
 {
@@ -32,18 +33,36 @@ namespace OS2Indberetning.Controllers
         {
             base.Initialize(requestContext);
 
+            var enviornmnt = System.Environment.GetEnvironmentVariable("ASPNET_ENVIORNMENT");
+
 #if DEBUG
-            var httpUser = @"skb\xocera".Split('\\'); // Fissirul Lehmann - administrator
+            var httpUser = @"skb\caxoma".Split('\\'); // Fissirul Lehmann - administrator
 #else
             var httpUser = User.Identity.Name.Split('\\');
 #endif
 
+            if (enviornmnt == "DEMO")
+            {
+                var queryDictionary = requestContext.Request.Headers.Referrer.ParseQueryString();
+                var demoUser = queryDictionary.Get("user");
+                if (demoUser != null)
+                {
+                    httpUser = new string[2]
+                    {
+                        ConfigurationManager.AppSettings["PROTECTED_AD_DOMAIN"],
+                        demoUser
+                    };
+                }
+            }
+
+            
             if (httpUser.Length == 2 && String.Equals(httpUser[0], ConfigurationManager.AppSettings["PROTECTED_AD_DOMAIN"], StringComparison.CurrentCultureIgnoreCase))
             {
                 var initials = httpUser[1].ToLower();
 
                 // DEBUG ON PRODUCTION. Set petsoe = lky
-                if (initials == "itmind" || initials == "jaoj" || initials == "itminds-ja") { initials = "caxoma"; }
+                if (initials == "itmind" || initials == "jaoj" || initials == "itminds-ja")
+                    initials = "caxoma"; 
 
                 // END DEBUG
                 CurrentUser = _personRepo.AsQueryable().FirstOrDefault(p => p.Initials.ToLower().Equals(initials));

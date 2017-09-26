@@ -63,7 +63,7 @@
                 save: (e: any) => {
                     e.preventDefault();
                 },
-                eventTemplate: kendo.template(`<div class="schedule-vacation-template vacation-#= type.toLowerCase()#"></div>`),
+                eventTemplate: kendo.template(`<div class="schedule-vacation-template vacation-#= type.toLowerCase()#"> # if (type == 'Care') { # O # } if (type == 'SixthVacationWeek') { # 6 # } if (type == 'Regular') { #  # } if (type == 'Senior') { # S # } if (type == 'Optional') { # V # } # </div>`),
                 editable: {
                     update: true,
                     move: false,
@@ -184,7 +184,7 @@
                                 {
                                 text: "Pending",
                                 value: "Pending",
-                                color: "#337ab7"
+                                color: "#f1eb47"
                             },
                             {
                                 text: "Accepted",

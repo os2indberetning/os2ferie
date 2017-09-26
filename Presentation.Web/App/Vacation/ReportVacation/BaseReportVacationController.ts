@@ -38,6 +38,8 @@
         vacationMinutes: number;
         freeVacationHours: number;
         freeVacationMinutes: number;
+        children: any[] = [];
+        child: string;
 
         protected maxEndDate: Date;
         protected currentUser: Person;
@@ -112,7 +114,7 @@
                 currentWeek = firstOfMonth.clone().day(0),
                 output = [];
 
-            if (firstOfMonth.isoWeekday() === 1) {
+            if (firstOfMonth.isoWeekday() === 7 || firstOfMonth.isoWeekday() === 1) {
                 output.push(currentWeek.isoWeek());
             }
 
@@ -131,6 +133,16 @@
             return a.date();
         }
 
+        protected GetChildFromId(id) {
+            var arrayLength = this.children.length;
+            for (var i = 0; i < arrayLength; i++) {
+                if (this.children[i].Id == id) {
+                    return this.children[i];
+                }
+            }
+            return null;
+        }
+
         private updateCalendarRange() {
             if (this.startDate > this.endDate) {
                 this.endDate = this.startDate;
@@ -139,8 +151,8 @@
 
         protected abstract initializeReport();
 
-        timePickerOptions: kendo.ui.TimePickerOptions = {
-            interval: 15,
+        timePickerOptions = {
+            format: "HH:mm",
             value: new Date(2000, 0, 1, 0, 0, 0, 0)
         }
 
@@ -156,6 +168,14 @@
                     }
                 }
             }
+
+            (this.Person as any).GetChildren({ id: selectedPostion }).$promise.then(data => {
+                this.children = data;
+            });
+        }
+
+        childUpdated() {
+
         }
 
         abstract saveReport();

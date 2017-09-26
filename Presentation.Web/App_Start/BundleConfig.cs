@@ -53,7 +53,6 @@ namespace OS2Indberetning
 
 
             bundles.Add(new ScriptBundle("~/bundles/angular").IncludeDirectoryWithExclusion("~/App", "*.js", true, "*.spec.js"));
-
             System.Web.Optimization.BundleTable.EnableOptimizations = false;
         }
     }

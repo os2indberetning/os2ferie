@@ -1,7 +1,7 @@
 ﻿<div class="row" ng-hide="rvc.isEditingReport">
     <div class="col-lg-12">
         <h1 class="page-header">
-            Indberet ferie
+            Indberet ferie/fravær
         </h1>
     </div>
 </div>
@@ -41,14 +41,14 @@
                     <div class="col-md-12">
                         <label class="">
                             <input type="checkbox" ng-model="rvc.vacationStartsOnFullDay" ng-true-value="false" ng-false-value="true"/>
-                            Ferien starter starter midt på dagen:
+                            Ferie/fravær starter midt på dagen:
                         </label>
                     </div>
                 </div>
                 <div class="row" ng-hide="rvc.vacationStartsOnFullDay">
                     <div class="col-md-12">
-                        <h4>Tidspunkt for feriestart</h4>
-                        <p>Udfyldes kun hvis første feriedag ikke er hele dagen</p>
+                        <h4>Starttidspunkt</h4>
+                        <p>Udfyldes kun hvis den første dag ikke er hele dagen</p>
                         <kendo-time-picker k-format="'HH:mm'" k-options="rvc.timePickerOptions"
                                            k-ng-model="rvc.startTime"
                                            style="width: 238px;"></kendo-time-picker>
@@ -86,14 +86,14 @@
                     <div class="col-md-12">
                         <label class="">
                             <input type="checkbox" ng-model="rvc.vacationEndsOnFullDay" ng-true-value="false" ng-false-value="true"/>
-                            Ferien slutter midt på dagen
+                            Ferie/fravær slutter midt på dagen
                         </label>
                     </div>
                 </div>
                 <div class="row" ng-hide="rvc.vacationEndsOnFullDay">
                     <div class="col-md-12">
-                        <h4>Tidspunkt for feriens afslutning</h4>
-                        <p>Udfyldes kun hvis sidste feriedag ikke er hele dagen</p>
+                        <h4>Afslutningstidspunkt</h4>
+                        <p>Udfyldes kun hvis den sidste dag ikke er hele dagen</p>
                         <kendo-time-picker k-format="'HH:mm'" k-options="rvc.timePickerOptions"
                                            k-ng-model="rvc.endTime"
                                            style="width: 238px;"></kendo-time-picker>
@@ -143,7 +143,8 @@
 <div class="row margin-bottom-10">
     <div class="col-lg-6">
         <div class="form-group">
-            <label for="">Vælg ferietype</label>
+            <label for="">Vælg fraværs-type</label>
+            <!--<select class="fill-width" kendo-drop-down-list ng-change="rvc.vactionTypeUpdated()" ng-model="rvc.vacationType" k-data-source="rvc.vacationTypes" k-data-text-field="'PresentationString'" k-data-value-field="'Value'" k-placeholder="'Vælg frafærstype'"><option>' '</option></select>-->
             <div class="form-field">
                 <input type="radio" name="VacationType" id="report-type-regular" ng-model="rvc.vacationType" value="Regular" class="k-radio" />
                 <label class="k-radio-label margin-right-5" for="report-type-regular">Almindelig ferie</label>
@@ -152,13 +153,13 @@
                 <label class="k-radio-label margin-right-5" for="report-type-sixth">6. ferieuge</label>
 
                 <input type="radio" name="VacationType" id="report-type-care" ng-model="rvc.vacationType" value="Care" class="k-radio" />
-                <label class="k-radio-label margin-right-5" for="report-type-care">Omsorgsdage</label>
+                <label class="k-radio-label margin-right-5" for="report-type-care">Omsorgsdag</label>
 
                 <input type="radio" name="VacationType" id="report-type-senior" ng-model="rvc.vacationType" value="Senior" class="k-radio" />
-                <label class="k-radio-label margin-right-5" for="report-type-senior">Seniordage</label>
+                <label class="k-radio-label margin-right-5" for="report-type-senior">Seniordag</label>
 
                 <input type="radio" name="VacationType" id="report-type-optional" ng-model="rvc.vacationType" value="Optional" class="k-radio" />
-                <label class="k-radio-label margin-right-5" for="report-type-optional">Valgfri</label>
+                <label class="k-radio-label margin-right-5" for="report-type-optional">Andet fravær<span popover="Indberetninger af typen 'Anden fravær' bliver ikke sendt til lønsystemet" popover-trigger="mouseenter" class="info-popup"><i class="fa fa-question"></i></span></label>
             </div>
         </div>
     </div>
@@ -166,15 +167,19 @@
 
 <div class="row margin-bottom-10">
     <div class="col-lg-6" ng-show="rvc.vacationType === 'Care'">
-        <div class="form-group">
-            <label class="k-label-top" for="report-type-care-cpr">Cpr-nr. for barn</label>
-            <input type="text" class="form-control" id="report-type-care-cpr" ng-model="rvc.careCpr" placeholder="Cpr-nr. for barn" />
+        <div class="form-group" ng-hide="rvc.children.length == 0">
+            <label class="k-label-top" for="report-type-care-cpr">Vælg barn</label>
+            <select class="fill-width" kendo-drop-down-list ng-change="rvc.childUpdated()" ng-model="rvc.child" k-data-source="rvc.children" k-data-text-field="'FullName'" k-data-value-field="'Id'" k-placeholder="'Brugerens børn'"><option>' '</option></select>  <!--k-data-value-field="'Id'"-->
         </div>
+        <div class="form-group" ng-hide="rvc.children.length != 0">
+            <label class="k-label-top" for="report-type-care-cpr"><i>Du har ingen børn under 8 år.</i></label>
+        </div>
+
     </div>
     <div class="col-lg-6" ng-show="rvc.vacationType === 'Optional'">
         <div class="form-group">
-            <label class="k-label-top" for="report-type-optional-text">Ferie type</label>
-            <input type="text" class="form-control" id="report-type-optional-text" ng-model="rvc.optionalText" placeholder="Ferie type" />
+            <label class="k-label-top" for="report-type-optional-text">Fraværsårsag</label>
+            <input type="text" class="form-control" id="report-type-optional-text" ng-model="rvc.optionalText" placeholder="Fraværsårsag" />
         </div>
     </div>
 </div>

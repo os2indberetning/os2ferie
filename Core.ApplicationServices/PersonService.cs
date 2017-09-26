@@ -3,6 +3,7 @@ using System.Linq;
 using Core.ApplicationServices.Interfaces;
 using Core.DomainModel;
 using Core.DomainServices;
+using Core.DomainServices.Interfaces;
 using Core.DomainServices.RoutingClasses;
 using Core.ApplicationServices.Logger;
 
@@ -14,13 +15,15 @@ namespace Core.ApplicationServices
         private readonly IRoute<RouteInformation> _route;
         private readonly IAddressCoordinates _coordinates;
         private readonly ILogger _logger;
+        private readonly IKMDAbsenceService _absenceService;
 
-        public PersonService(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route, IAddressCoordinates coordinates, ILogger logger)
+        public PersonService(IGenericRepository<PersonalAddress> addressRepo, IRoute<RouteInformation> route, IAddressCoordinates coordinates, ILogger logger, IKMDAbsenceService absenceService)
         {
             _addressRepo = addressRepo;
             _route = route;
             _coordinates = coordinates;
             _logger = logger;
+            _absenceService = absenceService;
         }
 
         /// <summary>
@@ -135,6 +138,11 @@ namespace Core.ApplicationServices
             {
 
             }
+        }
+
+        public List<Child> GetChildren(Employment employment)
+        {
+            return _absenceService.GetChildren(employment);
         }
     }
 }

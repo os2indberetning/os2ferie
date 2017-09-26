@@ -305,13 +305,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <None Include="connections.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="CustomSettings.config">
+    <Content Include="App\Vacation\Admin\OrgUnits\VacationHasAccessToVacationModalView.html" />
+    <Content Include="App\Vacation\Admin\OrgUnits\VacationAdminOrgUnitView.html" />
+    <Content Include="App\Vacation\Overview\VacationOverviewView.html" />
+    <Content Include="connections.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </None>
+    </Content>
+    <Content Include="CustomSettings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="manifest.appCache" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -477,6 +481,8 @@
     <TypeScriptCompile Include="App\Core\Models\Person.ts" />
     <TypeScriptCompile Include="App\Core\Models\VacationReport.ts" />
     <TypeScriptCompile Include="App\Core\Models\Report.ts" />
+    <TypeScriptCompile Include="App\Vacation\Admin\OrgUnits\VacationHasAccessToVacationModalController.ts" />
+    <TypeScriptCompile Include="App\Vacation\Admin\OrgUnits\VacationAdminOrgUnitController.ts" />
     <TypeScriptCompile Include="App\Vacation\Admin\Substitutes\VacationSubstitutesController.ts" />
     <TypeScriptCompile Include="App\Vacation\ApproveVacation\ApproveVacationBalance\ApproveVacationBalanceController.ts" />
     <TypeScriptCompile Include="App\Vacation\ApproveVacation\ApproveVacationController.ts" />
@@ -489,6 +495,7 @@
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyVacationReportsController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyRejectedVacationReports\MyRejectedVacationReportsController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyApprovedVacationReports\MyApprovedVacationReportsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\Overview\VacationOverviewController.ts" />
     <TypeScriptCompile Include="App\Vacation\ReportVacation\BaseReportVacationController.ts" />
     <TypeScriptCompile Include="App\Vacation\ReportVacation\EditReportVacationController .ts" />
     <TypeScriptCompile Include="App\Vacation\Services\VacationBalanceResource.ts" />
@@ -2427,7 +2434,7 @@
     <Content Include="Scripts\kendo\kendo.view.min.js.map" />
     <Content Include="Scripts\kendo\kendo.web.min.js.map" />
     <Content Include="Scripts\kendo\kendo.window.min.js.map" />
-    <None Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Jasmine\SpecRunner.cshtml" />
     <Content Include="Scripts\version.json" />

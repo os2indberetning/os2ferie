@@ -80,7 +80,7 @@
                 // Loop to find if the person has an employment with access to vacation
                 for (let i = 0; i < data.Employments.length; i++) {
                     const employment = data.Employments[i];
-                    if (employment.OrgUnit.HasAccessToVacation) {
+                    if (employment.OrgUnit.HasAccessToVacation || data.IsAdmin) {
                         this._accessibleModules.push("vacation");
                         break;
                     }

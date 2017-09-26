@@ -26,7 +26,7 @@
         }
 
         getVacationBalance(id: number, idx: number) {
-            this.VacationBalanceResource.query({ id: id }).$promise.then(data => {
+            this.VacationBalanceResource.forEmployment({ id: id }).$promise.then(data => {
                 this.calculateBalance(data[0], idx);
                 if (idx === this.persons.length - 1) {
                     this.isReady = true;

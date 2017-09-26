@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Query;
@@ -252,9 +253,9 @@ namespace OS2Indberetning.Controllers.Vacation
             catch(Infrastructure.KMDVacationService.KMDSetAbsenceFailedException ex)
             {
                 _logger.Log("Fejl fra KMD's ferie snitflade:", "web", ex, 1);
-                throw;
+                return BadRequest(ex.Message);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Log("Fejl under godkend ferieindberetning", "web", ex, 1);
                 throw;
@@ -262,8 +263,7 @@ namespace OS2Indberetning.Controllers.Vacation
 
             return Ok(report);
         }
-
-
+        
         [EnableQuery]
         [HttpGet]
         public IHttpActionResult RejectReport(int key, string comment = "")
@@ -274,7 +274,14 @@ namespace OS2Indberetning.Controllers.Vacation
             if (HasReportAccess(report, CurrentUser)) StatusCode(HttpStatusCode.Forbidden);
 
             _reportService.RejectReport(report, CurrentUser, comment);
-            _reportService.SendMailIfRejectedReport(report);
+
+            try
+            {
+                _reportService.SendMailIfRejectedReport(report);
+            }
+            catch(Exception)
+            {
+            }
 
             return Ok(report);
         }

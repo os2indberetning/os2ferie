@@ -64,6 +64,13 @@
                         roles: ['Admin']
                     }
                 })
+                .state("vacation.overview",
+                {
+                    url: "/overview",
+                    controller: 'VacationOverviewController',
+                    controllerAs: 'voc',
+                    templateUrl: "/App/Vacation/Overview/VacationOverviewView.html"
+                })
                 .state("vacation.myreports",
                 {
                     url: "/myreports",

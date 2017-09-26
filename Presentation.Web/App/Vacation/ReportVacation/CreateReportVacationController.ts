@@ -56,8 +56,13 @@
             report.Status = "Pending";
             report.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
             report.VacationType = this.vacationType;
-            report.CareCpr = this.careCpr;
             report.OptionalText = this.optionalText;
+
+            if (this.vacationType == "Care") {
+                var child = this.GetChildFromId(this.child);
+                report.AdditionalData = String(child.Id);
+                report.OptionalText = child.FullName;
+            }
 
             if (!this.vacationStartsOnFullDay) {
                 report.StartTime = `P0DT${this.startTime.getHours()}H${this.startTime.getMinutes()}M0S`;

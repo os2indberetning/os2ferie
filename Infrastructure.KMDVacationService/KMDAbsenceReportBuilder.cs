@@ -88,13 +88,21 @@ namespace Infrastructure.KMDVacationService
             var startDate = report.StartTimestamp.ToDateTime();
             var endDate = report.EndTimestamp.ToDateTime();
 
+            string extraData = "";
+
+            if (report.VacationType == VacationType.Care)
+            {
+                extraData = report.AdditionalData.PadLeft(2, '0');
+            }
+
             return new KMDAbsenceReport
             {
                 EmploymentId = report.Employment.EmploymentId,
                 KmdAbsenceOperation = kmdAbsenceOperation,
                 Type = report.VacationType,
                 StartDate = startDate,
-                EndDate = endDate
+                EndDate = endDate,
+                ExtraData = extraData
             };
         }
 

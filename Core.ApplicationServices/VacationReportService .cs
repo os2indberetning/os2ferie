@@ -91,7 +91,7 @@ namespace Core.ApplicationServices
 
             if (report.Comment == null) report.Comment = "";
             if (report.Purpose == null) report.Purpose = "";
-            if (report.CareCpr == null) report.CareCpr = "";
+            if (report.AdditionalData == null) report.AdditionalData = "";
             if (report.OptionalText == null) report.OptionalText = "";
 
             report.ProcessedDateTimestamp = 0;
@@ -148,6 +148,7 @@ namespace Core.ApplicationServices
                 report.StartTimestamp.ToDateTime().Date == report.EndTimestamp.ToDateTime().Date) return false;
             if (!_employmentRepository.AsQueryable().First(x => x.Id == report.EmploymentId).OrgUnit.HasAccessToVacation) return false;
             if (report.StartTimestamp == report.EndTimestamp && report.StartTime.HasValue && report.EndTime.HasValue && report.StartTime.Value == report.EndTime.Value) return false;
+            if (report.VacationType == VacationType.Care && string.IsNullOrEmpty(report.AdditionalData)) return false;
 
             return true;
         }
@@ -285,8 +286,14 @@ namespace Core.ApplicationServices
             report.ApprovedById = approver.Id;
 
 #if !DEBUG
-            var absenceReport = _absenceBuilder.Create(report);
-            _absenceService.ReportAbsence(absenceReport);
+            if (report.VacationType == VacationType.Care ||
+                report.VacationType == VacationType.Regular ||
+                report.VacationType == VacationType.Senior ||
+                report.VacationType == VacationType.SixthVacationWeek)
+            {
+                var absenceReport = _absenceBuilder.Create(report);
+                _absenceService.SetAbsence(absenceReport);
+            }
 #endif
 
             report.ProcessedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
@@ -307,8 +314,14 @@ namespace Core.ApplicationServices
         {
 #if !DEBUG
             if (report.ProcessedDateTimestamp == 0) return;
-            var absenceReport = _absenceBuilder.Delete(report);
-            _absenceService.ReportAbsence(absenceReport);
+            if (report.VacationType == VacationType.Care ||
+                report.VacationType == VacationType.Regular ||
+                report.VacationType == VacationType.Senior ||
+                report.VacationType == VacationType.SixthVacationWeek)
+            {
+                var absenceReport = _absenceBuilder.Delete(report);
+                _absenceService.SetAbsence(absenceReport);
+            }
 #endif
             report.ProcessedDateTimestamp = 0;
         }

@@ -12,6 +12,10 @@
                 <tab heading="Emailadviseringer" ng-controller="EmailNotificationController" ng-click="emailClicked()">
                     <div ng-include='"App/Core/Views/EmailNotificationView.html"'></div>
                 </tab>
+
+                <tab heading="Afdelings-indstillinger" ng-controller="VacationAdminOrgUnitController as orgUnitsCtrl" ng-click="orgUnitsCtrl.refreshGrid()">
+                    <div ng-include='"App/Vacation/Admin/OrgUnits/VacationAdminOrgUnitView.html"'></div>
+                </tab>
             </tabset>
         </div>
     </div>
