@@ -417,6 +417,10 @@
     <Compile Include="Migrations\201612042026146_sqlsupport.Designer.cs">
       <DependentUpon>201612042026146_sqlsupport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705030933303_AddedSeniorCareAndOptionalVacationTypes.cs" />
+    <Compile Include="Migrations\201705030933303_AddedSeniorCareAndOptionalVacationTypes.Designer.cs">
+      <DependentUpon>201705030933303_AddedSeniorCareAndOptionalVacationTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -701,6 +705,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612042026146_sqlsupport.resx">
       <DependentUpon>201612042026146_sqlsupport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705030933303_AddedSeniorCareAndOptionalVacationTypes.resx">
+      <DependentUpon>201705030933303_AddedSeniorCareAndOptionalVacationTypes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

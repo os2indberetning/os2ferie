@@ -36,6 +36,8 @@
             this.endDate = new Date();
             this.maxEndDate = new Date();
             this.purpose = undefined;
+            this.careCpr = undefined;
+            this.optionalText = undefined;
             this.vacationStartsOnFullDay = true;
             this.vacationEndsOnFullDay = true;
             this.startTime = new Date(2000, 0, 1, 0, 0, 0, 0); // Only time is relevant, date is ignored by kendo
@@ -54,6 +56,8 @@
             report.Status = "Pending";
             report.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
             report.VacationType = this.vacationType;
+            report.CareCpr = this.careCpr;
+            report.OptionalText = this.optionalText;
 
             if (!this.vacationStartsOnFullDay) {
                 report.StartTime = `P0DT${this.startTime.getHours()}H${this.startTime.getMinutes()}M0S`;
