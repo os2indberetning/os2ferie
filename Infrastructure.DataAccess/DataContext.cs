@@ -6,7 +6,6 @@ using Core.DomainModel;
 
 namespace Infrastructure.DataAccess
 {
-    [DbConfigurationType(typeof(MySql.Data.Entity.MySqlEFConfiguration))]
     public class DataContext : DbContext
     {
         public DataContext() : base("DefaultConnection")

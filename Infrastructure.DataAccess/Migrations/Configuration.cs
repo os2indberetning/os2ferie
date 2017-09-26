@@ -1,5 +1,3 @@
-using MySql.Data.Entity;
-
 namespace Infrastructure.DataAccess.Migrations
 {
     using System;
@@ -11,9 +9,7 @@ namespace Infrastructure.DataAccess.Migrations
     {
         public Configuration()
         {
-            CodeGenerator = new MySqlMigrationCodeGenerator();
             AutomaticMigrationsEnabled = false;
-            SetSqlGenerator("MySql.Data.MySqlClient", new MySqlMigrationSqlGenerator());
         }
 
         protected override void Seed(Infrastructure.DataAccess.DataContext context)

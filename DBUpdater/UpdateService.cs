@@ -250,7 +250,7 @@ namespace DBUpdater
             {
                 foreach (var admin in _personRepo.AsQueryable().Where(x => x.IsAdmin && x.IsActive))
                 {
-                    _mailSender.SendMail(admin.Mail, "Der er adresser der mangler at blive vasket", "Der mangler at blive vasket " + dirtyAddressCount + "adresser");
+                    // _mailSender.SendMail(admin.Mail, "Der er adresser der mangler at blive vasket", "Der mangler at blive vasket " + dirtyAddressCount + "adresser");
                 }
             }
         }

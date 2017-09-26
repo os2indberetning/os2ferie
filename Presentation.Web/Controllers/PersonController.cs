@@ -252,7 +252,6 @@ namespace OS2Indberetning.Controllers
             var personalApproving = _substituteRepo.AsQueryable().Where(x => x.PersonId != x.LeaderId && x.SubId == CurrentUser.Id && x.EndDateTimestamp >= currentTimestamp && x.Type == subsituteType).Select(x => x.Person).ToList();
             var orgs = _orgService.GetWhereUserIsResponsible(CurrentUser.Id).Where(x => subsituteType == ReportType.Vacation && x.HasAccessToVacation).ToList();
 
-
             foreach (var sub in substitutes)
             {
                 orgs.AddRange(_orgService.GetWhereUserIsResponsible(sub.PersonId));

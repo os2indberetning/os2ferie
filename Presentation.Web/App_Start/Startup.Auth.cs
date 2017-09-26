@@ -22,6 +22,10 @@ namespace OS2Indberetning
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
+
+            // TODO Remove this, it is insecure can should only be used during testing.
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
             // Configure the db context and user manager to use a single instance per request
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);

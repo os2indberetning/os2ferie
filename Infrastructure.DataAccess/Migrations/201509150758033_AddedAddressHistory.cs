@@ -19,9 +19,9 @@ namespace Infrastructure.DataAccess.Migrations
                         EndTimestamp = c.Long(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("Employments", t => t.EmploymentId, cascadeDelete: true)
-                .ForeignKey("Addresses", t => t.HomeAddressId, cascadeDelete: true)
-                .ForeignKey("Addresses", t => t.WorkAddressId, cascadeDelete: true)
+                .ForeignKey("Employments", t => t.EmploymentId, cascadeDelete: false)
+                .ForeignKey("Addresses", t => t.HomeAddressId, cascadeDelete: false)
+                .ForeignKey("Addresses", t => t.WorkAddressId, cascadeDelete: false)
                 .Index(t => t.EmploymentId)
                 .Index(t => t.HomeAddressId)
                 .Index(t => t.WorkAddressId);
