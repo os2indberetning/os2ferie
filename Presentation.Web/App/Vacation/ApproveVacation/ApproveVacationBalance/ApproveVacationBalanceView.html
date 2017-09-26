@@ -1,0 +1,29 @@
+﻿<div class="panel panel-default">
+    <div class="col-lg-12">
+        <h2 class="inline pull-left">
+            Ferie saldo
+        </h2>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <table ng-show="avbCtrl.isReady" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Navn:</th>
+                            <th>Almindelig ferie:</th>
+                            <th>6. ferieuge:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="person in avbCtrl.persons">
+                            <th>{{person.FullName}}</th>
+                            <td><span>{{person.VacationBalance.vacationHours}} timer {{person.VacationBalance.vacationMinutes}} minutter</span></td>
+                            <td><span>{{person.VacationBalance.freeVacationHours}} timer {{person.VacationBalance.freeVacationMinutes}} minutter</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-﻿angular.module("app.drive").controller("EmailNotificationController", [
+﻿angular.module("app.core").controller("EmailNotificationController", [
     "$scope", "$modal", "EmailNotification", "$rootScope", function ($scope, $modal, EmailNotification, $rootScope) {
 
 
@@ -111,7 +111,7 @@
             /// </summary>
             /// <param name="id">Id of MailNotification to edit</param>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Admin/Email/EditMailNotificationTemplate.html',
+                templateUrl: '/App/Core/Views/Modals/EditMailNotificationTemplate.html',
                 controller: 'EditMailNotificationController',
                 backdrop: "static",
                 resolve: {
@@ -142,7 +142,7 @@
             /// </summary>
             /// <param name="id">Id of MailNotification to delete</param>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Admin/Email/ConfirmDeleteMailNotificationTemplate.html',
+                templateUrl: '/App/Core/Views/Modals/ConfirmDeleteMailNotificationTemplate.html',
                 controller: 'DeleteMailNotificationController',
                 backdrop: "static",
                 resolve: {
@@ -164,7 +164,7 @@
             /// Opens add new MailNotification modal
             /// </summary>
             var modalInstance = $modal.open({
-                templateUrl: '/App/Admin/Email/AddNewMailNotificationTemplate.html',
+                templateUrl: '/App/Core/Views/Modals/AddNewMailNotificationTemplate.html',
                 controller: 'AddNewMailNotificationController',
                 backdrop: "static",
             });

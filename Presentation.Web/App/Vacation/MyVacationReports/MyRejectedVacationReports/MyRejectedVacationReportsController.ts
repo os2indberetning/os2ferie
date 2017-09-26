@@ -85,19 +85,31 @@
                     },
                     {
                         template: data => {
-                            if (data.Comment != "") {
-                                return `<button kendo-tooltip k-position="'right'" k-content="'${data.Comment
+                            if (data.Purpose != "") {
+                                return `<button kendo-tooltip k-position="'right'" k-content="'${data.Purpose
                                     }'" class="transparent-background pull-right no-border"><i class="fa fa-comment-o"></i></button>`;
                             }
-                            return "<i>Ingen kommentar angivet</i>";
+                            return "<i>Ingen bemærkning angivet</i>";
                         },
-                        title: "Kommentar"
+                        title: "Bemærkning"
                     },
                     {
                         title: "Ferietype",
                         template: data => {
-                            return data.VacationType === "Regular" ?
-                                "Almindelig ferie" : "6. ferieuge";
+                            switch (data.VacationType) {
+                                case "Care":
+                                    return "Omsorgsdage";
+                                case "Optional":
+                                    return "Valgfri ferie";
+                                case "Regular":
+                                    return "Almindelig Ferie";
+                                case "Senior":
+                                    return "Seniordage";
+                                case "SixthVacationWeek":
+                                    return "6. ferieuge";
+                                default:
+                                    return "Andet";
+                            }
                         }
                     },
                     {
@@ -107,6 +119,17 @@
                             return m.format("L");
                         },
                         title: "Indberettet"
+                    },
+                    {
+                        field: "Comment",
+                        title: "Begrundelse",
+                        template: data => {
+                            if (data.Comment != "") {
+                                return `<button kendo-tooltip k-position="'right'" k-content="'${data.Comment
+                                    }'" class="transparent-background pull-right no-border"><i class="fa fa-comment-o"></i></button>`;
+                            }
+                            return "<i>Ingen begrundelse angivet</i>";
+                        }
                     },
                     {
                         field: "ClosedDateTimestamp",

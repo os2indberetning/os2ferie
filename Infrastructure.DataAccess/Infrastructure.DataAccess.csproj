@@ -417,6 +417,14 @@
     <Compile Include="Migrations\201604261240174_AddedTimeToVacationReport.Designer.cs">
       <DependentUpon>201604261240174_AddedTimeToVacationReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608080953577_AddedPurposeToVacationReport.cs" />
+    <Compile Include="Migrations\201608080953577_AddedPurposeToVacationReport.Designer.cs">
+      <DependentUpon>201608080953577_AddedPurposeToVacationReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705030933303_AddedSeniorCareAndOptionalVacationTypes.cs" />
+    <Compile Include="Migrations\201705030933303_AddedSeniorCareAndOptionalVacationTypes.Designer.cs">
+      <DependentUpon>201705030933303_AddedSeniorCareAndOptionalVacationTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -697,6 +705,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604261240174_AddedTimeToVacationReport.resx">
       <DependentUpon>201604261240174_AddedTimeToVacationReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608080953577_AddedPurposeToVacationReport.resx">
+      <DependentUpon>201608080953577_AddedPurposeToVacationReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705030933303_AddedSeniorCareAndOptionalVacationTypes.resx">
+      <DependentUpon>201705030933303_AddedSeniorCareAndOptionalVacationTypes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 namespace Core.DomainModel
 {
@@ -11,12 +10,21 @@ namespace Core.DomainModel
         Invoiced
     }
 
+    public enum ReportType
+    {
+        Unknown = -1,
+        Drive = 0,
+        Vacation = 1
+    }
+
     public abstract class Report
     {
         public int Id { get; set; }
         public ReportStatus Status { get; set; }
         public long CreatedDateTimestamp { get; set; }
         public long EditedDateTimestamp { get; set; }
+
+        // Leader or admin comment when rejecting a report.
         public String Comment { get; set; }
         public long ClosedDateTimestamp { get; set; }
         public long ProcessedDateTimestamp { get; set; }
@@ -31,5 +39,21 @@ namespace Core.DomainModel
         public virtual Person ResponsibleLeader { get; set; }
         public int? ActualLeaderId { get; set; }
         public virtual Person ActualLeader { get; set; }
+
+        public ReportType ReportType
+        {
+            get
+            {
+                if (this is DriveReport)
+                {
+                    return ReportType.Drive;
+                }
+                if (this is VacationReport)
+                {
+                    return ReportType.Vacation;
+                }
+                return ReportType.Unknown;
+            }
+        }
     }
 }

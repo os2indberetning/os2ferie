@@ -1,8 +1,8 @@
-﻿module app.drive {
+﻿module app.vacation {
     "use strict";
 
     import BaseApproveReportsSettingsController = core.controllers.BaseApproveReportsSettingsController;
-    import SubstituteType = core.models.SubstituteType;
+    import ReportType = core.models.ReportType;
 
     class ApproveVacationSettingsController extends BaseApproveReportsSettingsController {
 
@@ -16,10 +16,10 @@
         ];
 
         constructor(protected $scope, protected Person, protected $rootScope, protected Autocomplete, protected $modal, protected moment) {
-            super($scope, Person, $rootScope, Autocomplete, $modal, moment, SubstituteType.Vacation);
+            super($scope, Person, $rootScope, Autocomplete, $modal, moment, ReportType.Vacation);
         }
 
     }
 
-    angular.module("app.drive").controller("ApproveVacationSettingsController", ApproveVacationSettingsController);
+    angular.module("app.vacation").controller("ApproveVacationSettingsController", ApproveVacationSettingsController);
 }

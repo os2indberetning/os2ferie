@@ -1,4 +1,4 @@
-﻿angular.module("app.drive").controller("RejectController", [
+﻿angular.module("app.core").controller("RejectReportModalInstanceController", [
    "$scope", "$modalInstance", "itemId", "NotificationService", function ($scope, $modalInstance, itemId, NotificationService) {
 
        $scope.itemId = itemId;
@@ -18,10 +18,7 @@
                $scope.result.Comment = $scope.comment;
                $scope.result.Id = itemId;
                $modalInstance.close($scope.result);
-               NotificationService.AutoFadeNotification("success", "", "Indberetningen blev afvist.");
            }
-           
        }
-
    }
 ]);

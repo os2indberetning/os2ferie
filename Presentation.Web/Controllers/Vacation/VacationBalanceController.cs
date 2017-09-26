@@ -20,10 +20,16 @@ namespace OS2Indberetning.Controllers.Vacation
         [EnableQuery]
         public IQueryable<VacationBalance> Get(ODataQueryOptions<VacationBalance> queryOptions)
         {
-            var currentYear = Repo.AsQueryable().Max(y => y.Year);
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            var currentYear = DateTime.Now.Year;
+            if (Repo.AsQueryable().Any())
+            {
+                currentYear = Repo.AsQueryable().Max(y => y.Year);
+            }
+            
             var queryable =
                 GetQueryable(queryOptions)
-                    .Where(x => x.PersonId == CurrentUser.Id && x.Year == currentYear && x.Employment.EndDateTimestamp == 0);
+                    .Where(x => x.PersonId == CurrentUser.Id && x.Year == currentYear && (x.Employment.EndDateTimestamp == 0 || x.Employment.EndDateTimestamp >= currentTimestamp));
 
             return queryable;
         }

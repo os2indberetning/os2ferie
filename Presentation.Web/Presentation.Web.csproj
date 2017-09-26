@@ -357,22 +357,22 @@
     <Content Include="App\Drive\Admin\Account\ConfirmDeleteAccountTemplate.html" />
     <Content Include="App\Drive\Admin\Account\View.html" />
     <Content Include="App\Drive\Admin\Address\View.html" />
-    <Content Include="App\Drive\Admin\Email\AddNewMailNotificationTemplate.html" />
-    <Content Include="App\Drive\Admin\Email\AddNewMailNotificationController.js" />
+    <Content Include="App\Core\Views\Modals\AddNewMailNotificationTemplate.html" />
+    <Content Include="App\Core\Controllers\AddNewMailNotificationController.js" />
     <Content Include="App\Drive\Admin\AdminView.html" />
     <Content Include="App\Drive\Admin\Address\AddNewAddressController.js" />
-    <Content Include="App\Drive\Admin\Email\ConfirmDeleteMailNotificationTemplate.html" />
-    <Content Include="App\Drive\Admin\Email\DeleteMailNotificationController.js" />
-    <Content Include="App\Drive\Admin\Email\EditMailNotificationTemplate.html" />
-    <Content Include="App\Drive\Admin\Email\EditMailNotificationController.js" />
+    <Content Include="App\Core\Views\Modals\ConfirmDeleteMailNotificationTemplate.html" />
+    <Content Include="App\Core\Controllers\DeleteMailNotificationController.js" />
+    <Content Include="App\Core\Views\Modals\EditMailNotificationTemplate.html" />
+    <Content Include="App\Core\Controllers\EditMailNotificationController.js" />
     <Content Include="App\Drive\Admin\Address\EditAddressController.js" />
     <Content Include="App\Drive\Admin\Address\AddNewAddressTemplate.html" />
     <Content Include="App\Drive\Admin\Address\EditAddressTemplate.html" />
     <Content Include="App\Drive\Admin\Address\ConfirmDeleteAddressTemplate.html" />
     <Content Include="App\Drive\Admin\Address\DeleteAddressController.js" />
-    <Content Include="App\Drive\Admin\Email\EmailNotificationController.js" />
+    <Content Include="App\Core\Controllers\EmailNotificationController.js" />
     <Content Include="App\Drive\Admin\Address\StandardAddressController.js" />
-    <Content Include="App\Drive\Admin\Email\View.html" />
+    <Content Include="App\Core\Views\EmailNotificationView.html" />
     <Content Include="App\Drive\Admin\Rate\View.html" />
     <TypeScriptCompile Include="App\app.ts" />
     <Content Include="App\Drive\app.drive.html" />
@@ -416,7 +416,6 @@
     <TypeScriptCompile Include="App\Core\Interfaces\NotificationService.d.ts" />
     <TypeScriptCompile Include="App\Core\Services\Authorization.ts" />
     <TypeScriptCompile Include="App\Core\Services\Principal.ts" />
-    <TypeScriptCompile Include="App\Drive\ApproveReports\ApproveReportsSettingsController.ts" />
     <Content Include="App\Core\Views\Modals\NewApproverModal.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -425,7 +424,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App\Core\Controllers\NewSubstituteModalInstanceController.js" />
-    <Content Include="App\Drive\ApproveReports\Modals\RejectController.js" />
+    <Content Include="App\Core\Controllers\RejectReportModalInstanceController.js" />
     <Content Include="App\Drive\ApproveReports\Modals\AcceptController.js" />
     <Content Include="App\Drive\ApproveReports\ApproveReportsView.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -433,7 +432,7 @@
     <Content Include="App\Drive\ApproveReports\Modals\ConfirmApproveTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App\Drive\ApproveReports\Modals\ConfirmRejectTemplate.html">
+    <Content Include="App\Core\Views\Modals\ConfirmRejectReport.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App\Core\Views\ApproveReportsSettingsView.html">
@@ -466,6 +465,8 @@
     <TypeScriptCompile Include="App\Core\Controllers\BaseApproveReportSettingsController.ts" />
     <TypeScriptCompile Include="App\Core\Controllers\BaseSubstitutesController.ts" />
     <TypeScriptCompile Include="App\Core\Models\Substitute.ts" />
+    <TypeScriptCompile Include="App\Drive\ApproveReports\ApproveReportsSettingsController.ts" />
+    <TypeScriptCompile Include="App\Drive\Settings\Substitutes\SubstitutesController.ts" />
     <TypeScriptCompile Include="App\Vacation\Admin\AdminMenuController.ts" />
     <Content Include="App\Vacation\Admin\AdminView.html" />
     <Content Include="App\Core\Views\AdminSubstitutesView.html" />
@@ -477,9 +478,12 @@
     <TypeScriptCompile Include="App\Core\Models\VacationReport.ts" />
     <TypeScriptCompile Include="App\Core\Models\Report.ts" />
     <TypeScriptCompile Include="App\Vacation\Admin\Substitutes\VacationSubstitutesController.ts" />
-    <TypeScriptCompile Include="App\Vacation\ApproveVacationSettings\ApproveVacationSettingsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\ApproveVacation\ApproveVacationBalance\ApproveVacationBalanceController.ts" />
     <TypeScriptCompile Include="App\Vacation\ApproveVacation\ApproveVacationController.ts" />
+    <TypeScriptCompile Include="App\Vacation\ApproveVacation\ApproveVacationSettings\ApproveVacationSettingsController.ts" />
+    <TypeScriptCompile Include="App\Vacation\ApproveVacation\ApproveVacationPending\ApproveVacationPendingController.ts" />
     <TypeScriptCompile Include="App\app.routes.ts" />
+    <TypeScriptCompile Include="App\Vacation\ApproveVacation\ShowVacationReportController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\BaseMyVacationReportsController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\ConfirmDeleteVacationReportController.ts" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyVacationReportsController.ts" />
@@ -490,7 +494,10 @@
     <TypeScriptCompile Include="App\Vacation\Services\VacationBalanceResource.ts" />
     <TypeScriptCompile Include="App\Vacation\app.vacation.ts" />
     <TypeScriptCompile Include="App\Vacation\ReportVacation\CreateReportVacationController.ts" />
+    <Content Include="App\Vacation\ApproveVacation\ApproveVacationBalance\ApproveVacationBalanceView.html" />
+    <Content Include="App\Vacation\ApproveVacation\ApproveVacationPending\ApproveVacationPendingView.html" />
     <Content Include="App\Vacation\ApproveVacation\ApproveVacationView.html" />
+    <Content Include="App\Vacation\ApproveVacation\ShowVacationReportView.html" />
     <Content Include="App\Vacation\MyVacationReports\ConfirmDeleteVacationReportTemplate.html" />
     <Content Include="App\Vacation\MyVacationReports\EditVacationReportTemplate.html" />
     <TypeScriptCompile Include="App\Vacation\MyVacationReports\MyPendingVacationReports\MyPendingVacationReportsController.ts" />
@@ -521,7 +528,6 @@
     <Content Include="App\Drive\Settings\AddressDeleteModal.html" />
     <Content Include="App\Drive\Settings\RouteDeleteModal.html" />
     <Content Include="App\Drive\Settings\RouteAddModal.html" />
-    <TypeScriptCompile Include="App\Drive\Settings\Substitutes\SubstitutesController.ts" />
     <Content Include="App\Drive\app.drive.routes.js" />
     <Content Include="App\Vacation\Services\VacationReportResource.js" />
     <Content Include="Content\angular-busy.min.css" />
@@ -2428,6 +2434,7 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App\Drive\Admin\Email\" />
     <Folder Include="App_Data\" />
     <Folder Include="Views\Manifest\" />
   </ItemGroup>

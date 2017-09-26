@@ -1,7 +1,7 @@
 ﻿module app.vacation {
     "use strict";
 
-    import SubstituteType = core.models.SubstituteType;
+    import ReportType = core.models.ReportType;
     import BaseSubstitutesController = core.controllers.BaseSubstitutesController;
 
     class VacationSubstitutesController extends BaseSubstitutesController {
@@ -18,7 +18,7 @@
         ];
 
         constructor(protected $scope, protected Person, protected $rootScope, protected HelpText, protected Autocomplete, protected $modal, protected $timeout, protected moment) {
-            super($scope, Person, $rootScope, HelpText, Autocomplete, $modal, $timeout, moment, SubstituteType.Vacation);
+            super($scope, Person, $rootScope, HelpText, Autocomplete, $modal, $timeout, moment, ReportType.Vacation);
         }
 
     }

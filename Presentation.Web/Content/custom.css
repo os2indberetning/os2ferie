@@ -578,3 +578,53 @@ li.mainMenuLink.active > a > i.fa {
 .force-text-left {
     text-align: left !important;
 }
+
+.vacation-care {
+    background: linear-gradient(#EE2269 67%, transparent 33%);
+}
+
+.vacation-optional {
+    background: linear-gradient(#000000 67%, transparent 33%);
+}
+
+.vacation-regular {
+    background: linear-gradient(#FFE4E1 67%, transparent 33%);
+    /*background: linear-gradient(#1BA8E0 67%, transparent 33%);*/
+}
+
+.vacation-senior {
+    background: linear-gradient(#EF8403 67%, transparent 33%);
+}
+
+.vacation-sixthvacationweek {
+    background: linear-gradient(#006B6C 67%, transparent 33%);
+}
+
+.schedule-vacation-template {
+    height: 100%;
+}
+
+.week-number-calendar {
+    margin: 33px 0px 0px 0px;
+    padding: 0px;
+    float: left;
+    width: inherit;
+    border-right: none;
+}
+
+.week-number-calendar .k-link {
+    cursor: default;
+}
+
+.calendar-week-empty {
+    display: block;
+    overflow: hidden;
+    min-height: 1.8333em;
+    line-height: 1.8333em;
+    padding: 0 .45em 0 .1em;
+    cursor: default;
+}
+
+.k-event {
+    border-style: none;
+}

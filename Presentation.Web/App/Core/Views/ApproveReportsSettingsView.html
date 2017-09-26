@@ -1,42 +1,52 @@
-﻿<div ng-show="arsCtrl.showSubstituteSettings" class=" row col-lg-12 setting-area">
-    <h3>Opret ny stedfortræder for organisatorisk enhed i en periode</h3>
-    <div>
-        <div class="col-sm-2 pull-right">
-            <button type="submit" class="btn btn-primary pull-right margin-5" ng-click="arsCtrl.createNewSubstitute()">Opret</button>
-        </div>
-        <div class="row">
-            <div class="form-group form-inline">
-                <div class="col-sm-12">
-                    <div id="substituteGrid" kendo-grid="arsCtrl.substituteGrid" class="margin-bottom-10 scrollable" k-options="arsCtrl.substitutes"></div>
+﻿<div class="panel panel-default">
+    <div class="col-lg-12">
+        <h2 class="inline pull-left">
+            Stedfortrædere
+        </h2>
+    </div>
+    <div class="panel-body">
+        <div ng-show="arsCtrl.showSubstituteSettings" class="col-lg-12 setting-area">
+            <h3>Opret ny stedfortræder for organisatorisk enhed i en periode</h3>
+            <div>
+                <div class="col-sm-2 pull-right">
+                    <button type="submit" class="btn btn-primary pull-right margin-5" ng-click="arsCtrl.createNewSubstitute()">Opret</button>
+                </div>
+                <div class="row">
+                    <div class="form-group form-inline">
+                        <div class="col-sm-12">
+                            <div id="substituteGrid" kendo-grid="arsCtrl.substituteGrid" class="margin-bottom-10 scrollable" k-options="arsCtrl.substitutes"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div ng-show="arsCtrl.showSubstituteSettings" class="row col-lg-12 setting-area">
-    <br />
-    <h3 class="inline">Opret personlig godkender for enkelte medarbejdere i en periode </h3><span class="info-popup" popover-trigger="mouseenter" ng-show="arsCtrl.personalApproverHelpText" popover="{{arsCtrl.personalApproverHelpText}}"><i class="fa fa-question"></i></span>
-    <div>
-        <div class="col-sm-2 pull-right">
-            <button type="submit" class="btn btn-primary pull-right margin-5" ng-click="arsCtrl.createNewApprover()">Opret</button>
-        </div>
-        <div class="row">
-            <div class="form-group form-inline">
-                <div class="col-sm-12">
-                    <div id="personalApproverGrid" kendo-grid="arsCtrl.personalApproverGrid" class="margin-bottom-10 scrollable" k-options="arsCtrl.personalApprovers"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row col-lg-12 setting-area">
-    <h3 >Du er stedfortræder for</h3>
-    <div >
-        <div class="row">
-            <div class="form-group form-inline">
-                <div class="col-md-12">
-                    <div id="mySubstitutesGrid" kendo-grid="arsCtrl.mySubstitutesGrid" class="margin-bottom-10 scrollable" k-options="arsCtrl.mySubstitutes"></div>
+        <div ng-show="arsCtrl.showSubstituteSettings" class="col-lg-12 setting-area">
+            <br />
+            <h3 class="inline">Opret personlig godkender for enkelte medarbejdere i en periode </h3><span class="info-popup" popover-trigger="mouseenter" ng-show="arsCtrl.personalApproverHelpText" popover="{{arsCtrl.personalApproverHelpText}}"><i class="fa fa-question"></i></span>
+            <div>
+                <div class="col-sm-2 pull-right">
+                    <button type="submit" class="btn btn-primary pull-right margin-5" ng-click="arsCtrl.createNewApprover()">Opret</button>
+                </div>
+                <div class="row">
+                    <div class="form-group form-inline">
+                        <div class="col-sm-12">
+                            <div id="personalApproverGrid" kendo-grid="arsCtrl.personalApproverGrid" class="margin-bottom-10 scrollable" k-options="arsCtrl.personalApprovers"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 setting-area">
+            <h3>Du er stedfortræder for</h3>
+            <div>
+                <div class="row">
+                    <div class="form-group form-inline">
+                        <div class="col-md-12">
+                            <div id="mySubstitutesGrid" kendo-grid="arsCtrl.mySubstitutesGrid" class="margin-bottom-10 scrollable" k-options="arsCtrl.mySubstitutes"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,9 +1,7 @@
-﻿angular.module("app.drive").controller("EditMailNotificationController", [
-    "$scope", "$modalInstance", "itemId", "NotificationService", "EmailNotification",
-    function ($scope, $modalInstance, itemId, NotificationService, EmailNotification) {
+﻿angular.module("app.core").controller("AddNewMailNotificationController", [
+    "$scope", "$modalInstance", "NotificationService", "StandardAddress", "AddressFormatter", "SmartAdresseSource",
+    function ($scope, $modalInstance, NotificationService, StandardAddress, AddressFormatter, SmartAdresseSource) {
 
-
-     
 
         $scope.repeatMonthly = "";
 
@@ -11,22 +9,11 @@
             format: "dd/MM/yyyy"
         };
 
-        $scope.repeatItems = [{ value: "Ja", bool : true }, { value: "Nej", bool : false }];
-
-        EmailNotification.get({ id: itemId }).$promise.then(function (res) {
-            $scope.repeatMonthly = $scope.repeatItems[1];
-            if (res.Repeat) {
-                $scope.repeatMonthly = $scope.repeatItems[0];
-            }
-            var date = moment.unix(res.DateTimestamp);
-            var payDate = moment.unix(res.PayRoleTimestamp);
-            $scope.notificationDate = date._d;
-            $scope.payRoleDate = payDate._d;
-        });
+        $scope.notificationDate = new Date();
 
         $scope.confirmSave = function () {
             /// <summary>
-            /// Confirms edit of MailNotification.
+            /// Saves new MailNotification if fields are properly filled.
             /// </summary>
             var error = false;
 
@@ -49,20 +36,25 @@
             }
 
             var result = {};
-            result.repeatMonthly = $scope.repeatMonthly.bool;
+            if ($scope.repeatMonthly == "true") {
+                result.repeatMonthly = true;
+            } else {
+                result.repeatMonthly = false;
+            }
 
             result.notificationDate = moment($scope.notificationDate).unix();
-
             result.payDate = moment($scope.payRoleDate).unix();
-
             if (!error) {
                 $modalInstance.close(result);
-                NotificationService.AutoFadeNotification("success", "", "Email-adviseringen blev redigeret.");
+                NotificationService.AutoFadeNotification("success", "", "Email-adviseringen blev oprettet.");
             }
-            
+
         }
 
         $scope.cancel = function () {
+            /// <summary>
+            /// Cancels creation of new MailNotification.
+            /// </summary>
             $modalInstance.dismiss('cancel');
             NotificationService.AutoFadeNotification("warning", "", "Oprettelse af email adviseringen blev annulleret.");
         }

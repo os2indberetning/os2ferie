@@ -116,7 +116,7 @@ namespace OS2Indberetning.Controllers
                 // Get sub that is being patched, so we can check if it is allowed.
                 var patchedSub = Repo.AsQueryable().First(x => x.Id.Equals(key));
 
-                var startStamp = new object();
+                object startStamp;
                 if (delta.TryGetPropertyValue("StartDateTimestamp", out startStamp))
                 {
                     var startOfDayStamp = _sub.GetStartOfDayTimestamp((long)startStamp);
@@ -125,7 +125,7 @@ namespace OS2Indberetning.Controllers
                     patchedSub.StartDateTimestamp = startOfDayStamp;
                 }
 
-                var endStamp = new object();
+                object endStamp;
                 if (delta.TryGetPropertyValue("EndDateTimestamp", out endStamp))
                 {
                     patchedSub.EndDateTimestamp = (long)endStamp;
@@ -181,7 +181,7 @@ namespace OS2Indberetning.Controllers
         public IHttpActionResult Personal(int type = 0)
         {
             //PersonId != LeaderId means it is a Personal Approver.
-            var res = Repo.AsQueryable().Where(x => x.Person.Id != x.LeaderId && x.Type == (SubstituteType)type);
+            var res = Repo.AsQueryable().Where(x => x.Person.Id != x.LeaderId && x.Type == (ReportType)type);
             _sub.ScrubCprFromPersons(res);
             return Ok(res);
         }
@@ -196,7 +196,7 @@ namespace OS2Indberetning.Controllers
         public IHttpActionResult Substitute(int type = 0)
         {
             //PersonId == LeaderId means it is a Substitute
-            var res = Repo.AsQueryable().Where(x => x.Person.Id == x.LeaderId && x.Type == (SubstituteType)type);
+            var res = Repo.AsQueryable().Where(x => x.Person.Id == x.LeaderId && x.Type == (ReportType)type);
             _sub.ScrubCprFromPersons(res);
             return Ok(res);
         }

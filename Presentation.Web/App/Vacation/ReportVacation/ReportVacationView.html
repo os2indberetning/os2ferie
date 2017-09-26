@@ -7,19 +7,40 @@
 </div>
 
 <div class="row margin-bottom-20">
-    <div class="col-md-12 col-lg-6 col-sm-12">
+    <div class="col-md-12 col-lg-12 col-sm-12">
         <div class="row">
-            <div class="col-md-6 col-sm-6">
+            <div style="width: 280px;float: left; margin-left: 15px;">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="padding-left: 0">
                         <h4>Vælg start dato: <span ng-show="rvc.startDate">{{rvc.startDate | date:"MMM d, yyyy"}}</span></h4>
-                        <kendo-calendar ng-model="rvc.startDate" k-rebind="endDate" min="rvc.mimimumVacationStartDate"></kendo-calendar>
+                        <div class="week-number-calendar-content">
+                            <div class="k-calendar k-widget week-number-calendar">
+                                <table tabindex="0" role="grid" class="k-content" cellspacing="0" style="width: initial;">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            uge
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr role="row" ng-repeat="week in rvc.startWeeks">
+                                        <td role="gridcell">
+                                            <a class="k-link" href="#">{{week}}</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <!--<div class="week-number-calendar-footer">&ensp;</div>-->
+                            </div>
+                            <kendo-calendar k-options="rvc.startCalendarOptions"  ng-model="rvc.startDate" k-rebind="endDate" min="rvc.mimimumVacationStartDate"></kendo-calendar>
+                        </div>
                     </div>
                 </div>
                 <div class="row margin-top-15">
                     <div class="col-md-12">
                         <label class="">
-                            <input type="checkbox" ng-model="rvc.vacationStartsOnFullDay" ng-true-value="false" ng-false-value="true" />
+                            <input type="checkbox" ng-model="rvc.vacationStartsOnFullDay" ng-true-value="false" ng-false-value="true"/>
                             Ferien starter starter midt på dagen:
                         </label>
                     </div>
@@ -34,17 +55,37 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-6 pull-right">
+            <div style="width: 280px;float: left;margin-left: 15px;">
                 <div class="row">
                     <div class="col-md-12">
                         <h4>Vælg slut dato: <span ng-show="rvc.endDate">{{rvc.endDate | date:"MMM d, yyyy"}}</span></h4>
-                        <kendo-calendar ng-model="rvc.endDate" k-rebind="rvc.startDate" min="rvc.startDate"></kendo-calendar>
+                        <div class="week-number-calendar-content">
+                            <div class="k-calendar k-widget week-number-calendar">
+                                <table tabindex="0" role="grid" class="k-content" cellspacing="0" style="width: initial;">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            uge
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr role="row" ng-repeat="week in rvc.endWeeks">
+                                        <td role="gridcell">
+                                            <a class="k-link" href="#">{{week}}</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <kendo-calendar k-options="rvc.endCalendarOptions" ng-model="rvc.endDate" k-rebind="rvc.startDate" current="rvc.startCurrent" min="rvc.startDate"></kendo-calendar>
+                        </div>
                     </div>
-                </div>
+                 </div>
                 <div class="row margin-top-15">
                     <div class="col-md-12">
                         <label class="">
-                            <input type="checkbox" ng-model="rvc.vacationEndsOnFullDay" ng-true-value="false" ng-false-value="true" />
+                            <input type="checkbox" ng-model="rvc.vacationEndsOnFullDay" ng-true-value="false" ng-false-value="true"/>
                             Ferien slutter midt på dagen
                         </label>
                     </div>
@@ -54,14 +95,42 @@
                         <h4>Tidspunkt for feriens afslutning</h4>
                         <p>Udfyldes kun hvis sidste feriedag ikke er hele dagen</p>
                         <kendo-time-picker k-format="'HH:mm'" k-options="rvc.timePickerOptions"
-                                            k-ng-model="rvc.endTime"
-                                            style="width: 238px;"></kendo-time-picker>
+                                           k-ng-model="rvc.endTime"
+                                           style="width: 238px;"></kendo-time-picker>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12 margin-top-40">
+                <div class="k-block" ng-class="rvc.hasVacationBalance ? 'k-info-colored' : ' k-error-colored'" style="padding: 5px 15px;">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>Feriesaldo</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div ng-if="!rvc.hasVacationBalance">
+                                <p><i>Din ferie saldo er ikke tilgængelig.</i>
+                                </p>
+                            </div>
+                            <div ng-if="rvc.hasVacationBalance">
+                                <p>Aktuel feriesaldo for ferieåret {{rvc.vacationBalance.Year}}/{{rvc.vacationBalance.Year + 1}}. Saldoen er for den valgte stilling</p>
+                                <ul>
+                                    <li>Restferie: {{rvc.vacationHours}} timer {{rvc.vacationMinutes}} minutter</li>
+                                    <li>Rest 6. ferieuge: {{rvc.freeVacationHours}} timer {{rvc.freeVacationMinutes}} minutter</li>
+                                </ul>
+                                <p>Feriesaldoen hentes fra lønsystemet og opdateres én gang om ugen</p>
+                                <p>Senest opdateret: {{rvc.vacationBalance.UpdatedAt | amUtc |amLocal | amDateFormat: 'DD/MM/YYYY'}}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 <div class="row margin-bottom-20">
     <div class="col-lg-6">
         <div class="form-group">
@@ -76,40 +145,36 @@
         <div class="form-group">
             <label for="">Vælg ferietype</label>
             <div class="form-field">
-                <input type="radio" name="VacationType" id="report-type-regular" ng-model="rvc.vacationType" value="Regular" class="k-radio">
-                <label style="margin-right: 40px;" class="k-radio-label" for="report-type-regular">Almindelig ferie</label>
+                <input type="radio" name="VacationType" id="report-type-regular" ng-model="rvc.vacationType" value="Regular" class="k-radio" />
+                <label class="k-radio-label margin-right-5" for="report-type-regular">Almindelig ferie</label>
 
-                <input type="radio" name="VacationType" id="report-type-sixth" ng-model="rvc.vacationType" value="SixthVacationWeek" class="k-radio">
-                <label class="k-radio-label" for="report-type-sixth">6. ferieuge</label>
+                <input type="radio" name="VacationType" id="report-type-sixth" ng-model="rvc.vacationType" value="SixthVacationWeek" class="k-radio" />
+                <label class="k-radio-label margin-right-5" for="report-type-sixth">6. ferieuge</label>
+
+                <input type="radio" name="VacationType" id="report-type-care" ng-model="rvc.vacationType" value="Care" class="k-radio" />
+                <label class="k-radio-label margin-right-5" for="report-type-care">Omsorgsdage</label>
+
+                <input type="radio" name="VacationType" id="report-type-senior" ng-model="rvc.vacationType" value="Senior" class="k-radio" />
+                <label class="k-radio-label margin-right-5" for="report-type-senior">Seniordage</label>
+
+                <input type="radio" name="VacationType" id="report-type-optional" ng-model="rvc.vacationType" value="Optional" class="k-radio" />
+                <label class="k-radio-label margin-right-5" for="report-type-optional">Valgfri</label>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row margin-bottom-20">
-    <div class="col-lg-6">
-        <div class="k-block" ng-class="rvc.hasVacationBalance ? 'k-info-colored' : ' k-error-colored'" style="padding:5px 15px;">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h4>Feriesaldo</h4>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div ng-if="!rvc.hasVacationBalance">
-                        <p><i>Din ferie saldo er ikke tilgængelig.</i></p>
-                    </div>
-                    <div ng-if="rvc.hasVacationBalance">
-                        <p>Aktuel feriesaldo for ferieåret {{rvc.vacationBalance.Year}}/{{rvc.vacationBalance.Year + 1}}. Saldoen er for den valgte stilling</p>
-                        <ul>
-                            <li>Restferie: {{rvc.vacationBalance.VacationHours + rvc.vacationBalance.TransferredHours}} timer</li>
-                            <li>Rest 6. ferieuge: {{rvc.vacationBalance.FreeVacationHours}} timer</li>
-                        </ul>
-                        <p>Feriesaldoen er fra lønsystemet, der er den samme som fremgår af din lønseddel</p>
-                        <p>Senest opdateret: {{rvc.vacationBalance.UpdatedAt | amUtc |amLocal | amDateFormat: 'DD/MM/YYYY'}}</p>
-                    </div>
-                </div>
-            </div>
+<div class="row margin-bottom-10">
+    <div class="col-lg-6" ng-show="rvc.vacationType === 'Care'">
+        <div class="form-group">
+            <label class="k-label-top" for="report-type-care-cpr">Cpr-nr. for barn</label>
+            <input type="text" class="form-control" id="report-type-care-cpr" ng-model="rvc.careCpr" placeholder="Cpr-nr. for barn" />
+        </div>
+    </div>
+    <div class="col-lg-6" ng-show="rvc.vacationType === 'Optional'">
+        <div class="form-group">
+            <label class="k-label-top" for="report-type-optional-text">Ferie type</label>
+            <input type="text" class="form-control" id="report-type-optional-text" ng-model="rvc.optionalText" placeholder="Ferie type" />
         </div>
     </div>
 </div>
@@ -117,7 +182,7 @@
 <div class="row margin-bottom-20">
     <div class="col-lg-6">
         <h4>Eventuel bemærkning</h4>
-        <textarea ng-model="rvc.comment" placeholder="Tiljøj bemærkning" class="k-textbox" style="width: 100%; height: 100px;"></textarea>
+        <textarea ng-model="rvc.purpose" placeholder="Tilføj bemærkning" class="k-textbox" style="width: 100%; height: 100px;"></textarea>
     </div>
 </div>
 
