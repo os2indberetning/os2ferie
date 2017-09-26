@@ -18,6 +18,11 @@
                 var result = angular.fromJson(data);
                 return result;
             }
+        },
+        "SetVacationAccess": {
+            method: "GET",
+            isArray: false,
+            url: "/odata/OrgUnits/Service.SetVacationAccess(Key=:id)"
         }
     });
 }]);

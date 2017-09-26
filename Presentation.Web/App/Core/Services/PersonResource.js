@@ -117,6 +117,18 @@
 
                 return result;
             }
+        },
+        "GetChildren": {
+            method: "GET",
+            isArray: true,
+            url: "/odata/Person/Service.Children(Id=:id)",
+            transformResponse: function (data) {
+                var res = angular.fromJson(data).value;
+                angular.forEach(res, function (value, key) {
+                    value.FullName = value.FirstName + " " + value.LastName;
+                });
+                return res;
+            }
         }
     });
 }]);

@@ -137,7 +137,7 @@
 
                                     switch (value.VacationType) {
                                         case "Care":
-                                            value.type = "Omsorgsdage";
+                                            value.type = "Omsorgsdag";
                                             break;
                                         case "Optional":
                                             value.type = "Valgfri ferie";
@@ -146,7 +146,7 @@
                                             value.type = "Almindelig Ferie";
                                             break;
                                         case "Senior":
-                                            value.type = "Seniordage";
+                                            value.type = "Seniordag";
                                             break;
                                         case "SixthVacationWeek":
                                             value.type = "6. ferieuge";

@@ -94,13 +94,17 @@
                         title: "Bemærkning"
                     },
                     {
-                        title: "Ferietype",
+                        title: "Fraværsårsag",
                         template: data => {
                             switch (data.VacationType) {
                                 case "Care":
                                     return "Omsorgsdage";
                                 case "Optional":
-                                    return "Valgfri ferie";
+                                    if (data.OptionalText != "") {
+                                        return `Andet fravær <button kendo-tooltip k-position="'right'" k-content="'${data.OptionalText}'" class="transparent-background pull-right no-border">
+                                        <i class="fa fa-comment-o"></i></button>`;
+                                    }
+                                    return "Andet fravær";
                                 case "Regular":
                                     return "Almindelig Ferie";
                                 case "Senior":

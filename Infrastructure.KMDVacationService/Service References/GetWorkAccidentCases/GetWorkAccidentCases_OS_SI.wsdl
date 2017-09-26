@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:p1="urn:kmd.dk:LPT:VACAB:external" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" name="GetWorkAccidentCases_OS_SI" targetNamespace="urn:kmd.dk:LPT:VACAB:external" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation />
+  <wsp:UsingPolicy wsdl:required="true" />
+  <wsp:Policy wsu:Id="OP_GetWorkAccidentCases_OS_SI" />
+  <wsdl:types>
+    <xsd:schema xmlns="urn:kmd.dk:LPT:VACAB:external" targetNamespace="urn:kmd.dk:LPT:VACAB:external" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="GetWorkAccidentCasesRequest_MT" type="p1:GetWorkAccidentCasesRequest" />
+      <xsd:element name="GetWorkAccidentCasesResponse_MT" type="p1:GetWorkAccidentCasesResponse" />
+      <xsd:complexType name="GetWorkAccidentCasesResponse">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">6701f866c82f11e689e9000022b9b763</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="ReturnStatus">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">e9bc16369f2f11e681d1005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element minOccurs="0" name="StatusType" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">e9bc16339f2f11e6ab51005056a06c6c</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element minOccurs="0" name="MessageText" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">063faad09f3011e68b98005056a06c6c</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="AccidentCase">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">e9bc163c9f2f11e6be42005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="Item">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">e9bc163b9f2f11e68c75005056a06c6c</xsd:appinfo>
+                  </xsd:annotation>
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element minOccurs="0" name="PersonnelNumber" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">e9bc16379f2f11e6b3d9005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="StartDate" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">e9bc16389f2f11e6b6b0005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="AccidentNumber" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">e9bc16399f2f11e6cd51005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="AccidentDate" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">e9bc163a9f2f11e68b5d005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GetWorkAccidentCasesRequest">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">07ceee9fa18711e68f37000022b9b763</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="StartDate" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">aca219529f2f11e69a4e005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="EndDate" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">aca219539f2f11e69ad0005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="PersonnelNumber" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">aca219549f2f11e687ce005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="GetWorkAccidentCasesRequest_MT">
+    <wsdl:documentation />
+    <wsdl:part name="GetWorkAccidentCasesRequest_MT" element="p1:GetWorkAccidentCasesRequest_MT" />
+  </wsdl:message>
+  <wsdl:message name="GetWorkAccidentCasesResponse_MT">
+    <wsdl:documentation />
+    <wsdl:part name="GetWorkAccidentCasesResponse_MT" element="p1:GetWorkAccidentCasesResponse_MT" />
+  </wsdl:message>
+  <wsdl:portType name="GetWorkAccidentCases_OS_SI">
+    <wsdl:documentation />
+    <wsdl:operation name="GetWorkAccidentCases_OS_SI">
+      <wsdl:documentation />
+      <wsp:Policy>
+        <wsp:PolicyReference URI="#OP_GetWorkAccidentCases_OS_SI" />
+      </wsp:Policy>
+      <wsdl:input message="p1:GetWorkAccidentCasesRequest_MT" />
+      <wsdl:output message="p1:GetWorkAccidentCasesResponse_MT" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GetWorkAccidentCases_OS_SIBinding" type="p1:GetWorkAccidentCases_OS_SI">
+    <binding transport="http://schemas.xmlsoap.org/soap/http" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    <wsdl:operation name="GetWorkAccidentCases_OS_SI">
+      <operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GetWorkAccidentCases_OS_SIService">
+    <wsdl:port name="HTTPS_Port" binding="p1:GetWorkAccidentCases_OS_SIBinding">
+      <address location="https://kmdpiprd.kmd.dk/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=KMD_LPT_VACAB_Service&amp;receiverParty=&amp;receiverService=&amp;interface=GetWorkAccidentCases_OS_SI&amp;interfaceNamespace=urn%3Akmd.dk%3ALPT%3AVACAB%3Aexternal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

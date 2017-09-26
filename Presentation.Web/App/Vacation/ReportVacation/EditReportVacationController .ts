@@ -65,10 +65,13 @@
                 }
 
                 this.purpose = report.Purpose;
-                this.careCpr = report.CareCpr;
                 this.optionalText = report.OptionalText;
                 this.vacationType = report.VacationType;
                 this.position = report.EmploymentId;
+
+                if (report.VacationType == "Care") {
+                    this.child = report.AdditionalData;
+                }
             });
         }
 
@@ -79,12 +82,17 @@
             report.EndTimestamp = this.moment(this.endDate).unix();
             report.EmploymentId = this.position;
             report.Purpose = this.purpose;
-            report.CareCpr = this.careCpr;
             report.OptionalText = this.optionalText;
             report.PersonId = this.currentUser.Id;
             report.Status = "Pending";
             report.CreatedDateTimestamp = Math.floor(Date.now() / 1000);
             report.VacationType = this.vacationType;
+
+            if (this.vacationType == "Care") {
+                var child = this.GetChildFromId(this.child);
+                report.AdditionalData = String(child.Id);
+                report.OptionalText = child.FullName;
+            }
 
             if (!this.vacationStartsOnFullDay) {
                 report.StartTime = `P0DT${this.startTime.getHours()}H${this.startTime.getMinutes()}M0S`;

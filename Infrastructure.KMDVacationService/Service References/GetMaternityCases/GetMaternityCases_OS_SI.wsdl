@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:p1="urn:kmd.dk:LPT:VACAB:external" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" name="GetMaternityCases_OS_SI" targetNamespace="urn:kmd.dk:LPT:VACAB:external" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation />
+  <wsp:UsingPolicy wsdl:required="true" />
+  <wsp:Policy wsu:Id="OP_GetMaternityCases_OS_SI" />
+  <wsdl:types>
+    <xsd:schema xmlns="urn:kmd.dk:LPT:VACAB:external" targetNamespace="urn:kmd.dk:LPT:VACAB:external" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="GetMaternityCasesRequest_MT" type="p1:GetMaternityCasesRequest" />
+      <xsd:element name="GetMaternityCasesResponse_MT" type="p1:GetMaternityCasesResponse" />
+      <xsd:complexType name="GetMaternityCasesResponse">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">0ea092cde77311e6c534000022b9b763</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="ReturnStatus">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a488690d9f2e11e6b20b005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element minOccurs="0" name="StatusType" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">a488690a9f2e11e6aa22005056a06c6c</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element minOccurs="0" name="MessageText" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">cbc8099aa18611e68194005056a06c6c</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="MaternityCase">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">a48869199f2e11e6cf50005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="Item">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">a48869189f2e11e6b46e005056a06c6c</xsd:appinfo>
+                  </xsd:annotation>
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element minOccurs="0" name="PersonnelNumber" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a488690e9f2e11e6c9ef005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="MaternityCaseKey" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a488690f9f2e11e6b63d005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="ValidEndDate" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a48869109f2e11e696cc005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="ValidStartDate" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a48869119f2e11e69261005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="NotificationDate" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a48869129f2e11e6a52a005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="ExpectedDeliveryDate" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a48869139f2e11e69cf4005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="ActualDeliveryDate" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a48869149f2e11e69d1c005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="AuthorityReportDate" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a48869159f2e11e69d46005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="MaternityType" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a48869169f2e11e69469005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="MaternityTypeText" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">a48869179f2e11e6b20b005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GetMaternityCasesRequest">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">a6c3ea72a18611e6a2b5000022b9b763</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="MaternityType" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">0c02ad8f9f2e11e6aff4005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="StartDate" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">0c02ad909f2e11e6a0a2005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="EndDate" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">0c02ad919f2e11e68922005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="PersonnelNumber" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">0c02ad929f2e11e68726005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="GetMaternityCasesRequest_MT">
+    <wsdl:documentation />
+    <wsdl:part name="GetMaternityCasesRequest_MT" element="p1:GetMaternityCasesRequest_MT" />
+  </wsdl:message>
+  <wsdl:message name="GetMaternityCasesResponse_MT">
+    <wsdl:documentation />
+    <wsdl:part name="GetMaternityCasesResponse_MT" element="p1:GetMaternityCasesResponse_MT" />
+  </wsdl:message>
+  <wsdl:portType name="GetMaternityCases_OS_SI">
+    <wsdl:documentation />
+    <wsdl:operation name="GetMaternityCases_OS_SI">
+      <wsdl:documentation />
+      <wsp:Policy>
+        <wsp:PolicyReference URI="#OP_GetMaternityCases_OS_SI" />
+      </wsp:Policy>
+      <wsdl:input message="p1:GetMaternityCasesRequest_MT" />
+      <wsdl:output message="p1:GetMaternityCasesResponse_MT" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GetMaternityCases_OS_SIBinding" type="p1:GetMaternityCases_OS_SI">
+    <binding transport="http://schemas.xmlsoap.org/soap/http" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    <wsdl:operation name="GetMaternityCases_OS_SI">
+      <operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GetMaternityCases_OS_SIService">
+    <wsdl:port name="HTTPS_Port" binding="p1:GetMaternityCases_OS_SIBinding">
+      <address location="https://kmdpiprd.kmd.dk/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=KMD_LPT_VACAB_Service&amp;receiverParty=&amp;receiverService=&amp;interface=GetMaternityCases_OS_SI&amp;interfaceNamespace=urn%3Akmd.dk%3ALPT%3AVACAB%3Aexternal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

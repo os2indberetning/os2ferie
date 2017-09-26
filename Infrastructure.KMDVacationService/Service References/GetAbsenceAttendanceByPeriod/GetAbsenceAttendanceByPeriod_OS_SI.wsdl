@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:p1="urn:kmd.dk:LPT:VACAB:external" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" name="GetAbsenceAttendanceByPeriod_OS_SI" targetNamespace="urn:kmd.dk:LPT:VACAB:external" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation />
+  <wsp:UsingPolicy wsdl:required="true" />
+  <wsp:Policy wsu:Id="OP_GetAbsenceAttendanceByPeriod_OS_SI" />
+  <wsdl:types>
+    <xsd:schema xmlns="urn:kmd.dk:LPT:VACAB:external" targetNamespace="urn:kmd.dk:LPT:VACAB:external" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="GetAbsenceAttendanceByPeriodResponse_MT" type="p1:GetAbsenceAttendanceByPeriodResponse" />
+      <xsd:element name="GetAbsenceAttendanceByPeriodRequest_MT" type="p1:GetAbsenceAttendanceByPeriodRequest" />
+      <xsd:complexType name="GetAbsenceAttendanceByPeriodResponse">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">c1689d1de6e111e6cde2000022b9b762</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="ReturnStatus">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">82c9989ad96211e688caf0921cf385a6</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="item">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">c14f57fae6e111e6ce1df0921cf385a6</xsd:appinfo>
+                  </xsd:annotation>
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element minOccurs="0" name="StatusType" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">c14f57f6e6e111e68dd9f0921cf385a6</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="MessageClass" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">c14f57f7e6e111e688b1f0921cf385a6</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="MessageNumber" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">c14f57f8e6e111e68335f0921cf385a6</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="MessageText" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">c14f57f9e6e111e6b960f0921cf385a6</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="AbsenceAttendance">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">82c998aed96211e6c5d5f0921cf385a6</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="item">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">ea605b0dd97411e6b21d005056a05b1c</xsd:appinfo>
+                  </xsd:annotation>
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element minOccurs="0" name="Key">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">82c998a2d96211e69341f0921cf385a6</xsd:appinfo>
+                        </xsd:annotation>
+                        <xsd:complexType>
+                          <xsd:sequence>
+                            <xsd:element minOccurs="0" name="PersonnelNumber" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c9989bd96211e68fc4f0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="AbsenceAttendanceType" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c9989cd96211e69fd6f0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="ObjectId" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c9989dd96211e6ba8cf0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="LockIndicator" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c9989ed96211e6bd4ef0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="EndDate" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c9989fd96211e6cc2ef0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="StartDate" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c998a0d96211e6c258f0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="RecordNumber" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c998a1d96211e68cd4f0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                          </xsd:sequence>
+                        </xsd:complexType>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="Item">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">82c998add96211e6b8b2f0921cf385a6</xsd:appinfo>
+                        </xsd:annotation>
+                        <xsd:complexType>
+                          <xsd:sequence>
+                            <xsd:element minOccurs="0" name="PersonnelNumber" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c998a3d96211e6c3b4f0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="StartDate" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c998a4d96211e69856f0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="EndDate" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c998a5d96211e68271f0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="StartTime" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c998a6d96211e6cbe7f0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="EndTime" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c998a7d96211e6a479f0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="AbsenceAttendanceType" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c998a8d96211e69cd4f0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="AbsenceAttendanceTypeText" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c998a9d96211e6a4f6f0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="AbsenceAttendanceDays" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c998aad96211e6a256f0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="AbsenceAttendanceHours" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c998abd96211e6a16bf0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="AbsenceAttendanceCalendarDays" type="xsd:string">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">82c998acd96211e684fff0921cf385a6</xsd:appinfo>
+                              </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="Maternity">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">ea604176d97411e6a4bd005056a05b1c</xsd:appinfo>
+                              </xsd:annotation>
+                              <xsd:complexType>
+                                <xsd:sequence>
+                                  <xsd:element minOccurs="0" maxOccurs="unbounded" name="Item">
+                                    <xsd:annotation>
+                                      <xsd:appinfo source="http://sap.com/xi/TextID">ea6011a4d97411e6bc03005056a05b1c</xsd:appinfo>
+                                    </xsd:annotation>
+                                    <xsd:complexType>
+                                      <xsd:sequence>
+                                        <xsd:element minOccurs="0" name="MaternityCaseKey" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea60119bd97411e68e31005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                        <xsd:element minOccurs="0" name="StartDate" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea60119cd97411e6afc9005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                        <xsd:element minOccurs="0" name="EndDate" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea60119dd97411e6a8d9005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                        <xsd:element minOccurs="0" name="NotificationDate" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea60119ed97411e6cfcb005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                        <xsd:element minOccurs="0" name="ExpectedDeliveryDate" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea60119fd97411e6cc4d005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                        <xsd:element minOccurs="0" name="ActualDeliveryDate" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea6011a0d97411e6cf5e005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                        <xsd:element minOccurs="0" name="AuthorityReportDate" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea6011a1d97411e6a521005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                        <xsd:element minOccurs="0" name="MaternityType" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea6011a2d97411e6ab53005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                        <xsd:element minOccurs="0" name="MaternityTypeText" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea6011a3d97411e6cb4c005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                      </xsd:sequence>
+                                    </xsd:complexType>
+                                  </xsd:element>
+                                </xsd:sequence>
+                              </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="Reason">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">ea60417ad97411e6a48f005056a05b1c</xsd:appinfo>
+                              </xsd:annotation>
+                              <xsd:complexType>
+                                <xsd:sequence>
+                                  <xsd:element minOccurs="0" maxOccurs="unbounded" name="Item">
+                                    <xsd:annotation>
+                                      <xsd:appinfo source="http://sap.com/xi/TextID">ea604179d97411e6b2d3005056a05b1c</xsd:appinfo>
+                                    </xsd:annotation>
+                                    <xsd:complexType>
+                                      <xsd:sequence>
+                                        <xsd:element minOccurs="0" name="ReasonCode" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea604177d97411e6b880005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                        <xsd:element minOccurs="0" name="ReasonCodeText" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea604178d97411e6ae44005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                      </xsd:sequence>
+                                    </xsd:complexType>
+                                  </xsd:element>
+                                </xsd:sequence>
+                              </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="WorkInjury">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">ea60417ed97411e68d16005056a05b1c</xsd:appinfo>
+                              </xsd:annotation>
+                              <xsd:complexType>
+                                <xsd:sequence>
+                                  <xsd:element minOccurs="0" maxOccurs="unbounded" name="Item">
+                                    <xsd:annotation>
+                                      <xsd:appinfo source="http://sap.com/xi/TextID">ea60417dd97411e6a87c005056a05b1c</xsd:appinfo>
+                                    </xsd:annotation>
+                                    <xsd:complexType>
+                                      <xsd:sequence>
+                                        <xsd:element minOccurs="0" name="AccidentNumber" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea60417bd97411e6c873005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                        <xsd:element minOccurs="0" name="AccidentDate" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea60417cd97411e698ee005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                      </xsd:sequence>
+                                    </xsd:complexType>
+                                  </xsd:element>
+                                </xsd:sequence>
+                              </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element minOccurs="0" name="CompLeave">
+                              <xsd:annotation>
+                                <xsd:appinfo source="http://sap.com/xi/TextID">ea605b0cd97411e6bab3005056a05b1c</xsd:appinfo>
+                              </xsd:annotation>
+                              <xsd:complexType>
+                                <xsd:sequence>
+                                  <xsd:element minOccurs="0" maxOccurs="unbounded" name="Item">
+                                    <xsd:annotation>
+                                      <xsd:appinfo source="http://sap.com/xi/TextID">ea604181d97411e6b0d1005056a05b1c</xsd:appinfo>
+                                    </xsd:annotation>
+                                    <xsd:complexType>
+                                      <xsd:sequence>
+                                        <xsd:element minOccurs="0" name="ChildNumber" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea60417fd97411e6b820005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                        <xsd:element minOccurs="0" name="ChildCPRNumber" type="xsd:string">
+                                          <xsd:annotation>
+                                            <xsd:appinfo source="http://sap.com/xi/TextID">ea604180d97411e6a2c1005056a05b1c</xsd:appinfo>
+                                          </xsd:annotation>
+                                        </xsd:element>
+                                      </xsd:sequence>
+                                    </xsd:complexType>
+                                  </xsd:element>
+                                </xsd:sequence>
+                              </xsd:complexType>
+                            </xsd:element>
+                          </xsd:sequence>
+                        </xsd:complexType>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GetAbsenceAttendanceByPeriodRequest">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">958cbe6ed95811e6bff4000022b9b763</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="VendorUUID" type="xsd:string" />
+          <xsd:element minOccurs="0" name="StartDate" type="xsd:string" />
+          <xsd:element minOccurs="0" name="EndDate" type="xsd:string" />
+          <xsd:element minOccurs="0" name="PersonnelNumber" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="GetAbsenceAttendanceByPeriodRequest_MT">
+    <wsdl:documentation />
+    <wsdl:part name="GetAbsenceAttendanceByPeriodRequest_MT" element="p1:GetAbsenceAttendanceByPeriodRequest_MT" />
+  </wsdl:message>
+  <wsdl:message name="GetAbsenceAttendanceByPeriodResponse_MT">
+    <wsdl:documentation />
+    <wsdl:part name="GetAbsenceAttendanceByPeriodResponse_MT" element="p1:GetAbsenceAttendanceByPeriodResponse_MT" />
+  </wsdl:message>
+  <wsdl:portType name="GetAbsenceAttendanceByPeriod_OS_SI">
+    <wsdl:documentation />
+    <wsdl:operation name="GetAbsenceAttendanceByPeriod_OS_SI">
+      <wsdl:documentation />
+      <wsp:Policy>
+        <wsp:PolicyReference URI="#OP_GetAbsenceAttendanceByPeriod_OS_SI" />
+      </wsp:Policy>
+      <wsdl:input message="p1:GetAbsenceAttendanceByPeriodRequest_MT" />
+      <wsdl:output message="p1:GetAbsenceAttendanceByPeriodResponse_MT" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GetAbsenceAttendanceByPeriod_OS_SIBinding" type="p1:GetAbsenceAttendanceByPeriod_OS_SI">
+    <binding transport="http://schemas.xmlsoap.org/soap/http" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    <wsdl:operation name="GetAbsenceAttendanceByPeriod_OS_SI">
+      <operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GetAbsenceAttendanceByPeriod_OS_SIService">
+    <wsdl:port name="HTTPS_Port" binding="p1:GetAbsenceAttendanceByPeriod_OS_SIBinding">
+      <address location="https://kmdpiprd.kmd.dk/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=KMD_LPT_VACAB_Service&amp;receiverParty=&amp;receiverService=&amp;interface=GetAbsenceAttendanceByPeriod_OS_SI&amp;interfaceNamespace=urn%3Akmd.dk%3ALPT%3AVACAB%3Aexternal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

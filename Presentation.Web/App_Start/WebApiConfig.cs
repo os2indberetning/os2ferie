@@ -130,9 +130,19 @@ namespace OS2Indberetning
                 .ReturnsFromEntitySet<Person>("Person")
                 .Parameter<int>("Type");
 
+            builder.EntityType<VacationBalance>().Collection
+                .Function("VacationForEmployment")
+                .ReturnsFromEntitySet<VacationBalance>("VacationBalance")
+                .Parameter<int>("Id");
+
             builder.EntityType<Person>().Collection
                 .Function("PeopleInMyOrganisation")
                 .ReturnsFromEntitySet<Person>("Person")
+                .Parameter<int>("Id");
+            
+            builder.EntityType<Person>().Collection
+                .Function("Children")
+                .ReturnsFromEntitySet<Child>("Child")
                 .Parameter<int>("Id");
 
             builder.EntitySet<PersonalAddress>("PersonalAddresses");
@@ -183,6 +193,11 @@ namespace OS2Indberetning
             builder.EntityType<Rate>().Collection
                 .Function("ThisYearsRates")
                 .ReturnsFromEntitySet<Rate>("Rates");
+
+            builder.EntityType<OrgUnit>().Collection
+                .Function("SetVacationAccess")
+                .ReturnsFromEntitySet<OrgUnit>("OrgUnits")
+                .Parameter<int>("Key");
 
             builder.Namespace = "Service";
 

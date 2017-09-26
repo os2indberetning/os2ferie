@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:p1="urn:kmd.dk:LPT:VACAB:external" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" name="GetChildren_OS_SI" targetNamespace="urn:kmd.dk:LPT:VACAB:external" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation />
+  <wsp:UsingPolicy wsdl:required="true" />
+  <wsp:Policy wsu:Id="OP_GetChildren_OS_SI" />
+  <wsdl:types>
+    <xsd:schema xmlns="urn:kmd.dk:LPT:VACAB:external" targetNamespace="urn:kmd.dk:LPT:VACAB:external" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="GetChildrenResponse_MT" type="p1:GetChildrenResponse" />
+      <xsd:element name="GetChildrenRequest_MT" type="p1:GetChildrenRequest" />
+      <xsd:complexType name="GetChildrenRequest">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">cb4b446af1cf11e6986d000022b9b763</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="PersonnelNumber" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">3aede7209f2d11e696fb005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="StartDate" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GetChildrenResponse">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">6d37d5bdc82d11e6adb1000022b9b763</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="ReturnStatus">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6e33bd22904411e6c6ac005056a03c2e</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element minOccurs="0" name="StatusType" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">6e33bd1f904411e6a060005056a03c2e</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element minOccurs="0" name="MessageText" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">cf2f8bea9f2d11e6b3f0005056a06c6c</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="Child">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">6e33d777904411e6ba7f005056a03c2e</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="Item">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">6e33d776904411e6c996005056a03c2e</xsd:appinfo>
+                  </xsd:annotation>
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element minOccurs="0" name="ChildNumber" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">6e33bd23904411e6c24b005056a03c2e</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="FirstName" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">6e33bd24904411e68f76005056a03c2e</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="LastName" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">6e33bd25904411e6c5d9005056a03c2e</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="ChildCPRNumber" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">6e33bd26904411e6af6c005056a03c2e</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="GetChildrenRequest_MT">
+    <wsdl:documentation />
+    <wsdl:part name="GetChildrenRequest_MT" element="p1:GetChildrenRequest_MT" />
+  </wsdl:message>
+  <wsdl:message name="GetChildrenResponse_MT">
+    <wsdl:documentation />
+    <wsdl:part name="GetChildrenResponse_MT" element="p1:GetChildrenResponse_MT" />
+  </wsdl:message>
+  <wsdl:portType name="GetChildren_OS_SI">
+    <wsdl:documentation />
+    <wsdl:operation name="GetChildren_OS_SI">
+      <wsdl:documentation />
+      <wsp:Policy>
+        <wsp:PolicyReference URI="#OP_GetChildren_OS_SI" />
+      </wsp:Policy>
+      <wsdl:input message="p1:GetChildrenRequest_MT" />
+      <wsdl:output message="p1:GetChildrenResponse_MT" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GetChildren_OS_SIBinding" type="p1:GetChildren_OS_SI">
+    <binding transport="http://schemas.xmlsoap.org/soap/http" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    <wsdl:operation name="GetChildren_OS_SI">
+      <operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GetChildren_OS_SIService">
+    <wsdl:port name="HTTPS_Port" binding="p1:GetChildren_OS_SIBinding">
+      <address location="https://kmdpiprd.kmd.dk/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=KMD_LPT_VACAB_Service&amp;receiverParty=&amp;receiverService=&amp;interface=GetChildren_OS_SI&amp;interfaceNamespace=urn%3Akmd.dk%3ALPT%3AVACAB%3Aexternal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:p1="urn:kmd.dk:LPT:VACAB:external" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" name="GetReasons_OS_SI" targetNamespace="urn:kmd.dk:LPT:VACAB:external" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation />
+  <wsp:UsingPolicy wsdl:required="true" />
+  <wsp:Policy wsu:Id="OP_GetReasons_OS_SI" />
+  <wsdl:types>
+    <xsd:schema xmlns="urn:kmd.dk:LPT:VACAB:external" targetNamespace="urn:kmd.dk:LPT:VACAB:external" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="GetReasonsRequest_MT" type="p1:GetReasonsRequest" />
+      <xsd:element name="GetReasonsResponse_MT" type="p1:GetReasonsResponse" />
+      <xsd:complexType name="GetReasonsResponse">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">1f9e45c8c82f11e6bea2000022b9b763</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="ReturnStatus">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">69e9a4c49f2f11e6b268005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element minOccurs="0" name="StatusType" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">69e9a4c19f2f11e69318005056a06c6c</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+                <xsd:element minOccurs="0" name="MessageText" type="xsd:string">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">69e9a4c29f2f11e6b361005056a06c6c</xsd:appinfo>
+                  </xsd:annotation>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="Reason">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">69e9a4c89f2f11e68e2f005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element minOccurs="0" maxOccurs="unbounded" name="Item">
+                  <xsd:annotation>
+                    <xsd:appinfo source="http://sap.com/xi/TextID">69e9a4c79f2f11e6cad5005056a06c6c</xsd:appinfo>
+                  </xsd:annotation>
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element minOccurs="0" name="ReasonCode" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">69e9a4c59f2f11e6ba53005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                      <xsd:element minOccurs="0" name="ReasonCodeText" type="xsd:string">
+                        <xsd:annotation>
+                          <xsd:appinfo source="http://sap.com/xi/TextID">69e9a4c69f2f11e6b0a3005056a06c6c</xsd:appinfo>
+                        </xsd:annotation>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GetReasonsRequest">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">de435e69a18611e6be60000022b9b763</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="PersonnelNumber" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">1ef34ddb9f2f11e6ab9e005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="leaveType" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">1ef5817b9f2f11e68539005056a06c6c</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="GetReasonsRequest_MT">
+    <wsdl:documentation />
+    <wsdl:part name="GetReasonsRequest_MT" element="p1:GetReasonsRequest_MT" />
+  </wsdl:message>
+  <wsdl:message name="GetReasonsResponse_MT">
+    <wsdl:documentation />
+    <wsdl:part name="GetReasonsResponse_MT" element="p1:GetReasonsResponse_MT" />
+  </wsdl:message>
+  <wsdl:portType name="GetReasons_OS_SI">
+    <wsdl:documentation />
+    <wsdl:operation name="GetReasons_OS_SI">
+      <wsdl:documentation />
+      <wsp:Policy>
+        <wsp:PolicyReference URI="#OP_GetReasons_OS_SI" />
+      </wsp:Policy>
+      <wsdl:input message="p1:GetReasonsRequest_MT" />
+      <wsdl:output message="p1:GetReasonsResponse_MT" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GetReasons_OS_SIBinding" type="p1:GetReasons_OS_SI">
+    <binding transport="http://schemas.xmlsoap.org/soap/http" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    <wsdl:operation name="GetReasons_OS_SI">
+      <operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GetReasons_OS_SIService">
+    <wsdl:port name="HTTPS_Port" binding="p1:GetReasons_OS_SIBinding">
+      <address location="https://kmdpiprd.kmd.dk/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=KMD_LPT_VACAB_Service&amp;receiverParty=&amp;receiverService=&amp;interface=GetReasons_OS_SI&amp;interfaceNamespace=urn%3Akmd.dk%3ALPT%3AVACAB%3Aexternal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

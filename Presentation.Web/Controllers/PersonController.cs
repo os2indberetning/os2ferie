@@ -310,5 +310,23 @@ namespace OS2Indberetning.Controllers
             return Ok(people);
         }
 
+        // GET: odata/Person()/Service.Children
+        /// <summary>
+        /// Returns the children for the given employment
+        /// </summary>
+        /// <param name="id">Id of the employment</param>
+        /// <returns></returns>
+        [EnableQuery]
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult Children(int id)
+        {
+            //if (!CurrentUser.Employments.Any(x => x.Id == id)) return Unauthorized();
+            var empl = _employmentRepo.AsQueryable().First(x => x.Id == id);
+
+            var children = _person.GetChildren(empl);
+
+            return Ok(children);
+        }
+
     }
 }

@@ -6,6 +6,7 @@ using Core.ApplicationServices.Interfaces;
 using Core.ApplicationServices.Logger;
 using Core.DomainModel;
 using Core.DomainServices;
+using Core.DomainServices.Interfaces;
 using Core.DomainServices.RoutingClasses;
 using NSubstitute;
 using NUnit.Framework;
@@ -21,7 +22,8 @@ namespace ApplicationServices.Test.PersonService
         private IGenericRepository<PersonalAddress> _addressRepoMock;
         private IPersonService _uut;
         private ILogger _loggerMock;
-            
+        private IKMDAbsenceService _absenceService;
+
         [SetUp]
         public void SetUp()
         {
@@ -57,13 +59,14 @@ namespace ApplicationServices.Test.PersonService
             _addressRepoMock = NSubstitute.Substitute.For<IGenericRepository<PersonalAddress>>();
             _coordinatesMock = NSubstitute.Substitute.For<IAddressCoordinates>();
             _loggerMock = NSubstitute.Substitute.For<ILogger>();
+            _absenceService = NSubstitute.Substitute.For<IKMDAbsenceService>();
 
             _coordinatesMock.GetAddressCoordinates(new Address()).ReturnsForAnyArgs(new Address
             {
                 Latitude = "1",
                 Longitude = "1"
             });
-            _uut = new Core.ApplicationServices.PersonService(_addressRepoMock, _routeMock, _coordinatesMock, _loggerMock);
+            _uut = new Core.ApplicationServices.PersonService(_addressRepoMock, _routeMock, _coordinatesMock, _loggerMock, _absenceService);
         }
 
 
@@ -72,7 +75,7 @@ namespace ApplicationServices.Test.PersonService
         public void ScrubCprsShouldRemoveCprNumbers()
         {
 
-            var uut = new Core.ApplicationServices.PersonService(_addressRepoMock, _routeMock, _coordinatesMock, _loggerMock);
+            var uut = new Core.ApplicationServices.PersonService(_addressRepoMock, _routeMock, _coordinatesMock, _loggerMock, _absenceService);
 
             foreach (var person in _persons)
             {
@@ -109,7 +112,7 @@ namespace ApplicationServices.Test.PersonService
                 }
             }.AsQueryable());
 
-            var uut = new Core.ApplicationServices.PersonService(_addressRepoMock, _routeMock, _coordinatesMock, _loggerMock);
+            var uut = new Core.ApplicationServices.PersonService(_addressRepoMock, _routeMock, _coordinatesMock, _loggerMock, _absenceService);
             var res = uut.GetHomeAddress(testPerson);
             Assert.AreEqual(PersonalAddressType.Home, res.Type);
             Assert.AreEqual("Katrinebjergvej", res.StreetName);
@@ -155,7 +158,7 @@ namespace ApplicationServices.Test.PersonService
                 }
             }.AsQueryable());
 
-            var uut = new Core.ApplicationServices.PersonService(_addressRepoMock, _routeMock, _coordinatesMock, _loggerMock);
+            var uut = new Core.ApplicationServices.PersonService(_addressRepoMock, _routeMock, _coordinatesMock, _loggerMock, _absenceService);
             var res = uut.GetHomeAddress(testPerson);
             Assert.AreEqual(PersonalAddressType.AlternativeHome, res.Type);
             Assert.AreEqual("Jens Baggesens Vej", res.StreetName);
@@ -199,7 +202,7 @@ namespace ApplicationServices.Test.PersonService
                 }
             }.AsQueryable());
 
-            var uut = new Core.ApplicationServices.PersonService(_addressRepoMock, _routeMock, _coordinatesMock, _loggerMock);
+            var uut = new Core.ApplicationServices.PersonService(_addressRepoMock, _routeMock, _coordinatesMock, _loggerMock, _absenceService);
             var res = uut.GetHomeAddress(testPerson);
             Assert.AreEqual(PersonalAddressType.AlternativeHome, res.Type);
             Assert.AreEqual("Jens Baggesens Vej", res.StreetName);

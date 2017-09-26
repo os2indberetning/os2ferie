@@ -74,5 +74,21 @@ namespace OS2Indberetning.Controllers.Vacation
         {
             throw new NotSupportedException();
         }
+
+        // GET: odata/VacationBalance/Service.VacationForUser
+        /// <summary>
+        /// Returns the people in the same organisation as the given employment.
+        /// </summary>
+        /// <param name="id">Id of the employment</param>
+        /// <returns></returns>
+        [EnableQuery]
+        [HttpGet]
+        public IHttpActionResult VacationForEmployment(int id)
+        {
+            var empl = Repo.AsQueryable().First(x => x.EmploymentId == id);
+            return Ok(empl);
+        }
+
+
     }
 }

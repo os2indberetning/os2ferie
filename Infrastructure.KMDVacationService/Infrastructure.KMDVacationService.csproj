@@ -45,10 +45,34 @@
   <ItemGroup>
     <Compile Include="KMDAbsenceExceptions.cs" />
     <Compile Include="KMDAbsenceReportBuilder.cs" />
-    <Compile Include="EmployeeLookup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="KMDAbsenceService.cs" />
-    <Compile Include="Service References\KMD_FerieService\Reference.cs">
+    <Compile Include="Service References\GetAbsenceAttendanceByPeriod\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\GetChildren\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\GetMaternityCases\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\GetReasons\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\GetWorkAccidentCases\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\SetAbsenceAttendance\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -56,38 +80,59 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="KMD_LPT_VACAB_Service.wsdl" />
-    <None Include="Service References\KMD_FerieService\Infrastructure.KMDVacationService.KMD_FerieService.BAPIRET2.datasource">
+    <None Include="Service References\GetAbsenceAttendanceByPeriod\GetAbsenceAttendanceByPeriod_OS_SI.wsdl" />
+    <None Include="Service References\GetAbsenceAttendanceByPeriod\Infrastructure.KMDVacationService.GetAbsenceAttendanceByPeriod.GetAbsenceAttendanceByPeriodResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\KMD_FerieService\Infrastructure.KMDVacationService.KMD_FerieService.GET_EMPLOYEE_INFOResponse.datasource">
+    <None Include="Service References\GetAbsenceAttendanceByPeriod\Infrastructure.KMDVacationService.GetAbsenceAttendanceByPeriod.GetAbsenceAttendanceByPeriod_OS_SIResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\KMD_FerieService\Infrastructure.KMDVacationService.KMD_FerieService.SET_ABSENCE_PULSResponse.datasource">
+    <None Include="Service References\GetChildren\GetChildren_OS_SI.wsdl" />
+    <None Include="Service References\GetChildren\Infrastructure.KMDVacationService.GetChildren.GetChildrenResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\KMD_FerieService\Infrastructure.KMDVacationService.KMD_FerieService.ZLPE_EMPLOYEE_INFO.datasource">
+    <None Include="Service References\GetChildren\Infrastructure.KMDVacationService.GetChildren.GetChildren_OS_SIResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\KMD_FerieService\LPT_VACAB_Service_Out.wsdl" />
+    <None Include="Service References\GetMaternityCases\GetMaternityCases_OS_SI.wsdl" />
+    <None Include="Service References\GetMaternityCases\Infrastructure.KMDVacationService.GetMaternityCases.GetMaternityCasesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GetMaternityCases\Infrastructure.KMDVacationService.GetMaternityCases.GetMaternityCases_OS_SIResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GetReasons\GetReasons_OS_SI.wsdl" />
+    <None Include="Service References\GetReasons\Infrastructure.KMDVacationService.GetReasons.GetReasonsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GetReasons\Infrastructure.KMDVacationService.GetReasons.GetReasons_OS_SIResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GetWorkAccidentCases\GetWorkAccidentCases_OS_SI.wsdl" />
+    <None Include="Service References\GetWorkAccidentCases\Infrastructure.KMDVacationService.GetWorkAccidentCases.GetWorkAccidentCasesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\GetWorkAccidentCases\Infrastructure.KMDVacationService.GetWorkAccidentCases.GetWorkAccidentCases_OS_SIResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SetAbsenceAttendance\Infrastructure.KMDVacationService.SetAbsenceAttendance.SetAbsenceAttendanceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SetAbsenceAttendance\Infrastructure.KMDVacationService.SetAbsenceAttendance.SetAbsenceAttendance_OS_SIResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SetAbsenceAttendance\SetAbsenceAttendance_OS_SI.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\KMD_FerieService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\KMD_FerieService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\KMD_FerieService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\KMD_FerieService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
+    <WCFMetadataStorage Include="Service References\GetAbsenceAttendanceByPeriod\" />
+    <WCFMetadataStorage Include="Service References\GetChildren\" />
+    <WCFMetadataStorage Include="Service References\GetMaternityCases\" />
+    <WCFMetadataStorage Include="Service References\GetReasons\" />
+    <WCFMetadataStorage Include="Service References\GetWorkAccidentCases\" />
+    <WCFMetadataStorage Include="Service References\SetAbsenceAttendance\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core.DomainModel\Core.DomainModel.csproj">
@@ -98,6 +143,78 @@
       <Project>{3a54fd98-5ecf-47c1-98c1-d827cfeba317}</Project>
       <Name>Core.DomainServices</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SetAbsenceAttendance\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SetAbsenceAttendance\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SetAbsenceAttendance\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetAbsenceAttendanceByPeriod\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetAbsenceAttendanceByPeriod\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetAbsenceAttendanceByPeriod\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetChildren\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetChildren\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetChildren\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetMaternityCases\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetMaternityCases\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetMaternityCases\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetReasons\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetReasons\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetReasons\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetWorkAccidentCases\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetWorkAccidentCases\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\GetWorkAccidentCases\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

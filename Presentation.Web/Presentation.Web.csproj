@@ -305,6 +305,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Content Include="App\Vacation\Admin\OrgUnits\VacationHasAccessToVacationModalView.html" />
+    <Content Include="App\Vacation\Admin\OrgUnits\VacationAdminOrgUnitView.html" />
     <Content Include="App\Vacation\Overview\VacationOverviewView.html" />
     <Content Include="connections.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -479,6 +481,8 @@
     <TypeScriptCompile Include="App\Core\Models\Person.ts" />
     <TypeScriptCompile Include="App\Core\Models\VacationReport.ts" />
     <TypeScriptCompile Include="App\Core\Models\Report.ts" />
+    <TypeScriptCompile Include="App\Vacation\Admin\OrgUnits\VacationHasAccessToVacationModalController.ts" />
+    <TypeScriptCompile Include="App\Vacation\Admin\OrgUnits\VacationAdminOrgUnitController.ts" />
     <TypeScriptCompile Include="App\Vacation\Admin\Substitutes\VacationSubstitutesController.ts" />
     <TypeScriptCompile Include="App\Vacation\ApproveVacation\ApproveVacationBalance\ApproveVacationBalanceController.ts" />
     <TypeScriptCompile Include="App\Vacation\ApproveVacation\ApproveVacationController.ts" />
