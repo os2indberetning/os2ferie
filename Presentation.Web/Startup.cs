@@ -10,7 +10,7 @@ namespace OS2Indberetning
     {
         public void Configuration(IAppBuilder app)
         {
-            DbConfiguration.SetConfiguration(new MySql.Data.Entity.MySqlEFConfiguration());
+            //DbConfiguration.SetConfiguration(new MySql.Data.Entity.MySqlEFConfiguration());
             ConfigureAuth(app);
         }
     }

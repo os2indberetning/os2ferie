@@ -32,10 +32,10 @@ namespace Infrastructure.DataAccess.Migrations
                         NextPoint_Id1 = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
+                .ForeignKey("People", t => t.PersonId, cascadeDelete: false)
                 .ForeignKey("Addresses", t => t.NextPoint_Id)
-                .ForeignKey("PersonalRoutes", t => t.PersonalRouteId, cascadeDelete: true)
-                .ForeignKey("Reports", t => t.DriveReportId, cascadeDelete: true)
+                .ForeignKey("PersonalRoutes", t => t.PersonalRouteId, cascadeDelete: false)
+                .ForeignKey("Reports", t => t.DriveReportId, cascadeDelete: false)
                 .ForeignKey("Addresses", t => t.NextPoint_Id1)
                 .Index(t => t.DriveReportId)
                 .Index(t => t.PersonId)
@@ -68,8 +68,8 @@ namespace Infrastructure.DataAccess.Migrations
                         Discriminator = c.String(nullable: false, maxLength: 128, storeType: "nvarchar"),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("Employments", t => t.EmploymentId, cascadeDelete: true)
-                .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
+                .ForeignKey("Employments", t => t.EmploymentId, cascadeDelete: false)
+                .ForeignKey("People", t => t.PersonId, cascadeDelete: false)
                 .Index(t => t.PersonId)
                 .Index(t => t.EmploymentId);
             
@@ -87,8 +87,8 @@ namespace Infrastructure.DataAccess.Migrations
                         OrgUnitId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("OrgUnits", t => t.OrgUnitId, cascadeDelete: true)
-                .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
+                .ForeignKey("OrgUnits", t => t.OrgUnitId, cascadeDelete: false)
+                .ForeignKey("People", t => t.PersonId, cascadeDelete: false)
                 .Index(t => t.PersonId)
                 .Index(t => t.OrgUnitId);
             
@@ -119,9 +119,9 @@ namespace Infrastructure.DataAccess.Migrations
                         OrgUnitId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("People", t => t.LeaderId, cascadeDelete: true)
-                .ForeignKey("OrgUnits", t => t.OrgUnitId, cascadeDelete: true)
-                .ForeignKey("People", t => t.SubId, cascadeDelete: true)
+                .ForeignKey("People", t => t.LeaderId, cascadeDelete: false)
+                .ForeignKey("OrgUnits", t => t.OrgUnitId, cascadeDelete: false)
+                .ForeignKey("People", t => t.SubId, cascadeDelete: false)
                 .Index(t => t.LeaderId)
                 .Index(t => t.SubId)
                 .Index(t => t.OrgUnitId);
@@ -151,7 +151,7 @@ namespace Infrastructure.DataAccess.Migrations
                         PersonId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
+                .ForeignKey("People", t => t.PersonId, cascadeDelete: false)
                 .Index(t => t.PersonId);
             
             CreateTable(
@@ -165,7 +165,7 @@ namespace Infrastructure.DataAccess.Migrations
                         PersonId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
+                .ForeignKey("People", t => t.PersonId, cascadeDelete: false)
                 .Index(t => t.PersonId);
             
             CreateTable(
@@ -177,7 +177,7 @@ namespace Infrastructure.DataAccess.Migrations
                         PersonId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)                
-                .ForeignKey("People", t => t.PersonId, cascadeDelete: true)
+                .ForeignKey("People", t => t.PersonId, cascadeDelete: false)
                 .Index(t => t.PersonId);
             
             CreateTable(
@@ -222,8 +222,8 @@ namespace Infrastructure.DataAccess.Migrations
                         Person_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => new { t.Substitute_Id, t.Person_Id })                
-                .ForeignKey("Substitutes", t => t.Substitute_Id, cascadeDelete: true)
-                .ForeignKey("People", t => t.Person_Id, cascadeDelete: true)
+                .ForeignKey("Substitutes", t => t.Substitute_Id, cascadeDelete: false)
+                .ForeignKey("People", t => t.Person_Id, cascadeDelete: false)
                 .Index(t => t.Substitute_Id)
                 .Index(t => t.Person_Id);
             

@@ -250,7 +250,7 @@ namespace DBUpdater
             {
                 foreach (var admin in _personRepo.AsQueryable().Where(x => x.IsAdmin && x.IsActive))
                 {
-                    _mailSender.SendMail(admin.Mail, "Der er adresser der mangler at blive vasket", "Der mangler at blive vasket " + dirtyAddressCount + "adresser");
+                    // _mailSender.SendMail(admin.Mail, "Der er adresser der mangler at blive vasket", "Der mangler at blive vasket " + dirtyAddressCount + "adresser");
                 }
             }
         }
@@ -545,7 +545,8 @@ namespace DBUpdater
 
                 if (!int.TryParse(balance.EmploymentRelationshipNumber, out employmentRelationshipNumber)) continue;
 
-                var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.ExtraNumber == employmentRelationshipNumber && x.EndDateTimestamp == 0);
+                var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                var employment = _emplRepo.AsQueryable().FirstOrDefault(x => x.PersonId == person.Id && x.ExtraNumber == employmentRelationshipNumber && (x.EndDateTimestamp == 0 || x.EndDateTimestamp >= currentTimestamp));
 
                 // The person's employment is not stored in our database, so abort
                 // Also not likely to happen, but better safe than sorry.

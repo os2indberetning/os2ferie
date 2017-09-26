@@ -98,7 +98,7 @@ namespace Infrastructure.DataAccess
             var entry = _context.Entry(entity);
             foreach (var propertyInfo in typeof(T).GetProperties())
             {
-                if (propertyInfo.Name == "Id")
+                if (propertyInfo.Name == "Id" || propertyInfo.Name == "ReportType")
                     continue; // skip primary key
 
                 if (propertyInfo.GetValue(entity) != null && propertyInfo.PropertyType.IsValueType)
