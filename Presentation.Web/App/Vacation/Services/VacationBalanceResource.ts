@@ -7,6 +7,7 @@
 
     export interface IVacationBalanceResource extends ng.resource.IResourceClass<IVacationBalance> {
         forEmployment
+        forEmployee
     }
 
     angular.module('app.vacation')
@@ -38,10 +39,21 @@
                     }
                 }
 
+                var vacationForEmployeeAction: ng.resource.IActionDescriptor = {
+                    method: "GET",
+                    url: '/odata/VacationBalance/Service.VacationForEmployee(Id=:id)',
+                    isArray: false,
+                    transformResponse(res) {
+                        var value = angular.fromJson(res);
+                        return value;
+                    }
+                }
+
                 return <IVacationBalanceResource>$resource("/odata/VacationBalance(:id)?:query", { id: "@id", query: "@query" }, {
                     get: getAction,
                     query: queryAction,
-                    forEmployment: vacationForEmploymentAction
+                    forEmployment: vacationForEmploymentAction,
+                    forEmployee: vacationForEmployeeAction
                 });
             }
         ]);

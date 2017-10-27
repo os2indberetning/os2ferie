@@ -36,7 +36,7 @@ namespace OS2Indberetning.Controllers
             var enviornmnt = System.Environment.GetEnvironmentVariable("ASPNET_ENVIORNMENT");
 
 #if DEBUG
-            var httpUser = @"skb\caxoma".Split('\\'); // Fissirul Lehmann - administrator
+            var httpUser = @"skb\jiwoha".Split('\\'); // Fissirul Lehmann - administrator
 #else
             var httpUser = User.Identity.Name.Split('\\');
 #endif
@@ -62,7 +62,7 @@ namespace OS2Indberetning.Controllers
 
                 // DEBUG ON PRODUCTION. Set petsoe = lky
                 if (initials == "itmind" || initials == "jaoj" || initials == "itminds-ja")
-                    initials = "caxoma"; 
+                    initials = "xocera"; 
 
                 // END DEBUG
                 CurrentUser = _personRepo.AsQueryable().FirstOrDefault(p => p.Initials.ToLower().Equals(initials));

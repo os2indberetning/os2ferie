@@ -44,6 +44,14 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.Entity.6.9.9\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -425,11 +433,16 @@
     <Compile Include="Migrations\201708200951366_UpdatedAdditionalDataOnVacationReport.Designer.cs">
       <DependentUpon>201708200951366_UpdatedAdditionalDataOnVacationReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709260842114_SQLFixes.cs" />
+    <Compile Include="Migrations\201709260842114_SQLFixes.Designer.cs">
+      <DependentUpon>201709260842114_SQLFixes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Example\ExampleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -715,6 +728,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708200951366_UpdatedAdditionalDataOnVacationReport.resx">
       <DependentUpon>201708200951366_UpdatedAdditionalDataOnVacationReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709260842114_SQLFixes.resx">
+      <DependentUpon>201709260842114_SQLFixes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

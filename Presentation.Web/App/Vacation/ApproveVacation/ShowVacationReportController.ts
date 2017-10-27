@@ -79,6 +79,7 @@
                 this.endTime = "Til kl. " + moment((moment.duration(report.EndTime) as any)._data).format('HH:mm');
             } else {
                 this.endTime = "Hele dagen";
+                report.end -= 86400;
             }
 
             this.start = moment(report.start).format("DD.MM.YYYY");

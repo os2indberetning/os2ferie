@@ -135,6 +135,11 @@ namespace OS2Indberetning
                 .ReturnsFromEntitySet<VacationBalance>("VacationBalance")
                 .Parameter<int>("Id");
 
+            builder.EntityType<VacationBalance>().Collection
+                .Function("VacationForEmployee")
+                .ReturnsFromEntitySet<VacationBalance>("VacationBalance")
+                .Parameter<int>("Id");
+
             builder.EntityType<Person>().Collection
                 .Function("PeopleInMyOrganisation")
                 .ReturnsFromEntitySet<Person>("Person")

@@ -77,7 +77,7 @@ namespace OS2Indberetning.Controllers.Vacation
 
         // GET: odata/VacationBalance/Service.VacationForUser
         /// <summary>
-        /// Returns the people in the same organisation as the given employment.
+        /// 
         /// </summary>
         /// <param name="id">Id of the employment</param>
         /// <returns></returns>
@@ -85,10 +85,49 @@ namespace OS2Indberetning.Controllers.Vacation
         [HttpGet]
         public IHttpActionResult VacationForEmployment(int id)
         {
-            var empl = Repo.AsQueryable().First(x => x.EmploymentId == id);
+            var currentYear = DateTime.Now.Year;
+
+            if (Repo.AsQueryable().Any())
+            {
+                currentYear = Repo.AsQueryable().Max(y => y.Year);
+            }
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            var empl = Repo.AsQueryable().First(x => x.EmploymentId == id && x.Year == currentYear);
             return Ok(empl);
         }
 
+        // GET: odata/VacationBalance/Service.VacationForUser
+        /// <summary>
+        /// Returns the people in the same organisation as the given employment.
+        /// </summary>
+        /// <param name="id">Id of the person</param>
+        /// <returns></returns>
+        [EnableQuery]
+        [HttpGet]
+        public IHttpActionResult VacationForEmployee(int id)
+        {
+            var currentYear = DateTime.Now.Year;
+
+            if (Repo.AsQueryable().Any())
+            {
+                currentYear = Repo.AsQueryable().Max(y => y.Year);
+            }
+            var currentTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            var balances = Repo.AsQueryable().Where(x => x.PersonId == id && x.Year == currentYear && (x.Employment.EndDateTimestamp == 0 || x.Employment.EndDateTimestamp > currentTimestamp));
+            VacationBalance totalBalance = new VacationBalance();
+
+            foreach(var balance in balances)
+            {
+
+                totalBalance.FreeVacationHours += balance.FreeVacationHours;
+                totalBalance.VacationHours += balance.VacationHours;
+                totalBalance.TotalVacationHours += balance.TotalVacationHours;
+                totalBalance.TransferredHours += balance.TransferredHours;
+                
+            }
+
+            return Ok(totalBalance);
+        }
 
     }
 }
