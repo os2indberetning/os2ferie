@@ -95,15 +95,14 @@
     <Compile Include="UpdateService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Presentation.Web\connections.config">
+      <Link>connections.config</Link>
+    </None>
+    <None Include="..\Presentation.Web\CustomSettings.config">
+      <Link>CustomSettings.config</Link>
+    </None>
     <None Include="App.config">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="connections.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="CustomSettings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Log4Net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
