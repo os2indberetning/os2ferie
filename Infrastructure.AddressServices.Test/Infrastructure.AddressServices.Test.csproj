@@ -63,11 +63,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Presentation.Web\connections.config">
+      <Link>connections.config</Link>
+    </None>
+    <None Include="..\Presentation.Web\CustomSettings.config">
+      <Link>CustomSettings.config</Link>
+    </None>
     <None Include="App.config" />
-    <Content Include="CustomSettings.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="connections.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

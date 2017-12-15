@@ -136,14 +136,14 @@
     <Compile Include="ReimbursementCalculatorTest\ReimbursementCalculatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Presentation.Web\connections.config">
+      <Link>connections.config</Link>
+    </None>
+    <None Include="..\Presentation.Web\CustomSettings.config">
+      <Link>CustomSettings.config</Link>
+    </None>
     <None Include="app.config">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="connections.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="CustomSettings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
