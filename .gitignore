@@ -1,6 +1,8 @@
 */**/CustomSettings.config
 */**/connections.config
 */**/logo.png
+*/**/Content/private.css
+*/**/Content/favicon.ico
 !Configuration/CustomSettings.config
 !Configuration/connections.config
 
