@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:p1="urn:kmd.dk:LPT:VACAB:external" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" name="SetAbsenceAttendance_OS_SI" targetNamespace="urn:kmd.dk:LPT:VACAB:external" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation />
+  <wsp:UsingPolicy wsdl:required="true" />
+  <wsp:Policy wsu:Id="OP_SetAbsenceAttendance_OS_SI" />
+  <wsdl:types>
+    <xsd:schema xmlns="urn:kmd.dk:LPT:VACAB:external" targetNamespace="urn:kmd.dk:LPT:VACAB:external" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="SetAbsenceAttendanceRequest_MT" type="p1:SetAbsenceAttendanceRequest" />
+      <xsd:element name="SetAbsenceAttendanceResponse_MT" type="p1:SetAbsenceAttendanceResponse" />
+      <xsd:complexType name="SetAbsenceAttendanceRequest">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">07add8edc83011e68c49000022b9b763</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="StartDate" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">02099eadc83011e6c1aa005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="OriginalStartDate" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">02099eaec83011e6a293005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="StartTime" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">02099eafc83011e6b9e9005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="OriginalStartTime" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">02099eb0c83011e6b622005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="EndDate" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">02099eb1c83011e6a7d7005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="OriginalEndDate" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">02099eb2c83011e6ad78005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="EndTime" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">02099eb3c83011e6b481005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="OriginalEndTime" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">0209abedc83011e687e4005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="AdditionalData" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">0209abeec83011e6a762005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="Operation" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">0209abefc83011e6b5e3005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="PersonnelNumber" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">0209abf0c83011e699b8005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="AbsenceAttendanceType" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">0209abf1c83011e6c780005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element minOccurs="0" name="OriginalAbsenceAttendanceType" type="xsd:string">
+            <xsd:annotation>
+              <xsd:appinfo source="http://sap.com/xi/TextID">0209abf2c83011e68deb005056a04ea0</xsd:appinfo>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SetAbsenceAttendanceResponse">
+        <xsd:annotation>
+          <xsd:appinfo source="http://sap.com/xi/VersionID">2b56c403c6ad11e6c404000022b9b763</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="ReturnStatus">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element minOccurs="0" name="StatusType" type="xsd:string" />
+                <xsd:element minOccurs="0" name="MessageText" type="xsd:string" />
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="SetAbsenceAttendanceRequest_MT">
+    <wsdl:documentation />
+    <wsdl:part name="SetAbsenceAttendanceRequest_MT" element="p1:SetAbsenceAttendanceRequest_MT" />
+  </wsdl:message>
+  <wsdl:message name="SetAbsenceAttendanceResponse_MT">
+    <wsdl:documentation />
+    <wsdl:part name="SetAbsenceAttendanceResponse_MT" element="p1:SetAbsenceAttendanceResponse_MT" />
+  </wsdl:message>
+  <wsdl:portType name="SetAbsenceAttendance_OS_SI">
+    <wsdl:documentation />
+    <wsdl:operation name="SetAbsenceAttendance_OS_SI">
+      <wsdl:documentation />
+      <wsp:Policy>
+        <wsp:PolicyReference URI="#OP_SetAbsenceAttendance_OS_SI" />
+      </wsp:Policy>
+      <wsdl:input message="p1:SetAbsenceAttendanceRequest_MT" />
+      <wsdl:output message="p1:SetAbsenceAttendanceResponse_MT" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SetAbsenceAttendance_OS_SIBinding" type="p1:SetAbsenceAttendance_OS_SI">
+    <binding transport="http://schemas.xmlsoap.org/soap/http" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    <wsdl:operation name="SetAbsenceAttendance_OS_SI">
+      <operation soapAction="http://sap.com/xi/WebService/soap1.1" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      <wsdl:input>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:input>
+      <wsdl:output>
+        <body use="literal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SetAbsenceAttendance_OS_SIService">
+    <wsdl:port name="HTTPS_Port" binding="p1:SetAbsenceAttendance_OS_SIBinding">
+      <address location="https://kmdpiprd.kmd.dk/XISOAPAdapter/MessageServlet?senderParty=&amp;senderService=KMD_LPT_VACAB_Service&amp;receiverParty=&amp;receiverService=&amp;interface=SetAbsenceAttendance_OS_SI&amp;interfaceNamespace=urn%3Akmd.dk%3ALPT%3AVACAB%3Aexternal" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
