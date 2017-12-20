@@ -17,13 +17,13 @@ namespace Infrastructure.KMDVacationService
                 {
                     var request = new SetAbsenceAttendance.SetAbsenceAttendanceRequest();
                     request.StartDate = report.StartDate.ToString("yyyy-MM-dd");
-                    request.StartTime = report.StartTime?.ToString("hhmm");
+                    request.StartTime = report.StartTime?.ToString(@"hh\:mm\:ss");
                     request.EndDate = report.EndDate.ToString("yyyy-MM-dd");
-                    request.EndTime = report.EndTime?.ToString("hhmm");
+                    request.EndTime = report.EndTime?.ToString(@"hh\:mm\:ss");
                     request.OriginalStartDate = report.OldStartDate?.ToString("yyyy-MM-dd");
-                    request.OriginalStartTime = report.OldEndTime?.ToString("hhmm");
+                    request.OriginalStartTime = report.OldEndTime?.ToString(@"hh\:mm\:ss");
                     request.OriginalEndDate = report.OldEndDate?.ToString("yyyy-MM-dd");
-                    request.OriginalEndTime = report.OldEndTime?.ToString("hhmm");
+                    request.OriginalEndTime = report.OldEndTime?.ToString(@"hh\:mm\:ss");
                     request.PersonnelNumber = report.EmploymentId.ToString();
                     request.Operation = report.KmdAbsenceOperation.AsString();
                     request.AdditionalData = report.ExtraData;
