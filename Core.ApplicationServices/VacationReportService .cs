@@ -162,12 +162,12 @@ namespace Core.ApplicationServices
             mailContent += "Feriestart: " + report.StartTimestamp.ToDateTime().ToString("dd/MM/yyyy");
 
             if (report.StartTime != null)
-                mailContent += " - " + report.StartTime?.ToString("hh:mm");
+                mailContent += " - " + report.StartTime?.ToString(@"hh\:mm");
 
             mailContent += Environment.NewLine + "Ferieafslutning: " + report.EndTimestamp.ToDateTime().ToString("dd/MM/yyyy");
 
             if (report.EndTime != null)
-                mailContent += " - " + report.EndTime?.ToString("hh:mm");
+                mailContent += " - " + report.EndTime?.ToString(@"hh\:mm");
 
             string vacationType;
 
@@ -312,7 +312,7 @@ namespace Core.ApplicationServices
 
         public void DeleteReport(VacationReport report)
         {
-#if !DEBUG
+//#if !DEBUG
             if (report.ProcessedDateTimestamp == 0) return;
             if (report.VacationType == VacationType.Care ||
                 report.VacationType == VacationType.Regular ||
@@ -322,7 +322,7 @@ namespace Core.ApplicationServices
                 var absenceReport = _absenceBuilder.Delete(report);
                 _absenceService.SetAbsence(absenceReport);
             }
-#endif
+//#endif
             report.ProcessedDateTimestamp = 0;
         }
     }
