@@ -17,8 +17,8 @@ namespace Infrastructure.AddressServices.Test
             AddressCoordinates uut = new AddressCoordinates();
             Coordinates correctCoord = new Coordinates
             {
-                Longitude = "10.1906",
-                Latitude = "56.1735",
+                Longitude = "10.19069648",
+                Latitude = "56.17357547",
                 Type = Coordinates.CoordinatesType.Origin
             };
 
@@ -40,8 +40,8 @@ namespace Infrastructure.AddressServices.Test
                 StreetName = "Katrinebjergvej",
                 StreetNumber = "90",
                 ZipCode = 8200,
-                Longitude = "10.1906964757185",
-                Latitude = "56.1735754688399",
+                Longitude = "10.19069648",
+                Latitude = "56.17357547"
 
             };
 
@@ -49,7 +49,8 @@ namespace Infrastructure.AddressServices.Test
             Address result = uut.GetAddressCoordinates(address);
 
             //Assert
-            Assert.IsTrue(correctCoord.Latitude == result.Latitude && correctCoord.Longitude == result.Longitude);
+            Assert.AreEqual(correctCoord.Latitude, result.Latitude);
+            Assert.AreEqual(correctCoord.Longitude, result.Longitude);
         }
 
         [Test]

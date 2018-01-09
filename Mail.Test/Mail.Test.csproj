@@ -70,6 +70,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Presentation.Web\CustomSettings.config">
+      <Link>CustomSettings.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="App.config" />
     <Content Include="LogMailer\test-web.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

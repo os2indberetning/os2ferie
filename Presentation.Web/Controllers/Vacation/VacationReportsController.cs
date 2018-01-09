@@ -137,7 +137,7 @@ namespace OS2Indberetning.Controllers.Vacation
                 return Ok(adminEditResult);
             }
 
-            if (!CurrentUser.Id.Equals(vacationReport.PersonId))
+            if (CurrentUser.Id != vacationReport.PersonId)
             {
                 return StatusCode(HttpStatusCode.Forbidden);
             }
