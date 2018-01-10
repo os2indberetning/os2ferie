@@ -57,7 +57,7 @@
 
             VacationBalanceResource.forEmployment({ id: report.EmploymentId }).$promise.then(data => {
                 this.vacationBalance = data;
-                this.calculateBalance();
+                this.calculateBalance(data);
                 this.calculatePayDeduction();
             })
 
@@ -169,12 +169,12 @@
             });
         }
 
-        calculateBalance() {
-            var totalVacation = this.vacationBalance.VacationHours + this.vacationBalance.TransferredHours;
+        calculateBalance(data: Balance) {
+            var totalVacation = data.VacationHours + data.TransferredHours;
             this.vacationHours = Math.floor(totalVacation);
-            this.vacationMinutes = Math.round((totalVacation - this.vacationHours) * 60);
-            this.freeVacationHours = Math.floor(this.vacationBalance.FreeVacationHours);
-            this.freeVacationMinutes = Math.round((this.vacationBalance.FreeVacationHours - this.freeVacationHours) * 60);
+            this.vacationMinutes = Math.round((totalVacation - data.VacationHours) * 60);
+            this.freeVacationHours = Math.floor(data.FreeVacationHours);
+            this.freeVacationMinutes = Math.round((data.FreeVacationHours - data.FreeVacationHours) * 60);
         }
 
         calculatePayDeduction() {
@@ -207,7 +207,7 @@
         }
 
         private calculateTotalVacationHours(): number {
-            return this.report.VacationHours;
+            return this.vacationHours;
         }
     }
 
