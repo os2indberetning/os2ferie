@@ -172,7 +172,7 @@
         calculateBalance(data: Balance) {
             var totalVacation = data.VacationHours + data.TransferredHours;
             this.vacationHours = Math.floor(totalVacation);
-            this.vacationMinutes = Math.round((totalVacation - data.VacationHours) * 60);
+            this.vacationMinutes = Math.round((totalVacation - this.vacationHours) * 60);
             this.freeVacationHours = Math.floor(data.FreeVacationHours);
             this.freeVacationMinutes = Math.round((data.FreeVacationHours - data.FreeVacationHours) * 60);
         }
@@ -207,7 +207,7 @@
         }
 
         private calculateTotalVacationHours(): number {
-            return this.vacationHours;
+            return this.vacationBalance.VacationHours + this.vacationBalance.TransferredHours;
         }
     }
 
