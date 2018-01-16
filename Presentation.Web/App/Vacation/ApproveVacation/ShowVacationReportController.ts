@@ -67,7 +67,7 @@
             const startsOnFullDay = report.StartTime == null;
             const endsOnFullDay = report.EndTime == null;
 
-            this.vacationTime = moment(report.end).diff(moment(report.start), 'days') * 7.5;
+            this.vacationTime = moment(report.end).diff(moment(report.start), 'days') * 7.4;
 
             if (!startsOnFullDay) {
                 this.startTime = "Fra kl. " + moment((moment.duration(report.StartTime) as any)._data).format('HH:mm');
