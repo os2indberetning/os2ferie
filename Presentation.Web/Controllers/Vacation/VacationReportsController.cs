@@ -231,7 +231,20 @@ namespace OS2Indberetning.Controllers.Vacation
 
             if(!report.PersonId.Equals(CurrentUser.Id) && !CurrentUser.IsAdmin) return Unauthorized();
 
-            _reportService.Delete(key);
+            try
+            {
+                _reportService.Delete(key);
+            }
+            catch (Infrastructure.KMDVacationService.KMDSetAbsenceFailedException ex)
+            {
+                _logger.Log($"Fejl fra KMD's ferie snitflade ved forsøg på at slette indberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName} ", "web", ex, 1);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log($"Fejl under slet ferieindberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName}", "web", ex, 1);
+                throw;
+            }
 
             return Ok();
         }
@@ -252,12 +265,12 @@ namespace OS2Indberetning.Controllers.Vacation
             }
             catch(Infrastructure.KMDVacationService.KMDSetAbsenceFailedException ex)
             {
-                _logger.Log("Fejl fra KMD's ferie snitflade:", "web", ex, 1);
+                _logger.Log($"Fejl fra KMD's ferie snitflade ved forsøg på at godkende indberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName} ", "web", ex, 1);
                 return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                _logger.Log("Fejl under godkend ferieindberetning", "web", ex, 1);
+                _logger.Log($"Fejl under godkend ferieindberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName}", "web", ex, 1);
                 throw;
             }
 
@@ -273,7 +286,20 @@ namespace OS2Indberetning.Controllers.Vacation
             if (report == null) return NotFound();
             if (HasReportAccess(report, CurrentUser)) StatusCode(HttpStatusCode.Forbidden);
 
-            _reportService.RejectReport(report, CurrentUser, comment);
+            try
+            {
+                _reportService.RejectReport(report, CurrentUser, comment);
+            }
+            catch (Infrastructure.KMDVacationService.KMDSetAbsenceFailedException ex)
+            {
+                _logger.Log($"Fejl fra KMD's ferie snitflade ved forsøg på at afvise indberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName} ", "web", ex, 1);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log($"Fejl under afvis ferieindberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName}", "web", ex, 1);
+                throw;
+            }
 
             try
             {
