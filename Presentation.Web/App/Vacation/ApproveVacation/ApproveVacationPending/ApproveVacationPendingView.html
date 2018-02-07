@@ -15,7 +15,7 @@
                     <div id="pendingVacationsList" class="list-group pending-vacation-listgroup">
                         <b class="list-group-item  list-group-item-info">Afventende indberetning</b>
                         <i class="list-group-item" ng-hide="avpCtrl.pendingVacations.length">Ingen afventende indberetning</i>
-                        <a id="{{pV.key}}" class="list-group-item" ng-repeat="pV in avpCtrl.pendingVacations" ng-click="avpCtrl.goToDate(pV.startTime)">{{pV.firstName}} <br /> {{pV.dateFrom}} - {{pV.dateTo}}</a>
+                        <a id="{{pV.key}}" class="list-group-item" ng-repeat="pV in avpCtrl.pendingVacations" ng-click="avpCtrl.goToDate(pV)">{{pV.firstName}} <br /> {{pV.dateFrom}} - {{pV.dateTo}}</a>
                     </div>
                 </div>
             </div>

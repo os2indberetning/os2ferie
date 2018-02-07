@@ -62,12 +62,27 @@
             })
 
             this.name = report.Person.FullName.split("[")[0];
-            this.purpose = report.description;
+            if (report.description == null) {
+                this.purpose = report.Purpose;
+            }
+            else {
+                this.purpose = report.description;
+            }
 
             const startsOnFullDay = report.StartTime == null;
             const endsOnFullDay = report.EndTime == null;
+            var endAsDate: any;
+            var startAsDate: any;
 
-            this.vacationTime = moment(report.end).diff(moment(report.start), 'days') * 7.4;
+            if (report.EndTimestamp == null) {
+                endAsDate = report.end;
+                startAsDate = report.start;
+            } else {
+                endAsDate = moment.unix(report.EndTimestamp).toDate();
+                startAsDate = moment.unix(report.StartTimestamp).toDate();
+            }
+
+            this.vacationTime = moment(endAsDate).diff(moment(startAsDate), 'days') * 7.4;
 
             if (!startsOnFullDay) {
                 this.startTime = "Fra kl. " + moment((moment.duration(report.StartTime) as any)._data).format('HH:mm');
@@ -79,13 +94,20 @@
                 this.endTime = "Til kl. " + moment((moment.duration(report.EndTime) as any)._data).format('HH:mm');
             } else {
                 this.endTime = "Hele dagen";
-                report.end -= 86400;
+                endAsDate -= 86400;
             }
 
-            this.start = moment(report.start).format("DD.MM.YYYY");
-            this.end = moment(report.end).format("DD.MM.YYYY");
+            this.start = moment(startAsDate).format("DD.MM.YYYY");
+            this.end = moment(endAsDate).format("DD.MM.YYYY");
 
-            switch (report.type) {
+            var type;
+            if (report.type == null) {
+                type = report.VacationType
+            } else {
+                type = report.type;
+            }
+
+            switch (type) {
                 case "Care":
                     this.type = "Omsorgsdage";
                     this.optionalText = report.OptionalText;
@@ -131,7 +153,13 @@
 
         approve() {
             var report = new this.VacationReport();
-            this.loadingPromise = report.$approve({ id: this.report.id },
+            var reportId;
+            if (this.report.id == null) {
+                reportId = this.report.Id;
+            } else {
+                reportId = this.report.id;
+            }
+            this.loadingPromise = report.$approve({ id: reportId },
                 () => {
                     this.NotificationService.AutoFadeNotification("success", "", "Indberetningen blev godkendt.");
                     this.$modalInstance.close();
@@ -150,18 +178,24 @@
         }
 
         reject() {
+            var reportId;
+            if (this.report.id == null) {
+                reportId = this.report.Id;
+            } else {
+                reportId = this.report.id;
+            }
             this.$modal.open({
                 templateUrl: '/App/Core/Views/Modals/ConfirmRejectReport.html',
                 controller: 'RejectReportModalInstanceController',
                 backdrop: "static",
                 resolve: {
                     itemId: () => {
-                        return this.report.id;
+                        return reportId;
                     }
                 }
             }).result.then(res => {
                 var report = new this.VacationReport();
-                this.loadingPromise = report.$reject({ id: this.report.id, comment: res.Comment },
+                this.loadingPromise = report.$reject({ id: reportId, comment: res.Comment },
                     () => {
                         this.NotificationService.AutoFadeNotification("success", "", "Indberetningen blev afvist.");
                         this.$modalInstance.close();

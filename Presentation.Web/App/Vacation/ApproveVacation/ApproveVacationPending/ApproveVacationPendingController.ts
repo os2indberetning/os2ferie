@@ -225,6 +225,7 @@
         readPendingVacations() {
             // TODO Change this to use Resource instead
             this.$http.get(`/odata/VacationReports()?status=Pending &$expand=Person($select=FullName)&$filter=ResponsibleLeaderId eq ${this.$rootScope.CurrentUser.Id}`).then((response: ng.IHttpPromiseCallbackArg<any>) => {
+
                 //Sort of objects for Pending Vacation Reports
                 response.data.value.sort((a, b) => ((a.StartTimestamp > b.StartTimestamp) ? 1 : ((b.StartTimestamp > a.StartTimestamp) ? -1 : 0)));
 
@@ -242,16 +243,30 @@
                         startTime: startTime,
                         firstName: value.Person.FullName.split("[")[0],
                         dateFrom: dateFrom,
-                        dateTo: dateTo
+                        dateTo: dateTo,
+                        reportdata: value
                 };
                     this.pendingVacations.push(obj);
                 });
             });
         };
 
-        goToDate(time) {
-            time = Number(time);
+        goToDate(data) {
+            var time = Number(data.startTime);
             this.scheduler.date(new Date(time));
+
+            this.$modal.open({
+                templateUrl: '/App/Vacation/ApproveVacation/ShowVacationReportView.html',
+                controller: 'ShowVacationReportController as svrc',
+                backdrop: "static",
+                resolve: {
+                    report() {
+                        return data.reportdata;
+                    }
+                }
+            }).result.then(() => {
+                this.refresh();
+            });
         };
 
         private refresh() {
