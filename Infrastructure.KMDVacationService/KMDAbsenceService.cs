@@ -56,7 +56,7 @@ namespace Infrastructure.KMDVacationService
                     if (response.ReturnStatus.StatusType == "" || response.ReturnStatus.StatusType == "S") continue;
 
                     // Error occurred, cast exception containing error message.
-                    throw new KMDSetAbsenceFailedException(response.ReturnStatus.MessageText);
+                    throw new KMDSetAbsenceFailedException(response.ReturnStatus.MessageText, request);
                 }
 
             }

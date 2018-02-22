@@ -285,16 +285,16 @@ namespace Core.ApplicationServices
             report.ClosedDateTimestamp = (DateTime.UtcNow.ToTimestamp());
             report.ApprovedById = approver.Id;
 
-#if !DEBUG
             if (report.VacationType == VacationType.Care ||
                 report.VacationType == VacationType.Regular ||
                 report.VacationType == VacationType.Senior ||
                 report.VacationType == VacationType.SixthVacationWeek)
             {
                 var absenceReport = _absenceBuilder.Create(report);
+#if !DEBUG
                 _absenceService.SetAbsence(absenceReport);
-            }
 #endif
+            }
 
             report.ProcessedDateTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             _reportRepo.Save();
@@ -312,7 +312,6 @@ namespace Core.ApplicationServices
 
         public void DeleteReport(VacationReport report)
         {
-#if !DEBUG
             if (report.ProcessedDateTimestamp == 0) return;
             if (report.VacationType == VacationType.Care ||
                 report.VacationType == VacationType.Regular ||
@@ -320,9 +319,10 @@ namespace Core.ApplicationServices
                 report.VacationType == VacationType.SixthVacationWeek)
             {
                 var absenceReport = _absenceBuilder.Delete(report);
+#if !DEBUG
                 _absenceService.SetAbsence(absenceReport);
-            }
 #endif
+            }
             report.ProcessedDateTimestamp = 0;
         }
     }

@@ -142,7 +142,11 @@ namespace Core.ApplicationServices
 
         public List<Child> GetChildren(Employment employment)
         {
-            return _absenceService.GetChildren(employment);
+            var result = new List<Child>();
+#if !DEBUG
+            result = _absenceService.GetChildren(employment);
+#endif
+            return result;
         }
     }
 }

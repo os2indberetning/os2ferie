@@ -237,7 +237,7 @@ namespace OS2Indberetning.Controllers.Vacation
             }
             catch (Infrastructure.KMDVacationService.KMDSetAbsenceFailedException ex)
             {
-                _logger.Log($"Fejl fra KMD's ferie snitflade ved forsøg på at slette indberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName} ", "web", ex, 1);
+                _logger.Log($"Fejl fra KMD's ferie snitflade ved forsøg på at slette indberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName} \n REQUEST: {ex.Request}", "web", ex, 1);
                 return BadRequest(ex.Message);
             }
             catch (Exception ex)
@@ -245,6 +245,8 @@ namespace OS2Indberetning.Controllers.Vacation
                 _logger.Log($"Fejl under slet ferieindberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName}", "web", ex, 1);
                 throw;
             }
+
+            _logger.Log($"Ferieindberetning er slettet - id: {report.Id}, employmentId: {report.Employment?.Id}, person: {report.Person?.FullName}, startdato: {report.StartTimestamp}, starttid: {report.StartTime}, slutdato: {report.EndTimestamp}, sluttid: {report.EndTime}, fraværstype: {report.VacationType}", "webSuccess", 2);
 
             return Ok();
         }
@@ -265,7 +267,7 @@ namespace OS2Indberetning.Controllers.Vacation
             }
             catch(Infrastructure.KMDVacationService.KMDSetAbsenceFailedException ex)
             {
-                _logger.Log($"Fejl fra KMD's ferie snitflade ved forsøg på at godkende indberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName} ", "web", ex, 1);
+                _logger.Log($"Fejl fra KMD's ferie snitflade ved forsøg på at godkende indberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName}  \n REQUEST: {ex.Request}", "web", ex, 1);
                 return BadRequest(ex.Message);
             }
             catch (Exception ex)
@@ -273,6 +275,8 @@ namespace OS2Indberetning.Controllers.Vacation
                 _logger.Log($"Fejl under godkend ferieindberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName}", "web", ex, 1);
                 throw;
             }
+
+            _logger.Log($"Ferieindberetning er godkendt - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName}", "webSuccess", 2);
 
             return Ok(report);
         }
@@ -292,7 +296,7 @@ namespace OS2Indberetning.Controllers.Vacation
             }
             catch (Infrastructure.KMDVacationService.KMDSetAbsenceFailedException ex)
             {
-                _logger.Log($"Fejl fra KMD's ferie snitflade ved forsøg på at afvise indberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName} ", "web", ex, 1);
+                _logger.Log($"Fejl fra KMD's ferie snitflade ved forsøg på at afvise indberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName}  \n REQUEST: {ex.Request}", "web", ex, 1);
                 return BadRequest(ex.Message);
             }
             catch (Exception ex)
@@ -308,6 +312,8 @@ namespace OS2Indberetning.Controllers.Vacation
             catch(Exception)
             {
             }
+
+            _logger.Log($"Ferieindberetning er afvist - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName}", "webSuccess", 2);
 
             return Ok(report);
         }
