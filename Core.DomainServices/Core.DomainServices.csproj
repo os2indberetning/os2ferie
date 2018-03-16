@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CachedAddressLaunderer.cs" />
+    <Compile Include="CustomSettings.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Encryption\Encryptor.cs" />
     <Compile Include="Encryption\StringCipher.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="IGenericDmzRepository.cs" />
     <Compile Include="IGenericRepository.cs" />
     <Compile Include="Interfaces\IAddressLaunderer.cs" />
+    <Compile Include="Interfaces\ICustomSettings.cs" />
     <Compile Include="Interfaces\IKMDAbsenceReportBuilder.cs" />
     <Compile Include="Interfaces\IKMDAbsenceService.cs" />
     <Compile Include="IRoute.cs" />

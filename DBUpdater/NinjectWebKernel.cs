@@ -85,6 +85,7 @@ namespace DBUpdater
             kernel.Bind<IKMDAbsenceReportBuilder>().To<KMDAbsenceReportBuilder>();
             kernel.Bind<IAddressHistoryService>().To<AddressHistoryService>();
             kernel.Bind<IDbUpdaterDataProvider>().To<DataProvider>();
+            kernel.Bind<ICustomSettings>().To<CustomSettings>();
         }
     }
 }

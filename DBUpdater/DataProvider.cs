@@ -6,13 +6,25 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.ApplicationServices.Logger;
+using Core.DomainServices.Interfaces;
 using DBUpdater.Models;
+using Ninject;
 
 namespace DBUpdater
 {
     public class DataProvider : IDbUpdaterDataProvider
     {
         private readonly string _connectionString = ConfigurationManager.ConnectionStrings["DBUpdaterConnection"].ConnectionString;
+
+        private ILogger _logger;
+        private ICustomSettings _customSettings;
+
+        public DataProvider(ILogger logger, ICustomSettings customSettings)
+        {
+            _logger = logger;
+            _customSettings = customSettings;
+        }
 
         /// <summary>
         /// Reads employees from Kommune database and returns them asqueryable.
@@ -24,10 +36,17 @@ namespace DBUpdater
 
             using (var sqlConnection1 = new SqlConnection(_connectionString))
             {
+                string medarbejderView = _customSettings.DbViewMedarbejder;
+
+                if (medarbejderView == null)
+                {
+                    //_logger.Log($"{this.GetType().Name}, GetEmployeesAsQueryable(), DATABASE_VIEW_MEDARBEJDER is null", null);
+                }
+
                 var cmd = new SqlCommand
                 {
                    // CommandText = "SELECT * FROM information_schema.tables",
-                    CommandText = "SELECT * FROM eindberetning.medarbejder",
+                    CommandText = "SELECT * FROM " + medarbejderView,
                     CommandType = CommandType.Text,
                     Connection = sqlConnection1
                 };
@@ -70,13 +89,18 @@ namespace DBUpdater
         {
             var result = new List<VacationBalance>();
 
+            string vacationBalanceView = _customSettings.DbViewVacationBalance;
 
+            if (vacationBalanceView == null)
+            {
+                //_logger.Log($"{this.GetType().Name}, GetEmployeesAsQueryable(), DATABASE_VIEW_VACATIONBALANCE is null", null);
+            }
 
             using (var sqlConnection1 = new SqlConnection(_connectionString))
             {
                 var cmd = new SqlCommand
                 {
-                    CommandText = "SELECT * FROM eindberetning.v_FerieSaldo",
+                    CommandText = "SELECT * FROM " + vacationBalanceView,
                     CommandType = CommandType.Text,
                     Connection = sqlConnection1
                 };
@@ -120,12 +144,22 @@ namespace DBUpdater
         /// <returns></returns>
         public IQueryable<Organisation> GetOrganisationsAsQueryable()
         {
+            string organisationView = _customSettings.DbViewOrganisation;
+
+            if (organisationView == null)
+            {
+                //_logger.Log($"{this.GetType().Name}, GetOrganisationsAsQueryable(): DATABASE_VIEW_ORGANISATION is null", null);
+            }
+
             var result = new List<Organisation>();
+
+            
+
             using (var sqlConnection1 = new SqlConnection(_connectionString))
             {
                 var cmd = new SqlCommand
                 {
-                    CommandText = "SELECT * FROM eindberetning.organisation",
+                    CommandText = "SELECT * FROM " + organisationView,
                     CommandType = CommandType.Text,
                     Connection = sqlConnection1
                 };
