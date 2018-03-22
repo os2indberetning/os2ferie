@@ -45,6 +45,11 @@
             this.vacationType = undefined;
         }
 
+
+        changefullday(){
+            this.vacationEndsOnFullDay = !this.vacationEndsOnFullDay;
+        }
+
         saveReport() {
             const report = new this.VacationReport();
 
