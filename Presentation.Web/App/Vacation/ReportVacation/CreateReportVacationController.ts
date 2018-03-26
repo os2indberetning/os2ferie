@@ -40,8 +40,8 @@
             this.optionalText = undefined;
             this.vacationStartsOnFullDay = true;
             this.vacationEndsOnFullDay = true;
-            this.startTime = new Date(2000, 0, 1, 0, 0, 0, 0); // Only time is relevant, date is ignored by kendo
-            this.endTime = new Date(2000, 0, 1, 0, 0, 0, 0);
+            this.startTime;// = new Date(2000, 0, 1, 8, 0, 0, 0); // Only time is relevant, date is ignored by kendo
+            this.endTime;// = new Date(2000, 0, 1, 16, 0, 0, 0);
             this.vacationType = undefined;
         }
 
@@ -51,6 +51,23 @@
         }
 
         saveReport() {
+            if(!this.vacationEndsOnFullDay && (this.endTime == null || this.startTime == null)){
+                this.NotificationService
+                    .AutoFadeNotification("danger",
+                        "",
+                        "Du skal vælge både et start- og et sluttidspunkt");
+
+                return;
+            }
+
+            if(this.startDate.getDate() == this.endDate.getDate() && this.endTime < this.startTime){
+                this.NotificationService
+                .AutoFadeNotification("danger",
+                    "",
+                    "Sluttidspunkt må ikke være før starttidspunkt");
+                    return;
+            }
+
             const report = new this.VacationReport();
 
             report.StartTimestamp = this.moment(this.startDate).unix();

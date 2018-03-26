@@ -111,14 +111,12 @@
 <div class="row margin-bottom-20" ng-hide="rvc.vacationStartsOnFullDay">
     <div class="col-xs-6 col-md-4">
         <h4>Starttidspunkt</h4>
-        <p>Udfyldes kun hvis den første dag ikke er hele dagen</p>
         <kendo-time-picker k-format="'HH:mm'" k-options="rvc.timePickerOptions"
         k-ng-model="rvc.startTime"
         style="width: 238px;"></kendo-time-picker>
     </div>
     <div class="col-xs-6 col-md-8">
         <h4>Afslutningstidspunkt</h4>
-        <p>Udfyldes kun hvis den sidste dag ikke er hele dagen</p>
         <kendo-time-picker k-format="'HH:mm'" k-options="rvc.timePickerOptions"
         k-ng-model="rvc.endTime"
         style="width: 238px;"></kendo-time-picker>
