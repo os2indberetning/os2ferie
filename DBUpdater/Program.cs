@@ -1,6 +1,7 @@
 ﻿using Ninject;
 using Core.ApplicationServices.Logger;
 using System;
+using Core.DomainServices.Interfaces;
 
 namespace DBUpdater
 {
@@ -12,6 +13,7 @@ namespace DBUpdater
             var historyService = ninjectKernel.Get<IAddressHistoryService>();
             var service = ninjectKernel.Get<UpdateService>();
             var logger = ninjectKernel.Get<ILogger>();
+            var customSettings = ninjectKernel.Get<ICustomSettings>();
 
             logger.Log("DBUpdater er start", "dbupdater");
             try

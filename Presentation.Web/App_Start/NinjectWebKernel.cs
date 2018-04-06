@@ -81,6 +81,7 @@ namespace OS2Indberetning
             kernel.Bind<IDriveReportService>().To<DriveReportService>();
             kernel.Bind<IKMDAbsenceService>().To<KMDAbsenceService>();
             kernel.Bind<IKMDAbsenceReportBuilder>().To<KMDAbsenceReportBuilder>();
+            kernel.Bind<ICustomSettings>().To<CustomSettings>();
         }
     }
 }
