@@ -237,7 +237,7 @@ namespace OS2Indberetning.Controllers.Vacation
             }
             catch (Infrastructure.KMDVacationService.KMDSetAbsenceFailedException ex)
             {
-                _logger.Log($"Fejl fra KMD's ferie snitflade ved forsøg på at slette indberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName} \n REQUEST: {ex.Request}", "web", ex, 1);
+                _logger.Log($"Fejl fra KMD's ferie snitflade ved forsøg på at slette indberetning - id: {report.Id}, employmentId: {report.Employment.Id}, person: {report.Person.FullName} \n REQUEST: startdate: {ex.Request.StartDate}, starttime: {ex.Request.StartTime}, enddate: {ex.Request.EndDate}, endtime: {ex.Request.EndTime}, operation: {ex.Request.Operation}, personlnumber: {ex.Request.PersonnelNumber}", "web", ex, 1);
                 return BadRequest(ex.Message);
             }
             catch (Exception ex)

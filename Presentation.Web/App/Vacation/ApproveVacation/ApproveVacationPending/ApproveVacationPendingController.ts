@@ -40,6 +40,8 @@
             var self = this;
 
             this.schedulerOptions = {
+                workDayStart: new Date("2010-01-01 00:00:00"),
+                workDayEnd: new Date("2010-01-01 23:59:59"),
                 views: [
                     {
                         type: "timelineMonth",
@@ -56,6 +58,13 @@
                         },
                         workWeekStart: 0,
                         workWeekEnd: 5
+                    },
+                    {
+                        type: "timelineWeek",
+                        title: "Uge",
+                        minorTickCount: 6,
+                        columnWidth: 40,
+                        majorTick: 1440
                     }
                 ],
                 timezone: "Etc/UTC",

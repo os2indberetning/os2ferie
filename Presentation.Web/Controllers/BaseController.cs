@@ -36,8 +36,8 @@ namespace OS2Indberetning.Controllers
             var enviornmnt = System.Environment.GetEnvironmentVariable("ASPNET_ENVIORNMENT");
 
 #if DEBUG
-            //var httpUser = @"MIRACLE\xocera".Split('\\'); // Fissirul Lehmann - administrator
-            var httpUser = @"MIRACLE\caxoma".Split('\\'); // Fissirul Lehmann - administrator
+            var httpUser = @"skb\xocera".Split('\\'); // Fissirul Lehmann - administrator
+            //var httpUser = @"skb\caxoma".Split('\\'); // Fissirul Lehmann - administrator
 #else
             var httpUser = User.Identity.Name.Split('\\');
 #endif
@@ -60,10 +60,6 @@ namespace OS2Indberetning.Controllers
             if (httpUser.Length == 2 && String.Equals(httpUser[0], ConfigurationManager.AppSettings["PROTECTED_AD_DOMAIN"], StringComparison.CurrentCultureIgnoreCase))
             {
                 var initials = httpUser[1].ToLower();
-
-                // DEBUG ON PRODUCTION. Set petsoe = lky
-                if (initials == "itmind" || initials == "jaoj" || initials == "itminds-ja")
-                    initials = "xocera"; 
 
                 // END DEBUG
                 CurrentUser = _personRepo.AsQueryable().FirstOrDefault(p => p.Initials.ToLower().Equals(initials));

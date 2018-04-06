@@ -184,6 +184,7 @@
             this.initializeReport();
         }
 
+
         calculateBalance() {
             var totalVacation = this.vacationBalances[0].VacationHours + this.vacationBalances[0].TransferredHours;
             this.vacationHours = Math.floor(totalVacation);
