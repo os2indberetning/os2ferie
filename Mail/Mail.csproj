@@ -91,10 +91,10 @@
     <Compile Include="ConsoleMailerService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Presentation.Web\connections.config">
+    <None Include="..\connections.config">
       <Link>connections.config</Link>
     </None>
-    <None Include="..\Presentation.Web\CustomSettings.config">
+    <None Include="..\CustomSettings.config">
       <Link>CustomSettings.config</Link>
     </None>
     <None Include="App.config" />

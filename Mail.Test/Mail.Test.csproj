@@ -70,9 +70,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Presentation.Web\CustomSettings.config">
+    <None Include="..\CustomSettings.config">
       <Link>CustomSettings.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="App.config" />
     <EmbeddedResource Include="LogMailer\test-web.txt">

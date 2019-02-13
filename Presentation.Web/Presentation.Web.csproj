@@ -29,6 +29,7 @@
     <NuGetPackageImportStamp>bb2330ea</NuGetPackageImportStamp>
     <UseGlobalApplicationHostFile />
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -314,13 +315,11 @@
     <Content Include="App\Vacation\Admin\OrgUnits\VacationHasAccessToVacationModalView.html" />
     <Content Include="App\Vacation\Admin\OrgUnits\VacationAdminOrgUnitView.html" />
     <Content Include="App\Vacation\Overview\VacationOverviewView.html" />
-    <Content Include="connections.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
+    <Content Include="..\connections.config">
+      <Link>connections.config</Link>
     </Content>
-    <Content Include="CustomSettings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
+    <Content Include="..\CustomSettings.config">
+      <Link>CustomSettings.config</Link>
     </Content>
     <None Include="manifest.appCache" />
     <Compile Include="Models\AccountBindingModels.cs" />

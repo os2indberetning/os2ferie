@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.Web", "Presentation.Web\Presentation.Web.csproj", "{2B953FAB-7F22-4884-9325-2A5C53519F3D}"
 EndProject
@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationServices.Test", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EFB1501E-877D-4D4D-B810-9B75B376A065}"
 	ProjectSection(SolutionItems) = preProject
+		connections.config = connections.config
+		CustomSettings.config = CustomSettings.config
 		GenerateTestCoverage.bat = GenerateTestCoverage.bat
 		Performance1.psess = Performance1.psess
 		RunAllTests.bat = RunAllTests.bat
@@ -164,5 +166,8 @@ Global
 		{F0C6C478-3A6A-405C-A193-9C498250CF2E} = {38A093DE-ECBD-4C54-9376-E71805D2C06B}
 		{A7C2603A-669B-408D-842F-08DB1E08F166} = {38A093DE-ECBD-4C54-9376-E71805D2C06B}
 		{DB308C4D-7CEA-4399-B678-C16673A3EBA2} = {A9413206-37FE-4261-9223-8E136288075E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CC0E422-C667-4963-84DB-EE17FE107F80}
 	EndGlobalSection
 EndGlobal
