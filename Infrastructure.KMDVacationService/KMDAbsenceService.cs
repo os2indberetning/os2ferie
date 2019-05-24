@@ -2,6 +2,7 @@
 using Core.DomainModel;
 using Core.DomainServices.Interfaces;
 using System;
+using System.Configuration;
 
 namespace Infrastructure.KMDVacationService
 {
@@ -11,7 +12,8 @@ namespace Infrastructure.KMDVacationService
         {
             using (var webService = new SetAbsenceAttendance.SetAbsenceAttendance_OS_SIClient("HTTPS_Port"))
             {
-                webService.ClientCredentials.ClientCertificate.SetCertificate(System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine, System.Security.Cryptography.X509Certificates.StoreName.My, System.Security.Cryptography.X509Certificates.X509FindType.FindBySubjectName, "OPUS-indberetning (funktionscertifikat)");
+                var certName = ConfigurationManager.AppSettings["PROTECTED_CERTIFICATE_NAME"];
+                webService.ClientCredentials.ClientCertificate.SetCertificate(System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine, System.Security.Cryptography.X509Certificates.StoreName.My, System.Security.Cryptography.X509Certificates.X509FindType.FindBySubjectName, certName);
 
                 foreach (var report in absenceReports)
                 {
@@ -65,16 +67,14 @@ namespace Infrastructure.KMDVacationService
         public List<Child> GetChildren(Employment employment)
         {
             var children = new List<Child>();
-
 #if !DEBUG
-
             using (var webService = new GetChildren.GetChildren_OS_SIClient("HTTPS_Port2"))
             {
-                webService.ClientCredentials.ClientCertificate.SetCertificate(System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine, System.Security.Cryptography.X509Certificates.StoreName.My, System.Security.Cryptography.X509Certificates.X509FindType.FindBySubjectName, "OPUS-indberetning (funktionscertifikat)");
+                var certName = ConfigurationManager.AppSettings["PROTECTED_CERTIFICATE_NAME"];
+                webService.ClientCredentials.ClientCertificate.SetCertificate(System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine, System.Security.Cryptography.X509Certificates.StoreName.My, System.Security.Cryptography.X509Certificates.X509FindType.FindBySubjectName, certName);
 
                 var request = new GetChildren.GetChildrenRequest();
                 request.PersonnelNumber = employment.EmploymentId.ToString();
-                
 
                 var response = webService.GetChildren_OS_SI(request);
                 
@@ -87,11 +87,8 @@ namespace Infrastructure.KMDVacationService
                         LastName = child.LastName
                     });
                 }
-
             }
-
 #endif
-
             return children;
         }
     }
