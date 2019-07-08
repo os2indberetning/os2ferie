@@ -35,11 +35,7 @@ namespace OS2Indberetning.Controllers
 
             var enviornmnt = System.Environment.GetEnvironmentVariable("ASPNET_ENVIORNMENT");
 
-#if DEBUG
-            var httpUser = @"skb\jiwoha".Split('\\'); // Fissirul Lehmann - administrator
-#else
             var httpUser = User.Identity.Name.Split('\\');
-#endif
 
             if (enviornmnt == "DEMO")
             {
