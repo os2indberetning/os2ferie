@@ -97,9 +97,11 @@
   <ItemGroup>
     <None Include="..\Presentation.Web\connections.config">
       <Link>connections.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\Presentation.Web\CustomSettings.config">
       <Link>CustomSettings.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="App.config">
       <SubType>Designer</SubType>
