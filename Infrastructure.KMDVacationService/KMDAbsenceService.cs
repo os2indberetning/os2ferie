@@ -67,9 +67,7 @@ namespace Infrastructure.KMDVacationService
         public List<Child> GetChildren(Employment employment)
         {
             var children = new List<Child>();
-
 #if !DEBUG
-
             using (var webService = new GetChildren.GetChildren_OS_SIClient("HTTPS_Port2"))
             {
                 var certName = ConfigurationManager.AppSettings["PROTECTED_CERTIFICATE_NAME"];
@@ -77,7 +75,6 @@ namespace Infrastructure.KMDVacationService
 
                 var request = new GetChildren.GetChildrenRequest();
                 request.PersonnelNumber = employment.EmploymentId.ToString();
-                
 
                 var response = webService.GetChildren_OS_SI(request);
                 
@@ -90,11 +87,8 @@ namespace Infrastructure.KMDVacationService
                         LastName = child.LastName
                     });
                 }
-
             }
-
 #endif
-
             return children;
         }
     }
