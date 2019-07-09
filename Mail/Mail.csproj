@@ -91,12 +91,14 @@
     <Compile Include="ConsoleMailerService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\connections.config">
+    <Content Include="..\connections.config">
       <Link>connections.config</Link>
-    </None>
-    <None Include="..\CustomSettings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\CustomSettings.config">
       <Link>CustomSettings.config</Link>
-    </None>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="App.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
