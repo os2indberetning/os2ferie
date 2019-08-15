@@ -10,11 +10,13 @@ using MoreLinq;
 using IAddressCoordinates = Core.DomainServices.IAddressCoordinates;
 using Core.ApplicationServices.Interfaces;
 using VacationBalance = Core.DomainModel.VacationBalance;
+using Core.ApplicationServices.Logger;
 
 namespace DBUpdater
 {
     public class UpdateService
     {
+
         private readonly IGenericRepository<Employment> _emplRepo;
         private readonly IGenericRepository<OrgUnit> _orgRepo;
         private readonly IGenericRepository<Person> _personRepo;
@@ -33,6 +35,8 @@ namespace DBUpdater
         private readonly IGenericRepository<VacationBalance> _vacationBalanceRepo;
         private readonly ISubstituteService _subService;
 
+        private readonly ILogger _logger;
+
         public UpdateService(IGenericRepository<Employment> emplRepo,
             IGenericRepository<OrgUnit> orgRepo,
             IGenericRepository<Person> personRepo,
@@ -47,7 +51,8 @@ namespace DBUpdater
             IReportService<Report> reportService,
             ISubstituteService subService,
             IGenericRepository<Substitute> subRepo,
-            IGenericRepository<VacationBalance> vacationBalanceRepo)
+            IGenericRepository<VacationBalance> vacationBalanceRepo,
+            ILogger logger)
         {
             _emplRepo = emplRepo;
             _orgRepo = orgRepo;
@@ -64,6 +69,7 @@ namespace DBUpdater
             _subService = subService;
             _subRepo = subRepo;
             _vacationBalanceRepo = vacationBalanceRepo;
+            _logger = logger;
         }
 
         /// <summary>
@@ -79,12 +85,45 @@ namespace DBUpdater
             {
                 result.Add(address);
             }
+
+            if (DoesAddressStartWithNumber(address))
+            {
+                string[] separator = { " " };
+                var number = address.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+
+                // add 1 for the space
+                var endIndex = number[0].Length + 1;
+
+                var addressWithoutStartNumber = address.Substring(endIndex, address.Length - endIndex);
+                var newIndexofFirstDigit = addressWithoutStartNumber.IndexOfAny("0123456789".ToCharArray());
+                if (newIndexofFirstDigit == -1)
+                {
+                    // Some international address can have reversed address, with number first and text after. 00 Someplace
+                    result.Add(addressWithoutStartNumber);
+                    result.Add(number[0]);
+                }
+                else
+                {
+                    // This is for handling a special case of an adress where the street name starts with a number. The street that prompted this fix was "6. Julivej" in Fredericia.
+                    // This fix may call for a refactor of the entire method to a more generic handling of addresses.
+                    result.Add(address.Substring(0, endIndex + newIndexofFirstDigit));
+                    result.Add(addressWithoutStartNumber.Substring(newIndexofFirstDigit, addressWithoutStartNumber.Length - newIndexofFirstDigit));
+                }
+            }
             else
             {
                 result.Add(address.Substring(0, index - 1));
                 result.Add(address.Substring(index, address.Length - index));
             }
+            
             return result;
+        }
+
+        private bool DoesAddressStartWithNumber(string address)
+        {
+            var firstChar = address.ToCharArray().ElementAt(0);
+
+            return char.IsNumber(firstChar);
         }
 
         /// <summary>
@@ -330,7 +369,16 @@ namespace DBUpdater
 
             var launderer = new CachedAddressLaunderer(_cachedRepo, _actualLaunderer, _coordinates);
 
-            var splitStreetAddress = SplitAddressOnNumber(empl.Adresse);
+            List<string> splitStreetAddress = null;
+            try
+            {
+                splitStreetAddress = SplitAddressOnNumber(empl.Adresse);
+            }
+            catch (Exception e)
+            {
+                _logger.Log($"{this.GetType().Name}, UpdateHomeAddress(), Error when splitting address. personId={personId}, address={empl.Adresse}", "dbupdater", e);
+                throw;
+            }
 
             var addressToLaunder = new Address
             {
