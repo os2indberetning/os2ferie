@@ -84,6 +84,7 @@ namespace DBUpdater
             if (index == -1)
             {
                 result.Add(address);
+                return result;
             }
 
             if (DoesAddressStartWithNumber(address))
